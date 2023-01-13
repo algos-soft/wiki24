@@ -12,7 +12,13 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.theme.lumo.LumoUtility;
 import it.algos.components.appnav.AppNav;
 import it.algos.components.appnav.AppNavItem;
+import it.algos.vaad24.backend.boot.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.views.helloworld.HelloWorldView;
+
+import java.util.*;
 
 /**
  * The main view is a top-level placeholder for other views.
@@ -60,8 +66,19 @@ public class MainLayout extends AppLayout {
     private Footer createFooter() {
         Footer layout = new Footer();
 
+        String message;
+        double doppio = VaadVar.projectVersion;
+        String nome = VaadVar.projectNameUpper;
+        String data = VaadVar.projectDate;
+        String note = VaadVar.projectNote;
+
+        //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
+        message = String.format(Locale.US, "Algos® - %s %2.1f di %s%s", nome, doppio, data, note);
+        layout.add(message);
+
         return layout;
     }
+
 
     @Override
     protected void afterNavigation() {
@@ -73,4 +90,5 @@ public class MainLayout extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
+
 }

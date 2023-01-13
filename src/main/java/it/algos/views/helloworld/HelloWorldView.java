@@ -12,7 +12,7 @@ import it.algos.views.MainLayout;
 
 @PageTitle("Hello World")
 @Route(value = "hello-world2", layout = MainLayout.class)
-@RouteAlias(value = "", layout = MainLayout.class)
+@RouteAlias(value = "pippoz", layout = MainLayout.class)
 public class HelloWorldView extends HorizontalLayout {
 
     private TextField name;
