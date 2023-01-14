@@ -1,7 +1,6 @@
 package it.algos.vaad24.backend.utility;
 
 import com.vaadin.flow.component.button.*;
-import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
