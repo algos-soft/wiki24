@@ -19,11 +19,16 @@ import java.util.*;
 @Component
 public class AResult {
 
+    @Deprecated
     private boolean valido;
 
     private boolean eseguito;
 
     private AETypeResult typeResult;
+
+    private AETypeLog typeLog;
+
+    private AECopy typeCopy;
 
     //    private String webTitle = VUOTA;
     //
@@ -70,6 +75,7 @@ public class AResult {
     private List lista = null;
 
     private LinkedHashMap mappa = null;
+
 
     protected AResult() {
         this(true, VUOTA);
@@ -125,6 +131,7 @@ public class AResult {
     public AResult nonValido() {
         return valido(false);
     }
+
     public AResult valido(boolean valido) {
         this.valido = valido;
         return this;
@@ -213,6 +220,17 @@ public class AResult {
 
     public AResult mappa(LinkedHashMap mappa) {
         this.mappa = mappa;
+        return this;
+    }
+
+
+    public AResult typeLog(AETypeLog typeLog) {
+        this.typeLog = typeLog;
+        return this;
+    }
+
+    public AResult typeCopy(AECopy typeCopy) {
+        this.typeCopy = typeCopy;
         return this;
     }
 
@@ -437,6 +455,22 @@ public class AResult {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public AETypeLog getTypeLog() {
+        return typeLog;
+    }
+
+    public void setTypeLog(AETypeLog typeLog) {
+        this.typeLog = typeLog;
+    }
+
+    public AECopy getTypeCopy() {
+        return typeCopy;
+    }
+
+    public void setTypeCopy(AECopy typeCopy) {
+        this.typeCopy = typeCopy;
     }
 
     public String getTagCode() {
