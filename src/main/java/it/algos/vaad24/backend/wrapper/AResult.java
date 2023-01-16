@@ -19,7 +19,6 @@ import java.util.*;
 @Component
 public class AResult {
 
-    @Deprecated
     private boolean valido;
 
     private boolean eseguito;
