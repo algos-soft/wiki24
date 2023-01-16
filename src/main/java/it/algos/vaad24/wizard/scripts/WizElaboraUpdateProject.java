@@ -61,18 +61,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                     case directory -> directory(wiz);
                     case file -> {
                         result = file(wiz);
-                        if (result != null) {
-                            path = fileService.findPathBreve(wiz.name());
-                            desc = wiz.getCopy().getDescrizione();
-                            type = result.getTypeResult();
-                            message = String.format("File [%s] (%s)%s%s", path, desc, FORWARD, type.getTag());
-                            if (result.isErrato()) {
-                                logger.warn(new WrapLog().message(message).type(AETypeLog.wizard));
-                            }
-                            else {
-                                logger.info(new WrapLog().message(message).type(AETypeLog.wizard));
-                            }
-                        }
+                        logger.copy(result);
                     }
                     case source -> source(wiz);
                     case elaboraFile, elaboraDir -> elabora(wiz);

@@ -208,13 +208,13 @@ public abstract class WizElabora {
 
 
     public AResult file(AEWizProject wiz) {
-        AResult result = AResult.build().target(wiz.getNomeFile()).method("copyFile");
         AECopy copy = wiz.getCopy();
-//        String textFile;
+        AResult result = AResult.build()
+                .typeLog(AETypeLog.wizard)
+                .target(wiz.getNomeFile())
+                .method("copyFile")
+                .typeCopy(copy);
         String srcPath = srcVaad24 + wiz.getCopyDest();
-//        String destPath = destNewProject + wiz.getCopyDest();
-        //        String dir = fileService.lastDirectory(destPath).toLowerCase();
-        //        String tag = progettoEsistente ? "Update" : "New";
 
         //check esiste nome file
         if (textService.isEmpty(wiz.getNomeFile())) {
@@ -226,35 +226,7 @@ public abstract class WizElabora {
             return result.type(AETypeResult.noSourceFile).type(copy.name()).eseguito(false).nonValido();
         }
         result = fileService.copyFile(copy, srcVaad24, destNewProject, wiz.getCopyDest());
-
-        //        switch (copy) {
-        //            case fileOnly -> {
-        //                if (fileService.isEsisteFile(destPath)) {
-        //                    result.type(AETypeResult.fileEsistente).type(copy.name());
-        //                }
-        //                else {
-        //                    textFile = fileService.leggeFile(srcPath);
-        //                    fileService.sovraScriveFile(destPath, textFile);
-        //                    result.type(AETypeResult.fileCreato).type(copy.name());
-        //                }
-        //            }
-        //            case fileDelete -> {
-        //                if (fileService.isEsisteFile(destPath)) {
-        //                    textFile = fileService.leggeFile(srcPath);
-        //                    fileService.sovraScriveFile(destPath, textFile);
-        //                    result.type(AETypeResult.fileSovrascritto).type(copy.name());
-        //                }
-        //                else {
-        //                    textFile = fileService.leggeFile(srcPath);
-        //                    fileService.sovraScriveFile(destPath, textFile);
-        //                    result.type(AETypeResult.fileCreato).type(copy.name());
-        //                }
-        //            }
-        //            case fileCheck -> {}
-        //            default -> {}
-        //        }
-
-        return result;
+        return result.typeLog(AETypeLog.wizard).typeCopy(copy);
     }
 
 
