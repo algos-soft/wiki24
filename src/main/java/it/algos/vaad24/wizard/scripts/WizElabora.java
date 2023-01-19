@@ -107,8 +107,8 @@ public abstract class WizElabora {
                 .typeCopy(copy);
         String srcPath = srcVaad24 + wiz.getCopyDest() + SLASH;
         String destPath = destNewProject + wiz.getCopyDest() + SLASH;
-        String dir = fileService.lastDirectory(destPath).toLowerCase();
-        String tag = progettoEsistente ? "Update" : "New";
+//        String dir = fileService.lastDirectory(destPath).toLowerCase();
+//        String tag = progettoEsistente ? "Update" : "New";
 
         result = fileService.copyDirectory(copy, srcPath, destPath);
 //        mostraRisultato(result, wiz.getCopy(), dir, tag);
