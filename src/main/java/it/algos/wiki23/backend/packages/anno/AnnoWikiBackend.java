@@ -1,11 +1,13 @@
 package it.algos.wiki23.backend.packages.anno;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
+import it.algos.wiki23.backend.packages.bio.*;
 import it.algos.wiki23.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -13,6 +15,7 @@ import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki23
@@ -223,6 +226,48 @@ public class AnnoWikiBackend extends WikiBackend {
         }
 
         super.fixElaboraMinuti(inizio, "anni");
+    }
+
+    public Map elaboraValidi() {
+        Map<String, Integer> mappa = new HashMap<>();
+        List<String> nati = mongoService.projectionString(Bio.class, "annoNato");
+        List<String> morti = mongoService.projectionString(Bio.class, "annoMorto");
+        int vociBiografiche = mongoService.count(Bio.class);
+        Long natiSenzaParametro; //senza parametro
+        Long natiParametroVuoto; //parametro vuoto
+        Long natiValoreEsistente; //qualsiasi valore
+        Long mortiSenzaParametro; //senza parametro
+        Long mortiParametroVuoto; //parametro vuoto
+        Long mortiValoreEsistente; //qualsiasi valore
+        List<String> mortiLinkati;
+        int checkSum;
+
+        natiSenzaParametro = nati.stream().filter(anno -> anno == null).count();
+        natiParametroVuoto = nati.stream().filter(anno -> anno != null && anno.length() == 0).count();
+        natiValoreEsistente = nati.stream().filter(anno -> anno != null && anno.length() > 0).count();
+
+        mortiSenzaParametro = morti.stream().filter(anno -> anno == null).count();
+        mortiParametroVuoto = morti.stream().filter(anno -> anno != null && anno.length() == 0).count();
+        mortiValoreEsistente = morti.stream().filter(anno -> anno != null && anno.length() > 0).count();
+
+        checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
+        if (checkSum != vociBiografiche) {
+            logger.warn(WrapLog.build().message("Somma  anno nascita errata"));
+        }
+        checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
+        if (checkSum != vociBiografiche) {
+            logger.warn(WrapLog.build().message("Somma anno morte errata"));
+        }
+
+        mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());
+        mappa.put(KEY_MAP_NATI_PARAMETRO_VUOTO, natiParametroVuoto.intValue());
+        mappa.put(KEY_MAP_NATI_VALORE_ESISTENTE, natiValoreEsistente.intValue());
+
+        mappa.put(KEY_MAP_MORTI_SENZA_PARAMETRO, mortiSenzaParametro.intValue());
+        mappa.put(KEY_MAP_MORTI_PARAMETRO_VUOTO, mortiParametroVuoto.intValue());
+        mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente.intValue());
+
+        return mappa;
     }
 
     /**

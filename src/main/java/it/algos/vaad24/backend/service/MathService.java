@@ -58,7 +58,7 @@ public class MathService extends AbstractService {
      * @return valore risultante di tipo double
      */
     public double percentuale(int dividendo, int divisore) {
-        return divisione((double) dividendo, (double) divisore) * 100;
+        return divisione((double) divisore, (double) dividendo) * 100;
     }
 
     /**

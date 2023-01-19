@@ -5,6 +5,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
 import it.algos.wiki23.backend.enumeration.*;
 import it.algos.wiki23.backend.packages.anno.*;
+import it.algos.wiki23.backend.packages.bio.*;
 import it.algos.wiki23.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -65,7 +66,8 @@ public class StatisticheAnni extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-        annoWikiBackend.elabora();
+        //        annoWikiBackend.elabora();
+        Map mappa = annoWikiBackend.elaboraValidi();
     }
 
     /**
@@ -157,6 +159,91 @@ public class StatisticheAnni extends Statistiche {
         return buffer.toString();
     }
 
+
+    /**
+     * Prima tabella <br>
+     */
+    @Override
+    protected String body() {
+        return VUOTA;
+    }
+
+    /**
+     * Eventuale seconda tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected String secondBody() {
+        StringBuffer buffer = new StringBuffer();
+        int vociBiografiche = mongoService.count(Bio.class);
+        String numVoci = textService.format(vociBiografiche);
+        Map<String, Integer> mappa = annoWikiBackend.elaboraValidi();
+
+        buffer.append(nascita(vociBiografiche, numVoci, mappa));
+        buffer.append(morte(vociBiografiche, numVoci, mappa));
+
+        return buffer.toString();
+    }
+
+    protected String nascita(int vociBiografiche, String numVoci, Map<String, Integer> mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        String natiSenzaPer;
+        String natiVuotoPer;
+        String natiValidoPer;
+
+        natiSenzaPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO));
+        natiVuotoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO));
+        natiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
+
+        buffer.append(wikiUtility.setParagrafo("Nascita"));
+        message = String.format("Nelle %s voci biografiche esistenti, l'anno di nascita risulta:", numVoci);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), natiVuotoPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), natiValidoPer);
+        buffer.append(message);
+
+        return buffer.toString();
+    }
+
+    /**
+     * Eventuale seconda tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String morte(int vociBiografiche, String numVoci, Map<String, Integer> mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        String mortiSenzaPer;
+        String mortiVuotoPer;
+        String mortiValidoPer;
+
+        mortiSenzaPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO));
+        mortiVuotoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO));
+        mortiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE));
+
+        buffer.append(wikiUtility.setParagrafo("Morte"));
+        message = String.format("Nelle %s voci biografiche esistenti, l'anno di morte risulta:", numVoci);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO)), mortiSenzaPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO)), mortiVuotoPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE)), mortiValidoPer);
+        buffer.append(message);
+
+        return buffer.toString();
+    }
 
     /**
      * Esegue la scrittura della pagina <br>

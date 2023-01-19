@@ -186,6 +186,23 @@ public class StatisticheGiorni extends Statistiche {
     }
 
     /**
+     * Prima tabella <br>
+     */
+    @Override
+    protected String body() {
+        return VUOTA;
+    }
+
+    /**
+     * Eventuale seconda tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected String secondBody() {
+        return "Marcellino";
+    }
+
+    /**
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {

@@ -188,6 +188,7 @@ public abstract class Statistiche {
         buffer.append(includeEnd());
         buffer.append(incipit());
         buffer.append(body());
+        buffer.append(secondBody());
         buffer.append(note());
         buffer.append(correlate());
         buffer.append(categorie());
@@ -260,6 +261,13 @@ public abstract class Statistiche {
     }
 
     protected String riga(MappaStatistiche mappa) {
+        return VUOTA;
+    }
+    /**
+     * Eventuale seconda tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String secondBody() {
         return VUOTA;
     }
 

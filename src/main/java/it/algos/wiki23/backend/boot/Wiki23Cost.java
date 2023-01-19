@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 public class Wiki23Cost {
 
     public static final String PROJECT_CURRENT_MAIN_APPLICATION = "Wiki23Application";
+
     public static final String WIKI_TITLE_DEBUG = "Utente:Biobot/2";
 
     public static final int DELTA_ORDINE_ANNI = 100;
@@ -354,5 +355,17 @@ public class Wiki23Cost {
     public static final String UPLOAD_TITLE_DEBUG = "Utente:Biobot/";
 
     public static final String UPLOAD_TITLE_PROJECT = "Progetto:Biografie/";
+
+    public static final String KEY_MAP_NATI_SENZA_PARAMETRO = "natiSenzaParametro";
+
+    public static final String KEY_MAP_NATI_PARAMETRO_VUOTO = "natiParametroVuoto";
+
+    public static final String KEY_MAP_NATI_VALORE_ESISTENTE = "natiValoreEsistente";
+
+    public static final String KEY_MAP_MORTI_SENZA_PARAMETRO = "mortiSenzaParametro";
+
+    public static final String KEY_MAP_MORTI_PARAMETRO_VUOTO = "mortiParametroVuoto";
+
+    public static final String KEY_MAP_MORTI_VALORE_ESISTENTE = "mortiValoreEsistente";
 
 }
