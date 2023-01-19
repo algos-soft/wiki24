@@ -51,6 +51,7 @@ public class MathService extends AbstractService {
 
     /**
      * Percentuale tra due numeri interi <br>
+     * ATTENZIONE che nella percentuale dividendo e divisore si alternano
      *
      * @param dividendo quantità da dividere
      * @param divisore  quantità che divide
