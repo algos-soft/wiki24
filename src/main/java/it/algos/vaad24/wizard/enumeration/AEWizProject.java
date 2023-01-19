@@ -34,9 +34,9 @@ public enum AEWizProject {
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "properties"
     ),
 
-    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileModifyToken, "MAGENTA", "RED"),
+    banner("File BANNER di SpringBoot (vaad24) [need riavvio]", true, true, "src/main/resources/banner.txt", AECopy.fileModifyEver),
 
-    git("File GIT di esclusione (sources)", true, false, ".gitignore", AECopy.sourceSoloSeNonEsiste, "git"),
+    git("File GIT di esclusione (sources)", true, true, ".gitignore", AECopy.fileModifyEver),
 
     pomVaad24("File POM.xml di Maven (vaad24)", true, false, "pom.xml", AECopy.elaboraFile),
     pomSources("File POM.xml di Maven (sources)", true, false, "pom.xml", AECopy.sourceSovrascriveSempreAncheSeEsiste, "pom"),

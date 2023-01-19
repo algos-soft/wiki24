@@ -6,12 +6,12 @@ __   __  __ _   __ _   __| ||___ \ | || |
   \_/   \__,_| \__,_| \__,_||_____|   |_|  
 
 ${AnsiBackground.DEFAULT}
-${AnsiColor.RED}
+${AnsiColor.MAGENTA}
 Vaad24 FrameWork  (c)Algos
-Java ver: ${AnsiColor.GREEN}${java.version}${AnsiColor.RED}
-SpringBoot ver: ${AnsiColor.GREEN}${spring-boot.version}${AnsiColor.RED}
-Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.RED}
-Vaad24 ver: ${AnsiColor.GREEN}${algos.vaad24.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.vaad24.version.date}${AnsiColor.RED}
-${algos.project.name} ver: ${AnsiColor.GREEN}${algos.project.version}${AnsiColor.RED} di ${AnsiColor.GREEN}${algos.project.version.date}${AnsiColor.RED}
-Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.RED}
+Java ver: ${AnsiColor.GREEN}${java.version}${AnsiColor.MAGENTA}
+SpringBoot ver: ${AnsiColor.GREEN}${spring-boot.version}${AnsiColor.MAGENTA}
+Vaadin ver: ${AnsiColor.GREEN}${vaadin.version}${AnsiColor.MAGENTA}
+Vaad24 ver: ${AnsiColor.GREEN}${algos.vaad24.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.vaad24.version.date}${AnsiColor.MAGENTA}
+${algos.project.name} ver: ${AnsiColor.GREEN}${algos.project.version}${AnsiColor.MAGENTA} di ${AnsiColor.GREEN}${algos.project.version.date}${AnsiColor.MAGENTA}
+Tomcat port: ${AnsiColor.GREEN}${server.port}${AnsiColor.MAGENTA}
 ${AnsiColor.DEFAULT}
