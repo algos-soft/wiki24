@@ -606,7 +606,6 @@ public abstract class AlgosUnitTest {
         //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("Target: %s", result.getTarget()));
         System.out.println(String.format("TypeResult: %s", result.getTypeResult().getTag()));
-        System.out.println(String.format("TypeText: %s", result.getType()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));
