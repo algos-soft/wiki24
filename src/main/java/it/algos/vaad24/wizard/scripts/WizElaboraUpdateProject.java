@@ -89,7 +89,7 @@ public class WizElaboraUpdateProject extends WizElabora {
 
         switch (wiz) {
             case pomVaad24 -> {
-                result = fileService.copyFile(AECopy.fileDelete, srcVaad24, destNewProject, wiz.getNomeFile());
+                result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile());
                 oldToken = PROJECT_VAADIN24;
                 newToken = VaadVar.projectCurrent;
                 result = fixToken(result, wiz, oldToken, newToken);
