@@ -895,7 +895,7 @@ public class FileService extends AbstractService {
         result.typeCopy(typeCopy).typeTxt(typeCopy.getDescrizione());
 
         //errore grave - traccia l'eccezione
-        if (typeCopy.getType() != AECopyType.directory) {
+        if (typeCopy.getType() != AECopyType.modulo && typeCopy.getType() != AECopyType.directory) {
             message = String.format("Il type [%s] previsto non è compatibile col metodo [%s]", typeCopy, result.getMethod());
             return result
                     .nonValido()
@@ -920,8 +920,7 @@ public class FileService extends AbstractService {
         path = this.findPathBreve(destPath);
         dir = srcPath.contains(test) ? "Test " + dir : dir;
 
-//        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
-
+        //        result = result.typeTxt(typeCopy + FORWARD + typeCopy.getDescrizione());
 
         if (!dirSrc.isDirectory()) {
             message = String.format("Non esiste la %s sorgente '%s' da copiare.", srcPath, dir);
@@ -930,12 +929,10 @@ public class FileService extends AbstractService {
 
         if (typeCopy == AECopy.dirFilesModificaToken) {
             if (textService.isEmpty(srcToken)) {
-                message = "Manca il token sorgente";
-                return result.errorMessage(message);
+                return result.exception(new AlgosException("Manca il token sorgente")).typeResult(AETypeResult.noToken);
             }
             if (textService.isEmpty(destToken)) {
-                message = "Manca il token destinazione";
-                return result.errorMessage(message);
+                return result.exception(new AlgosException("Manca il token destinazione")).typeResult(AETypeResult.noToken);
             }
         }
 
@@ -970,12 +967,12 @@ public class FileService extends AbstractService {
                 }
                 return result;
 
-            case dirDelete:
+            case modulo, dirDelete:
                 if (dirDest.exists()) {
-
                     try {
                         FileUtils.deleteDirectory(dirDest);
                         FileUtils.copyDirectory(dirSrc, dirDest);
+                        result.typeResult(AETypeResult.dirRiCreata);
                     } catch (Exception unErrore) {
                         logger.error(new WrapLog().exception(unErrore).usaDb());
                         return result.setErrorMessage(unErrore.getMessage());
@@ -991,8 +988,8 @@ public class FileService extends AbstractService {
                     filesDestinazionePost = getFilesName(destPath);
                     resultMap.put(AEKeyMapFile.destinazionePost.name(), filesDestinazionePost);
 
-                    message = String.format("La %s '%s' esisteva già ma è stata cancellata e creata ex-novo.", dir, path);
-                    result.setValidMessage(message);
+                    //                    message = String.format("La %s '%s' esisteva già ma è stata cancellata e creata ex-novo.", dir, path);
+                    //                    result.setValidMessage(message);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
@@ -1022,10 +1019,12 @@ public class FileService extends AbstractService {
                         message = String.format("La %s '%s' esisteva già e non è stato aggiunto nessun nuovo file.", dir, path);
                         result.setTagCode(AEKeyDir.esistente.name());
                     }
-                    result.setValidMessage(message);
+                    //                    result.setValidMessage(message);
+                    result.typeResult(AETypeResult.dirRiCreata);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
+                    result.typeResult(AETypeResult.dirCreata);
                 }
                 return result;
 
@@ -1041,7 +1040,7 @@ public class FileService extends AbstractService {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
                                     //--file uguali a parte il token
                                     if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
-                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
+                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                                         filesTokenModificati.add(nomeFile);
                                     }
                                     else {
@@ -1057,6 +1056,7 @@ public class FileService extends AbstractService {
                             }
                             else {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
+                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
                                     filesTokenUguali.add(nomeFile);
                                 }
                                 else {
@@ -1098,6 +1098,7 @@ public class FileService extends AbstractService {
                             result.setTagCode(AEKeyDir.integrata.name());
                             message = String.format("La %s '%s' esisteva già; aggiunti: %s; modificati (token): %s", dir, path, filesAggiunti, filesTokenModificati);
                         }
+                        result.typeResult(AETypeResult.dirEsistente);
                     }
                     else {
                         if (filesAggiunti.size() == 0 && filesModificati.size() == 0) {
@@ -1108,11 +1109,13 @@ public class FileService extends AbstractService {
                             result.setTagCode(AEKeyDir.integrata.name());
                             message = String.format("La %s '%s' esisteva già; aggiunti: %s; modificati: %s", dir, path, filesAggiunti, filesModificati);
                         }
+                        result.typeResult(AETypeResult.dirModificata);
                     }
-                    result.setValidMessage(message);
+                    //                    result.setValidMessage(message);
                 }
                 else {
                     result = creaNuova(result, dirSrc, dirDest, path);
+                    result.typeResult(AETypeResult.dirCreata);
                 }
                 return result;
 
@@ -1147,7 +1150,8 @@ public class FileService extends AbstractService {
 
         message = String.format("La directory '%s' non esisteva ed è stata creata.", path);
 
-        return result.validMessage(message);
+        //        return result.validMessage(message);
+        return result;
     }
 
 

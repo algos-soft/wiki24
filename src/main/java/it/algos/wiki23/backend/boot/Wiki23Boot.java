@@ -123,7 +123,7 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Nome identificativo minuscolo del progetto corrente <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectCurrent = "wiki23";
+        VaadVar.projectCurrent = "wiki24";
 
         /**
          * Nome della classe di partenza col metodo 'main' <br>
@@ -138,7 +138,7 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectNameUpper = "Wiki23";
+        VaadVar.projectNameUpper = "Wiki24";
 
         /**
          * Nome identificativo minuscolo del modulo dell' applicazione <br>
