@@ -31,16 +31,18 @@ public class TaskGiorni extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        if (execute()) {
-            //--Le statistiche comprendono anche l'elaborazione
-            //--L'elaborazione comprende le info per la view
-            //--Le statistiche comprendono le info per la view
-            appContext.getBean(StatisticheGiorni.class).upload();
+        super.execute(taskExecutionContext);
+
+        if (flagAttivazione.is()) {
+            super.fixNext();
 
             //--L'upload comprende anche le info per la view
             inizio = System.currentTimeMillis();
             appContext.getBean(UploadGiorni.class).uploadAll();
             super.loggerTask();
+        }
+        else {
+            super.loggerNoTask();
         }
     }
 

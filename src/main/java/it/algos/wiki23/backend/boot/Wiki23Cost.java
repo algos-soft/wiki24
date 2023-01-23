@@ -351,7 +351,6 @@ public class Wiki23Cost {
     public static final String INFO_SOTTOPAGINA_DI_ATTIVITA = "Questa sottopagina ''(%s/%s)'' è stata creata perché ci sono %d voci biografiche nel paragrafo ''%s'' dell'attività ''%s''";
 
     public static final String INFO_SOTTOPAGINA_DI_NAZIONALITA = "Questa sottopagina ''(%s/%s)'' è stata creata perché ci sono %d voci biografiche nel paragrafo ''%s'' della nazionalità ''%s''";
-
     public static final String UPLOAD_TITLE_DEBUG = "Utente:Biobot/";
 
     public static final String UPLOAD_TITLE_PROJECT = "Progetto:Biografie/";

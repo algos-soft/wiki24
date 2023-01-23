@@ -4,6 +4,8 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki23.backend.boot.*;
 import it.algos.wiki23.backend.enumeration.*;
+import it.algos.wiki23.backend.statistiche.*;
+import it.algos.wiki23.backend.upload.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -28,11 +30,18 @@ public class TaskStatistiche extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        if (execute()) {
+        super.execute(taskExecutionContext);
 
-            // qui esegue la task specifica
+        if (flagAttivazione.is()) {
+            super.fixNext();
 
+            //--Le statistiche comprendono anche l'elaborazione
+            appContext.getBean(StatisticheGiorni.class).upload();
+            appContext.getBean(StatisticheAnni.class).upload();
             super.loggerTask();
+        }
+        else {
+            super.loggerNoTask();
         }
     }
 

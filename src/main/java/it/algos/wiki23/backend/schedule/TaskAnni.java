@@ -36,11 +36,6 @@ public class TaskAnni extends VaadTask {
         if (flagAttivazione.is()) {
             super.fixNext();
 
-            //--Le statistiche comprendono anche l'elaborazione
-            //--L'elaborazione comprende le info per la view
-            //--Le statistiche comprendono le info per la view
-            appContext.getBean(StatisticheAnni.class).upload();
-
             //--L'upload comprende anche le info per la view
             inizio = System.currentTimeMillis();
             appContext.getBean(UploadAnni.class).uploadAll();
@@ -50,7 +45,6 @@ public class TaskAnni extends VaadTask {
             super.loggerNoTask();
         }
     }
-
 
 }
 

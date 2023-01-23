@@ -252,11 +252,11 @@ public class AnnoWikiBackend extends WikiBackend {
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logger.warn(WrapLog.build().message("Somma  anno nascita errata"));
+            logger.warn(WrapLog.build().message("Somma anno di nascita errata"));
         }
         checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logger.warn(WrapLog.build().message("Somma anno morte errata"));
+            logger.warn(WrapLog.build().message("Somma anno di morte errata"));
         }
 
         mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());
