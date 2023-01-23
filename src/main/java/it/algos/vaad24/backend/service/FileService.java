@@ -638,8 +638,10 @@ public class FileService extends AbstractService {
     /**
      * Copia un file <br>
      * <p>
-     * Controlla che siano validi i path di riferimento <br>
-     * Controlla che esista il path del file sorgente  <br>
+     * Controlla che ci sia il type (AECopy) <br>
+     * Controlla che il type sia compatibile con questo metodo <br>
+     * Controlla che esista il nome del file <br>
+     * Controlla che esista il file sorgente (srcPath) <br>
      * Se manca il file sorgente, non fa nulla <br>
      * Se esiste il file di destinazione ed è AECopyFile.soloSeNonEsiste, non fa nulla <br>
      * Se esiste il file di destinazione ed è AECopyDir.sovrascriveSempreAncheSeEsiste, lo sovrascrive <br>
@@ -664,10 +666,10 @@ public class FileService extends AbstractService {
         File fileDest;
         String srcText;
         String destText;
-        String fileText;
-        String tokens;
+        boolean ugualeTesto;
+        boolean ugualeToken;
 
-        //errore grave - traccia l'eccezione
+        //errore grave - traccia l'eccezione ed esce
         if (typeCopy == null) {
             return result
                     .nonValido()
@@ -677,7 +679,7 @@ public class FileService extends AbstractService {
         }
         result.typeCopy(typeCopy).typeTxt(typeCopy.getDescrizione());
 
-        //errore grave - traccia l'eccezione
+        //errore grave - traccia l'eccezione ed esce
         if (typeCopy.getType() != AECopyType.file) {
             message = String.format("Il type [%s] previsto non è compatibile col metodo [%s]", typeCopy, result.getMethod());
             return result
@@ -687,7 +689,7 @@ public class FileService extends AbstractService {
                     .exception(new AlgosException(message));
         }
 
-        //errore grave - traccia l'eccezione
+        //errore grave - traccia l'eccezione ed esce
         if (textService.isEmpty(nomeFile)) {
             return result
                     .nonValido()
@@ -696,132 +698,102 @@ public class FileService extends AbstractService {
                     .exception(new AlgosException(AETypeResult.noFileName.getTag()));
         }
 
-        //errore lieve
+        //errore grave - traccia l'eccezione ed esce
         if (textService.isEmpty(srcPathDir)) {
-            return result.nonValido().typeResult(AETypeResult.noSrcDir);
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noSrcDir)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(AETypeResult.noSrcDir.getTag()));
         }
         srcPathDir = srcPathDir.endsWith(SLASH) ? srcPathDir : srcPathDir + SLASH;
         srcPath = srcPathDir + nomeFile;
         fileSrc = new File(srcPath);
+        if (!fileSrc.exists()) {
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noSourceFile)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(AETypeResult.noSourceFile.getTag()));
+        }
+        srcText = leggeFile(srcPath);
 
-        //errore lieve
+        //errore grave - traccia l'eccezione ed esce
         if (textService.isEmpty(destPathDir)) {
-            return result.nonValido().typeResult(AETypeResult.noDestDir);
+            return result
+                    .nonValido()
+                    .typeResult(AETypeResult.noDestDir)
+                    .typeTxt(VUOTA)
+                    .exception(new AlgosException(AETypeResult.noDestDir.getTag()));
         }
         destPathDir = destPathDir.endsWith(SLASH) ? destPathDir : destPathDir + SLASH;
         destPath = destPathDir + nomeFile;
         fileDest = new File(destPath);
         result.target(destPath);
 
+        //errore grave - traccia l'eccezione ed esce
+        if (typeCopy == AECopy.fileModifyToken) {
+            if (textService.isEmpty(srcToken) || textService.isEmpty(destToken)) {
+                return result
+                        .nonValido()
+                        .typeResult(AETypeResult.noToken)
+                        .typeTxt(VUOTA)
+                        .exception(new AlgosException(AETypeResult.noToken.getTag()));
+            }
+        }
+
         result = checkPath(result, destPath);
         if (result.isErrato()) {
             return result;
         }
 
-        //errore lieve
-        if (!new File(srcPath).exists()) {
-            return result.nonValido().typeResult(AETypeResult.noSourceFile);
-        }
+        if (fileDest.exists()) {
 
-        switch (typeCopy) {
+            if (typeCopy == AECopy.fileCreaOnlyNotExist) {
+                return result
+                        .valido(true)
+                        .eseguito(false)
+                        .typeResult(AETypeResult.fileEsistente);
+            }
 
-            //esiste e non fa nulla
-            //non esiste e lo crea
-            case fileCreaOnlyNotExist:
-                if (fileDest.exists()) {
+            destText = leggeFile(destPath);
+            ugualeTesto = destText.equals(srcText);
+            if (ugualeTesto) {
+                return result
+                        .valido(true)
+                        .eseguito(false)
+                        .typeResult(AETypeResult.fileEsistenteUguale);
+            }
+
+            if (typeCopy == AECopy.fileModifyToken) {
+                srcText = textService.sostituisce(srcText, srcToken, destToken);
+                ugualeToken = destText.equals(srcText);
+                if (ugualeToken) {
                     return result
                             .valido(true)
                             .eseguito(false)
-                            .typeResult(AETypeResult.fileEsistente);
+                            .typeResult(AETypeResult.fileEsistenteUguale);
                 }
-                else {
-                    return copyFile(result, fileSrc, fileDest);
-                }
+            }
 
-                //esiste, viene sovrascritto ma era uguale
-                //esiste, viene sovrascritto ma era diverso
-                //non esiste e lo crea
-            case fileModifyEver:
-                if (fileDest.exists()) {
-                    srcText = leggeFile(srcPath);
-                    destText = leggeFile(destPath);
-                    if (destText.equals(srcText)) {
-                        return result
-                                .valido(true)
-                                .eseguito(false)
-                                .typeResult(AETypeResult.fileEsistenteUguale);
-                    }
-                    else {
-                        result = copyFile(result, fileSrc, fileDest);
-                        if (result.isValido()) {
-                            return result.typeResult(AETypeResult.fileEsistenteModificato);
-                        }
-                        else {
-                            return result;
-                        }
-                    }
-                }
-                else {
-                    return copyFile(result, fileSrc, fileDest);
-                }
-
-            case fileModifyToken:
-                tokens = String.format("%s[%s%s%s]", SPAZIO, srcToken, FORWARD, destToken);
-
-                if (fileDest.exists()) {
-                    result = copyFile(AECopy.fileModifyEver, srcPathDir, destPathDir, nomeFile).typeCopy(AECopy.fileModifyToken);
-
-                    if (result.getTypeResult() == AETypeResult.fileEsistenteUguale) {
-                        if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
-                            return result.typeResult(AETypeResult.fileTokenUgualeNoToken).validMessage(tokens);
-                        }
-                        else {
-                            fileText = leggeFile(destPath);
-                            fileText = textService.sostituisce(fileText, srcToken, destToken);
-                            sovraScriveFile(destPath, fileText);
-                            return result.typeResult(AETypeResult.fileTokenUgualeSiToken).validMessage(tokens);
-                        }
-                    }
-
-                    if (result.getTypeResult() == AETypeResult.fileEsistenteModificato) {
-                        if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
-                            return result.typeResult(AETypeResult.fileTokenModificatoNoToken).validMessage(tokens);
-                        }
-                        else {
-                            fileText = leggeFile(destPath);
-                            fileText = textService.sostituisce(fileText, srcToken, destToken);
-                            sovraScriveFile(destPath, fileText);
-                            return result.typeResult(AETypeResult.fileTokenModificatoSiToken).validMessage(tokens);
-                        }
-                    }
-
-                    return result.errorMessage("Qualcosa non ha funzionato");
-                }
-                else {
-                    // crea il file
-                    result = copyFile(result, fileSrc, fileDest);
-
-                    // check del token
-                    if (isUgualeToken(srcPath, destPath, srcToken, destToken)) {
-                        return result.typeResult(AETypeResult.fileTokenCreatoUguale).validMessage(tokens);
-                    }
-                    else {
-                        fileText = leggeFile(destPath);
-                        fileText = textService.sostituisce(fileText, srcToken, destToken);
-                        sovraScriveFile(destPath, fileText);
-                        return result.typeResult(AETypeResult.fileTokenCreatoDiverso).validMessage(tokens);
-                    }
-                }
-
-                //non usato - troppo complicato da mantenere
-            case fileCheck:
-                logger.warn(AETypeLog.file, new AlgosException(SWITCH_FUTURO));
-                return result.errorMessage(SWITCH_FUTURO);
-            default:
-                logger.warn(AETypeLog.file, new AlgosException(SWITCH));
-                return result.errorMessage(SWITCH);
+            if (sovraScriveFile(destPath, srcText)) {
+                return result
+                        .valido(true)
+                        .eseguito(true)
+                        .typeResult(AETypeResult.fileEsistenteModificato);
+            }
+            else {
+                return result
+                        .valido(false)
+                        .eseguito(false)
+                        .typeResult(AETypeResult.error);
+            }
+        }
+        else {
+            return copyFile(result, fileSrc, fileDest);
         }
     }
+
 
     private AResult copyFile(AResult result, File fileSrc, File fileDest) {
         try {
@@ -929,10 +901,10 @@ public class FileService extends AbstractService {
 
         if (typeCopy == AECopy.dirFilesModificaToken) {
             if (textService.isEmpty(srcToken)) {
-                return result.exception(new AlgosException("Manca il token sorgente")).typeResult(AETypeResult.noToken);
+                return result.exception(new AlgosException("Manca il token sorgente")).typeResult(AETypeResult.noToken).nonValido();
             }
             if (textService.isEmpty(destToken)) {
-                return result.exception(new AlgosException("Manca il token destinazione")).typeResult(AETypeResult.noToken);
+                return result.exception(new AlgosException("Manca il token destinazione")).typeResult(AETypeResult.noToken).nonValido();
             }
         }
 
@@ -1036,27 +1008,17 @@ public class FileService extends AbstractService {
                         if (filesDestinazioneAnte.contains(nomeFile)) {
                             //--se è diverso, lo modifica
                             if (!isUguale(srcPath, destPath, nomeFile)) {
-                                //--diversi però controlla le differenze del token
-                                if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    //--file uguali a parte il token
-                                    if (!isUgualeToken(srcPath, destPath, nomeFile, srcToken, destToken)) {
-                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
-                                        filesTokenModificati.add(nomeFile);
-                                    }
-                                    else {
-                                        copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                        filesTokenUguali.add(nomeFile);
-                                    }
-                                }
-                                //--diversi e non controlla le differenze del token
-                                else {
+                                if (typeCopy == AECopy.dirFilesModifica) {
                                     copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile);
-                                    filesModificati.add(nomeFile);
                                 }
+                                if (typeCopy == AECopy.dirFilesModificaToken) {
+                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                }
+                                filesModificati.add(nomeFile);
                             }
                             else {
                                 if (typeCopy == AECopy.dirFilesModificaToken) {
-                                    copyFile(AECopy.fileModifyEver, srcPath, destPath, nomeFile, srcToken, destToken);
+                                    copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
                                     filesTokenUguali.add(nomeFile);
                                 }
                                 else {
@@ -1066,8 +1028,14 @@ public class FileService extends AbstractService {
                         }
                         //--se manca, lo aggiunge
                         else {
-                            copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
-                            filesAggiunti.add(nomeFile);
+                            if (typeCopy == AECopy.dirFilesModificaToken) {
+                                copyFile(AECopy.fileModifyToken, srcPath, destPath, nomeFile, srcToken, destToken);
+                                filesAggiunti.add(nomeFile);
+                            }
+                            else {
+                                copyFile(AECopy.fileCreaOnlyNotExist, srcPath, destPath, nomeFile);
+                                filesAggiunti.add(nomeFile);
+                            }
                         }
                     }
 
@@ -1309,6 +1277,14 @@ public class FileService extends AbstractService {
         return status;
     }
 
+    public String leggeFile(File fileToRead) {
+        try {
+            return leggeFile(fileToRead.getCanonicalPath());
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            return VUOTA;
+        }
+    }
 
     /**
      * Legge un file
