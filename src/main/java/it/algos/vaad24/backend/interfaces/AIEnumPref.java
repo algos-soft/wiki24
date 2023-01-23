@@ -24,4 +24,3 @@ public interface AIEnumPref {
     void inizia();
 
 }// end of interface
-

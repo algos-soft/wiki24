@@ -131,4 +131,3 @@ public class VaadTask extends Task {
     }
 
 }
-

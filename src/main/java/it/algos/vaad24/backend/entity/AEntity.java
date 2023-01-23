@@ -118,5 +118,3 @@ public abstract class AEntity implements Serializable {
     }
 
 }
-
-

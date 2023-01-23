@@ -481,8 +481,10 @@ public class LogService extends AbstractService {
         AECopy copy;
         String titolo;
         String test = "/src/test/java/";
-        String path;
+        String path = fileService.findPathBreve(result.getTarget());
         String textResult;
+        String resultTagCode = VUOTA;
+        String tagCode = VUOTA;
 
         if (result == null) {
             info(WrapLog.build().type(AETypeLog.error).message(AETypeResult.mancaResult.getTag()));
@@ -499,10 +501,11 @@ public class LogService extends AbstractService {
             message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto", VaadVar.moduloVaadin24, VaadVar.projectCurrent);
         }
         else {
-            path = fileService.findPathBreve(result.getTarget());
             textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
             textResult += result.getValidMessage();
-            message = String.format("%s [%s] (%s)%s%s", titolo, path, copy.getDescrizione(), FORWARD, textResult);
+            resultTagCode = result.getTagCode();
+            tagCode = textService.isValid(resultTagCode) ? SPAZIO + resultTagCode : VUOTA;
+            message = String.format("%s [%s] (%s)%s%s%s", titolo, path, copy.getDescrizione(), FORWARD, textResult, tagCode);
         }
 
         if (result.isValido()) {
@@ -511,6 +514,15 @@ public class LogService extends AbstractService {
         else {
             warn(WrapLog.build().type(log).message(message).exception(result.getException()));
         }
+        if (log == AETypeLog.test || Pref.debug.is()) {
+            if (result.getTypeCopy() != null && result.getTypeCopy().getType() == AECopyType.directory && result.getMappa() != null) {
+                for (Object key : result.getMappa().keySet()) {
+                    message = String.format("[%s].%s: %s", path, key, result.getMappa().get(key));
+                    info(WrapLog.build().type(log).message(message));
+                }
+            }
+        }
+
     }
 
 
