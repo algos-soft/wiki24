@@ -22,6 +22,9 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatisticheGiorni extends Statistiche {
 
+    public static final String VALIDO_NASCITA = VALIDO + SPAZIO + "'''giornoMeseNascita'''";
+
+    public static final String VALIDO_MORTE = VALIDO + SPAZIO + "'''giornoMeseMorte'''";
 
     /**
      * Costruttore base con parametri <br>
@@ -55,6 +58,7 @@ public class StatisticheGiorni extends Statistiche {
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
         buffer.append("Vengono prese in considerazione '''solo''' le voci biografiche che hanno valori '''validi e certi''' per i giorni di nascita e morte della persona.");
+        buffer.append(VALORI_CERTI + SPAZIO + "per i giorni di nascita e morte della persona.");
 
         return buffer.toString();
     }

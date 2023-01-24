@@ -24,15 +24,11 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatisticheAnni extends Statistiche {
 
-    public static final String VALIDO = "Nel [[template:Bio|template Bio]] della voce biografica deve esserci un valore '''valido''' per il parametro";
-
-    public static final String VALIDO_CORRISPONDENTE = VALIDO + SPAZIO + "corrispondente";
 
     public static final String VALIDO_NASCITA = VALIDO + SPAZIO + "'''annoNascita'''";
 
     public static final String VALIDO_MORTE = VALIDO + SPAZIO + "'''annoMorte'''";
 
-    public static final String NOTA_VALIDO = "valido";
 
     /**
      * Costruttore base con parametri <br>
@@ -67,7 +63,7 @@ public class StatisticheAnni extends Statistiche {
         message = String.format("Potenzialmente dal [[1000 a.C.]] al [[{{CURRENTYEAR}}]], anche se non tutti gli anni hanno una propria pagina di nati o morti");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
-        buffer.append("Vengono prese in considerazione '''solo''' le voci biografiche che hanno valori '''validi e certi''' degli anni di nascita e morte della persona.");
+        buffer.append(VALORI_CERTI + SPAZIO + "per gli anni di nascita e morte della persona.");
 
         return buffer.toString();
     }
@@ -76,7 +72,7 @@ public class StatisticheAnni extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-        //        annoWikiBackend.elabora();
+        annoWikiBackend.elabora();
         //        Map mappa = annoWikiBackend.elaboraValidi();
     }
 
