@@ -54,7 +54,7 @@ public class StatisticheGiorni extends Statistiche {
         message = String.format("Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
-        buffer.append("Vengono prese in considerazione '''solo''' le voci biografiche che hanno valori '''validi e certi''' dei giorni di nascita e morte della persona.");
+        buffer.append("Vengono prese in considerazione '''solo''' le voci biografiche che hanno valori '''validi e certi''' per i giorni di nascita e morte della persona.");
 
         return buffer.toString();
     }
@@ -193,14 +193,6 @@ public class StatisticheGiorni extends Statistiche {
         return VUOTA;
     }
 
-    /**
-     * Eventuale seconda tabella <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected String secondBody() {
-        return "Marcellino";
-    }
 
     /**
      * Esegue la scrittura della pagina <br>

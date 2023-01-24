@@ -24,6 +24,16 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatisticheAnni extends Statistiche {
 
+    public static final String VALIDO = "Nel [[template:Bio|template Bio]] della voce biografica deve esserci un valore '''valido''' per il parametro";
+
+    public static final String VALIDO_CORRISPONDENTE = VALIDO + SPAZIO + "corrispondente";
+
+    public static final String VALIDO_NASCITA = VALIDO + SPAZIO + "'''annoNascita'''";
+
+    public static final String VALIDO_MORTE = VALIDO + SPAZIO + "'''annoMorte'''";
+
+    public static final String NOTA_VALIDO = "valido";
+
     /**
      * Costruttore base con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -66,8 +76,8 @@ public class StatisticheAnni extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-                annoWikiBackend.elabora();
-        Map mappa = annoWikiBackend.elaboraValidi();
+        //        annoWikiBackend.elabora();
+        //        Map mappa = annoWikiBackend.elaboraValidi();
     }
 
     /**
@@ -92,88 +102,29 @@ public class StatisticheAnni extends Statistiche {
         int morti;
         totNati = 0;
         totMorti = 0;
+        String chiave;
 
         for (AnnoWiki anno : (List<AnnoWiki>) lista) {
             nati = anno.bioNati;
             morti = anno.bioMorti;
-            mappaSingola = new MappaStatistiche(++pos, anno.nome, nati, morti);
-            mappa.put(anno.nome, mappaSingola);
+            if (nati > 0 || morti > 0) {
+                ++pos;
+                chiave = textService.format(pos);
+                mappaSingola = new MappaStatistiche(chiave, anno.nome, nati, morti);
+                mappa.put(anno.nome, mappaSingola);
+            }
+
             totNati += nati;
             totMorti += morti;
         }
     }
 
 
-    @Override
-    protected String colonne() {
-        StringBuffer buffer = new StringBuffer();
-        String color = "! style=\"background-color:#CCC;\" |";
-        String message;
-
-        buffer.append(color);
-        buffer.append("#");
-        buffer.append(CAPO);
-        buffer.append(color);
-        buffer.append("Anno");
-        buffer.append(CAPO);
-        buffer.append(color);
-        buffer.append("Nati");
-        message = "Il [[template:Bio|template Bio]] della voce biografica deve avere un valore valido al parametro '''annoNascita'''";
-        buffer.append(textService.setRef(message));
-        buffer.append(CAPO);
-        buffer.append(color);
-        buffer.append("Morti");
-        message = "Il [[template:Bio|template Bio]] della voce biografica deve avere un valore valido al parametro '''annoMorte'''";
-        buffer.append(textService.setRef(message));
-        buffer.append(CAPO);
-
-        return buffer.toString();
-    }
-
-    protected String riga(MappaStatistiche mappa) {
-        StringBuffer buffer = new StringBuffer();
-        String iniTag = "|-";
-        String doppioTag = " || ";
-        String pipe = "|";
-        String nato;
-        String morto;
-
-        buffer.append(iniTag);
-        buffer.append(CAPO);
-        buffer.append(pipe);
-        buffer.append(mappa.getPos());
-
-        buffer.append(doppioTag);
-        buffer.append(textService.setDoppieQuadre(mappa.getNome()));
-
-        buffer.append(doppioTag);
-        nato = wikiUtility.wikiTitleNatiAnno(mappa.getNome()) + PIPE + mappa.getNati();
-        buffer.append(textService.setDoppieQuadre(nato));
-
-        buffer.append(doppioTag);
-        morto = wikiUtility.wikiTitleMortiAnno(mappa.getNome()) + PIPE + mappa.getMorti();
-        buffer.append(textService.setDoppieQuadre(morto));
-
-        buffer.append(CAPO);
-
-        return buffer.toString();
-    }
-
-
     /**
-     * Prima tabella <br>
-     */
-    @Override
-    protected String body() {
-        return VUOTA;
-    }
-
-    /**
-     * Eventuale seconda tabella <br>
+     * Eventuale prima tabella <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected String secondBody() {
+    protected String bodyAnte() {
         StringBuffer buffer = new StringBuffer();
         int vociBiografiche = mongoService.count(Bio.class);
         String numVoci = textService.format(vociBiografiche);
@@ -184,6 +135,7 @@ public class StatisticheAnni extends Statistiche {
 
         return buffer.toString();
     }
+
 
     protected String nascita(int vociBiografiche, String numVoci, Map<String, Integer> mappa) {
         StringBuffer buffer = new StringBuffer();
@@ -198,7 +150,10 @@ public class StatisticheAnni extends Statistiche {
         natiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
 
         buffer.append(wikiUtility.setParagrafo("Nascita"));
-        message = String.format("Nelle %s voci biografiche esistenti, l'anno di nascita risulta:", numVoci);
+        message = String.format("Nelle '''%s''' voci biografiche esistenti, l'anno di nascita", numVoci);
+        buffer.append(message);
+        buffer.append(textService.setRef(VALIDO_CORRISPONDENTE, NOTA_VALIDO));
+        message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
@@ -230,7 +185,10 @@ public class StatisticheAnni extends Statistiche {
         mortiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE));
 
         buffer.append(wikiUtility.setParagrafo("Morte"));
-        message = String.format("Nelle %s voci biografiche esistenti, l'anno di morte risulta:", numVoci);
+        message = String.format("Nelle '''%s''' voci biografiche esistenti, l'anno di morte", numVoci);
+        buffer.append(message);
+        buffer.append(textService.getRef(NOTA_VALIDO));
+        message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO)), mortiSenzaPer);
@@ -244,6 +202,82 @@ public class StatisticheAnni extends Statistiche {
 
         return buffer.toString();
     }
+
+    /**
+     * Tabella normale <br>
+     */
+    @Override
+    protected String body() {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        buffer.append(wikiUtility.setParagrafo("Biografie"));
+        message = "Voci biografiche esistenti per ogni anno";
+        buffer.append(message);
+        buffer.append(textService.setRef("In ordine cronologico discendente"));
+        buffer.append(textService.setRef("Sono elencati '''solo''' gli anni che hanno almeno una voce biografica di nascita o morte"));
+        message = " di nascita e di morte";
+        buffer.append(message);
+
+        buffer.append(CAPO_ASTERISCO);
+        buffer.append(super.body());
+
+        return buffer.toString();
+    }
+
+    @Override
+    protected String colonne() {
+        StringBuffer buffer = new StringBuffer();
+        String color = "! style=\"background-color:#CCC;\" |";
+        String message;
+
+        buffer.append(color);
+        buffer.append("#");
+        buffer.append(CAPO);
+        buffer.append(color);
+        buffer.append("Anno");
+        buffer.append(CAPO);
+        buffer.append(color);
+        buffer.append("Nati");
+        buffer.append(textService.setRef(VALIDO_NASCITA));
+        buffer.append(CAPO);
+        buffer.append(color);
+        buffer.append("Morti");
+        buffer.append(textService.setRef(VALIDO_MORTE));
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
+    protected String riga(MappaStatistiche mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String iniTag = "|-";
+        String doppioTag = " || ";
+        String pipe = "|";
+        String nato;
+        String morto;
+
+        buffer.append(iniTag);
+        buffer.append(CAPO);
+        buffer.append(pipe);
+        buffer.append(mappa.getChiave());
+
+        buffer.append(doppioTag);
+        buffer.append(textService.setDoppieQuadre(mappa.getNome()));
+
+        buffer.append(doppioTag);
+        nato = wikiUtility.wikiTitleNatiAnno(mappa.getNome()) + PIPE + mappa.getNati();
+        buffer.append(textService.setDoppieQuadre(nato));
+
+        buffer.append(doppioTag);
+        morto = wikiUtility.wikiTitleMortiAnno(mappa.getNome()) + PIPE + mappa.getMorti();
+        buffer.append(textService.setDoppieQuadre(morto));
+
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
 
     /**
      * Esegue la scrittura della pagina <br>

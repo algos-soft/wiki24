@@ -187,8 +187,9 @@ public abstract class Statistiche {
         buffer.append(tmpStatBio());
         buffer.append(includeEnd());
         buffer.append(incipit());
+        buffer.append(bodyAnte());
         buffer.append(body());
-        buffer.append(secondBody());
+        buffer.append(bodyPost());
         buffer.append(note());
         buffer.append(correlate());
         buffer.append(categorie());
@@ -227,7 +228,15 @@ public abstract class Statistiche {
     }
 
     /**
-     * Prima tabella <br>
+     * Eventuale prima tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String bodyAnte() {
+        return VUOTA;
+    }
+
+    /**
+     * Tabella normale <br>
      */
     protected String body() {
         StringBuffer buffer = new StringBuffer();
@@ -238,6 +247,15 @@ public abstract class Statistiche {
         buffer.append(fineTabella());
 
         return buffer.toString();
+    }
+
+
+    /**
+     * Eventuale terza tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String bodyPost() {
+        return VUOTA;
     }
 
     protected String colonne() {
@@ -263,13 +281,7 @@ public abstract class Statistiche {
     protected String riga(MappaStatistiche mappa) {
         return VUOTA;
     }
-    /**
-     * Eventuale seconda tabella <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected String secondBody() {
-        return VUOTA;
-    }
+
 
     protected String note() {
         StringBuffer buffer = new StringBuffer();

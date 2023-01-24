@@ -1,17 +1,14 @@
 package it.algos.vaad24.ui.views;
 
 
-import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.applayout.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.security.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.service.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -131,32 +128,11 @@ public class MainLayout extends AppLayout {
         Footer layout = new Footer();
         layout.addClassNames("flex", "items-center", "my-s", "px-m", "py-xs");
 
-        layout.add(bottomAlgos());
+        layout.add(layoutService.bottomAlgos());
 
         return layout;
     }
 
-    private Component bottomAlgos() {
-        VerticalLayout bottomPlaceHolder = new VerticalLayout();
-        bottomPlaceHolder.setPadding(false);
-        bottomPlaceHolder.setSpacing(false);
-        bottomPlaceHolder.setMargin(false);
-
-        String message;
-        double doppio = VaadVar.projectVersion;
-        String nome = VaadVar.projectNameUpper;
-        String data = VaadVar.projectDate;
-        String note = VaadVar.projectNote;
-
-        //--Locale.US per forzare la visualizzazione grafica di un punto anziché una virgola
-        message = String.format(Locale.US, "Algos® - %s %2.1f di %s", nome, doppio, data);
-        bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(message).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
-        if (textService.isValid(note)) {
-            bottomPlaceHolder.add(htmlService.getSpan(new WrapSpan(note).color(AETypeColor.blue).weight(AEFontWeight.bold).fontHeight(AEFontSize.em7)));
-        }
-
-        return bottomPlaceHolder;
-    }
 
     @Override
     protected void afterNavigation() {

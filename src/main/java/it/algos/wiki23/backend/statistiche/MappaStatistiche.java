@@ -93,6 +93,12 @@ public class MappaStatistiche {
         this.nati = nati;
         this.morti = morti;
     }
+    public MappaStatistiche(String chiave, String nome, int nati, int morti) {
+        this.chiave = chiave;
+        this.nome = nome;
+        this.nati = nati;
+        this.morti = morti;
+    }
 
     public String getChiave() {
         return chiave;
