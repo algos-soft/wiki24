@@ -4,6 +4,8 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
+import it.algos.wiki23.backend.packages.bio.*;
 import it.algos.wiki23.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -164,7 +166,49 @@ public class GiornoWikiBackend extends WikiBackend {
         }
 
         super.fixElaboraMinuti(inizio, "pagine di giorni");
+    }
 
+
+    public Map elaboraValidi() {
+        Map<String, Integer> mappa = new HashMap<>();
+        List<String> nati = mongoService.projectionString(Bio.class, "giornoNato");
+        List<String> morti = mongoService.projectionString(Bio.class, "giornoMorto");
+        int vociBiografiche = mongoService.count(Bio.class);
+        Long natiSenzaParametro; //senza parametro
+        Long natiParametroVuoto; //parametro vuoto
+        Long natiValoreEsistente; //qualsiasi valore
+        Long mortiSenzaParametro; //senza parametro
+        Long mortiParametroVuoto; //parametro vuoto
+        Long mortiValoreEsistente; //qualsiasi valore
+        List<String> mortiLinkati;
+        int checkSum;
+
+        natiSenzaParametro = nati.stream().filter(giorno -> giorno == null).count();
+        natiParametroVuoto = nati.stream().filter(giorno -> giorno != null && giorno.length() == 0).count();
+        natiValoreEsistente = nati.stream().filter(giorno -> giorno != null && giorno.length() > 0).count();
+
+        mortiSenzaParametro = morti.stream().filter(giorno -> giorno == null).count();
+        mortiParametroVuoto = morti.stream().filter(giorno -> giorno != null && giorno.length() == 0).count();
+        mortiValoreEsistente = morti.stream().filter(giorno -> giorno != null && giorno.length() > 0).count();
+
+        checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
+        if (checkSum != vociBiografiche) {
+            logger.warn(WrapLog.build().message("Somma giorno di nascita errata"));
+        }
+        checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
+        if (checkSum != vociBiografiche) {
+            logger.warn(WrapLog.build().message("Somma giorno di morte errata"));
+        }
+
+        mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());
+        mappa.put(KEY_MAP_NATI_PARAMETRO_VUOTO, natiParametroVuoto.intValue());
+        mappa.put(KEY_MAP_NATI_VALORE_ESISTENTE, natiValoreEsistente.intValue());
+
+        mappa.put(KEY_MAP_MORTI_SENZA_PARAMETRO, mortiSenzaParametro.intValue());
+        mappa.put(KEY_MAP_MORTI_PARAMETRO_VUOTO, mortiParametroVuoto.intValue());
+        mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente.intValue());
+
+        return mappa;
     }
 
     /**

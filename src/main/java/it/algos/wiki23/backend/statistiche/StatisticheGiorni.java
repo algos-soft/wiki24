@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
 import it.algos.wiki23.backend.enumeration.*;
+import it.algos.wiki23.backend.packages.bio.*;
 import it.algos.wiki23.backend.packages.giorno.*;
 import it.algos.wiki23.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
@@ -57,7 +58,6 @@ public class StatisticheGiorni extends Statistiche {
         message = String.format("Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
-        buffer.append("Vengono prese in considerazione '''solo''' le voci biografiche che hanno valori '''validi e certi''' per i giorni di nascita e morte della persona.");
         buffer.append(VALORI_CERTI + SPAZIO + "per i giorni di nascita e morte della persona.");
 
         return buffer.toString();
@@ -67,7 +67,7 @@ public class StatisticheGiorni extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-        giornoWikiBackend.elabora();
+//        giornoWikiBackend.elabora();
     }
 
     /**
@@ -107,12 +107,115 @@ public class StatisticheGiorni extends Statistiche {
             mappaSingola = mappa.get(key);
             nati = mappaSingola.getNati();
             morti = mappaSingola.getMorti();
-            percNati = mathService.percentualeDueDecimali(nati, totNati);
-            percMorti = mathService.percentualeDueDecimali(morti, totMorti);
+            percNati = mathService.percentualeTxt(nati, totNati);
+            percMorti = mathService.percentualeTxt(morti, totMorti);
             mappaSingola.setPercNati(percNati);
             mappaSingola.setPercMorti(percMorti);
             mappa.put(key, mappaSingola);
         }
+    }
+
+
+    /**
+     * Eventuale prima tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String bodyAnte() {
+        StringBuffer buffer = new StringBuffer();
+        int vociBiografiche = mongoService.count(Bio.class);
+        String numVoci = textService.format(vociBiografiche);
+        Map<String, Integer> mappa = giornoWikiBackend.elaboraValidi();
+
+        buffer.append(nascita(vociBiografiche, numVoci, mappa));
+        buffer.append(morte(vociBiografiche, numVoci, mappa));
+
+        return buffer.toString();
+    }
+
+
+    protected String nascita(int vociBiografiche, String numVoci, Map<String, Integer> mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        String natiSenzaPer;
+        String natiVuotoPer;
+        String natiValidoPer;
+
+        natiSenzaPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO));
+        natiVuotoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO));
+        natiValidoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
+
+        buffer.append(wikiUtility.setParagrafo("Nascita"));
+        message = String.format("Nelle '''%s''' voci biografiche esistenti, il giorno di nascita", numVoci);
+        buffer.append(message);
+        buffer.append(textService.setRef(VALIDO_CORRISPONDENTE, NOTA_VALIDO));
+        message = " risulta:";
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), natiVuotoPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), natiValidoPer);
+        buffer.append(message);
+
+        return buffer.toString();
+    }
+
+    /**
+     * Eventuale seconda tabella <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected String morte(int vociBiografiche, String numVoci, Map<String, Integer> mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        String mortiSenzaPer;
+        String mortiVuotoPer;
+        String mortiValidoPer;
+
+        mortiSenzaPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO),vociBiografiche );
+        mortiVuotoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO),vociBiografiche);
+        mortiValidoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE),vociBiografiche);
+
+        buffer.append(wikiUtility.setParagrafo("Morte"));
+        message = String.format("Nelle '''%s''' voci biografiche esistenti, il giorno di morte", numVoci);
+        buffer.append(message);
+        buffer.append(textService.getRef(NOTA_VALIDO));
+        message = " risulta:";
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO)), mortiSenzaPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO)), mortiVuotoPer);
+        buffer.append(message);
+        buffer.append(CAPO_ASTERISCO);
+        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE)), mortiValidoPer);
+        buffer.append(message);
+
+        return buffer.toString();
+    }
+
+
+    /**
+     * Tabella normale <br>
+     */
+    @Override
+    protected String body() {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        buffer.append(wikiUtility.setParagrafo("Biografie"));
+        message = "Voci biografiche esistenti per ogni giorno di nascita e di morte";
+        buffer.append(message);
+
+        buffer.append(CAPO_ASTERISCO);
+        buffer.append(super.body());
+
+        return buffer.toString();
     }
 
     @Override
@@ -189,13 +292,6 @@ public class StatisticheGiorni extends Statistiche {
         return buffer.toString();
     }
 
-    /**
-     * Prima tabella <br>
-     */
-    @Override
-    protected String body() {
-        return VUOTA;
-    }
 
 
     /**

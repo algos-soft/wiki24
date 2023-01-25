@@ -67,5 +67,3 @@
  cd Desktop/
  cd wiki/
  java -jar -Dserver.port=8090 wiki24.jar
-
-

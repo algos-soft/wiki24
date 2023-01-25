@@ -141,9 +141,9 @@ public class StatisticheAnni extends Statistiche {
         String natiVuotoPer;
         String natiValidoPer;
 
-        natiSenzaPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO));
-        natiVuotoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO));
-        natiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
+        natiSenzaPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO));
+        natiVuotoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO));
+        natiValidoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
 
         buffer.append(wikiUtility.setParagrafo("Nascita"));
         message = String.format("Nelle '''%s''' voci biografiche esistenti, l'anno di nascita", numVoci);
@@ -176,9 +176,9 @@ public class StatisticheAnni extends Statistiche {
         String mortiVuotoPer;
         String mortiValidoPer;
 
-        mortiSenzaPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO));
-        mortiVuotoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO));
-        mortiValidoPer = mathService.percentualeDueDecimali(vociBiografiche, mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE));
+        mortiSenzaPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO));
+        mortiVuotoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO));
+        mortiValidoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE));
 
         buffer.append(wikiUtility.setParagrafo("Morte"));
         message = String.format("Nelle '''%s''' voci biografiche esistenti, l'anno di morte", numVoci);
