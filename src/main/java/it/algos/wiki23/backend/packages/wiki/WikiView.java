@@ -949,20 +949,5 @@ public abstract class WikiView extends CrudView {
 //        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).weight(AEFontWeight.bold)));
 //    }
 
-    public void fixStatisticheMinuti(final long inizio) {
-        long fine = System.currentTimeMillis();
-        String message;
-
-        if (lastStatistica != null) {
-            lastStatistica.setValue(LocalDateTime.now());
-        }
-        else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
-            return;
-        }
-
-        message = String.format("Check");
-        logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
-    }
 
 }

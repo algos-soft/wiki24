@@ -317,7 +317,6 @@ public class NazionalitaView extends WikiView {
     public void uploadStatistiche() {
         long inizio = System.currentTimeMillis();
         appContext.getBean(StatisticheNazionalita.class).upload();
-        super.fixStatisticheMinuti(inizio);
         super.uploadStatistiche();
     }
 

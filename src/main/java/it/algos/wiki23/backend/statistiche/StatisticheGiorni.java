@@ -2,6 +2,9 @@ package it.algos.wiki23.backend.statistiche;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
 import it.algos.wiki23.backend.enumeration.*;
 import it.algos.wiki23.backend.packages.bio.*;
@@ -10,6 +13,7 @@ import it.algos.wiki23.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
+import java.time.*;
 import java.util.*;
 
 /**
@@ -46,6 +50,7 @@ public class StatisticheGiorni extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaGiorni;
+        super.infoTime = "dei giorni";
     }
 
     @Override
@@ -58,7 +63,7 @@ public class StatisticheGiorni extends Statistiche {
         message = String.format("Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
-        buffer.append(VALORI_CERTI + SPAZIO + "per i giorni di nascita e morte della persona.");
+        buffer.append(VALORI_CERTI + SPAZIO + " i giorni di nascita e morte della persona.");
 
         return buffer.toString();
     }
@@ -176,9 +181,9 @@ public class StatisticheGiorni extends Statistiche {
         String mortiVuotoPer;
         String mortiValidoPer;
 
-        mortiSenzaPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO),vociBiografiche );
-        mortiVuotoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO),vociBiografiche);
-        mortiValidoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE),vociBiografiche);
+        mortiSenzaPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO), vociBiografiche);
+        mortiVuotoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO), vociBiografiche);
+        mortiValidoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE), vociBiografiche);
 
         buffer.append(wikiUtility.setParagrafo("Morte"));
         message = String.format("Nelle '''%s''' voci biografiche esistenti, il giorno di morte", numVoci);
@@ -293,7 +298,6 @@ public class StatisticheGiorni extends Statistiche {
     }
 
 
-
     /**
      * Esegue la scrittura della pagina <br>
      */
@@ -309,5 +313,6 @@ public class StatisticheGiorni extends Statistiche {
         super.esegue();
         return super.upload(UPLOAD_TITLE_DEBUG + GIORNI);
     }
+
 
 }

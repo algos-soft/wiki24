@@ -50,6 +50,7 @@ public class StatisticheAnni extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaAnni;
+        super.infoTime = "degli anni";
     }
 
 
@@ -63,7 +64,7 @@ public class StatisticheAnni extends Statistiche {
         message = String.format("Potenzialmente dal [[1000 a.C.]] al [[{{CURRENTYEAR}}]], anche se non tutti gli anni hanno una propria pagina di nati o morti");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
-        buffer.append(VALORI_CERTI + SPAZIO + "per gli anni di nascita e morte della persona.");
+        buffer.append(VALORI_CERTI + SPAZIO + " gli anni di nascita e morte della persona.");
 
         return buffer.toString();
     }

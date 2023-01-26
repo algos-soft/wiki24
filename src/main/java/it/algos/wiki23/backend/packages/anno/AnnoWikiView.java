@@ -245,7 +245,6 @@ public class AnnoWikiView extends WikiView {
     public void uploadStatistiche() {
         long inizio = System.currentTimeMillis();
         appContext.getBean(StatisticheAnni.class).upload();
-        super.fixStatisticheMinuti(inizio);
         super.uploadStatistiche();
     }
 

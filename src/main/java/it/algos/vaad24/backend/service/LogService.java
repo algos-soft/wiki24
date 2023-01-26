@@ -580,7 +580,7 @@ public class LogService extends AbstractService {
             }
         }
         else {
-            message = String.format("%s%s", DUE_PUNTI_SPAZIO, message);
+//            message = String.format("%s%s", DUE_PUNTI_SPAZIO, message);
         }
 
         //-- Inserimento opzionale nella collection di mongoDB

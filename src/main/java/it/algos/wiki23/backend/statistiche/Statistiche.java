@@ -148,11 +148,15 @@ public abstract class Statistiche {
 
     protected boolean uploadTest = false;
 
+
+    protected String infoTime;
+
     protected void esegue() {
         this.fixPreferenze();
         this.elabora();
         this.creaLista();
         this.creaMappa();
+
     }
 
     /**
@@ -187,6 +191,7 @@ public abstract class Statistiche {
     protected WResult upload(String wikiTitle) {
         WResult result;
         StringBuffer buffer = new StringBuffer();
+        long inizio = System.currentTimeMillis();
 
         buffer.append(avviso());
         buffer.append(CAPO);
@@ -203,7 +208,7 @@ public abstract class Statistiche {
         buffer.append(categorie());
         result = registra(wikiTitle, buffer.toString());
 
-        fixInfo();
+        fixInfo(inizio);
         return result;
     }
 
@@ -346,11 +351,38 @@ public abstract class Statistiche {
         return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText);
     }
 
+    //    public void fixInfo(long inizio) {
+    //        long fine;
+    //        long delta;
+    //        String message;
+    //
+    //        fine = System.currentTimeMillis();
+    //        delta = fine - inizio;
+    //        delta = delta / 1000 / 60;
+    //        message = String.format("Elaborazione e upload statistiche dei giorni eseguite in %s minuti", delta);
+    //
+    //        if (lastStatistica != null) {
+    //            lastStatistica.setValue(LocalDateTime.now());
+    //            logger.info(new WrapLog().message(message).type(AETypeLog.statistiche));
+    //        }
+    //        else {
+    //            logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
+    //        }
+    //    }
 
-    public void fixInfo() {
+    public void fixInfo(long inizio) {
+        long fine;
+        long delta;
+        String message;
+
+        fine = System.currentTimeMillis();
+        delta = fine - inizio;
+        delta = delta / 1000 / 60;
+        message = String.format("Elaborazione statistiche %s eseguita in %s minuti", infoTime, delta);
+
         if (lastStatistica != null) {
             lastStatistica.setValue(LocalDateTime.now());
-            logger.info(new WrapLog().message("Upload statistica giorni").type(AETypeLog.statistiche).usaDb());
+            logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
