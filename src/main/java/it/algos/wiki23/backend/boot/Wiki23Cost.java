@@ -181,6 +181,8 @@ public class Wiki23Cost {
 
     public static final String PATH_STATISTICHE_GIORNI = PATH_PROGETTO + GIORNI;
 
+    public static final String PATH_STATISTICHE_ANNI = PATH_PROGETTO + ANNI;
+
     public static final String PATH_CATEGORIA = PATH_WIKI + "Categoria:";
 
     public static final String TAG_EX_SPAZIO = "ex" + SPAZIO;
@@ -351,6 +353,7 @@ public class Wiki23Cost {
     public static final String INFO_SOTTOPAGINA_DI_ATTIVITA = "Questa sottopagina ''(%s/%s)'' è stata creata perché ci sono %d voci biografiche nel paragrafo ''%s'' dell'attività ''%s''";
 
     public static final String INFO_SOTTOPAGINA_DI_NAZIONALITA = "Questa sottopagina ''(%s/%s)'' è stata creata perché ci sono %d voci biografiche nel paragrafo ''%s'' della nazionalità ''%s''";
+
     public static final String UPLOAD_TITLE_DEBUG = "Utente:Biobot/";
 
     public static final String UPLOAD_TITLE_PROJECT = "Progetto:Biografie/";

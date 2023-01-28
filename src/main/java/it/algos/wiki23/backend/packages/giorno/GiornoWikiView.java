@@ -109,7 +109,6 @@ public class GiornoWikiView extends WikiView {
     @Override
     public void fixAlert() {
         super.fixAlert();
-        String message;
 
         int errati = paginaBackend.countGiorniErrati();
         message = String.format("%s: %s", "Pagine dei giorni da cancellare", errati);
