@@ -159,7 +159,7 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
         /**
          * Schedule per ogni task del programma <br>
          */
-        Wiki23Var.typeSchedule = AETypeSchedule.schema1;
+        Wiki23Var.typeSchedule = AETypeSchedule.schema2;
     }
 
     /**
