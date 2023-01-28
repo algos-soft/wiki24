@@ -310,7 +310,7 @@ public abstract class Statistiche {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(CAPO);
-        buffer.append("{{BioCorrelate}}");
+        buffer.append("{{Utente:Biobot/box}}");
         buffer.append(CAPO);
 
         return buffer.toString();
@@ -351,24 +351,6 @@ public abstract class Statistiche {
         return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText);
     }
 
-    //    public void fixInfo(long inizio) {
-    //        long fine;
-    //        long delta;
-    //        String message;
-    //
-    //        fine = System.currentTimeMillis();
-    //        delta = fine - inizio;
-    //        delta = delta / 1000 / 60;
-    //        message = String.format("Elaborazione e upload statistiche dei giorni eseguite in %s minuti", delta);
-    //
-    //        if (lastStatistica != null) {
-    //            lastStatistica.setValue(LocalDateTime.now());
-    //            logger.info(new WrapLog().message(message).type(AETypeLog.statistiche));
-    //        }
-    //        else {
-    //            logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
-    //        }
-    //    }
 
     public void fixInfo(long inizio) {
         long fine;
