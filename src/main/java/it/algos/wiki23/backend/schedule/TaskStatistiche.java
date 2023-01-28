@@ -35,9 +35,12 @@ public class TaskStatistiche extends VaadTask {
         if (flagAttivazione.is()) {
             super.fixNext();
 
-            //--Le statistiche comprendono anche l'elaborazione
+            //--Le statistiche dei giorni comprendono anche l'elaborazione
             appContext.getBean(StatisticheGiorni.class).upload();
+
+            //--Le statistiche degli anni comprendono anche l'elaborazione
             appContext.getBean(StatisticheAnni.class).upload();
+
             super.loggerTask();
         }
         else {

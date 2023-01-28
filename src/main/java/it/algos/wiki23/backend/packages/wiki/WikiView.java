@@ -345,8 +345,13 @@ public abstract class WikiView extends CrudView {
                         }
                     }
                 }
-                addSpan(ASpan.text(message).verde().small());
             }
+            else {
+                message = "Download non previsto";
+            }
+            addSpan(ASpan.text(message).verde().small());
+
+
             if (lastElaborazione != null && lastElaborazione.get() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
                     message = "Elaborazione non ancora effettuata";
@@ -363,15 +368,6 @@ public abstract class WikiView extends CrudView {
                 addSpan(ASpan.text(message).verde().small());
             }
 
-            if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
-                if (statistica.equals(ROOT_DATA_TIME)) {
-                    message = "Statistiche non ancora registrate sul server";
-                }
-                else {
-                    message = String.format("Ultime statistiche registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
-                }
-                addSpan(ASpan.text(message).verde().small());
-            }
 
             if (lastUpload != null && lastUpload.get() instanceof LocalDateTime upload) {
                 if (upload.equals(ROOT_DATA_TIME)) {
@@ -385,6 +381,17 @@ public abstract class WikiView extends CrudView {
                     if (nextUpload != null && nextUpload.get() instanceof LocalDateTime next) {
                         message += String.format(" Prossimo upload previsto %s.", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(next));
                     }
+                }
+                addSpan(ASpan.text(message).verde().small());
+            }
+
+
+            if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
+                if (statistica.equals(ROOT_DATA_TIME)) {
+                    message = "Statistiche non ancora registrate sul server";
+                }
+                else {
+                    message = String.format("Ultime statistiche registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
                 }
                 addSpan(ASpan.text(message).verde().small());
             }

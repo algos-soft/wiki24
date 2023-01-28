@@ -110,7 +110,7 @@ public class NazionalitaView extends WikiView {
         Anchor anchor2 = new Anchor(modulo + PATH_LINK + NAZ_LOWER, PATH_LINK + NAZ_LOWER);
         anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
 
-        Anchor anchor3 = new Anchor(PATH_WIKI + PATH_STATISTICHE_NAZIONALITA, PATH_STATISTICHE_NAZIONALITA);
+        Anchor anchor3 = new Anchor(PATH_WIKI + PATH_STATISTICHE_NAZIONALITA, STATISTICHE);
         anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3));
 

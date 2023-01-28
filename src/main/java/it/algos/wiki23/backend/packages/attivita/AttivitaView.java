@@ -124,7 +124,7 @@ public class AttivitaView extends WikiView {
         Anchor anchor3 = new Anchor(modulo + PATH_LINK + ATT_LOWER, PATH_LINK + ATT_LOWER);
         anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
 
-        Anchor anchor4 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ATTIVITA, PATH_STATISTICHE_ATTIVITA);
+        Anchor anchor4 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ATTIVITA, STATISTICHE);
         anchor4.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3, new Label(SEP), anchor4));
 
