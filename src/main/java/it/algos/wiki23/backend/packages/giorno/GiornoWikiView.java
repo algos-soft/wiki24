@@ -114,6 +114,7 @@ public class GiornoWikiView extends WikiView {
         message = String.format("%s: %s", "Pagine dei giorni da cancellare (vedi view)", errati);
         addSpan(ASpan.text(message).rosso().small());
         addSpan(ASpan.text("Scheduled: TaskGiorni (base giornaliera/2 giorni) e TaskStatistiche (base settimanale)").blue().small());
+        addSpan(ASpan.text("Elaborazione: Prima di ogni statistica").blue().small());
 
         Anchor anchor1 = new Anchor(PATH_WIKI + PATH_STATISTICHE_GIORNI, STATISTICHE);
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
