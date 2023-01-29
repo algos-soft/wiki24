@@ -310,7 +310,7 @@ public abstract class Statistiche {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(CAPO);
-        buffer.append("{{Utente:Biobot/box}}");
+        buffer.append("{{BioCorrelate}}");
         buffer.append(CAPO);
 
         return buffer.toString();
