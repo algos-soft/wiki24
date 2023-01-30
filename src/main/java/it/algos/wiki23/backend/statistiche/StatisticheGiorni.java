@@ -50,6 +50,8 @@ public class StatisticheGiorni extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaGiorni;
+        super.durataStatistica = WPref.statisticaGiorniTime;
+        super.typeTime = AETypeTime.minuti;
         super.infoTime = "dei giorni";
     }
 
@@ -59,7 +61,7 @@ public class StatisticheGiorni extends Statistiche {
         String message;
 
         buffer.append(wikiUtility.setParagrafo("Giorni"));
-        buffer.append("Statistiche dei nati e morti per ogni giorno dell'anno");
+        buffer.append("'''Statistiche''' dei nati e morti per ogni giorno dell'anno");
         message = String.format("Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);

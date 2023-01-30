@@ -40,6 +40,8 @@ public abstract class Statistiche {
 
     protected WPref lastStatistica;
 
+    protected WPref durataStatistica;
+
     /**
      * Istanza di una interfaccia <br>
      * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
@@ -148,6 +150,9 @@ public abstract class Statistiche {
 
     protected boolean uploadTest = false;
 
+    protected long inizio;
+
+    protected AETypeTime typeTime;
 
     protected String infoTime;
 
@@ -166,6 +171,7 @@ public abstract class Statistiche {
      */
     protected void fixPreferenze() {
         this.typeToc = AETypeToc.forceToc;
+        this.inizio = System.currentTimeMillis();
     }
 
     /**
@@ -191,7 +197,6 @@ public abstract class Statistiche {
     protected WResult upload(String wikiTitle) {
         WResult result;
         StringBuffer buffer = new StringBuffer();
-        long inizio = System.currentTimeMillis();
 
         buffer.append(avviso());
         buffer.append(CAPO);
@@ -208,7 +213,7 @@ public abstract class Statistiche {
         buffer.append(categorie());
         result = registra(wikiTitle, buffer.toString());
 
-        fixInfo(inizio);
+        fixInfo();
         return result;
     }
 
@@ -352,15 +357,15 @@ public abstract class Statistiche {
     }
 
 
-    public void fixInfo(long inizio) {
-        long fine;
-        long delta;
-        String message;
+    public void fixInfo() {
+        String message = VUOTA;
 
-        fine = System.currentTimeMillis();
-        delta = fine - inizio;
-        delta = delta / 1000 / 60;
-        message = String.format("Elaborazione statistiche %s eseguita in %s minuti", infoTime, delta);
+        if (typeTime != null) {
+            message = typeTime.message(inizio, String.format("Elaborazione statistiche e upload %s eseguito", infoTime));
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("manca typeTime")));
+        }
 
         if (lastStatistica != null) {
             lastStatistica.setValue(LocalDateTime.now());
@@ -368,6 +373,10 @@ public abstract class Statistiche {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
+        }
+
+        if (durataStatistica != null) {
+            durataStatistica.setValue(typeTime.durata(inizio));
         }
     }
 

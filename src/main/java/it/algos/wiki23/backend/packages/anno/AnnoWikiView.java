@@ -75,10 +75,11 @@ public class AnnoWikiView extends WikiView {
 
         super.lastElaborazione = WPref.elaboraAnni;
         super.durataElaborazione = WPref.elaboraAnniTime;
-        super.lastStatistica = WPref.statisticaAnni;
         super.lastUpload = WPref.uploadAnni;
         super.durataUpload = WPref.uploadAnniTime;
         super.nextUpload = WPref.uploadAnniPrevisto;
+        super.lastStatistica = WPref.statisticaAnni;
+        super.durataStatistica= WPref.statisticaAnniTime;
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
@@ -102,6 +103,7 @@ public class AnnoWikiView extends WikiView {
         super.dialogClazz = AnnoWikiDialog.class;
         super.unitaMisuraElaborazione = "minuti";
         super.unitaMisuraUpload = "minuti";
+        super.unitaMisuraStatistiche = "minuti";
         super.fixPreferenzeBackend();
     }
 
@@ -248,7 +250,6 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        long inizio = System.currentTimeMillis();
         appContext.getBean(StatisticheAnni.class).upload();
         super.uploadStatistiche();
     }

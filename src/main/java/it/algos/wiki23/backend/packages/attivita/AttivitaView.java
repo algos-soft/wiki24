@@ -112,6 +112,7 @@ public class AttivitaView extends WikiView {
 
         message = String.format("%s: %s", "Liste da cancellare", backend.countAttivitaDaCancellare());
         addSpan(ASpan.text(message).rosso().small());
+        addSpan(ASpan.text("Scheduled: TaskAttivita (base settimanale) e TaskStatistiche (base settimanale)").blue().small());
 
         String modulo = PATH_WIKI + PATH_MODULO;
 

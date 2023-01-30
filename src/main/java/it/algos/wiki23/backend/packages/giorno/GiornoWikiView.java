@@ -72,10 +72,11 @@ public class GiornoWikiView extends WikiView {
 
         super.lastElaborazione = WPref.elaboraGiorni;
         super.durataElaborazione = WPref.elaboraGiorniTime;
-        super.lastStatistica = WPref.statisticaGiorni;
         super.lastUpload = WPref.uploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
         super.nextUpload = WPref.uploadGiorniPrevisto;
+        super.lastStatistica = WPref.statisticaGiorni;
+        super.durataStatistica = WPref.statisticaGiorniTime;
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
@@ -96,9 +97,9 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneUploadNati = true;
         super.usaBottoneUploadMorti = true;
 
-        //        super.dialogClazz = GiornoWikiDialog.class;
         super.unitaMisuraElaborazione = "minuti";
         super.unitaMisuraUpload = "minuti";
+        super.unitaMisuraStatistiche = "minuti";
         super.fixPreferenzeBackend();
     }
 

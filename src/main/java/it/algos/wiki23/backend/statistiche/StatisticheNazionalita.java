@@ -361,7 +361,7 @@ public class StatisticheNazionalita extends Statistiche {
      */
     @Override
     protected void creaLista() {
-        lista = nazionalitaBackend.findNazionalitaDistinctByPlurali();
+        lista = nazionalitaBackend.findNazionalitaDistinctByPluraliSortPlurali();
     }
 
     /**

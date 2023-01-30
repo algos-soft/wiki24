@@ -12,6 +12,7 @@ import it.algos.wiki23.backend.upload.*;
 import it.algos.wiki23.backend.wrapper.*;
 import it.algos.wiki23.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -188,18 +189,28 @@ public class NazionalitaBackend extends WikiBackend {
         return nazionalita;
     }
 
-    public List<Nazionalita> findNazionalitaDistinctByPlurali() {
+
+    private List<Nazionalita> findNazionalitaDistinctByPlurali(String property) {
         List<Nazionalita> lista = new ArrayList<>();
         Set<String> set = new HashSet();
-        List<Nazionalita> listaAll = repository.findAll();
+        Sort sortOrder = Sort.by(Sort.Direction.ASC, property);
+        List<Nazionalita> listaAll = repository.findAll(sortOrder);
 
-        for (Nazionalita nazionalita : listaAll) {
-            if (set.add(nazionalita.pluraleLista)) {
-                lista.add(nazionalita);
+        for (Nazionalita attivita : listaAll) {
+            if (set.add(attivita.pluraleLista)) {
+                lista.add(attivita);
             }
         }
 
         return lista;
+    }
+
+    public List<Nazionalita> findNazionalitaDistinctByPluraliSortPagina() {
+        return findNazionalitaDistinctByPlurali("pagina");
+    }
+
+    public List<Nazionalita> findNazionalitaDistinctByPluraliSortPlurali() {
+        return findNazionalitaDistinctByPlurali("pluraleLista");
     }
 
     /**
@@ -211,7 +222,7 @@ public class NazionalitaBackend extends WikiBackend {
      */
     public List<Nazionalita> findPagineDaCancellare() {
         List<Nazionalita> listaDaCancellare = new ArrayList<>();
-        List<Nazionalita> listaPlurali = findNazionalitaDistinctByPlurali();
+        List<Nazionalita> listaPlurali = findNazionalitaDistinctByPluraliSortPlurali();
 
         for (Nazionalita nazionalita : listaPlurali) {
             if (nazionalita.esistePaginaLista && !nazionalita.superaSoglia) {
@@ -460,6 +471,20 @@ public class NazionalitaBackend extends WikiBackend {
 
         logger.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
         return cont;
+    }
+
+
+    public int countNazionalitaDaCancellare() {
+        int daCancellare = 0;
+        List<Nazionalita> listaPlurali = findNazionalitaDistinctByPluraliSortPagina();
+
+        for (Nazionalita attivita : listaPlurali) {
+            if (attivita.esistePaginaLista && !attivita.superaSoglia) {
+                daCancellare++;
+            }
+        }
+
+        return daCancellare;
     }
 
 

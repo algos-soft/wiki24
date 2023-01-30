@@ -126,6 +126,7 @@ public abstract class WikiView extends CrudView {
     protected String unitaMisuraElaborazione;
 
     protected String unitaMisuraUpload;
+    protected String unitaMisuraStatistiche;
 
     protected boolean usaBottoneGiornoAnno;
 
@@ -178,6 +179,8 @@ public abstract class WikiView extends CrudView {
     protected WPref nextUpload;
 
     protected WPref lastStatistica;
+
+    protected WPref durataStatistica;
 
     protected WikiBackend crudBackend;
 
@@ -351,7 +354,6 @@ public abstract class WikiView extends CrudView {
             }
             addSpan(ASpan.text(message).verde().small());
 
-
             if (lastElaborazione != null && lastElaborazione.get() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
                     message = "Elaborazione non ancora effettuata";
@@ -367,7 +369,6 @@ public abstract class WikiView extends CrudView {
 
                 addSpan(ASpan.text(message).verde().small());
             }
-
 
             if (lastUpload != null && lastUpload.get() instanceof LocalDateTime upload) {
                 if (upload.equals(ROOT_DATA_TIME)) {
@@ -385,13 +386,17 @@ public abstract class WikiView extends CrudView {
                 addSpan(ASpan.text(message).verde().small());
             }
 
-
             if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
                 if (statistica.equals(ROOT_DATA_TIME)) {
                     message = "Statistiche non ancora registrate sul server";
                 }
                 else {
-                    message = String.format("Ultime statistiche registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
+                    message = String.format("Ultime statistiche elaborate e registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
+                    if (durataStatistica != null && durataStatistica.get() instanceof Integer durata) {
+                        if (durata > 0) {
+                            message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
+                        }
+                    }
                 }
                 addSpan(ASpan.text(message).verde().small());
             }
@@ -944,17 +949,17 @@ public abstract class WikiView extends CrudView {
         reload();
     }
 
-//    public void addSpanVerdeSmall(final String message) {
-//        infoPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.verde).fontHeight(AEFontSize.em7)));
-//    }
-//
-//    public void addSpanRossoSmall(final String message) {
-//        infoPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).fontHeight(AEFontSize.em7)));
-//    }
-//
-//    public void addSpanRossoBold(final String message) {
-//        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).weight(AEFontWeight.bold)));
-//    }
+    //    public void addSpanVerdeSmall(final String message) {
+    //        infoPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.verde).fontHeight(AEFontSize.em7)));
+    //    }
+    //
+    //    public void addSpanRossoSmall(final String message) {
+    //        infoPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).fontHeight(AEFontSize.em7)));
+    //    }
+    //
+    //    public void addSpanRossoBold(final String message) {
+    //        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).weight(AEFontWeight.bold)));
+    //    }
 
 
 }

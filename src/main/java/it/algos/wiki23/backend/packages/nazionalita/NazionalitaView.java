@@ -102,6 +102,10 @@ public class NazionalitaView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
+        message = String.format("%s: %s", "Liste da cancellare", backend.countNazionalitaDaCancellare());
+        addSpan(ASpan.text(message).rosso().small());
+        addSpan(ASpan.text("Scheduled: TaskNazionalita (base settimanale) e TaskStatistiche (base settimanale)").blue().small());
+
         String modulo = PATH_WIKI + PATH_MODULO;
 
         Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + NAZ_LOWER, PATH_PLURALE + NAZ_LOWER);
@@ -140,8 +144,6 @@ public class NazionalitaView extends WikiView {
 
         this.add(topPlaceHolder2);
     }
-
-
 
 
     /**
@@ -209,8 +211,6 @@ public class NazionalitaView extends WikiView {
     }
 
 
-
-
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
@@ -259,7 +259,7 @@ public class NazionalitaView extends WikiView {
 
         if (boxDistinctPlurali != null) {
             if (boxDistinctPlurali.getValue()) {
-                items = backend.findNazionalitaDistinctByPlurali();
+                items = backend.findNazionalitaDistinctByPluraliSortPlurali();
             }
             else {
                 sortOrder = Sort.by(Sort.Direction.ASC, "singolare");

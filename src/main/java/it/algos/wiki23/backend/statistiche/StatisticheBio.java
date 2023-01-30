@@ -103,7 +103,7 @@ public class StatisticheBio extends Statistiche {
         int giorni = giornoWikiBackend.findAll().size();
         int anni = annoWikiBackend.findAll().size();
         int attivita = attivitaBackend.findAttivitaDistinctByPluraliSortPagina().size();
-        int nazionalita = nazionalitaBackend.findNazionalitaDistinctByPlurali().size();
+        int nazionalita = nazionalitaBackend.findNazionalitaDistinctByPluraliSortPlurali().size();
         int attesa = 2;
 
         return statisticaBioBackend.creaIfNotExist(evento, bio, giorni, anni, attivita, nazionalita, attesa);

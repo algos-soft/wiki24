@@ -2,6 +2,7 @@ package it.algos.wiki23.backend.statistiche;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki23.backend.boot.Wiki23Cost.*;
 import it.algos.wiki23.backend.enumeration.*;
 import it.algos.wiki23.backend.packages.anno.*;
@@ -50,6 +51,8 @@ public class StatisticheAnni extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaAnni;
+        super.durataStatistica = WPref.statisticaAnniTime;
+        super.typeTime = AETypeTime.minuti;
         super.infoTime = "degli anni";
     }
 
@@ -60,7 +63,7 @@ public class StatisticheAnni extends Statistiche {
         String message;
 
         buffer.append(wikiUtility.setParagrafo("Anni"));
-        buffer.append("Statistiche dei nati e morti per ogni anno");
+        buffer.append("'''Statistiche''' dei nati e morti per ogni anno");
         message = String.format("Potenzialmente dal [[1000 a.C.]] al [[{{CURRENTYEAR}}]], anche se non tutti gli anni hanno una propria pagina di nati o morti");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
