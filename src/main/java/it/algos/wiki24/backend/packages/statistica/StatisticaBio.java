@@ -1,0 +1,66 @@
+package it.algos.wiki24.backend.packages.statistica;
+
+import it.algos.vaad24.backend.annotation.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
+import lombok.*;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.*;
+import org.springframework.stereotype.*;
+
+import javax.persistence.*;
+import java.time.*;
+import java.time.format.*;
+
+/**
+ * Project wiki23
+ * Created by Algos
+ * User: gac
+ * Date: Sun, 21-Aug-2022
+ * Time: 14:07
+ * <p>
+ * Estende la entity astratta AEntity che contiene la key property ObjectId <br>
+ */
+@Component
+//Lombok
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder()
+@EqualsAndHashCode(callSuper = false)
+@MappedSuperclass()
+public class StatisticaBio extends AEntity {
+
+    private static final transient int WIDTHEM = 6;
+
+    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
+    @AIField(type = AETypeField.integer, header = "#", widthEM = 4)
+    public int ordine;
+
+    @AIField(type = AETypeField.localDate)
+    public LocalDate evento;
+
+    @AIField(type = AETypeField.integer, header = "Bio", widthEM = WIDTHEM)
+    public int bio;
+
+    @AIField(type = AETypeField.integer, header = "Gio", widthEM = WIDTHEM)
+    public int giorni;
+
+    @AIField(type = AETypeField.integer, header = "Anni", widthEM = WIDTHEM)
+    public int anni;
+
+    @AIField(type = AETypeField.integer, header = "Att", widthEM = WIDTHEM)
+    public int attivita;
+
+    @AIField(type = AETypeField.integer, header = "Nat", widthEM = WIDTHEM)
+    public int nazionalita;
+
+    @AIField(type = AETypeField.integer, header = "Delta", widthEM = WIDTHEM)
+    public int attesa;
+
+    @Override
+    public String toString() {
+        return evento.format(DateTimeFormatter.ofPattern("d-MMM-yy"));
+    }
+
+}// end of crud entity class

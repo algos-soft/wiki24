@@ -3,7 +3,7 @@ package it.algos.statistiche;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki23.backend.statistiche.*;
+import it.algos.wiki24.backend.statistiche.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;

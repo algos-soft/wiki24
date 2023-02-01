@@ -3,16 +3,12 @@ package it.algos.statistiche;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki23.backend.statistiche.*;
+import it.algos.wiki24.backend.statistiche.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 import org.springframework.test.context.junit.jupiter.*;
 
 /**
