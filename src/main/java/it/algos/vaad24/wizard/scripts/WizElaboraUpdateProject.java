@@ -108,7 +108,7 @@ public class WizElaboraUpdateProject extends WizElabora {
                 oldToken = VaadVar.vaadin24BannerTitle;
                 newToken = VaadVar.projectBannerTitle;
                 result = fileService.copyFile(AECopy.fileModifyEver, srcVaad24, destNewProject, wiz.getNomeFile(), oldToken, newToken);
-                mostraRisultato(result, AECopy.dirFilesModifica, dir, tag);
+                mostraRisultato(result, wiz.getNomeFile(), oldToken, newToken);
             }
 
             default -> {}

@@ -919,6 +919,30 @@ public class TextService extends AbstractService {
         return testoOut;
     }
 
+
+    /**
+     * Forza un testo alla lunghezza desiderata. <br>
+     * Se è più corta, aggiunge spazi vuoti <br>
+     * Se è più lungo, lo tronca e aggiunge 3 punti <br>
+     * La stringa in ingresso viene 'giustificata' a sinistra <br>
+     * Vengono eliminati gli spazi vuoti che precedono la stringa <br>
+     *
+     * @param testoIn stringa in ingresso
+     *
+     * @return testo della 'lunghezza' richiesta
+     */
+
+    public String fixSizePunti(final String testoIn, int size) {
+        String testoOut = rightPad(testoIn, size);
+
+        if (testoOut.length() > size) {
+            testoOut = testoOut.substring(0, size);
+            testoOut += TRE_PUNTI;
+        }
+
+        return testoOut;
+    }
+
     /**
      * Forza un testo alla lunghezza desiderata e aggiunge singole parentesi quadre in testa e coda. <br>
      * Se arriva una stringa vuota, restituisce una stringa vuota con singole parentesi quadre aggiunte <br>
@@ -1330,11 +1354,12 @@ public class TextService extends AbstractService {
 
         return buffer.toString();
     }
+
     /**
      * Aggiunge i tag '<ref></ref>' in testa e coda alla stringa. <br>
      * Elimina spazi vuoti iniziali e finali <br>
      *
-     * @param keyNota   chiave della nota
+     * @param keyNota chiave della nota
      *
      * @return stringa con <ref></ref> aggiunti
      */
