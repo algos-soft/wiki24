@@ -155,6 +155,18 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          */
         VaadVar.versionClazz = Wiki23Vers.class;
 
+        /**
+         * Titolo del banner <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.projectBannerTitle = " _______ _______ _______ _______ _______ _______\n" +
+                "|\\     /|\\     /|\\     /|\\     /|\\     /|\\     /|\n" +
+                "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
+                "| |   | | |   | | |   | | |   | | |   | | |   | |\n" +
+                "| |w  | | |i  | | |k  | | |i  | | |2  | | |4  | |\n" +
+                "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
+                "|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|\n";
+
 
         /**
          * Schedule per ogni task del programma <br>
