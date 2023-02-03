@@ -2,7 +2,7 @@ package it.algos.wiki24.backend.boot;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
-import static it.algos.wiki24.backend.boot.Wiki23Cost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -20,7 +20,7 @@ import org.springframework.context.event.*;
 @SpringComponent
 @Qualifier(TAG_WIKI23_PREFERENCES)
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class Wiki23Pref extends VaadPref {
+public class Wiki24Pref extends VaadPref {
 
     /**
      * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this

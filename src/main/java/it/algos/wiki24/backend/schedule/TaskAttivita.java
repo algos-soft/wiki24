@@ -26,7 +26,7 @@ public class TaskAttivita extends VaadTask {
 
     public TaskAttivita() {
         super.descrizioneTask = WPref.uploadAttivita.getDescrizione();
-        super.typeSchedule = Wiki23Var.typeSchedule.getAttivita();
+        super.typeSchedule = Wiki24Var.typeSchedule.getAttivita();
         super.flagAttivazione = WPref.usaTaskAttivita;
         super.flagPrevisione = WPref.uploadAttivitaPrevisto;
     }

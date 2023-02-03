@@ -8,7 +8,7 @@ import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
-import static it.algos.wiki24.backend.boot.Wiki23Cost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
@@ -29,6 +29,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.servlet.*;
+import java.util.*;
 
 /**
  * Project Wiki23
@@ -48,7 +49,7 @@ import javax.servlet.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class Wiki23Boot extends VaadBoot implements ServletContextListener {
+public class Wiki24Boot extends VaadBoot implements ServletContextListener {
 
     private String property;
 
@@ -69,7 +70,7 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
     public QueryService queryService;
 
     public static void start() {
-        new Wiki23Boot();
+        new Wiki24Boot();
     }
 
 //    /**
@@ -97,14 +98,14 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Di default FlowData oppure possibile sottoclasse del progetto <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabiliRiferimentoIstanzeGenerali() del progetto corrente <br>
          */
-        VaadVar.istanzaData = appContext.getBean(Wiki23Data.class);
+        VaadVar.istanzaData = appContext.getBean(Wiki24Data.class);
 
         /*
          * Classe da usare per gestire le versioni <br>
          * Di default FlowVers oppure possibile sottoclasse del progetto <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.versionClazz = Wiki23Vers.class;
+        VaadVar.versionClazz = Wiki24Vers.class;
 
         super.fixVariabiliRiferimentoIstanzeGenerali();
     }
@@ -130,7 +131,13 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectCurrentMainApplication = PROJECT_CURRENT_MAIN_APPLICATION;
+        try {
+            property = "algos.project.application";
+            VaadVar.projectCurrentMainApplication = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
 
         /**
          * Nome identificativo maiuscolo dell' applicazione <br>
@@ -138,7 +145,13 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectNameUpper = "Wiki24";
+        try {
+            property = "algos.project.name";
+            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
 
         /**
          * Nome identificativo minuscolo del modulo dell' applicazione <br>
@@ -146,14 +159,21 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
          * Spesso coincide (non obbligatoriamente) con projectNameIdea <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.projectNameModulo = "wiki23";
+        try {
+            property = "algos.project.nameModulo";
+            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
 
         /**
          * Classe da usare per gestire le versioni <br>
          * Di default FlowVers oppure possibile sottoclasse del progetto <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.versionClazz = Wiki23Vers.class;
+        VaadVar.versionClazz = Wiki24Vers.class;
 
         /**
          * Titolo del banner <br>
@@ -171,7 +191,7 @@ public class Wiki23Boot extends VaadBoot implements ServletContextListener {
         /**
          * Schedule per ogni task del programma <br>
          */
-        Wiki23Var.typeSchedule = AETypeSchedule.schema2;
+        Wiki24Var.typeSchedule = AETypeSchedule.schema2;
     }
 
     /**

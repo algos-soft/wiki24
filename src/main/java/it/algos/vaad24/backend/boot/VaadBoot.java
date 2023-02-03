@@ -324,7 +324,7 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.usaSecurity = false;
 
-        /**
+        /*
          * Titolo del banner <br>
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */

@@ -3,7 +3,7 @@ package it.algos.wiki24.backend.boot;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.enumeration.*;
-import static it.algos.wiki24.backend.boot.Wiki23Cost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Scope;
 @SpringComponent
 @Qualifier(TAG_WIKI23_VERSION)
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class Wiki23Vers extends VaadVers {
+public class Wiki24Vers extends VaadVers {
 
     /**
      * Property statica per le versioni inserite da vaadin23 direttamente <br>

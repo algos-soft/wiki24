@@ -13,9 +13,8 @@ import org.springframework.context.annotation.Scope;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class Wiki23Cost {
+public class Wiki24Cost {
 
-    public static final String PROJECT_CURRENT_MAIN_APPLICATION = "Wiki23Application";
 
     public static final String WIKI_TITLE_DEBUG = "Utente:Biobot/2";
 

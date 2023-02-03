@@ -22,7 +22,7 @@ public class TaskNomi extends VaadTask {
 
     public TaskNomi() {
         super.descrizioneTask = WPref.uploadNomi.getDescrizione();
-        super.typeSchedule = Wiki23Var.typeSchedule.getNomi();
+        super.typeSchedule = Wiki24Var.typeSchedule.getNomi();
         super.flagAttivazione = WPref.usaTaskNomi;
         super.flagPrevisione = WPref.uploadNomiPrevisto;
     }

@@ -28,7 +28,7 @@ public class TaskNazionalita extends VaadTask {
 
     public TaskNazionalita() {
         super.descrizioneTask = WPref.uploadNazionalita.getDescrizione();
-        super.typeSchedule = Wiki23Var.typeSchedule.getNazionalita();
+        super.typeSchedule = Wiki24Var.typeSchedule.getNazionalita();
         super.flagAttivazione = WPref.usaTaskNazionalita;
         super.flagPrevisione = WPref.uploadNazionalitaPrevisto;
     }

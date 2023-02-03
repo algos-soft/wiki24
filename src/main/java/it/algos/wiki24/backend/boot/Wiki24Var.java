@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class Wiki23Var {
+public class Wiki24Var {
 
     /**
      * Schedule per ogni task del programma <br>

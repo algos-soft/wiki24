@@ -1,7 +1,7 @@
 package it.algos.wiki24.backend.packages.cognome;
 
 import it.algos.vaad24.backend.entity.*;
-import static it.algos.wiki24.backend.boot.Wiki23Cost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;

@@ -16,7 +16,7 @@ import javax.annotation.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class Wiki23Data extends VaadData {
+public class Wiki24Data extends VaadData {
 
 
     /**
@@ -26,7 +26,7 @@ public class Wiki23Data extends VaadData {
      * Non utilizzato e non necessario <br>
      * Per evitare il bug (solo visivo), aggiungo un costruttore senza parametri <br>
      */
-    public Wiki23Data() {
+    public Wiki24Data() {
     }// end of constructor not @Autowired
 
 

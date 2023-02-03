@@ -22,7 +22,7 @@ import java.util.stream.*;
  * Date: Tue, 13-Dec-2022
  * Time: 09:35
  */
-@SpringBootTest(classes = {Application.class})
+@SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
 @Tag("backend")

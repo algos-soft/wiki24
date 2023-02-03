@@ -3,7 +3,7 @@ package it.algos.wiki24.backend.packages.statistica;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
-import static it.algos.wiki24.backend.boot.Wiki23Cost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.statistiche.*;
 import org.springframework.beans.factory.annotation.*;
