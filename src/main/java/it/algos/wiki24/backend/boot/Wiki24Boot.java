@@ -126,46 +126,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
          */
         VaadVar.projectCurrent = "wiki24";
 
-        /**
-         * Nome della classe di partenza col metodo 'main' <br>
-         * Spesso coincide (non obbligatoriamente) con projectCurrent + Application <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.project.application";
-            VaadVar.projectCurrentMainApplication = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
-
-        /**
-         * Nome identificativo maiuscolo dell' applicazione <br>
-         * Usato (eventualmente) nella barra di menu in testa pagina <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.project.name";
-            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
-
-        /**
-         * Nome identificativo minuscolo del modulo dell' applicazione <br>
-         * Usato come parte del path delle varie directory <br>
-         * Spesso coincide (non obbligatoriamente) con projectNameIdea <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.project.nameModulo";
-            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
 
 
         /**

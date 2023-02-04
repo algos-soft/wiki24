@@ -116,9 +116,8 @@ public abstract class WizElabora {
             result = fileService.copyDirectory(copy, srcPath, destPath);
         }
 
-        //        mostraRisultato(result, wiz.getCopy(), dir, tag);
+        logger.copy(result.typeLog(AETypeLog.wizard));
         return result.typeLog(AETypeLog.wizard).typeCopy(copy);
-
     }
 
 
