@@ -480,7 +480,7 @@ public class LogService extends AbstractService {
         String textResult;
         String resultTagCode = VUOTA;
         String tagCode = VUOTA;
-        String tab = DOPPIO_SPAZIO;
+        String tab = TAB_SPAZIO;
 
         if (result == null) {
             info(WrapLog.build().type(AETypeLog.error).message(AETypeResult.mancaResult.getTag()));
@@ -494,7 +494,7 @@ public class LogService extends AbstractService {
         titolo = textService.primaMaiuscola(titolo);
 
         if (copy == AECopy.modulo) {
-            message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto", VaadVar.moduloVaadin24, VaadVar.projectCurrent);
+            message = String.format("Il modulo '%s' su [%s] è stato completamente riscritto partendo da quello di [%s]", VaadVar.moduloVaadin24, VaadVar.projectCurrent, VaadVar.moduloVaadin24);
         }
         else {
             textResult = result.getTypeResult() != null ? result.getTypeResult().getTag() : AETypeResult.indeterminato.getTag();
