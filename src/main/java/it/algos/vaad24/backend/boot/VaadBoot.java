@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.boot;
 
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -99,6 +100,14 @@ public class VaadBoot implements ServletContextListener {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
+    protected TextService textService;
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
     protected LogService logger;
 
     /**
@@ -170,6 +179,7 @@ public class VaadBoot implements ServletContextListener {
         this.fixVariabili();
         logger.setUpIni();
 
+        this.printInfo();
         this.fixEnvironment();
         this.fixDBMongo();
 
@@ -184,6 +194,25 @@ public class VaadBoot implements ServletContextListener {
         logger.setUpEnd();
     }
 
+    public void printInfo() {
+        printInfo("VaadVar.projectVaadin24", VaadVar.projectVaadin24);
+        printInfo("VaadVar.moduloVaadin24", VaadVar.moduloVaadin24);
+        printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
+        printInfo("VaadVar.projectCurrentMainApplication", VaadVar.projectCurrentMainApplication);
+        printInfo("VaadVar.projectNameUpper", VaadVar.projectNameUpper);
+        printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
+        printInfo("VaadVar.projectCurrent", VaadVar.projectCurrent);
+        printInfo("VaadVar.projectDate", VaadVar.projectDate);
+        printInfo("VaadVar.projectNote", VaadVar.projectNote);
+    }
+
+    private void printInfo(String nome, String valore) {
+        String message;
+        if (textService.isValid(valore)) {
+            message = String.format("%s: %s", nome, valore);
+            logger.info(new WrapLog().message(message).type(AETypeLog.info));
+        }
+    }
 
     /**
      * Controllo di alcune regolazioni
@@ -191,6 +220,7 @@ public class VaadBoot implements ServletContextListener {
     public void fixEnvironment() {
         String message;
         String databaseName;
+        String databaseVersion = "6-?";
         String autoIndexCreation;
         String allDebugSetupTxt;
 
@@ -206,12 +236,17 @@ public class VaadBoot implements ServletContextListener {
 
         databaseName = environment.getProperty("spring.data.mongodb.database");
         message = String.format("Database mongo in uso: %s", databaseName);
-        logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+        logger.info(new WrapLog().message(message).type(AETypeLog.info));
+
+        MongoDatabase db = mongoService.getDataBase();
+        MongoDatabase dbAdmin = mongoService.getDBAdmin();
+        message = String.format("Database mongo versione: %s", databaseVersion);
+        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 
         autoIndexCreation = environment.getProperty("spring.data.mongodb.auto-index-creation");
         message = String.format("Auto creazione degli indici (per la classi @Document): %s", autoIndexCreation);
         if (allDebugSetup) {
-            logger.info(new WrapLog().message(message).type(AETypeLog.setup));
+            logger.info(new WrapLog().message(message).type(AETypeLog.info));
         }
     }
 
@@ -279,11 +314,18 @@ public class VaadBoot implements ServletContextListener {
         VaadVar.projectNameModulo = MODULO_VAADIN24;
 
         /**
-         * Lista dei moduli di menu da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+         * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
          * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
          * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
          */
-        VaadVar.menuRouteList = new ArrayList<>();
+        VaadVar.menuRouteListVaadin = new ArrayList<>();
+
+        /**
+         * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+         * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
+         * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
+         */
+        VaadVar.menuRouteListProject = new ArrayList<>();
 
         //        /**
         //         * Classe da usare per lo startup del programma <br>
@@ -336,7 +378,6 @@ public class VaadBoot implements ServletContextListener {
                 "| |v  | | |a  | | |a  | | |d  | | |2  | | |4  | |\n" +
                 "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
                 "|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|\n";
-
 
         /**
          * Nome della classe di partenza col metodo 'main' <br>
@@ -393,33 +434,6 @@ public class VaadBoot implements ServletContextListener {
             VaadVar.projectCurrent = "simple";
         }
 
-        /*
-         * Nome identificativo maiuscolo dell' applicazione <br>
-         * Usato (eventualmente) nella barra di menu in testa pagina <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.project.name";
-            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-            VaadVar.projectNameUpper = "Simple";
-        }
-
-        /*
-         * Nome identificativo minuscolo del progetto corrente <br>
-         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
-         */
-        try {
-            property = "algos.project.nameModulo";
-            VaadVar.projectNameModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-            VaadVar.projectCurrent = "simple";
-        }
 
         /*
          * Versione dell' applicazione <br>
@@ -460,7 +474,6 @@ public class VaadBoot implements ServletContextListener {
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
-
     }
 
     /**
@@ -478,12 +491,12 @@ public class VaadBoot implements ServletContextListener {
         //        VaadVar.menuRouteList.add(AddressFormView.class);
         //        VaadVar.menuRouteList.add(CarrelloFormView.class);
         //        VaadVar.menuRouteList.add(ContinenteView.class);
-        VaadVar.menuRouteList.add(WizardView.class);
-        VaadVar.menuRouteList.add(UtilityView.class);
-        VaadVar.menuRouteList.add(NotaView.class);
-        VaadVar.menuRouteList.add(VersioneView.class);
-        VaadVar.menuRouteList.add(LoggerView.class);
-        VaadVar.menuRouteList.add(PreferenzaView.class);
+        VaadVar.menuRouteListVaadin.add(WizardView.class);
+        VaadVar.menuRouteListVaadin.add(UtilityView.class);
+        VaadVar.menuRouteListVaadin.add(NotaView.class);
+        VaadVar.menuRouteListVaadin.add(VersioneView.class);
+        VaadVar.menuRouteListVaadin.add(LoggerView.class);
+        VaadVar.menuRouteListVaadin.add(PreferenzaView.class);
     }
 
 

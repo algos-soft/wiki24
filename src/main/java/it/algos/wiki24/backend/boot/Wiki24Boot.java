@@ -195,20 +195,19 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     @Override
     protected void fixMenuRoutes() {
         super.fixMenuRoutes();
-        VaadVar.menuRouteList.remove(ContinenteView.class);
 
-        VaadVar.menuRouteList.add(GenereView.class);
-        VaadVar.menuRouteList.add(AttivitaView.class);
-        VaadVar.menuRouteList.add(NazionalitaView.class);
-        VaadVar.menuRouteList.add(ProfessioneView.class);
-        VaadVar.menuRouteList.add(DoppionomeView.class);
-        VaadVar.menuRouteList.add(BioView.class);
-        VaadVar.menuRouteList.add(AnnoWikiView.class);
-        VaadVar.menuRouteList.add(GiornoWikiView.class);
-        VaadVar.menuRouteList.add(CognomeView.class);
-        VaadVar.menuRouteList.add(StatisticaBioView.class);
-        VaadVar.menuRouteList.add(ErroreBioView.class);
-        VaadVar.menuRouteList.add(PaginaView.class);
+        VaadVar.menuRouteListProject.add(GenereView.class);
+        VaadVar.menuRouteListProject.add(AttivitaView.class);
+        VaadVar.menuRouteListProject.add(NazionalitaView.class);
+        VaadVar.menuRouteListProject.add(ProfessioneView.class);
+        VaadVar.menuRouteListProject.add(DoppionomeView.class);
+        VaadVar.menuRouteListProject.add(BioView.class);
+        VaadVar.menuRouteListProject.add(AnnoWikiView.class);
+        VaadVar.menuRouteListProject.add(GiornoWikiView.class);
+        VaadVar.menuRouteListProject.add(CognomeView.class);
+        VaadVar.menuRouteListProject.add(StatisticaBioView.class);
+        VaadVar.menuRouteListProject.add(ErroreBioView.class);
+        VaadVar.menuRouteListProject.add(PaginaView.class);
     }
 
 
