@@ -245,7 +245,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         //--Layout generale della view <br>
         this.fixGeneralLayout();
 
-        //--Preferenze usate da questa 'view'
+        //--Preferenze usate da questa 'logica'
         this.fixPreferenze();
 
         //--Costruisce un (eventuale) layout per informazioni aggiuntive come header della view <br>
