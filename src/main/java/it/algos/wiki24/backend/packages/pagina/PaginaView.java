@@ -79,7 +79,6 @@ public class PaginaView extends WikiView {
         this.usaBottonePaginaWiki = false;
         this.usaBottoneElabora = true;
 
-        super.unitaMisuraElaborazione = "minuti";
         super.fixPreferenzeBackend();
     }
 

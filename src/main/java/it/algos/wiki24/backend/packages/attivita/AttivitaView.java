@@ -95,9 +95,7 @@ public class AttivitaView extends WikiView {
         super.usaBottoneSearch = false;
 
         super.dialogClazz = AttivitaDialog.class;
-        super.unitaMisuraDownload = "secondi";
-        super.unitaMisuraElaborazione = "minuti";
-        super.unitaMisuraUpload = "minuti";
+        super.unitaMisuraDownload = AETypeTime.secondi;
         super.fixPreferenzeBackend();
     }
 

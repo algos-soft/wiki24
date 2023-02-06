@@ -102,9 +102,6 @@ public class AnnoWikiView extends WikiView {
         super.usaBottoneUploadMorti = true;
 
 //        super.dialogClazz = AnnoWikiDialog.class;
-        super.unitaMisuraElaborazione = "minuti";
-        super.unitaMisuraUpload = "minuti";
-        super.unitaMisuraStatistiche = "minuti";
         super.fixPreferenzeBackend();
     }
 

@@ -82,7 +82,6 @@ public class CognomeView extends WikiView {
         super.usaBottoneUploadPagina = true;
         super.usaBottoneElabora = true;
 
-        super.unitaMisuraElaborazione = "minuti";
         super.fixPreferenzeBackend();
     }
 

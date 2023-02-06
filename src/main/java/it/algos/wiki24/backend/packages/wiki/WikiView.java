@@ -10,6 +10,7 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.selection.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -118,13 +119,13 @@ public abstract class WikiView extends CrudView {
 
     protected String wikiStatisticheTitle;
 
-    protected String unitaMisuraDownload;
+    protected AETypeTime unitaMisuraDownload;
 
-    protected String unitaMisuraElaborazione;
+    protected AETypeTime unitaMisuraElaborazione;
 
-    protected String unitaMisuraUpload;
+    protected AETypeTime unitaMisuraUpload;
 
-    protected String unitaMisuraStatistiche;
+    protected AETypeTime unitaMisuraStatistiche;
 
     protected boolean usaBottoneGiornoAnno;
 
@@ -278,9 +279,9 @@ public abstract class WikiView extends CrudView {
         this.usaBottoneUploadNati = false;
         this.usaBottoneUploadMorti = false;
 
-        this.unitaMisuraDownload = VUOTA;
-        this.unitaMisuraElaborazione = VUOTA;
-        this.unitaMisuraUpload = VUOTA;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraUpload = AETypeTime.minuti;
+        this.unitaMisuraStatistiche = AETypeTime.minuti;
     }
 
     protected void fixPreferenzeBackend() {

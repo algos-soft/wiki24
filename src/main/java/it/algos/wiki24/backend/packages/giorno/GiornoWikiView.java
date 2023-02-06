@@ -66,7 +66,7 @@ public class GiornoWikiView extends WikiView {
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nomeWiki", "bioNati", "bioMorti");
         super.formPropertyNamesList = Arrays.asList("ordine", "nomeWiki", "bioNati", "bioMorti");
-//        super.formPropertyNamesList = Arrays.asList("nomeWiki");
+        //        super.formPropertyNamesList = Arrays.asList("nomeWiki");
 
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.usaRowIndex = false;
@@ -98,10 +98,7 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneUploadNati = true;
         super.usaBottoneUploadMorti = true;
 
-//                super.dialogClazz = GiornoWikiDialog.class;
-        super.unitaMisuraElaborazione = "minuti";
-        super.unitaMisuraUpload = "minuti";
-        super.unitaMisuraStatistiche = "minuti";
+        //                super.dialogClazz = GiornoWikiDialog.class;
         super.fixPreferenzeBackend();
     }
 

@@ -443,8 +443,10 @@ public class AttivitaBackend extends WikiBackend {
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String moduloEx = PATH_MODULO + PATH_EX + ATT_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + ATT_LOWER;
-        int sizeBase = 0;
-        int sizeExtra = 0;
+        int sizeBase ;
+        int sizeExtra ;
+
+        // genere?????????
 
         sizeBase = downloadAttivitaPlurali(moduloPlurale);
         sizeExtra = downloadAttivitaExtra(moduloEx);
@@ -776,6 +778,26 @@ public class AttivitaBackend extends WikiBackend {
         LocalDateTime adesso = LocalDateTime.now();
         LocalDateTime prossimo = adesso.plusDays(7);
         WPref.uploadAttivitaPrevisto.setValue(prossimo);
+    }
+
+    /**
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
+     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
+
+        if (result.isValido()) {
+            this.download();
+            return fixResult(result);
+        }
+        else {
+            return result;
+        }
     }
 
 }// end of crud backend class

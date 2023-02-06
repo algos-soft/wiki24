@@ -104,8 +104,6 @@ public class BioView extends WikiView {
         super.usaBottoneDelete = true;
         super.usaBottoneSearch = false;
         super.usaBottonePaginaWiki = true;
-        super.unitaMisuraDownload = "minuti";
-        super.unitaMisuraElaborazione = "minuti";
         super.dialogClazz = BioDialog.class;
 
         super.fixPreferenzeBackend();

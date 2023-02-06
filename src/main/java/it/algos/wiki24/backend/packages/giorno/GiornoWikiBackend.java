@@ -234,12 +234,11 @@ public class GiornoWikiBackend extends WikiBackend {
             for (Giorno giorno : giorniBase) {
                 creaIfNotExist(giorno);
             }
+            return fixResult(result);
         }
         else {
             return result;
         }
-
-        return fixResult(result);
     }
 
 }// end of crud backend class
