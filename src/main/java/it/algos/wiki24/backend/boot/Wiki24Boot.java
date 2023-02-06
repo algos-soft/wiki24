@@ -196,15 +196,16 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     protected void fixMenuRoutes() {
         super.fixMenuRoutes();
 
-        VaadVar.menuRouteListProject.add(GenereView.class);
+        VaadVar.menuRouteListProject.add(GiornoWikiView.class);
+        VaadVar.menuRouteListProject.add(AnnoWikiView.class);
         VaadVar.menuRouteListProject.add(AttivitaView.class);
         VaadVar.menuRouteListProject.add(NazionalitaView.class);
-        VaadVar.menuRouteListProject.add(ProfessioneView.class);
-        VaadVar.menuRouteListProject.add(DoppionomeView.class);
+
+        //        VaadVar.menuRouteListProject.add(GenereView.class);
+//        VaadVar.menuRouteListProject.add(ProfessioneView.class);
+//        VaadVar.menuRouteListProject.add(DoppionomeView.class);
+        //        VaadVar.menuRouteListProject.add(CognomeView.class);
         VaadVar.menuRouteListProject.add(BioView.class);
-        VaadVar.menuRouteListProject.add(AnnoWikiView.class);
-        VaadVar.menuRouteListProject.add(GiornoWikiView.class);
-        VaadVar.menuRouteListProject.add(CognomeView.class);
         VaadVar.menuRouteListProject.add(StatisticaBioView.class);
         VaadVar.menuRouteListProject.add(ErroreBioView.class);
         VaadVar.menuRouteListProject.add(PaginaView.class);
