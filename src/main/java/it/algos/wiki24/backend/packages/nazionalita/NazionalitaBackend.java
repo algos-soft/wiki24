@@ -356,34 +356,11 @@ public class NazionalitaBackend extends WikiBackend {
         long inizio = System.currentTimeMillis();
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
-        int sizeBase = 0;
-        int sizeExtra = 0;
 
-        sizeBase = downloadNazionalitaPlurali(moduloPlurale);
+        downloadNazionalitaPlurali(moduloPlurale);
         downloadNazionalitaLink(moduloLink);
 
-        super.fixDownloadSecondi(inizio, VUOTA, 0, 0);
-
-        //        String message;
-        //        int size = 0;
-        //        long inizio = System.currentTimeMillis();
-        //
-        //        Map<String, String> mappa = wikiApiService.leggeMappaModulo(wikiTitle);
-        //
-        //        if (mappa != null && mappa.size() > 0) {
-        //            deleteAll();
-        //            for (Map.Entry<String, String> entry : mappa.entrySet()) {
-        ////                if (creaIfNotExist(entry.getKey(), entry.getValue()) != null) {
-        ////                    size++;
-        ////                }
-        //            }
-        //        }
-        //        else {
-        //            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", wikiTitle);
-        //            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-        //        }
-        //
-        //        super.fixDownloadMinuti(inizio, wikiTitle, mappa.size(), size);
+        super.fixDownload(inizio);
     }
 
     /**
@@ -643,6 +620,27 @@ public class NazionalitaBackend extends WikiBackend {
         LocalDateTime adesso = LocalDateTime.now();
         LocalDateTime prossimo = adesso.plusDays(7);
         WPref.uploadNazionalitaPrevisto.setValue(prossimo);
+    }
+
+
+    /**
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
+     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
+
+        if (result.isValido()) {
+            this.download();
+            return fixResult(result);
+        }
+        else {
+            return result;
+        }
     }
 
 }// end of crud backend class

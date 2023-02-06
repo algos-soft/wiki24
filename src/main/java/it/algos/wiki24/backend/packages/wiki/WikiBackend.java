@@ -42,6 +42,14 @@ public abstract class WikiBackend extends CrudBackend {
 
     protected WPref durataUpload;
 
+    protected AETypeTime unitaMisuraDownload;
+
+    protected AETypeTime unitaMisuraElaborazione;
+
+    protected AETypeTime unitaMisuraUpload;
+
+    protected AETypeTime unitaMisuraStatistiche;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -143,6 +151,21 @@ public abstract class WikiBackend extends CrudBackend {
     }// end of constructor with @Autowired
 
     /**
+     * Preferenze usate da questa 'backend' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        this.unitaMisuraDownload = AETypeTime.minuti;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraUpload = AETypeTime.minuti;
+        this.unitaMisuraStatistiche = AETypeTime.minuti;
+    }
+
+    /**
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      *
@@ -158,15 +181,35 @@ public abstract class WikiBackend extends CrudBackend {
     public void elabora() {
     }
 
+    public void fixDownload(final long inizio) {
+        if (lastDownload != null) {
+            lastDownload.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastDownload è nullo")));
+        }
 
+        if (durataDownload != null) {
+            durataDownload.setValue(unitaMisuraDownload.durata(inizio));
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+        }
+
+    }
+
+
+    @Deprecated
     public void fixDownloadSecondi(final long inizio, final String wikiTitle, final int sizeServerWiki, final int sizeMongoDB) {
         fixDownload(inizio, wikiTitle, sizeServerWiki, sizeMongoDB, false);
     }
 
+    @Deprecated
     public void fixDownloadMinuti(final long inizio, final String wikiTitle, final int sizeServerWiki, final int sizeMongoDB) {
         fixDownload(inizio, wikiTitle, sizeServerWiki, sizeMongoDB, true);
     }
 
+    @Deprecated
     public void fixDownload(final long inizio, final String wikiTitle, final int sizeServerWiki, final int sizeMongoDB, boolean usaMinuti) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;

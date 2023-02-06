@@ -55,6 +55,7 @@ public class AttivitaBackend extends WikiBackend {
         this.repository = (AttivitaRepository) crudRepository;
     }
 
+
     public Attivita creaIfNotExist(String singolare, String pluraleParagrafo, String pluraleLista, String linkPaginaAttivita, AETypeGenere typeGenere, boolean aggiunta) {
         return checkAndSave(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaAttivita, typeGenere, aggiunta));
     }
@@ -443,16 +444,14 @@ public class AttivitaBackend extends WikiBackend {
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String moduloEx = PATH_MODULO + PATH_EX + ATT_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + ATT_LOWER;
-        int sizeBase ;
-        int sizeExtra ;
 
         // genere?????????
 
-        sizeBase = downloadAttivitaPlurali(moduloPlurale);
-        sizeExtra = downloadAttivitaExtra(moduloEx);
+        downloadAttivitaPlurali(moduloPlurale);
+        downloadAttivitaExtra(moduloEx);
         downloadAttivitaLink(moduloLink);
 
-        super.fixDownloadSecondi(inizio, VUOTA, 0, 0);
+        super.fixDownload(inizio);
     }
 
 

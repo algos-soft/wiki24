@@ -279,6 +279,7 @@ public abstract class WikiView extends CrudView {
         this.usaBottoneUploadNati = false;
         this.usaBottoneUploadMorti = false;
 
+        this.unitaMisuraDownload = AETypeTime.minuti;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
         this.unitaMisuraUpload = AETypeTime.minuti;
         this.unitaMisuraStatistiche = AETypeTime.minuti;
@@ -292,6 +293,10 @@ public abstract class WikiView extends CrudView {
             crudBackend.durataElaborazione = durataElaborazione;
             crudBackend.lastUpload = lastUpload;
             crudBackend.durataUpload = durataUpload;
+            crudBackend.unitaMisuraDownload = unitaMisuraDownload;
+            crudBackend.unitaMisuraElaborazione = unitaMisuraElaborazione;
+            crudBackend.unitaMisuraUpload = unitaMisuraUpload;
+            crudBackend.unitaMisuraStatistiche = unitaMisuraStatistiche;
         }
     }
 
