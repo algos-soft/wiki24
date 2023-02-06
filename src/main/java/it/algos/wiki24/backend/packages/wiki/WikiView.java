@@ -123,6 +123,7 @@ public abstract class WikiView extends CrudView {
     protected String unitaMisuraElaborazione;
 
     protected String unitaMisuraUpload;
+
     protected String unitaMisuraStatistiche;
 
     protected boolean usaBottoneGiornoAnno;
