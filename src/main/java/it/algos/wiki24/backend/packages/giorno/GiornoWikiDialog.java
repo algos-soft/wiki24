@@ -20,7 +20,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class GiornoWikiDialog extends CrudDialogBase {
+public class GiornoWikiDialog extends CrudDialog {
 
     //--I fields devono essere class variable e non local variable
     private TextField code;

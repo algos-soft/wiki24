@@ -69,7 +69,7 @@ public class AnnoWikiView extends WikiView {
         super.fixPreferenze();
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
-        super.formPropertyNamesList = Arrays.asList("code", "descrizione"); // controllare la congruità con la Entity
+        super.formPropertyNamesList = Arrays.asList("nome");
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
 

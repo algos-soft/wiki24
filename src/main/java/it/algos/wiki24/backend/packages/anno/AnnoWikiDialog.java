@@ -20,7 +20,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class AnnoWikiDialog extends CrudDialogBase {
+public class AnnoWikiDialog extends CrudDialog {
 
     //--I fields devono essere class variable e non local variable
     private TextField code;
@@ -62,8 +62,7 @@ public class AnnoWikiDialog extends CrudDialogBase {
      * Aggiunge eventuali fields specifici direttamente al layout grafico (senza binder e senza fieldMap)
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void fixBody() {
+    protected void fixBody2() {
         code = new TextField("Code");
         code.setReadOnly(operation == CrudOperation.DELETE);
 
