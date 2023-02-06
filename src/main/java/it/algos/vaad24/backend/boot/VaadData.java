@@ -127,7 +127,7 @@ public class VaadData extends AbstractService {
         if (allResetOrderedClass != null && allResetOrderedClass.size() > 0) {
             message = String.format("Nel modulo %s sono state trovate %d classi di tipo 'backend' che implementano il metodo %s():", moduleName, allResetOrderedClass.size(), TAG_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.checkData));
-            nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList()); ;
+            nomi = allResetOrderedClass.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList());
             message = arrayService.toStringaVirgolaSpazio(nomi);
             logger.info(new WrapLog().message(message.trim()).type(AETypeLog.checkData));
         }
@@ -137,7 +137,7 @@ public class VaadData extends AbstractService {
             for (Class clazz : allResetOrderedClass) {
                 result = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
                 if (result.isValido()) {
-                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData));
+                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset));
                 }
             }
         }

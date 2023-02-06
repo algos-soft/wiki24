@@ -26,7 +26,6 @@ import java.util.function.*;
  * <p>
  */
 @SpringComponent
-@Primary
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BioDialog extends CrudDialog {
 
