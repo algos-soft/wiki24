@@ -20,7 +20,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.context.event.*;
 import org.springframework.core.env.*;
 
-import javax.annotation.*;
 import javax.servlet.*;
 import java.util.*;
 
@@ -136,19 +135,19 @@ public class VaadBoot implements ServletContextListener {
     }// end of constructor with @Autowired on setter
 
 
-    /**
-     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-     * <p>
-     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-     */
-    @PostConstruct
-    private void postConstruct() {
-        this.inizia();
-    }
+//    /**
+//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+//     * <p>
+//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+//     */
+//    @PostConstruct
+//    private void postConstruct() {
+//        this.inizia();
+//    }
 
     /**
      * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
@@ -193,13 +192,14 @@ public class VaadBoot implements ServletContextListener {
     }
 
     public void printInfo() {
-        printInfo("VaadVar.projectVaadin24", VaadVar.projectVaadin24);
+        printInfo("VaadVar.frameworkVaadin24", VaadVar.frameworkVaadin24);
         printInfo("VaadVar.moduloVaadin24", VaadVar.moduloVaadin24);
+
+        printInfo("VaadVar.projectCurrentUpper", VaadVar.projectCurrentUpper);
+        printInfo("VaadVar.projectCurrent", VaadVar.projectCurrent);
         printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
         printInfo("VaadVar.projectCurrentMainApplication", VaadVar.projectCurrentMainApplication);
-        printInfo("VaadVar.projectNameUpper", VaadVar.projectNameUpper);
-        printInfo("VaadVar.projectNameModulo", VaadVar.projectNameModulo);
-        printInfo("VaadVar.projectCurrent", VaadVar.projectCurrent);
+
         printInfo("VaadVar.projectDate", VaadVar.projectDate);
         printInfo("VaadVar.projectNote", VaadVar.projectNote);
     }
@@ -295,7 +295,7 @@ public class VaadBoot implements ServletContextListener {
          * Nome identificativo minuscolo del progetto base vaadin23 <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto base <br>
          */
-        VaadVar.projectVaadin24 = PROJECT_VAADIN24;
+        VaadVar.frameworkVaadin24 = PROJECT_VAADIN24;
 
         /**
          * Nome identificativo minuscolo del modulo base vaad23 <br>
@@ -344,7 +344,7 @@ public class VaadBoot implements ServletContextListener {
          * Usato solo internamente <br>
          * Deve essere regolato in backend.boot.VaadBoot.fixVariabili() del progetto corrente <br>
          */
-        VaadVar.vaadin23Version = Double.parseDouble(Objects.requireNonNull(environment.getProperty("algos.vaad24.version")));
+        VaadVar.vaadin24Version = Double.parseDouble(Objects.requireNonNull(environment.getProperty("algos.vaad24.version")));
 
         /**
          * Controlla se l' applicazione è multi-company oppure no <br>
@@ -398,7 +398,7 @@ public class VaadBoot implements ServletContextListener {
          */
         try {
             property = "algos.project.name";
-            VaadVar.projectNameUpper = Objects.requireNonNull(environment.getProperty(property));
+            VaadVar.projectCurrentUpper = Objects.requireNonNull(environment.getProperty(property));
         } catch (Exception unErrore) {
             String message = String.format("Non ho trovato la property %s nelle risorse", property);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
@@ -478,6 +478,11 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.serverConfig = WebService.URL_BASE_VAADIN24_CONFIG;
 
+        /**
+         * File name per i logger nella directory 'log' <br>
+         * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
+         */
+        VaadVar.logbackName = "pippo" + "-admin";
     }
 
     /**
@@ -614,7 +619,7 @@ public class VaadBoot implements ServletContextListener {
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono 'task'", VaadVar.projectNameUpper);
+            message = String.format("Nel modulo %s non ci sono 'task'", VaadVar.projectNameModulo);
             logger.info(new WrapLog().message(message).type(AETypeLog.schedule));
         }
 

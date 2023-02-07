@@ -89,7 +89,7 @@ public class VaadData extends AbstractService {
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
         resetData(VaadVar.moduloVaadin24);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
-        resetData(VaadVar.projectCurrent);
+        resetData(VaadVar.projectNameModulo);
         logger.info(new WrapLog().message(VUOTA).type(AETypeLog.setup));
     }
 
@@ -137,7 +137,7 @@ public class VaadData extends AbstractService {
             for (Class clazz : allResetOrderedClass) {
                 result = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_ONLY);
                 if (result.isValido()) {
-                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset));
+                    logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.checkData).usaDb());
                 }
             }
         }

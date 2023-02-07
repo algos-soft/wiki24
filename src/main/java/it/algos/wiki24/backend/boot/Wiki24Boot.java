@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.*;
 import javax.servlet.*;
 import java.util.*;
 
@@ -73,7 +74,21 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         new Wiki24Boot();
     }
 
-//    /**
+    /**
+     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+     */
+    @PostConstruct
+    private void postConstruct() {
+        this.inizia();
+    }
+
+    //    /**
 //     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
 //     * event, the application is ready to service Vaadin requests <br>
 //     */
