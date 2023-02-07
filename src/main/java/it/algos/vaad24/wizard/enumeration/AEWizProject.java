@@ -15,6 +15,8 @@ import java.util.*;
  * x
  */
 public enum AEWizProject {
+    logback("File logback-spring per i loggin automatici (vaad24)", true, false, "config/logback-springxml", AECopy.fileModifyEver),
+
     config("Directory CONFIG di risorse on-line esterne al JAR (vaad24)", true, false, "config", AECopy.dirFilesModifica),
 
     documentation("Directory DOC di documentazione (vaad24)", true, true, "doc", AECopy.dirFilesModifica),
@@ -46,8 +48,8 @@ public enum AEWizProject {
 
     testBase("Directory TEST /base (vaad24)", false, true, "src/test/java/it/algos/base", AECopy.dirFilesModifica),
     testEnum("Directory TEST /enum (vaad24)", false, true, "src/test/java/it/algos/enumeration", AECopy.dirFilesModifica),
-    testService("Directory TEST /service (vaad24)", false, true, "src/test/java/it/algos/service", AECopy.dirFilesModifica,"Vaad24SimpleApp","Wiki24App"),
-    testBackend("Directory TEST /backend (vaad24)", false, true, "src/test/java/it/algos/backend", AECopy.dirFilesModifica,"Vaad24SimpleApp","Wiki24App"),
+    testService("Directory TEST /service (vaad24)", false, true, "src/test/java/it/algos/service", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
+    testBackend("Directory TEST /backend (vaad24)", false, true, "src/test/java/it/algos/backend", AECopy.dirFilesModifica, "Vaad24SimpleApp", "Wiki24App"),
     application("Main class java", true, false, "src/main/java/it/algos/@PROJECTUPPER@Application.java",
             AECopy.sourceSovrascriveSempreAncheSeEsiste, "application"
     ),

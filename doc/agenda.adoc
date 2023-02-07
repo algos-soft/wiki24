@@ -1,0 +1,72 @@
+:doctype: book
+:toc: left
+:toclevels: 4
+
+= Miscellaneous
+
+== Vaadin
+- Start [https://vaadin.com/docs/latest/guide/quick-start]
+- MyApp [https://start.vaadin.com/app]
+- Components [https://vaadin.com/docs/latest/components]
+- Release [https://github.com/vaadin/platform/tags]
+- 23.3.5 [https://github.com/vaadin/platform/releases/tag/23.3.5]
+
+== AsciiDoc
+Baeldung [https://www.baeldung.com/asciidoctor]
+
+AsciiDoc reference [https://docs.netapp.com/us-en/contribute/asciidoc_syntax.html#labeled-lists]
+
+Quick reference [https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/#ex-urls]
+
+== Banner
+Baeldung color [https://www.baeldung.com/spring-boot-color-banner]
+
+OnLine [https://devops.datenkollektiv.de/banner.txt/index.html]
+
+Create [https://devops.datenkollektiv.de/create-your-own-spring-boot-banner.html]
+
+
+== Crono
+* Next, fire up the terminal and run crontab -e.
+* Once you’re on the vim screen, hit i to put the editor into INSERT mode
+* After typing out the cron expression, hit esc and then type :wq to save and exit vim.
+* To see your active cron jobs, you can use the crontab -l command.
+
+* Betterprogramming [https://betterprogramming.pub/https-medium-com-ratik96-scheduling-jobs-with-crontab-on-macos-add5a8b26c30]
+* Ss64 [https://ss64.com/osx/crontab.html]
+
+== Format
+* String.format("");
+
+ %a 	floating point (except BigDecimal) 	Returns Hex output of floating point number.
+ %b 	Any type 	"true" if non-null, "false" if null
+ %c 	character 	Unicode character
+ %d 	integer (incl. byte, short, int, long, bigint) 	Decimal Integer
+ %e 	floating point 	decimal number in scientific notation
+ %f 	floating point 	decimal number
+ %g 	floating point 	decimal number, possibly in scientific notation depending on the precision and value.
+ %h 	any type 	Hex String of value from hashCode() method.
+ %n 	none 	Platform-specific line separator.
+ %o 	integer (incl. byte, short, int, long, bigint) 	Octal number
+ %s 	any type 	String value
+ %t 	Date/Time (incl. long, Calendar, Date and TemporalAccessor) 	%t is the prefix for Date/Time conversions. More formatting flags
+are needed after this. See Date/Time conversion below.
+ %x 	integer (incl. byte, short, int, long, bigint) Hex string.
+* Javatpoint [https://www.javatpoint.com/java-string-format]
+
+
+== Scheduler
+
+* Sotto-pattern per i minuti. I valori ammessi vanno da 0 a 59.
+* Sotto-pattern per le ore. I valori ammessi vanno da 0 a 23.
+* Sotto-pattern per il giorno del mese. I valori ammessi vanno da 1 a 31.
+* Sotto-pattern per il mese. I valori ammessi vanno da 1 (gennaio) a 12 (dicembre), o le stringhe-equivalenti "jan", "feb", "mar", "apr",
+"may", "jun", "jul", "aug", "sep", "oct", "nov" e "dec".
+* Sotto-pattern per il giorno della settimana. I valori ammessi vanno da 0 (domenica) a 6 (sabato), o le stringhe-equivalenti: "sun",
+"mon", "tue", "wed", "thu", "fri" e "sat".
+
+* Cron4j [http://www.sauronsoftware.it/projects/cron4j/manual.php]
+
+== Icons
+
+* Vaadin [https://vaadin.com/docs/latest/components/icons]
