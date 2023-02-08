@@ -165,7 +165,7 @@ public class GiornoWikiBackend extends WikiBackend {
             update(giornoWiki);
         }
 
-        super.fixElaboraMinuti(inizio, "pagine di giorni");
+        super.fixElabora(inizio, "dei giorni");
     }
 
 

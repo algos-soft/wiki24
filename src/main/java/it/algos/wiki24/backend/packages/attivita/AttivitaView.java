@@ -96,6 +96,7 @@ public class AttivitaView extends WikiView {
 
         super.dialogClazz = AttivitaDialog.class;
         super.unitaMisuraDownload = AETypeTime.secondi;
+
         super.fixPreferenzeBackend();
     }
 

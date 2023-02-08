@@ -184,7 +184,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     @Autowired
     @Qualifier(TAG_WIKI23_PREFERENCES)
     public void setPrefInstance(final AIEnumPref prefInstance) {
-        this.prefInstance = prefInstance;
+        VaadVar.prefInstance = prefInstance;
     }
 
     /**

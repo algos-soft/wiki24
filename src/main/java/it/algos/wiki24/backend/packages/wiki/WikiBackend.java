@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.wiki;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -182,6 +183,10 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public void fixDownload(final long inizio) {
+        fixDownload(inizio, VUOTA);
+    }
+
+    public void fixDownload(final long inizio, String modulo) {
         if (lastDownload != null) {
             lastDownload.setValue(LocalDateTime.now());
         }
@@ -196,6 +201,31 @@ public abstract class WikiBackend extends CrudBackend {
             logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
         }
 
+        message = String.format("Download di %s. %s", modulo, unitaMisuraDownload.message(inizio));
+        logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+    }
+
+    public void fixElabora(final long inizio) {
+        fixElabora(inizio, VUOTA);
+    }
+
+    public void fixElabora(final long inizio, String modulo) {
+        if (lastElabora != null) {
+            lastElabora.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+        }
+
+        if (durataElaborazione != null) {
+            durataElaborazione.setValue(unitaMisuraElaborazione.durata(inizio));
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
+        }
+
+        message = String.format("Elaborazione %s. Pagine esaminate %s. %s", modulo, count(), unitaMisuraElaborazione.message(inizio));
+        logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
     }
 
 
@@ -250,6 +280,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
 
+    @Deprecated
     public void fixElaboraSecondi(final long inizio, final String modulo) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
@@ -276,6 +307,7 @@ public abstract class WikiBackend extends CrudBackend {
         logger.info(new WrapLog().message(message));
     }
 
+    @Deprecated
     public void fixElaboraMinuti(final long inizio, final String modulo) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
@@ -302,6 +334,7 @@ public abstract class WikiBackend extends CrudBackend {
         logger.info(new WrapLog().message(message));
     }
 
+    @Deprecated
     public void fixUploadMinuti(final long inizio, int sottoSoglia, int daCancellare, int nonModificate, int modificate, final String modulo) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;

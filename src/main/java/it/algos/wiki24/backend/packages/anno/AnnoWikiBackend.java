@@ -118,6 +118,9 @@ public class AnnoWikiBackend extends WikiBackend {
     public List<AnnoWiki> findAll() {
         return repository.findAllByOrderByOrdineAsc();
     }
+    public List<AnnoWiki> findAllReverse() {
+        return repository.findAllByOrderByOrdineDesc();
+    }
 
     public List<String> findAllNomi() {
         return annoBackend.findNomi();
@@ -177,7 +180,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
-        for (AnnoWiki annoWiki : findAll()) {
+        for (AnnoWiki annoWiki : findAllReverse()) {
             anno = annoBackend.findByNome(annoWiki.nome);
             bioNati = bioBackend.countAnnoNato(annoWiki.nome);
             bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);

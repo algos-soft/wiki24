@@ -78,6 +78,7 @@ public class GiornoWikiView extends WikiView {
         super.nextUpload = WPref.uploadGiorniPrevisto;
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
+
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
@@ -99,6 +100,7 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneUploadMorti = true;
 
         //                super.dialogClazz = GiornoWikiDialog.class;
+        super.unitaMisuraElaborazione = AETypeTime.secondi;
         super.fixPreferenzeBackend();
     }
 

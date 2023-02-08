@@ -75,12 +75,12 @@ public class VaadBoot implements ServletContextListener {
     //    public AIData dataInstance;
 
 
-    /**
-     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    public AIEnumPref prefInstance;
+//    /**
+//     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+//     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+//     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+//     */
+//    public AIEnumPref prefInstance;
 
 
     /**
@@ -131,7 +131,7 @@ public class VaadBoot implements ServletContextListener {
         //        this.setEnvironment(environment);
         this.setVersInstance(versInstance);
         //        this.setDataInstance(dataInstance);
-        this.setPrefInstance(prefInstance);
+//        this.setPrefInstance(prefInstance);
     }// end of constructor with @Autowired on setter
 
 
@@ -181,7 +181,7 @@ public class VaadBoot implements ServletContextListener {
         this.fixDBMongo();
 
         this.fixVariabiliRiferimentoIstanzeGenerali();
-        this.fixPreferenze();
+//        this.fixPreferenze();
         this.fixMenuRoutes();
         this.fixData();
         this.fixVersioni();
@@ -281,6 +281,14 @@ public class VaadBoot implements ServletContextListener {
          * Deve essere regolato in backend.boot.xxxBoot.fixVariabili() del progetto corrente <br>
          */
         VaadVar.versionClazz = VaadVers.class;
+
+//        /**
+//         * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+//         * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+//         * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+//         */
+//        VaadVar.prefInstance= Pref.class;
+
     }
 
     /**
@@ -543,7 +551,7 @@ public class VaadBoot implements ServletContextListener {
     @Autowired
     @Qualifier(QUALIFIER_PREFERENCES_VAAD)
     public void setPrefInstance(final AIEnumPref prefInstance) {
-        this.prefInstance = prefInstance;
+        VaadVar.prefInstance = prefInstance;
     }
 
 
@@ -563,13 +571,13 @@ public class VaadBoot implements ServletContextListener {
         this.versInstance.inizia();
     }
 
-    /**
-     * Inizializzazione delle versioni standard di vaadinFlow <br>
-     * Inizializzazione delle versioni del programma specifico <br>
-     */
-    public void fixPreferenze() {
-        this.prefInstance.inizia();
-    }
+//    /**
+//     * Inizializzazione delle versioni standard di vaadinFlow <br>
+//     * Inizializzazione delle versioni del programma specifico <br>
+//     */
+//    public void fixPreferenze() {
+//        this.prefInstance.inizia();
+//    }
 
     /**
      * Eventuale collegamento <br>

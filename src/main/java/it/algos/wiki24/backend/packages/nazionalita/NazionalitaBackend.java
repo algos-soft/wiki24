@@ -360,7 +360,7 @@ public class NazionalitaBackend extends WikiBackend {
         downloadNazionalitaPlurali(moduloPlurale);
         downloadNazionalitaLink(moduloLink);
 
-        super.fixDownload(inizio);
+        super.fixDownload(inizio,"nazionalità");
     }
 
     /**

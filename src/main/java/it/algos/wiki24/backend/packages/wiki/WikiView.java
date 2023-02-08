@@ -313,6 +313,7 @@ public abstract class WikiView extends CrudView {
         this.infoPlaceHolder.setSpacing(false);
         this.infoPlaceHolder.setMargin(false);
         alertPlaceHolder.add(infoPlaceHolder);
+
         this.fixInfo();
     }
 
@@ -322,6 +323,7 @@ public abstract class WikiView extends CrudView {
      */
     public void fixInfo() {
         infoPlaceHolder.removeAll();
+
         if (usaInfoDownload) {
             if (lastReset != null && lastReset.get() instanceof LocalDateTime reset) {
                 if (reset.equals(ROOT_DATA_TIME)) {
@@ -790,8 +792,7 @@ public abstract class WikiView extends CrudView {
      */
     public void elabora() {
         crudBackend.elabora();
-        refresh();
-        fixInfo();
+        reload();
     }
 
 
