@@ -75,12 +75,12 @@ public class VaadBoot implements ServletContextListener {
     //    public AIData dataInstance;
 
 
-//    /**
-//     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
-//     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-//     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-//     */
-//    public AIEnumPref prefInstance;
+    //    /**
+    //     * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+    //     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+    //     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+    //     */
+    //    public AIEnumPref prefInstance;
 
 
     /**
@@ -131,23 +131,23 @@ public class VaadBoot implements ServletContextListener {
         //        this.setEnvironment(environment);
         this.setVersInstance(versInstance);
         //        this.setDataInstance(dataInstance);
-//        this.setPrefInstance(prefInstance);
+        //        this.setPrefInstance(prefInstance);
     }// end of constructor with @Autowired on setter
 
 
-//    /**
-//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
-//     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-//     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
-//     */
-//    @PostConstruct
-//    private void postConstruct() {
-//        this.inizia();
-//    }
+    //    /**
+    //     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+    //     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+    //     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+    //     * <p>
+    //     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti <br>
+    //     * L'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+    //     * Se viene implementata una istanza di sottoclasse, passa di qui per ogni istanza <br>
+    //     */
+    //    @PostConstruct
+    //    private void postConstruct() {
+    //        this.inizia();
+    //    }
 
     /**
      * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
@@ -181,7 +181,7 @@ public class VaadBoot implements ServletContextListener {
         this.fixDBMongo();
 
         this.fixVariabiliRiferimentoIstanzeGenerali();
-//        this.fixPreferenze();
+        //        this.fixPreferenze();
         this.fixMenuRoutes();
         this.fixData();
         this.fixVersioni();
@@ -282,12 +282,12 @@ public class VaadBoot implements ServletContextListener {
          */
         VaadVar.versionClazz = VaadVers.class;
 
-//        /**
-//         * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
-//         * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-//         * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-//         */
-//        VaadVar.prefInstance= Pref.class;
+        //        /**
+        //         * Istanza di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) <br>
+        //         * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+        //         * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+        //         */
+        //        VaadVar.prefInstance= Pref.class;
 
     }
 
@@ -571,13 +571,13 @@ public class VaadBoot implements ServletContextListener {
         this.versInstance.inizia();
     }
 
-//    /**
-//     * Inizializzazione delle versioni standard di vaadinFlow <br>
-//     * Inizializzazione delle versioni del programma specifico <br>
-//     */
-//    public void fixPreferenze() {
-//        this.prefInstance.inizia();
-//    }
+    //    /**
+    //     * Inizializzazione delle versioni standard di vaadinFlow <br>
+    //     * Inizializzazione delle versioni del programma specifico <br>
+    //     */
+    //    public void fixPreferenze() {
+    //        this.prefInstance.inizia();
+    //    }
 
     /**
      * Eventuale collegamento <br>
