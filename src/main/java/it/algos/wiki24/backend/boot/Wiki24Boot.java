@@ -5,6 +5,7 @@ import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -210,6 +211,8 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     @Override
     protected void fixMenuRoutes() {
         super.fixMenuRoutes();
+        VaadVar.menuRouteListVaadin.add(ViaView.class);
+        VaadVar.menuRouteListVaadin.add(ContinenteView.class);
 
         VaadVar.menuRouteListProject.add(GiornoWikiView.class);
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
