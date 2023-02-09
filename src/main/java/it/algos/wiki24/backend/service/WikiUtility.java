@@ -522,4 +522,24 @@ public class WikiUtility extends WAbstractService {
         return StringUtils.stripAccents(parola);
     }
 
+    /**
+     * Controlla che la collection 'Bio' del database mongoDB sia valida <br>
+     * Per essere valida deve avere un numero di biografie che sia una frazione accettabile di quelle presenti sul server wiki <br>
+     * Il valore di accettabilità (in percentuale) è fissato da una costante <br>
+     */
+    public WResult checkValiditaDatabase() {
+        WResult result = WResult.crea();
+        LinkedHashMap mappa = new LinkedHashMap();
+        String categoryTitle = WPref.categoriaBio.getStr();
+        int numPagesServerWiki = queryService.getSizeCat(categoryTitle);
+        int bioMongoDB = bioBackend.count();
+
+        mappa.put(KEY_MAP_VOCI_SERVER_WIKI,numPagesServerWiki);
+        mappa.put(KEY_MAP_VOCI_DATABASE_MONGO,bioMongoDB);
+        result.mappa(mappa);
+
+        double percentuale = mathService.percentuale(bioMongoDB, numPagesServerWiki);
+        return result.validoWiki(percentuale > PERCENTUALE_MINIMA_BIOGRAFIE);
+    }
+
 }

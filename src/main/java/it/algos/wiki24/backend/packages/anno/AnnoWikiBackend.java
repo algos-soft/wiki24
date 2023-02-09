@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
@@ -179,6 +180,23 @@ public class AnnoWikiBackend extends WikiBackend {
         boolean esistePaginaMorti;
         boolean natiOk;
         boolean mortiOk;
+        WResult result;
+        String message;
+        Map mappa;
+        String bioMongoDB;
+        String numPagesServerWiki;
+
+        //--Check di validità del database mongoDB
+        result = wikiUtility.checkValiditaDatabase();
+        if (result.isErrato()) {
+            mappa = result.getMappa();
+            bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
+            numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
+            message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione degli anni.";
+            message += String.format(" Solo %s su %s", bioMongoDB, numPagesServerWiki);
+            logger.warn(WrapLog.build().message(message).usaDb());
+            return;
+        }
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean

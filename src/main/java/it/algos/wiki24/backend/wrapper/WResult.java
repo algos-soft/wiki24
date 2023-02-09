@@ -182,6 +182,10 @@ public class WResult extends AResult {
         this.setValido(true);
         return this;
     }
+    public WResult validoWiki(boolean valido) {
+        this.setValido(valido);
+        return this;
+    }
 
     public WResult pageid(final long pageid) {
         this.pageid = pageid;

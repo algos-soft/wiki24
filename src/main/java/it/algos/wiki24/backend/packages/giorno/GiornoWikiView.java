@@ -81,8 +81,8 @@ public class GiornoWikiView extends WikiView {
 
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
-        super.usaBottoneElabora = true;
         super.usaBottoneDownload = false;
+        super.usaBottoneElabora = true;
         super.usaBottoneStatistiche = true;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneNew = false;
@@ -100,7 +100,6 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneUploadMorti = true;
 
         //                super.dialogClazz = GiornoWikiDialog.class;
-        super.unitaMisuraElaborazione = AETypeTime.secondi;
         super.fixPreferenzeBackend();
     }
 
