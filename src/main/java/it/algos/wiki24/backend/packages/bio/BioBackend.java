@@ -12,6 +12,7 @@ import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
@@ -361,7 +362,7 @@ public class BioBackend extends WikiBackend {
             numBio = 0;
             for (String attivitaSingola : listaAttivita) {
                 numBio += countAttivitaNazionalitaBase(attivitaSingola, null);
-//                List listone = bioService.fetchAttivita(attivitaSingola);
+                //                List listone = bioService.fetchAttivita(attivitaSingola);
             }
         }
 
@@ -585,6 +586,10 @@ public class BioBackend extends WikiBackend {
     // GIORNO  NATO
     //
     //
+    public int countGiornoNato(final GiornoWiki giornoWiki) {
+        return countGiornoNato(giornoWiki.nomeWiki);
+    }
+
     public int countGiornoNato(final String giornoNato) {
         Long giornoLong = textService.isValid(giornoNato) ? repository.countBioByGiornoNato(giornoNato) : 0;
         return giornoLong.intValue();
@@ -693,6 +698,10 @@ public class BioBackend extends WikiBackend {
     // GIORNO  MORTO
     //
     //
+    public int countGiornoMorto(final GiornoWiki giornoWiki) {
+        return countGiornoMorto(giornoWiki.nomeWiki);
+    }
+
     public int countGiornoMorto(final String giornoMorto) {
         Long giornoLong = textService.isValid(giornoMorto) ? repository.countBioByGiornoMorto(giornoMorto) : 0;
         return giornoLong.intValue();

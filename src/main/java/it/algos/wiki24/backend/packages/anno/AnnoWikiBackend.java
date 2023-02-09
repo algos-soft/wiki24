@@ -118,6 +118,7 @@ public class AnnoWikiBackend extends WikiBackend {
     public List<AnnoWiki> findAll() {
         return repository.findAllByOrderByOrdineAsc();
     }
+
     public List<AnnoWiki> findAllReverse() {
         return repository.findAllByOrderByOrdineDesc();
     }
@@ -165,18 +166,19 @@ public class AnnoWikiBackend extends WikiBackend {
     public void elabora() {
         long inizio = System.currentTimeMillis();
         int cont = 0;
+        int blocco = 303;
         String size;
         String time;
         int tot = count();
         Anno anno;
-        int bioNati = 0;
-        int bioMorti = 0;
+        int bioNati;
+        int bioMorti;
         String wikiTitleNati;
         String wikiTitleMorti;
-        boolean esistePaginaNati = false;
-        boolean esistePaginaMorti = false;
-        boolean natiOk = false;
-        boolean mortiOk = false;
+        boolean esistePaginaNati;
+        boolean esistePaginaMorti;
+        boolean natiOk;
+        boolean mortiOk;
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
@@ -217,7 +219,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
             if (Pref.debug.is()) {
                 cont++;
-                if (mathService.multiploEsatto(303, cont)) {
+                if (mathService.multiploEsatto(blocco, cont)) {
                     size = textService.format(cont);
                     time = dateService.deltaText(inizio);
                     message = String.format("Finora controllata l'esistenza di %s/%s anni, in %s", size, tot, time);
@@ -226,7 +228,7 @@ public class AnnoWikiBackend extends WikiBackend {
             }
         }
 
-        super.fixElaboraMinuti(inizio, "anni");
+        super.fixElabora(inizio, "degli anni");
     }
 
     public Map elaboraValidi() {

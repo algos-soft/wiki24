@@ -159,8 +159,8 @@ public class GiornoWikiBackend extends WikiBackend {
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (GiornoWiki giornoWiki : findAll()) {
-            giornoWiki.bioNati = bioBackend.countGiornoNato(giornoWiki.nomeWiki);
-            giornoWiki.bioMorti = bioBackend.countGiornoMorto(giornoWiki.nomeWiki);
+            giornoWiki.bioNati = bioBackend.countGiornoNato(giornoWiki);
+            giornoWiki.bioMorti = bioBackend.countGiornoMorto(giornoWiki);
 
             update(giornoWiki);
         }
