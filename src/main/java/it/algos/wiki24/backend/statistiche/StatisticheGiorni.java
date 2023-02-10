@@ -69,6 +69,7 @@ public class StatisticheGiorni extends Statistiche {
 
     /**
      * Elabora i dati
+     * Prima esegue una Elaborazione <br>
      */
     protected void elabora() {
         giornoWikiBackend.elabora();

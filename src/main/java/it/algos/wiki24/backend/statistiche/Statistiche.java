@@ -176,6 +176,7 @@ public abstract class Statistiche {
 
     /**
      * Elabora i dati
+     * Prima esegue una (eventuale) elaborazione <br>
      */
     protected void elabora() {
     }

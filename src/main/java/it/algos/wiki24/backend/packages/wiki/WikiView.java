@@ -11,7 +11,9 @@ import com.vaadin.flow.data.selection.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -805,10 +807,8 @@ public abstract class WikiView extends CrudView {
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void upload() {
-        reload();
     }
 
     /**
@@ -966,5 +966,25 @@ public abstract class WikiView extends CrudView {
     //        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).weight(AEFontWeight.bold)));
     //    }
 
+    public void fixUpload(final long inizio, String modulo) {
+        String message;
+
+        if (lastUpload != null) {
+            lastUpload.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
+        }
+
+        if (durataUpload != null) {
+            durataUpload.setValue(unitaMisuraUpload.durata(inizio));
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
+        }
+
+        message = String.format("Upload %s. %s", modulo, unitaMisuraUpload.message(inizio));
+        logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+    }
 
 }

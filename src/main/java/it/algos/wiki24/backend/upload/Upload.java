@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.upload;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
@@ -202,6 +203,8 @@ public abstract class Upload {
 
     protected AETypeToc typeToc;
 
+    protected AETypeTime unitaMisuraUpload;
+
     protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
         return null;
     }
@@ -303,6 +306,7 @@ public abstract class Upload {
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, List<WrapLista> lista) {
     }
 
+    @Deprecated
     public void fixUploadMinuti(final long inizio) {
         long fine = System.currentTimeMillis();
         String message;
@@ -325,5 +329,6 @@ public abstract class Upload {
             return;
         }
     }
+
 
 }

@@ -70,7 +70,7 @@ public class AnnoWikiView extends WikiView {
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
-//        super.formPropertyNamesList = Arrays.asList("nome");
+        //        super.formPropertyNamesList = Arrays.asList("nome");
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
 
@@ -80,7 +80,7 @@ public class AnnoWikiView extends WikiView {
         super.durataUpload = WPref.uploadAnniTime;
         super.nextUpload = WPref.uploadAnniPrevisto;
         super.lastStatistica = WPref.statisticaAnni;
-        super.durataStatistica= WPref.statisticaAnniTime;
+        super.durataStatistica = WPref.statisticaAnniTime;
         super.usaBottoneDeleteReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
@@ -101,7 +101,7 @@ public class AnnoWikiView extends WikiView {
         super.usaBottoneUploadNati = true;
         super.usaBottoneUploadMorti = true;
 
-//        super.dialogClazz = AnnoWikiDialog.class;
+        //        super.dialogClazz = AnnoWikiDialog.class;
         super.fixPreferenzeBackend();
     }
 
@@ -305,10 +305,11 @@ public class AnnoWikiView extends WikiView {
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void upload() {
         appContext.getBean(UploadAnni.class).uploadAll();
+        super.upload();
     }
 
     /**

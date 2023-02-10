@@ -40,6 +40,8 @@ public class UploadGiorni extends UploadGiorniAnni {
         super.nextUpload = WPref.uploadGiorniPrevisto;
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
+        super.unitaMisuraUpload = AETypeTime.secondi;
+
     }// end of constructor
 
 
@@ -81,7 +83,6 @@ public class UploadGiorni extends UploadGiorniAnni {
     public WResult uploadAll() {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
-        long inizio = System.currentTimeMillis();
         List<String> giorni;
         String message;
         int modificatiNati;
@@ -103,11 +104,13 @@ public class UploadGiorni extends UploadGiorniAnni {
                     modificatiMorti++;
                 }
             }
-            message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
-            logger.info(new WrapLog().type(AETypeLog.upload).message(message));
+
+            if (Pref.debug.is()) {
+                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
+                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
+            }
         }
 
-        fixUploadMinuti(inizio);
         return result;
     }
 

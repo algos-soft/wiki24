@@ -221,10 +221,12 @@ public class GiornoWikiView extends WikiView {
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void upload() {
+        long inizio = System.currentTimeMillis();
         appContext.getBean(UploadGiorni.class).uploadAll();
+        super.fixUpload(inizio,"dei giorni");
+        reload();
     }
 
     /**
