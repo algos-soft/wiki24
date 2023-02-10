@@ -369,7 +369,7 @@ public class Wiki24Cost {
 
     public static final String KEY_MAP_MORTI_VALORE_ESISTENTE = "mortiValoreEsistente";
 
-    public static final double PERCENTUALE_MINIMA_BIOGRAFIE = 99.99;
+    public static final double PERCENTUALE_MINIMA_BIOGRAFIE = 99.95;
     public static final String KEY_MAP_VOCI_SERVER_WIKI = "vociServerWiki";
     public static final String KEY_MAP_VOCI_DATABASE_MONGO= "vociDatabaseMongo";
 

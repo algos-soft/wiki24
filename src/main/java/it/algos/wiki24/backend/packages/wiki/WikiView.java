@@ -365,7 +365,7 @@ public abstract class WikiView extends CrudView {
                     message = "Elaborazione non ancora effettuata";
                 }
                 else {
-                    message = String.format("Ultimo elaborazione effettuata il %s", dateService.get(elaborazione));
+                    message = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
                     if (durataElaborazione != null && durataElaborazione.get() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);

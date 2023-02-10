@@ -224,7 +224,7 @@ public abstract class WikiBackend extends CrudBackend {
             logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
         }
 
-        message = String.format("Elaborazione %s. Pagine esaminate %s. %s", modulo, count(), unitaMisuraElaborazione.message(inizio));
+        message = String.format("Elaborazione %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
     }
 

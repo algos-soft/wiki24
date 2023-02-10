@@ -21,43 +21,42 @@ import java.util.*;
 public enum WPref implements AIGenPref {
 
     downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
-
     downloadAttivita("downloadAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività."),
-    downloadAttivitaTime("downloadAttivitaTime", AETypePref.integer, 0, "Durata download delle attività in minuti."),
+    downloadAttivitaTime("downloadAttivitaTime", AETypePref.integer, 0, "Durata download delle attività."),
     elaboraAttivita("elaboraAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività."),
-    elaboraAttivitaTime("elaboraAttivitaTime", AETypePref.integer, 0, "Durata elaborazione delle attività in minuti."),
+    elaboraAttivitaTime("elaboraAttivitaTime", AETypePref.integer, 0, "Durata elaborazione delle attività."),
     uploadAttivita("uploadAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di attività"),
-    uploadAttivitaTime("uploadAttivitaTime", AETypePref.integer, 0, "Durata upload delle attività in minuti."),
+    uploadAttivitaTime("uploadAttivitaTime", AETypePref.integer, 0, "Durata upload delle attività."),
     uploadAttivitaPrevisto("uploadAttivitaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le attività."),
 
 
     downloadNazionalita("downloadNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale nazionalità."),
-    downloadNazionalitaTime("downloadNazionalitaTime", AETypePref.integer, 0, "Durata download delle nazionalità in minuti."),
+    downloadNazionalitaTime("downloadNazionalitaTime", AETypePref.integer, 0, "Durata download delle nazionalità."),
     elaboraNazionalita("elaboraNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità."),
-    elaboraNazionalitaTime("elaboraNazionalitaTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità in minuti."),
+    elaboraNazionalitaTime("elaboraNazionalitaTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità."),
     uploadNazionalita("uploadNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nazionalità"),
-    uploadNazionalitaTime("uploadNazionalitaTime", AETypePref.integer, 0, "Durata upload delle nazionalità in minuti."),
+    uploadNazionalitaTime("uploadNazionalitaTime", AETypePref.integer, 0, "Durata upload delle nazionalità."),
     uploadNazionalitaPrevisto("uploadNazionalitaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità."),
 
 
     uploadCognomi("uploadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di cognomi oltre la soglia di 50 biografie"),
-    uploadCognomiTime("uploadCognomiTime", AETypePref.integer, 0, "Durata upload dei cognomi in minuti."),
+    uploadCognomiTime("uploadCognomiTime", AETypePref.integer, 0, "Durata upload dei cognomi."),
     uploadCognomiPrevisto("uploadCognomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i cognomi."),
 
     uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
-    uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi in minuti."),
+    uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 
-    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie"),
+    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa"),
     resetBio("resetBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset completo delle voci biografiche"),
-    resetBioTime("resetBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata Reset completo delle biografie in minuti."),
+    resetBioTime("resetBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata Reset completo delle biografie."),
     resetBioPrevisto("resetBioPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo reset previsto delle voci biografiche."),
 
     downloadBio("downloadBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di tutte le biografie nuove e modificate"),
-    downloadBioTime("downloadBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata ciclo completo download delle biografie in minuti."),
+    downloadBioTime("downloadBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata ciclo completo download delle biografie."),
     downloadBioPrevisto("downloadBioPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo download previsto delle voci biografiche."),
     elaboraBio("elaboraBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le biografie."),
-    elaboraBioTime("elaboraBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata elaborazione delle biografie in minuti."),
+    elaboraBioTime("elaboraBioTime", AETypePref.integer, ROOT_DATA_TIME, "Durata elaborazione delle biografie."),
 
     //    uploadAttivitaTime("uploadAttivitaTime", AETypePref.integer, "Durata upload delle attività.", 0),
     //    downloadNazionalita("downloadNazionalita", AETypePref.localdatetime, "Download di Modulo:Bio/Plurale nazionalità.", ROOT_DATA_TIME),
@@ -65,38 +64,38 @@ public enum WPref implements AIGenPref {
     //    downloadNomi("downloadNomi", AETypePref.localdatetime, "Download di Progetto:Antroponimi/Nomi doppi.", ROOT_DATA_TIME),
 
     elaboraAnni("elaboraAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti gli anni."),
-    elaboraAnniTime("elaboraAnniTime", AETypePref.integer, 0, "Durata elaborazione di tutti gli anni in minuti."),
+    elaboraAnniTime("elaboraAnniTime", AETypePref.integer, 0, "Durata elaborazione di tutti gli anni."),
     elaboraGiorni("elaboraGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti i giorni."),
-    elaboraGiorniTime("elaboraGiorniTime", AETypePref.integer, 0, "Durata elaborazione di tutti i giorni in minuti."),
+    elaboraGiorniTime("elaboraGiorniTime", AETypePref.integer, 0, "Durata elaborazione di tutti i giorni."),
 
     elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
-    elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi in minuti."),
+    elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
     statisticaAttivita("statisticaAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività."),
     statisticaNazionalita("statisticaNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità."),
 
 
     uploadGiorni("uploadGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per giorno"),
-    uploadGiorniTime("uploadGiorniTime", AETypePref.integer, 0, "Durata upload dei giorni in minuti."),
+    uploadGiorniTime("uploadGiorniTime", AETypePref.integer, 0, "Durata upload dei giorni."),
     uploadGiorniPrevisto("uploadGiorniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i giorni."),
     statisticaGiorni("statisticaGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per i giorni."),
-    statisticaGiorniTime("statisticaGiorniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche dei giorni in minuti."),
+    statisticaGiorniTime("statisticaGiorniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche dei giorni."),
 
 
     uploadAnni("uploadAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per anno"),
-    uploadAnniTime("uploadAnniTime", AETypePref.integer, 0, "Durata upload degli anni in minuti."),
+    uploadAnniTime("uploadAnniTime", AETypePref.integer, 0, "Durata upload degli anni."),
     uploadAnniPrevisto("uploadAnniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per gli anni."),
     statisticaAnni("statisticaAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per gli anni."),
-    statisticaAnniTime("statisticaAnniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche degli anni in minuti."),
+    statisticaAnniTime("statisticaAnniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche degli anni."),
 
 
-    usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, false, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni"),
+    usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni"),
     sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki"),
 
     categoriaBio("categoriaBio", AETypePref.string, "BioBot", "Categoria di riferimento per le Biografie"),
     sogliaAttNazWiki("sogliaAttNazWiki", AETypePref.integer, 50, "Soglia minima per creare la pagina di una attività o nazionalità sul server wiki"),
     sogliaSottoPagina("sogliaSottoPagina", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di una attività o nazionalità sul server wiki"),
-    sogliaDiv("sogliaDiv", AETypePref.integer, 1, "Soglia minima per usare {{Div col}}"),
+    sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima per usare {{Div col}}"),
     sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima per 'includere' la voce in giorni/anni"),
     sogliaIncludeParagrafo("sogliaIncludeParagrafo", AETypePref.integer, 50, "Soglia minima per usare i paragrafi 'inclusi' di secondo livello"),
 
@@ -106,7 +105,7 @@ public enum WPref implements AIGenPref {
             "voci elencate"),
     usaLinkStatistiche("usaLinkStatistiche", AETypePref.bool, true, "Link alle liste di attività nel template statistiche, anche se " +
             "rossi"),
-    typeTocAttNaz("typeTocAttNaz", AETypePref.enumerationType, AETypeToc.noToc, "Type di TOC in attività e nazionalità",
+    typeTocAttNaz("typeTocAttNaz", AETypePref.enumerationType, AETypeToc.forceToc, "Type di TOC in attività e nazionalità",
             AETypeToc.noToc
     ),
     typeTocGiorni("typeTocGiorni", AETypePref.enumerationType, AETypeToc.forceToc, "Type di TOC nelle liste di giorni",
@@ -131,10 +130,10 @@ public enum WPref implements AIGenPref {
     simboloMorto("simboloMorto", AETypePref.string, "†", "Simbolo della morte nelle didascalie"),
     usaSimboliCrono("usaSimboliCrono", AETypePref.bool, true, "Uso dei simboli crono per nati e morti"),
 
-    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.voce, "Type di link a giorni/anni nelle didascalie",
+    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.lista, "Type di link a giorni/anni nelle didascalie",
             AETypeLink.nessuno
     ),
-    linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.voce, "Type di link nei titoli dei paragrafi in attività/nazionalità",
+    linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.lista, "Type di link nei titoli dei paragrafi in attività/nazionalità",
             AETypeLink.nessuno
     ),
     linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessuno, "Type di link nei titoli dei paragrafi in giorni/anni",
@@ -144,25 +143,25 @@ public enum WPref implements AIGenPref {
             AETypeLink.nessuno
     ),
 
-    usaTaskBio("usaTaskBio", AETypePref.bool, false, "Download calendarizzato di tutte le biografie"),
-    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei giorni nato/morto"),
-    usaTaskAnni("usaTaskAnni", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine degli anni nato/morto"),
-    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività"),
-    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità"),
+    usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie"),
+    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto"),
+    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto"),
+    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, true, "Upload calendarizzato di tutte le attività"),
+    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, true, "Upload calendarizzato di tutte le nazionalità"),
     usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi"),
     usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi"),
     usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori"),
-    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione di alcune statistiche"),
+    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, true, "Elaborazione delle statistiche"),
 
 
-    usaRigheGiorni("usaRigheGiorni", AETypePref.bool, true, "Usa righe raggruppate per anno nelle liste dei giorni"),
-    usaRigheAnni("usaRigheAnni", AETypePref.bool, true, "Usa righe raggruppate per giorno nelle liste degli anni"),
+    usaRigheGiorni("usaRigheGiorni", AETypePref.bool, false, "Usa righe raggruppate per anno nelle liste dei giorni"),
+    usaRigheAnni("usaRigheAnni", AETypePref.bool, false, "Usa righe raggruppate per giorno nelle liste degli anni"),
     sogliaCognomiMongo("sogliaCognomiMongo", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Cognomi sul mongoDB"),
     sogliaCognomiWiki("sogliaCognomiWiki", AETypePref.integer, 50, "Soglia minima per creare una pagina Cognomi sul server wiki"),
     usaLoggerTask("usaLoggerTask", AETypePref.bool, true, "Registra sul log interno l'esecuzione dell task programmate"),
 
     elaboraPagineCancella("elaboraPagineCancella", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione delle pagine da cancellare"),
-    elaboraPagineCancellaTime("elaboraPagineCancellaTime", AETypePref.integer, 0, "Durata elaborazione delle pagine da cancellare in minuti."),
+    elaboraPagineCancellaTime("elaboraPagineCancellaTime", AETypePref.integer, 0, "Durata elaborazione delle pagine da cancellare."),
     elaboraPagineCancellaPrevisto("elaboraPagineCancellaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossima elaborazione delle pagine da cancellare."),
 
     statistichePrevisto("statistichePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossima elaborazione delle statistiche"),
@@ -170,7 +169,7 @@ public enum WPref implements AIGenPref {
     maxPageLength("maxPageLength", AETypePref.integer, 200000, "Soglia massima di una pagina in byte"),
     maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine  giorni/anni"),
     scriveComunque("scriveComunque", AETypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data"),
-    sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, false, "Categorizzazione per secoli delle liste di 'Nati per anno'"),
+    sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, true, "Categorizzazione per secoli delle liste di 'Nati per anno'"),
     ;
 
 
