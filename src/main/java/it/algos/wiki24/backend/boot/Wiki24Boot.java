@@ -98,6 +98,13 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
 //        this.inizia();
 //    }
 
+    public void fixPreferenze() {
+        super.fixPreferenze();
+
+        for (WPref pref : WPref.values()) {
+            VaadVar.prefList.add(pref);
+        }
+    }
 
     /**
      * Costruisce alcune istanze generali dell'applicazione e ne mantiene i riferimenti nelle apposite variabili <br>

@@ -101,7 +101,7 @@ public class WizDialogUpdateProject extends WizDialog {
         confirmButton.getElement().setAttribute("theme", "primary");
         confirmButton.setEnabled(true);
 
-        message = String.format("Confermando viene aggiornata la directory 'wizard' su [%s]", PROJECT_VAADIN24);
+        message = String.format("Confermando viene aggiornata la directory 'wizard' su [%s]", VaadVar.frameworkVaadin24);
         spanConferma.add(ASpan.text(message).rosso().bold());
         message = String.format("Confermando vengono aggiornati i files selezionati su [%s]", VaadVar.projectCurrent);
         spanConferma.add(ASpan.text(message).rosso().bold());
