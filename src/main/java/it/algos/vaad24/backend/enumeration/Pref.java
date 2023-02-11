@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.enumeration;
 
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
 import org.springframework.beans.factory.annotation.*;
@@ -20,7 +21,7 @@ public enum Pref implements AIGenPref {
     durataAvviso("durataAvviso", AETypePref.integer, 2000, "Durata in millisecondi dell'avviso a video"),
 
     usaNonBreaking("usaNonBreaking", AETypePref.bool, false, "Uso dello spazio non-breaking"),
-    nonBreaking("nonBreaking", AETypePref.string, "&nbsp;", "Spazio non-breaking"),
+    nonBreaking("nonBreaking", AETypePref.string, SPAZIO_NON_BREAKING, "Spazio non-breaking"),
     ;
 
 
@@ -74,9 +75,14 @@ public enum Pref implements AIGenPref {
     }// fine del costruttore
 
 
+    public static List getAll() {
+        return Arrays.stream(values()).toList();
+    }
+
     public static List<Pref> getAllEnums() {
         return Arrays.stream(values()).toList();
     }
+
     public static List<String> getAllKeyCode() {
         List<String> listaTags = new ArrayList<>();
 
