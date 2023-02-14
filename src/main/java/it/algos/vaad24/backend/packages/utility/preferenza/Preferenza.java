@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.packages.utility.preferenza;
 
+import com.vaadin.flow.component.icon.*;
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -53,6 +54,7 @@ public class Preferenza extends AEntity {
      */
     //    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolField.checkBox, caption = "Preferenza standard")
     //    @AIColumn(headerIcon = VaadinIcon.HOME)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon,headerIcon= VaadinIcon.HOME)
     public boolean vaad23;
 
 
@@ -71,6 +73,7 @@ public class Preferenza extends AEntity {
      */
     //    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolField.checkBox, caption = "Occorre riavviare")
     //    @AIColumn(headerIcon = VaadinIcon.REFRESH)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon,headerIcon= VaadinIcon.REFRESH)
     public boolean needRiavvio;
 
     /**
@@ -81,6 +84,9 @@ public class Preferenza extends AEntity {
     //    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolField.checkBox, caption = "Visibile solo agli admin")
     //    @AIColumn(headerIcon = VaadinIcon.USER)
     public boolean visibileAdmin;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon,headerIcon= VaadinIcon.CALENDAR)
+    public boolean dinamica;
 
     /**
      * descrizione (obbligatoria)
@@ -190,6 +196,14 @@ public class Preferenza extends AEntity {
 
     public void setVisibileAdmin(boolean visibileAdmin) {
         this.visibileAdmin = visibileAdmin;
+    }
+
+    public void setDinamica(boolean dinamica) {
+        this.dinamica = dinamica;
+    }
+
+    public boolean isDinamica() {
+        return dinamica;
     }
 
     public String getEnumClazzName() {

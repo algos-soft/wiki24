@@ -23,7 +23,6 @@ public enum AETypePref implements AITypePref {
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
             if (obj instanceof String stringa) {
-                //                String stringa = (String) obj;
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
@@ -31,7 +30,7 @@ public enum AETypePref implements AITypePref {
 
         @Override
         public String bytesToObject(byte[] bytes) {
-            String obj = "";
+            String obj = VUOTA;
             if (bytes != null) {
                 obj = new String(bytes, Charset.forName("UTF-8"));
             }
@@ -85,8 +84,7 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof Integer) {
-                int num = (Integer) obj;
+            if (obj instanceof Integer num) {
                 bytes = intToByteArray(num);
             }
             if (obj instanceof String) {
@@ -113,9 +111,8 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof Long) {
-                long num = (Long) obj;
-                bytes = longToByteArray(num);
+            if (obj instanceof Long lungo) {
+                bytes = longToByteArray(lungo);
             }
             if (obj instanceof String) {
                 bytes = longToByteArray( Long.valueOf((String) obj));
@@ -139,11 +136,9 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            LocalDate data;
             long giorni;
 
-            if (obj instanceof LocalDate) {
-                data = (LocalDate) obj;
+            if (obj instanceof LocalDate data) {
                 giorni = data.toEpochDay();
                 bytes = Longs.toByteArray(giorni);
             }
@@ -174,16 +169,13 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            LocalDateTime data;
             long millis;
 
-            if (obj instanceof LocalDateTime) {
-                data = (LocalDateTime) obj;
+            if (obj instanceof LocalDateTime data) {
                 millis = data.toEpochSecond(ZoneOffset.UTC);
-                //                long millis = LibDate.getLongSecs((LocalDateTime) obj);
-                //                long millis = ((LocalDateTime) obj).;
                 bytes = Longs.toByteArray(millis);
             }
+
             return bytes;
         }
 
@@ -191,9 +183,8 @@ public enum AETypePref implements AITypePref {
         @Override
         public LocalDateTime bytesToObject(byte[] bytes) {
             LocalDateTime data = null;
-            long millis = 0;
+            long millis;
 
-            //            return bytes.length > 0 ? LibDate.dateToLocalDateTime(new Date(Longs.fromByteArray(bytes))) : null;
             if (bytes != null && bytes.length > 0) {
                 millis = Longs.fromByteArray(bytes);
                 data = bytes.length > 0 ? LocalDateTime.ofEpochSecond(millis, 0, ZoneOffset.UTC) : null;
@@ -212,8 +203,7 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof LocalTime) {
-                LocalTime time = (LocalTime) obj;
+            if (obj instanceof LocalTime time) {
                 long millis = time.toNanoOfDay();
                 bytes = Longs.toByteArray(millis);
             }
@@ -243,8 +233,7 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof String) {
-                String stringa = (String) obj;
+            if (obj instanceof String stringa) {
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
@@ -270,16 +259,15 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof String) {
-                String stringa = (String) obj;
-                bytes = stringa.getBytes(Charset.forName("UTF-8"));
+            if (obj instanceof AITypePref enumeration) {
+                bytes =  enumeration.getPref().getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
         }
 
         @Override
         public String bytesToObject(byte[] bytes) {
-            String obj = "";
+            String obj = VUOTA;
             if (bytes != null) {
                 obj = new String(bytes, Charset.forName("UTF-8"));
             }
@@ -296,8 +284,7 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof String) {
-                String stringa = (String) obj;
+            if (obj instanceof String stringa) {
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
             return bytes;
@@ -344,8 +331,7 @@ public enum AETypePref implements AITypePref {
         @Override
         public byte[] objectToBytes(Object obj) {
             byte[] bytes = new byte[0];
-            if (obj instanceof String) {
-                String stringa = (String) obj;
+            if (obj instanceof String stringa) {
                 bytes = stringa.getBytes(Charset.forName("UTF-8"));
             }
             return bytes;

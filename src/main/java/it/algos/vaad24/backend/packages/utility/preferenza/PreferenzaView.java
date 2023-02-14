@@ -70,6 +70,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
     @Autowired
     protected PreferenzaBackend backend;
+    @Autowired
+    protected ColumnService columnService;
 
     @Autowired
     protected HtmlService htmlService;
@@ -97,6 +99,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     protected IndeterminateCheckbox boxBoxRiavvio;
 
     protected IndeterminateCheckbox boxBoxDefault;
+    protected IndeterminateCheckbox boxBoxDinamica;
 
     protected int elementiFiltrati;
 
@@ -236,6 +239,14 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         layout4.setAlignItems(Alignment.CENTER);
         layout.add(layout4);
 
+        boxBoxDinamica = new IndeterminateCheckbox();
+        boxBoxDinamica.setLabel("Dinamica");
+        boxBoxDinamica.setIndeterminate(true);
+        boxBoxDinamica.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout5 = new HorizontalLayout(boxBoxDinamica);
+        layout5.setAlignItems(Alignment.CENTER);
+        layout.add(layout5);
+
         this.add(layout);
     }
 
@@ -269,6 +280,9 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void fixColumns() {
+        Icon iconDB= new Icon(VaadinIcon.DATABASE);
+        iconDB.setColor("blue");
+
         grid.addColumns("code", "type");
 
         grid.addColumn(new ComponentRenderer<>(pref ->
@@ -301,32 +315,25 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         String larType = "9em";
         String larValue = "10em";
         String larDesc = "30em";
-        String larBool = "6em";
+        String larBool = "5em";
 
         grid.getColumnByKey("code").setWidth(larCode).setFlexGrow(0);
         grid.getColumnByKey("type").setWidth(larType).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
         grid.getColumnByKey("value").setWidth(larValue).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
         grid.getColumnByKey("descrizione").setWidth(larDesc).setFlexGrow(1);
 
-        grid.addColumn(new ComponentRenderer<>(pref -> {
-            Icon icona = pref.vaad23 ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
-            icona.setColor(pref.vaad23 ? COLOR_VERO : COLOR_FALSO);
-            return icona;
-        })).setHeader("Vaad24").setKey("vaadFlow").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
-
-        grid.addColumn(new ComponentRenderer<>(pref -> {
-            Icon icona = pref.needRiavvio ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
-            icona.setColor(pref.needRiavvio ? COLOR_VERO : COLOR_FALSO);
-            return icona;
-        })).setHeader("Riavvio").setKey("needRiavvio").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+        columnService.crea(grid, Preferenza.class, "vaad23");
+        columnService.crea(grid, Preferenza.class, "needRiavvio");
 
         grid.addColumn(new ComponentRenderer<>(prefDB -> {
             boolean usaDefault = preferenceService.isStandard(prefDB.code);
-            Icon icona = usaDefault ? VaadinIcon.CHECK.create() : VaadinIcon.CLOSE.create();
-            icona.setColor(usaDefault ? COLOR_VERO : COLOR_FALSO);
+            Icon icona = usaDefault ? new Icon(VaadinIcon.CHECK) : new Icon(VaadinIcon.CLOSE);
+            icona.setColor(usaDefault ? "green" : "red");
+            icona.setSize("1em");
             return icona;
-        })).setHeader("Default").setKey("usaDefault").setWidth(larBool).setFlexGrow(0).setTextAlign(ColumnTextAlign.CENTER);
+        })).setHeader(iconDB).setKey("usaDefault").setWidth(larBool).setFlexGrow(0);
 
+        columnService.crea(grid, Preferenza.class, "dinamica");
     }
 
     /**
@@ -430,6 +437,13 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
                     .filter(pref -> preferenceService.isStandard(pref.code) == boxBoxDefault.getValue())
                     .toList();
         }
+
+        if (boxBoxDinamica != null && !boxBoxDinamica.isIndeterminate()) {
+            items = items.stream()
+                    .filter(pref -> pref.dinamica == boxBoxDinamica.getValue())
+                    .toList();
+        }
+
 
         if (items != null) {
             grid.setItems((List) items);

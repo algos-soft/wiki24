@@ -51,7 +51,7 @@ public class Attivita extends AEntity {
     @AIField(type = AETypeField.text, widthEM = WIDTHEM)
     public String linkPaginaAttivita;
 
-    @AIField(type = AETypeField.enumeration, enumClazz = AETypeGenere.class)
+    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeGenere.class)
     public AETypeGenere type;
 
     @AIField(type = AETypeField.booleano, headerIcon = VaadinIcon.ADD_DOCK, caption = "aggiunta (ex-attività)", usaCheckBox3Vie = true)

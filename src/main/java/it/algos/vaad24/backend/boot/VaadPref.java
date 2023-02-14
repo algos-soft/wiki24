@@ -81,7 +81,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
      * Controlla che la entity non esista già <br>
      */
     protected void crea(final Pref pref) {
-        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true);
+        crea(pref.getKeyCode(), pref.getType(), pref.getDefaultValue(), pref.getDescrizione(), false, true,pref.isDinamica());
     }
 
     /**
@@ -89,9 +89,13 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
      * Controlla che la entity non esista già <br>
      */
     protected void crea(final String keyCode, final AETypePref type, Object value, final String descrizione,
-                        final boolean needRiavvio, final boolean vaad23) {
+                        final boolean needRiavvio, final boolean vaad23, final boolean dinamica) {
         Preferenza preferenza = null;
         String message;
+
+        if (backend.existsByKeyCode(keyCode)) {
+            return;
+        }
 
         if (textService.isEmpty(keyCode)) {
             logger.error(new WrapLog().exception(new AlgosException("Manca il keyCode")).usaDb());
@@ -113,16 +117,12 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
             return;
         }
 
-        if (backend.existsByKeyCode(keyCode)) {
-            return;
-        }
-
-        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
-            Object obj = ((AITypePref) value).getPref();
-            if (obj instanceof String valueTxt) {
-                value = valueTxt;
-            }
-        }
+//        if (type == AETypePref.enumerationType && value instanceof AITypePref) {
+//            Object obj = ((AITypePref) value).getPref();
+//            if (obj instanceof String valueTxt) {
+//                value = valueTxt;
+//            }
+//        }
 
         preferenza = new Preferenza();
         preferenza.code = keyCode;
@@ -132,6 +132,7 @@ public class VaadPref implements AIEnumPref, ServletContextListener {
         preferenza.usaCompany = false;
         preferenza.needRiavvio = needRiavvio;
         preferenza.visibileAdmin = false;
+        preferenza.dinamica = dinamica;
         preferenza.descrizione = descrizione;
         preferenza.descrizioneEstesa = descrizione;
         preferenza.enumClazzName = AETypeLog.class.getSimpleName();
