@@ -103,9 +103,9 @@ public enum WPref implements AIGenPref {
     usaTreAttivitaStatistiche("usaTreAttivitaStatistiche", AETypePref.bool, true, "Considera tutte le attività (tre) nelle statistiche di attività", false),
     usaParagrafiDimensionati("usaParagrafiDimensionati", AETypePref.bool, true, "Nel titolo del paragrafo aggiunge la dimensione delle " + "voci elencate", false),
     usaLinkStatistiche("usaLinkStatistiche", AETypePref.bool, true, "Link alle liste di attività nel template statistiche, anche se " + "rossi", false),
-    typeTocAttNaz("typeTocAttNaz", AETypePref.enumerationType, AETypeToc.noToc, "[AETypeToc] in attività e nazionalità"),
-    typeTocGiorni("typeTocGiorni", AETypePref.enumerationType, AETypeToc.noToc, "[AETypeToc] nelle liste di giorni"),
-    typeTocAnni("typeTocAnni", AETypePref.enumerationType, AETypeToc.noToc, "[AETypeToc] nelle liste di anni"),
+    typeTocAttNaz("typeTocAttNaz", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] in attività e nazionalità"),
+    typeTocGiorni("typeTocGiorni", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di giorni"),
+    typeTocAnni("typeTocAnni", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di anni"),
     typeChiaveNulla("typeChiaveNulla", AETypePref.enumerationType, AETypeChiaveNulla.inCoda, "[AETypeChiaveNulla] Posizione del paragrafo 'nullo'"),
 
     usaSottoCognomi("usaSottoCognomi", AETypePref.bool, false, "Usa le sotto-sottopagine per i cognomi", false),
@@ -340,6 +340,14 @@ public enum WPref implements AIGenPref {
 
     public boolean isDinamica() {
         return dinamica;
+    }
+
+    public boolean needRiavvio() {
+        return needRiavvio;
+    }
+
+    public boolean isVaad24() {
+        return false;
     }
 
     public Class<?> getEnumClazz() {

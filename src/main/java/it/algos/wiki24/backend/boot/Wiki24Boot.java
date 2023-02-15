@@ -89,17 +89,17 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         this.inizia();
     }
 
-    //    /**
-//     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-//     * event, the application is ready to service Vaadin requests <br>
-//     */
-//    @EventListener(ContextRefreshedEvent.class)
-//    public void onContextRefreshEvent() {
-//        this.inizia();
-//    }
 
-    public void fixPreferenze() {
-        super.fixPreferenze();
+
+    /**
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void creaEnumerationPreferenze() {
+        super.creaEnumerationPreferenze();
 
         for (WPref pref : WPref.values()) {
             VaadVar.prefList.add(pref);
@@ -189,11 +189,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         this.versInstance = versInstance;
     }
 
-    @Autowired
-    @Qualifier(TAG_WIKI23_PREFERENCES)
-    public void setPrefInstance(final AIEnumPref prefInstance) {
-        VaadVar.prefInstance = prefInstance;
-    }
 
     /**
      * Eventuali task <br>
