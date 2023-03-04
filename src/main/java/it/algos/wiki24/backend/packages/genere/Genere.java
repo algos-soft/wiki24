@@ -39,7 +39,7 @@ public class Genere extends AEntity {
     public String singolare;
 
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeGenere.class)
+    @AIField(type = AETypeField.enumType, enumClazz = AETypeGenere.class)
     public AETypeGenere type;
 
     @Indexed(unique = false, direction = IndexDirection.DESCENDING)

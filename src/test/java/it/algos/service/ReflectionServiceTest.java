@@ -3,17 +3,27 @@ package it.algos.service;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.ui.views.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -36,6 +46,25 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
      */
     private ReflectionService service;
 
+    //--clazz
+    //--simpleName
+    //--numero fields classe + superClassi
+    //--numero only fields della classe
+    //--numero only fields della classe accettabili nel database
+    //--numero only fields della classe senza keyID
+    protected static Stream<Arguments> CLAZZ_FOR_FIELD() {
+        return Stream.of(
+                Arguments.of(CrudView.class, CrudView.class.getSimpleName(), 0, 0, 0, 0),
+                Arguments.of(AIType.class, AIType.class.getSimpleName(), 0, 0, 0, 0),
+                Arguments.of(Mese.class, Mese.class.getSimpleName(), 10, 7, 7, 6),
+                Arguments.of(Continente.class, Continente.class.getSimpleName(), 8, 4, 4, 3),
+                Arguments.of(Giorno.class, Giorno.class.getSimpleName(), 9, 6, 6, 5),
+                Arguments.of(Logger.class, Logger.class.getSimpleName(), 16, 13, 11, 10),
+                Arguments.of(Via.class, Via.class.getSimpleName(), 5, 2, 2, 1),
+                Arguments.of(ViaView.class, ViaView.class.getSimpleName(), 0, 0, 0, 0),
+                Arguments.of(SecoloView.class, SecoloView.class.getSimpleName(), 0, 0, 0, 0)
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -218,6 +247,7 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         assertTrue(ottenutoBooleano);
 
     }
+
     @Test
     @Order(27)
     @DisplayName("27 - isEsisteMetodoSenzaParametri")
@@ -230,6 +260,139 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
 
         ottenutoBooleano = service.isEsisteMetodoSenzaParametri(clazz, sorgente);
         assertFalse(ottenutoBooleano);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
+    @Order(41)
+    @DisplayName("41 - getAllSuperClassFields di una classe AEntity")
+        //--clazz
+        //--simpleName
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+        //--numero only fields della classe accettabili nel database
+        //--numero only fields della classe senza keyID
+    void getAllSuperClassFields(Class genericClazz, String simpleName, int numSuperClassi) {
+        System.out.println("41 - getAllSuperClassFields di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getAllSuperClassFields(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numSuperClassi, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe e di tutte le superClassi; compreso _ID e transient");
+        System.out.println(message);
+        printFields(clazz, listaFields);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
+    @Order(42)
+    @DisplayName("42 - getClassOnlyDeclaredFields di una classe AEntity")
+        //--clazz
+        //--simpleName
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+        //--numero only fields della classe accettabili nel database
+        //--numero only fields della classe senza keyID
+    void getClassOnlyDeclaredFields(Class genericClazz, String simpleName, int nonUsato, int numOnlyClasse) {
+        System.out.println("42 - getClassOnlyDeclaredFields di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getClassOnlyDeclaredFields(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numOnlyClasse, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe; compreso _ID e transient, ma esclusi i fields della superclasse");
+        System.out.println(message);
+        printFields(clazz, listaFields);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
+    @Order(43)
+    @DisplayName("43 - getClassOnlyDeclaredFieldsDB di una classe AEntity")
+        //--clazz
+        //--simpleName
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+        //--numero only fields della classe accettabili nel database
+        //--numero only fields della classe senza keyID
+    void getClassOnlyDeclaredFieldsDB(Class genericClazz, String simpleName, int nonUsato, int nonUsato2, int numOnlyClasseDatabase) {
+        System.out.println("43 - getClassOnlyDeclaredFieldsDB di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getClassOnlyDeclaredFieldsDB(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numOnlyClasseDatabase, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe; compreso _ID, ma esclusi transient e i fields della superclasse");
+        System.out.println(message);
+        printFields(clazz, listaFields);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "CLAZZ_FOR_FIELD")
+    @Order(44)
+    @DisplayName("44 - getClassOnlyFormFields di una classe AEntity")
+        //--clazz
+        //--simpleName
+        //--numero fields classe + superClassi
+        //--numero only fields della classe
+        //--numero only fields della classe accettabili nel database
+        //--numero only fields della classe senza keyID
+    void getClassOnlyFormFields(Class genericClazz, String simpleName, int nonUsato, int nonUsato2, int nonUsato3, int numOnlyForm) {
+        System.out.println("44 - getClassOnlyFormFields di una classe AEntity");
+        System.out.println(VUOTA);
+
+        if (!AEntity.class.isAssignableFrom(genericClazz)) {
+            message = String.format("La classe %s non è una classe di tipo AEntity", simpleName);
+            System.out.println(message);
+            return;
+        }
+        else {
+            clazz = genericClazz;
+        }
+
+        listaFields = service.getClassOnlyFormFields(clazz);
+        assertNotNull(listaFields);
+        ottenutoIntero = listaFields.size();
+        assertEquals(numOnlyForm, ottenutoIntero);
+
+        message = String.format("Tutti i fields della classe; escluso _ID, esclusi transient ed esclusi i fields della superclasse");
+        System.out.println(message);
+        printFields(clazz, listaFields);
     }
 
 
@@ -283,6 +446,27 @@ public class ReflectionServiceTest extends AlgosIntegrationTest {
         }
 
         return lista;
+    }
+
+    protected void printFields(Class clazz, List<Field> lista) {
+        String clazzName = clazz.getSimpleName();
+        String fieldName;
+        String fieldClass;
+        int k = 1;
+
+        message = String.format("Nella classe %s ci sono %d fields", clazzName, lista.size());
+        System.out.println(message);
+        System.out.println(VUOTA);
+
+        for (Field field : lista) {
+            fieldName = field.getName();
+            fieldClass = field.getType().getSimpleName();
+            message = String.format("%s%s%s", fieldName, FORWARD, fieldClass);
+            System.out.print(k++);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+            System.out.println(message);
+        }
     }
 
 }

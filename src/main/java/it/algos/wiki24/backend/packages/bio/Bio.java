@@ -145,7 +145,7 @@ public class Bio extends AEntity {
     @AIField(type = AETypeField.booleano)
     public boolean errato;
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AETypeBioError.class, nullSelectionAllowed = true, widthEM = 12)
+    @AIField(type = AETypeField.enumType, enumClazz = AETypeBioError.class, nullSelectionAllowed = true, widthEM = 12)
     public AETypeBioError errore;
 
     @Override

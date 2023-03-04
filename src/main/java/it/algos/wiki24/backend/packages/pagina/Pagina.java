@@ -45,7 +45,7 @@ public class Pagina extends AEntity {
     @AIField(type = AETypeField.integer)
     public int voci;
 
-    @AIField(type = AETypeField.enumerationType, enumClazz = AETypePaginaCancellare.class, widthEM = 16)
+    @AIField(type = AETypeField.enumType, enumClazz = AETypePaginaCancellare.class, widthEM = 16)
     public AETypePaginaCancellare type;
 
 
