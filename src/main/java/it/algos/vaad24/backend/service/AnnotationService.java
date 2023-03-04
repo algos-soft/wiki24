@@ -445,6 +445,7 @@ public class AnnotationService extends AbstractService {
 
     /**
      * Get the name (lowerCase) of the collection on mongoDB  <br>
+     * Controlla che esista l'annotation specifica <br>
      *
      * @param entityClazz the class of type AEntity
      *
@@ -466,9 +467,22 @@ public class AnnotationService extends AbstractService {
         return collectionName;
     }
 
+    /**
+     * Usa il metodo resetOnlyEmpty() nella classe xxxBackend <br>
+     * Controlla che esista l'annotation specifica <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return if exists the method xxxBackend.resetOnlyEmpty()
+     */
+    public boolean usaReset(final Class<? extends AEntity> entityClazz) {
+        AIEntity annotation = this.getAIEntity(entityClazz);
+        return annotation != null ? annotation.usaReset() : false;
+    }
 
     /**
      * Get the name of the EntityClass that is a preReset <br>
+     * Controlla che esista l'annotation specifica <br>
      *
      * @param entityClazz the class of type AEntity
      *
@@ -477,18 +491,115 @@ public class AnnotationService extends AbstractService {
     public String getReset(final Class<? extends AEntity> entityClazz) {
         String ancestorReset = VUOTA;
         AIEntity annotation = this.getAIEntity(entityClazz);
-        String collectionName = getCollectionName(entityClazz);
+        String collectionName = VUOTA;
 
         if (annotation != null && annotation.preReset().length() > 0) {
             ancestorReset = annotation.preReset();
         }
 
         if (textService.isValid(ancestorReset)) {
+            collectionName = entityClazz.getSimpleName().toLowerCase();
             collectionName += VIRGOLA;
             collectionName += ancestorReset;
+            return collectionName;
+        }
+        else {
+            return entityClazz.getSimpleName().toLowerCase();
+        }
+    }
+
+
+    /**
+     * Restituisce il nome della property chiave <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Se non la trova, usa il valore di default '_id' <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the key property name
+     */
+    public String getKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+        String keyPropertyName = VUOTA;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
         }
 
-        return collectionName;
+        if (annotation != null) {
+            keyPropertyName = annotation.keyPropertyName();
+        }
+        else {
+            keyPropertyName = FIELD_NAME_ID_CON;
+        }
+
+        return keyPropertyName;
+    }
+
+    /**
+     * Esiste una property chiave <br>
+     * Controlla che esista l'annotation specifica <br>
+     * Esclude usa il valore di default '_id' <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return if exists a key property
+     */
+    public boolean usaKeyPropertyName(final Class<? extends AEntity> entityClazz) {
+        String keyPropertyName = getKeyPropertyName(entityClazz);
+
+        if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Flag per usare solo le lettere minuscole nel campo chiave keyId. <br>
+     * Uppercase and lowercase letters are treated equivalent (case-insensitive) and NOT as distinct (case-sensitive) <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the status
+     */
+    public boolean usaKeyIdMinuscolaCaseInsensitive(final Class<? extends AEntity> entityClazz) {
+        boolean usaKeyIdMinuscolaCaseInsensitive = true;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
+        }
+
+        if (annotation != null) {
+            usaKeyIdMinuscolaCaseInsensitive = annotation.usaKeyIdMinuscolaCaseInsensitive();
+        }
+
+        return usaKeyIdMinuscolaCaseInsensitive;
+    }
+
+
+    /**
+     * Flag per non usare lo spazio nel campo chiave keyId. <br>
+     *
+     * @param entityClazz the class of type AEntity
+     *
+     * @return the status
+     */
+    public boolean usaKeyIdSenzaSpazi(final Class<? extends AEntity> entityClazz) {
+        boolean usaKeyIdSenzaSpazi = true;
+        AIEntity annotation = this.getAIEntity(entityClazz);
+
+        if (annotation != null && annotation.keyPropertyName().length() > 0) {
+            annotation = getAIEntity(entityClazz);
+        }
+
+        if (annotation != null) {
+            usaKeyIdSenzaSpazi = annotation.usaKeyIdSenzaSpazi();
+        }
+
+        return usaKeyIdSenzaSpazi;
     }
 
     //==========================================================================

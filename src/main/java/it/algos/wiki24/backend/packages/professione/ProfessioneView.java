@@ -121,7 +121,7 @@ public class ProfessioneView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Professione> items = backend.findAll(sortOrder);
+        List<Professione> items = backend.findAllSortCorrente();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {

@@ -35,6 +35,11 @@ import java.util.stream.*;
  * User: gac
  * Date: ven, 01-apr-2022
  * Time: 06:41
+ * Vista iniziale e principale di un package <br>
+ * Superclasse astratta <br>
+ * Presenta la Grid <br>
+ * Su richiesta apre un Dialogo per gestire la singola entity <br>
+ * La sottoclasse concreta usa @Route e viene chiamata dal menu generale <br>
  */
 public abstract class CrudView extends VerticalLayout implements AfterNavigationObserver {
 
@@ -287,7 +292,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         //--Larghezza del browser utilizzato in questa sessione <br>
         UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> browserWidth = details.getBodyClientWidth());
 
-        sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
+        sortOrder = crudBackend.getSortOrder();
+        sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
         usaRowIndex = true;
         riordinaColonne = true;
         gridPropertyNamesList = new ArrayList<>();
@@ -504,7 +510,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
     protected void fixItems() {
         List items;
-        items = crudBackend.findAll(sortOrder);
+
+        items = crudBackend.findAllSort(sortOrder);
         if (items != null) {
             grid.setItems(items);
         }
@@ -616,7 +623,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void sincroFiltri() {
-        List<AEntity> items = crudBackend.findAll(sortOrder);
+        List<AEntity> items = crudBackend.findAllSort(sortOrder);
 
         if (usaBottoneSearch && searchField != null) {
             final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
@@ -660,7 +667,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void refresh() {
-        grid.setItems(crudBackend.findAll(sortOrder));
+        grid.setItems(crudBackend.findAllSort(sortOrder));
     }
 
 
@@ -669,7 +676,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
 
         if (result.isValido()) {
             logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.reset).usaDb());
-            grid.setItems(crudBackend.findAll(sortOrder));
+            grid.setItems(crudBackend.findAllSort(sortOrder));
             Avviso.message("Eseguito reset completo").success().open();
             refresh();
         }
@@ -686,7 +693,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
 
         crudBackend.deleteAll();
-        grid.setItems(crudBackend.findAll(sortOrder));
+        grid.setItems(crudBackend.findAllSort(sortOrder));
         Avviso.message("Delete all").success().open();
     }
 
@@ -752,14 +759,14 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
      * Primo ingresso dopo il click sul bottone del dialogo <br>
      */
     protected void saveHandler(final AEntity entityBean, final CrudOperation operation) {
-        grid.setItems(crudBackend.findAll(sortOrder));
+        grid.setItems(crudBackend.findAllSort(sortOrder));
     }
 
     public void deleteHandler() {
         Optional<AEntity> entityBean = grid.getSelectedItems().stream().findFirst();
         if (entityBean.isPresent()) {
             crudBackend.delete(entityBean.get());
-            grid.setItems(crudBackend.findAll(sortOrder));
+            grid.setItems(crudBackend.findAllSort(sortOrder));
             Avviso.message(String.format("%s successfully deleted", entityBean.get())).success().open();
         }
         else {

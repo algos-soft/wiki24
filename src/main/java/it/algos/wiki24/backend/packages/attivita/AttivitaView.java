@@ -251,7 +251,7 @@ public class AttivitaView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Attivita> items = backend.findAll(sortOrder);
+        List<Attivita> items = backend.findAllSortCorrente();
 
         final String textSearchSingolare = searchFieldSingolare != null ? searchFieldSingolare.getValue() : VUOTA;
         if (textService.isValid(textSearchSingolare)) {
@@ -338,7 +338,7 @@ public class AttivitaView extends WikiView {
             }
             else {
                 sortOrder = Sort.by(Sort.Direction.ASC, "singolare");
-                items = backend.findAll(sortOrder);
+                items = backend.findAllSortCorrente();
             }
         }
 
@@ -359,7 +359,7 @@ public class AttivitaView extends WikiView {
             }
             else {
                 sortOrder = Sort.by(Sort.Direction.ASC, "singolare");
-                items = backend.findAll(sortOrder);
+                items = backend.findAllSortCorrente();
             }
         }
 

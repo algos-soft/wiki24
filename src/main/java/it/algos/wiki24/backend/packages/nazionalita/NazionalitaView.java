@@ -213,7 +213,7 @@ public class NazionalitaView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Nazionalita> items = backend.findAll(sortOrder);
+        List<Nazionalita> items = backend.findAllSortCorrente();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
@@ -261,7 +261,7 @@ public class NazionalitaView extends WikiView {
             }
             else {
                 sortOrder = Sort.by(Sort.Direction.ASC, "singolare");
-                items = backend.findAll(sortOrder);
+                items = backend.findAllSortCorrente();
             }
         }
 
@@ -280,8 +280,8 @@ public class NazionalitaView extends WikiView {
                 items = backend.findPagineDaCancellare();
             }
             else {
-                sortOrder = Sort.by(Sort.Direction.ASC, "singolare");
-                items = backend.findAll(sortOrder);
+                sortOrder = Sort.by(Sort.Direction.ASC, "singolare");//todo sarà giusto?
+                items = backend.findAllSortCorrente();
             }
         }
 

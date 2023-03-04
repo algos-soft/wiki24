@@ -15,6 +15,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.util.*;
 
 /**
@@ -260,22 +261,22 @@ public class WikiUtility extends WAbstractService {
     }
 
     public String fixSecoloNato(final Bio bio) {
-        Anno anno = annoBackend.findByNome(bio.annoNato);
+        Anno anno = annoBackend.findByKey(bio.annoNato);
         return anno != null ? anno.getSecolo().nome : VUOTA;
     }
 
     public String fixSecoloMorto(final Bio bio) {
-        Anno anno = annoBackend.findByNome(bio.annoMorto);
+        Anno anno = annoBackend.findByKey(bio.annoMorto);
         return anno != null ? anno.getSecolo().nome : VUOTA;
     }
 
     public String fixMeseNato(final Bio bio) {
-        Giorno giorno = giornoBackend.findByNome(bio.giornoNato);
+        Giorno giorno = giornoBackend.findByKey(bio.giornoNato);
         return giorno != null ? textService.primaMaiuscola(giorno.getMese().nome) : VUOTA;
     }
 
     public String fixMeseMorto(final Bio bio) {
-        Giorno giorno = giornoBackend.findByNome(bio.giornoMorto);
+        Giorno giorno = giornoBackend.findByKey(bio.giornoMorto);
         return giorno != null ? textService.primaMaiuscola(giorno.getMese().nome) : VUOTA;
     }
 
@@ -534,12 +535,14 @@ public class WikiUtility extends WAbstractService {
         int numPagesServerWiki = queryService.getSizeCat(categoryTitle);
         int bioMongoDB = bioBackend.count();
 
-        mappa.put(KEY_MAP_VOCI_SERVER_WIKI,numPagesServerWiki);
-        mappa.put(KEY_MAP_VOCI_DATABASE_MONGO,bioMongoDB);
+        mappa.put(KEY_MAP_VOCI_SERVER_WIKI, numPagesServerWiki);
+        mappa.put(KEY_MAP_VOCI_DATABASE_MONGO, bioMongoDB);
         result.mappa(mappa);
 
-        double percentuale = mathService.percentuale(bioMongoDB, numPagesServerWiki);
-        return result.validoWiki(percentuale > PERCENTUALE_MINIMA_BIOGRAFIE);
+        double attuale = mathService.percentuale(bioMongoDB, numPagesServerWiki);
+        BigDecimal decimal = WPref.percentualeMinimaBiografie.getDecimal();
+        double minimo = decimal.doubleValue();
+        return result.validoWiki(attuale > minimo);
     }
 
 }

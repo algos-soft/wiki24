@@ -468,7 +468,7 @@ public class BioBackend extends WikiBackend {
     }
 
     public List<Bio> findAllAll() {
-        return super.findAll();
+        return super.findAllNoSort();
     }
 
     public List<Bio> findAll() {
@@ -630,7 +630,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(giornoNato)) {
             return null;
         }
-        if (giornoBackend.findByNome(giornoNato) == null) {
+        if (giornoBackend.findByKey(giornoNato) == null) {
             return null;
         }
 
@@ -665,7 +665,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(nomeSecolo)) {
             return null;
         }
-        secolo = secoloBackend.findByNome(nomeSecolo);
+        secolo = secoloBackend.findByKey(nomeSecolo);
         if (secolo == null && !nomeSecolo.equalsIgnoreCase(TAG_LISTA_NO_ANNO)) {
             return null;
         }
@@ -736,7 +736,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(giornoMorto)) {
             return null;
         }
-        if (giornoBackend.findByNome(giornoMorto) == null) {
+        if (giornoBackend.findByKey(giornoMorto) == null) {
             return null;
         }
 
@@ -762,7 +762,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(nomeSecolo)) {
             return null;
         }
-        secolo = secoloBackend.findByNome(nomeSecolo);
+        secolo = secoloBackend.findByKey(nomeSecolo);
         if (secolo == null && !nomeSecolo.equalsIgnoreCase(TAG_LISTA_NO_ANNO)) {
             return null;
         }
@@ -823,7 +823,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(annoNato)) {
             return null;
         }
-        if (annoBackend.findByNome(annoNato) == null) {
+        if (annoBackend.findByKey(annoNato) == null) {
             return null;
         }
 
@@ -845,7 +845,7 @@ public class BioBackend extends WikiBackend {
             return null;
         }
         nomeMese = textService.primaMinuscola(nomeMese);
-        mese = meseBackend.findByNome(nomeMese);
+        mese = meseBackend.findByKey(nomeMese);
         if (mese == null && !nomeMese.equalsIgnoreCase(TAG_LISTA_NO_GIORNO)) {
             return null;
         }
@@ -903,7 +903,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(annoMorto)) {
             return null;
         }
-        if (annoBackend.findByNome(annoMorto) == null) {
+        if (annoBackend.findByKey(annoMorto) == null) {
             return null;
         }
 
@@ -925,7 +925,7 @@ public class BioBackend extends WikiBackend {
             return null;
         }
         nomeMese = textService.primaMinuscola(nomeMese);
-        mese = meseBackend.findByNome(nomeMese);
+        mese = meseBackend.findByKey(nomeMese);
         if (mese == null && !nomeMese.equalsIgnoreCase(TAG_LISTA_NO_GIORNO)) {
             return null;
         }
@@ -1009,7 +1009,6 @@ public class BioBackend extends WikiBackend {
      *
      * @param sort
      */
-    @Override
     public List<Bio> findAll(Sort sort) {
         if (sort == null) {
             return findSenzaTmpl();

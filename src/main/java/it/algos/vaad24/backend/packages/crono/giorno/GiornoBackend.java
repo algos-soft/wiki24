@@ -1,13 +1,14 @@
 package it.algos.vaad24.backend.packages.crono.giorno;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -19,57 +20,37 @@ import java.util.stream.*;
  * User: gac
  * Date: lun, 02-mag-2022
  * Time: 08:26
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class GiornoBackend extends CrudBackend {
 
-    public GiornoRepository repository;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
     @Autowired
     public MeseBackend meseBackend;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public GiornoBackend(@Autowired @Qualifier(TAG_GIORNO) final MongoRepository crudRepository) {
-        super(crudRepository, Giorno.class);
-        this.repository = (GiornoRepository) crudRepository;
-    }
-
-    public boolean crea(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-        Giorno giorno = newEntity(ordine, nome, mese, trascorsi, mancanti);
-        return crudRepository.insert(giorno) != null;
+    public GiornoBackend() {
+        super(Giorno.class);
     }
 
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Giorno newEntity() {
         return newEntity(0, VUOTA, null, 0, 0);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (non salvata e senza keyID)
+     */
+    @Override
+    public Giorno newEntity(final String keyPropertyValue) {
+        return newEntity(0, keyPropertyValue, null, 0, 0);
     }
 
     /**
@@ -84,53 +65,75 @@ public class GiornoBackend extends CrudBackend {
      * @param trascorsi di inizio anno
      * @param mancanti  alla fine dell'anno
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Giorno newEntity(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-        return Giorno.builder()
+        Giorno newEntityBean = Giorno.builder()
                 .ordine(ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .mese(mese)
                 .trascorsi(trascorsi)
                 .mancanti(mancanti)
                 .build();
-    }
 
-    public Giorno findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
-    }
-
-    public boolean isEsiste(final String nome) {
-        return repository.findFirstByNome(nome) != null;
-    }
-
-    public Giorno findByOrdine(final int ordine) {
-        return repository.findFirstByOrdine(ordine);
+        return (Giorno) fixKey(newEntityBean);
     }
 
     @Override
-    public List<Giorno> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
+    public Giorno findById(final String keyID) {
+        return (Giorno) super.findById(keyID);
     }
 
-    public List<String> findNomi() {
-        return findAll().stream()
-                .map(giorno -> giorno.nome)
-                .collect(Collectors.toList());
+    @Override
+    public Giorno findByKey(final String keyValue) {
+        return (Giorno) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Giorno findByProperty(final String propertyName, final Object propertyValue) {
+        return (Giorno) super.findByProperty(propertyName, propertyValue);
+    }
+
+    public Giorno findByOrdine(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public List<Giorno> findAllNoSort() {
+        return (List<Giorno>)super.findAllNoSort();
+    }
+
+    @Override
+    public List<Giorno> findAllSortCorrente() {
+        return (List<Giorno>) super.findAllSortCorrente();
     }
 
     public List<Giorno> findAllByMese(Mese mese) {
-        return findAll().stream()
-                .filter(giorno -> giorno.mese.nome.equals(mese.nome))
-                .collect(Collectors.toList());
+        return super.findAllByProperty(FIELD_NAME_MESE, mese);
+    }
+
+    @Override
+    public List<String> findAllForKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+
+    @Override
+    public List<String> findAllForKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
+
+    public List<String> findAllForNome() {
+        return findAllForKey();
     }
 
 
-    public List<String> findNomiByMese(String nomeMese) {
-        return findAll().stream()
-                .filter(giorno -> giorno.mese.nome.equals(nomeMese))
-                .map(giorno -> giorno.nome)
-                .collect(Collectors.toList());
+    public List<String> findAllForNomeByMese(Mese mese) {
+        return findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
+    }
+
+    @Override
+    public Giorno save(AEntity entity) {
+        return (Giorno) super.save(entity);
     }
 
     /**
@@ -143,28 +146,35 @@ public class GiornoBackend extends CrudBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
         int ordine;
-        List<HashMap> lista;
+        List<HashMap> mappa;
         String nome;
         String meseTxt;
         Mese mese;
-        int trascorsi = 0;
-        int mancanti = 0;
+        int trascorsi;
+        int mancanti;
         int tot = 365;
         String message;
+        AEntity entityBean;
+        List<AEntity> lista;
 
         if (meseBackend.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
-            return result;
+            return result.fine();
         }
 
-        if (result.isValido()) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
             //costruisce i 366 records
-            lista = dateService.getAllGiorni();
-            for (HashMap mappaGiorno : lista) {
+            mappa = dateService.getAllGiorni();
+            result.setValido(true);
+            lista = new ArrayList<>();
+
+            for (HashMap mappaGiorno : mappa) {
                 nome = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_TITOLO);
                 meseTxt = (String) mappaGiorno.get(KEY_MAPPA_GIORNI_MESE_TESTO);
-                mese = meseBackend.findByNome(meseTxt);
+                mese = meseBackend.findByKey(meseTxt);
                 if (mese == null) {
                     message = String.format("Manca il mese di %s", meseTxt);
                     logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
@@ -174,18 +184,21 @@ public class GiornoBackend extends CrudBackend {
                 trascorsi = (int) mappaGiorno.get(KEY_MAPPA_GIORNI_NORMALE);
                 mancanti = tot - trascorsi;
 
-                try {
-                    crea(ordine, nome, mese, trascorsi, mancanti);
-                } catch (Exception unErrore) {
-                    logger.error(new WrapLog().exception(unErrore).usaDb());
+                entityBean = insert(newEntity(ordine, nome, mese, trascorsi, mancanti));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    result.setValido(false);
                 }
             }
+
+            return super.fixResult(result, clazzName, collectionName, lista);
         }
         else {
-            return result;
+            return result.fine();
         }
-
-        return fixResult(result);
     }
 
 }// end of crud backend class

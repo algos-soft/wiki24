@@ -223,7 +223,7 @@ public class AnnoWikiView extends WikiView {
                 items = backend.fetchDaCancellare();
             }
             else {
-                items = backend.findAll(sortOrder);
+                items = backend.findAllSortCorrente();
             }
         }
 

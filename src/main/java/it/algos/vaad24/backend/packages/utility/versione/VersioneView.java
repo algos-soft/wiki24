@@ -63,7 +63,8 @@ public class VersioneView extends CrudView {
             super.gridPropertyNamesList = Arrays.asList("code", "type", "titolo", "descrizione", "vaadin23");
             super.formPropertyNamesList = Arrays.asList("code", "type", "titolo", "descrizione", "vaadin23");
         }
-        super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
+
+        super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaBottoneDeleteReset = false;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
@@ -119,7 +120,7 @@ public class VersioneView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Versione> items = backend.findAll(sortOrder);
+        List<Versione> items = backend.findAllSort(sortOrder);
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {

@@ -152,7 +152,7 @@ public class PaginaView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Pagina> items = backend.findAll(sortOrder);
+        List<Pagina> items = backend.findAllSortCorrente();
 
         if (comboType != null && comboType.getValue() != null) {
             if (comboType.getValue() instanceof AETypePaginaCancellare type) {

@@ -4,10 +4,10 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
-import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -25,7 +25,6 @@ import java.util.*;
  * Date: Tue, 13-Dec-2022
  * Time: 11:36
  */
-@SpringComponent
 @Route(value = VaadCost.TAG_UTILITY, layout = MainLayout.class)
 //@RouteAlias(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
 //@CssImport("./styles/shared-styles.css")
@@ -71,6 +70,9 @@ public class UtilityView extends VerticalLayout {
     @Autowired
     public LogService logger;
 
+    @Autowired
+    public PreferenzaBackend preferenzaBackend;
+
     /**
      * Questa classe viene costruita partendo da @Route e NON dalla catena @Autowired di SpringBoot <br>
      */
@@ -99,6 +101,7 @@ public class UtilityView extends VerticalLayout {
         this.titolo();
 
         this.paragrafoReset();
+        this.paragrafoPreferenze();
 
         //--spazio per distanziare i paragrafi
         this.add(new H3());
@@ -120,7 +123,7 @@ public class UtilityView extends VerticalLayout {
         H3 paragrafo = new H3("Reset di tutte le collection [ordinate]");
         paragrafo.getElement().getStyle().set("color", "blue");
 
-        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", TAG_RESET_FORCING, TAG_RESET_ONLY);
+        message = String.format("Esegue il %s() su tutte le collection [ordinate] che implementano %s()", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
         lista = classService.allModuleEntityResetOrderedClassName(VaadVar.moduloVaadin24);
         message = String.format("%s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
@@ -136,7 +139,6 @@ public class UtilityView extends VerticalLayout {
         layout.add(bottone);
         this.add(layout);
     }
-
 
 
     private void reset() {
@@ -162,17 +164,58 @@ public class UtilityView extends VerticalLayout {
 
         listaClazz = classService.allModuleBackendResetOrderedClass(nomeModulo);
         if (listaClazz != null && listaClazz.size() > 0) {
-            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s ci sono %d classi che implementano il metodo %s", nomeModulo, listaClazz.size(), METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
             for (Class clazz : listaClazz) {
-                risultato = classService.esegueMetodo(clazz.getCanonicalName(), TAG_RESET_FORCING);
+                risultato = classService.esegueMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_FORCING);
                 logger.info(new WrapLog().message(risultato.getValidMessage()).type(AETypeLog.reset));
             }
         }
         else {
-            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, TAG_RESET_ONLY);
+            message = String.format("Nel modulo %s non ci sono classi che implementino il metodo %s", nomeModulo, METHOD_NAME_RESET_ONLY);
             logger.info(new WrapLog().message(message).type(AETypeLog.reset));
         }
+    }
+
+
+    public void paragrafoPreferenze() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        List<String> lista;
+        H3 paragrafo = new H3("Reset delle preferenze");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        message = String.format("Esegue il reset/refresh di tutte le preferenze");
+        layout.add(ASpan.text(message));
+        message = "Refresh -> ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+        message = "Delete -> ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche.";
+        layout.add(ASpan.text(message));
+
+        Button bottone = new Button("Refresh");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> refresh());
+
+        Button bottone2 = new Button("Delete");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> delete());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone, bottone2));
+        this.add(layout);
+    }
+
+
+    private void refresh() {
+        preferenzaBackend.refreshAll();
+    }
+
+
+    private void delete() {
+        preferenzaBackend.deleteAll();
     }
 
 }

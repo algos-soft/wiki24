@@ -85,7 +85,7 @@ public class StatisticheAnni extends Statistiche {
      */
     @Override
     protected void creaLista() {
-        lista = annoWikiBackend.findAll(Sort.by(Sort.Direction.DESC, "ordine"));
+        lista = annoWikiBackend.findAllSort(Sort.by(Sort.Direction.DESC, "ordine"));
     }
 
 

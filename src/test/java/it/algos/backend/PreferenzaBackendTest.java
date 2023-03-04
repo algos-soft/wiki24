@@ -24,7 +24,7 @@ import java.util.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("backend")
+@Tag("backendx")
 @DisplayName("Preferenza Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PreferenzaBackendTest extends AlgosUnitTest {
@@ -68,6 +68,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         backend.arrayService = arrayService;
         backend.dateService = dateService;
         backend.textService = textService;
+        backend.annotationService = annotationService;
         backend.resourceService = resourceService;
         backend.reflectionService = reflectionService;
         backend.mongoService = mongoService;
@@ -119,8 +120,8 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
             message = String.format("Ci sono in totale %s entities di '%s' nel database mongoDB", textService.format(ottenutoIntero), dbName);
         }
         else {
-            if (reflectionService.isEsisteMetodo(backend.getClass(), TAG_RESET_ONLY)) {
-                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, TAG_RESET_ONLY);
+            if (reflectionService.isEsisteMetodo(backend.getClass(), METHOD_NAME_RESET_ONLY)) {
+                message = String.format("La collection '%s' è ancora vuota. Usa il metodo %s.%s()", dbName, backendName, METHOD_NAME_RESET_ONLY);
             }
             else {
                 message = String.format("Nel database mongoDB la collection '%s' è ancora vuota", dbName);
@@ -137,7 +138,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         System.out.println("2 - findAll");
         String message;
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
         System.out.println(message);
@@ -152,13 +153,13 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
 
         sorgente = "debug";
         objPrevisto = false;
-        objOttenuto = backend.findByKeyCode(sorgente).getValore();
+        objOttenuto = backend.findByKey(sorgente).getValore();
         assertNotNull(objOttenuto);
         assertEquals(objPrevisto, objOttenuto);
 
         sorgente = "nonBreaking";
         objPrevisto = SPAZIO_NON_BREAKING;
-        objOttenuto = backend.findByKeyCode(sorgente).getValore();
+        objOttenuto = backend.findByKey(sorgente).getValore();
         assertNotNull(objOttenuto);
         assertEquals(objPrevisto, objOttenuto);
     }
@@ -312,7 +313,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -332,7 +333,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetOnlyEmpty();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -350,7 +351,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);
@@ -370,7 +371,7 @@ public class PreferenzaBackendTest extends AlgosUnitTest {
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
 
-        listaBeans = backend.findAll();
+        listaBeans = backend.findAllSortCorrente();
         assertNotNull(listaBeans);
         System.out.println(VUOTA);
         message = String.format("Ci sono in totale %s entities di %s", textService.format(listaBeans.size()), dbName);

@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.upload;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -88,9 +89,9 @@ public class UploadGiorni extends UploadGiorniAnni {
         int modificatiNati;
         int modificatiMorti;
 
-        List<String> mesi = meseBackend.findNomi();
-        for (String mese : mesi) {
-            giorni = giornoBackend.findNomiByMese(mese);
+        List<Mese> mesi = meseBackend.findAllSortCorrente();
+        for (Mese mese : mesi) {
+            giorni = giornoBackend.findAllForNomeByMese(mese);
             modificatiNati = 0;
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {

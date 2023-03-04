@@ -20,6 +20,7 @@ import org.mockito.*;
 import org.slf4j.Logger;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -112,11 +113,15 @@ public abstract class AlgosUnitTest {
 
     protected Class clazz;
 
+    protected Class entityClazz;
+
     protected Class sorgenteClasse;
 
     protected Class previstoClasse;
 
     protected Class ottenutoClasse;
+
+    protected String clazzName;
 
     protected Field sorgenteField;
 
@@ -148,7 +153,9 @@ public abstract class AlgosUnitTest {
 
     protected List<Long> listaLong;
 
-    protected List<AEntity> listaBean;
+    protected AEntity entityBean;
+
+    protected List<AEntity> listaBeans;
 
     protected Map<String, List<String>> mappa;
 
@@ -159,6 +166,8 @@ public abstract class AlgosUnitTest {
     protected StreamResource streamResource;
 
     protected long inizio;
+
+    protected Sort sort;
 
     @InjectMocks
     protected TextService textService;
@@ -348,6 +357,7 @@ public abstract class AlgosUnitTest {
         resourceService.webService = webService;
         resourceService.logger = logService;
         reflectionService.textService = textService;
+        reflectionService.classService = classService;
         reflectionService.logger = logService;
         classService.textService = textService;
         classService.fileService = fileService;
@@ -382,7 +392,6 @@ public abstract class AlgosUnitTest {
         sorgenteDouble = 0;
         previstoDouble = 0;
         ottenutoDouble = 0;
-        clazz = null;
         previstoRisultato = null;
         ottenutoRisultato = null;
         sorgenteClasse = null;
@@ -399,9 +408,11 @@ public abstract class AlgosUnitTest {
         mappaSorgente = null;
         mappaPrevista = null;
         mappaOttenuta = null;
+        clazz = null;
         listaFields = null;
         listaStr = null;
-        listaBean = null;
+        listaBeans = null;
+        entityBean = null;
         mappa = null;
         bytes = null;
         streamResource = null;
@@ -409,6 +420,7 @@ public abstract class AlgosUnitTest {
         inizio = System.currentTimeMillis();
         message = VUOTA;
         listaClazz = null;
+        sort = null;
     }
 
 
@@ -619,7 +631,7 @@ public abstract class AlgosUnitTest {
         System.out.println(String.format("TypeText: %s", result.getTypeTxt()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));
-        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage():VUOTA));
+        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage() : VUOTA));
         System.out.println(String.format("Error code: %s", result.getErrorCode()));
         System.out.println(String.format("Error message: %s", result.getErrorMessage()));
         System.out.println(String.format("Valid message: %s", result.getValidMessage()));
@@ -631,7 +643,7 @@ public abstract class AlgosUnitTest {
                 System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
             }
         }
-        System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaText(inizio)));
+        System.out.println(String.format("Tempo: %s", result.deltaSec()));
     }
 
     protected String getSimpleName(final Class clazz) {
@@ -657,5 +669,11 @@ public abstract class AlgosUnitTest {
             }
         }
     }
+
+    protected void printValue(Object sinistra, String destra) {
+        message = String.format("%s%s%s", sinistra, FORWARD, destra);
+        System.out.println(message);
+    }
+
 
 }

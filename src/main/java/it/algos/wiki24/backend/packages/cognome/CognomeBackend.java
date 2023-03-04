@@ -107,9 +107,8 @@ public class CognomeBackend extends WikiBackend {
         return repository.findFirstByCognome(cognome);
     }
 
-    @Override
     public List<Cognome> findAll() {
-        List<Cognome> lista = super.findAll();
+        List<Cognome> lista = super.findAllSortCorrente();
 
         return lista.stream()
                 .sorted(Comparator.comparing(c -> c.cognome))
@@ -117,7 +116,7 @@ public class CognomeBackend extends WikiBackend {
     }
 
     public List<Cognome> findAllSortNumBio() {
-        List<Cognome> lista = super.findAll();
+        List<Cognome> lista = super.findAllSortCorrente();
 
         lista = lista.stream()
                 .sorted(Comparator.comparingInt(c -> c.numBio))
@@ -128,7 +127,7 @@ public class CognomeBackend extends WikiBackend {
     }
 
     public List<Cognome> findAllStampabili() {
-        List<Cognome> lista = super.findAll();
+        List<Cognome> lista = super.findAllSortCorrente();
         int max = WPref.sogliaCognomiWiki.getInt();
 
         lista = lista.stream()

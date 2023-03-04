@@ -44,7 +44,7 @@ public class DoppionomeBackend extends WikiBackend {
 //        super.lastDownload = WPref.downloadNomi;
     }
 
-    public Doppionome creaIfNotExist(final String nome) {
+    public Doppionome creaIfNotExist2(final String nome) {
         return checkAndSave(newEntity(nome));
     }
 
@@ -123,7 +123,7 @@ public class DoppionomeBackend extends WikiBackend {
             deleteAll();
             for (int k = 0; k < righe.length; k++) {
                 nome = righe[k];
-                if (creaIfNotExist(nome) != null) {
+                if (creaIfNotExist2(nome) != null) {
                     size++;
                 }
             }

@@ -15,6 +15,7 @@ import org.bson.conversions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -162,34 +163,26 @@ public class MongoService<capture> extends AbstractService {
     }
 
     /**
-     *
+     * Versione corrente del database mongoDB <br>
      */
     public String versione() {
+        String versione;
+        List results = new ArrayList<>();
+        Document query;
+        Document doc;
         MongoDatabase dataBase = getDBAdmin();
-        List<String> lista = listCollectionNames(dataBase);
-        collection = dataBase.getCollection("system");
-        MongoNamespace fullName = collection.getNamespace();
-        String collectionName = fullName.getCollectionName();
+        collection = dataBase.getCollection("system.version");
 
-//        MongoDatabase alfa2=  mongoClient.getDatabase("system");
-//        DB alfa3=  mongoClient.getDatabase("system");
-//        MongoDatabase database = client.getDatabase("admin");
-        Document documentA = dataBase.runCommand(new Document("enablesharding", "test"));
-        Document documentB = dataBase.runCommand(new Document("shardcollection", "testDB.x").append("key", new Document("userId", 1)));
-
-        long alfa=collection.estimatedDocumentCount();
-        FindIterable iterable = collection.find();
-        MongoCursor iterator = iterable.iterator();
-        int num=iterator.available();
-        while (iterator.hasNext()) {
-            Object document = iterator.next();
-            lista.add(document.toString());
+        if (collection == null) {
+            return "Collection non trovata";
         }
 
-        if (collection.countDocuments() > 1) {
-        }
+        query = new Document("_id", "featureCompatibilityVersion");
+        collection.find(query).into(results);
+        doc = (Document) results.get(0);
+        versione = (String) doc.get("version");
 
-        return "Collection non trovata";
+        return versione;
     }
 
 
@@ -297,7 +290,8 @@ public class MongoService<capture> extends AbstractService {
      * @return true if the collection is null or empty
      */
     public boolean isCollectionNullOrEmpty(final Class<? extends AEntity> entityClazz) {
-        return entityClazz == null ? false : isCollectionNullOrEmpty(textService.primaMinuscola(entityClazz.getSimpleName()));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        return entityClazz == null ? false : isCollectionNullOrEmpty(collectionName);
     }
 
     /**
@@ -324,7 +318,8 @@ public class MongoService<capture> extends AbstractService {
      * @return true if the collection exist
      */
     public boolean isExistsCollection(final Class<? extends AEntity> entityClazz) {
-        return entityClazz == null ? false : isExistsCollection(textService.primaMinuscola(entityClazz.getSimpleName()));
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        return entityClazz == null ? false : isExistsCollection(collectionName);
     }
 
 
@@ -409,6 +404,7 @@ public class MongoService<capture> extends AbstractService {
      */
     public int count(final Class entityClazz) {
         Long entities;
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
         Query query = new Query();
 
@@ -418,12 +414,13 @@ public class MongoService<capture> extends AbstractService {
             return 0;
         }
         if (!isExistsCollection(entityClazz)) {
-            message = String.format("La entityClazz '%s' non ha una collection", entityClazz.getSimpleName());
-            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+            //            collectionName = annotationService.getCollectionName(entityClazz);
+            //            message = String.format("La entityClazz '%s' non ha una corrispondente collection '%s'", entityClazz.getSimpleName(), collectionName);
+            //            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
-        entities = mongoOp.count(query, entityClazz);
+        entities = mongoOp.count(query, entityClazz, collectionName);
 
         return entities > 0 ? entities.intValue() : 0;
     }
@@ -467,28 +464,71 @@ public class MongoService<capture> extends AbstractService {
     public List<AEntity> query(Class<? extends AEntity> entityClazz) {
         List<AEntity> listaEntities;
         Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
 
-        listaEntities = (List<AEntity>) mongoOp.find(query, entityClazz);
+        listaEntities = (List<AEntity>) mongoOp.find(query, entityClazz, collectionName);
+
+        return listaEntities;
+    }
+
+    public List<AEntity> query(Class<? extends AEntity> entityClazz, Sort sort) {
+        List<AEntity> listaEntities;
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+
+        listaEntities = (List<AEntity>) mongoOp.find(query.with(sort), entityClazz, collectionName);
 
         return listaEntities;
     }
 
     public List<String> projectionString(Class<? extends AEntity> entityClazz, String property) {
+        return projectionString(entityClazz, property, new BasicDBObject(property, 1));
+    }
+
+    public List<String> projectionStringReverseOrder(Class<? extends AEntity> entityClazz, String property) {
+        return projectionString(entityClazz, property, new BasicDBObject(property, -1));
+    }
+
+    public List<String> projectionString(Class<? extends AEntity> entityClazz, String property, BasicDBObject sort) {
         List<String> listaProperty = new ArrayList();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String message;
-        collection = getCollection(textService.primaMinuscola(entityClazz.getSimpleName()));
+        collection = getCollection(textService.primaMinuscola(collectionName));
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return null;
+            return listaProperty;
         }
 
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
-        FindIterable<Document> documents = collection.find().projection(projection);
+        FindIterable<Document> documents = collection.find().projection(projection).sort(sort);
 
         for (var singolo : documents) {
-            listaProperty.add(singolo.get(property, String.class));
+            Object obj = singolo.get(property);
+            listaProperty.add(obj.toString());
+        }
+        return listaProperty;
+    }
+
+    public List<String> projectionString(Class<? extends AEntity> entityClazz, Document query, String property, BasicDBObject sort) {
+        List<String> listaProperty = new ArrayList();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String message;
+        collection = getCollection(textService.primaMinuscola(collectionName));
+
+        if (collection == null) {
+            message = String.format("Non esiste la collection", entityClazz.getSimpleName());
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return listaProperty;
+        }
+
+        Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
+        FindIterable<Document> documents = collection.find(query).projection(projection).sort(sort);
+
+        for (var singolo : documents) {
+            Object obj = singolo.get(property);
+            listaProperty.add(obj.toString());
         }
         return listaProperty;
     }

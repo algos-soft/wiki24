@@ -7,9 +7,12 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project vaadin23
@@ -31,6 +34,8 @@ public class PreferenzaBackend extends CrudBackend {
 
     public PreferenzaRepository repository;
 
+    public Runnable refreshHandler;
+
     /**
      * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -46,12 +51,13 @@ public class PreferenzaBackend extends CrudBackend {
         this.repository = (PreferenzaRepository) crudRepository;
     }
 
+
     public boolean existsByKeyCode(final String code) {
-        return findByKeyCode(code) != null;
+        return findByKey(code) != null;
     }
 
 
-    public Preferenza findByKeyCode(final String keyCode) {
+    public Preferenza findByKey(final String keyCode) {
         return repository.findFirstByCode(keyCode);
     }
 
@@ -61,7 +67,7 @@ public class PreferenzaBackend extends CrudBackend {
     }
 
     public Object getValore(final String keyCode) {
-        Preferenza preferenza = findByKeyCode(keyCode);
+        Preferenza preferenza = findByKey(keyCode);
         return preferenza != null ? preferenza.getValore() : null;
     }
 
@@ -74,7 +80,7 @@ public class PreferenzaBackend extends CrudBackend {
     public boolean setValore(final String keyCode, final Object newJavaValue) {
         boolean modificato = false;
         Object oldJavaValue;
-        Preferenza preferenza = findByKeyCode(keyCode);
+        Preferenza preferenza = findByKey(keyCode);
 
         if (preferenza != null) {
             oldJavaValue = preferenza.getValore();
@@ -164,7 +170,7 @@ public class PreferenzaBackend extends CrudBackend {
         }
         keyCode = prefEnum.getKeyCode();
 
-        preferenza = findByKeyCode(keyCode);
+        preferenza = findByKey(keyCode);
         if (preferenza == null) {
             return false;
         }
@@ -183,5 +189,59 @@ public class PreferenzaBackend extends CrudBackend {
         return modificato;
     }
 
+
+    public void refreshDialog(Runnable refreshHandler) {
+        this.refreshHandler = refreshHandler;
+        appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
+    }
+
+    public void refreshAll() {
+        List<AIGenPref> listaPref = VaadVar.prefList;
+        boolean almenoUnaModificata = false;
+        String message;
+        String keyCode;
+        Object oldValue;
+
+        for (AIGenPref pref : listaPref) {
+            oldValue = this.getValore(pref);
+            if (this.resetStandard(pref)) {
+                keyCode = pref.getKeyCode();
+                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
+                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+                almenoUnaModificata = true;
+            }
+        }
+
+        if (!almenoUnaModificata) {
+            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
+            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        }
+
+        if (refreshHandler != null) {
+            refreshHandler.run();
+        }
+        Avviso.message("Reset preferenze non dinamiche").success().open();
+    }
+
+    public boolean deleteAll() {
+        boolean status;
+        String message;
+
+        try {
+            crudRepository.deleteAll();
+        } catch (Exception unErrore) {
+            logger.error(unErrore);
+            return false;
+        }
+
+        status = crudRepository.count() == 0;
+        creaAll();
+
+        message = "Ricreate tutte le preferenze";
+        logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
+        Avviso.message(message).success().open();
+
+        return status;
+    }
 
 }// end of crud backend class

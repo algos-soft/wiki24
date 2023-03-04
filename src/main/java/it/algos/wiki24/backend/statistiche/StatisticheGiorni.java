@@ -80,7 +80,7 @@ public class StatisticheGiorni extends Statistiche {
      */
     @Override
     protected void creaLista() {
-        lista = giornoWikiBackend.findAll();
+        lista = giornoWikiBackend.findAllSortCorrente();
     }
 
     /**

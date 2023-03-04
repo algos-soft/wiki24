@@ -27,9 +27,10 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "giornoWikiBuilder")
+@Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "nomeWiki", usaReset = true)
 public class GiornoWiki extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
@@ -61,7 +62,7 @@ public class GiornoWiki extends AEntity {
 
     @Override
     public String toString() {
-        return VUOTA;
+        return nomeWiki;
     }
 
 }// end of crud entity class

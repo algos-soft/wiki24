@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.service;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -93,7 +94,7 @@ public class ElaboraService extends WAbstractService {
      * Quello che resta è affidabile e utilizzabile per le liste <br>
      */
     public Bio esegueSave(Bio bio) {
-        return bioBackend.save(esegue(bio));
+        return (Bio)bioBackend.save(esegue(bio));
     }
 
     //--Inserisce i valori nella entity Bio
@@ -330,7 +331,7 @@ public class ElaboraService extends WAbstractService {
         //--tutto minuscolo
         testoValido = testoValido.toLowerCase();
         try {
-            giorno = giornoWikiBackend.findByNome(testoValido);
+            giorno = giornoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -405,7 +406,7 @@ public class ElaboraService extends WAbstractService {
         }
 
         try {
-            giorno = giornoWikiBackend.findByNome(testoValido);
+            giorno = giornoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -423,7 +424,7 @@ public class ElaboraService extends WAbstractService {
             return giornoOrdine;
         }
 
-        giorno = giornoWikiBackend.findByNome(testoGiorno);
+        giorno = giornoWikiBackend.findByKey(testoGiorno);
         if (giorno != null) {
             giornoOrdine = giorno.ordine;
         }
@@ -449,7 +450,7 @@ public class ElaboraService extends WAbstractService {
         String testoValido = fixGiorno(testoGrezzo);
 
         if (textService.isValid(testoValido)) {
-            giorno = giornoWikiBackend.findByNome(testoValido);
+            giorno = giornoWikiBackend.findByKey(testoValido);
         }
 
         return giorno;

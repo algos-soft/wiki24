@@ -164,8 +164,8 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         span.add(ASpan.text("Default=true se la preferenza (non dinamica) ha lo stesso valore originario della Enumeration").verde());
         span.add(ASpan.text("Dinamica=true se la preferenza viene modificata automaticamente dalle task (scheduled) del programma").verde());
         span.add(ASpan.text("Le preferenze sono create/cancellate solo via hardcoded (tramite una Enumeration)").rosso());
-        span.add(ASpan.text("Refresh ripristina nel database i valori di default (delle preferenze non dinamiche) annullando le successive modifiche").rosso());
-        span.add(ASpan.text("Delete ripristina nel database i valori di default di tutte le preferenze annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Refresh -> ripristina nel database i valori di default delle preferenze non dinamiche, annullando le successive modifiche").rosso());
+        span.add(ASpan.text("Delete -> ripristina nel database i valori di default di tutte le preferenze, annullando le successive modifiche").rosso());
     }
 
     /**
@@ -258,7 +258,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
         grid = new Grid<>(Preferenza.class, false);
 
         // Pass all Preferenza objects to a grid from a Spring Data repository object
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
 
         // The row-stripes theme produces a background color for every other row.
         grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
@@ -402,7 +402,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     //    }
 
     protected void sincroFiltri() {
-        List<Preferenza> items = backend.findAll();
+        List<Preferenza> items = backend.findAllSortCorrente();
 
         final String textSearch = filter != null ? filter.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
@@ -461,7 +461,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
         backend.deleteAll();
         backend.creaAll();
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
 
         Avviso.message("Reset di tutte le preferenze").success().open();
         message = "Tutte le preferenze sono state ricostruite col valore standard";
@@ -469,45 +469,24 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
     }
 
     protected void refreshDialog() {
-        appContext.getBean(DialogRefreshPreferenza.class).open(this::refreshAll);
+        backend.refreshDialog(this::refreshList);
     }
 
-    protected void refreshAll() {
-        List<AIGenPref> listaPref = VaadVar.prefList;
-        boolean almenoUnaModificata = false;
-        String message;
-        String keyCode;
-        Object oldValue;
-
-        for (AIGenPref pref : listaPref) {
-            oldValue = backend.getValore(pref);
-            if (backend.resetStandard(pref)) {
-                keyCode = pref.getKeyCode();
-                message = String.format("Reset preferenza [%s]: %s%s(%s)%s%s", keyCode, oldValue, FORWARD, pref.getType(), FORWARD, pref.getDefaultValue());
-                logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-                almenoUnaModificata = true;
-            }
-        }
-
-        if (!almenoUnaModificata) {
-            message = "Reset preferenze - Tutte le preferenze (escluse quelle dinamiche) avevano già il valore standard";
-            logger.info(new WrapLog().type(AETypeLog.reset).message(message).usaDb());
-        }
-
-        grid.setItems(backend.findAll());
-        Avviso.message("Reset preferenze non dinamiche").success().open();
+    protected void refreshList() {
+        grid.setItems(backend.findAllSortCorrente());
     }
+
 
     /**
      * Primo ingresso dopo il click sul bottone del dialogo <br>
      */
     protected void saveHandler(final Preferenza entityBean, final CrudOperation operation) {
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
     }
 
     public void deleteHandler(final Preferenza entityBean) {
         backend.delete(entityBean);
-        grid.setItems(backend.findAll());
+        grid.setItems(backend.findAllSortCorrente());
         Avviso.message(String.format("%s successfully deleted", entityBean.code)).success().open();
     }
 

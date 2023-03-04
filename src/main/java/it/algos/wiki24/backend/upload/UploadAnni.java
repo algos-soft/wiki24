@@ -98,9 +98,9 @@ public class UploadAnni extends UploadGiorniAnni {
         int modificatiNati;
         int modificatiMorti;
 
-        List<String> secoli = secoloBackend.findNomi();
-        for (String secolo : secoli) {
-            anni = annoBackend.findNomiBySecolo(secolo);
+        List<Secolo> secoli = secoloBackend.findAllSortCorrente();
+        for (Secolo secolo : secoli) {
+            anni = annoBackend.findAllForNomeBySecolo(secolo);
             modificatiNati = 0;
             modificatiMorti = 0;
 
@@ -128,7 +128,7 @@ public class UploadAnni extends UploadGiorniAnni {
         StringBuffer buffer = new StringBuffer();
         String message;
         String title = wikiUtility.wikiTitle(typeCrono, nomeLista);
-        Secolo secolo = secoloBackend.getSecolo(anno.secolo);
+        Secolo secolo = secoloBackend.findByProperty("secolo",anno.secolo); //@todo controllare
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {
@@ -162,7 +162,7 @@ public class UploadAnni extends UploadGiorniAnni {
     @Override
     protected String categorieSotto() {
         StringBuffer buffer = new StringBuffer();
-        Secolo secolo = secoloBackend.getSecolo(anno.secolo);
+        Secolo secolo = secoloBackend.findByProperty("secolo",anno.secolo); //@todo controllare
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {

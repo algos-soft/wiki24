@@ -106,7 +106,7 @@ public abstract class UploadGiorniAnni extends Upload {
 
             switch (typeCrono) {
                 case giornoNascita, giornoMorte -> {
-                    giorno = giornoWikiBackend.findByNome(nomeLista);
+                    giorno = giornoWikiBackend.findByKey(nomeLista);
                     this.ordineGiornoAnno = giorno != null ? giorno.getOrdine() : 0;
                 }
                 case annoNascita, annoMorte -> {
@@ -189,7 +189,7 @@ public abstract class UploadGiorniAnni extends Upload {
 
         switch (typeCrono) {
             case giornoNascita, giornoMorte -> {
-                giorno = giornoWikiBackend.findByNome(nomeLista);
+                giorno = giornoWikiBackend.findByKey(nomeLista);
                 this.ordineGiornoAnno = giorno != null ? giorno.getOrdine() : 0;
             }
             case annoNascita, annoMorte -> {
@@ -475,7 +475,8 @@ public abstract class UploadGiorniAnni extends Upload {
     }
 
     protected int fixOrdineSottoPagina(String titoloParagrafoLink) {
-        int ordine = meseBackend.getOrdine(titoloParagrafoLink);
+//        int ordine = meseBackend.getOrdine(titoloParagrafoLink); @todo ASSOLUTAMENTE da sistemare
+        int ordine = 17;
 
         if (ordine == 0 && titoloParagrafoLink.equals(TAG_LISTA_NO_GIORNO)) {
             ordine = 13;

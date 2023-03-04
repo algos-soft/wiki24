@@ -113,13 +113,13 @@ public class GenereBackend extends WikiBackend {
 
 
     public List<Genere> findStartingEx() {
-        return (List<Genere>) findAll().stream().filter(startEx).collect(Collectors.toList());
+        return (List<Genere>) findAllSortCorrente().stream().filter(startEx).collect(Collectors.toList());
     }
 
 
     public List<String> findAllSingolari() {
         List<String> singolari = new ArrayList<>();
-        List<Genere> listaAll = findAll();
+        List<Genere> listaAll = findAllSortCorrente();
 
         for (Genere genere : listaAll) {
             singolari.add(genere.singolare);
@@ -130,7 +130,7 @@ public class GenereBackend extends WikiBackend {
 
     public List<String> findAllPluraliMaschili() {
         List<String> plurali = new ArrayList<>();
-        List<Genere> listaAll = findAll();
+        List<Genere> listaAll = findAllSortCorrente();
 
         for (Genere genere : listaAll) {
             if (genere.pluraleMaschile != null) {
@@ -145,7 +145,7 @@ public class GenereBackend extends WikiBackend {
 
     public List<String> findAllPluraliFemminili() {
         List<String> plurali = new ArrayList<>();
-        List<Genere> listaAll = findAll();
+        List<Genere> listaAll = findAllSortCorrente();
 
         for (Genere genere : listaAll) {
             if (genere.pluraleFemminile != null) {

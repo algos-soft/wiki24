@@ -784,7 +784,7 @@ public abstract class WikiView extends CrudView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void download() {
-        crudBackend.download(wikiModuloTitle);
+        crudBackend.download();
         reload();
     }
 

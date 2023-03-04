@@ -115,7 +115,6 @@ public class AnnoWikiBackend extends WikiBackend {
         return annoWiki;
     }
 
-    @Override
     public List<AnnoWiki> findAll() {
         return repository.findAllByOrderByOrdineAsc();
     }
@@ -124,9 +123,9 @@ public class AnnoWikiBackend extends WikiBackend {
         return repository.findAllByOrderByOrdineDesc();
     }
 
-    public List<String> findAllNomi() {
-        return annoBackend.findNomi();
-    }
+//    public List<String> findAllNomi() {
+//        return annoBackend.findAllStringKey();
+//    }
 
     public AnnoWiki findByNome(final String nome) {
         return repository.findFirstByNome(nome);
@@ -134,7 +133,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
     public List<String> findAllPagine() {
         List<String> listaNomi = new ArrayList<>();
-        List<Anno> listaAnni = annoBackend.findAll();
+        List<Anno> listaAnni = annoBackend.findAllSortCorrenteReverse();
 
         for (Anno anno : listaAnni) {
             listaNomi.add(wikiUtility.wikiTitleNatiAnno(anno.nome));
@@ -194,14 +193,14 @@ public class AnnoWikiBackend extends WikiBackend {
             numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione degli anni.";
             message += String.format(" Solo %s su %s", bioMongoDB, numPagesServerWiki);
-            logger.warn(WrapLog.build().message(message).usaDb());
+            logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
             return;
         }
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (AnnoWiki annoWiki : findAllReverse()) {
-            anno = annoBackend.findByNome(annoWiki.nome);
+            anno = annoBackend.findByKey(annoWiki.nome);
             bioNati = bioBackend.countAnnoNato(annoWiki.nome);
             bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);
 
@@ -301,6 +300,8 @@ public class AnnoWikiBackend extends WikiBackend {
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
         List<Anno> anniBase;
         int delta = DELTA_ORDINE_ANNI;
         int ordine = 0;
@@ -310,9 +311,9 @@ public class AnnoWikiBackend extends WikiBackend {
             return result;
         }
 
-        if (result.isValido()) {
-            Sort sort = Sort.by(Sort.Direction.ASC, "ordine");
-            anniBase = annoBackend.findAll(sort);
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            Sort sort = Sort.by(Sort.Direction.ASC, "ordine"); //@todo eliminare
+            anniBase = annoBackend.findAllSortCorrenteReverse();
             for (Anno anno : anniBase) {
                 ordine += delta;
                 creaIfNotExist(anno, ordine);
@@ -322,7 +323,7 @@ public class AnnoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return fixResult(result);
+        return super.fixResult(result, clazzName, collectionName, ordine);
     }
 
 }// end of crud backend class

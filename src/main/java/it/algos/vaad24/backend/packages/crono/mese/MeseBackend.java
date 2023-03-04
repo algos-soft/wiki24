@@ -1,17 +1,15 @@
 package it.algos.vaad24.backend.packages.crono.mese;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.bson.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -19,52 +17,35 @@ import java.util.stream.*;
  * User: gac
  * Date: dom, 01-mag-2022
  * Time: 08:51
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class MeseBackend extends CrudBackend {
 
-    public MeseRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public MeseBackend(@Autowired @Qualifier(TAG_MESE) final MongoRepository crudRepository) {
-        super(crudRepository, Mese.class);
-        this.repository = (MeseRepository) crudRepository;
+    public MeseBackend() {
+        super(Mese.class);
     }
 
-    public Mese crea(final int ordine, final String breve, final String nome, final int giorni, int primo, int ultimo) {
-        Mese mese = newEntity(ordine, breve, nome, giorni, primo, ultimo);
-        return repository.insert(mese);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
      *
      * @return la nuova entity appena creata (non salvata)
      */
+    @Override
     public Mese newEntity() {
         return newEntity(0, VUOTA, VUOTA, 0, 0, 0);
     }
 
-    public Mese newEntity(Document doc) {
-        return newEntity(27, doc.getString("breve"), doc.getString("nome"), 0, 0, 0);
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (non salvata)
+     */
+    @Override
+    public Mese newEntity(final String keyPropertyValue) {
+        return newEntity(0, VUOTA, keyPropertyValue, 0, 0, 0);
     }
 
     /**
@@ -77,13 +58,13 @@ public class MeseBackend extends CrudBackend {
      * @param breve  (obbligatorio, unico)
      * @param nome   (obbligatorio, unico)
      * @param giorni (obbligatorio)
-     * @param primo  giorno dell'anno
-     * @param ultimo giorno dell'anno
+     * @param primo  giorno dell'anno (facoltativo)
+     * @param ultimo giorno dell'anno (facoltativo)
      *
-     * @return la nuova entity appena creata (non salvata e senza keyID)
+     * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Mese newEntity(int ordine, String breve, String nome, int giorni, int primo, int ultimo) {
-        return Mese.builder()
+        Mese newEntityBean = Mese.builder()
                 .ordine(ordine)
                 .breve(textService.isValid(breve) ? breve : null)
                 .nome(textService.isValid(nome) ? nome : null)
@@ -91,59 +72,78 @@ public class MeseBackend extends CrudBackend {
                 .primo(primo)
                 .ultimo(ultimo)
                 .build();
-    }
 
-    public Mese findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
-    }
-
-    public Mese findFirstByOrdine(final int ordine) {
-        return repository.findFirstByOrdine(ordine);
+        return (Mese) fixKey(newEntityBean);
     }
 
     @Override
-    public List<Mese> findAll() {
-        return repository.findAll(Sort.by(Sort.Direction.ASC, "ordine"));
+    public Mese findById(final String keyID) {
+        return (Mese) super.findById(keyID);
     }
 
-    public List<String> findNomi() {
-        return findAll().stream()
-                .map(giorno -> giorno.nome)
-                .collect(Collectors.toList());
+    @Override
+    public Mese findByKey(final String keyValue) {
+        return (Mese) super.findByKey(keyValue);
     }
 
-    public int getOrdine(final String nomeMaiuscoloMinuscolo) {
-        Mese mese = findByNome(textService.primaMinuscola(nomeMaiuscoloMinuscolo));
-        return mese != null ? mese.ordine : 0;
+    @Override
+    public Mese findByProperty(final String propertyName, final Object propertyValue) {
+        return (Mese) super.findByProperty(propertyName, propertyValue);
+    }
+
+    public Mese findByOrdine(final int ordine) {
+        return findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public List<Mese> findAllNoSort() {
+        return (List<Mese>)super.findAllNoSort();
+    }
+
+    @Override
+    public List<Mese> findAllSortCorrente() {
+        return (List<Mese>) super.findAllSortCorrente();
     }
 
 
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
+    public List<String> findAllForKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+
+
+    public List<String> findAllForKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
+
+    @Override
+    public Mese save(AEntity entity) {
+        return (Mese) super.save(entity);
+    }
+
     @Override
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
-        String nomeFile = "mesi";
+        String clazzName = entityClazz.getSimpleName();
+        String collectionName = result.getTarget();
+        String nomeFileCSVSulServerAlgos = "mesi";
         Map<String, List<String>> mappa;
-        List<Mese> mesi = new ArrayList<>();
-        Mese mese;
         List<String> riga;
         int giorni;
         String breve;
         String nome;
+        List<AEntity> lista;
+        AEntity entityBean;
         String message;
         int ordine = 0;
         int primo = 0;
         int ultimo = 0;
 
-        if (result.isValido()) {
-            mappa = resourceService.leggeMappa(nomeFile);
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            mappa = resourceService.leggeMappa(nomeFileCSVSulServerAlgos);
             if (mappa != null) {
+                result.setValido(true);
+                lista = new ArrayList<>();
+
                 for (String key : mappa.keySet()) {
                     riga = mappa.get(key);
                     if (riga.size() >= 3) {
@@ -175,24 +175,24 @@ public class MeseBackend extends CrudBackend {
                         }
                     }
 
-                    mese = crea(++ordine, breve, nome, giorni, primo, ultimo);
-                    if (mese != null) {
-                        mesi.add(mese);
+                    entityBean = insert(newEntity(++ordine, breve, nome, giorni, primo, ultimo));
+                    if (entityBean != null) {
+                        lista.add(entityBean);
                     }
                     else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                        result.setValido(false);
                     }
                 }
+                return super.fixResult(result, clazzName, collectionName, lista);
             }
             else {
-                return result.errorMessage("Non ho trovato il file sul server");
+                return result.errorMessage("Non ho trovato il file sul server").fine();
             }
         }
         else {
-            return result;
+            return result.fine();
         }
-
-        return fixResult(result);
     }
 
 }// end of crud backend class

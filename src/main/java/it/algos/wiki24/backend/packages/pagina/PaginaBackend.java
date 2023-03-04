@@ -101,7 +101,6 @@ public class PaginaBackend extends WikiBackend {
         return repository.findFirstByPagina(pagina);
     }
 
-    @Override
     public List<Pagina> findAll() {
         return repository.findAll();
     }

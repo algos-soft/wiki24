@@ -143,7 +143,7 @@ public class GenereView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Genere> items = backend.findAll(sortOrder);
+        List<Genere> items = backend.findAllSortCorrente();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {

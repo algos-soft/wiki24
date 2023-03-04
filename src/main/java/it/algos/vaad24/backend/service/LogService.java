@@ -98,7 +98,7 @@ public class LogService extends AbstractService {
      */
     @PostConstruct
     private void postConstruct() {
-        String logbackName=VUOTA;
+        String logbackName;
         String property = "logging.algos.admin";
 
         try {

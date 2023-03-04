@@ -167,7 +167,7 @@ public class CognomeView extends WikiView {
      */
     protected void sincroFiltri() {
         long inizio = System.currentTimeMillis();
-        List<Cognome> items = backend.findAll(sortOrder);
+        List<Cognome> items = backend.findAllSortCorrente();
         logger.info(new WrapLog().exception(new AlgosException(String.format("Items %s", dateService.deltaText(inizio)))));
 
         final String textCognome = searchField != null ? searchField.getValue() : VUOTA;

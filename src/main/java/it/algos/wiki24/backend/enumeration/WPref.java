@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.annotation.*;
+import java.math.*;
 import java.util.*;
 
 /**
@@ -152,6 +153,9 @@ public enum WPref implements AIGenPref {
     maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine  giorni/anni", false),
     scriveComunque("scriveComunque", AETypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data", false),
     sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, true, "Categorizzazione per secoli delle liste di 'Nati per anno'", false),
+
+
+    percentualeMinimaBiografie("percentualeMinimaBiografie", AETypePref.decimal, new BigDecimal(88), "Percentuale minima di biografie per avere delle elaborazioni attendibili", false),
     ;
 
 
@@ -277,6 +281,11 @@ public enum WPref implements AIGenPref {
     @Override
     public int getInt() {
         return preferenceService.getInt(type, keyCode);
+    }
+
+    @Override
+    public BigDecimal getDecimal() {
+        return preferenceService.getDecimal(type, keyCode);
     }
 
     @Override

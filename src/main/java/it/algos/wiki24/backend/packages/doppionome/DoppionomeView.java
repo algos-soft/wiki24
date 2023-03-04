@@ -97,7 +97,7 @@ public class DoppionomeView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected void sincroFiltri() {
-        List<Doppionome> items = backend.findAll(sortOrder);
+        List<Doppionome> items = backend.findAllSortCorrente();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {

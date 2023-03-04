@@ -352,7 +352,7 @@ public class NazionalitaBackend extends WikiBackend {
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
-    public void download(String wikiTitle) {
+    public void download() {
         long inizio = System.currentTimeMillis();
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
@@ -634,9 +634,10 @@ public class NazionalitaBackend extends WikiBackend {
     public AResult resetOnlyEmpty() {
         AResult result = super.resetOnlyEmpty();
 
-        if (result.isValido()) {
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
             this.download();
-            return fixResult(result);
+//            return fixResult(result);
+            return result;
         }
         else {
             return result;

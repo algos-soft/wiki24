@@ -480,7 +480,7 @@ public class BioView extends WikiView {
     }
 
     public void downloadHandler(final Bio bio) {
-        grid.setItems(crudBackend.findAll(sortOrder));
+        grid.setItems(crudBackend.findAllSortCorrente());
         Avviso.message(String.format("%s successfully downloaded", bio)).success().open();
     }
 
@@ -490,7 +490,7 @@ public class BioView extends WikiView {
 
     public void elaboraHandler(final Bio bio) {
         backend.update(bio);
-        grid.setItems(crudBackend.findAll(sortOrder));
+        grid.setItems(crudBackend.findAllSortCorrente());
         Avviso.message(String.format("%s successfully elaborated", bio)).success().open();
     }
 

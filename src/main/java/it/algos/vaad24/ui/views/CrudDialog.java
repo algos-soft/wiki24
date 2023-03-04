@@ -301,7 +301,7 @@ public abstract class CrudDialog extends Dialog {
                                 linkClazz = annotationService.getLinkClazz(currentItem.getClass(), key);
                                 Object obj = appContext.getBean(linkClazz);
                                 if (obj instanceof CrudBackend backend) {
-                                    items = backend.findAll();
+                                    items = backend.findAllSortCorrente();
                                     if (items != null) {
                                         combo.setItems(items);
                                     }
@@ -502,7 +502,7 @@ public abstract class CrudDialog extends Dialog {
             logger.error(error);
             return;
         }
-        crudBackend.update(currentItem);
+        crudBackend.save(currentItem);
         switch (operation) {
             case ADD -> Avviso.message("Aggiunto un elemento").success().open();
             case UPDATE -> Avviso.message("Registrata la modifica").success().open();

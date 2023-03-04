@@ -110,7 +110,6 @@ public class StatisticaBioBackend extends WikiBackend {
                 .build();
     }
 
-    @Override
     public List findAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "evento"));
     }

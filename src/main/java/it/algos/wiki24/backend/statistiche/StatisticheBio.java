@@ -100,7 +100,7 @@ public class StatisticheBio extends Statistiche {
         LocalDate evento = LocalDate.now();
         int bio = mongoService.count(Bio.class);
 
-        int giorni = giornoWikiBackend.findAll().size();
+        int giorni = giornoWikiBackend.findAllSortCorrente().size();
         int anni = annoWikiBackend.findAll().size();
         int attivita = attivitaBackend.findAttivitaDistinctByPluraliSortPagina().size();
         int nazionalita = nazionalitaBackend.findNazionalitaDistinctByPluraliSortPlurali().size();
