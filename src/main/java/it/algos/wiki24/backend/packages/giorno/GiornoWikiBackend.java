@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.giorno;
 
+import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -8,6 +9,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -16,7 +18,9 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
+import java.math.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki23
@@ -28,12 +32,11 @@ import java.util.*;
 @Service
 public class GiornoWikiBackend extends WikiBackend {
 
-
-//    @Autowired
-//    public GiornoBackend giornoBackend;
-//
-//    @Autowired
-//    public MeseBackend meseBackend;
+    //    @Autowired
+    //    public GiornoBackend giornoBackend;
+    //
+    //    @Autowired
+    //    public MeseBackend meseBackend;
 
     public GiornoWikiBackend() {
         super(GiornoWiki.class);
@@ -55,7 +58,7 @@ public class GiornoWikiBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public GiornoWiki newEntity() {
-        return newEntity( VUOTA);
+        return newEntity(VUOTA);
     }
 
 
@@ -65,7 +68,7 @@ public class GiornoWikiBackend extends WikiBackend {
 
     @Override
     public AEntity newEntity(Object keyPropertyValue) {
-        return newEntity((Giorno)keyPropertyValue);
+        return newEntity((Giorno) keyPropertyValue);
     }
 
     /**
@@ -84,6 +87,7 @@ public class GiornoWikiBackend extends WikiBackend {
                 .nomeWiki(giornoBase.nome)
                 .build();
 
+        newEntityBean = fixProperties(newEntityBean);
         return (GiornoWiki) fixKey(newEntityBean);
     }
 
@@ -109,34 +113,46 @@ public class GiornoWikiBackend extends WikiBackend {
         return (GiornoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
+    public GiornoWiki findByOrdine(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
 
+    @Override
     public List<GiornoWiki> findAllNoSort() {
         return super.findAllNoSort();
     }
 
+    @Override
     public List<GiornoWiki> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
 
+    @Override
     public List<GiornoWiki> findAllSort(Sort sort) {
         return super.findAllSort(sort);
     }
 
-//    public List<String> findAllNomi() {
-//        return this.findAllStringKey();
-//    }
+    public List<GiornoWiki> findAllByMese(Mese mese) {
+        return super.findAllByProperty(FIELD_NAME_MESE, mese);
+    }
 
-    //    public GiornoWiki findByNome(final String nome) {
-    //        return repository.findFirstByNomeWiki(nome);
-    //    }
+    @Override
+    public List<String> findAllForKey() {
+        return mongoService.projectionString(entityClazz, "nomeWiki", new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
 
-    //    public boolean isEsiste(final String nome) {
-    //        return repository.findFirstByNomeWiki(nome) != null;
-    //    }
+    @Override
+    public List<String> findAllForKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, "nomeWiki", new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
 
-    //    public boolean isNotEsiste(final String nome) {
-    //        return !isEsiste(nome);
-    //    }
+    public List<String> findAllForNome() {
+        return findAllForKey();
+    }
+
+    public List<String> findAllForNomeByMese(Mese mese) {
+        return findAllByMese(mese).stream().map(giorno -> giorno.nomeWiki).collect(Collectors.toList());
+    }
 
 
     public List<String> findAllPagine() {
@@ -165,6 +181,9 @@ public class GiornoWikiBackend extends WikiBackend {
         Map mappa;
         String bioMongoDB;
         String numPagesServerWiki;
+        BigDecimal decimal;
+        Double doppio;
+        String minimo;
 
         //--Check di validità del database mongoDB
         result = wikiUtility.checkValiditaDatabase();
@@ -172,8 +191,11 @@ public class GiornoWikiBackend extends WikiBackend {
             mappa = result.getMappa();
             bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
             numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
+            decimal = WPref.percentualeMinimaBiografie.getDecimal();
+            doppio = decimal.doubleValue();
+            minimo = doppio.toString() + PERCENTUALE;
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione dei giorni.";
-            message += String.format(" Solo %s su %s", bioMongoDB, numPagesServerWiki);
+            message += String.format(" Solo %s su %s. Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, minimo);
             logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
             return;
         }

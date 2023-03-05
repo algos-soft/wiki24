@@ -23,7 +23,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("giorno")
 @Tag("backend")
 @DisplayName("Giorno Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -38,18 +38,6 @@ public class GiornoBackendTest extends BackendTest {
     private List<Giorno> listaBeans;
 
 
-    //--giorno
-    //--esistente
-    protected static Stream<Arguments> GIORNI() {
-        return Stream.of(
-                Arguments.of(null, false),
-                Arguments.of(VUOTA, false),
-                Arguments.of("23 febbraio", true),
-                Arguments.of("43 marzo", false),
-                Arguments.of("19 dicembra", false),
-                Arguments.of("4 gennaio", true)
-        );
-    }
 
 
     /**

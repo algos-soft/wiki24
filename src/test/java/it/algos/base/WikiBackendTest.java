@@ -82,6 +82,9 @@ public abstract class WikiBackendTest extends BackendTest {
 
         wikiBackend.meseBackend = meseBackend;
         wikiBackend.meseBackend.mongoService = mongoService;
+        wikiBackend.meseBackend.reflectionService = reflectionService;
+        wikiBackend.meseBackend.annotationService = annotationService;
+
     }
 
 }

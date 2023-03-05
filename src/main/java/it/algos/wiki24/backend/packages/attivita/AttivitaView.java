@@ -235,7 +235,7 @@ public class AttivitaView extends WikiView {
             }
         })).setHeader("X").setKey("cancella").setFlexGrow(0).setWidth("8em");
 
-        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+//        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
         Grid.Column singolare = grid.getColumnByKey("singolare");
         Grid.Column pluraleParagrafo = grid.getColumnByKey("pluraleParagrafo");
         Grid.Column type = grid.getColumnByKey("type");
@@ -244,7 +244,8 @@ public class AttivitaView extends WikiView {
         Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
 
-        grid.setColumnOrder(ordine, singolare, pluraleParagrafo, pluraleLista, linkPagina, type, aggiunta, numBio, numSingolari, superaSoglia, daCancellare);
+//        grid.setColumnOrder(ordine, singolare, pluraleParagrafo, pluraleLista, linkPagina, type, aggiunta, numBio, numSingolari, superaSoglia, daCancellare);
+        grid.setColumnOrder( singolare, pluraleParagrafo, pluraleLista, linkPagina, type, aggiunta, numBio, numSingolari, superaSoglia, daCancellare);
     }
 
     /**
