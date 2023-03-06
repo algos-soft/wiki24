@@ -50,15 +50,6 @@ public class GiornoWikiBackend extends WikiBackend {
     }
 
 
-//    public GiornoWiki newEntity(final String keyPropertyValue) {
-//        return null;
-//    }
-
-//    @Override
-//    public AEntity newEntity(Object keyPropertyValue) {
-//        return newEntity((Giorno) keyPropertyValue);
-//    }
-
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -70,32 +61,18 @@ public class GiornoWikiBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     public GiornoWiki newEntity(final String keyPropertyValue) {
+        GiornoWiki newEntityBean = GiornoWiki.builderGiornoWiki().build();
         Giorno giornoBase = giornoBackend.findByKey(keyPropertyValue);
         if (giornoBase == null) {
             logger.error(new WrapLog().message(String.format("Manca il giorno base di riferimento dal nome %s", keyPropertyValue)));
             return null;
         }
 
-        GiornoWiki newEntityBean = GiornoWiki.builderGiornoWiki().build();
-
-//        newEntityBean.ordine = giornoBase.ordine;
-//        newEntityBean.nome = giornoBase.nome;
-//        newEntityBean.mese = giornoBase.mese;
-//        newEntityBean.trascorsi = giornoBase.trascorsi;
-//        newEntityBean.mancanti = giornoBase.mancanti;
-
         beanService.copia(giornoBase, newEntityBean);
+        newEntityBean.pageNati = wikiUtility.wikiTitleNatiGiorno(giornoBase.nome);
+        newEntityBean.pageMorti = wikiUtility.wikiTitleMortiGiorno(giornoBase.nome);
 
-
-        newEntityBean = fixProperties(newEntityBean);
         return (GiornoWiki) fixKey(newEntityBean);
-//        return null;
-    }
-
-    public GiornoWiki fixProperties(GiornoWiki giornoWiki) {
-        giornoWiki.pageNati = wikiUtility.wikiTitleNatiGiorno(giornoWiki.nome);
-        giornoWiki.pageMorti = wikiUtility.wikiTitleMortiGiorno(giornoWiki.nome);
-        return giornoWiki;
     }
 
 
