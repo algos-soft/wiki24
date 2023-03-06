@@ -45,6 +45,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         super.crudBackend = backend;
         super.wikiBackend = backend;
         super.setUpAll();
+        super.typeBackend = TypeBackend.giorno;
     }
 
 
@@ -76,13 +77,13 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
             sorgente = "4 marzo";
-            giornoBase = giornoBackend.findByKey(sorgente);
+//            giornoBase = giornoBackend.findByKey(sorgente);
             try {
-                entityBean = backend.newEntity(giornoBase);
+                entityBean = backend.newEntity(sorgente);
             } catch (Exception unErrore) {
                 message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
                 System.out.println(message);
-                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", giornoBase);
+                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", sorgente);
                 System.out.println(message);
                 return;
             }
@@ -252,7 +253,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         previsto = "3ottobre";
         previsto2 = sorgente;
 
-        return giornoBackend.findByKey(sorgente);
+        return sorgente;
     }
 
 

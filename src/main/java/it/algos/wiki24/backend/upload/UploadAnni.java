@@ -93,14 +93,14 @@ public class UploadAnni extends UploadGiorniAnni {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti degli anni"));
         long inizio = System.currentTimeMillis();
-        List<String> anni;
+        List<String> anni=new ArrayList<>();
         String message;
         int modificatiNati;
         int modificatiMorti;
 
         List<Secolo> secoli = secoloBackend.findAllSortCorrente();
         for (Secolo secolo : secoli) {
-            anni = annoBackend.findAllForNomeBySecolo(secolo);
+//            anni = annoBackend.findAllForProperty(secolo);
             modificatiNati = 0;
             modificatiMorti = 0;
 

@@ -32,23 +32,11 @@ import java.util.stream.*;
 @Service
 public class GiornoWikiBackend extends WikiBackend {
 
-    //    @Autowired
-    //    public GiornoBackend giornoBackend;
-    //
-    //    @Autowired
-    //    public MeseBackend meseBackend;
 
     public GiornoWikiBackend() {
         super(GiornoWiki.class);
     }
 
-    //    public GiornoWiki creaIfNotExist(final Giorno giornoBase) {
-    //        return checkAndSave(newEntity(giornoBase));
-    //    }
-
-    //    public GiornoWiki checkAndSave(final GiornoWiki giornoWiki) {
-    //        return findByNome(giornoWiki.nomeWiki) != null ? null : repository.insert(giornoWiki);
-    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -62,14 +50,14 @@ public class GiornoWikiBackend extends WikiBackend {
     }
 
 
-    public GiornoWiki newEntity(final String keyPropertyValue) {
-        return newEntity(giornoBackend.findByKey(keyPropertyValue));
-    }
+//    public GiornoWiki newEntity(final String keyPropertyValue) {
+//        return null;
+//    }
 
-    @Override
-    public AEntity newEntity(Object keyPropertyValue) {
-        return newEntity((Giorno) keyPropertyValue);
-    }
+//    @Override
+//    public AEntity newEntity(Object keyPropertyValue) {
+//        return newEntity((Giorno) keyPropertyValue);
+//    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -77,23 +65,36 @@ public class GiornoWikiBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param giornoBase proveniente da vaadin23
+     * @param keyPropertyValue proveniente da vaad24
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public GiornoWiki newEntity(final Giorno giornoBase) {
-        GiornoWiki newEntityBean = GiornoWiki.builder()
-                .ordine(giornoBase.ordine)
-                .nomeWiki(giornoBase.nome)
-                .build();
+    public GiornoWiki newEntity(final String keyPropertyValue) {
+        Giorno giornoBase = giornoBackend.findByKey(keyPropertyValue);
+        if (giornoBase == null) {
+            logger.error(new WrapLog().message(String.format("Manca il giorno base di riferimento dal nome %s", keyPropertyValue)));
+            return null;
+        }
+
+        GiornoWiki newEntityBean = GiornoWiki.builderGiornoWiki().build();
+
+//        newEntityBean.ordine = giornoBase.ordine;
+//        newEntityBean.nome = giornoBase.nome;
+//        newEntityBean.mese = giornoBase.mese;
+//        newEntityBean.trascorsi = giornoBase.trascorsi;
+//        newEntityBean.mancanti = giornoBase.mancanti;
+
+        beanService.copia(giornoBase, newEntityBean);
+
 
         newEntityBean = fixProperties(newEntityBean);
         return (GiornoWiki) fixKey(newEntityBean);
+//        return null;
     }
 
     public GiornoWiki fixProperties(GiornoWiki giornoWiki) {
-        giornoWiki.pageNati = wikiUtility.wikiTitleNatiGiorno(giornoWiki.nomeWiki);
-        giornoWiki.pageMorti = wikiUtility.wikiTitleMortiGiorno(giornoWiki.nomeWiki);
+        giornoWiki.pageNati = wikiUtility.wikiTitleNatiGiorno(giornoWiki.nome);
+        giornoWiki.pageMorti = wikiUtility.wikiTitleMortiGiorno(giornoWiki.nome);
         return giornoWiki;
     }
 
@@ -138,12 +139,12 @@ public class GiornoWikiBackend extends WikiBackend {
 
     @Override
     public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, "nomeWiki", new BasicDBObject(FIELD_NAME_ORDINE, 1));
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
     @Override
     public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, "nomeWiki", new BasicDBObject(FIELD_NAME_ORDINE, -1));
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
     }
 
     public List<String> findAllForNome() {
@@ -151,7 +152,7 @@ public class GiornoWikiBackend extends WikiBackend {
     }
 
     public List<String> findAllForNomeByMese(Mese mese) {
-        return findAllByMese(mese).stream().map(giorno -> giorno.nomeWiki).collect(Collectors.toList());
+        return findAllByMese(mese).stream().map(giorno -> giorno.nome).collect(Collectors.toList());
     }
 
 

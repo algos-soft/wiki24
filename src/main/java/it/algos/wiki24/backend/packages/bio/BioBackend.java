@@ -587,7 +587,7 @@ public class BioBackend extends WikiBackend {
     //
     //
     public int countGiornoNato(final GiornoWiki giornoWiki) {
-        return countGiornoNato(giornoWiki.nomeWiki);
+        return countGiornoNato(giornoWiki.nome);
     }
 
     public int countGiornoNato(final String giornoNato) {
@@ -699,7 +699,7 @@ public class BioBackend extends WikiBackend {
     //
     //
     public int countGiornoMorto(final GiornoWiki giornoWiki) {
-        return countGiornoMorto(giornoWiki.nomeWiki);
+        return countGiornoMorto(giornoWiki.nome);
     }
 
     public int countGiornoMorto(final String giornoMorto) {

@@ -4,6 +4,7 @@ import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.*;
@@ -27,18 +28,11 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder()
+@Builder(builderMethodName = "builderGiornoWiki")
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nomeWiki", usaReset = true)
-public class GiornoWiki extends AEntity {
-
-    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento da inizio anno")
-    public int ordine;
-
-    @AIField(type = AETypeField.text, header = "nome", caption = "Nome corrente", sortProperty = "ordine")
-    public String nomeWiki;
+@AIEntity(keyPropertyName = "nome", usaReset = true)
+public class GiornoWiki extends Giorno {
 
     @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.integer, header = "nati", caption = "Numero di biografie che utilizzano i nati in questo giorno", widthEM = 6)
@@ -62,7 +56,7 @@ public class GiornoWiki extends AEntity {
 
     @Override
     public String toString() {
-        return nomeWiki;
+        return nome;
     }
 
 }// end of crud entity class

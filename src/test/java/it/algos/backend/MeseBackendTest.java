@@ -3,12 +3,8 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
-
-import java.util.*;
 
 /**
  * Project vaad24
@@ -19,33 +15,27 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("mese")
 @Tag("backend")
 @DisplayName("Mese Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MeseBackendTest extends BackendTest {
 
-    @InjectMocks
-    private MeseBackend backend;
 
-
-    private List<Mese> listaBeans;
+    protected MeseBackend backend;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
+        this.backend = super.meseBackend;
         super.entityClazz = Mese.class;
-        super.crudBackend = backend;
-        super.setUpAll();
         super.typeBackend = TypeBackend.mese;
+        super.crudBackend = backend;
+
+        super.setUpAll();
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
 }

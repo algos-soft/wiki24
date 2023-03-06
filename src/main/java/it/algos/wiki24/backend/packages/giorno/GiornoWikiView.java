@@ -64,8 +64,8 @@ public class GiornoWikiView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("ordine", "nomeWiki", "bioNati", "bioMorti");
-        super.formPropertyNamesList = Arrays.asList("ordine", "nomeWiki", "bioNati", "bioMorti");
+        super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
+        super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
         //        super.formPropertyNamesList = Arrays.asList("nomeWiki");
 
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
@@ -250,7 +250,7 @@ public class GiornoWikiView extends WikiView {
 
     public String getNomeGiorno() {
         GiornoWiki giorno = (GiornoWiki) super.wikiPage();
-        return giorno != null ? giorno.nomeWiki : VUOTA;
+        return giorno != null ? giorno.nome : VUOTA;
     }
 
 }// end of crud @Route view class

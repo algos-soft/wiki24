@@ -336,7 +336,7 @@ public class ElaboraService extends WAbstractService {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
 
-        return giorno != null ? giorno.nomeWiki : VUOTA;
+        return giorno != null ? giorno.nome : VUOTA;
     }
 
 
@@ -411,7 +411,7 @@ public class ElaboraService extends WAbstractService {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
 
-        return giorno != null ? giorno.nomeWiki : VUOTA;
+        return giorno != null ? giorno.nome : VUOTA;
     }
 
 

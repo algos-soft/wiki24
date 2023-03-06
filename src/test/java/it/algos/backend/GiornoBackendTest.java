@@ -8,11 +8,9 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaad24
@@ -29,15 +27,9 @@ import java.util.stream.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoBackendTest extends BackendTest {
 
-    @InjectMocks
     private GiornoBackend backend;
 
-    @InjectMocks
-    private MeseBackend meseBackend;
-
     private List<Giorno> listaBeans;
-
-
 
 
     /**
@@ -45,12 +37,12 @@ public class GiornoBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
-        assertNotNull(meseBackend);
+        this.backend = super.giornoBackend;
         super.entityClazz = Giorno.class;
-        super.crudBackend = backend;
-        super.setUpAll();
         super.typeBackend = TypeBackend.giorno;
+        super.crudBackend = backend;
+
+        super.setUpAll();
     }
 
 
@@ -69,10 +61,6 @@ public class GiornoBackendTest extends BackendTest {
         backend.meseBackend.textService = textService;
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
 
     @Test
@@ -105,7 +93,7 @@ public class GiornoBackendTest extends BackendTest {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             System.out.println(VUOTA);
-            printBackend(listaBeans,3);
+            printBackend(listaBeans, 3);
         }
     }
 
@@ -144,6 +132,23 @@ public class GiornoBackendTest extends BackendTest {
         GIORNI().forEach(this::isExistKeyBase);
     }
 
+    //--giorno
+    //--esistente
+    void isExistKeyBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[1];
+
+        ottenutoBooleano = backend.isExistKey(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+        if (ottenutoBooleano) {
+            System.out.println(String.format("Il giorno %s esiste", sorgente));
+        }
+        else {
+            System.out.println(String.format("Il giorno %s non esiste", sorgente));
+        }
+        System.out.println(VUOTA);
+    }
 
     @Test
     @Order(62)
@@ -183,24 +188,6 @@ public class GiornoBackendTest extends BackendTest {
         assertNull(entityBean);
         ottenuto = VUOTA;
         printValue(sorgenteIntero, ottenuto);
-    }
-
-    //--giorno
-    //--esistente
-    void isExistKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isExistKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno %s esiste", sorgente));
-        }
-        else {
-            System.out.println(String.format("Il giorno %s non esiste", sorgente));
-        }
-        System.out.println(VUOTA);
     }
 
 

@@ -102,8 +102,8 @@ public class StatisticheGiorni extends Statistiche {
         for (GiornoWiki giorno : (List<GiornoWiki>) lista) {
             nati = giorno.bioNati;
             morti = giorno.bioMorti;
-            mappaSingola = new MappaStatistiche(++pos, giorno.nomeWiki, nati, morti);
-            mappa.put(giorno.nomeWiki, mappaSingola);
+            mappaSingola = new MappaStatistiche(++pos, giorno.nome, nati, morti);
+            mappa.put(giorno.nome, mappaSingola);
             totNati += nati;
             totMorti += morti;
         }
