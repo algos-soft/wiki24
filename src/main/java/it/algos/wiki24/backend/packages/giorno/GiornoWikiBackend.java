@@ -13,9 +13,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.math.*;
@@ -68,11 +66,11 @@ public class GiornoWikiBackend extends WikiBackend {
             return null;
         }
 
-        beanService.copia(giornoBase, newEntityBean);
+        beanService.copiaAncheID(giornoBase, newEntityBean);
         newEntityBean.pageNati = wikiUtility.wikiTitleNatiGiorno(giornoBase.nome);
         newEntityBean.pageMorti = wikiUtility.wikiTitleMortiGiorno(giornoBase.nome);
 
-        return (GiornoWiki) fixKey(newEntityBean);
+        return newEntityBean;
     }
 
 

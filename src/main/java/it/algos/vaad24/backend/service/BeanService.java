@@ -39,7 +39,7 @@ public class BeanService extends AbstractService {
      *
      * @return the status
      */
-    public boolean copia(final AEntity entityBeanOld, AEntity entityBeanNew) {
+    public boolean copiaAncheID(final AEntity entityBeanOld, AEntity entityBeanNew) {
         boolean status = false;
         List<Field> oldFields = reflectionService.getAllSuperClassFields(entityBeanOld.getClass());
         Object value;
