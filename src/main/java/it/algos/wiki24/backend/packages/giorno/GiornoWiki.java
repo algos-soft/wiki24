@@ -25,7 +25,7 @@ import javax.persistence.*;
  */
 @Component
 @Document
-//Lombok
+// Lombok
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
