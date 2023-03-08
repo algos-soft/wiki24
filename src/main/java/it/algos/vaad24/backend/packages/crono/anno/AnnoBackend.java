@@ -66,13 +66,14 @@ public class AnnoBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Anno newEntity(final int ordine, final String nome, final Secolo secolo, final boolean dopoCristo, final boolean bisestile) {
-        Anno newEntityBean = Anno.builder()
+        Anno newEntityBean = Anno.builderAnno()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .secolo(secolo)
                 .dopoCristo(dopoCristo)
                 .bisestile(bisestile)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Anno) super.fixKey(newEntityBean);
     }
 
@@ -131,11 +132,13 @@ public class AnnoBackend extends CrudBackend {
         String collectionName = result.getTarget();
         AEntity entityBean;
         List<AEntity> lista;
-        String message;
 
         if (secoloBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
-            return result.fine();
+            AResult resultMese = secoloBackend.resetOnlyEmpty();
+            if (resultMese.isErrato()) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
+                return result.fine();
+            }
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {

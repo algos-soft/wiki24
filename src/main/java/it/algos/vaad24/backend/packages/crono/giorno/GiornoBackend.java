@@ -68,13 +68,14 @@ public class GiornoBackend extends CrudBackend {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     public Giorno newEntity(final int ordine, final String nome, final Mese mese, final int trascorsi, final int mancanti) {
-        Giorno newEntityBean = Giorno.builder()
+        Giorno newEntityBean = Giorno.builderGiorno()
+                .ordine(ordine)
+                .nome(textService.isValid(nome) ? nome : null)
                 .mese(mese)
                 .trascorsi(trascorsi)
                 .mancanti(mancanti)
                 .build();
 
-        super.fixOrdine(newEntityBean, ordine, nome);
         return (Giorno) super.fixKey(newEntityBean);
     }
 
@@ -94,12 +95,12 @@ public class GiornoBackend extends CrudBackend {
     }
 
     public Giorno findByOrdine(final int ordine) {
-        return (Giorno)super.findByOrdine(ordine);
+        return (Giorno) super.findByOrdine(ordine);
     }
 
     @Override
     public List<Giorno> findAllNoSort() {
-        return (List<Giorno>)super.findAllNoSort();
+        return (List<Giorno>) super.findAllNoSort();
     }
 
     @Override
@@ -160,8 +161,11 @@ public class GiornoBackend extends CrudBackend {
         List<AEntity> lista;
 
         if (meseBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
-            return result.fine();
+            AResult resultMese = meseBackend.resetOnlyEmpty();
+            if (resultMese.isErrato()) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
+                return result.fine();
+            }
         }
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {

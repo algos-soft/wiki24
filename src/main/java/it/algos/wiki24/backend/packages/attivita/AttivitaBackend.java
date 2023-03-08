@@ -791,7 +791,7 @@ public class AttivitaBackend extends WikiBackend {
         AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            this.download();
+//            this.download();
 //            return fixResult(result);
             return result;
         }

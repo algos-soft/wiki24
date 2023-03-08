@@ -60,7 +60,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     protected void toStringTest() {
         System.out.println("40 - toString");
         System.out.println(VUOTA);
-        Giorno giornoBase;
 
         if (annotationService.usaKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
@@ -77,7 +76,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
             sorgente = "4 marzo";
-//            giornoBase = giornoBackend.findByKey(sorgente);
             try {
                 entityBean = backend.newEntity(sorgente);
             } catch (Exception unErrore) {
@@ -150,6 +148,9 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
             listaBeans = backend.findAllByMese(sorgente);
             assertNotNull(listaBeans);
             System.out.println(VUOTA);
+            message = String.format("Mese di %s", sorgente.nome);
+            System.out.println(message);
+
             printBackend(listaBeans, 3);
         }
     }
@@ -256,5 +257,56 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         return sorgente;
     }
 
+    protected void printTestaGiorno() {
+        System.out.print("ordine");
+        System.out.print(SEP);
+        System.out.print("nome");
+        System.out.print(SEP);
+        System.out.print("bioNati");
+        System.out.print(SEP);
+        System.out.print("bioMorti");
+        System.out.print(SEP);
+        System.out.print("pageNati");
+        System.out.print(SEP);
+        System.out.print("pageMorti");
+        System.out.print(SEP);
+        System.out.print("esistePaginaNati");
+        System.out.print(SEP);
+        System.out.print("esistePaginaMorti");
+        System.out.print(SEP);
+        System.out.print("natiOk");
+        System.out.print(SEP);
+        System.out.print("mortiOk");
+        System.out.println(SPAZIO);
+    }
+
+    protected void printGiorno(Object obj) {
+        if (obj instanceof Giorno giorno) {
+            super.printGiorno(obj);
+            return;
+        }
+        if (obj instanceof GiornoWiki giorno) {
+            System.out.print(giorno.ordine);
+            System.out.print(SEP);
+            System.out.print(giorno.nome);
+            System.out.print(SEP);
+            System.out.print(giorno.bioNati);
+            System.out.print(SEP);
+            System.out.print(giorno.bioMorti);
+            System.out.print(SEP);
+            System.out.print(giorno.pageNati);
+            System.out.print(SEP);
+            System.out.print(giorno.pageMorti);
+            System.out.print(SEP);
+            System.out.print(giorno.esistePaginaNati);
+            System.out.print(SEP);
+            System.out.print(giorno.esistePaginaMorti);
+            System.out.print(SEP);
+            System.out.print(giorno.natiOk);
+            System.out.print(SEP);
+            System.out.print(giorno.mortiOk);
+            System.out.println(SPAZIO);
+        }
+    }
 
 }

@@ -70,7 +70,7 @@ public class UploadAnni extends UploadGiorniAnni {
      */
     @Override
     public WResult upload(String nomeAnno) {
-        anno = annoWikiBackend.findByNome(nomeAnno);
+        anno = annoWikiBackend.findByKey(nomeAnno);
         return super.upload(nomeAnno);
     }
 

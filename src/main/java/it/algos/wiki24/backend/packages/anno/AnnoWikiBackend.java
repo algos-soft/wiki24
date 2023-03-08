@@ -1,5 +1,8 @@
 package it.algos.wiki24.backend.packages.anno;
 
+import com.mongodb.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -15,6 +18,7 @@ import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki23
@@ -22,59 +26,22 @@ import java.util.*;
  * User: gac
  * Date: Fri, 08-Jul-2022
  * Time: 06:34
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class AnnoWikiBackend extends WikiBackend {
 
 
-    public AnnoWikiRepository repository;
-
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public AnnoBackend annoBackend;
-
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public SecoloBackend secoloBackend;
-
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
-    public AnnoWikiBackend(@Autowired @Qualifier("AnnoWiki") final MongoRepository crudRepository) {
-        super(crudRepository, AnnoWiki.class);
-        this.repository = (AnnoWikiRepository) crudRepository;
+    public AnnoWikiBackend() {
+        super(AnnoWiki.class);
     }
 
-    public AnnoWiki creaIfNotExist(final Anno annoBase, int ordine) {
-        return checkAndSave(newEntity(annoBase, ordine));
-    }
+    //    public AnnoWiki creaIfNotExist(final Anno annoBase, int ordine) {
+    //        return checkAndSave(newEntity(annoBase, ordine));
+    //    }
 
-    public AnnoWiki checkAndSave(final AnnoWiki annoWiki) {
-        return findByNome(annoWiki.nome) != null ? null : repository.insert(annoWiki);
-    }
+    //    public AnnoWiki checkAndSave(final AnnoWiki annoWiki) {
+    //        return findByNome(annoWiki.nome) != null ? null : repository.insert(annoWiki);
+    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -84,7 +51,7 @@ public class AnnoWikiBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public AnnoWiki newEntity() {
-        return newEntity((Anno) null, 0);
+        return newEntity(VUOTA);
     }
 
     /**
@@ -93,47 +60,96 @@ public class AnnoWikiBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param annoBase proveniente da vaadin23
-     * @param ordine   progressivo partendo da -1000 e moltiplicando per 100 per categorizzare in ordine anche le sottopagine
+     * @param keyPropertyValue proveniente da vaad24
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AnnoWiki newEntity(final Anno annoBase, int ordine) {
-        AnnoWiki annoWiki = AnnoWiki.annoWikiBuilder()
-                .ordine(ordine)
-                .nome(annoBase.nome)
-                .secolo(annoBase.secolo.ordine)
-                .build();
+    public AnnoWiki newEntity(final String keyPropertyValue) {
+        AnnoWiki newEntityBean = AnnoWiki.builderAnnoWiki().build();
+        Anno annoBase = annoBackend.findByKey(keyPropertyValue);
+        if (annoBase == null) {
+            logger.error(new WrapLog().message(String.format("Manca l'anno base di riferimento dal nome %s", keyPropertyValue)));
+            return null;
+        }
 
-        return fixProperties(annoWiki);
+        beanService.copiaAncheID(annoBase, newEntityBean);
+        newEntityBean.pageNati = wikiUtility.wikiTitleNatiAnno(annoBase.nome);
+        newEntityBean.pageMorti = wikiUtility.wikiTitleMortiAnno(annoBase.nome);
+
+        return newEntityBean;
     }
 
-    public AnnoWiki fixProperties(AnnoWiki annoWiki) {
-        annoWiki.pageNati = wikiUtility.wikiTitleNatiAnno(annoWiki.nome);
-        annoWiki.pageMorti = wikiUtility.wikiTitleMortiAnno(annoWiki.nome);
 
-        return annoWiki;
+    @Override
+    public AnnoWiki findById(final String keyID) {
+        return (AnnoWiki) super.findById(keyID);
     }
 
-    public List<AnnoWiki> findAll() {
-        return repository.findAllByOrderByOrdineAsc();
+    @Override
+    public AnnoWiki findByKey(final String keyValue) {
+        return (AnnoWiki) super.findByKey(keyValue);
     }
 
-    public List<AnnoWiki> findAllReverse() {
-        return repository.findAllByOrderByOrdineDesc();
+    @Override
+    public AnnoWiki findByProperty(final String propertyName, final Object propertyValue) {
+        return (AnnoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
-//    public List<String> findAllNomi() {
-//        return annoBackend.findAllStringKey();
+    @Override
+    public AnnoWiki findByOrdine(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public List<AnnoWiki> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<AnnoWiki> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<AnnoWiki> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<AnnoWiki> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
+    }
+
+    public List<AnnoWiki> findAllBySecolo(Secolo secolo) {
+        return super.findAllByProperty(FIELD_NAME_SECOLO, secolo);
+    }
+
+    @Override
+    public List<String> findAllForKey() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    }
+
+    @Override
+    public List<String> findAllForKeyReverseOrder() {
+        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    }
+
+    public List<String> findAllForNome() {
+        return findAllForKey();
+    }
+
+    public List<String> findAllForNomeBySecolo(Secolo secolo) {
+        return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
+    }
+
+
+    //    public AnnoWiki findByNome(final String nome) {
+//        return repository.findFirstByNome(nome);
 //    }
-
-    public AnnoWiki findByNome(final String nome) {
-        return repository.findFirstByNome(nome);
-    }
 
     public List<String> findAllPagine() {
         List<String> listaNomi = new ArrayList<>();
-        List<Anno> listaAnni = annoBackend.findAllSortCorrenteReverse();
+        List<Anno> listaAnni = annoBackend.findAllNoSort();
 
         for (Anno anno : listaAnni) {
             listaNomi.add(wikiUtility.wikiTitleNatiAnno(anno.nome));
@@ -146,15 +162,15 @@ public class AnnoWikiBackend extends WikiBackend {
     public int countListeDaCancellare() {
         int daCancellare = 0;
 
-        daCancellare += ((Long) repository.countAnnoWikiByNatiOkFalse()).intValue();
-        daCancellare += ((Long) repository.countAnnoWikiByMortiOkFalse()).intValue();
+//        daCancellare += ((Long) repository.countAnnoWikiByNatiOkFalse()).intValue();
+//        daCancellare += ((Long) repository.countAnnoWikiByMortiOkFalse()).intValue();
 
         return daCancellare;
     }
 
     public List<AnnoWiki> fetchDaCancellare() {
         List<AnnoWiki> lista = null;
-        lista = repository.findAllByNatiOkFalseOrMortiOkFalse();
+//        lista = repository.findAllByNatiOkFalseOrMortiOkFalse(); //@todo va in errore
         return lista;
     }
 
@@ -199,7 +215,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
-        for (AnnoWiki annoWiki : findAllReverse()) {
+        for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
             anno = annoBackend.findByKey(annoWiki.nome);
             bioNati = bioBackend.countAnnoNato(annoWiki.nome);
             bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);
@@ -297,33 +313,31 @@ public class AnnoWikiBackend extends WikiBackend {
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    @Override
-    public AResult resetOnlyEmpty() {
+//    @Override
+    public AResult resetOnlyEmpty2() {
         AResult result = super.resetOnlyEmpty();
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         List<Anno> anniBase;
         int delta = DELTA_ORDINE_ANNI;
         int ordine = 0;
-
-        if (secoloBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Secolo'")).usaDb());
-            return result;
-        }
+        List<AEntity> lista;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             Sort sort = Sort.by(Sort.Direction.ASC, "ordine"); //@todo eliminare
             anniBase = annoBackend.findAllSortCorrenteReverse();
+            lista = new ArrayList<>();
+
             for (Anno anno : anniBase) {
                 ordine += delta;
-                creaIfNotExist(anno, ordine);
+//                creaIfNotExist(anno, ordine);
             }
         }
         else {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, ordine);
+        return super.fixResult(result, clazzName, collectionName, lista);
     }
 
 }// end of crud backend class

@@ -113,7 +113,7 @@ public class AnnoWikiView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        String message = String.format("%s: %s (vedi view)", "Pagine degli anni da cancellare", backend.countListeDaCancellare());
+        String message = String.format("%s: %s (vedi view)", "Pagine degli anni da cancellare", backend.countListeDaCancellare()); //@todo va in errore
         addSpan(ASpan.text(message).rosso().small());
         addSpan(ASpan.text("Scheduled: TaskAnni (base giornaliera/2 giorni) e TaskStatistiche (base settimanale)").blue().small());
         addSpan(ASpan.text("Elaborazione: Prima di ogni statistica").blue().small());

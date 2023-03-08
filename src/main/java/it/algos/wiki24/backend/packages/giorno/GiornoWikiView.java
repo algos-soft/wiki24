@@ -68,6 +68,7 @@ public class GiornoWikiView extends WikiView {
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
         //        super.formPropertyNamesList = Arrays.asList("nomeWiki");
 
+
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.usaRowIndex = false;
 

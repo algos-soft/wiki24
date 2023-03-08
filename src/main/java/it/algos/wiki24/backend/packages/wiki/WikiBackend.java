@@ -5,8 +5,10 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
@@ -35,7 +37,13 @@ public abstract class WikiBackend extends CrudBackend {
     public GiornoBackend giornoBackend;
 
     @Autowired
+    public AnnoBackend annoBackend;
+
+    @Autowired
     public MeseBackend meseBackend;
+
+    @Autowired
+    public SecoloBackend secoloBackend;
 
     protected String message;
 
@@ -155,8 +163,8 @@ public abstract class WikiBackend extends CrudBackend {
     @Autowired
     public CognomeBackend cognomeBackend;
 
-    public WikiBackend( final Class<? extends AEntity> entityClazz) {
-        super( entityClazz);
+    public WikiBackend(final Class<? extends AEntity> entityClazz) {
+        super(entityClazz);
     }// end of constructor with @Autowired
 
     public WikiBackend(final MongoRepository crudRepository, final Class<? extends AEntity> entityClazz) {

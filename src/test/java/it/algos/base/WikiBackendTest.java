@@ -30,14 +30,14 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @InjectMocks
     protected GiornoWikiBackend giornoWikiBackend;
+    @InjectMocks
+    protected AnnoWikiBackend annoWikiBackend;
 
     @InjectMocks
     protected MeseBackend meseBackend;
 
     @InjectMocks
     protected AnnoBackend annoBackend;
-    @InjectMocks
-    protected AnnoWikiBackend annoWikiBackend;
 
     @InjectMocks
     protected WikiUtility wikiUtility;

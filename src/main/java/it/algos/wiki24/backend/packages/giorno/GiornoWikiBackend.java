@@ -89,6 +89,7 @@ public class GiornoWikiBackend extends WikiBackend {
         return (GiornoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
+    @Override
     public GiornoWiki findByOrdine(final int ordine) {
         return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
@@ -101,6 +102,11 @@ public class GiornoWikiBackend extends WikiBackend {
     @Override
     public List<GiornoWiki> findAllSortCorrente() {
         return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<GiornoWiki> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
     }
 
     @Override
@@ -248,11 +254,6 @@ public class GiornoWikiBackend extends WikiBackend {
         List<AEntity> lista;
         String nome;
 
-        if (meseBackend.count() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Mese'")).usaDb());
-            return result;
-        }
-
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             giorniBase = giornoBackend.findAllNoSort();
             result.setValido(true);
@@ -260,7 +261,7 @@ public class GiornoWikiBackend extends WikiBackend {
 
             for (Giorno giorno : giorniBase) {
                 nome = giorno.nome;
-                entityBean = insert(newEntity(giorno));
+                entityBean = insert(newEntity(nome));
                 if (entityBean != null) {
                     lista.add(entityBean);
                 }
@@ -276,7 +277,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista.size());
+        return super.fixResult(result, clazzName, collectionName, lista);
     }
 
 }// end of crud backend class

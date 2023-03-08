@@ -502,7 +502,7 @@ public class ElaboraService extends WAbstractService {
         //        }
 
         try {
-            anno = annoWikiBackend.findByNome(testoValido);
+            anno = annoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -520,7 +520,7 @@ public class ElaboraService extends WAbstractService {
             return annoOrdine;
         }
 
-        annoWiki = annoWikiBackend.findByNome(testoAnno);
+        annoWiki = annoWikiBackend.findByKey(testoAnno);
         if (annoWiki != null) {
             annoOrdine = annoWiki.ordine;
         }
@@ -588,7 +588,7 @@ public class ElaboraService extends WAbstractService {
             titoloEsatto = titoloEsatto.replace(tagC, tagC + PUNTO);
         }
 
-        anno = annoWikiBackend.findByNome(titoloEsatto);
+        anno = annoWikiBackend.findByKey(titoloEsatto);
 
         return anno;
     }
