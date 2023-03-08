@@ -225,7 +225,7 @@ public class BioView extends WikiView {
         })).setHeader("pagina").setKey("pagina").setFlexGrow(0).setWidth("18em");
 
         HeaderRow headerRow = grid.prependHeaderRow();
-        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+//        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
         Grid.Column pageId = grid.getColumnByKey("pageId");
         Grid.Column wikiTitle = grid.getColumnByKey("wikiTitle");
         Grid.Column ordinamento = grid.getColumnByKey("ordinamento");
@@ -242,7 +242,7 @@ public class BioView extends WikiView {
         Grid.Column attivita3 = grid.getColumnByKey("attivita3");
         Grid.Column nazionalita = grid.getColumnByKey("nazionalita");
 
-        grid.setColumnOrder(ordine, pageId, pagina, elaborato, ordinamento, sesso, nome, cognome, giornoNato, annoNato, giornoMorto, annoMorto, attivita, attivita2, attivita3, nazionalita);
+        grid.setColumnOrder( pageId, pagina, elaborato, ordinamento, sesso, nome, cognome, giornoNato, annoNato, giornoMorto, annoMorto, attivita, attivita2, attivita3, nazionalita);
 
         headerRow.join(pageId, pagina, elaborato, ordinamento).setText("Wiki");
         headerRow.join(sesso, nome, cognome).setText("Anagrafica");

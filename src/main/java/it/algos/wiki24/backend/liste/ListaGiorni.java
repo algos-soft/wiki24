@@ -68,7 +68,7 @@ public class ListaGiorni extends Lista {
     public LinkedHashMap<String, List<WrapLista>> sortMap(LinkedHashMap<String, List<WrapLista>> mappaIn) {
         LinkedHashMap<String, List<WrapLista>> mappaOut = new LinkedHashMap<>();
         List<WrapLista> lista;
-        List<String> secoli = secoloBackend.findAllSortCorrenteReverse();
+        List<String> secoli = secoloBackend.findAllForKey();
 
         //Ordina le chiavi per secolo
         for (String key : secoli) {

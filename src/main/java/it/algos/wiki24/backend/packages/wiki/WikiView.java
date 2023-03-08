@@ -281,10 +281,10 @@ public abstract class WikiView extends CrudView {
         this.usaBottoneUploadNati = false;
         this.usaBottoneUploadMorti = false;
 
-        this.unitaMisuraDownload = AETypeTime.minuti;
-        this.unitaMisuraElaborazione = AETypeTime.minuti;
-        this.unitaMisuraUpload = AETypeTime.minuti;
-        this.unitaMisuraStatistiche = AETypeTime.minuti;
+        this.unitaMisuraDownload = crudBackend.unitaMisuraDownload;
+        this.unitaMisuraElaborazione = crudBackend.unitaMisuraElaborazione;
+        this.unitaMisuraUpload = crudBackend.unitaMisuraUpload;
+        this.unitaMisuraStatistiche = crudBackend.unitaMisuraStatistiche;
     }
 
     protected void fixPreferenzeBackend() {

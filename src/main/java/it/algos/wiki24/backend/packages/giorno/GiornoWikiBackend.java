@@ -35,6 +35,10 @@ public class GiornoWikiBackend extends WikiBackend {
         super(GiornoWiki.class);
     }
 
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -166,6 +170,8 @@ public class GiornoWikiBackend extends WikiBackend {
         BigDecimal decimal;
         Double doppio;
         String minimo;
+        Integer percentuale;
+        String perc;
 
         //--Check di validità del database mongoDB
         result = wikiUtility.checkValiditaDatabase();
@@ -173,11 +179,14 @@ public class GiornoWikiBackend extends WikiBackend {
             mappa = result.getMappa();
             bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
             numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
+            percentuale = (Integer) mappa.get(KEY_MAP_VOCI_DATABASE_MONGO) * 100 * 100 / (Integer) mappa.get(KEY_MAP_VOCI_SERVER_WIKI);
+            perc = percentuale.toString();
+            perc = perc.substring(0, perc.length() - 2) + VIRGOLA + perc.substring(perc.length() - 2) + PERCENTUALE;
             decimal = WPref.percentualeMinimaBiografie.getDecimal();
             doppio = decimal.doubleValue();
             minimo = doppio.toString() + PERCENTUALE;
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione dei giorni.";
-            message += String.format(" Solo %s su %s. Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, minimo);
+            message += String.format(" Solo %s su %s (=%s). Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, perc, minimo);
             logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
             return;
         }
