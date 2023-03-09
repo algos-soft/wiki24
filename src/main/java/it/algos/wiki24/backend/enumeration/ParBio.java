@@ -219,6 +219,8 @@ public enum ParBio {
     noteMorte("NoteMorte", "NoteMorte", false, false, true, false, false) {
     },// end of single enumeration
 
+    floruit("Floruit", "Floruit", false, false, false, false, false) {
+    },// end of single enumeration
     epoca("Epoca", "Epoca", false, false, true, false, false) {
     },// end of single enumeration
 
