@@ -5,10 +5,15 @@ import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.notification.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.views.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
@@ -16,6 +21,7 @@ import org.springframework.context.annotation.Scope;
 import org.vaadin.crudui.crud.*;
 
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Project wiki23
@@ -24,8 +30,8 @@ import java.util.*;
  * Date: Sat, 27-Aug-2022
  * Time: 14:06
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+//@SpringComponent
+//@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ErroreBioDialog extends BioDialog {
 
     /**
@@ -75,13 +81,15 @@ public class ErroreBioDialog extends BioDialog {
      */
     @Autowired
     public BioService bioService;
+    @Autowired
+    public ElaboraService elaboraService;
 
     protected Button buttonFixSexM;
 
     protected Button buttonFixSexF;
 
     protected Button buttonFixNazionalita;
-
+    Bio currentItem;
     /**
      * Constructor not @Autowired. <br>
      * Non utilizzato e non necessario <br>
@@ -105,8 +113,8 @@ public class ErroreBioDialog extends BioDialog {
      */
     public ErroreBioDialog(final Bio entityBean, final CrudOperation operation, final BioBackend crudBackend, final List fields) {
         super(entityBean, operation, crudBackend, fields);
-        super.currentItem = entityBean;
-        super.backend = crudBackend;
+        currentItem = entityBean;
+//        super.backend = crudBackend;
         super.usaUnaSolaColonna = false;
     }// end of constructor not @Autowired
 
@@ -193,7 +201,7 @@ public class ErroreBioDialog extends BioDialog {
             if (bio != null && bio.sesso != null) {
                 if (bio.sesso.equals("M") || bio.sesso.equals("F")) {
                     bio.errato = false;
-                    backend.save(bio);
+                    crudBackend.save(bio);
                     message = String.format("La biografia %s ha adesso il parametro sesso = %s", currentItem.wikiTitle, bio.sesso);
                     Notification.show(message).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
                 }
@@ -258,7 +266,7 @@ public class ErroreBioDialog extends BioDialog {
             bio = wikiApiService.downloadAndSave(wikiTitle);
             if (bio != null && bio.nazionalita.equals(nazionalitaNew)) {
                 bio.errato = false;
-                backend.save(bio);
+                crudBackend.save(bio);
                 message = String.format("La biografia %s ha adesso il parametro nazionalità = %s", currentItem.wikiTitle, nazionalitaNew);
                 Notification.show(message).addThemeVariants(NotificationVariant.LUMO_SUCCESS);
             }
@@ -274,5 +282,4 @@ public class ErroreBioDialog extends BioDialog {
 
         close();
     }
-
 }

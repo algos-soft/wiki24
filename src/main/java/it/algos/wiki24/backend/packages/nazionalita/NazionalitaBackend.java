@@ -360,7 +360,7 @@ public class NazionalitaBackend extends WikiBackend {
         downloadNazionalitaPlurali(moduloPlurale);
         downloadNazionalitaLink(moduloLink);
 
-        super.fixDownload(inizio,"nazionalità");
+        super.fixDownload(inizio, "nazionalità");
     }
 
     /**
@@ -469,7 +469,8 @@ public class NazionalitaBackend extends WikiBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void elabora() {
+    public WResult elabora() {
+        WResult result = null;
         long inizio = System.currentTimeMillis();
         List<String> listaPlurali;
         List<String> listaSingolari;
@@ -524,7 +525,7 @@ public class NazionalitaBackend extends WikiBackend {
             }
         }
 
-        super.fixElaboraMinuti(inizio, "nazionalità");
+        return super.fixElaboraMinuti(result, inizio, "nazionalità");
     }
 
     //    /**
@@ -635,8 +636,8 @@ public class NazionalitaBackend extends WikiBackend {
         AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            this.download();
-//            return fixResult(result);
+            //            this.download();
+            //            return fixResult(result);
             return result;
         }
         else {

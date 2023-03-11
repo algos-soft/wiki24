@@ -281,24 +281,21 @@ public abstract class WikiView extends CrudView {
         this.usaBottoneUploadNati = false;
         this.usaBottoneUploadMorti = false;
 
-        this.unitaMisuraDownload = crudBackend.unitaMisuraDownload;
-        this.unitaMisuraElaborazione = crudBackend.unitaMisuraElaborazione;
-        this.unitaMisuraUpload = crudBackend.unitaMisuraUpload;
-        this.unitaMisuraStatistiche = crudBackend.unitaMisuraStatistiche;
+        fixPreferenzeBackend();
     }
 
     protected void fixPreferenzeBackend() {
         if (crudBackend != null) {
-            crudBackend.lastDownload = lastDownload;
-            crudBackend.durataDownload = durataDownload;
-            crudBackend.lastElabora = lastElaborazione;
-            crudBackend.durataElaborazione = durataElaborazione;
-            crudBackend.lastUpload = lastUpload;
-            crudBackend.durataUpload = durataUpload;
-            crudBackend.unitaMisuraDownload = unitaMisuraDownload;
-            crudBackend.unitaMisuraElaborazione = unitaMisuraElaborazione;
-            crudBackend.unitaMisuraUpload = unitaMisuraUpload;
-            crudBackend.unitaMisuraStatistiche = unitaMisuraStatistiche;
+            lastDownload = crudBackend.lastDownload;
+            durataDownload = crudBackend.durataDownload;
+            lastElaborazione = crudBackend.lastElaborazione;
+            durataElaborazione = crudBackend.durataElaborazione;
+            lastUpload = crudBackend.lastUpload;
+            durataUpload = crudBackend.durataUpload;
+            unitaMisuraDownload = crudBackend.unitaMisuraDownload;
+            unitaMisuraElaborazione = crudBackend.unitaMisuraElaborazione;
+            unitaMisuraUpload = crudBackend.unitaMisuraUpload;
+            unitaMisuraStatistiche = crudBackend.unitaMisuraStatistiche;
         }
     }
 

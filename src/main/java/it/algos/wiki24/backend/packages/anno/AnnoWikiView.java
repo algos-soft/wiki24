@@ -74,14 +74,6 @@ public class AnnoWikiView extends WikiView {
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
 
-        super.lastElaborazione = WPref.elaboraAnni;
-        super.durataElaborazione = WPref.elaboraAnniTime;
-        super.lastUpload = WPref.uploadAnni;
-        super.durataUpload = WPref.uploadAnniTime;
-        super.nextUpload = WPref.uploadAnniPrevisto;
-        super.lastStatistica = WPref.statisticaAnni;
-        super.durataStatistica = WPref.statisticaAnniTime;
-
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
@@ -102,7 +94,6 @@ public class AnnoWikiView extends WikiView {
         super.usaBottoneUploadNati = true;
         super.usaBottoneUploadMorti = true;
 
-        //        super.dialogClazz = AnnoWikiDialog.class;
         super.fixPreferenzeBackend();
     }
 

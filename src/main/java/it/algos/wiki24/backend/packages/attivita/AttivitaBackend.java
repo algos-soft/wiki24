@@ -451,7 +451,7 @@ public class AttivitaBackend extends WikiBackend {
         downloadAttivitaExtra(moduloEx);
         downloadAttivitaLink(moduloLink);
 
-        super.fixDownload(inizio,"attività");
+        super.fixDownload(inizio, "attività");
     }
 
 
@@ -629,7 +629,8 @@ public class AttivitaBackend extends WikiBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void elabora() {
+    public WResult elabora() {
+        WResult result = null;
         long inizio = System.currentTimeMillis();
         List<String> listaPlurali;
         List<String> listaSingolari;
@@ -683,7 +684,7 @@ public class AttivitaBackend extends WikiBackend {
             }
         }
 
-        super.fixElaboraMinuti(inizio, "attività");
+        return super.fixElaboraMinuti(result, inizio, "attività");
     }
 
     /**
@@ -791,8 +792,8 @@ public class AttivitaBackend extends WikiBackend {
         AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            this.download();
-//            return fixResult(result);
+            //            this.download();
+            //            return fixResult(result);
             return result;
         }
         else {

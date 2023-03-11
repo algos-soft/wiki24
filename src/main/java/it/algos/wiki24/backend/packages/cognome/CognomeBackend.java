@@ -213,8 +213,9 @@ public class CognomeBackend extends WikiBackend {
      * Registra la entity <br>
      * Non registra la entity col cognomi mancante <br>
      */
-    public void elabora() {
+    public WResult elabora() {
         long inizio = System.currentTimeMillis();
+        WResult result = null;
         int tot = 0;
         int cont = 0;
         List<String> cognomi = bioBackend.findAllCognomiDistinti();
@@ -233,7 +234,7 @@ public class CognomeBackend extends WikiBackend {
         }
 
         logger.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
-        super.fixElaboraMinuti(inizio, "cognomi");
+        return super.fixElaboraMinuti(result, inizio, "cognomi");
         //        logger.info("Creazione di " + text.format(cont) + " cognomi su un totale di " + text.format(tot) + " cognomi distinti. Tempo impiegato: " + date.deltaText(inizio));
     }
 

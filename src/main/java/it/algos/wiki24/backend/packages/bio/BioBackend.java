@@ -189,7 +189,8 @@ public class BioBackend extends WikiBackend {
     }
 
     public Bio insert(final Bio bio) {
-        return repository.insert(bio);
+        return (Bio) super.insert(bio);
+        //        return repository.insert(bio);
     }
 
     @Override
@@ -1042,7 +1043,8 @@ public class BioBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void elabora() {
+    public WResult elabora() {
+        WResult result = null;
         long inizio = System.currentTimeMillis(); List<Bio> lista = findAll(); int dim = 50000; int blocco = lista.size() / dim; int ini; int end; String size;
         String time; String message; int cont = 0; Bio bioTemp; Bio bioSaved;
 
@@ -1062,7 +1064,9 @@ public class BioBackend extends WikiBackend {
                 message = String.format("Elaborate finora %s voci biografiche, in %s", size, time);
                 logger.info(new WrapLog().message(message).type(AETypeLog.elabora));
             }
-        } super.fixElaboraMinuti(inizio, "biografie");
+        } super.fixElaboraMinuti(result, inizio, "biografie");
+
+        return null;
     }
 
     /**

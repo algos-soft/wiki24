@@ -5,6 +5,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.apache.commons.collections4.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
@@ -122,8 +123,9 @@ public class PaginaBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void elabora() {
+    public WResult elabora() {
         long inizio = System.currentTimeMillis();
+        WResult result = null;
         mongoService.deleteAll(Pagina.class);
 
         elaboraGiorni();
@@ -133,7 +135,7 @@ public class PaginaBackend extends WikiBackend {
         elaboraCognomi();
         elaboraUtenteBot();
 
-        super.fixElaboraMinuti(inizio, "cancellazioni");
+        return super.fixElaboraMinuti(result, inizio, "cancellazioni");
     }
 
     public List<Pagina> elaboraGiorni() {

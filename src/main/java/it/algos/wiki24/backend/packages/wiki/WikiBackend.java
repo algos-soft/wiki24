@@ -19,6 +19,7 @@ import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 
@@ -49,23 +50,29 @@ public abstract class WikiBackend extends CrudBackend {
 
     public WPref lastDownload;
 
-    protected WPref durataDownload;
+    public WPref durataDownload;
 
-    public WPref lastElabora;
+    public WPref lastElaborazione;
 
     public WPref durataElaborazione;
 
-    protected WPref lastUpload;
+    public WPref lastUpload;
 
-    protected WPref durataUpload;
+    public WPref durataUpload;
 
-    protected AETypeTime unitaMisuraDownload;
+    public WPref nextUpload;
 
-    protected AETypeTime unitaMisuraElaborazione;
+    public WPref lastStatistica;
 
-    protected AETypeTime unitaMisuraUpload;
+    public WPref durataStatistica;
 
-    protected AETypeTime unitaMisuraStatistiche;
+    public AETypeTime unitaMisuraDownload;
+
+    public AETypeTime unitaMisuraElaborazione;
+
+    public AETypeTime unitaMisuraUpload;
+
+    public AETypeTime unitaMisuraStatistiche;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -199,7 +206,8 @@ public abstract class WikiBackend extends CrudBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void elabora() {
+    public WResult elabora() {
+       return WResult.build().method("elabora").target(getClass().getSimpleName());
     }
 
     public void fixDownload(final long inizio) {
@@ -225,13 +233,14 @@ public abstract class WikiBackend extends CrudBackend {
         logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
     }
 
-    public void fixElabora(final long inizio) {
-        fixElabora(inizio, VUOTA);
+    public WResult fixElabora(WResult result, final long inizio) {
+        return fixElabora(result, inizio, VUOTA);
     }
 
-    public void fixElabora(final long inizio, String modulo) {
-        if (lastElabora != null) {
-            lastElabora.setValue(LocalDateTime.now());
+    public WResult fixElabora(WResult result, final long inizio, String modulo) {
+        result.fine();
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
@@ -246,6 +255,11 @@ public abstract class WikiBackend extends CrudBackend {
 
         message = String.format("Elaborazione %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
+
+        message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
+        logger.debug(new WrapLog().message(message));
+
+        return result;
     }
 
 
@@ -306,8 +320,8 @@ public abstract class WikiBackend extends CrudBackend {
         Long delta = fine - inizio;
         String mongoTxt = textService.format(count());
 
-        if (lastElabora != null) {
-            lastElabora.setValue(LocalDateTime.now());
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
@@ -328,17 +342,17 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     @Deprecated
-    public void fixElaboraMinuti(final long inizio, final String modulo) {
+    public WResult fixElaboraMinuti(WResult result,final long inizio, final String modulo) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
         String mongoTxt = textService.format(count());
 
-        if (lastElabora != null) {
-            lastElabora.setValue(LocalDateTime.now());
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
-            return;
+            return result;
         }
 
         if (durataElaborazione != null) {
@@ -347,11 +361,13 @@ public abstract class WikiBackend extends CrudBackend {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
-            return;
+            return result;
         }
 
         message = String.format("Elaborate %s %s in %d millisecondi", mongoTxt, modulo, delta);
         logger.info(new WrapLog().message(message));
+
+        return result;
     }
 
     @Deprecated

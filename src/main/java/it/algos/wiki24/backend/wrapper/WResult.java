@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.wrapper;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import org.springframework.stereotype.*;
@@ -60,10 +61,6 @@ public class WResult extends AResult {
 
     private long nameSpace = 0L;
 
-    private long inizio;
-
-    private long fine;
-
     private boolean modificata = false;
 
     private int cicli;
@@ -74,8 +71,168 @@ public class WResult extends AResult {
 
     private String content = VUOTA;
 
-    private WResult() {
+    public WResult() {
         this(null);
+    }
+
+    public WResult(final boolean valido, final String message) {
+        this(valido, message, 0);
+    }
+
+    protected WResult(final boolean valido, final String message, final int intValue) {
+        this.valido = valido;
+        if (valido) {
+            this.validMessage = message;
+        }
+        else {
+            this.errorMessage = message;
+        }
+        this.intValue = intValue;
+        this.inizio = System.currentTimeMillis();
+    }
+
+
+    public static WResult build() {
+        return new WResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato);
+    }
+
+
+    public WResult validMessage(final String validMessage) {
+        this.valido = true;
+        this.validMessage = validMessage;
+        return this;
+    }
+
+    public WResult errorMessage(final String errorMessage) {
+        this.valido = false;
+        this.errorMessage = errorMessage;
+        return this;
+    }
+
+    public WResult addValidMessage(final String validMessage) {
+        this.valido = true;
+        this.validMessage += validMessage;
+        return this;
+    }
+
+    public WResult addErrorMessage(final String errorMessage) {
+        this.valido = false;
+        this.errorMessage += errorMessage;
+        return this;
+    }
+
+    public WResult nonValido() {
+        return valido(false);
+    }
+
+    public WResult valido(boolean valido) {
+        this.valido = valido;
+        return this;
+    }
+
+    public static WResult valido() {
+        return WResult.build();
+    }
+
+    public WResult method(final String method) {
+        this.method = method;
+        return this;
+    }
+
+    public WResult target(final String target) {
+        this.target = target;
+        return this;
+    }
+
+    public WResult typeTxt(final String typeTxt) {
+        this.typeTxt = typeTxt;
+        return this;
+    }
+
+    public WResult typeResult(final AETypeResult typeResult) {
+        this.typeResult = typeResult;
+        return this;
+    }
+
+    public WResult eseguito() {
+        return eseguito(true);
+    }
+
+    public WResult nonEseguito() {
+        return eseguito(false);
+    }
+
+    public WResult eseguito(final boolean eseguito) {
+        this.eseguito = eseguito;
+        return this;
+    }
+
+    public WResult intValue(final int intValue) {
+        this.intValue = intValue;
+        return this;
+    }
+
+
+    public static WResult valido(final String validMessage) {
+        return new WResult(true, validMessage);
+    }
+
+    public static WResult valido(final String validMessage, final int value) {
+        return new WResult(true, validMessage, value);
+    }
+
+    public static WResult contenuto(final String text, final String source) {
+        WResult result = new WResult();
+
+        if (text != null && text.length() > 0) {
+            result.setValido(true);
+            //            result.setResponse(text);
+            result.setValidMessage(JSON_SUCCESS);
+        }
+        else {
+            result.setValido(false);
+        }
+
+        return result;
+    }
+
+    public static WResult contenuto(final String text) {
+        return contenuto(text, VUOTA);
+    }
+
+    public static WResult errato() {
+        return new WResult(false, "Non effettuato");
+    }
+
+    public static WResult errato(final int valore) {
+        return new WResult(false, VUOTA, valore);
+    }
+
+    public static WResult errato(final String errorMessage) {
+        WResult result = new WResult(false, errorMessage);
+        result.setErrorCode(errorMessage);
+        return result;
+    }
+
+
+    public WResult mappa(LinkedHashMap mappa) {
+        this.mappa = mappa;
+        return this;
+    }
+
+    public WResult inizio() {
+        this.inizio = System.currentTimeMillis();
+        return this;
+    }
+
+    public WResult typeLog(AETypeLog typeLog) {
+        this.typeLog = typeLog;
+        return this;
+    }
+
+    public WResult typeCopy(AECopy typeCopy) {
+        this.typeCopy = typeCopy;
+        return this;
     }
 
     private WResult(WrapBio wrap) {
@@ -113,18 +270,6 @@ public class WResult extends AResult {
         return wResult;
     }
 
-    public static WResult errato() {
-        WResult wResult = new WResult();
-        wResult.setValido(false);
-        return wResult;
-    }
-
-    public static WResult errato(final String errorMessage) {
-        WResult wResult = new WResult();
-        wResult.setErrorCode(errorMessage);
-        wResult.setValido(false);
-        return wResult;
-    }
 
     public WResult queryType(final AETypeQuery queryType) {
         this.queryType = queryType;
@@ -150,14 +295,12 @@ public class WResult extends AResult {
         this.cicli = cicli;
         return this;
     }
+
     public WResult content(final String content) {
         this.content = content;
         return this;
     }
-    public WResult intValue(final int intValue) {
-        this.setIntValue(intValue);
-        return this;
-    }
+
 
     public WResult fine() {
         this.setFine();
@@ -182,6 +325,7 @@ public class WResult extends AResult {
         this.setValido(true);
         return this;
     }
+
     public WResult validoWiki(boolean valido) {
         this.setValido(valido);
         return this;
@@ -200,9 +344,6 @@ public class WResult extends AResult {
         this.wrap = wrap;
     }
 
-    public static WResult valido() {
-        return new WResult();
-    }
 
     public String getWikiBio() {
         return wikiBio;

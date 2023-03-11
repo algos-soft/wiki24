@@ -76,7 +76,7 @@ public class ElaboraServiceTest extends WikiTest {
     @Override
     protected void fixRiferimentiIncrociati() {
         super.fixRiferimentiIncrociati();
-        giornoWikiBackend.lastElabora = WPref.elaboraGiorni;
+        giornoWikiBackend.lastElaborazione = WPref.elaboraGiorni;
         giornoWikiBackend.durataElaborazione = WPref.elaboraGiorniTime;
 
     }

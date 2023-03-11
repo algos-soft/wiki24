@@ -38,6 +38,16 @@ public class GiornoWikiBackend extends WikiBackend {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastElaborazione = WPref.elaboraGiorni;
+        super.durataElaborazione = WPref.elaboraGiorniTime;
+        super.lastUpload = WPref.uploadGiorni;
+        super.durataUpload = WPref.uploadGiorniTime;
+        super.nextUpload = WPref.uploadGiorniPrevisto;
+        super.lastStatistica = WPref.statisticaGiorni;
+        super.durataStatistica = WPref.statisticaGiorniTime;
+
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
     }
 
     /**
@@ -160,9 +170,9 @@ public class GiornoWikiBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void elabora() {
+    public WResult elabora() {
         long inizio = System.currentTimeMillis();
-        WResult result;
+        WResult result = super.elabora();
         String message;
         Map mappa;
         String bioMongoDB;
@@ -172,6 +182,7 @@ public class GiornoWikiBackend extends WikiBackend {
         String minimo;
         Integer percentuale;
         String perc;
+        int tempo = 31;
 
         //--Check di validità del database mongoDB
         result = wikiUtility.checkValiditaDatabase();
@@ -188,8 +199,11 @@ public class GiornoWikiBackend extends WikiBackend {
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione dei giorni.";
             message += String.format(" Solo %s su %s (=%s). Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, perc, minimo);
             logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
-            return;
+            return result;
         }
+
+        message = String.format("Inizio elabora() di %s. Tempo previsto: circa %d secondi.", GiornoWikiBackend.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
@@ -200,7 +214,7 @@ public class GiornoWikiBackend extends WikiBackend {
             update(giornoWiki);
         }
 
-        super.fixElabora(inizio, "dei giorni");
+        return super.fixElabora(result, inizio, "dei giorni");
     }
 
 

@@ -9,6 +9,7 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -35,6 +36,18 @@ public class AnnoWikiBackend extends WikiBackend {
         super(AnnoWiki.class);
     }
 
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.lastElaborazione = WPref.elaboraAnni;
+        super.durataElaborazione = WPref.elaboraAnniTime;
+        super.lastUpload = WPref.uploadAnni;
+        super.durataUpload = WPref.uploadAnniTime;
+        super.nextUpload = WPref.uploadAnniPrevisto;
+        super.lastStatistica = WPref.statisticaAnni;
+        super.durataStatistica = WPref.statisticaAnniTime;
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -170,8 +183,9 @@ public class AnnoWikiBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void elabora() {
+    public WResult elabora() {
         long inizio = System.currentTimeMillis();
+        WResult result = super.elabora();
         int cont = 0;
         int blocco = 303;
         String size;
@@ -186,11 +200,11 @@ public class AnnoWikiBackend extends WikiBackend {
         boolean esistePaginaMorti;
         boolean natiOk;
         boolean mortiOk;
-        WResult result;
         String message;
         Map mappa;
         String bioMongoDB;
         String numPagesServerWiki;
+        int tempo = 26;
 
         //--Check di validità del database mongoDB
         result = wikiUtility.checkValiditaDatabase();
@@ -201,12 +215,15 @@ public class AnnoWikiBackend extends WikiBackend {
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione degli anni.";
             message += String.format(" Solo %s su %s", bioMongoDB, numPagesServerWiki);
             logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
-            return;
+            return result;
         }
+
+        message = String.format("Inizio elabora() di %s. Tempo previsto: circa %d minuti.", AnnoWikiBackend.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
-        for (AnnoWiki annoWiki : findAllSortCorrenteReverse().subList(34, 36)) {
+        for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
             anno = annoBackend.findByKey(annoWiki.nome);
             bioNati = bioBackend.countAnnoNato(annoWiki.nome);
             bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);
@@ -252,7 +269,7 @@ public class AnnoWikiBackend extends WikiBackend {
             }
         }
 
-        super.fixElabora(inizio, "degli anni");
+        return super.fixElabora(result, inizio, "degli anni");
     }
 
     public Map elaboraValidi() {

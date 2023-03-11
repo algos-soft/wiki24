@@ -72,14 +72,6 @@ public class GiornoWikiView extends WikiView {
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.usaRowIndex = false;
 
-        super.lastElaborazione = WPref.elaboraGiorni;
-        super.durataElaborazione = WPref.elaboraGiorniTime;
-        super.lastUpload = WPref.uploadGiorni;
-        super.durataUpload = WPref.uploadGiorniTime;
-        super.nextUpload = WPref.uploadGiorniPrevisto;
-        super.lastStatistica = WPref.statisticaGiorni;
-        super.durataStatistica = WPref.statisticaGiorniTime;
-
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneDownload = false;
@@ -100,7 +92,6 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneUploadNati = true;
         super.usaBottoneUploadMorti = true;
 
-        //                super.dialogClazz = GiornoWikiDialog.class;
         super.fixPreferenzeBackend();
     }
 
