@@ -32,6 +32,7 @@ import javax.persistence.*;
 @Builder(builderMethodName = "builderAnnoWiki")
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "nome", usaReset = true)
 public class AnnoWiki extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)

@@ -254,8 +254,8 @@ public class GiornoWikiBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         List<Giorno> giorniBase;
@@ -264,6 +264,8 @@ public class GiornoWikiBackend extends WikiBackend {
         String nome;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
+            logger.debug(new WrapLog().message(message));
             giorniBase = giornoBackend.findAllNoSort();
             result.setValido(true);
             lista = new ArrayList<>();
@@ -286,7 +288,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista);
+        return super.fixResult(result, clazzName, collectionName, lista, logInfo);
     }
 
 }// end of crud backend class

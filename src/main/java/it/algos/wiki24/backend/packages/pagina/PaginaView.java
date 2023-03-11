@@ -66,10 +66,10 @@ public class PaginaView extends WikiView {
         super.gridPropertyNamesList = Arrays.asList("cancella", "voci", "type");
         super.lastElaborazione = WPref.elaboraPagineCancella;
         super.durataElaborazione = WPref.elaboraPagineCancellaTime;
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = false;
         this.usaBottoneDownload = false;
         this.usaBottoneErrori = false;
         this.usaBottoneUploadAll = false;

@@ -87,7 +87,7 @@ public class ErroreBioView extends WikiView {
         super.usaBottoneDeleteAll = false;
         this.usaBottoneUploadAll = false;
         super.usaBottoneNew = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneReset = false;
         super.usaBottoneSearch = false;
         super.usaBottonePaginaWiki = false;
         this.usaBottoneTest = false;

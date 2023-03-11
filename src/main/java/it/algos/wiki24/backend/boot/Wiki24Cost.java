@@ -31,6 +31,7 @@ public class Wiki24Cost {
     public static final String PATH_PLURALE = "Plurale ";
 
     public static final String PATH_EX = "Ex ";
+    public static final String WIKI_TAG_UTILITY = "wikiUtility";
 
     public static final String TAG_WIKI23_VERSION = "wikiversion";
 

@@ -37,7 +37,7 @@ import java.util.stream.*;
  * Nella superclasse ATest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse ATest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-public abstract class WikiTest extends AlgosIntegrationTest {
+public abstract class WikiTest extends AlgosTest {
 
     public static int MAX = 175;
 
@@ -493,20 +493,21 @@ public abstract class WikiTest extends AlgosIntegrationTest {
 
     //--titolo
     //--pagina esistente
+    //--biografia esistente
     protected static Stream<Arguments> PAGINE_E_CATEGORIE() {
         return Stream.of(
-                Arguments.of(null, false),
-                Arguments.of(VUOTA, false),
-                Arguments.of("Roman Protasevič", true),
-                Arguments.of("Louis Winslow Austin", true),
-                Arguments.of("Categoria:Nati nel 1435", true),
-                Arguments.of("2741616|27416167", false),
-                Arguments.of("Categoria:Nati nel 2387", false),
-                Arguments.of("Categoria:BioBot", true),
-                Arguments.of("Categoria:Supercalifragilistichespiralidoso", false),
-                Arguments.of("Supercalifragilistichespiralidoso", true),
-                Arguments.of("Regno di Napoli (1908-1745)", false),
-                Arguments.of("Rossi", true)
+                Arguments.of(null, false, false),
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("Roman Protasevič", true, true),
+                Arguments.of("Louis Winslow Austin", true, true),
+                Arguments.of("Categoria:Nati nel 1435", true, false),
+                Arguments.of("2741616|27416167", false, false),
+                Arguments.of("Categoria:Nati nel 2387", false, false),
+                Arguments.of("Categoria:BioBot", true, false),
+                Arguments.of("Categoria:Supercalifragilistichespiralidoso", false, false),
+                Arguments.of("Supercalifragilistichespiralidoso", true, false),
+                Arguments.of("Regno di Napoli (1908-1745)", false, false),
+                Arguments.of("Rossi", true, false)
         );
     }
 
@@ -1179,7 +1180,7 @@ public abstract class WikiTest extends AlgosIntegrationTest {
 
         if (mappaWrap != null) {
             System.out.println(VUOTA);
-            message = String.format("Faccio vedere le %d chiavi ordinate di una mappa",mappaWrap.keySet().size());
+            message = String.format("Faccio vedere le %d chiavi ordinate di una mappa", mappaWrap.keySet().size());
             System.out.println(message);
             for (String key : mappaWrap.keySet()) {
                 pos++;

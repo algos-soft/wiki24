@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -26,6 +27,7 @@ import it.algos.wiki24.backend.packages.professione.*;
 import it.algos.wiki24.backend.packages.statistica.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.utility.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -91,7 +93,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     }
 
 
-
     /**
      * Crea le Enumeration in memoria <br>
      * Aggiunge le singole Enumeration alla lista globale <br>
@@ -150,8 +151,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
          */
         VaadVar.projectCurrent = "wiki24";
 
-
-
         /**
          * Classe da usare per gestire le versioni <br>
          * Di default FlowVers oppure possibile sottoclasse del progetto <br>
@@ -170,7 +169,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
                 "| |w  | | |i  | | |k  | | |i  | | |2  | | |4  | |\n" +
                 "| +---+ | +---+ | +---+ | +---+ | +---+ | +---+ |\n" +
                 "|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|/_____\\|\n";
-
 
         /**
          * Schedule per ogni task del programma <br>
@@ -214,17 +212,24 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
     @Override
     protected void fixMenuRoutes() {
         super.fixMenuRoutes();
+
+        //sostituisce un link
+        Object daSostituire = UtilityView.class;
+        if (VaadVar.menuRouteListVaadin.contains(daSostituire)) {
+            VaadVar.menuRouteListVaadin.remove(daSostituire);
+        }
         VaadVar.menuRouteListVaadin.add(ViaView.class);
         VaadVar.menuRouteListVaadin.add(ContinenteView.class);
 
+        VaadVar.menuRouteListProject.add(WikiUtilityView.class);
         VaadVar.menuRouteListProject.add(GiornoWikiView.class);
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
         VaadVar.menuRouteListProject.add(AttivitaView.class);
         VaadVar.menuRouteListProject.add(NazionalitaView.class);
 
         //        VaadVar.menuRouteListProject.add(GenereView.class);
-//        VaadVar.menuRouteListProject.add(ProfessioneView.class);
-//        VaadVar.menuRouteListProject.add(DoppionomeView.class);
+        //        VaadVar.menuRouteListProject.add(ProfessioneView.class);
+        //        VaadVar.menuRouteListProject.add(DoppionomeView.class);
         //        VaadVar.menuRouteListProject.add(CognomeView.class);
         VaadVar.menuRouteListProject.add(BioView.class);
         VaadVar.menuRouteListProject.add(StatisticaBioView.class);

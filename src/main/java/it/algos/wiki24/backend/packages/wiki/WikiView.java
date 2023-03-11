@@ -257,10 +257,10 @@ public abstract class WikiView extends CrudView {
         super.fixPreferenze();
 
         this.usaBottoneDeleteAll = false;
-        super.usaBottoneDeleteReset = false;
+        super.usaBottoneReset = false;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = false;
 
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = false;
@@ -332,7 +332,7 @@ public abstract class WikiView extends CrudView {
                     message = "Reset non ancora effettuato";
                 }
                 else {
-                    message = String.format("Ultimo reset effettuato il %s", dateService.get(reset));
+                    message = String.format("Ultimo reset effettuato %s", dateService.getDataOrarioCompleta(reset));
                     if (durataReset != null && durataDownload.get() instanceof Integer durata) {
                         message += String.format(" in circa %d %s.", durata, "minuti");
                     }
@@ -344,7 +344,7 @@ public abstract class WikiView extends CrudView {
                     message = "Download non ancora effettuato";
                 }
                 else {
-                    message = String.format("Ultimo download effettuato il %s", dateService.get(download));
+                    message = String.format("Ultimo download effettuato %s", dateService.getDataOrarioCompleta(download));
                     if (durataDownload != null && durataDownload.get() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraDownload);
@@ -367,7 +367,7 @@ public abstract class WikiView extends CrudView {
                     message = "Elaborazione non ancora effettuata";
                 }
                 else {
-                    message = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
+                    message = String.format("Ultima elaborazione effettuata %s", dateService.getDataOrarioCompleta(elaborazione));
                     if (durataElaborazione != null && durataElaborazione.get() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
@@ -383,7 +383,7 @@ public abstract class WikiView extends CrudView {
                     message = "Upload non ancora effettuato";
                 }
                 else {
-                    message = String.format("Ultimo upload effettuato il %s", dateService.get(upload));
+                    message = String.format("Ultimo upload effettuato %s", dateService.getDataOrarioCompleta(upload));
                     if (durataUpload != null && durataUpload.get() instanceof Integer durata) {
                         message += String.format(" in circa %d %s.", durata, unitaMisuraUpload);
                     }
@@ -399,7 +399,7 @@ public abstract class WikiView extends CrudView {
                     message = "Statistiche non ancora registrate sul server";
                 }
                 else {
-                    message = String.format("Ultime statistiche elaborate e registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
+                    message = String.format("Ultime statistiche elaborate e registrate %s", dateService.getDataOrarioCompleta(statistica));
                     if (durataStatistica != null && durataStatistica.get() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);

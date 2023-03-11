@@ -82,6 +82,26 @@ public class QueryService extends WAbstractService {
         return appContext.getBean(QueryWrapBio.class).getWrap(listaPageids);
     }
 
+    public WrapBio getBioWrap(final long pageId) {
+        WrapBio wrapBio = null;
+        List<Long> listaPageids = null;
+        List<WrapBio> listaWraps = null;
+
+        if (pageId > 0) {
+            listaPageids = List.of(pageId);
+        }
+
+        if (listaPageids != null && listaPageids.size() > 0) {
+            listaWraps = getBioWrap(listaPageids);
+        }
+
+        if (listaWraps != null && listaWraps.size() > 0) {
+            wrapBio = listaWraps.get(0);
+        }
+
+        return wrapBio;
+    }
+
     public WrapBio getBioWrap(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo);
     }
@@ -100,6 +120,10 @@ public class QueryService extends WAbstractService {
 
     public boolean isEsiste(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitleGrezzo);
+    }
+
+    public boolean isBio(final String wikiTitleGrezzo) {
+        return getBio(wikiTitleGrezzo) != null;
     }
 
     public List<String> getList(final String tagIniziale) {
@@ -121,9 +145,11 @@ public class QueryService extends WAbstractService {
     public LocalDateTime getLast(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryInfo.class).getLast(wikiTitleGrezzo);
     }
+
     public boolean isRedirect(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryRedirect.class).isRedirect(wikiTitleGrezzo);
     }
+
     public String getWikiLink(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryRedirect.class).getWikiLink(wikiTitleGrezzo);
     }

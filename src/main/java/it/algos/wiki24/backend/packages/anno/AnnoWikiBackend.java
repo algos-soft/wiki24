@@ -35,13 +35,6 @@ public class AnnoWikiBackend extends WikiBackend {
         super(AnnoWiki.class);
     }
 
-    //    public AnnoWiki creaIfNotExist(final Anno annoBase, int ordine) {
-    //        return checkAndSave(newEntity(annoBase, ordine));
-    //    }
-
-    //    public AnnoWiki checkAndSave(final AnnoWiki annoWiki) {
-    //        return findByNome(annoWiki.nome) != null ? null : repository.insert(annoWiki);
-    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -51,7 +44,7 @@ public class AnnoWikiBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public AnnoWiki newEntity() {
-        return newEntity(VUOTA);
+        return newEntity(0, VUOTA);
     }
 
     /**
@@ -60,11 +53,12 @@ public class AnnoWikiBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
+     * @param ordine           per le categorie
      * @param keyPropertyValue proveniente da vaad24
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AnnoWiki newEntity(final String keyPropertyValue) {
+    public AnnoWiki newEntity(final int ordine, final String keyPropertyValue) {
         AnnoWiki newEntityBean = AnnoWiki.builderAnnoWiki().build();
         Anno annoBase = annoBackend.findByKey(keyPropertyValue);
         if (annoBase == null) {
@@ -75,6 +69,7 @@ public class AnnoWikiBackend extends WikiBackend {
         beanService.copiaAncheID(annoBase, newEntityBean);
         newEntityBean.pageNati = wikiUtility.wikiTitleNatiAnno(annoBase.nome);
         newEntityBean.pageMorti = wikiUtility.wikiTitleMortiAnno(annoBase.nome);
+        newEntityBean.ordine = ordine;
 
         return newEntityBean;
     }
@@ -143,10 +138,6 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
 
-    //    public AnnoWiki findByNome(final String nome) {
-//        return repository.findFirstByNome(nome);
-//    }
-
     public List<String> findAllPagine() {
         List<String> listaNomi = new ArrayList<>();
         List<Anno> listaAnni = annoBackend.findAllNoSort();
@@ -162,15 +153,15 @@ public class AnnoWikiBackend extends WikiBackend {
     public int countListeDaCancellare() {
         int daCancellare = 0;
 
-//        daCancellare += ((Long) repository.countAnnoWikiByNatiOkFalse()).intValue();
-//        daCancellare += ((Long) repository.countAnnoWikiByMortiOkFalse()).intValue();
+        //        daCancellare += ((Long) repository.countAnnoWikiByNatiOkFalse()).intValue();
+        //        daCancellare += ((Long) repository.countAnnoWikiByMortiOkFalse()).intValue();
 
         return daCancellare;
     }
 
     public List<AnnoWiki> fetchDaCancellare() {
         List<AnnoWiki> lista = null;
-//        lista = repository.findAllByNatiOkFalseOrMortiOkFalse(); //@todo va in errore
+        //        lista = repository.findAllByNatiOkFalseOrMortiOkFalse(); //@todo va in errore
         return lista;
     }
 
@@ -215,7 +206,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
-        for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
+        for (AnnoWiki annoWiki : findAllSortCorrenteReverse().subList(34, 36)) {
             anno = annoBackend.findByKey(annoWiki.nome);
             bioNati = bioBackend.countAnnoNato(annoWiki.nome);
             bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);
@@ -313,31 +304,47 @@ public class AnnoWikiBackend extends WikiBackend {
      * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-//    @Override
-    public AResult resetOnlyEmpty2() {
-        AResult result = super.resetOnlyEmpty();
+    @Override
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         List<Anno> anniBase;
         int delta = DELTA_ORDINE_ANNI;
         int ordine = 0;
+        AEntity entityBean;
         List<AEntity> lista;
+        String nome;
+        int tempo = 8;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            Sort sort = Sort.by(Sort.Direction.ASC, "ordine"); //@todo eliminare
-            anniBase = annoBackend.findAllSortCorrenteReverse();
+            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: circa %d secondi.", clazzName, tempo);
+            logger.debug(new WrapLog().message(message));
+            anniBase = annoBackend.findAllNoSort();
+            result.setValido(true);
             lista = new ArrayList<>();
 
             for (Anno anno : anniBase) {
                 ordine += delta;
-//                creaIfNotExist(anno, ordine);
+                nome = anno.nome;
+
+                entityBean = insert(newEntity(ordine, nome));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    result.setValido(false);
+                }
             }
+            result.setIntValue(lista.size());
+            result.setLista(lista);
         }
         else {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista);
+        return super.fixResult(result, clazzName, collectionName, lista, logInfo);
     }
 
 }// end of crud backend class

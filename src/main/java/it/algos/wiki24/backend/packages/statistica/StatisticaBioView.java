@@ -69,7 +69,7 @@ public class StatisticaBioView extends WikiView {
         super.riordinaColonne = false;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = false;
         super.usaBottoneStatistiche = true;
         super.usaBottoneUploadStatistiche = true;
     }

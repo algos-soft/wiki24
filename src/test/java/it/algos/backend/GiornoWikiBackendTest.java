@@ -5,13 +5,10 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
@@ -75,7 +72,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         }
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            sorgente = "4 marzo";
+            sorgente = "1845";
             try {
                 entityBean = backend.newEntity(sorgente);
             } catch (Exception unErrore) {

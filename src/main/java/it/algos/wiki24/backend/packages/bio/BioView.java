@@ -99,9 +99,9 @@ public class BioView extends WikiView {
 
         super.usaBottoneElabora = true;
         super.usaBottoneErrori = true;
-        super.usaBottoneDeleteAll = true;
+        super.usaBottoneReset = true;
         super.usaBottoneNew = true;
-        super.usaBottoneDelete = true;
+        super.usaBottoneDeleteAll = true;
         super.usaBottoneSearch = false;
         super.usaBottonePaginaWiki = true;
         super.dialogClazz = BioDialog.class;

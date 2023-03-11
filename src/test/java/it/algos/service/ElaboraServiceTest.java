@@ -95,7 +95,7 @@ public class ElaboraServiceTest extends WikiTest {
     @Test
     @Order(1)
     @DisplayName("1 - elabora giorni")
-    void getLabelHost() {
+    void elaboraGiorni() {
         System.out.println("1 - elabora giorni");
         System.out.println(VUOTA);
         System.out.println("Elabora controlla solo il numero di voci biografiche per ogni giorno");
@@ -104,6 +104,19 @@ public class ElaboraServiceTest extends WikiTest {
         System.out.println("Viene registrata anche la data e la durata nelle preferenze visibili da programma");
 
         giornoWikiBackend.elabora();
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - elabora anni")
+    void elaboraAnni() {
+        System.out.println("2 - elabora giorni");
+        System.out.println(VUOTA);
+        System.out.println("Elabora controlla solo il numero di voci biografiche per ogni anno");
+        System.out.println("Effettua controlli sulle pagine esistenti o meno sul server");
+        System.out.println("Viene registrata anche la data e la durata nelle preferenze visibili da programma");
+
+        annoWikiBackend.elabora();
     }
 
 

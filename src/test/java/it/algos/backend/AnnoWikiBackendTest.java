@@ -3,20 +3,13 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.data.domain.*;
 
 import java.util.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -53,6 +46,57 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+    }
+
+    @Test
+    @Order(40)
+    @DisplayName("40 - toString")
+    protected void toStringTest() {
+        System.out.println("40 - toString");
+        System.out.println(VUOTA);
+
+        if (annotationService.usaKeyPropertyName(entityClazz)) {
+            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        }
+        else {
+            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+            System.out.println(message);
+            return;
+        }
+
+        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
+            sorgente = "4 marzo";
+            try {
+                entityBean = backend.newEntity(sorgente);
+            } catch (Exception unErrore) {
+                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
+                System.out.println(message);
+                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", sorgente);
+                System.out.println(message);
+                return;
+            }
+            assertNotNull(entityBean);
+            ottenuto = entityBean.toString();
+            if (textService.isEmpty(ottenuto)) {
+                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
+                System.out.println(message);
+                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
+                System.out.println(message);
+            }
+            assertTrue(textService.isValid(ottenuto));
+            System.out.println(ottenuto);
+            return;
+        }
+        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
+        System.out.println(message);
+        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+        System.out.println(message);
+        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
+        System.out.println(message);
     }
 
 }

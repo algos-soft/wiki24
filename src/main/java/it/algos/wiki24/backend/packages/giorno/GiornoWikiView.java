@@ -80,7 +80,7 @@ public class GiornoWikiView extends WikiView {
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
 
-        super.usaBottoneDeleteReset = true;
+        super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneDownload = false;
         super.usaBottoneElabora = true;
@@ -89,7 +89,7 @@ public class GiornoWikiView extends WikiView {
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
         super.usaBottoneSearch = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = false;
         super.usaBottonePaginaWiki = false;
         super.usaBottoneGiornoAnno = true;
         super.usaBottonePaginaNati = true;

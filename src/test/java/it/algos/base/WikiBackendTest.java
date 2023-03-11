@@ -6,6 +6,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.parametro.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import static org.junit.Assert.*;
@@ -57,6 +58,7 @@ public abstract class WikiBackendTest extends BackendTest {
         assertNotNull(annoWikiBackend);
         assertNotNull(wikiUtility);
         assertNotNull(queryService);
+
         super.crudBackend = wikiBackend;
         super.setUpAll();
     }

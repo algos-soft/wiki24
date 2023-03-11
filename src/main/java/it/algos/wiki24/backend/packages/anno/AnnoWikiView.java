@@ -81,7 +81,8 @@ public class AnnoWikiView extends WikiView {
         super.nextUpload = WPref.uploadAnniPrevisto;
         super.lastStatistica = WPref.statisticaAnni;
         super.durataStatistica = WPref.statisticaAnniTime;
-        super.usaBottoneDeleteReset = true;
+
+        super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneElabora = true;
         super.usaBottoneDownload = false;
@@ -90,7 +91,7 @@ public class AnnoWikiView extends WikiView {
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
         super.usaBottoneSearch = false;
-        super.usaBottoneDelete = false;
+        super.usaBottoneDeleteAll = false;
         super.usaBottonePaginaWiki = false;
         super.usaBottoneGiornoAnno = true;
         super.usaBottonePaginaNati = true;
