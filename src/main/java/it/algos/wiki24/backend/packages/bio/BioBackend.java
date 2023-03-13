@@ -246,64 +246,6 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    /**
-     * Conta tutte le biografie con una serie di attività plurali. <br>
-     *
-     * @param attivitaPlurale
-     *
-     * @return conteggio di biografie che la usano
-     */
-    public int countAttivitaPlurale(final String attivitaPlurale) {
-        int numBio = 0; List<String> listaNomi = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-
-        for (String singolare : listaNomi) {
-            numBio += countAttivitaSingola(singolare);
-        }
-
-        return numBio;
-    }
-
-
-    /**
-     * Conta tutte le biografie con una serie di attività singolari. <br>
-     *
-     * @param attivitaSingola
-     *
-     * @return conteggio di biografie che la usano
-     */
-    public int countAttivitaAll(final String attivitaSingola) {
-        int numBio = 0;
-        Long attivitaUno = repository.countBioByAttivita(attivitaSingola);
-        Long attivitaDue;
-        Long attivitaTre;
-
-        numBio = attivitaUno.intValue();
-
-        if (WPref.usaTreAttivita.is()) {
-            attivitaDue = repository.countBioByAttivita2(attivitaSingola);
-            attivitaTre = repository.countBioByAttivita3(attivitaSingola);
-            numBio += attivitaDue.intValue() + attivitaTre.intValue();
-        }
-
-        return numBio;
-    }
-
-    public int countAttivitaSingola(final String attivitaSingola) {
-        Long numBio = textService.isValid(attivitaSingola) ? repository.countBioByAttivita(attivitaSingola) : 0;
-        return numBio > 0 ? numBio.intValue() : 0;
-    }
-
-
-    public int countAttivitaDue(final String attivitaSingola) {
-        Long numBio = repository.countBioByAttivita2(attivitaSingola);
-        return numBio > 0 ? numBio.intValue() : 0;
-    }
-
-    public int countAttivitaTre(final String attivitaSingola) {
-        Long numBio = repository.countBioByAttivita3(attivitaSingola);
-        return numBio > 0 ? numBio.intValue() : 0;
-    }
-
     public int countAttivitaNazionalitaBase(final String attivitaSingola, final String nazionalitaSingola) {
         Long numBio = repository.countBioByAttivitaAndNazionalita(attivitaSingola, nazionalitaSingola);
         return numBio > 0 ? numBio.intValue() : 0;
@@ -443,18 +385,6 @@ public class BioBackend extends WikiBackend {
         }
 
         return numBio;
-    }
-
-    /**
-     * Conta tutte le biografie con una serie di nazionalita. <br>
-     *
-     * @param nazionalitaSingola singola
-     *
-     * @return conteggio di biografie che la usano
-     */
-    public int countNazionalita(final String nazionalitaSingola) {
-        Long nazLong = repository.countBioByNazionalita(nazionalitaSingola);
-        return nazLong.intValue();
     }
 
 
@@ -1156,6 +1086,153 @@ public class BioBackend extends WikiBackend {
     }
     //
     // anno morto end
+    //
+
+    //
+    //
+    // ATTIVITA
+    //
+    //
+
+
+    /**
+     * Conta tutte le biografie con una serie di attività plurali. <br>
+     *
+     * @param attivitaPlurale
+     *
+     * @return conteggio di biografie che la usano
+     */
+    public int countAttivitaPlurale(final String attivitaPlurale) {
+        int numBio = 0; List<String> listaNomi = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+
+        for (String singolare : listaNomi) {
+            numBio += countAttivitaSingola(singolare);
+        }
+
+        return numBio;
+    }
+
+
+    /**
+     * Conta tutte le biografie con una serie di attività singolari. <br>
+     *
+     * @param attivitaSingola
+     *
+     * @return conteggio di biografie che la usano
+     */
+    public int countAttivitaAll(final String attivitaSingola) {
+        int numBio = countAttivitaSingola(attivitaSingola);
+
+        if (WPref.usaTreAttivita.is()) {
+            numBio += countAttivitaDue(attivitaSingola);
+            numBio += countAttivitaTre(attivitaSingola);
+        }
+
+        return numBio;
+    }
+
+
+    public int countAttivitaSingola(final String attivitaSingola) {
+        return countAttivitaBase(attivitaSingola,"attivita");
+    }
+
+
+    public int countAttivitaDue(final String attivitaSingola) {
+        return countAttivitaBase(attivitaSingola,"attivita2");
+    }
+
+    public int countAttivitaTre(final String attivitaSingola) {
+        return countAttivitaBase(attivitaSingola,"attivita3");
+    }
+
+
+    private int countAttivitaBase(final String attivitaSingola, String propertyName) {
+        int numBio = 0;
+        Query query;
+        Long lungo;
+
+        if (textService.isEmpty(attivitaSingola)) {
+            return numBio;
+        }
+
+        query = queryAttivita(attivitaSingola, propertyName);
+        if (query == null) {
+            return numBio;
+        }
+
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+        numBio = lungo > 0 ? lungo.intValue() : 0;
+
+        return numBio;
+    }
+
+    private Query queryAttivita(String attivitaSingola, String propertyName) {
+        Query query = new Query();
+        Sort sort;
+
+        if (textService.isEmpty(attivitaSingola)) {
+            return null;
+        }
+        if (attivitaBackend.findByKey(attivitaSingola) == null) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(propertyName).is(attivitaSingola));
+        sort = Sort.by(Sort.Direction.ASC, propertyName);
+        query.with(sort);
+
+        return query;
+    }
+
+    //
+    // attivita end
+    //
+
+
+    //
+    //
+    // NAZIONALITA
+    //
+    //
+    public int countNazionalita(final String nazionalitaSingola) {
+        int numBio = 0;
+        Query query;
+        Long lungo;
+
+        if (textService.isEmpty(nazionalitaSingola)) {
+            return numBio;
+        }
+
+        query = queryNazionalita(nazionalitaSingola);
+        if (query == null) {
+            return numBio;
+        }
+
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+        numBio = lungo > 0 ? lungo.intValue() : 0;
+
+        return numBio;
+    }
+
+    private Query queryNazionalita(String nazionalitaSingola) {
+        Query query = new Query();
+        Sort sort;
+
+        if (textService.isEmpty(nazionalitaSingola)) {
+            return null;
+        }
+        if (attivitaBackend.findByKey(nazionalitaSingola) == null) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where("nazionalita").is(nazionalitaSingola));
+        sort = Sort.by(Sort.Direction.ASC, "nazionalita");
+        query.with(sort);
+
+        return query;
+    }
+    //
+    // nazionalita end
     //
 
 

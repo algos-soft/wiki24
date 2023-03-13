@@ -564,7 +564,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("attori", true),
                 Arguments.of("nessuna", false),
                 Arguments.of("direttore di scena", false),
-                Arguments.of("accademici", true),
+                Arguments.of("accademici", false),
                 Arguments.of("vescovo ariano", true)
         );
     }

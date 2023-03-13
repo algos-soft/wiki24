@@ -31,6 +31,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "singolare")
 public class Attivita extends AEntity {
 
     private static final transient int WIDTHEM = 20;

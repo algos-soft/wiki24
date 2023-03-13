@@ -107,6 +107,7 @@ public class BioAttNazBackendTest extends WikiTest {
     @DisplayName("51 - countAttivitaSingola")
     void countAttivitaSingola(String singolare, boolean esiste) {
         System.out.println("51 - countAttivitaSingola");
+
         ottenutoIntero = backend.countAttivitaSingola(singolare);
         assertEquals(ottenutoIntero > 0, esiste);
         System.out.println(String.format("L'attività singolare '%s' contiene %s voci biografiche", singolare, ottenutoIntero));
@@ -119,6 +120,7 @@ public class BioAttNazBackendTest extends WikiTest {
     @DisplayName("52 - countAttivitaPlurale")
     void countAttivitaPlurale(String plurale, boolean esiste) {
         System.out.println("52 - countAttivitaPlurale");
+
         ottenutoIntero = backend.countAttivitaPlurale(plurale);
         assertEquals(ottenutoIntero > 0, esiste);
         System.out.println(String.format("L'attività plurale '%s' contiene %s voci biografiche", plurale, ottenutoIntero));
@@ -203,10 +205,10 @@ public class BioAttNazBackendTest extends WikiTest {
 //        System.out.println(VUOTA);
 //        System.out.println(String.format("L'attività '%s' contiene %d voci biografiche di %s", sorgente, ottenutoIntero, sorgente2));
 
-        sorgente = "accademici";
+        sorgente = "archeologi";
         sorgente2 = "francesi";
         sorgente3 = "C";
-        previstoIntero = 3;
+        previstoIntero = 9;
         ottenutoIntero = backend.countAttivitaNazionalitaAll(sorgente, sorgente2, sorgente3);
         assertEquals(previstoIntero, ottenutoIntero);
         System.out.println(VUOTA);
@@ -216,7 +218,7 @@ public class BioAttNazBackendTest extends WikiTest {
         sorgente = "sovrani";
         sorgente2 = TAG_LISTA_NO_NAZIONALITA;
         sorgente3 = "A";
-        previstoIntero = 328;
+        previstoIntero = 331;
         ottenutoIntero = backend.countAttivitaNazionalitaAll(sorgente, sorgente2, sorgente3);
         assertEquals(previstoIntero, ottenutoIntero);
         System.out.println(VUOTA);
@@ -316,9 +318,9 @@ public class BioAttNazBackendTest extends WikiTest {
     void findAllAttivitaNazionalita() {
         System.out.println("64 - findAllAttivitaNazionalita");
 
-        sorgente = "accademici";
+        sorgente = "archeologi";
         sorgente2 = "russi";
-        previstoIntero = 8;
+        previstoIntero = 5;
         listaBeans = backend.findAllAttivitaNazionalita(sorgente, sorgente2);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
@@ -327,9 +329,9 @@ public class BioAttNazBackendTest extends WikiTest {
         System.out.println(String.format("L'attività '%s' contiene %d voci biografiche di %s", sorgente, ottenutoIntero, sorgente2));
         printBio(listaBeans);
 
-        sorgente = "accademici";
-        sorgente2 = "russi";
-        sorgente3 = "G";
+        sorgente = "archeologi";
+        sorgente2 = "greci";
+        sorgente3 = "M";
         previstoIntero = 2;
         listaBeans = backend.findAllAttivitaNazionalita(sorgente, sorgente2, sorgente3);
         assertNotNull(listaBeans);
