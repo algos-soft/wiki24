@@ -614,7 +614,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findAllForGiornoNato(String giornoNato) {
+    public List<Bio> findAllByGiornoNato(String giornoNato) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -658,7 +658,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAllForGiornoNatoForSecolo(String giornoNato, String nomeSecolo) {
+    public List<Bio> findAllByGiornoNatoBySecolo(String giornoNato, String nomeSecolo) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -774,7 +774,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findAllForGiornoMorto(String giornoMorto) {
+    public List<Bio> findAllByGiornoMorto(String giornoMorto) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -811,7 +811,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAllForGiornoMortoForSecolo(String giornoMorto, String nomeSecolo) {
+    public List<Bio> findAllByGiornoMortoBySecolo(String giornoMorto, String nomeSecolo) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -917,7 +917,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findAllForAnnoNato(String annoNato) {
+    public List<Bio> findAllByAnnoNato(String annoNato) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -953,7 +953,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAllForAnnoNatoForMese(String annoNato, String nomeMese) {
+    public List<Bio> findAllByAnnoNatoByMese(String annoNato, String nomeMese) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -1051,7 +1051,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAllForAnnoMorto(String annoMorto) {
+    public List<Bio> findAllByAnnoMorto(String annoMorto) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -1088,7 +1088,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAllForAnnoMortoForMese(String annoMorto, String nomeMese) {
+    public List<Bio> findAllByAnnoMortoByMese(String annoMorto, String nomeMese) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 

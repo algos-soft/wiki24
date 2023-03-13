@@ -84,7 +84,7 @@ public class AttivitaDialog extends CrudDialog {
     protected void fixBinder() {
         super.fixBinder();
 
-        List<Attivita> lista = backend.findAllByPlurale(entityBean.pluraleLista);
+        List<Attivita> lista = backend.findAllForPlurale(entityBean.pluraleLista);
         VerticalLayout layout = new VerticalLayout();
         layout.setPadding(false);
         layout.setSpacing(true);

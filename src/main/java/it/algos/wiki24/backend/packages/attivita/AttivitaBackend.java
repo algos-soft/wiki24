@@ -286,7 +286,7 @@ public class AttivitaBackend extends WikiBackend {
         }
     }
 
-    public List<Attivita> findAllByPlurale(final String plurale) {
+    public List<Attivita> findAllForPlurale(final String plurale) {
         return repository.findAllByPluraleListaOrderBySingolareAsc(plurale);
     }
 
@@ -331,7 +331,7 @@ public class AttivitaBackend extends WikiBackend {
      */
     public List<String> findAllSingolariByPlurale(final String attivitaPlurale) {
         List<String> listaNomi = new ArrayList<>();
-        List<Attivita> listaAttivita = findAllByPlurale(attivitaPlurale);
+        List<Attivita> listaAttivita = findAllForPlurale(attivitaPlurale);
         Attivita attivitaSingola;
 
         if (listaAttivita.size() == 0) {
@@ -688,7 +688,7 @@ public class AttivitaBackend extends WikiBackend {
                 numSingolari++;
             }
 
-            for (Attivita attivitaOK : findAllByPlurale(plurale)) {
+            for (Attivita attivitaOK : findAllForPlurale(plurale)) {
                 attivitaOK.numBio = numBio;
                 attivitaOK.superaSoglia = numBio >= soglia ? true : false;
                 attivitaOK.esistePaginaLista = esistePagina(attivitaOK.pluraleLista);

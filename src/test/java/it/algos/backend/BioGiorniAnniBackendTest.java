@@ -155,10 +155,6 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         super.setUpAll();
     }
 
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-    }
 
 
     @Test
@@ -222,7 +218,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente = (String) mat[0];
         previstoIntero = (int) mat[1];
 
-        listaBeans = backend.findAllForGiornoNato(sorgente);
+        listaBeans = backend.findAllByGiornoNato(sorgente);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -280,7 +276,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente2 = (String) mat[1];
         previstoIntero = (int) mat[2];
 
-        listaBeans = backend.findAllForGiornoNatoForSecolo(sorgente, sorgente2);
+        listaBeans = backend.findAllByGiornoNatoBySecolo(sorgente, sorgente2);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -338,7 +334,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente = (String) mat[0];
         previstoIntero = (int) mat[1];
 
-        listaBeans = backend.findAllForGiornoMorto(sorgente);
+        listaBeans = backend.findAllByGiornoMorto(sorgente);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -396,7 +392,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente2 = (String) mat[1];
         previstoIntero = (int) mat[3];
 
-        listaBeans = backend.findAllForGiornoMortoForSecolo(sorgente, sorgente2);
+        listaBeans = backend.findAllByGiornoMortoBySecolo(sorgente, sorgente2);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -453,7 +449,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente = (String) mat[0];
         previstoIntero = (int) mat[1];
 
-        listaBeans = backend.findAllForAnnoNato(sorgente);
+        listaBeans = backend.findAllByAnnoNato(sorgente);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -510,7 +506,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente2 = (String) mat[1];
         previstoIntero = (int) mat[2];
 
-        listaBeans = backend.findAllForAnnoNatoForMese(sorgente, sorgente2);
+        listaBeans = backend.findAllByAnnoNatoByMese(sorgente, sorgente2);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -565,7 +561,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente = (String) mat[0];
         previstoIntero = (int) mat[1];
 
-        listaBeans = backend.findAllForAnnoMorto(sorgente);
+        listaBeans = backend.findAllByAnnoMorto(sorgente);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
@@ -622,7 +618,7 @@ public class BioGiorniAnniBackendTest extends WikiTest {
         sorgente2 = (String) mat[1];
         previstoIntero = (int) mat[3];
 
-        listaBeans = backend.findAllForAnnoMortoForMese(sorgente, sorgente2);
+        listaBeans = backend.findAllByAnnoMortoByMese(sorgente, sorgente2);
         assertNotNull(listaBeans);
         ottenutoIntero = listaBeans.size();
         assertEquals(previstoIntero, ottenutoIntero);
