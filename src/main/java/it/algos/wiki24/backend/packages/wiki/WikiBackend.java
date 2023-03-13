@@ -240,12 +240,21 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     /**
+     * Esegue un azione di download, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, senza invocare il metodo della superclasse <br>
+     */
+    public WResult download() {
+        return WResult.build().method("download").target(getClass().getSimpleName());
+    }
+
+    /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
         return WResult.build().method("elabora").target(getClass().getSimpleName());
     }
+
 
     public WResult fixDownload(WResult result, final long inizio) {
         return fixDownload(result, inizio, VUOTA);

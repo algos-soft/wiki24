@@ -50,13 +50,14 @@ public class WikiUtilityView extends UtilityView {
     @Override
     public void body() {
         super.body();
-        this.paragrafoDownload();
+        this.paragrafoDownloadModuli();
+        this.paragrafoDownloadBiografie();
         this.paragrafoElaborazione();
         this.paragrafoUploadListe();
         this.paragrafoUploadStatistiche();
     }
 
-    public void paragrafoDownload() {
+    public void paragrafoDownloadModuli() {
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
         layout.setPadding(false);
@@ -140,6 +141,28 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
+    public void paragrafoDownloadBiografie() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        H3 paragrafo = new H3("Download delle biografie");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        Button bottone = new Button("Download");
+        bottone.getElement().setAttribute("theme", "error");
+        bottone.addClickListener(event -> downloadBio());
+
+        message = "Download di tutte le biografie. Da eseguire PRIMA delle elaborazioni. Necessarie circa 8-10 ore";
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(ASpan.text(message).rosso(),bottone));
+        this.add(layout);
+    }
+    public void downloadBio() {
+        String message="Meglio andare nel package Biografie";
+        Avviso.message(message).error().open();
+    }
 
     public void paragrafoElaborazione() {
         VerticalLayout layout = new VerticalLayout();
@@ -256,6 +279,7 @@ public class WikiUtilityView extends UtilityView {
 
         super.fineDebug();
     }
+
 
 
     public void paragrafoUploadListe() {

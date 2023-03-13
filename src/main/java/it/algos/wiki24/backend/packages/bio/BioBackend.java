@@ -614,7 +614,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findGiornoNato(String giornoNato) {
+    public List<Bio> findAllForGiornoNato(String giornoNato) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -658,7 +658,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findGiornoNatoSecolo(String giornoNato, String nomeSecolo) {
+    public List<Bio> findAllForGiornoNatoForSecolo(String giornoNato, String nomeSecolo) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -674,7 +674,7 @@ public class BioBackend extends WikiBackend {
         return mongoService.mongoOp.find(query, Bio.class);
     }
 
-    public Query queryGiornoNato(String giornoNato) {
+    private Query queryGiornoNato(String giornoNato) {
         Query query = new Query();
         Sort sort;
         giornoNato = wikiUtility.fixPrimoMese(giornoNato);
@@ -702,7 +702,7 @@ public class BioBackend extends WikiBackend {
      * Se il secolo non corrisponde ad un Secolo -> query null <br>
      * Se il secolo è uguale a 'Senza anno specificato' -> query diversa <br>
      */
-    public Query queryGiornoNatoSecolo(String giornoNato, String nomeSecolo) {
+    private Query queryGiornoNatoSecolo(String giornoNato, String nomeSecolo) {
         Query query;
         Secolo secolo;
         int annoIniziale = DELTA_ANNI;
@@ -774,7 +774,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findGiornoMorto(String giornoMorto) {
+    public List<Bio> findAllForGiornoMorto(String giornoMorto) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -811,7 +811,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findGiornoMortoSecolo(String giornoMorto, String nomeSecolo) {
+    public List<Bio> findAllForGiornoMortoForSecolo(String giornoMorto, String nomeSecolo) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -827,7 +827,7 @@ public class BioBackend extends WikiBackend {
         return mongoService.mongoOp.find(query, Bio.class);
     }
 
-    public Query queryGiornoMorto(String giornoMorto) {
+    private Query queryGiornoMorto(String giornoMorto) {
         Query query = new Query(); Sort sort;
         giornoMorto = wikiUtility.fixPrimoMese(giornoMorto);
 
@@ -845,7 +845,7 @@ public class BioBackend extends WikiBackend {
         return query;
     }
 
-    public Query queryGiornoMortoSecolo(String giornoMorto, String nomeSecolo) {
+    private Query queryGiornoMortoSecolo(String giornoMorto, String nomeSecolo) {
         Query query;
         Secolo secolo;
         int annoIniziale = DELTA_ANNI;
@@ -917,7 +917,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public List<Bio> findAnnoNato(String annoNato) {
+    public List<Bio> findAllForAnnoNato(String annoNato) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -953,7 +953,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAnnoNatoMese(String annoNato, String nomeMese) {
+    public List<Bio> findAllForAnnoNatoForMese(String annoNato, String nomeMese) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -969,7 +969,7 @@ public class BioBackend extends WikiBackend {
         return mongoService.mongoOp.find(query, Bio.class);
     }
 
-    public Query queryAnnoNato(String annoNato) {
+    private Query queryAnnoNato(String annoNato) {
         Query query = new Query();
         Sort sort;
 
@@ -987,7 +987,7 @@ public class BioBackend extends WikiBackend {
         return query;
     }
 
-    public Query queryAnnoNatoMese(String annoNato, String nomeMese) {
+    private Query queryAnnoNatoMese(String annoNato, String nomeMese) {
         Query query;
         Mese mese;
 
@@ -1051,7 +1051,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAnnoMorto(String annoMorto) {
+    public List<Bio> findAllForAnnoMorto(String annoMorto) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -1088,7 +1088,7 @@ public class BioBackend extends WikiBackend {
         return numBio;
     }
 
-    public List<Bio> findAnnoMortoMese(String annoMorto, String nomeMese) {
+    public List<Bio> findAllForAnnoMortoForMese(String annoMorto, String nomeMese) {
         List<Bio> listaBio = new ArrayList<>();
         Query query;
 
@@ -1105,7 +1105,7 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    public Query queryAnnoMorto(String annoMorto) {
+    private Query queryAnnoMorto(String annoMorto) {
         Query query = new Query();
         Sort sort;
 
@@ -1123,7 +1123,7 @@ public class BioBackend extends WikiBackend {
         return query;
     }
 
-    public Query queryAnnoMortoMese(String annoMorto, String nomeMese) {
+    private Query queryAnnoMortoMese(String annoMorto, String nomeMese) {
         Query query;
         Mese mese;
 

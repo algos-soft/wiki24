@@ -403,9 +403,10 @@ public class VaadCost {
     public static final String METHOD_NAME_RESET_FORCING = "resetForcing";
 
     public static final String METHOD_NAME_ELABORA = "elabora";
-    public static final String METHOD_NAME_DOWLOAD = "download";
-    public static final String METHOD_NAME_UPLOAD = "upload";
 
+    public static final String METHOD_NAME_DOWLOAD = "download";
+
+    public static final String METHOD_NAME_UPLOAD = "upload";
 
     public static final String TAG_FLOW_DATA = "flowdata";
 

@@ -144,5 +144,4 @@ public class SecoloBackendTest extends BackendTest {
         printValue(sorgenteIntero, ottenuto);
     }
 
-
 }
