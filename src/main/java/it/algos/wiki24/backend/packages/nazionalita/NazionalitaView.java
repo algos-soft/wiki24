@@ -70,14 +70,6 @@ public class NazionalitaView extends WikiView {
         super.sortOrder = Sort.by(Sort.Direction.ASC, "singolare");
 
         super.usaBottoneElabora = true;
-        super.lastDownload = WPref.downloadNazionalita;
-        super.durataDownload = WPref.downloadNazionalitaTime;
-        super.lastElaborazione = WPref.elaboraNazionalita;
-        super.durataElaborazione = WPref.elaboraNazionalitaTime;
-        super.lastUpload = WPref.uploadNazionalita;
-        super.durataUpload = WPref.uploadNazionalitaTime;
-        super.nextUpload = WPref.uploadNazionalitaPrevisto;
-        super.lastStatistica = WPref.statisticaNazionalita;
         super.wikiModuloTitle = PATH_MODULO_NAZIONALITA;
         super.usaBottoneStatistiche = true;
         super.usaBottoneUploadStatistiche = true;
@@ -198,14 +190,15 @@ public class NazionalitaView extends WikiView {
             }
         })).setHeader("X").setKey("cancella").setFlexGrow(0).setWidth("8em");
 
-        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+//        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
         Grid.Column singolare = grid.getColumnByKey("singolare");
         Grid.Column pluraleParagrafo = grid.getColumnByKey("pluraleParagrafo");
         Grid.Column numBio = grid.getColumnByKey("numBio");
         Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
 
-        grid.setColumnOrder(ordine, singolare, pluraleParagrafo, pluraleLista, linkPagina, numBio, numSingolari, superaSoglia, daCancellare);
+//        grid.setColumnOrder(ordine, singolare, pluraleParagrafo, pluraleLista, linkPagina, numBio, numSingolari, superaSoglia, daCancellare);
+        grid.setColumnOrder( singolare, pluraleParagrafo, pluraleLista, linkPagina, numBio, numSingolari, superaSoglia, daCancellare);
     }
 
 

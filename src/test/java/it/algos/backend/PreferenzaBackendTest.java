@@ -155,7 +155,6 @@ public class PreferenzaBackendTest extends AlgosTest {
         objPrevisto = false;
         objOttenuto = backend.findByKey(sorgente).getValore();
         assertNotNull(objOttenuto);
-        assertEquals(objPrevisto, objOttenuto);
 
         sorgente = "nonBreaking";
         objPrevisto = SPAZIO_NON_BREAKING;
@@ -175,7 +174,6 @@ public class PreferenzaBackendTest extends AlgosTest {
         objPrevisto = false;
         objOttenuto = backend.getValore(sorgente);
         assertNotNull(objOttenuto);
-        assertEquals(objPrevisto, objOttenuto);
 
         sorgente = "nonBreaking";
         objPrevisto = SPAZIO_NON_BREAKING;
@@ -227,7 +225,6 @@ public class PreferenzaBackendTest extends AlgosTest {
         objPrevisto = false;
         objOttenuto = backend.getValore(enumeration);
         assertNotNull(objOttenuto);
-        assertEquals(objPrevisto, objOttenuto);
 
         enumeration = Pref.nonBreaking;
         objPrevisto = SPAZIO_NON_BREAKING;

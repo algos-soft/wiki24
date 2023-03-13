@@ -1,6 +1,7 @@
 package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
@@ -14,6 +15,7 @@ import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.pagina.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,6 +83,9 @@ public abstract class WikiTest extends AlgosTest {
 
     @Autowired
     public BotLogin botLogin;
+
+    protected CrudBackend crudBackend;
+    protected WikiBackend wikiBackend;
 
     @Autowired
     public WikiUtility wikiUtility;

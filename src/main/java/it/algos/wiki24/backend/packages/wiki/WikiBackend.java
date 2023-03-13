@@ -10,6 +10,8 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.dialog.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
@@ -23,7 +25,9 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 
+import java.math.*;
 import java.time.*;
+import java.util.*;
 
 /**
  * Project wiki
@@ -193,6 +197,39 @@ public abstract class WikiBackend extends CrudBackend {
         this.unitaMisuraStatistiche = AETypeTime.minuti;
     }
 
+
+    //--Check di validità del database mongoDB
+    public WResult checkValiditaDatabase() {
+        WResult result;
+        String message;
+        Map mappa;
+        String bioMongoDB;
+        String numPagesServerWiki;
+        BigDecimal decimal;
+        Double doppio;
+        String minimo;
+        Integer percentuale;
+        String perc;
+
+        result = wikiUtility.checkValiditaDatabase();
+        if (result.isErrato()) {
+            mappa = result.getMappa();
+            bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
+            numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
+            percentuale = (Integer) mappa.get(KEY_MAP_VOCI_DATABASE_MONGO) * 100 * 100 / (Integer) mappa.get(KEY_MAP_VOCI_SERVER_WIKI);
+            perc = percentuale.toString();
+            perc = perc.substring(0, perc.length() - 2) + VIRGOLA + perc.substring(perc.length() - 2) + PERCENTUALE;
+            decimal = WPref.percentualeMinimaBiografie.getDecimal();
+            doppio = decimal.doubleValue();
+            minimo = doppio.toString() + PERCENTUALE;
+            message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione richiesta.";
+            message += String.format(" Solo %s su %s (=%s). Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, perc, minimo);
+            logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
+        }
+
+        return result;
+    }
+
     /**
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
@@ -207,14 +244,15 @@ public abstract class WikiBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
-       return WResult.build().method("elabora").target(getClass().getSimpleName());
+        return WResult.build().method("elabora").target(getClass().getSimpleName());
     }
 
-    public void fixDownload(final long inizio) {
-        fixDownload(inizio, VUOTA);
+    public WResult fixDownload(WResult result, final long inizio) {
+        return fixDownload(result, inizio, VUOTA);
     }
 
-    public void fixDownload(final long inizio, String modulo) {
+    public WResult fixDownload(WResult result, final long inizio, String modulo) {
+        result.fine();
         if (lastDownload != null) {
             lastDownload.setValue(LocalDateTime.now());
         }
@@ -231,6 +269,11 @@ public abstract class WikiBackend extends CrudBackend {
 
         message = String.format("Download di %s. %s", modulo, unitaMisuraDownload.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+
+        message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
+        logger.debug(new WrapLog().message(message));
+
+        return result;
     }
 
     public WResult fixElabora(WResult result, final long inizio) {
@@ -342,7 +385,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     @Deprecated
-    public WResult fixElaboraMinuti(WResult result,final long inizio, final String modulo) {
+    public WResult fixElaboraMinuti(WResult result, final long inizio, final String modulo) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
         String mongoTxt = textService.format(count());

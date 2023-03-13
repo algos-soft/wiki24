@@ -56,6 +56,24 @@ public class NazionalitaBackend extends WikiBackend {
         //        super.lastDownload = WPref.downloadNazionalita;
     }
 
+
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.lastDownload = WPref.downloadNazionalita;
+        super.durataDownload = WPref.downloadNazionalitaTime;
+        super.lastElaborazione = WPref.elaboraNazionalita;
+        super.durataElaborazione = WPref.elaboraNazionalitaTime;
+        super.lastUpload = WPref.uploadNazionalita;
+        super.durataUpload = WPref.uploadNazionalitaTime;
+        super.nextUpload = WPref.uploadNazionalitaPrevisto;
+        super.lastStatistica = WPref.statisticaNazionalita;
+
+        this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
+    }
+
     public Nazionalita creaIfNotExist(final String singolare, String pluraleParagrafo, String pluraleLista, String linkPaginaNazione) {
         return checkAndSave(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaNazione));
     }
@@ -352,15 +370,22 @@ public class NazionalitaBackend extends WikiBackend {
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
-    public void download() {
+    public WResult download() {
+        WResult result = super.download();
         long inizio = System.currentTimeMillis();
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
+        int tempo = 3;
+
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, Nazionalita.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
 
         downloadNazionalitaPlurali(moduloPlurale);
         downloadNazionalitaLink(moduloLink);
 
-        super.fixDownload(inizio, "nazionalità");
+        return super.fixDownload(result, inizio, "nazionalità");
     }
 
     /**
@@ -446,7 +471,10 @@ public class NazionalitaBackend extends WikiBackend {
             return 0;
         }
 
-        logger.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
+        if (cont > 0) {
+            logger.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
+        }
+
         return cont;
     }
 
@@ -470,7 +498,7 @@ public class NazionalitaBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
-        WResult result = null;
+        WResult result = super.elabora();
         long inizio = System.currentTimeMillis();
         List<String> listaPlurali;
         List<String> listaSingolari;
@@ -481,9 +509,17 @@ public class NazionalitaBackend extends WikiBackend {
         String size;
         String time;
         int tot = count();
+        int tempo = 77;
+
+        //--Check di validità del database mongoDB
+        if (checkValiditaDatabase().isErrato()) {
+            return null;
+        }
+
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, Nazionalita.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
 
         for (Nazionalita nazionalita : findAll()) {
-            nazionalita.numBio = 0;
             nazionalita.numSingolari = 0;
             nazionalita.numBio = 0;
             nazionalita.superaSoglia = false;
@@ -525,7 +561,7 @@ public class NazionalitaBackend extends WikiBackend {
             }
         }
 
-        return super.fixElaboraMinuti(result, inizio, "nazionalità");
+        return super.fixElabora(result, inizio, "nazionalità");
     }
 
     //    /**

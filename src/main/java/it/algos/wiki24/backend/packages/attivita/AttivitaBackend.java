@@ -55,6 +55,23 @@ public class AttivitaBackend extends WikiBackend {
         this.repository = (AttivitaRepository) crudRepository;
     }
 
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.lastDownload = WPref.downloadAttivita;
+        super.durataDownload = WPref.downloadAttivitaTime;
+        super.lastElaborazione = WPref.elaboraAttivita;
+        super.durataElaborazione = WPref.elaboraAttivitaTime;
+        super.lastUpload = WPref.uploadAttivita;
+        super.durataUpload = WPref.uploadAttivitaTime;
+        super.nextUpload = WPref.uploadAttivitaPrevisto;
+        super.lastStatistica = WPref.statisticaAttivita;
+
+        this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
+    }
+
 
     public Attivita creaIfNotExist(String singolare, String pluraleParagrafo, String pluraleLista, String linkPaginaAttivita, AETypeGenere typeGenere, boolean aggiunta) {
         return checkAndSave(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaAttivita, typeGenere, aggiunta));
@@ -439,19 +456,25 @@ public class AttivitaBackend extends WikiBackend {
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
-    public void download() {
+    public WResult download() {
+        WResult result = super.download();
         long inizio = System.currentTimeMillis();
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String moduloEx = PATH_MODULO + PATH_EX + ATT_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + ATT_LOWER;
+        int tempo = 88;
 
-        // genere?????????
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, Attivita.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloEx)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
 
         downloadAttivitaPlurali(moduloPlurale);
         downloadAttivitaExtra(moduloEx);
         downloadAttivitaLink(moduloLink);
 
-        super.fixDownload(inizio, "attività");
+        return super.fixDownload(result, inizio, "attività");
     }
 
 
@@ -630,7 +653,7 @@ public class AttivitaBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
-        WResult result = null;
+        WResult result = super.elabora();
         long inizio = System.currentTimeMillis();
         List<String> listaPlurali;
         List<String> listaSingolari;

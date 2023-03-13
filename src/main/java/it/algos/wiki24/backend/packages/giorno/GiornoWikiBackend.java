@@ -47,7 +47,7 @@ public class GiornoWikiBackend extends WikiBackend {
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
 
-        this.unitaMisuraElaborazione = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
     /**
@@ -174,35 +174,14 @@ public class GiornoWikiBackend extends WikiBackend {
         long inizio = System.currentTimeMillis();
         WResult result = super.elabora();
         String message;
-        Map mappa;
-        String bioMongoDB;
-        String numPagesServerWiki;
-        BigDecimal decimal;
-        Double doppio;
-        String minimo;
-        Integer percentuale;
-        String perc;
-        int tempo = 31;
+        int tempo = 2;
 
         //--Check di validità del database mongoDB
-        result = wikiUtility.checkValiditaDatabase();
-        if (result.isErrato()) {
-            mappa = result.getMappa();
-            bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
-            numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
-            percentuale = (Integer) mappa.get(KEY_MAP_VOCI_DATABASE_MONGO) * 100 * 100 / (Integer) mappa.get(KEY_MAP_VOCI_SERVER_WIKI);
-            perc = percentuale.toString();
-            perc = perc.substring(0, perc.length() - 2) + VIRGOLA + perc.substring(perc.length() - 2) + PERCENTUALE;
-            decimal = WPref.percentualeMinimaBiografie.getDecimal();
-            doppio = decimal.doubleValue();
-            minimo = doppio.toString() + PERCENTUALE;
-            message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione dei giorni.";
-            message += String.format(" Solo %s su %s (=%s). Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, perc, minimo);
-            logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
-            return result;
+        if (checkValiditaDatabase().isErrato()) {
+            return WResult.errato();
         }
 
-        message = String.format("Inizio elabora() di %s. Tempo previsto: circa %d secondi.", GiornoWikiBackend.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d minuti.", METHOD_NAME_ELABORA, Giorno.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)

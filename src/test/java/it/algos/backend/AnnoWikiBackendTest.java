@@ -69,7 +69,7 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         }
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            sorgente = "4 marzo";
+            sorgente = "1845";
             try {
                 entityBean = backend.newEntity(sorgente);
             } catch (Exception unErrore) {
@@ -97,6 +97,31 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         System.out.println(message);
         message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
         System.out.println(message);
+    }
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - newEntity con ID ma non registrata")
+    protected void newEntity() {
+        System.out.println("41 - newEntity con ID ma non registrata");
+        System.out.println(VUOTA);
+
+        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+        System.out.println(message);
+        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro di tipo [Anno]", METHOD_NAME_NEW_ENTITY, backendName);
+
+    }
+    @Test
+    @Order(42)
+    @DisplayName("42 - CRUD operations")
+    protected void crud() {
+        System.out.println("42 - CRUD operations");
+        System.out.println(VUOTA);
+
+        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+        System.out.println(message);
+        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro di tipo [Anno]", METHOD_NAME_NEW_ENTITY, backendName);
+
     }
 
 }

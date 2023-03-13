@@ -19,6 +19,7 @@ import it.algos.vaad24.ui.views.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.time.*;
@@ -790,8 +791,15 @@ public abstract class WikiView extends CrudView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void elabora() {
-        crudBackend.elabora();
-        reload();
+        WResult result = crudBackend.elabora();
+
+        if (result.isValido()) {
+            reload();
+//            Avviso.message("Elaborazione effettuata").success().open();
+        }
+        else {
+            Avviso.message("Elaborazione non effettuata").error().open();
+        }
     }
 
 

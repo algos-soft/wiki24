@@ -72,7 +72,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         }
 
         if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            sorgente = "1845";
+            sorgente = "4 marzo";
             try {
                 entityBean = backend.newEntity(sorgente);
             } catch (Exception unErrore) {

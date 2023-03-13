@@ -5,6 +5,7 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.packages.anno.*;
+import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.parametro.*;
 import it.algos.wiki24.backend.packages.wiki.*;
@@ -25,6 +26,9 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 public abstract class WikiBackendTest extends BackendTest {
 
     protected WikiBackend wikiBackend;
+
+    @InjectMocks
+    protected BioBackend bioBackend;
 
     @InjectMocks
     protected GiornoBackend giornoBackend;
@@ -52,6 +56,7 @@ public abstract class WikiBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        assertNotNull(bioBackend);
         assertNotNull(giornoBackend);
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoBackend);
@@ -74,9 +79,17 @@ public abstract class WikiBackendTest extends BackendTest {
         super.fixRiferimentiIncrociati();
 
         wikiBackend.giornoBackend = giornoBackend;
-        wikiBackend.giornoBackend.mongoService = mongoService;
-        wikiBackend.giornoBackend.annotationService = annotationService;
         wikiBackend.giornoBackend.textService = textService;
+        wikiBackend.giornoBackend.mongoService = mongoService;
+        wikiBackend.giornoBackend.reflectionService = reflectionService;
+        wikiBackend.giornoBackend.annotationService = annotationService;
+
+        wikiBackend.annoBackend = annoBackend;
+        wikiBackend.annoBackend.textService = textService;
+        wikiBackend.annoBackend.mongoService = mongoService;
+        wikiBackend.annoBackend.reflectionService = reflectionService;
+        wikiBackend.annoBackend.annotationService = annotationService;
+
         wikiBackend.wikiUtility = wikiUtility;
         wikiBackend.wikiUtility.textService = textService;
         wikiBackend.wikiUtility.regexService = regexService;

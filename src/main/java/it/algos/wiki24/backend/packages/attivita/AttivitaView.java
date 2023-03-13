@@ -77,14 +77,6 @@ public class AttivitaView extends WikiView {
         super.sortOrder = Sort.by(Sort.Direction.ASC, "pluraleLista");
 
         super.usaBottoneElabora = true;
-        super.lastDownload = WPref.downloadAttivita;
-        super.durataDownload = WPref.downloadAttivitaTime;
-        super.lastElaborazione = WPref.elaboraAttivita;
-        super.durataElaborazione = WPref.elaboraAttivitaTime;
-        super.lastUpload = WPref.uploadAttivita;
-        super.durataUpload = WPref.uploadAttivitaTime;
-        super.nextUpload = WPref.uploadAttivitaPrevisto;
-        super.lastStatistica = WPref.statisticaAttivita;
         super.wikiModuloTitle = PATH_MODULO_ATTIVITA;
 
         super.usaBottoneStatistiche = true;

@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -796,7 +797,8 @@ public abstract class CrudBackend extends AbstractService {
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, senza invocare il metodo della superclasse <br>
      */
-    public void download() {
+    public WResult download() {
+        return WResult.build().method("download").target(getClass().getSimpleName());
     }
 
     /**

@@ -128,7 +128,7 @@ public class UploadAnni extends UploadGiorniAnni {
         StringBuffer buffer = new StringBuffer();
         String message;
         String title = wikiUtility.wikiTitle(typeCrono, nomeLista);
-        Secolo secolo = secoloBackend.findByProperty("secolo",anno.secolo); //@todo controllare
+        Secolo secolo = anno.secolo;
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {

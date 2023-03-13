@@ -218,7 +218,7 @@ public class AnnoWikiBackend extends WikiBackend {
             return result;
         }
 
-        message = String.format("Inizio elabora() di %s. Tempo previsto: circa %d minuti.", AnnoWikiBackend.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d minuti.", METHOD_NAME_ELABORA, Anno.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
