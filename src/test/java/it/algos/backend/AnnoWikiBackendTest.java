@@ -146,8 +146,8 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         int ordine = annoSempliceVaad24.ordine*100;
         int bioNati = 0;
         int bioMorti = 0;
-        String pageNati = wikiUtility.wikiTitleNatiGiorno(sorgente);
-        String pageMorti = wikiUtility.wikiTitleMortiGiorno(sorgente);
+        String pageNati = wikiUtility.wikiTitleNatiAnno(sorgente);
+        String pageMorti = wikiUtility.wikiTitleMortiAnno(sorgente);
         int ordineSecolo = secolo.ordine;
 
         entityBean = backend.newEntity(sorgente);

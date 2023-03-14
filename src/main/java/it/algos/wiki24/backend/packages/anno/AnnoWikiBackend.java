@@ -57,7 +57,7 @@ public class AnnoWikiBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public AnnoWiki newEntity() {
-        return newEntity(0, VUOTA);
+        return newEntity(VUOTA);
     }
 
     /**
@@ -66,12 +66,11 @@ public class AnnoWikiBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param ordine           per le categorie
      * @param keyPropertyValue proveniente da vaad24
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AnnoWiki newEntity(final int ordine, final String keyPropertyValue) {
+    public AnnoWiki newEntity(final String keyPropertyValue) {
         AnnoWiki newEntityBean = AnnoWiki.builderAnnoWiki().build();
         Anno annoBase = annoBackend.findByKey(keyPropertyValue);
         if (annoBase == null) {
@@ -82,7 +81,8 @@ public class AnnoWikiBackend extends WikiBackend {
         beanService.copiaAncheID(annoBase, newEntityBean);
         newEntityBean.pageNati = wikiUtility.wikiTitleNatiAnno(annoBase.nome);
         newEntityBean.pageMorti = wikiUtility.wikiTitleMortiAnno(annoBase.nome);
-        newEntityBean.ordine = ordine;
+        newEntityBean.ordine = annoBase.ordine * 100;
+        newEntityBean.ordineSecolo = annoBase.secolo.ordine;
 
         return newEntityBean;
     }
@@ -327,8 +327,6 @@ public class AnnoWikiBackend extends WikiBackend {
         String clazzName = entityClazz.getSimpleName();
         String collectionName = result.getTarget();
         List<Anno> anniBase;
-        int delta = DELTA_ORDINE_ANNI;
-        int ordine = 0;
         AEntity entityBean;
         List<AEntity> lista;
         String nome;
@@ -342,10 +340,9 @@ public class AnnoWikiBackend extends WikiBackend {
             lista = new ArrayList<>();
 
             for (Anno anno : anniBase) {
-                ordine += delta;
                 nome = anno.nome;
 
-                entityBean = insert(newEntity(ordine, nome));
+                entityBean = insert(newEntity(nome));
                 if (entityBean != null) {
                     lista.add(entityBean);
                 }
