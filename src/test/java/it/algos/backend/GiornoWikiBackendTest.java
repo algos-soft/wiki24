@@ -116,6 +116,45 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     }
 
     @Test
+    @Order(43)
+    @DisplayName("43 - newEntityConParametri")
+    protected void newEntityConParametri() {
+        System.out.println("43 - newEntityConParametri");
+        System.out.println(VUOTA);
+        Giorno giornoSempliceVaad24;
+        GiornoWiki giorno;
+
+        sorgente = "14 gennaio";
+        previsto = "14gennaio";
+        giornoSempliceVaad24 = giornoBackend.findByKey(sorgente);
+        assertNotNull(giornoSempliceVaad24);
+        int ordine=giornoSempliceVaad24.ordine;
+        int bioNati = 0;
+        int bioMorti = 0;
+        String pageNati = wikiUtility.wikiTitleNatiGiorno(sorgente);
+        String pageMorti = wikiUtility.wikiTitleMortiGiorno(sorgente);
+
+        entityBean = backend.newEntity(sorgente);
+        assertNotNull(entityBean);
+        assertTrue(entityBean instanceof GiornoWiki);
+        giorno = (GiornoWiki) entityBean;
+        assertEquals(previsto, giorno.id);
+        assertEquals(ordine,giorno.ordine);
+        assertEquals(sorgente, giorno.nome);
+        assertEquals(bioNati, giorno.bioNati);
+        assertEquals(bioMorti, giorno.bioMorti);
+        assertEquals(pageNati, giorno.pageNati);
+        assertEquals(pageMorti, giorno.pageMorti);
+        assertFalse(giorno.esistePaginaNati);
+        assertFalse(giorno.esistePaginaMorti);
+        assertFalse(giorno.natiOk);
+        assertFalse(giorno.mortiOk);
+        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(message);
+    }
+
+
+    @Test
     @Order(51)
     @DisplayName("51 - findAllForNome (String)")
     protected void findAllForNome() {
@@ -194,7 +233,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        ottenutoBooleano = backend.isExistKey(sorgente);
+        ottenutoBooleano = backend.isExistByKey(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
         if (ottenutoBooleano) {
             System.out.println(String.format("Il giorno %s esiste", sorgente));

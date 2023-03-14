@@ -7,7 +7,6 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -131,15 +130,12 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public boolean creaIfNotExist(final String keyPropertyValue) {
-       Object alfa=newEntity(keyPropertyValue);
-       AEntity beta =(AEntity) alfa;
-        try {
-            insert(beta);
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        if (isExistByKey(keyPropertyValue)) {
+            return false;
         }
-
-        return insert(newEntity(keyPropertyValue)) != null;
+        else {
+            return insert(newEntity(keyPropertyValue)) != null;
+        }
     }
 
     public AEntity newEntity(Object keyPropertyValue) {
@@ -259,17 +255,17 @@ public abstract class CrudBackend extends AbstractService {
         return keyPropertyValue;
     }
 
-    public boolean isExistId(final String keyIdValue) {
-        return isExistProperty(FIELD_NAME_ID_CON, keyIdValue);
+    public boolean isExistById(final String keyIdValue) {
+        return isExistByProperty(FIELD_NAME_ID_CON, keyIdValue);
     }
 
 
-    public boolean isExistKey(final String keyValue) {
+    public boolean isExistByKey(final String keyValue) {
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-        return isExistProperty(keyPropertyName, keyValue);
+        return isExistByProperty(keyPropertyName, keyValue);
     }
 
-    public boolean isExistProperty(final String propertyName, final String propertyValue) {
+    public boolean isExistByProperty(final String propertyName, final String propertyValue) {
         String collectionName = annotationService.getCollectionName(entityClazz);
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         Query query = new Query();
@@ -343,7 +339,7 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public AEntity save(AEntity entityBean) {
-        if (!isExistId(entityBean.id)) {
+        if (!isExistById(entityBean.id)) {
             return insert(entityBean);
         }
         else {
@@ -354,24 +350,19 @@ public abstract class CrudBackend extends AbstractService {
     public AEntity insert(AEntity entityBean) {
         String collectionName = annotationService.getCollectionName(entityClazz);
 
-        if (!isExistId(entityBean.id)) {
-            //possibilità di inserire il keyID prima dell'inserimento automatico di mongoDB se manca
-            entityBean = fixKey(entityBean);
+        //possibilità di inserire il keyID prima dell'inserimento automatico di mongoDB se manca
+        entityBean = fixKey(entityBean);
 
-            if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
-                return (AEntity) crudRepository.insert(entityBean);
-            }
-            else {
-                if (textService.isValid(collectionName)) {
-                    return mongoService.mongoOp.insert(entityBean, collectionName);
-                }
-                else {
-                    return mongoService.mongoOp.insert(entityBean);
-                }
-            }
+        if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
+            return (AEntity) crudRepository.insert(entityBean);
         }
         else {
-            return null;
+            if (textService.isValid(collectionName)) {
+                return mongoService.mongoOp.insert(entityBean, collectionName);
+            }
+            else {
+                return mongoService.mongoOp.insert(entityBean);
+            }
         }
     }
 
@@ -380,7 +371,7 @@ public abstract class CrudBackend extends AbstractService {
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
-        if (isExistId(entityBean.id)) {
+        if (isExistById(entityBean.id)) {
             if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                 try {
                     return (AEntity) crudRepository.save(entityBean);
@@ -410,7 +401,7 @@ public abstract class CrudBackend extends AbstractService {
         String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
-        if (isExistId(entityBean.id)) {
+        if (isExistById(entityBean.id)) {
             if (USA_REPOSITORY && crudRepository != null) { //@todo noRepository
                 try {
                     crudRepository.delete(entityBean);
@@ -619,7 +610,7 @@ public abstract class CrudBackend extends AbstractService {
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
     public List<String> findAllForPropertyReverseOrder(String keyPropertyName) {
-        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, -1));
+        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
     }
 
     @Deprecated
@@ -717,6 +708,7 @@ public abstract class CrudBackend extends AbstractService {
             }
         }
     }
+
     public AResult resetOnlyEmpty() {
         return resetOnlyEmpty(false);
     }
