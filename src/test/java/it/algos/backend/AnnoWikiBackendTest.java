@@ -3,6 +3,8 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -111,6 +113,7 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro di tipo [Anno]", METHOD_NAME_NEW_ENTITY, backendName);
 
     }
+
     @Test
     @Order(42)
     @DisplayName("42 - CRUD operations")
@@ -122,6 +125,49 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         System.out.println(message);
         message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro di tipo [Anno]", METHOD_NAME_NEW_ENTITY, backendName);
 
+    }
+
+    @Test
+    @Order(43)
+    @DisplayName("43 - newEntityConParametri")
+    protected void newEntityConParametri() {
+        System.out.println("43 - newEntityConParametri");
+        System.out.println(VUOTA);
+        Anno annoSempliceVaad24;
+        AnnoWiki anno;
+        Secolo secolo;
+
+        sorgente = "1875";
+        previsto = "1875";
+        annoSempliceVaad24 = annoBackend.findByKey(sorgente);
+        assertNotNull(annoSempliceVaad24);
+        secolo = annoSempliceVaad24.getSecolo();
+        assertNotNull(secolo);
+        int ordine = annoSempliceVaad24.ordine*100;
+        int bioNati = 0;
+        int bioMorti = 0;
+        String pageNati = wikiUtility.wikiTitleNatiGiorno(sorgente);
+        String pageMorti = wikiUtility.wikiTitleMortiGiorno(sorgente);
+        int ordineSecolo = secolo.ordine;
+
+        entityBean = backend.newEntity(sorgente);
+        assertNotNull(entityBean);
+        assertTrue(entityBean instanceof AnnoWiki);
+        anno = (AnnoWiki) entityBean;
+        assertEquals(previsto, anno.id);
+        assertEquals(ordine, anno.ordine);
+        assertEquals(sorgente, anno.nome);
+        assertEquals(bioNati, anno.bioNati);
+        assertEquals(bioMorti, anno.bioMorti);
+        assertEquals(pageNati, anno.pageNati);
+        assertEquals(pageMorti, anno.pageMorti);
+        assertFalse(anno.esistePaginaNati);
+        assertFalse(anno.esistePaginaMorti);
+        assertFalse(anno.natiOk);
+        assertFalse(anno.mortiOk);
+        assertEquals(ordineSecolo, anno.ordineSecolo);
+        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        System.out.println(message);
     }
 
 }
