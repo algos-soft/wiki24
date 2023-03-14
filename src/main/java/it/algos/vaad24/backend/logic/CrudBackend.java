@@ -131,6 +131,14 @@ public abstract class CrudBackend extends AbstractService {
     }
 
     public boolean creaIfNotExist(final String keyPropertyValue) {
+       Object alfa=newEntity(keyPropertyValue);
+       AEntity beta =(AEntity) alfa;
+        try {
+            insert(beta);
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
         return insert(newEntity(keyPropertyValue)) != null;
     }
 
@@ -611,7 +619,7 @@ public abstract class CrudBackend extends AbstractService {
      * Se si vuole un ordinamento specifico, può essere sovrascritto SENZA invocare il metodo della superclasse <br>
      */
     public List<String> findAllForPropertyReverseOrder(String keyPropertyName) {
-        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, 1));
+        return mongoService.projectionString(entityClazz, keyPropertyName, new BasicDBObject(keyPropertyName, -1));
     }
 
     @Deprecated

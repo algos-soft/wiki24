@@ -1094,7 +1094,6 @@ public class BioBackend extends WikiBackend {
     //
     //
 
-
     /**
      * Conta tutte le biografie con una serie di attività plurali. <br>
      *
@@ -1133,18 +1132,16 @@ public class BioBackend extends WikiBackend {
 
 
     public int countAttivitaSingola(final String attivitaSingola) {
-        return countAttivitaBase(attivitaSingola,"attivita");
+        return countAttivitaBase(attivitaSingola, "attivita");
     }
 
-
     public int countAttivitaDue(final String attivitaSingola) {
-        return countAttivitaBase(attivitaSingola,"attivita2");
+        return countAttivitaBase(attivitaSingola, "attivita2");
     }
 
     public int countAttivitaTre(final String attivitaSingola) {
-        return countAttivitaBase(attivitaSingola,"attivita3");
+        return countAttivitaBase(attivitaSingola, "attivita3");
     }
-
 
     private int countAttivitaBase(final String attivitaSingola, String propertyName) {
         int numBio = 0;
@@ -1183,7 +1180,6 @@ public class BioBackend extends WikiBackend {
 
         return query;
     }
-
     //
     // attivita end
     //

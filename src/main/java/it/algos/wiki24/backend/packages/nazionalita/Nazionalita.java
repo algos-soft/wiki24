@@ -28,6 +28,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(keyPropertyName = "singolare", usaReset = true)
 public class Nazionalita extends AEntity {
 
     private static final transient int WIDTHEM = 20;
@@ -36,23 +37,18 @@ public class Nazionalita extends AEntity {
     @AIField(type = AETypeField.text, widthEM = WIDTHEM, search = true)
     public String singolare;
 
-    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.text, widthEM = WIDTHEM)
     public String pluraleParagrafo;
 
-    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.text, widthEM = WIDTHEM)
     public String pluraleLista;
 
-    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.text, widthEM = WIDTHEM)
     public String linkPaginaNazione;
 
-    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano la stessa nazionalità plurale", widthEM = 6)
     public int numBio;
 
-    @Indexed(unique = false, direction = IndexDirection.DESCENDING)
     @AIField(type = AETypeField.integer, header = "sin")
     public int numSingolari;
 

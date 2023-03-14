@@ -103,6 +103,20 @@ public class NazionalitaBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
+     * @param keyPropertyValue proveniente da vaad24
+     *
+     * @return la nuova entity appena creata (non salvata e senza keyID)
+     */
+    public Nazionalita newEntity(final String keyPropertyValue) {
+        return newEntity(keyPropertyValue, VUOTA, VUOTA, VUOTA);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     * Usa il @Builder di Lombok <br>
+     * Eventuali regolazioni iniziali delle property <br>
+     * All properties <br>
+     *
      * @param singolare         di riferimento (obbligatorio, unico)
      * @param pluraleParagrafo  di riferimento (obbligatorio, non unico)
      * @param pluraleLista      di riferimento (obbligatorio, non unico)
@@ -115,7 +129,7 @@ public class NazionalitaBackend extends WikiBackend {
             final String pluraleParagrafo,
             final String pluraleLista,
             final String linkPaginaNazione) {
-        return Nazionalita.builder()
+        Nazionalita newEntityBean = Nazionalita.builder()
                 .singolare(textService.isValid(singolare) ? singolare : null)
                 .pluraleParagrafo(textService.isValid(pluraleParagrafo) ? pluraleParagrafo : null)
                 .pluraleLista(textService.isValid(pluraleLista) ? pluraleLista : null)
@@ -124,6 +138,8 @@ public class NazionalitaBackend extends WikiBackend {
                 .superaSoglia(false)
                 .esistePaginaLista(false)
                 .build();
+
+        return (Nazionalita) super.fixKey(newEntityBean);
     }
 
     public List<Nazionalita> findAll() {

@@ -129,12 +129,12 @@ public enum WPref implements AIGenPref {
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),
     usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false),
     usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto", false),
-    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, true, "Upload calendarizzato di tutte le attività", false),
-    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, true, "Upload calendarizzato di tutte le nazionalità", false),
+    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività", false),
+    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità", false),
     usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi", false),
     usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi", false),
     usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori", false),
-    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, true, "Elaborazione delle statistiche", false),
+    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche", false),
 
 
     usaRigheGiorni("usaRigheGiorni", AETypePref.bool, false, "Usa righe raggruppate per anno nelle liste dei giorni", false),
