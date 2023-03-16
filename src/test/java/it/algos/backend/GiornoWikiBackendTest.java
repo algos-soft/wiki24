@@ -6,9 +6,12 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
+import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
@@ -28,6 +31,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoWikiBackendTest extends WikiBackendTest {
 
+    @Autowired
     private GiornoWikiBackend backend;
 
     private List<GiornoWiki> listaBeans;
@@ -37,89 +41,260 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        this.backend = super.giornoWikiBackend;
         super.entityClazz = GiornoWiki.class;
-        backend = giornoWikiBackend;
+        super.typeBackend = TypeBackend.giorno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
+
         super.setUpAll();
-        super.typeBackend = TypeBackend.giorno;
-    }
-
-
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
     }
 
     @Test
-    @Order(40)
-    @DisplayName("40 - toString")
-    protected void toStringTest() {
-        System.out.println("40 - toString");
+    @Order(21)
+    @DisplayName("21 - isExistById")
+    protected void isExistById() {
+        System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        if (annotationService.usaKeyPropertyName(entityClazz)) {
-            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        sorgente = "sbagliato";
+        ottenutoBooleano = super.isExistById(sorgente);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "23maggio";
+        ottenutoBooleano = super.isExistById(sorgente);
+        assertTrue(ottenutoBooleano);
+    }
+
+
+    @Test
+    @Order(22)
+    @DisplayName("22 - isExistByKey")
+    protected void isExistByKey() {
+        System.out.println("22 - isExistByKey");
+        System.out.println(VUOTA);
+        System.out.println("Giorno ricavato dalla keyProperty");
+        System.out.println(VUOTA);
+
+        //--giorno
+        //--esistente
+        System.out.println(VUOTA);
+        GIORNI().forEach(this::isExistKeyBase);
+    }
+
+    //--giorno
+    //--esistente
+    void isExistKeyBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[1];
+
+        ottenutoBooleano = backend.isExistByKey(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+        if (ottenutoBooleano) {
+            System.out.println(String.format("Il giorno [%s] esiste", sorgente));
         }
         else {
-            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
-            System.out.println(message);
-            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
-            System.out.println(message);
-            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
-            System.out.println(message);
-            return;
+            System.out.println(String.format("Il giorno [%s] non esiste", sorgente));
         }
-
-        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-            sorgente = "4 marzo";
-            try {
-                entityBean = backend.newEntity(sorgente);
-            } catch (Exception unErrore) {
-                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
-                System.out.println(message);
-                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", sorgente);
-                System.out.println(message);
-                return;
-            }
-            assertNotNull(entityBean);
-            ottenuto = entityBean.toString();
-            if (textService.isEmpty(ottenuto)) {
-                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
-                System.out.println(message);
-                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
-                System.out.println(message);
-            }
-            assertTrue(textService.isValid(ottenuto));
-            System.out.println(ottenuto);
-            return;
-        }
-        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
-        System.out.println(message);
-        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
-        System.out.println(message);
-        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
-        System.out.println(message);
+        System.out.println(VUOTA);
     }
+
+    @Test
+    @Order(23)
+    @DisplayName("23 - isExistByOrder")
+    protected void isExistByOrder() {
+        System.out.println("23 - isExistByOrder");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 487;
+        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 6;
+        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+        assertTrue(ottenutoBooleano);
+    }
+
+
+    @Test
+    @Order(24)
+    @DisplayName("24 - isExistByProperty")
+    protected void isExistByProperty() {
+        System.out.println("24 - isExistByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgenteIntero = 27;
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "pageNati";
+        sorgente2 = "Nati il 2 termidoro";
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "pageNati";
+        sorgente2 = "Nati il 25 gennaio";
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+        assertTrue(ottenutoBooleano);
+    }
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - findById")
+    protected void findById() {
+        System.out.println("31 - findById");
+        System.out.println(VUOTA);
+
+        sorgente = "sbagliato";
+        entityBean = super.findById(sorgente);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "23maggio";
+        entityBean = super.findById(sorgente);
+        assertNotNull(entityBean);
+    }
+
+    @Test
+    @Order(32)
+    @DisplayName("32 - findByKey")
+    protected void findByKey() {
+        System.out.println("32 - findByKey");
+        System.out.println(VUOTA);
+
+        sorgente = "12 termidoro";
+        entityBean = super.findByKey(sorgente);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "23 maggio";
+        entityBean = super.findByKey(sorgente);
+        assertNotNull(entityBean);
+    }
+
+    @Test
+    @Order(33)
+    @DisplayName("33 - findByOrder")
+    protected void findByOrder() {
+        System.out.println("33 - findByOrder");
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 487;
+        entityBean = super.findByOrder(sorgenteIntero);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgenteIntero = 6;
+        entityBean = super.findByOrder(sorgenteIntero);
+        assertNotNull(entityBean);
+    }
+
+
+    @Test
+    @Order(34)
+    @DisplayName("34 - findByProperty")
+    protected void findByProperty() {
+        System.out.println("34 - findByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgenteIntero = 27;
+        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "pageNati";
+        sorgente2 = "Nati il 2 termidoro";
+        entityBean = super.findByProperty(sorgente, sorgente2);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "pageNati";
+        sorgente2 = "Nati il 25 gennaio";
+        entityBean = super.findByProperty(sorgente, sorgente2);
+        assertNotNull(entityBean);
+        System.out.println(VUOTA);
+    }
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - creaIfNotExist")
+    protected void creaIfNotExist() {
+        System.out.println("41 - creaIfNotExist");
+        System.out.println(VUOTA);
+
+        sorgente = "23 maggio";
+        ottenutoBooleano = super.creaIfNotExist(sorgente);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = VUOTA;
+        ottenutoBooleano = super.creaIfNotExist(sorgente);
+        assertFalse(ottenutoBooleano);
+    }
+
+    //    @Test
+    //    @Order(40)
+    //    @DisplayName("40 - toString")
+    //    protected void toStringTest() {
+    //        System.out.println("40 - toString");
+    //        System.out.println(VUOTA);
+    //
+    //        if (annotationService.usaKeyPropertyName(entityClazz)) {
+    //            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+    //        }
+    //        else {
+    //            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
+    //            System.out.println(message);
+    //            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+    //            System.out.println(message);
+    //            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
+    //            System.out.println(message);
+    //            return;
+    //        }
+    //
+    //        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
+    //            sorgente = "4 marzo";
+    //            try {
+    //                entityBean = backend.newEntity(sorgente);
+    //            } catch (Exception unErrore) {
+    //                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
+    //                System.out.println(message);
+    //                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", sorgente);
+    //                System.out.println(message);
+    //                return;
+    //            }
+    //            assertNotNull(entityBean);
+    //            ottenuto = entityBean.toString();
+    //            if (textService.isEmpty(ottenuto)) {
+    //                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
+    //                System.out.println(message);
+    //                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
+    //                System.out.println(message);
+    //            }
+    //            assertTrue(textService.isValid(ottenuto));
+    //            System.out.println(ottenuto);
+    //            return;
+    //        }
+    //        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
+    //        System.out.println(message);
+    //        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
+    //        System.out.println(message);
+    //        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
+    //        System.out.println(message);
+    //    }
 
     @Test
     @Order(42)
-    @DisplayName("42 - CRUD operations")
-    protected void crud() {
-        System.out.println("42 - CRUD operations");
-        System.out.println(VUOTA);
-
-        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
-        System.out.println(message);
-        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro di tipo [Giorno]", METHOD_NAME_NEW_ENTITY, backendName);
-
-    }
-
-    @Test
-    @Order(43)
-    @DisplayName("43 - newEntityConParametri")
-    protected void newEntityConParametri() {
-        System.out.println("43 - newEntityConParametri");
+    @DisplayName("42 - newEntity")
+    protected void newEntity() {
+        System.out.println("42 - newEntity");
         System.out.println(VUOTA);
         Giorno giornoSempliceVaad24;
         GiornoWiki giorno;
@@ -128,7 +303,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         previsto = "14gennaio";
         giornoSempliceVaad24 = giornoBackend.findByKey(sorgente);
         assertNotNull(giornoSempliceVaad24);
-        int ordine=giornoSempliceVaad24.ordine;
+        int ordine = giornoSempliceVaad24.ordine;
         int bioNati = 0;
         int bioMorti = 0;
         String pageNati = wikiUtility.wikiTitleNatiGiorno(sorgente);
@@ -139,7 +314,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         assertTrue(entityBean instanceof GiornoWiki);
         giorno = (GiornoWiki) entityBean;
         assertEquals(previsto, giorno.id);
-        assertEquals(ordine,giorno.ordine);
+        assertEquals(ordine, giorno.ordine);
         assertEquals(sorgente, giorno.nome);
         assertEquals(bioNati, giorno.bioNati);
         assertEquals(bioMorti, giorno.bioMorti);
@@ -151,6 +326,12 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         assertFalse(giorno.mortiOk);
         message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+    }
+
+    @Test
+    @Order(45)
+    @DisplayName("45 - toString")
+    protected void toStringTest() {
     }
 
 
@@ -211,78 +392,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         }
     }
 
-    @Test
-    @Order(61)
-    @DisplayName("61 - isExistKey")
-    protected void isExistKey() {
-        System.out.println("61 - isExistKey");
-        System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
-        System.out.println(VUOTA);
-
-        //--giorno
-        //--esistente
-        System.out.println(VUOTA);
-        GIORNI().forEach(this::isExistKeyBase);
-    }
-
-    //--giorno
-    //--esistente
-    void isExistKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("Il giorno %s esiste", sorgente));
-        }
-        else {
-            System.out.println(String.format("Il giorno %s non esiste", sorgente));
-        }
-        System.out.println(VUOTA);
-    }
-
-    @Test
-    @Order(62)
-    @DisplayName("62 - findByOrdine")
-    protected void findByOrdine() {
-        System.out.println("62 - findByOrdine");
-        System.out.println(VUOTA);
-        System.out.println("Giorno ricavato dal numero progressivo nell'anno");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 857;
-        entityBean = backend.findByOrdine(sorgenteIntero);
-        assertNull(entityBean);
-        ottenuto = VUOTA;
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 127;
-        entityBean = backend.findByOrdine(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = 250;
-        entityBean = backend.findByOrdine(sorgenteIntero);
-        assertNotNull(entityBean);
-        ottenuto = entityBean.toString();
-        printValue(sorgenteIntero, ottenuto);
-
-        sorgenteIntero = -4;
-        entityBean = backend.findByOrdine(sorgenteIntero);
-        assertNull(entityBean);
-        ottenuto = VUOTA;
-        printValue(sorgenteIntero, ottenuto);
-    }
 
     @Override
     protected Object getParamEsistente() {

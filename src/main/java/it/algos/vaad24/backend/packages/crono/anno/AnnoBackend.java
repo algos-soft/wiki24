@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadin23
@@ -88,6 +89,11 @@ public class AnnoBackend extends CrudBackend {
     }
 
     @Override
+    public Anno findByOrder(final int ordine) {
+        return (Anno) super.findByOrder(ordine);
+    }
+
+    @Override
     public Anno findByProperty(final String propertyName, final Object propertyValue) {
         return (Anno) super.findByProperty(propertyName, propertyValue);
     }
@@ -107,8 +113,11 @@ public class AnnoBackend extends CrudBackend {
         return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    public Anno findByOrdine(final int ordine) {
-        return (Anno) super.findByOrdine(ordine);
+    public List<String> findAllForNome() {
+        return findAllForKey();
+    }
+    public List<String> findAllForNomeBySecolo(Secolo secolo) {
+        return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
 
 

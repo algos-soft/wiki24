@@ -104,7 +104,7 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
     @Override
-    public AnnoWiki findByOrdine(final int ordine) {
+    public AnnoWiki findByOrder(final int ordine) {
         return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 

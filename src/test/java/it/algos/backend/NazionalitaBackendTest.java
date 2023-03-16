@@ -27,7 +27,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("backend")
+//@Tag("backend")
 @DisplayName("Nazionalita Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NazionalitaBackendTest extends BackendTest {

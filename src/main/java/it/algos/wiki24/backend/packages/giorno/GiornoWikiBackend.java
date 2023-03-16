@@ -104,7 +104,7 @@ public class GiornoWikiBackend extends WikiBackend {
     }
 
     @Override
-    public GiornoWiki findByOrdine(final int ordine) {
+    public GiornoWiki findByOrder(final int ordine) {
         return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
