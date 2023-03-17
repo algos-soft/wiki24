@@ -99,14 +99,15 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
     @Override
+    public AnnoWiki findByOrder(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
     public AnnoWiki findByProperty(final String propertyName, final Object propertyValue) {
         return (AnnoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
-    @Override
-    public AnnoWiki findByOrder(final int ordine) {
-        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
-    }
 
     @Override
     public List<AnnoWiki> findAllNoSort() {
@@ -154,6 +155,17 @@ public class AnnoWikiBackend extends WikiBackend {
     public List<String> findAllPagine() {
         List<String> listaNomi = new ArrayList<>();
         List<Anno> listaAnni = annoBackend.findAllNoSort();
+
+        for (Anno anno : listaAnni) {
+            listaNomi.add(wikiUtility.wikiTitleNatiAnno(anno.nome));
+            listaNomi.add(wikiUtility.wikiTitleMortiAnno(anno.nome));
+        }
+
+        return listaNomi;
+    }
+    public List<String> findAllPagineReverseOrder() {
+        List<String> listaNomi = new ArrayList<>();
+        List<Anno> listaAnni = annoBackend.findAllSortCorrenteReverse();
 
         for (Anno anno : listaAnni) {
             listaNomi.add(wikiUtility.wikiTitleNatiAnno(anno.nome));

@@ -239,56 +239,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         assertFalse(ottenutoBooleano);
     }
 
-    //    @Test
-    //    @Order(40)
-    //    @DisplayName("40 - toString")
-    //    protected void toStringTest() {
-    //        System.out.println("40 - toString");
-    //        System.out.println(VUOTA);
-    //
-    //        if (annotationService.usaKeyPropertyName(entityClazz)) {
-    //            keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
-    //        }
-    //        else {
-    //            message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
-    //            System.out.println(message);
-    //            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
-    //            System.out.println(message);
-    //            message = String.format("Aggiungendo in testa alla classe un'annotazione tipo @AIEntity(keyPropertyName = \"nome\")");
-    //            System.out.println(message);
-    //            return;
-    //        }
-    //
-    //        if (reflectionService.isEsisteMetodoConParametri(crudBackend.getClass(), METHOD_NAME_NEW_ENTITY, 1)) {
-    //            sorgente = "4 marzo";
-    //            try {
-    //                entityBean = backend.newEntity(sorgente);
-    //            } catch (Exception unErrore) {
-    //                message = String.format("Non sono riuscito a creare una entityBean della classe [%s] col metodo newEntity() ad un solo parametro", clazzName);
-    //                System.out.println(message);
-    //                message = String.format("Probabilmente il valore [%s] usato per il metodo newEntity() non è adeguato", sorgente);
-    //                System.out.println(message);
-    //                return;
-    //            }
-    //            assertNotNull(entityBean);
-    //            ottenuto = entityBean.toString();
-    //            if (textService.isEmpty(ottenuto)) {
-    //                message = String.format("Non esiste il valore toString() della entity appena creata di classe [%s]", clazzName);
-    //                System.out.println(message);
-    //                message = String.format("Devi creare/modificare il metodo [%s].toString()", clazzName);
-    //                System.out.println(message);
-    //            }
-    //            assertTrue(textService.isValid(ottenuto));
-    //            System.out.println(ottenuto);
-    //            return;
-    //        }
-    //        message = String.format("Questo test presuppone che esista il metodo '%s' nella classe [%s] con un parametro solo o senza", METHOD_NAME_NEW_ENTITY, backendName);
-    //        System.out.println(message);
-    //        message = String.format("Devi scrivere un test alternativo oppure modificare la classe [%s]", backendName);
-    //        System.out.println(message);
-    //        message = String.format("Aggiungendo un metodo '%s' senza parametri oppure con un parametro", METHOD_NAME_NEW_ENTITY);
-    //        System.out.println(message);
-    //    }
 
     @Test
     @Order(42)
@@ -336,29 +286,10 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
 
 
     @Test
-    @Order(51)
-    @DisplayName("51 - findAllForNome (String)")
-    protected void findAllForNome() {
-        System.out.println("51 - findAllForNome (String)");
-        System.out.println("Uguale a 31 - findAllForKey");
-        System.out.println(VUOTA);
-
-        listaStr = backend.findAllForNome();
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        sorgente = textService.format(ottenutoIntero);
-        sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        System.out.println(message);
-
-        printSubLista(listaStr);
-    }
-
-    @Test
-    @Order(52)
-    @DisplayName("52 - findAllByMese (entity)")
+    @Order(54)
+    @DisplayName("54 - findAllByMese (entityBeans)")
     protected void findAllByMese() {
-        System.out.println("52 - findAllByMese (entity)");
+        System.out.println("54 - findAllByMese (entity)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
 
         for (Mese sorgente : meseBackend.findAllNoSort()) {
@@ -373,10 +304,29 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     }
 
     @Test
-    @Order(53)
-    @DisplayName("53 - findAllForNomeByMese (nomi)")
+    @Order(64)
+    @DisplayName("64 - findAllForNome (String)")
+    protected void findAllForNome() {
+        System.out.println("64 - findAllForNome (String)");
+        System.out.println("Uguale a 61 - findAllForKey");
+        System.out.println(VUOTA);
+
+        listaStr = backend.findAllForNome();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        System.out.println(message);
+
+        printSubLista(listaStr);
+    }
+
+    @Test
+    @Order(65)
+    @DisplayName("65 - findAllForNomeByMese (String)")
     protected void findAllForNomeByMese() {
-        System.out.println("54 - findAllForNomeByMese (nomi)");
+        System.out.println("65 - findAllForNomeByMese (String)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
         int num = 3;
 
@@ -389,6 +339,23 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
             if (num > 0) {
                 print(listaStr.subList(0, num));
             }
+        }
+    }
+
+    @Test
+    @Order(66)
+    @DisplayName("66 - findAllPagine (String)")
+    protected void findAllPagine() {
+        System.out.println("66 - findAllPagine (String)");
+        int num = 20;
+
+        listaStr = backend.findAllPagine();
+        assertNotNull(listaStr);
+        message = String.format("Ci sono %s pagine. Mostro solo le prime %d", textService.format(listaStr.size()), num);
+        System.out.println(VUOTA);
+        System.out.println(message);
+        if (num > 0) {
+            print(listaStr.subList(0, num));
         }
     }
 

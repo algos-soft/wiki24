@@ -78,6 +78,24 @@ public abstract class WikiBackendTest extends BackendTest {
     protected void fixRiferimentiIncrociati() {
         super.fixRiferimentiIncrociati();
 
+        giornoBackend.textService = textService;
+        giornoBackend.mongoService = mongoService;
+        giornoBackend.reflectionService = reflectionService;
+        giornoBackend.annotationService = annotationService;
+
+        annoBackend.textService = textService;
+        annoBackend.mongoService = mongoService;
+        annoBackend.reflectionService = reflectionService;
+        annoBackend.annotationService = annotationService;
+
+        secoloBackend.mongoService = mongoService;
+        secoloBackend.reflectionService = reflectionService;
+        secoloBackend.annotationService = annotationService;
+
+        meseBackend.mongoService = mongoService;
+        meseBackend.reflectionService = reflectionService;
+        meseBackend.annotationService = annotationService;
+
         wikiBackend.giornoBackend = giornoBackend;
         wikiBackend.giornoBackend.textService = textService;
         wikiBackend.giornoBackend.mongoService = mongoService;

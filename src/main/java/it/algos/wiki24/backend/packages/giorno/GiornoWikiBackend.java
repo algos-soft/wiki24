@@ -99,14 +99,15 @@ public class GiornoWikiBackend extends WikiBackend {
     }
 
     @Override
+    public GiornoWiki findByOrder(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
     public GiornoWiki findByProperty(final String propertyName, final Object propertyValue) {
         return (GiornoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
-    @Override
-    public GiornoWiki findByOrder(final int ordine) {
-        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
-    }
 
     @Override
     public List<GiornoWiki> findAllNoSort() {
