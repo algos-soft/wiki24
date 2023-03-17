@@ -3,8 +3,10 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.*;
@@ -35,6 +37,13 @@ public class NazionalitaBackendTest extends BackendTest {
     @InjectMocks
     private NazionalitaBackend backend;
 
+    @InjectMocks
+    protected WikiApiService wikiApiService;
+    @InjectMocks
+    protected WebService webService;
+    @InjectMocks
+    protected TextService textService;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -44,6 +53,14 @@ public class NazionalitaBackendTest extends BackendTest {
         super.entityClazz = Nazionalita.class;
         super.crudBackend = backend;
         super.setUpAll();
+    }
+
+    protected void fixRiferimentiIncrociati() {
+        super.fixRiferimentiIncrociati();
+
+        backend.wikiApiService = wikiApiService;
+        wikiApiService.webService = webService;
+        wikiApiService.textService = textService;
     }
 
     @BeforeEach

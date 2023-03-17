@@ -79,11 +79,13 @@ public class NazionalitaBackend extends WikiBackend {
     }
 
     public Nazionalita checkAndSave(final Nazionalita nazionalita) {
-        return isExist(nazionalita.singolare) ? null : repository.insert(nazionalita);
+        return null;
+        //        return isExist(nazionalita.singolare) ? null : repository.insert(nazionalita);
     }
 
     public boolean isExist(final String singolare) {
-        return repository.findFirstBySingolare(singolare) != null;
+        //        return repository.findFirstBySingolare(singolare) != null;
+        return false;
     }
 
     /**
@@ -143,7 +145,8 @@ public class NazionalitaBackend extends WikiBackend {
     }
 
     public List<Nazionalita> findAll() {
-        return repository.findAll();
+        return null;
+        //        return repository.findAll();
     }
 
     public List<String> findAllPluraliDistinti() {
@@ -460,7 +463,7 @@ public class NazionalitaBackend extends WikiBackend {
         Map<String, String> mappaLink = wikiApiService.leggeMappaModulo(moduloLink);
         List<Nazionalita> listaAllAttivita = findAll();
 
-        if (mappaLink != null && mappaLink.size() > 0) {
+        if (mappaLink != null && mappaLink.size() > 0 && listaAllAttivita != null) {
             for (Nazionalita attivita : listaAllAttivita) {
                 singolare = attivita.singolare;
 
@@ -684,11 +687,11 @@ public class NazionalitaBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(false);
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            //            this.download();
+            this.download();
             //            return fixResult(result);
             return result;
         }

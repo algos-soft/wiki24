@@ -5,8 +5,10 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.packages.anno.*;
+import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametro.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
@@ -35,6 +37,7 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @InjectMocks
     protected GiornoWikiBackend giornoWikiBackend;
+
     @InjectMocks
     protected AnnoWikiBackend annoWikiBackend;
 
@@ -43,6 +46,15 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @InjectMocks
     protected AnnoBackend annoBackend;
+
+    @InjectMocks
+    protected AttivitaBackend attivitaBackend;
+
+    @InjectMocks
+    protected NazionalitaBackend nazionalitaBackend;
+
+    @InjectMocks
+    protected WikiApiService wikiApiService;
 
     @InjectMocks
     protected WikiUtility wikiUtility;
@@ -61,6 +73,9 @@ public abstract class WikiBackendTest extends BackendTest {
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoBackend);
         assertNotNull(annoWikiBackend);
+        assertNotNull(attivitaBackend);
+        assertNotNull(nazionalitaBackend);
+        assertNotNull(wikiApiService);
         assertNotNull(wikiUtility);
         assertNotNull(queryService);
 
@@ -118,6 +133,8 @@ public abstract class WikiBackendTest extends BackendTest {
         wikiBackend.meseBackend.reflectionService = reflectionService;
         wikiBackend.meseBackend.annotationService = annotationService;
 
+        attivitaBackend.wikiApiService = wikiApiService;
+        nazionalitaBackend.wikiApiService = wikiApiService;
     }
 
 }
