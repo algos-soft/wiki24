@@ -1,23 +1,16 @@
 package it.algos.base;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaad24.backend.packages.crono.anno.*;
-import it.algos.vaad24.backend.packages.crono.giorno.*;
-import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
-import it.algos.wiki24.backend.packages.parametro.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
-import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  * Project wiki24
@@ -55,6 +48,8 @@ public abstract class WikiBackendTest extends BackendTest {
     @Autowired
     protected QueryService queryService;
 
+    @Autowired
+    protected NazSingolareBackend nazSingolaBackend;
 
     /**
      * Qui passa una volta sola <br>

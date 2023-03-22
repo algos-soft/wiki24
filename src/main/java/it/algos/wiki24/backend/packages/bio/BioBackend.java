@@ -1217,9 +1217,9 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(nazionalitaSingola)) {
             return null;
         }
-        if (attivitaBackend.findByKey(nazionalitaSingola) == null) {
-            return null;
-        }
+//        if (attivitaBackend.findByKey(nazionalitaSingola) == null) {
+//            return null;
+//        }
 
         query.addCriteria(Criteria.where("nazionalita").is(nazionalitaSingola));
         sort = Sort.by(Sort.Direction.ASC, "nazionalita");

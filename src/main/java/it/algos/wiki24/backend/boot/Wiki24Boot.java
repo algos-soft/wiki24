@@ -15,16 +15,12 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.packages.doppionome.*;
 import it.algos.wiki24.backend.packages.errore.*;
-import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
-import it.algos.wiki24.backend.packages.nazsingola.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.parametro.*;
-import it.algos.wiki24.backend.packages.professione.*;
 import it.algos.wiki24.backend.packages.statistica.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
@@ -35,7 +31,6 @@ import org.springframework.context.annotation.Scope;
 
 import javax.annotation.*;
 import javax.servlet.*;
-import java.util.*;
 
 /**
  * Project Wiki23
@@ -227,7 +222,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
         VaadVar.menuRouteListProject.add(AttivitaView.class);
         VaadVar.menuRouteListProject.add(NazionalitaView.class);
-        VaadVar.menuRouteListProject.add(NazSingolaView.class);
+        VaadVar.menuRouteListProject.add(NazSingolareView.class);
 
         //        VaadVar.menuRouteListProject.add(GenereView.class);
         //        VaadVar.menuRouteListProject.add(ProfessioneView.class);

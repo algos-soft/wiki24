@@ -125,15 +125,17 @@ public class NazionalitaView extends WikiView {
     @Override
     protected void fixTopLayout() {
         super.fixTopLayout();
-        fixBottoniTopSpecificiNazionalita();
-    }
-
-    protected void fixBottoniTopSpecificiNazionalita() {
         super.fixBottoniTopSpecificiAttivitaNazionalita();
         super.fixCheckTopSpecificiAttivitaNazionalita();
-
         this.add(topPlaceHolder2);
     }
+
+//    protected void fixBottoniTopSpecificiNazionalita() {
+//        super.fixBottoniTopSpecificiAttivitaNazionalita();
+//        super.fixCheckTopSpecificiAttivitaNazionalita();
+//
+//        this.add(topPlaceHolder2);
+//    }
 
 
     /**

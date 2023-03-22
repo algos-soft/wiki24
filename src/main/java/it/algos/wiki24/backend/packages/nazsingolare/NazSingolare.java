@@ -1,7 +1,6 @@
-package it.algos.wiki24.backend.packages.nazsingola;
+package it.algos.wiki24.backend.packages.nazsingolare;
 
 import it.algos.vaad24.backend.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
@@ -10,11 +9,6 @@ import javax.persistence.*;
 
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -34,11 +28,14 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome", usaReset = true)
-public class NazSingola extends AEntity {
+@AIEntity(collectionName = "nazsingolare", keyPropertyName = "nome", usaReset = true)
+public class NazSingolare extends AEntity {
 
-    @AIField(type = AETypeField.text, widthEM = 20, search = true)
+    @AIField(type = AETypeField.text, header = "singolare", widthEM = 20, search = true)
     public String nome;
+
+    @AIField(type = AETypeField.text, widthEM = 20)
+    public String plurale;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questa nazionalità", widthEM = 6)
     public int numBio;
