@@ -261,7 +261,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public WResult fixDownload(WResult result, final long inizio, String modulo) {
-        result.fine();
+        result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
         if (lastDownload != null) {
             lastDownload.setValue(LocalDateTime.now());
         }
@@ -278,6 +278,7 @@ public abstract class WikiBackend extends CrudBackend {
 
         message = String.format("Download di %s. %s", modulo, unitaMisuraDownload.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+        result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
         logger.debug(new WrapLog().message(message));

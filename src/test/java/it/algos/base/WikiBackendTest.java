@@ -15,6 +15,7 @@ import it.algos.wiki24.backend.service.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -27,39 +28,31 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  */
 public abstract class WikiBackendTest extends BackendTest {
 
+//    @Autowired
     protected WikiBackend wikiBackend;
 
-    @InjectMocks
+    @Autowired
     protected BioBackend bioBackend;
 
-    @InjectMocks
-    protected GiornoBackend giornoBackend;
-
-    @InjectMocks
+    @Autowired
     protected GiornoWikiBackend giornoWikiBackend;
 
-    @InjectMocks
+    @Autowired
     protected AnnoWikiBackend annoWikiBackend;
 
-    @InjectMocks
-    protected MeseBackend meseBackend;
-
-    @InjectMocks
-    protected AnnoBackend annoBackend;
-
-    @InjectMocks
+    @Autowired
     protected AttivitaBackend attivitaBackend;
 
-    @InjectMocks
+    @Autowired
     protected NazionalitaBackend nazionalitaBackend;
 
-    @InjectMocks
+    @Autowired
     protected WikiApiService wikiApiService;
 
-    @InjectMocks
+    @Autowired
     protected WikiUtility wikiUtility;
 
-    @InjectMocks
+    @Autowired
     protected QueryService queryService;
 
 
@@ -90,51 +83,51 @@ public abstract class WikiBackendTest extends BackendTest {
      * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        giornoBackend.textService = textService;
-        giornoBackend.mongoService = mongoService;
-        giornoBackend.reflectionService = reflectionService;
-        giornoBackend.annotationService = annotationService;
-
-        annoBackend.textService = textService;
-        annoBackend.mongoService = mongoService;
-        annoBackend.reflectionService = reflectionService;
-        annoBackend.annotationService = annotationService;
-
-        secoloBackend.mongoService = mongoService;
-        secoloBackend.reflectionService = reflectionService;
-        secoloBackend.annotationService = annotationService;
-
-        meseBackend.mongoService = mongoService;
-        meseBackend.reflectionService = reflectionService;
-        meseBackend.annotationService = annotationService;
-
-        wikiBackend.giornoBackend = giornoBackend;
-        wikiBackend.giornoBackend.textService = textService;
-        wikiBackend.giornoBackend.mongoService = mongoService;
-        wikiBackend.giornoBackend.reflectionService = reflectionService;
-        wikiBackend.giornoBackend.annotationService = annotationService;
-
-        wikiBackend.annoBackend = annoBackend;
-        wikiBackend.annoBackend.textService = textService;
-        wikiBackend.annoBackend.mongoService = mongoService;
-        wikiBackend.annoBackend.reflectionService = reflectionService;
-        wikiBackend.annoBackend.annotationService = annotationService;
-
-        wikiBackend.wikiUtility = wikiUtility;
-        wikiBackend.wikiUtility.textService = textService;
-        wikiBackend.wikiUtility.regexService = regexService;
-        wikiBackend.wikiUtility.queryService = queryService;
-
-        wikiBackend.meseBackend = meseBackend;
-        wikiBackend.meseBackend.mongoService = mongoService;
-        wikiBackend.meseBackend.reflectionService = reflectionService;
-        wikiBackend.meseBackend.annotationService = annotationService;
-
-        attivitaBackend.wikiApiService = wikiApiService;
-        nazionalitaBackend.wikiApiService = wikiApiService;
-    }
+//    protected void fixRiferimentiIncrociati() {
+//        super.fixRiferimentiIncrociati();
+//
+//        giornoBackend.textService = textService;
+//        giornoBackend.mongoService = mongoService;
+//        giornoBackend.reflectionService = reflectionService;
+//        giornoBackend.annotationService = annotationService;
+//
+//        annoBackend.textService = textService;
+//        annoBackend.mongoService = mongoService;
+//        annoBackend.reflectionService = reflectionService;
+//        annoBackend.annotationService = annotationService;
+//
+//        secoloBackend.mongoService = mongoService;
+//        secoloBackend.reflectionService = reflectionService;
+//        secoloBackend.annotationService = annotationService;
+//
+//        meseBackend.mongoService = mongoService;
+//        meseBackend.reflectionService = reflectionService;
+//        meseBackend.annotationService = annotationService;
+//
+//        wikiBackend.giornoBackend = giornoBackend;
+//        wikiBackend.giornoBackend.textService = textService;
+//        wikiBackend.giornoBackend.mongoService = mongoService;
+//        wikiBackend.giornoBackend.reflectionService = reflectionService;
+//        wikiBackend.giornoBackend.annotationService = annotationService;
+//
+//        wikiBackend.annoBackend = annoBackend;
+//        wikiBackend.annoBackend.textService = textService;
+//        wikiBackend.annoBackend.mongoService = mongoService;
+//        wikiBackend.annoBackend.reflectionService = reflectionService;
+//        wikiBackend.annoBackend.annotationService = annotationService;
+//
+//        wikiBackend.wikiUtility = wikiUtility;
+//        wikiBackend.wikiUtility.textService = textService;
+//        wikiBackend.wikiUtility.regexService = regexService;
+//        wikiBackend.wikiUtility.queryService = queryService;
+//
+//        wikiBackend.meseBackend = meseBackend;
+//        wikiBackend.meseBackend.mongoService = mongoService;
+//        wikiBackend.meseBackend.reflectionService = reflectionService;
+//        wikiBackend.meseBackend.annotationService = annotationService;
+//
+//        attivitaBackend.wikiApiService = wikiApiService;
+//        nazionalitaBackend.wikiApiService = wikiApiService;
+//    }
 
 }

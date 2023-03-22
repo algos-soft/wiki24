@@ -1,7 +1,9 @@
 package it.algos.vaad24.backend.service;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -107,6 +109,7 @@ public class ClassService extends AbstractService {
                 logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             }
         }
+
         return backend;
     }
 
@@ -301,6 +304,29 @@ public class ClassService extends AbstractService {
         return getClazzFromSimpleName(clazzName);
     }
 
+    public List<Class> allPackagesClazz() {
+        List<Class> listClazz = new ArrayList<>();
+
+        listClazz.addAll(allModulePackagesClazz(VaadVar.moduloVaadin24));
+        listClazz.addAll(allModulePackagesClazz(VaadVar.projectNameModulo));
+
+        return listClazz;
+    }
+
+    public List<Class> allPackagesEntityClazz() {
+        return allPackagesClazz().stream()
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_REPOSITORY))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_VIEW))
+                .filter(path -> !path.getCanonicalName().endsWith(SUFFIX_DIALOG))
+                .collect(Collectors.toList());
+    }
+
+    public List<Class> allPackagesBackendClazz() {
+        return allPackagesClazz().stream()
+                .filter(path -> path.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+    }
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
@@ -310,7 +336,7 @@ public class ClassService extends AbstractService {
      *
      * @return lista di tutte le classi del package
      */
-    public List<Class> allModulePackagesClass(String moduleName) {
+    public List<Class> allModulePackagesClazz(String moduleName) {
         List<Class> allClazz = null;
         String tagFinale = "/backend/packages";
         List<String> allPath = null;
@@ -344,7 +370,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModulePackagesClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+        return allModulePackagesClazz(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
     }
 
     /**
@@ -360,7 +386,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModulePackagesClass(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
+        return allModulePackagesClazz(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
     }
 
     /**
@@ -378,7 +404,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModulePackagesClass(moduleName)
+        return allModulePackagesClazz(moduleName)
                 .stream()
                 .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
                 .collect(Collectors.toList());
@@ -386,24 +412,18 @@ public class ClassService extends AbstractService {
 
 
     /**
-     * Spazzola tutta la directory package del modulo in esame e recupera
-     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     * Spazzola tutta le directory package dei moduli del progetto
      *
-     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
-     *
-     * @return lista di tutte le classi 'backend' del package
+     * @return lista di tutte le classi 'backend' dei package dei moduli del progetto
      */
-    public List<Class> allModuleBackendClass(String moduleName) {
-        if (textService.isEmpty(moduleName)) {
-            return null;
-        }
+    public List<Class> allBackendClazz() {
+        List<Class> listBackendClazz = new ArrayList<>();
 
-        return allModulePackagesClass(moduleName)
-                .stream()
-                .filter(clazz -> clazz.getCanonicalName().endsWith(SUFFIX_BACKEND))
-                .collect(Collectors.toList());
+        listBackendClazz.addAll(allModuleBackendClazz(VaadVar.moduloVaadin24));
+        listBackendClazz.addAll(allModuleBackendClazz(VaadVar.projectNameModulo));
+
+        return listBackendClazz;
     }
-
 
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera
@@ -413,12 +433,41 @@ public class ClassService extends AbstractService {
      *
      * @return lista di tutte le classi 'backend' del package
      */
-    public List<String> allModuleBackendSimpleName(final String moduleName) {
+    public List<Class> allModuleBackendClazz(String moduleName) {
         if (textService.isEmpty(moduleName)) {
             return null;
         }
 
-        return allModuleBackendClass(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
+        return allModulePackagesClazz(moduleName)
+                .stream()
+                .filter(clazz -> clazz.getCanonicalName().endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+    }
+
+
+    /**
+     * Spazzola tutta le directory package dei moduli del progetto
+     *
+     * @return lista di tutte le classi 'backend' dei package dei moduli del progetto
+     */
+    public List<String> allBackendName() {
+        return allBackendClazz().stream().map(Class::getSimpleName).collect(Collectors.toList());
+    }
+
+    /**
+     * Spazzola tutta la directory package del modulo in esame e recupera
+     * tutte le classi di tipo 'backend' contenute nella directory e nelle sue sottoclassi
+     *
+     * @param moduleName dal cui vanno estratte tutte le classi di tipo 'backend' del package
+     *
+     * @return lista di tutte le classi 'backend' del package
+     */
+    public List<String> allModuleBackendName(final String moduleName) {
+        if (textService.isEmpty(moduleName)) {
+            return null;
+        }
+
+        return allModuleBackendClazz(moduleName).stream().map(Class::getSimpleName).collect(Collectors.toList());
     }
 
     /**
@@ -434,7 +483,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModuleBackendClass(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
+        return allModuleBackendClazz(moduleName).stream().map(Class::getCanonicalName).collect(Collectors.toList());
     }
 
     /**
@@ -452,7 +501,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModuleBackendClass(moduleName)
+        return allModuleBackendClazz(moduleName)
                 .stream()
                 .map(clazz -> textService.pointToSlash(textService.levaTestoPrimaDiEscluso(clazz.getCanonicalName(), tag)))
                 .collect(Collectors.toList());
@@ -472,7 +521,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModuleBackendClass(moduleName)
+        return allModuleBackendClazz(moduleName)
                 .stream()
                 .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), METHOD_NAME_RESET_ONLY))
                 .collect(Collectors.toList());
@@ -483,7 +532,7 @@ public class ClassService extends AbstractService {
             return null;
         }
 
-        return allModuleBackendClass(moduleName)
+        return allModuleBackendClazz(moduleName)
                 .stream()
                 .filter(clazz -> reflectionService.isEsisteMetodo(clazz.getCanonicalName(), METHOD_NAME_ELABORA))
                 .collect(Collectors.toList());
@@ -644,6 +693,23 @@ public class ClassService extends AbstractService {
         return allBackendResetClazz;
     }
 
+
+    /**
+     * Spazzola tutta la directory package dei moduli del progetto corrente e recupera in ordine
+     * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
+     * *
+     *
+     * @return lista ordinata dei nomi di tutte le classi 'backend' && 'reset' dei package del progetto corrente
+     */
+    public List<String> allBackendResetOrderedName() {
+        List<String> listaNomiClassi = new ArrayList<>();
+
+        listaNomiClassi.addAll(allModuleBackendResetOrderedName(VaadVar.moduloVaadin24));
+        listaNomiClassi.addAll(allModuleBackendResetOrderedName(VaadVar.projectNameModulo));
+
+        return listaNomiClassi;
+    }
+
     /**
      * Spazzola tutta la directory package del modulo in esame e recupera in ordine
      * tutte le classi di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
@@ -652,9 +718,24 @@ public class ClassService extends AbstractService {
      *
      * @return lista ordinata dei nomi di tutte le classi 'backend' && 'reset' del package
      */
-    public List<String> allModuleBackendResetOrderedClassName(final String moduleName) {
+    public List<String> allModuleBackendResetOrderedName(final String moduleName) {
         List<Class> listaClassi = allModuleBackendResetOrderedClass(moduleName);
         return listaClassi != null ? listaClassi.stream().map(clazz -> clazz.getSimpleName()).collect(Collectors.toList()) : new ArrayList<>();
+    }
+
+    /**
+     * Spazzola tutta la directory package dei moduli del progetto corrente e recupera in ordine
+     * tutti i nomi delle entity di tipo 'backend' && 'reset' contenute nella directory e nelle sue sottoclassi <br>
+     *
+     * @return lista ordinata dei nomi di tutte le entity 'backend' && 'reset' dei package dei moduli del progetto corrente
+     */
+    public List<String> allEntityResetOrderedName() {
+        List<String> listaNomiClassi = new ArrayList<>();
+
+        listaNomiClassi.addAll(allModuleEntityResetOrderedName(VaadVar.moduloVaadin24));
+        listaNomiClassi.addAll(allModuleEntityResetOrderedName(VaadVar.projectNameModulo));
+
+        return listaNomiClassi;
     }
 
     /**
@@ -665,8 +746,8 @@ public class ClassService extends AbstractService {
      *
      * @return lista ordinata dei nomi di tutte le entity 'backend' && 'reset' del package
      */
-    public List<String> allModuleEntityResetOrderedClassName(final String moduleName) {
-        List<String> listaBackend = allModuleBackendResetOrderedClassName(moduleName);
+    public List<String> allModuleEntityResetOrderedName(final String moduleName) {
+        List<String> listaBackend = allModuleBackendResetOrderedName(moduleName);
         return listaBackend != null ? listaBackend.stream().map(name -> textService.levaCoda(name, SUFFIX_BACKEND)).collect(Collectors.toList()) : new ArrayList<>();
     }
 
@@ -712,5 +793,86 @@ public class ClassService extends AbstractService {
 
         return result;
     }
+
+
+    /**
+     * Lista di istanze di tipo xxxBackend (prototype) associata al nome della entity <br>
+     *
+     * @param entitiesClazzSimpleName list of the simple name of all entities class
+     *
+     * @return lista di istanze di tipo xxxBackend associate ai nomi delle entities
+     */
+    public List<CrudBackend> getBackendsFromEntitiesNames(List<String> entitiesClazzSimpleName) {
+        List<CrudBackend> listaCrudBackends = new ArrayList<>();
+        CrudBackend backend;
+        String canonicalName;
+
+        if (entitiesClazzSimpleName == null) {
+            return listaCrudBackends;
+        }
+
+        for (String entityClazzSimpleName : entitiesClazzSimpleName) {
+            canonicalName = fileService.getCanonicalName(entityClazzSimpleName);
+            backend = getBackendFromEntityClazz(canonicalName);
+            if (backend != null) {
+                listaCrudBackends.add(backend);
+            }
+            else {
+                logger.warn(new WrapLog().message(String.format("xx")));
+            }
+        }
+
+        return listaCrudBackends;
+    }
+
+    public List<AEntity> getAllAEntity() {
+        List<AEntity> listaAEntity = new ArrayList<>();
+        List<String> allPath;
+        Object bean;
+
+        allPath = fileService.getAllSubFilesJava();
+        allPath = allPath.stream()
+                .filter(path -> !path.endsWith(SUFFIX_BACKEND))
+                .filter(path -> !path.endsWith(SUFFIX_REPOSITORY))
+                .filter(path -> !path.endsWith(SUFFIX_VIEW))
+                .filter(path -> !path.endsWith(SUFFIX_DIALOG))
+                .collect(Collectors.toList());
+        for (String path : allPath) {
+            try {
+                bean = appContext.getBean(Class.forName(path));
+                if (bean != null && bean instanceof AEntity entity) {
+                    listaAEntity.add(entity);
+                }
+            } catch (Exception unErrore) {
+                logger.info(new WrapLog().type(AETypeLog.file).message(String.format("Manca il file %s", path)));
+            }
+        }
+
+        return listaAEntity;
+    }
+
+    public List<CrudBackend> getAllBackend() {
+        List<CrudBackend> listaCrudBackends = new ArrayList<>();
+        List<String> allPath;
+        Object bean;
+
+        allPath = fileService.getAllSubFilesJava();
+        allPath = allPath.stream()
+                .filter(path -> path.endsWith(SUFFIX_BACKEND))
+                .collect(Collectors.toList());
+        for (String path : allPath) {
+            try {
+                bean = appContext.getBean(Class.forName(path));
+                if (bean != null && bean instanceof CrudBackend backend) {
+                    listaCrudBackends.add(backend);
+                }
+            } catch (Exception unErrore) {
+                logger.info(new WrapLog().exception(new AlgosException(unErrore)));
+            }
+        }
+
+        return listaCrudBackends;
+    }
+
 
 }

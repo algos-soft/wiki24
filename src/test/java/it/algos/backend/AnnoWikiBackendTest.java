@@ -39,9 +39,9 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     @BeforeAll
     protected void setUpAll() {
         super.entityClazz = AnnoWiki.class;
-        backend = annoWikiBackend;
+//        backend = annoWikiBackend;
         super.crudBackend = backend;
-        super.wikiBackend = backend;
+//        super.wikiBackend = backend;
         super.setUpAll();
         super.typeBackend = TypeBackend.anno;
     }
@@ -263,8 +263,9 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         assertFalse(anno.natiOk);
         assertFalse(anno.mortiOk);
         assertEquals(ordineSecolo, anno.ordineSecolo);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
 
     @Test

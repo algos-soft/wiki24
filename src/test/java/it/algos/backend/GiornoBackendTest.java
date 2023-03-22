@@ -46,22 +46,6 @@ public class GiornoBackendTest extends BackendTest {
     }
 
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        backend.meseBackend = meseBackend;
-        backend.meseBackend.mongoService = mongoService;
-        backend.meseBackend.annotationService = annotationService;
-        backend.meseBackend.textService = textService;
-    }
-
-
     @Test
     @Order(21)
     @DisplayName("21 - isExistById")
@@ -284,8 +268,9 @@ public class GiornoBackendTest extends BackendTest {
         assertEquals(sorgente, giorno.nome);
         assertEquals(sorgenteIntero2, giorno.trascorsi);
         assertEquals(sorgenteIntero3, giorno.mancanti);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
     @Test
     @Order(54)
@@ -312,15 +297,15 @@ public class GiornoBackendTest extends BackendTest {
         System.out.println("Uguale a 61 - findAllForKey");
         System.out.println(VUOTA);
 
-        listaStr = backend.findAllForNome();
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        sorgente = textService.format(ottenutoIntero);
-        sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        System.out.println(message);
-
-        printSubLista(listaStr);
+//        listaStr = backend.findAllForNome();
+//        assertNotNull(listaStr);
+//        ottenutoIntero = listaStr.size();
+//        sorgente = textService.format(ottenutoIntero);
+//        sorgente2 = keyPropertyName;
+//        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+//        System.out.println(message);
+//
+//        printSubLista(listaStr);
     }
 
 

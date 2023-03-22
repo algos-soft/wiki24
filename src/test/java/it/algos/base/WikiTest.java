@@ -569,9 +569,26 @@ public abstract class WikiTest extends AlgosTest {
         );
     }
 
+    //--nome singolare
+    //--esiste
+    public static Stream<Arguments> NAZIONALITA_SINGOLARE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false),
+                Arguments.of("turco", true),
+                Arguments.of("errata", false),
+                Arguments.of("tedesca", true),
+                Arguments.of("direttore di scena", false),
+                Arguments.of("brasiliano", true),
+                Arguments.of("vescovo ariano", false),
+                Arguments.of("errata", false),
+                Arguments.of("britannici", false),
+                Arguments.of("tedesco", true),
+                Arguments.of("tedeschi", false)
+        );
+    }
     //--nome singolarePlurale
     //--esiste
-    protected static Stream<Arguments> NAZIONALITA_TRUE() {
+    public static Stream<Arguments> NAZIONALITA_TRUE() {
         return Stream.of(
                 Arguments.of(VUOTA, false),
                 Arguments.of("turco", true),
@@ -680,7 +697,7 @@ public abstract class WikiTest extends AlgosTest {
         slf4jLogger = LoggerFactory.getLogger("wiki23.admin");
 
         initMocks();
-        fixRiferimentiIncrociati();
+//        fixRiferimentiIncrociati();
     }
 
     /**
@@ -710,25 +727,25 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(annoWikiBackend);
     }
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        elaboraService.wikiBotService = wikiBotService;
-        wikiUtility.queryService = queryService;
-        wikiUtility.regexService = regexService;
-        attivitaBackend.logger = logService;
-        nazionalitaBackend.logger = logService;
-        bioBackend.giornoBackend = giornoBackend;
-        bioBackend.meseBackend = meseBackend;
-        cognomeBackend.bioBackend = bioBackend;
-    }
-
+//    /**
+//     * Regola tutti riferimenti incrociati <br>
+//     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
+//     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
+//     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+//     */
+//    protected void fixRiferimentiIncrociati() {
+//        super.fixRiferimentiIncrociati();
+//
+//        elaboraService.wikiBotService = wikiBotService;
+//        wikiUtility.queryService = queryService;
+//        wikiUtility.regexService = regexService;
+//        attivitaBackend.logger = logService;
+//        nazionalitaBackend.logger = logService;
+//        bioBackend.giornoBackend = giornoBackend;
+//        bioBackend.meseBackend = meseBackend;
+//        cognomeBackend.bioBackend = bioBackend;
+//    }
+//
     /**
      * Qui passa prima di ogni test delle sottoclassi <br>
      * Invocare PRIMA il metodo setUpEach() della superclasse <br>

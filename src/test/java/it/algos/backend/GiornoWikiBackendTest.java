@@ -31,7 +31,6 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class GiornoWikiBackendTest extends WikiBackendTest {
 
-    @Autowired
     private GiornoWikiBackend backend;
 
     private List<GiornoWiki> listaBeans;
@@ -274,8 +273,9 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         assertFalse(giorno.esistePaginaMorti);
         assertFalse(giorno.natiOk);
         assertFalse(giorno.mortiOk);
-        message = String.format("Creata correttamente (in memoria) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
+        message = String.format("Creata correttamente (SOLO IN MEMORIA) la entity: [%s] con keyPropertyName%s'%s'", entityBean.id, FORWARD, entityBean);
         System.out.println(message);
+        printBackend(List.of(entityBean));
     }
 
     @Test

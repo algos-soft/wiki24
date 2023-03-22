@@ -134,7 +134,7 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
     @Override
-    public List<String> findAllForKey() {
+    public List<String> findAllForKeySortOrdine() {
         return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
     }
 
@@ -144,7 +144,7 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
     public List<String> findAllForNome() {
-        return findAllForKey();
+        return findAllForKeySortOrdine();
     }
 
     public List<String> findAllForNomeBySecolo(Secolo secolo) {

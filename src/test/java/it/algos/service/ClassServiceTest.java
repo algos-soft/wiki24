@@ -211,13 +211,12 @@ public class ClassServiceTest extends AlgosTest {
         clazz = service.getClazzFromName(sorgente);
         assertNotNull(clazz);
         System.out.println(VUOTA);
-        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(),sorgente));
-
+        System.out.println(String.format("Trovata la classe %s, tramite il simpleName %s", clazzFromStream.getSimpleName(), sorgente));
 
         clazz = service.getClazzFromName(sorgente2);
         assertNotNull(clazz);
         System.out.println(VUOTA);
-        System.out.println(String.format("Trovata la classe %s, tramite il canonicalName %s", clazzFromStream.getSimpleName(),sorgente2));
+        System.out.println(String.format("Trovata la classe %s, tramite il canonicalName %s", clazzFromStream.getSimpleName(), sorgente2));
     }
 
     @ParameterizedTest
@@ -230,7 +229,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaClazz = service.allModulePackagesClass(sorgente);
+        listaClazz = service.allModulePackagesClazz(sorgente);
 
         if (listaClazz != null && listaClazz.size() > 0) {
             message = String.format("Ci sono in totale %d classi nella directory package del modulo %s", listaClazz.size(), sorgente);
@@ -330,7 +329,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaClazz = service.allModuleBackendClass(sorgente);
+        listaClazz = service.allModuleBackendClazz(sorgente);
 
         if (listaClazz != null && listaClazz.size() > 0) {
             message = String.format("Ci sono in totale %d classi 'backend' nella directory package del modulo %s", listaClazz.size(), sorgente);
@@ -355,7 +354,7 @@ public class ClassServiceTest extends AlgosTest {
         System.out.println(VUOTA);
 
         sorgente = moduleName;
-        listaStr = service.allModuleBackendSimpleName(sorgente);
+        listaStr = service.allModuleBackendName(sorgente);
 
         if (listaStr != null && listaStr.size() > 0) {
             message = String.format("Ci sono in totale %d classi 'backend' nella directory package del modulo %s", listaStr.size(), sorgente);
@@ -664,6 +663,107 @@ public class ClassServiceTest extends AlgosTest {
         }
     }
 
+    @Test
+    @Order(90)
+    @DisplayName("90 - allPackagesClazz del programma")
+    void allPackagesClazz() {
+        System.out.println("90 - allPackagesClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesClazz();
+        assertNotNull(listaClazz);
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nei packages di progetto ci sono %d classi", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+
+    @Test
+    @Order(91)
+    @DisplayName("91 - allPackagesEntityClazz del programma")
+    void allPackagesEntityClazz() {
+        System.out.println("91 - allPackagesEntityClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesEntityClazz();
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo AEntity", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+    @Test
+    @Order(92)
+    @DisplayName("92 - allPackagesBackendClazz del programma")
+    void allPackagesBackendClazz() {
+        System.out.println("92 - allPackagesBackendClazz del programma");
+        System.out.println(VUOTA);
+
+        listaClazz = service.allPackagesBackendClazz();
+        ottenutoIntero = listaClazz.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo CrudBackend", listaClazz.size()));
+        System.out.println(VUOTA);
+        for (Class classe : listaClazz) {
+            message = String.format("%s%s%s", classe.getSimpleName(), FORWARD, classe.getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+
+
+    @Test
+    @Order(95)
+    @DisplayName("95 - Istanze AEntity del programma")
+    void getAllAEntity() {
+        System.out.println("95 - Istanze AEntity del programma");
+        System.out.println(VUOTA);
+        List<AEntity> listaAEntity;
+
+        listaAEntity = service.getAllAEntity();
+        assertNotNull(listaAEntity);
+        ottenutoIntero = listaAEntity.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo AEntity", listaAEntity.size()));
+        System.out.println(VUOTA);
+        for (AEntity entity : listaAEntity) {
+            message = String.format("%s%s%s", entity.getClass().getSimpleName(), FORWARD, entity.getClass().getCanonicalName());
+            System.out.println(message);
+        }
+    }
+
+    @Test
+    @Order(96)
+    @DisplayName("96 - Istanze CrudBackend del programma")
+    void getAllBackend() {
+        System.out.println("96 - Istanze CrudBackend del programma");
+        System.out.println(VUOTA);
+        List<CrudBackend> listaCrudBackends;
+
+        listaCrudBackends = service.getAllBackend();
+        assertNotNull(listaCrudBackends);
+        ottenutoIntero = listaCrudBackends.size();
+        assertTrue(ottenutoIntero > 0);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nel progetto ci sono %d classi di tipo Backend", listaCrudBackends.size()));
+        System.out.println(VUOTA);
+        for (CrudBackend backend : listaCrudBackends) {
+            message = String.format("%s%s%s", backend.getClass().getSimpleName(), FORWARD, backend.getClass().getCanonicalName());
+            System.out.println(message);
+        }
+    }
 
     protected void printPackages(List<String> lista) {
         List<String> listaShort = new ArrayList<>();

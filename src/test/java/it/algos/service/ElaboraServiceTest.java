@@ -73,13 +73,13 @@ public class ElaboraServiceTest extends WikiTest {
      * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-        giornoWikiBackend.lastElaborazione = WPref.elaboraGiorni;
-        giornoWikiBackend.durataElaborazione = WPref.elaboraGiorniTime;
-
-    }
+//    @Override
+//    protected void fixRiferimentiIncrociati() {
+//        super.fixRiferimentiIncrociati();
+//        giornoWikiBackend.lastElaborazione = WPref.elaboraGiorni;
+//        giornoWikiBackend.durataElaborazione = WPref.elaboraGiorniTime;
+//
+//    }
 
     /**
      * Qui passa a ogni test delle sottoclassi <br>

@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.nazionalita;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -26,35 +27,32 @@ import java.util.stream.*;
  * User: gac
  * Date: lun, 25-apr-2022
  * Time: 18:21
- * <p>
- * Service di una entityClazz specifica e di un package <br>
- * Garantisce i metodi di collegamento per accedere al database <br>
- * Non mantiene lo stato di una istanza entityBean <br>
- * Mantiene lo stato della entityClazz <br>
- * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
- * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class NazionalitaBackend extends WikiBackend {
 
+    //    public NazionalitaRepository repository;
 
-    public NazionalitaRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public NazionalitaBackend(@Autowired @Qualifier(TAG_NAZIONALITA) final MongoRepository crudRepository) {
-        super(crudRepository, Nazionalita.class);
-        this.repository = (NazionalitaRepository) crudRepository;
-        //        super.lastDownload = WPref.downloadNazionalita;
+    public NazionalitaBackend() {
+        super(Nazionalita.class);
     }
+
+    //    /**
+    //     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
+    //     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
+    //     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
+    //     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
+    //     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
+    //     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
+    //     *
+    //     * @param crudRepository per la persistenza dei dati
+    //     */
+    //    public NazionalitaBackend(@Autowired @Qualifier(TAG_NAZIONALITA) final MongoRepository crudRepository) {
+    //        super(crudRepository, Nazionalita.class);
+    //        this.repository = (NazionalitaRepository) crudRepository;
+    //        //        super.lastDownload = WPref.downloadNazionalita;
+    //    }
 
 
     @Override
@@ -74,19 +72,19 @@ public class NazionalitaBackend extends WikiBackend {
         this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
-    public Nazionalita creaIfNotExist(final String singolare, String pluraleParagrafo, String pluraleLista, String linkPaginaNazione) {
-        return checkAndSave(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaNazione));
-    }
-
-    public Nazionalita checkAndSave(final Nazionalita nazionalita) {
-        return null;
-        //        return isExist(nazionalita.singolare) ? null : repository.insert(nazionalita);
-    }
-
-    public boolean isExist(final String singolare) {
-        //        return repository.findFirstBySingolare(singolare) != null;
-        return false;
-    }
+    //    public Nazionalita creaIfNotExist(final String singolare, String pluraleParagrafo, String pluraleLista, String linkPaginaNazione) {
+    //        return checkAndSave(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaNazione));
+    //    }
+    //
+    //    public Nazionalita checkAndSave(final Nazionalita nazionalita) {
+    //        return null;
+    //        //        return isExist(nazionalita.singolare) ? null : repository.insert(nazionalita);
+    //    }
+    //
+    //    public boolean isExist(final String singolare) {
+    //        //        return repository.findFirstBySingolare(singolare) != null;
+    //        return false;
+    //    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -137,6 +135,7 @@ public class NazionalitaBackend extends WikiBackend {
                 .pluraleLista(textService.isValid(pluraleLista) ? pluraleLista : null)
                 .linkPaginaNazione(textService.isValid(linkPaginaNazione) ? linkPaginaNazione : null)
                 .numBio(0)
+                .numSingolari(0)
                 .superaSoglia(false)
                 .esistePaginaLista(false)
                 .build();
@@ -144,14 +143,53 @@ public class NazionalitaBackend extends WikiBackend {
         return (Nazionalita) super.fixKey(newEntityBean);
     }
 
+    @Override
+    public Nazionalita findById(final String keyID) {
+        return (Nazionalita) super.findById(keyID);
+    }
+
+    @Override
+    public Nazionalita findByKey(final String keyValue) {
+        return (Nazionalita) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Nazionalita findByOrder(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public Nazionalita findByProperty(final String propertyName, final Object propertyValue) {
+        return (Nazionalita) super.findByProperty(propertyName, propertyValue);
+    }
+
+    @Override
+    public List<Nazionalita> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<Nazionalita> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<Nazionalita> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Nazionalita> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
+    }
+
     public List<Nazionalita> findAll() {
-        return null;
-        //        return repository.findAll();
+        return this.findAllNoSort();
     }
 
     public List<String> findAllPluraliDistinti() {
         // Lista completa di tutte le entities
-        List<Nazionalita> listaAll = repository.findAll();
+        List<Nazionalita> listaAll = this.findAll();
 
         // Lista completa della singola property
         List<String> pluraleLista = listaAll.stream()
@@ -176,7 +214,8 @@ public class NazionalitaBackend extends WikiBackend {
      * @return the FIRST founded entity
      */
     public Nazionalita findFirstBySingolare(final String nazionalitaSingolare) {
-        return repository.findFirstBySingolare(nazionalitaSingolare);
+        return findByKey(nazionalitaSingolare);
+        //        return repository.findFirstBySingolare(nazionalitaSingolare);
     }
 
     /**
@@ -189,7 +228,8 @@ public class NazionalitaBackend extends WikiBackend {
      * @return the FIRST founded entity
      */
     public Nazionalita findFirstByPlurale(final String nazionalitaPlurale) {
-        return repository.findFirstByPluraleLista(nazionalitaPlurale);
+        return findByProperty("pluraleLista", nazionalitaPlurale);
+        //        return repository.findFirstByPluraleLista(nazionalitaPlurale);
     }
 
 
@@ -203,7 +243,8 @@ public class NazionalitaBackend extends WikiBackend {
      * @return the FIRST founded entity
      */
     public Nazionalita findFirstByPluraleLista(final String nazionalitaPlurale) {
-        return repository.findFirstByPluraleLista(nazionalitaPlurale);
+        return findByProperty("pluraleLista", nazionalitaPlurale);
+        //        return repository.findFirstByPluraleLista(nazionalitaPlurale);
     }
 
     /**
@@ -218,20 +259,20 @@ public class NazionalitaBackend extends WikiBackend {
     public Nazionalita findFirst(final String nazionalitaSingolarePlurale) {
         Nazionalita nazionalita;
 
-        nazionalita = repository.findFirstBySingolare(nazionalitaSingolarePlurale);
+        nazionalita = this.findFirstBySingolare(nazionalitaSingolarePlurale);
         if (nazionalita == null) {
-            nazionalita = repository.findFirstByPluraleLista(nazionalitaSingolarePlurale);
+            nazionalita = this.findFirstByPluraleLista(nazionalitaSingolarePlurale);
         }
 
         return nazionalita;
     }
 
 
-    private List<Nazionalita> findNazionalitaDistinctByPlurali(String property) {
+    public List<Nazionalita> findNazionalitaDistinctByPlurali(String property) {
         List<Nazionalita> lista = new ArrayList<>();
         Set<String> set = new HashSet();
         Sort sortOrder = Sort.by(Sort.Direction.ASC, property);
-        List<Nazionalita> listaAll = repository.findAll(sortOrder);
+        List<Nazionalita> listaAll = this.findAllSort(sortOrder);
 
         for (Nazionalita attivita : listaAll) {
             if (set.add(attivita.pluraleLista)) {
@@ -242,13 +283,13 @@ public class NazionalitaBackend extends WikiBackend {
         return lista;
     }
 
-    public List<Nazionalita> findNazionalitaDistinctByPluraliSortPagina() {
-        return findNazionalitaDistinctByPlurali("pagina");
-    }
+        public List<Nazionalita> findNazionalitaDistinctByPluraliSortPagina() {
+            return findNazionalitaDistinctByPlurali("pagina");
+        }
 
-    public List<Nazionalita> findNazionalitaDistinctByPluraliSortPlurali() {
-        return findNazionalitaDistinctByPlurali("pluraleLista");
-    }
+        public List<Nazionalita> findNazionalitaDistinctByPluraliSortPlurali() {
+            return findNazionalitaDistinctByPlurali("pluraleLista");
+        }
 
     /**
      * Pagine che esistono sul server wikipedia e che non superano la soglia prevista per le liste <br>
@@ -270,25 +311,26 @@ public class NazionalitaBackend extends WikiBackend {
         return listaDaCancellare;
     }
 
+    //    public List<Nazionalita> findAllBySingolare(final String singolare) {
+    //        Nazionalita nazionalita = findFirstBySingolare(singolare);
+    //        if (nazionalita != null) {
+    //            return null;
+    ////            return repository.findAllByPluraleListaOrderBySingolareAsc(nazionalita.pluraleLista);
+    //        }
+    //        else {
+    //            return null;
+    //        }
+    //    }
 
-    public List<Nazionalita> findAllBySingolare(final String singolare) {
-        Nazionalita nazionalita = findFirstBySingolare(singolare);
-        if (nazionalita != null) {
-            return repository.findAllByPluraleListaOrderBySingolareAsc(nazionalita.pluraleLista);
-        }
-        else {
-            return null;
-        }
+    public List<Nazionalita> findAllByPlurale(final String nazionalitaPlurale) {
+        return findAllByProperty("pluraleLista", nazionalitaPlurale);
+        //        return repository.findAllByPluraleListaOrderBySingolareAsc(plurale);
     }
 
-    public List<Nazionalita> findAllByPlurale(final String plurale) {
-        return repository.findAllByPluraleListaOrderBySingolareAsc(plurale);
-    }
-
-    public List<Nazionalita> findAllBySingolarePlurale(final String singolarePlurale) {
-        Nazionalita nazionalita = findFirst(singolarePlurale);
-        return nazionalita != null ? repository.findAllByPluraleListaOrderBySingolareAsc(nazionalita.pluraleLista) : null;
-    }
+    //    public List<Nazionalita> findAllBySingolarePlurale(final String singolarePlurale) {
+    //        Nazionalita nazionalita = findFirst(singolarePlurale);
+    //        return nazionalita != null ? repository.findAllByPluraleListaOrderBySingolareAsc(nazionalita.pluraleLista) : null;
+    //    }
 
     public String pluraleBySingolarePlurale(final String nazionalitaSingolarePlurale) {
         Nazionalita nazionalita;
@@ -359,7 +401,7 @@ public class NazionalitaBackend extends WikiBackend {
     public LinkedHashMap<String, List<String>> findMappaSingolariByPlurale() {
         LinkedHashMap<String, List<String>> mappa = new LinkedHashMap<>();
         List<String> lista;
-        List<Nazionalita> listaAll = repository.findAll();
+        List<Nazionalita> listaAll = this.findAll();
         String plurale;
         String singolare;
 
@@ -395,14 +437,16 @@ public class NazionalitaBackend extends WikiBackend {
         String moduloPlurale = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
         int tempo = 3;
+        int size = 0;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, Nazionalita.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
         logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
         logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
 
-        downloadNazionalitaPlurali(moduloPlurale);
-        downloadNazionalitaLink(moduloLink);
+        size += downloadNazionalitaPlurali(moduloPlurale);
+        size += downloadNazionalitaLink(moduloLink);
+        result.setIntValue(size);
 
         return super.fixDownload(result, inizio, "nazionalità");
     }
@@ -420,13 +464,17 @@ public class NazionalitaBackend extends WikiBackend {
         String singolare;
         String pluraleParagrafo;
         String pluraleLista = VUOTA;
+        String linkPaginaNazione = VUOTA;
         AETypeGenere typeGenere = null;
         Genere genere;
+        AEntity entityBean;
+        List<AEntity> lista;
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloPlurale);
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
+            lista = new ArrayList<>();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 singolare = entry.getKey();
                 pluraleLista = entry.getValue();
@@ -434,8 +482,19 @@ public class NazionalitaBackend extends WikiBackend {
                 //                typeGenere = genere != null ? genere.getType() : AETypeGenere.nessuno;
                 //                pluraleParagrafo = getParagrafo(genere, pluraleLista);
                 pluraleParagrafo = pluraleLista;
-                if (creaIfNotExist(singolare, pluraleParagrafo, pluraleLista, VUOTA) != null) {
+
+                //                public Nazionalita newEntity(
+                //                final String singolare,
+                //                final String pluraleParagrafo,
+                //                final String pluraleLista,
+                //                final String linkPaginaNazione) {
+
+                entityBean = insert(newEntity(singolare, pluraleParagrafo, pluraleLista, linkPaginaNazione));
+                if (entityBean != null) {
                     size++;
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
         }
@@ -691,9 +750,7 @@ public class NazionalitaBackend extends WikiBackend {
         AResult result = super.resetOnlyEmpty(false);
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            this.download();
-            //            return fixResult(result);
-            return result;
+            return this.download();
         }
         else {
             return result;

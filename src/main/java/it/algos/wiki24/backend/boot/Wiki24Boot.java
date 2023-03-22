@@ -21,6 +21,7 @@ import it.algos.wiki24.backend.packages.errore.*;
 import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazsingola.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.parametro.*;
 import it.algos.wiki24.backend.packages.professione.*;
@@ -226,6 +227,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
         VaadVar.menuRouteListProject.add(AttivitaView.class);
         VaadVar.menuRouteListProject.add(NazionalitaView.class);
+        VaadVar.menuRouteListProject.add(NazSingolaView.class);
 
         //        VaadVar.menuRouteListProject.add(GenereView.class);
         //        VaadVar.menuRouteListProject.add(ProfessioneView.class);

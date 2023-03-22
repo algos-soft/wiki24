@@ -3,25 +3,14 @@ package it.algos.base;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
-import it.algos.vaad24.backend.packages.anagrafica.*;
-import it.algos.vaad24.backend.packages.crono.anno.*;
-import it.algos.vaad24.backend.packages.crono.giorno.*;
-import it.algos.vaad24.backend.packages.crono.mese.*;
-import it.algos.vaad24.backend.packages.crono.secolo.*;
-import it.algos.vaad24.backend.packages.geografia.continente.*;
-import it.algos.vaad24.backend.packages.utility.log.*;
-import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
-import it.algos.vaad24.backend.packages.utility.versione.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
-import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -54,41 +43,12 @@ import java.util.stream.*;
  * resetOnlyEmpty()
  * deleteAll()
  */
-
 public abstract class BackendTest extends AlgosTest {
 
-    @InjectMocks
-    protected NotaBackend notaBackend;
-
-    @InjectMocks
-    protected GiornoBackend giornoBackend;
-
-    @InjectMocks
-    protected MeseBackend meseBackend;
-
-    @InjectMocks
-    protected AnnoBackend annoBackend;
-
-    @InjectMocks
-    protected SecoloBackend secoloBackend;
-
-    @InjectMocks
-    protected ContinenteBackend continenteBackend;
-
-    @InjectMocks
-    protected LoggerBackend loggerBackend;
-
-    @InjectMocks
-    protected VersioneBackend versioneBackend;
-
-    @InjectMocks
-    protected PreferenzaBackend preferenzaBackend;
 
     @Autowired
     protected PreferenzaRepository preferenzaRepository;
 
-    @Autowired
-    protected ViaBackend viaBackend;
 
     protected CrudBackend crudBackend;
 
@@ -98,7 +58,6 @@ public abstract class BackendTest extends AlgosTest {
 
     protected String keyPropertyName;
 
-    protected TypeBackend typeBackend;
 
     protected Sort sortOrder;
 
@@ -136,10 +95,10 @@ public abstract class BackendTest extends AlgosTest {
     protected void setUpAll() {
         super.setUpAll();
 
-        clazzName = entityClazz.getSimpleName();
+        clazzName = entityClazz != null ? entityClazz.getSimpleName() : VUOTA;
         backendName = clazzName + SUFFIX_BACKEND;
-        collectionName = annotationService.getCollectionName(entityClazz);
-        keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+        collectionName = entityClazz != null ? annotationService.getCollectionName(entityClazz) : VUOTA;
+        keyPropertyName = entityClazz != null ? annotationService.getKeyPropertyName(entityClazz) : VUOTA;
         this.typeBackend = typeBackend != null ? typeBackend : TypeBackend.nessuno;
 
         if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
@@ -148,36 +107,17 @@ public abstract class BackendTest extends AlgosTest {
         else {
             sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_CON);
         }
-        crudBackend.sortOrder = sortOrder;
+        if (crudBackend != null) {
+            crudBackend.sortOrder = sortOrder;
+        }
     }
 
-    /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixRiferimentiIncrociati() {
-        super.fixRiferimentiIncrociati();
-
-        crudBackend.arrayService = arrayService;
-        crudBackend.dateService = dateService;
-        crudBackend.textService = textService;
-        crudBackend.resourceService = resourceService;
-        crudBackend.reflectionService = reflectionService;
-        crudBackend.mongoService = mongoService;
-        crudBackend.annotationService = annotationService;
-        crudBackend.logger = logger;
-        crudBackend.beanService = beanService;
-
-        crudBackend.crudRepository = null;
-    }
 
     @Test
     @Order(10)
     @DisplayName("10--------")
     void test10() {
-        System.out.println("11 - collection");
+        System.out.println("11 - isExistsCollection");
         System.out.println("12 - count");
         System.out.println("13 - resetOnlyEmpty");
         System.out.println("14 - resetForcing");
@@ -186,9 +126,14 @@ public abstract class BackendTest extends AlgosTest {
 
     @Test
     @Order(11)
-    @DisplayName("11 - collection")
-    protected void collection() {
-        System.out.println("11 - Esistenza della collection");
+    @DisplayName("11 - isExistsCollection")
+    protected void isExistsCollection() {
+        System.out.println("11 - isExistsCollection");
+
+        if (crudBackend == null) {
+            System.out.println("Manca la variabile crudBackend in questo test");
+            return;
+        }
 
         ottenutoBooleano = crudBackend.isExistsCollection();
         if (ottenutoBooleano) {
@@ -204,8 +149,13 @@ public abstract class BackendTest extends AlgosTest {
     @Test
     @Order(12)
     @DisplayName("12 - count")
-    protected void count2() {
+    protected void count() {
         System.out.println("12 - count");
+
+        if (crudBackend == null) {
+            System.out.println("Manca la variabile crudBackend in questo test");
+            return;
+        }
 
         ottenutoIntero = crudBackend.count();
         if (ottenutoIntero > 0) {
@@ -229,6 +179,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void resetOnlyEmpty() {
         System.out.println("13 - resetOnlyEmpty");
         System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+            return;
+        }
 
         if (!annotationService.usaReset(entityClazz)) {
             message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
@@ -262,6 +217,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void resetForcing() {
         System.out.println("14 - resetForcing");
         System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+            return;
+        }
 
         if (!annotationService.usaReset(entityClazz)) {
             message = String.format("Questo test presuppone che la entity [%s] preveda la funzionalità '%s'", clazzName, METHOD_NAME_RESET_ONLY);
@@ -531,7 +491,7 @@ public abstract class BackendTest extends AlgosTest {
 
         ottenutoBooleano = crudBackend.creaIfNotExist(keyValue);
         if (ottenutoBooleano) {
-            message = String.format("Nella collection '%s' è stata CREATA (true) una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
+            message = String.format("Nella collection '%s' è stata CREATA (true) SOLO IN MEMORIA una entity individuata dal valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
         }
         else {
             message = String.format("Nella collection '%s' ESISTEVA già (false) una entity col valore '%s' della property [%s]", collectionName, keyValue, keyPropertyName);
@@ -782,7 +742,7 @@ public abstract class BackendTest extends AlgosTest {
             return;
         }
 
-        listaStr = crudBackend.findAllForKey();
+        listaStr = crudBackend.findAllForKeySortKey();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
@@ -1101,217 +1061,5 @@ public abstract class BackendTest extends AlgosTest {
     @AfterAll
     void tearDownAll() {
     }
-
-
-    protected void printBackend(final List lista) {
-        printBackend(lista, 10);
-    }
-
-
-    protected void printBackend(final List lista, int max) {
-        String message = VUOTA;
-        int cont = 1;
-        int tot;
-
-        if (lista != null) {
-            if (lista.size() > 0) {
-                tot = Math.min(lista.size(), max);
-                message = String.format("La lista contiene %d elementi.", lista.size());
-                if (lista.size() > tot) {
-                    message += String.format(" Mostro solo i primi %d", tot);
-                }
-                System.out.println(message);
-
-                switch (typeBackend) {
-                    case giorno -> printTestaGiorno();
-                    case mese -> {
-                        System.out.print("ordine");
-                        System.out.print(SEP);
-                        System.out.print("breve");
-                        System.out.print(SEP);
-                        System.out.print("nome");
-                        System.out.print(SEP);
-                        System.out.print("giorni");
-                        System.out.print(SEP);
-                        System.out.print("primo");
-                        System.out.print(SEP);
-                        System.out.println("ultimo");
-                    }
-                    case secolo -> {
-                        System.out.print("ordine");
-                        System.out.print(SEP);
-                        System.out.print("nome");
-                        System.out.print(SEP);
-                        System.out.print("inizio");
-                        System.out.print(SEP);
-                        System.out.print("fine");
-                        System.out.print(SEP);
-                        System.out.println("avanti Cristo");
-                    }
-                    case anno -> printTestaAnno();
-                    case nota -> {
-                        System.out.print("type");
-                        System.out.print(SEP);
-                        System.out.print("livello");
-                        System.out.print(SEP);
-                        System.out.print("inizio");
-                        System.out.print(SEP);
-                        System.out.print("descrizione");
-                        System.out.print(SEP);
-                        System.out.print("fatto");
-                        System.out.print(SEP);
-                        System.out.println("fine");
-                    }
-                    default -> {}
-                } ;
-                System.out.println(VUOTA);
-
-                for (Object obj : lista.subList(0, tot)) {
-                    System.out.print(cont);
-                    System.out.print(PARENTESI_TONDA_END);
-                    System.out.print(SPAZIO);
-                    switch (typeBackend) {
-                        case giorno -> printGiorno(obj);
-                        case mese -> printMese(obj);
-                        case secolo -> printSecolo(obj);
-                        case anno -> printAnno(obj);
-                        case nota -> printNota(obj);
-                        default -> {
-                            System.out.println(obj);
-                        }
-                    } ;
-                    cont++;
-                }
-                if (lista.size() > tot) {
-                    System.out.print(cont);
-                    System.out.print(PARENTESI_TONDA_END);
-                    System.out.print(SPAZIO);
-                    System.out.println(TRE_PUNTI);
-                }
-            }
-            else {
-                System.out.println("Non ci sono elementi nella lista");
-            }
-        }
-        else {
-            System.out.println("Manca la lista");
-        }
-    }
-
-
-    protected void printMese(Object obj) {
-        if (obj instanceof Mese mese) {
-            System.out.print(mese.breve);
-            System.out.print(SEP);
-            System.out.print(mese.nome);
-            System.out.print(SEP);
-            System.out.print(mese.giorni);
-            System.out.print(SEP);
-            System.out.print(mese.primo);
-            System.out.print(SEP);
-            System.out.print(mese.ultimo);
-            System.out.println(SPAZIO);
-        }
-    }
-
-
-    protected void printSecolo(Object obj) {
-        if (obj instanceof Secolo secolo) {
-            System.out.print(secolo.nome);
-            System.out.print(SEP);
-            System.out.print(secolo.inizio);
-            System.out.print(SEP);
-            System.out.print(secolo.fine);
-            System.out.print(SEP);
-            System.out.print(secolo.anteCristo);
-            System.out.println(SPAZIO);
-        }
-    }
-
-    protected void printTestaGiorno() {
-        System.out.print("ordine");
-        System.out.print(SEP);
-        System.out.print("nome");
-        System.out.print(SEP);
-        System.out.print("Trascorsi");
-        System.out.print(SEP);
-        System.out.print("mancanti");
-        System.out.println(SPAZIO);
-    }
-
-    protected void printGiorno(Object obj) {
-        if (obj instanceof Giorno giorno) {
-            System.out.print(giorno.nome);
-            System.out.print(SEP);
-            System.out.print(giorno.trascorsi);
-            System.out.print(SEP);
-            System.out.print(giorno.mancanti);
-            System.out.println(SPAZIO);
-        }
-    }
-
-
-    protected void printTestaAnno() {
-        System.out.print("ordine");
-        System.out.print(SEP);
-        System.out.print("nome");
-        System.out.print(SEP);
-        System.out.print("secolo");
-        System.out.print(SEP);
-        System.out.print("dopoCristo");
-        System.out.print(SEP);
-        System.out.print("bisestile");
-        System.out.println(SPAZIO);
-    }
-
-    protected void printAnno(Object obj) {
-        if (obj instanceof Anno anno) {
-            System.out.print(anno.nome);
-            System.out.print(SEP);
-            System.out.print(anno.secolo);
-            System.out.print(SEP);
-            System.out.print(anno.dopoCristo);
-            System.out.print(SEP);
-            System.out.print(anno.bisestile);
-            System.out.println(SPAZIO);
-        }
-    }
-
-
-    protected void printNota(Object obj) {
-        if (obj instanceof Nota nota) {
-            System.out.print(nota.type);
-            System.out.print(SPAZIO);
-            System.out.print(nota.livello);
-            System.out.print(SPAZIO);
-            System.out.print(dateService.get(nota.inizio));
-            System.out.print(SPAZIO);
-            System.out.print(nota.descrizione);
-            System.out.print(SPAZIO);
-            System.out.print(nota.livello);
-            System.out.print(SPAZIO);
-            System.out.print(nota.fatto);
-            System.out.print(SPAZIO);
-            System.out.print(dateService.get(nota.fine));
-            System.out.println(SPAZIO);
-        }
-    }
-
-    protected void printNota() {
-        System.out.print("type");
-        System.out.print(SEP);
-        System.out.print("livello");
-        System.out.print(SEP);
-        System.out.print("inizio");
-        System.out.print(SEP);
-        System.out.print("descrizione");
-        System.out.print(SEP);
-        System.out.print("fatto");
-        System.out.print(SEP);
-        System.out.print("fine");
-        System.out.println(SPAZIO);
-    }
-
-    protected enum TypeBackend {nessuno, via, anno, giorno, mese, secolo, continente, nota, versione, logger}
 
 }
