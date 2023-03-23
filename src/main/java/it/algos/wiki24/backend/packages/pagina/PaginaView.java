@@ -9,6 +9,7 @@ import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -151,8 +152,8 @@ public class PaginaView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Pagina> items = backend.findAllSortCorrente();
+    protected List<AEntity> sincroFiltri() {
+        List<Pagina> items = (List)super.sincroFiltri();
 
         if (comboType != null && comboType.getValue() != null) {
             if (comboType.getValue() instanceof AETypePaginaCancellare type) {
@@ -172,6 +173,8 @@ public class PaginaView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     /**

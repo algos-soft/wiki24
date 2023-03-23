@@ -6,6 +6,7 @@ import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -165,7 +166,7 @@ public class CognomeView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         long inizio = System.currentTimeMillis();
         List<Cognome> items = backend.findAllSortCorrente();
         logger.info(new WrapLog().exception(new AlgosException(String.format("Items %s", dateService.deltaText(inizio)))));
@@ -191,6 +192,8 @@ public class CognomeView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     /**

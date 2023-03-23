@@ -120,8 +120,8 @@ public class ProfessioneView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Professione> items = backend.findAllSortCorrente();
+    protected List<AEntity> sincroFiltri() {
+        List<Professione> items = (List)super.sincroFiltri();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
@@ -140,6 +140,8 @@ public class ProfessioneView extends WikiView {
         if (items != null) {
             grid.setItems((List) items);
         }
+
+        return (List)items;
     }
 
     /**

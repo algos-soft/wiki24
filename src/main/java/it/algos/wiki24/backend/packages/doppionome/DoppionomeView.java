@@ -93,22 +93,5 @@ public class DoppionomeView extends WikiView {
         addSpan(ASpan.text(message).rosso());
     }
 
-    /**
-     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
-     */
-    protected void sincroFiltri() {
-        List<Doppionome> items = backend.findAllSortCorrente();
-
-        final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
-        if (textService.isValid(textSearch)) {
-            items = items.stream().filter(dop -> dop.nome.matches("^(?i)" + textSearch + ".*$")).toList();
-        }
-
-        if (items != null) {
-            grid.setItems((List) items);
-            elementiFiltrati = items.size();
-            sicroBottomLayout();
-        }
-    }
 
 }// end of crud @Route view class

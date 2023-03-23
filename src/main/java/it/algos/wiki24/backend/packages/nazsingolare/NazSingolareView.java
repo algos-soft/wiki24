@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.packages.nazsingolare;
 
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -87,6 +88,19 @@ public class NazSingolareView extends WikiView {
 
         message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
+    }
+
+    /**
+     * Bottoni standard (solo icone) Reset, New, Edit, Delete, ecc.. <br>
+     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixBottoniTopStandard() {
+        super.fixBottoniTopStandard();
+
+        if (searchField!=null) {
+            searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
+        }
     }
 
 }// end of crud @Route view class

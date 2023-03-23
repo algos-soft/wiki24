@@ -255,7 +255,7 @@ public class BioView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         long inizio = System.currentTimeMillis();
         List<Bio> items = backend.findAll(sortOrder);
         logger.info(new WrapLog().exception(new AlgosException(String.format("Items %s", dateService.deltaText(inizio)))));
@@ -393,6 +393,8 @@ public class BioView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
 

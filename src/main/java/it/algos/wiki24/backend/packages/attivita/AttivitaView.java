@@ -243,7 +243,7 @@ public class AttivitaView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         List<Attivita> items = backend.findAllSortCorrente();
 
         final String textSearchSingolare = searchFieldSingolare != null ? searchFieldSingolare.getValue() : VUOTA;
@@ -303,6 +303,8 @@ public class AttivitaView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     @Override

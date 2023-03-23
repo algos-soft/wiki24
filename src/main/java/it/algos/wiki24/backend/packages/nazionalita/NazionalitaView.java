@@ -207,8 +207,8 @@ public class NazionalitaView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
-        List<Nazionalita> items = backend.findAllSortCorrente();
+    protected List<AEntity> sincroFiltri() {
+        List<Nazionalita> items = (List)super.sincroFiltri();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
         if (textService.isValid(textSearch)) {
@@ -245,6 +245,8 @@ public class NazionalitaView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     protected void sincroPlurali() {

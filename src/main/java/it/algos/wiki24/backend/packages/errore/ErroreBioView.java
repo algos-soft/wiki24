@@ -171,7 +171,7 @@ public class ErroreBioView extends WikiView {
     protected void fixItems() {
     }
 
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         List<Bio> items;
         items = bioService.fetchErrori();
 
@@ -188,6 +188,8 @@ public class ErroreBioView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
     public void updateItem(AEntity entityBeanSenzaTempl) {

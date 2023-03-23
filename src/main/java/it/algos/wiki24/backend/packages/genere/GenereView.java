@@ -6,6 +6,7 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -142,7 +143,7 @@ public class GenereView extends WikiView {
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
-    protected void sincroFiltri() {
+    protected List<AEntity> sincroFiltri() {
         List<Genere> items = backend.findAllSortCorrente();
 
         final String textSearch = searchField != null ? searchField.getValue() : VUOTA;
@@ -181,6 +182,8 @@ public class GenereView extends WikiView {
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
+
+        return (List)items;
     }
 
 }// end of crud @Route view class
