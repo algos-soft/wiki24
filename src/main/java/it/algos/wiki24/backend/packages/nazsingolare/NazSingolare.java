@@ -31,13 +31,13 @@ import org.springframework.stereotype.*;
 @AIEntity(collectionName = "nazsingolare", keyPropertyName = "nome", usaReset = true)
 public class NazSingolare extends AEntity {
 
-    @AIField(type = AETypeField.text, header = "singolare", widthEM = 20, search = true)
+    @AIField(type = AETypeField.text, header = "singolare", caption = "singolare", widthEM = 20)
     public String nome;
 
     @AIField(type = AETypeField.text, widthEM = 20)
     public String plurale;
 
-    @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questa nazionalità", widthEM = 6)
+    @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questa singola nazionalità", widthEM = 6)
     public int numBio;
 
     @Override

@@ -14,6 +14,8 @@ import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
@@ -110,6 +112,10 @@ public abstract class WikiTest extends AlgosTest {
 
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+    @Autowired
+    public NazSingolareBackend nazSingolareBackend;
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
     protected final static long BIO_SALVINI_PAGEID = 132555;
 
@@ -586,6 +592,22 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("tedeschi", false)
         );
     }
+
+
+    //--nome nazionalità plurale (maiuscola o minuscola)
+    //--esiste
+    public static Stream<Arguments> NAZIONALITA_PLURALE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false),
+                Arguments.of("turco", false),
+                Arguments.of("Afghani", true),
+                Arguments.of("andorrani", true),
+                Arguments.of("tedesca", false),
+                Arguments.of("arabi", true),
+                Arguments.of("tedesco", false)
+        );
+    }
+
     //--nome singolarePlurale
     //--esiste
     public static Stream<Arguments> NAZIONALITA_TRUE() {

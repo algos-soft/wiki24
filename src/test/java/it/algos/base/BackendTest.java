@@ -264,7 +264,7 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("21 - isExistById")
     protected boolean isExistById(String keyId) {
         sorgente = keyId;
-        ottenutoBooleano = crudBackend.isExistById(sorgente);
+        ottenutoBooleano = crudBackend.isExistById(sorgente.toLowerCase());
         if (ottenutoBooleano) {
             message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, sorgente);
         }
@@ -362,7 +362,7 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("31 - findById")
     protected AEntity findById(String keyId) {
         sorgente = keyId;
-        entityBean = crudBackend.findById(sorgente);
+        entityBean = crudBackend.findById(sorgente.toLowerCase());
         if (entityBean != null) {
             message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
         }
@@ -712,20 +712,21 @@ public abstract class BackendTest extends AlgosTest {
     @Order(60)
     @DisplayName("60--------")
     void test60() {
-        System.out.println("61 - findAllForKey (String)");
-        System.out.println("62 - findAllForKeyReverseOrder (String)");
+        System.out.println("61 - findAllForKeySortKey (String)");
+        System.out.println("62 - findAllForKeySortKeyReverse (String)");
+        System.out.println("63 - findAllForKeySortOrdine (String)");
+        System.out.println("64 - findAllForKeySortOrdineReverse (String)");
     }
 
     @Test
     @Order(61)
-    @DisplayName("61 - findAllForKey (String)")
-    protected void findAllForKey() {
-        System.out.println("61 - findAllForKey (String)");
+    @DisplayName("61 - findAllForKeySortKey (String)")
+    protected void findAllForKeySortKey() {
+        System.out.println("61 - findAllForKeySortKey (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
             System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
-
             message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
             System.out.println(message);
             message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
@@ -748,22 +749,24 @@ public abstract class BackendTest extends AlgosTest {
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
         sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' ascendente:", keyPropertyName, keyPropertyName);
         System.out.println(message);
 
         printSubLista(listaStr);
     }
 
+
     @Test
     @Order(62)
-    @DisplayName("62 - findAllForKeyReverseOrder (String)")
-    protected void findAllForKeyReverseOrder() {
-        System.out.println("62 - findAllForKeyReverseOrder (String)");
+    @DisplayName("62 - findAllForKeySortKeyReverse (String)")
+    protected void findAllForKeySortKeyReverse() {
+        System.out.println("62 - findAllForKeySortKeyReverse (String)");
         System.out.println(VUOTA);
 
         if (!annotationService.usaKeyPropertyName(entityClazz)) {
             System.out.println("Il metodo usato da questo test presuppone che esista una keyProperty");
-
             message = String.format("Nella entityClazz [%s] la keyProperty non è prevista", clazzName);
             System.out.println(message);
             message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
@@ -781,20 +784,101 @@ public abstract class BackendTest extends AlgosTest {
             return;
         }
 
-        listaStr = crudBackend.findAllForKeyReverseOrder();
+        listaStr = crudBackend.findAllForKeySortKeyReverse();
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         sorgente = textService.format(ottenutoIntero);
         sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s' in ordine inverso:", collectionName, clazzName, sorgente, sorgente2);
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' discendente:", keyPropertyName, keyPropertyName);
         System.out.println(message);
 
         printSubLista(listaStr);
     }
 
-    //Segnaposto
+
+    @Test
+    @Order(63)
+    @DisplayName("63 - findAllForKeySortOrdine (String)")
+    protected void findAllForKeySortOrdine() {
+        System.out.println("63 - findAllForKeySortOrdine (String)");
+        System.out.println(VUOTA);
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Il metodo usato da questo test presuppone che esista una property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+
+            message = String.format("Nella entityClazz [%s] la property %s non è prevista", clazzName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo la property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return;
+        }
+
+        if (!crudBackend.isExistsCollection()) {
+            message = String.format("Il metodo usato da questo test presuppone che esista la collection '%s' che invece è assente", collectionName);
+            System.out.println(message);
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = crudBackend.findAllForKeySortOrdine();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' ascendente:", keyPropertyName, FIELD_NAME_ORDINE);
+        System.out.println(message);
+
+        printSubLista(listaStr);
+    }
+
+
+    @Test
     @Order(64)
-    protected void libero64() {
+    @DisplayName("64 - findAllForKeySortOrdineReverse (String)")
+    protected void findAllForKeySortOrdineReverse() {
+        System.out.println("64 - findAllForKeySortOrdineReverse (String)");
+        System.out.println(VUOTA);
+
+        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+            message = String.format("Il metodo usato da questo test presuppone che esista una property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+
+            message = String.format("Nella entityClazz [%s] la property %s non è prevista", clazzName, FIELD_NAME_ORDINE);
+            System.out.println(message);
+            message = String.format("Devi scrivere un test alternativo oppure modificare la entityClazz [%s]", clazzName);
+            System.out.println(message);
+            message = String.format("Aggiungendo la property %s", FIELD_NAME_ORDINE);
+            System.out.println(message);
+            return;
+        }
+
+        if (!crudBackend.isExistsCollection()) {
+            message = String.format("Il metodo usato da questo test presuppone che esista la collection '%s' che invece è assente", collectionName);
+            System.out.println(message);
+            message = String.format("Non esiste la collection '%s' della classe [%s]", collectionName, clazzName);
+            System.out.println(message);
+            return;
+        }
+
+        listaStr = crudBackend.findAllForKeySortOrdineReverse();
+        assertNotNull(listaStr);
+        ottenutoIntero = listaStr.size();
+        sorgente = textService.format(ottenutoIntero);
+        sorgente2 = keyPropertyName;
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities.", collectionName, clazzName, ottenutoIntero);
+        System.out.println(message);
+        message = String.format("Valori (String) del campo chiave '%s' ordinato secondo '%s' discendente:", keyPropertyName, FIELD_NAME_ORDINE);
+        System.out.println(message);
+
+        printSubLista(listaStr);
     }
 
     //Segnaposto

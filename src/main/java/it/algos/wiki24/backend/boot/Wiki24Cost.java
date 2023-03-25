@@ -184,6 +184,8 @@ public class Wiki24Cost {
     public static final String PATH_STATISTICHE_ANNI = PATH_PROGETTO + ANNI;
 
     public static final String PATH_CATEGORIA = PATH_WIKI + "Categoria:";
+    public static final String LINK_PAGINA_ATTIVITA = "Progetto:Biografie/Attività/";
+    public static final String LINK_PAGINA_NAZIONALITA = "Progetto:Biografie/Nazionalità/";
 
     public static final String TAG_EX_SPAZIO = "ex" + SPAZIO;
 

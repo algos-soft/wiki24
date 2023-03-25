@@ -20,6 +20,8 @@ import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -49,6 +51,12 @@ public abstract class WikiBackend extends CrudBackend {
 
     @Autowired
     public SecoloBackend secoloBackend;
+
+    @Autowired
+    public NazSingolareBackend nazSingolareBackend;
+
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
     protected String message;
 
@@ -174,6 +182,9 @@ public abstract class WikiBackend extends CrudBackend {
     @Autowired
     public CognomeBackend cognomeBackend;
 
+    @Autowired
+    private AETypeTime.TypeInjector nonUsatoDirettamenteServeSoloPerInjectionDiSpring;
+
     public WikiBackend(final Class<? extends AEntity> entityClazz) {
         super(entityClazz);
     }// end of constructor with @Autowired
@@ -276,7 +287,7 @@ public abstract class WikiBackend extends CrudBackend {
             logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
         }
 
-        message = String.format("Download di %s. %s", modulo, unitaMisuraDownload.message(inizio));
+        message = String.format("Download di %s. Pagine caricate %s. %s", modulo, textService.format(count()), unitaMisuraDownload.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
         result.setValidMessage(message);
 

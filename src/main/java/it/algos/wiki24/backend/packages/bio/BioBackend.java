@@ -1190,6 +1190,51 @@ public class BioBackend extends WikiBackend {
     // NAZIONALITA
     //
     //
+    public int countNazPlurale(final String nazPlurale) {
+        int numBio = 0;
+        int numTemp = 0;
+        List<String> listaSingolari = nazSingolareBackend.findAllForSingolareByPlurale(nazPlurale);
+        Query query;
+        Long lungo;
+
+        if (textService.isEmpty(nazPlurale)) {
+            return numBio;
+        }
+
+        if (listaSingolari != null && listaSingolari.size() > 0) {
+            for (String nazSingola : listaSingolari) {
+                query = new Query();
+                query.addCriteria(Criteria.where("nazionalita").is(nazSingola));
+                lungo = mongoService.mongoOp.count(query, Bio.class);
+                numTemp = lungo > 0 ? lungo.intValue() : 0;
+                numBio += numTemp;
+            }
+        }
+
+        return numBio;
+    }
+
+    //    private Query queryNazPlurale(String nazPlurale) {
+    //        Query query = new Query();
+    //        List<String> listaSingolari = nazSingolareBackend.findAllForSingolareByPlurale(nazPlurale);
+    //        Sort sort;
+    //
+    //        if (textService.isEmpty(nazPlurale)) {
+    //            return null;
+    //        }
+    //
+    //        if (listaSingolari!=null&&listaSingolari.size()>0) {
+    //            for (String nazSingola : listaSingolari) {
+    //                query.addCriteria(Criteria.where("nazionalita").is(nazSingola));
+    //            }
+    //        }
+    //
+    //        sort = Sort.by(Sort.Direction.ASC, "nazionalita");
+    //        query.with(sort);
+    //
+    //        return query;
+    //    }
+
     public int countNazionalita(final String nazionalitaSingola) {
         int numBio = 0;
         Query query;
@@ -1217,9 +1262,9 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(nazionalitaSingola)) {
             return null;
         }
-//        if (attivitaBackend.findByKey(nazionalitaSingola) == null) {
-//            return null;
-//        }
+        //        if (attivitaBackend.findByKey(nazionalitaSingola) == null) {
+        //            return null;
+        //        }
 
         query.addCriteria(Criteria.where("nazionalita").is(nazionalitaSingola));
         sort = Sort.by(Sort.Direction.ASC, "nazionalita");
@@ -1227,6 +1272,7 @@ public class BioBackend extends WikiBackend {
 
         return query;
     }
+
     //
     // nazionalita end
     //

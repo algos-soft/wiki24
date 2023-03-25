@@ -3,46 +3,55 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.packages.nazsingolare.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.mockito.*;
 import org.springframework.boot.test.context.*;
-
-import java.util.*;
 
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 22-Mar-2023
- * Time: 18:49
+ * Date: Fri, 24-Mar-2023
+ * Time: 06:48
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
 @Tag("wikiBackend")
-@DisplayName("NazSingolare Backend")
+@DisplayName("NazPlurale Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NazSingolareBackendTest extends WikiBackendTest {
+public class NazPluraleBackendTest extends WikiBackendTest {
 
-    private NazSingolareBackend backend;
-
-    private List<NazSingolare> listaBeans;
+    @InjectMocks
+    private NazPluraleBackend backend;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        this.backend = super.nazSingolaBackend;
-        super.entityClazz = NazSingolare.class;
+        this.backend = super.nazPluraleBackend;
+        super.entityClazz = NazPlurale.class;
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
 
         super.setUpAll();
+    }
+
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("14 - resetForcing")
+    protected void resetForcing() {
     }
 
     @Test
@@ -52,14 +61,14 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
+        //--nome nazionalità plurale (maiuscola o minuscola)
         //--esiste ID
         //--esiste key
         System.out.println(VUOTA);
-        NAZIONALITA_SINGOLARE().forEach(this::isExistByIdBase);
+        NAZIONALITA_PLURALE().forEach(this::isExistByIdBase);
     }
 
-    //--nome nazionalità singolare (maiuscola o minuscola)
+    //--nome nazionalità plurale (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     void isExistByIdBase(Arguments arg) {
@@ -79,14 +88,14 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
+        //--nome nazionalità plurale (maiuscola o minuscola)
         //--esiste ID
         //--esiste key
         System.out.println(VUOTA);
-        NAZIONALITA_SINGOLARE().forEach(this::isExistByKeyBase);
+        NAZIONALITA_PLURALE().forEach(this::isExistByKeyBase);
     }
 
-    //--nome nazionalità singolare (maiuscola o minuscola)
+    //--nome nazionalità plurale (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     void isExistByKeyBase(Arguments arg) {
@@ -130,14 +139,14 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         assertFalse(ottenutoBooleano);
         System.out.println(VUOTA);
 
-        sorgente = "plurale";
+        sorgente = "lista";
         sorgente2 = "termidoro";
         ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
         assertFalse(ottenutoBooleano);
         System.out.println(VUOTA);
 
-        sorgente = "plurale";
-        sorgente2 = "abcasi";
+        sorgente = "lista";
+        sorgente2 = "Bulgari";
         ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
         assertTrue(ottenutoBooleano);
     }
@@ -149,15 +158,15 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
+        //--nome nazionalità plurale (maiuscola o minuscola)
         //--esiste ID
         //--esiste key
         System.out.println(VUOTA);
-        NAZIONALITA_SINGOLARE().forEach(this::findByIdBase);
+        NAZIONALITA_PLURALE().forEach(this::findByIdBase);
     }
 
 
-    //--nome nazionalità singolare (maiuscola o minuscola)
+    //--nome nazionalità plurale (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     void findByIdBase(Arguments arg) {
@@ -176,14 +185,14 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("32 - findByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
+        //--nome nazionalità plurale (maiuscola o minuscola)
         //--esiste ID
         //--esiste key
         System.out.println(VUOTA);
-        NAZIONALITA_SINGOLARE().forEach(this::findByKeyBase);
+        NAZIONALITA_PLURALE().forEach(this::findByKeyBase);
     }
 
-    //--nome nazionalità singolare (maiuscola o minuscola)
+    //--nome nazionalità plurale (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     void findByKeyBase(Arguments arg) {
@@ -226,88 +235,35 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         assertNull(entityBean);
         System.out.println(VUOTA);
 
-        sorgente = "plurale";
+        sorgente = "lista";
         sorgente2 = "termidoro";
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNull(entityBean);
         System.out.println(VUOTA);
 
-        sorgente = "plurale";
-        sorgente2 = "abcasi";
+        sorgente = "lista";
+        sorgente2 = "Bulgari";
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNotNull(entityBean);
         System.out.println(VUOTA);
     }
 
-
-    @Test
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
     @Order(71)
-    @DisplayName("71 - findAllByPlurale (entityBeans)")
-    protected void findAllByPlurale() {
-        System.out.println("71 - findAllByPlurale (entityBeans)");
+    @DisplayName("71 - findSingolari")
+        //--nome nazionalità plurale (maiuscola o minuscola)
+    void findSingolari(final String nomePlurale) {
+        System.out.println("71 - findSingolari");
         System.out.println(VUOTA);
 
-        sorgente = "berberi";
-        listaBeans = backend.findAllByPlurale(sorgente);
-        assertNotNull(listaBeans);
-        ottenutoIntero = listaBeans.size();
-        message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
+        sorgente = nomePlurale;
+        listaStr = backend.findSingolari(sorgente);
+        message = String.format("Nazionalità singolari comprese nella nazionalità plurale '%s'", sorgente);
         System.out.println(message);
-        printSubLista(listaBeans);
         System.out.println(VUOTA);
 
-        sorgente = "britannici";
-        listaBeans = backend.findAllByPlurale(sorgente);
-        assertNotNull(listaBeans);
-        ottenutoIntero = listaBeans.size();
-        message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
-        System.out.println(message);
-        printSubLista(listaBeans);
-    }
-
-
-    @Test
-    @Order(72)
-    @DisplayName("72 - findAllForSingolareByPlurale (String)")
-    protected void findAllForSingolareByPlurale() {
-        System.out.println("72 - findAllForSingolareByPlurale (String)");
-        System.out.println(VUOTA);
-
-        sorgente = "rumeni";
-        listaStr = backend.findAllForSingolareByPlurale(sorgente);
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
-        System.out.println(message);
-        printSubLista(listaStr);
-        System.out.println(VUOTA);
-
-        sorgente = "suebi";
-        listaStr = backend.findAllForSingolareByPlurale(sorgente);
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
-        System.out.println(message);
-        printSubLista(listaStr);
-        System.out.println(VUOTA);
-    }
-
-
-    @Test
-    @Order(73)
-    @DisplayName("73 - getMappaSingolarePlurale")
-    protected void getMappaSingolarePlurale() {
-        System.out.println("73 - getMappaSingolarePlurale");
-        System.out.println("Mappa di tutte le nazionalità con la coppia singolare -> plurale.");
-        System.out.println(VUOTA);
-
-        previstoIntero = backend.count();
-        mappaOttenuta = backend.getMappaSingolarePlurale();
-        assertNotNull(mappaOttenuta);
-        ottenutoIntero = mappaOttenuta.size();
-        assertEquals(previstoIntero, ottenutoIntero);
-
-        printMappa(mappaOttenuta);
+        print(listaStr);
     }
 
 }

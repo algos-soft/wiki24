@@ -59,14 +59,6 @@ public class NazionalitaBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastDownload = WPref.downloadNazionalita;
-        super.durataDownload = WPref.downloadNazionalitaTime;
-        super.lastElaborazione = WPref.elaboraNazionalita;
-        super.durataElaborazione = WPref.elaboraNazionalitaTime;
-        super.lastUpload = WPref.uploadNazionalita;
-        super.durataUpload = WPref.uploadNazionalitaTime;
-        super.nextUpload = WPref.uploadNazionalitaPrevisto;
-        super.lastStatistica = WPref.statisticaNazionalita;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
@@ -734,7 +726,7 @@ public class NazionalitaBackend extends WikiBackend {
     public void fixNext() {
         LocalDateTime adesso = LocalDateTime.now();
         LocalDateTime prossimo = adesso.plusDays(7);
-        WPref.uploadNazionalitaPrevisto.setValue(prossimo);
+        WPref.uploadNazPluralePrevisto.setValue(prossimo);
     }
 
 

@@ -665,7 +665,9 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
 
         if (items != null) {
-            grid.setItems(items);
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
         }
 
         return items;

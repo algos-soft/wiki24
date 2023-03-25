@@ -65,6 +65,7 @@ public class NazSingolareView extends WikiView {
         this.usaBottoneUploadAll = false;
         this.usaBottoneTest = false;
         this.usaBottoneDownload = true;
+        this.usaBottonePaginaWiki = false;
         this.usaInfoDownload = true;
     }
 
@@ -77,17 +78,21 @@ public class NazSingolareView extends WikiView {
         super.fixAlert();
         String modulo = PATH_WIKI + PATH_MODULO;
 
-        Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + NAZ_LOWER,   NAZ);
+        Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + NAZ_LOWER,   NAZ+" singolare -> plurale");
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1));
 
         message = "Tabella nazionalità singolari del parametro 'nazionalità' recuperate dal modulo singolare->plurale sul server wiki.";
         addSpan(ASpan.text(message).verde());
-        message = "La lista dei plurali, l'elaborazione e gli upload delle liste biografiche riguardano la task NazPlurale.";
+        message = "L'elaborazione di questa tabella calcola le voci biografiche che usano ogni singola attività singolare.";
         addSpan(ASpan.text(message).verde());
 
         message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
+        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task NazPlurale.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = "ResetOnlyEmpty effettua il download. Il download effettua anche l'elaborazione che può comunque essere fatta separatamente.";
+        addSpan(ASpan.text(message).rosso().small());
     }
 
     /**

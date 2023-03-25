@@ -38,12 +38,13 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        this.backend = super.annoWikiBackend;
         super.entityClazz = AnnoWiki.class;
-//        backend = annoWikiBackend;
+        super.typeBackend = TypeBackend.giorno;
         super.crudBackend = backend;
-//        super.wikiBackend = backend;
+        super.wikiBackend = backend;
+
         super.setUpAll();
-        super.typeBackend = TypeBackend.anno;
     }
 
     @BeforeEach
@@ -292,10 +293,10 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     }
 
     @Test
-    @Order(64)
-    @DisplayName("64 - findAllForNome (String)")
+    @Order(65)
+    @DisplayName("65 - findAllForNome (String)")
     protected void findAllForNome() {
-        System.out.println("64 - findAllForNome (String)");
+        System.out.println("65 - findAllForNome (String)");
         System.out.println(VUOTA);
 
         listaStr = backend.findAllForNome();
@@ -311,10 +312,10 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
 
 
     @Test
-    @Order(65)
-    @DisplayName("65 - findAllForNomeBySecolo (String)")
+    @Order(66)
+    @DisplayName("66 - findAllForNomeBySecolo (String)")
     protected void findAllForNomeByMese() {
-        System.out.println("65 - findAllForNomeByMese (String)");
+        System.out.println("66 - findAllForNomeByMese (String)");
         int num = 3;
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
@@ -331,10 +332,10 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
 
 
     @Test
-    @Order(66)
-    @DisplayName("66 - findAllPagine (String)")
+    @Order(67)
+    @DisplayName("67 - findAllPagine (String)")
     protected void findAllPagine() {
-        System.out.println("66 - findAllPagine (String)");
+        System.out.println("67 - findAllPagine (String)");
         int num = 20;
 
         listaStr = backend.findAllPagine();
@@ -349,10 +350,10 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
 
 
     @Test
-    @Order(67)
-    @DisplayName("67 - findAllPagineReverseOrder (String)")
+    @Order(68)
+    @DisplayName("68 - findAllPagineReverseOrder (String)")
     protected void findAllPagineReverseOrder() {
-        System.out.println("67 - findAllPagineReverseOrder (String)");
+        System.out.println("68 - findAllPagineReverseOrder (String)");
         int num = 20;
 
         listaStr = backend.findAllPagineReverseOrder();

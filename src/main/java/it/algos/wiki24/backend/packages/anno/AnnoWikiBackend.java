@@ -133,15 +133,6 @@ public class AnnoWikiBackend extends WikiBackend {
         return super.findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    @Override
-    public List<String> findAllForKeySortOrdine() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
-    }
-
-    @Override
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
-    }
 
     public List<String> findAllForNome() {
         return findAllForKeySortOrdine();

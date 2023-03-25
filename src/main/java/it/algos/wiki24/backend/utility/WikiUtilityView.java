@@ -17,6 +17,8 @@ import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -44,7 +46,10 @@ public class WikiUtilityView extends UtilityView {
     public AttivitaBackend attivitaBackend;
 
     @Autowired
-    public NazionalitaBackend nazionalitaBackend;
+    public NazSingolareBackend nazSingolareBackend;
+
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
 
     @Override
@@ -86,9 +91,9 @@ public class WikiUtilityView extends UtilityView {
         bottone2.getElement().setAttribute("theme", "primary");
         bottone2.addClickListener(event -> downloadAttivita());
 
-        Button bottone3 = new Button("Nazionalità");
+        Button bottone3 = new Button("NazSingolare");
         bottone3.getElement().setAttribute("theme", "primary");
-        bottone3.addClickListener(event -> downloadNazionalita());
+        bottone3.addClickListener(event -> downloadNazSingolare());
 
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2, bottone3));
@@ -97,7 +102,7 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadAll() {
         downloadAttivita();
-        downloadNazionalita();
+        downloadNazSingolare();
     }
 
     public void downloadAttivita() {
@@ -121,14 +126,14 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
-    public void downloadNazionalita() {
+    public void downloadNazSingolare() {
         super.inizioDebug();
         WResult result;
         String message;
         String task = Nazionalita.class.getSimpleName();
 
-        logger.info(new WrapLog().message("Utility: download delle Nazionalità.").type(AETypeLog.utility));
-        result = nazionalitaBackend.download();
+        logger.info(new WrapLog().message("Utility: download delle nazionalità singolari.").type(AETypeLog.utility));
+        result = nazSingolareBackend.download();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);
@@ -156,11 +161,12 @@ public class WikiUtilityView extends UtilityView {
 
         message = "Download di tutte le biografie. Da eseguire PRIMA delle elaborazioni. Necessarie circa 8-10 ore";
         this.add(paragrafo);
-        layout.add(new HorizontalLayout(ASpan.text(message).rosso(),bottone));
+        layout.add(new HorizontalLayout(ASpan.text(message).rosso(), bottone));
         this.add(layout);
     }
+
     public void downloadBio() {
-        String message="Meglio andare nel package Biografie";
+        String message = "Meglio andare nel package Biografie";
         Avviso.message(message).error().open();
     }
 
@@ -202,12 +208,16 @@ public class WikiUtilityView extends UtilityView {
         bottone4.addClickListener(event -> elaboraAttivita());
         bottone4.setEnabled(false);
 
-        Button bottone5 = new Button("Nazionalità");
+        Button bottone5 = new Button("NazSingolare");
         bottone5.getElement().setAttribute("theme", "primary");
-        bottone5.addClickListener(event -> elaboraNazionalita());
+        bottone5.addClickListener(event -> elaboraNazSingolare());
+
+        Button bottone6 = new Button("NazPlurale");
+        bottone6.getElement().setAttribute("theme", "primary");
+        bottone6.addClickListener(event -> elaboraNazPlurale());
 
         this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5));
+        layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5, bottone6));
         this.add(layout);
     }
 
@@ -264,12 +274,12 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
-    public void elaboraNazionalita() {
+    public void elaboraNazSingolare() {
         super.inizioDebug();
         WResult result;
 
-        logger.info(new WrapLog().message("Utility: elaborazione delle Nazionalità.").type(AETypeLog.utility));
-        result = nazionalitaBackend.elabora();
+        logger.info(new WrapLog().message("Utility: elaborazione delle nazionalità singolari.").type(AETypeLog.utility));
+        result = nazSingolareBackend.elabora();
         if (result.isValido()) {
             Avviso.message("Elaborazione effettuata").success().open();
         }
@@ -280,6 +290,22 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
+
+    public void elaboraNazPlurale() {
+        super.inizioDebug();
+        WResult result;
+
+        logger.info(new WrapLog().message("Utility: elaborazione delle nazionalità plurali.").type(AETypeLog.utility));
+        result = nazPluraleBackend.elabora();
+        if (result.isValido()) {
+            Avviso.message("Elaborazione effettuata").success().open();
+        }
+        else {
+            Avviso.message("Elaborazione non effettuata").error().open();
+        }
+
+        super.fineDebug();
+    }
 
 
     public void paragrafoUploadListe() {

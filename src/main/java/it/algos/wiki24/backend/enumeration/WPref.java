@@ -31,13 +31,21 @@ public enum WPref implements AIGenPref {
     uploadAttivitaPrevisto("uploadAttivitaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le attività."),
 
 
-    downloadNazionalita("downloadNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale nazionalità."),
-    downloadNazionalitaTime("downloadNazionalitaTime", AETypePref.integer, 0, "Durata download delle nazionalità."),
-    elaboraNazionalita("elaboraNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità."),
-    elaboraNazionalitaTime("elaboraNazionalitaTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità."),
-    uploadNazionalita("uploadNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nazionalità"),
-    uploadNazionalitaTime("uploadNazionalitaTime", AETypePref.integer, 0, "Durata upload delle nazionalità."),
-    uploadNazionalitaPrevisto("uploadNazionalitaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità."),
+    downloadNazSingolare("downloadNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale nazionalità."),
+    downloadNazSingolareTime("downloadNazSingolareTime", AETypePref.integer, 0, "Durata download delle nazionalità singolari."),
+    elaboraNazSingolare("elaboraNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità singolari."),
+    elaboraNazSingolareTime("elaboraNazSingolareTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità singolari."),
+
+
+    downloadNazPlurale("downloadNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Link nazionalità."),
+    downloadNazPluraleTime("downloadNazPluraleTime", AETypePref.integer, 0, "Durata download delle nazionalità plurali."),
+    elaboraNazPlurale("elaboraNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità plurali."),
+    elaboraNazPluraleTime("elaboraNazPluraleTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità plurali."),
+
+
+    uploadNazPlurale("uploadNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nazionalità plurali"),
+    uploadNazPluraleTime("uploadNazPluraleTime", AETypePref.integer, 0, "Durata upload delle nazionalità plurali."),
+    uploadNazPluralePrevisto("uploadNazPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità plurali."),
 
 
     uploadCognomi("uploadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di cognomi oltre la soglia di 50 biografie"),
@@ -73,7 +81,7 @@ public enum WPref implements AIGenPref {
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
     statisticaAttivita("statisticaAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività."),
-    statisticaNazionalita("statisticaNazionalita", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità."),
+    statisticaNazPlurale("statisticaNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità plurali."),
 
 
     uploadGiorni("uploadGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per giorno"),

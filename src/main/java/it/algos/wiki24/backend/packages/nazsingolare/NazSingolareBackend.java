@@ -9,9 +9,11 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -39,10 +41,13 @@ public class NazSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastDownload = WPref.downloadNazionalita;
-        super.durataDownload = WPref.downloadNazionalitaTime;
+        super.lastDownload = WPref.downloadNazSingolare;
+        super.durataDownload = WPref.downloadNazSingolareTime;
+        super.lastElaborazione = WPref.elaboraNazSingolare;
+        super.durataElaborazione = WPref.elaboraNazSingolareTime;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
     }
 
     /**
@@ -77,14 +82,73 @@ public class NazSingolareBackend extends WikiBackend {
         return (NazSingolare) super.fixKey(newEntityBean);
     }
 
+
+    @Override
+    public NazSingolare findById(final String keyID) {
+        return (NazSingolare) super.findById(keyID);
+    }
+
+    @Override
+    public NazSingolare findByKey(final String keyValue) {
+        return (NazSingolare) super.findByKey(keyValue);
+    }
+
+    @Override
+    public NazSingolare findByOrder(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public NazSingolare findByProperty(final String propertyName, final Object propertyValue) {
+        return (NazSingolare) super.findByProperty(propertyName, propertyValue);
+    }
+
+
+    @Override
+    public List<NazSingolare> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<NazSingolare> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<NazSingolare> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<NazSingolare> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
+    }
+
     public List<NazSingolare> findAll() {
         return this.findAllNoSort();
     }
 
+    public List<NazSingolare> findAllByPlurale(String plurale) {
+        return super.findAllByProperty("plurale", plurale);
+    }
+
+    public List<String> findAllForSingolareByPlurale(String plurale) {
+        return findAllByPlurale(plurale).stream().map(nazSin -> nazSin.nome).collect(Collectors.toList());
+    }
+
+    public Map<String, String> getMappaSingolarePlurale() {
+        Map<String, String> mappa = new LinkedHashMap<>();
+
+        for (NazSingolare naz : findAll()) {
+            mappa.put(naz.nome, naz.plurale);
+        }
+
+        return mappa;
+    }
+
     /**
-     * Legge le mappa di valori dai moduli di wiki: <br>
+     * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale nazionalità
-     * Modulo:Bio/Link nazionalità
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
@@ -102,7 +166,10 @@ public class NazSingolareBackend extends WikiBackend {
         size += downloadNazionalita(moduloNazionalita);
         result.setIntValue(size);
 
-        return super.fixDownload(result, inizio, "nazionalità");
+        result = super.fixDownload(result, inizio, "nazionalità");
+        result = this.elabora();
+
+        return result;
     }
 
 
@@ -153,12 +220,7 @@ public class NazSingolareBackend extends WikiBackend {
     public WResult elabora() {
         WResult result = super.elabora();
         long inizio = System.currentTimeMillis();
-        int tempo = 77;
-
-        //--Check di validità del database mongoDB
-//        if (checkValiditaDatabase().isErrato()) {
-//            return null;
-//        }
+        int tempo = 2;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, NazSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
@@ -183,7 +245,9 @@ public class NazSingolareBackend extends WikiBackend {
         AResult result = super.resetOnlyEmpty(false);
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            return this.download();
+            result.setValido(true);
+            result = this.download();
+            return result;
         }
         else {
             return result;
