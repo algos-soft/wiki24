@@ -6,7 +6,6 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
@@ -45,6 +44,7 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         super.setUpAll();
     }
 
+
     @Test
     @Order(21)
     @DisplayName("21 - isExistById")
@@ -52,9 +52,6 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
-        //--esiste ID
-        //--esiste key
         System.out.println(VUOTA);
         NAZIONALITA_SINGOLARE().forEach(this::isExistByIdBase);
     }
@@ -79,9 +76,6 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
-        //--esiste ID
-        //--esiste key
         System.out.println(VUOTA);
         NAZIONALITA_SINGOLARE().forEach(this::isExistByKeyBase);
     }
@@ -149,9 +143,6 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
-        //--esiste ID
-        //--esiste key
         System.out.println(VUOTA);
         NAZIONALITA_SINGOLARE().forEach(this::findByIdBase);
     }
@@ -176,9 +167,6 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("32 - findByKey");
         System.out.println(VUOTA);
 
-        //--nome nazionalità singolare (maiuscola o minuscola)
-        //--esiste ID
-        //--esiste key
         System.out.println(VUOTA);
         NAZIONALITA_SINGOLARE().forEach(this::findByKeyBase);
     }

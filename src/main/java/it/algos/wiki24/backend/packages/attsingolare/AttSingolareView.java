@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
@@ -13,12 +13,17 @@ import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.component.textfield.TextField;
+
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 18-Mar-2023
- * Time: 15:17
+ * Date: Sat, 25-Mar-2023
+ * Time: 16:49
  * <p>
  * Vista iniziale e principale di un package <br>
  *
@@ -26,13 +31,13 @@ import java.util.*;
  * Presenta la Grid <br>
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
-@PageTitle("NazSingolare")
-@Route(value = "nazsingolare", layout = MainLayout.class)
-public class NazSingolareView extends WikiView {
+@PageTitle("AttSingolare")
+@Route(value = "attsingolare", layout = MainLayout.class)
+public class AttSingolareView extends WikiView {
 
 
     //--per eventuali metodi specifici
-    private NazSingolareBackend backend;
+    private AttSingolareBackend backend;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -42,8 +47,8 @@ public class NazSingolareView extends WikiView {
      *
      * @param crudBackend service specifico per la businessLogic e il collegamento con la persistenza dei dati
      */
-    public NazSingolareView(@Autowired final NazSingolareBackend crudBackend) {
-        super(crudBackend, NazSingolare.class);
+    public AttSingolareView(@Autowired final AttSingolareBackend crudBackend) {
+        super(crudBackend, AttSingolare.class);
         this.backend = crudBackend;
     }
 
@@ -78,18 +83,23 @@ public class NazSingolareView extends WikiView {
         super.fixAlert();
         String modulo = PATH_WIKI + PATH_MODULO;
 
-        Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + NAZ_LOWER, NAZ + " singolare/plurale");
+        Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + ATT_LOWER, ATT + " singolare/plurale");
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1));
 
-        message = "Tabella nazionalità singolari del parametro 'nazionalità' recuperate dal modulo 'singolare/plurale' sul server wiki.";
+        Anchor anchor2 = new Anchor(modulo + PATH_EX + ATT_LOWER, PATH_EX + ATT_LOWER);
+        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
+
+        message = "Tabella attività singolari del (primo) parametro 'attività' recuperate dal modulo 'singolare/plurale' sul server wiki.";
+        addSpan(ASpan.text(message).verde());
+        message = "Vengono aggiunte anche le 'attività' previste dal modulo 'ex-attività' sul server wiki.";
         addSpan(ASpan.text(message).verde());
         message = "L'elaborazione di questa tabella calcola le voci biografiche che usano ogni singola attività singolare.";
         addSpan(ASpan.text(message).verde());
 
-        message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità singolari sono convertite in minuscolo.";
+        message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
-        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task NazPlurale.";
+        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";
         addSpan(ASpan.text(message).rosso().small());
         message = "ResetOnlyEmpty effettua il download. Il download effettua anche l'elaborazione che può comunque essere fatta separatamente.";
         addSpan(ASpan.text(message).rosso().small());

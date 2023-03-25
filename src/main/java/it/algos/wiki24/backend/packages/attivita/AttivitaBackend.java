@@ -59,13 +59,13 @@ public class AttivitaBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastDownload = WPref.downloadAttivita;
-        super.durataDownload = WPref.downloadAttivitaTime;
-        super.lastElaborazione = WPref.elaboraAttivita;
-        super.durataElaborazione = WPref.elaboraAttivitaTime;
-        super.lastUpload = WPref.uploadAttivita;
-        super.durataUpload = WPref.uploadAttivitaTime;
-        super.nextUpload = WPref.uploadAttivitaPrevisto;
+        super.lastDownload = WPref.downloadAttPlurale;
+        super.durataDownload = WPref.downloadAttPluraleTime;
+        super.lastElaborazione = WPref.elaboraAttPlurale;
+        super.durataElaborazione = WPref.elaboraAttPluraleTime;
+        super.lastUpload = WPref.uploadAttPlurale;
+        super.durataUpload = WPref.uploadAttPluraleTime;
+        super.nextUpload = WPref.uploadAttPluralePrevisto;
         super.lastStatistica = WPref.statisticaAttivita;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
@@ -800,7 +800,7 @@ public class AttivitaBackend extends WikiBackend {
     public void fixNext() {
         LocalDateTime adesso = LocalDateTime.now();
         LocalDateTime prossimo = adesso.plusDays(7);
-        WPref.uploadAttivitaPrevisto.setValue(prossimo);
+        WPref.uploadAttPluralePrevisto.setValue(prossimo);
     }
 
     /**

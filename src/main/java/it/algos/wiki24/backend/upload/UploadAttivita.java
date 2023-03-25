@@ -50,9 +50,9 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         super.titoloLinkParagrafo = TITOLO_LINK_PARAGRAFO_NAZIONALITA;
         super.titoloLinkVediAnche = TITOLO_LINK_PARAGRAFO_ATTIVITA;
         super.typeCrono = AETypeLista.attivitaPlurale;
-        super.lastUpload = WPref.uploadAttivita;
-        super.durataUpload = WPref.uploadAttivitaTime;
-        super.nextUpload = WPref.uploadAttivitaPrevisto;
+        super.lastUpload = WPref.uploadAttPlurale;
+        super.durataUpload = WPref.uploadAttPluraleTime;
+        super.nextUpload = WPref.uploadAttPluralePrevisto;
     }// end of constructor
 
 

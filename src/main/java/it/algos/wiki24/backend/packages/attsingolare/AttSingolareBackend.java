@@ -1,26 +1,27 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 18-Mar-2023
- * Time: 15:17
+ * Date: Sat, 25-Mar-2023
+ * Time: 16:49
  * <p>
  * Service di una entityClazz specifica e di un package <br>
  * Garantisce i metodi di collegamento per accedere al database <br>
@@ -30,11 +31,11 @@ import java.util.stream.*;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
-public class NazSingolareBackend extends WikiBackend {
+public class AttSingolareBackend extends WikiBackend {
 
 
-    public NazSingolareBackend() {
-        super(NazSingolare.class);
+    public AttSingolareBackend() {
+        super(AttSingolare.class);
     }
 
     @Override
@@ -57,10 +58,9 @@ public class NazSingolareBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public NazSingolare newEntity() {
+    public AttSingolare newEntity() {
         return newEntity(VUOTA, VUOTA);
     }
-
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -69,105 +69,88 @@ public class NazSingolareBackend extends WikiBackend {
      * All properties <br>
      *
      * @param keyPropertyValue (obbligatorio, unico)
-     * @param plurale (obbligatorio)
+     * @param plurale          (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NazSingolare newEntity(final String keyPropertyValue, String plurale) {
-        NazSingolare newEntityBean = NazSingolare.builder()
+    public AttSingolare newEntity(final String keyPropertyValue, String plurale) {
+        AttSingolare newEntityBean = AttSingolare.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .numBio(0)
                 .build();
 
-        return (NazSingolare) super.fixKey(newEntityBean);
+        return (AttSingolare) super.fixKey(newEntityBean);
     }
 
 
     @Override
-    public NazSingolare findById(final String keyID) {
-        return (NazSingolare) super.findById(keyID);
+    public AttSingolare findById(final String keyID) {
+        return (AttSingolare) super.findById(keyID);
     }
 
     @Override
-    public NazSingolare findByKey(final String keyValue) {
-        return (NazSingolare) super.findByKey(keyValue);
+    public AttSingolare findByKey(final String keyValue) {
+        return (AttSingolare) super.findByKey(keyValue);
     }
 
     @Override
-    public NazSingolare findByOrder(final int ordine) {
+    public AttSingolare findByOrder(final int ordine) {
         return this.findByProperty(FIELD_NAME_ORDINE, ordine);
     }
 
     @Override
-    public NazSingolare findByProperty(final String propertyName, final Object propertyValue) {
-        return (NazSingolare) super.findByProperty(propertyName, propertyValue);
+    public AttSingolare findByProperty(final String propertyName, final Object propertyValue) {
+        return (AttSingolare) super.findByProperty(propertyName, propertyValue);
     }
 
 
     @Override
-    public List<NazSingolare> findAllNoSort() {
+    public List<AttSingolare> findAllNoSort() {
         return super.findAllNoSort();
     }
 
     @Override
-    public List<NazSingolare> findAllSortCorrente() {
+    public List<AttSingolare> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
 
     @Override
-    public List<NazSingolare> findAllSortCorrenteReverse() {
+    public List<AttSingolare> findAllSortCorrenteReverse() {
         return super.findAllSortCorrenteReverse();
     }
 
     @Override
-    public List<NazSingolare> findAllSort(Sort sort) {
+    public List<AttSingolare> findAllSort(Sort sort) {
         return super.findAllSort(sort);
     }
 
-    public List<NazSingolare> findAll() {
+    public List<AttSingolare> findAll() {
         return this.findAllNoSort();
     }
 
-    public List<NazSingolare> findAllByPlurale(String plurale) {
-        return super.findAllByProperty("plurale", plurale);
-    }
-
-    public List<String> findAllForSingolareByPlurale(String plurale) {
-        return findAllByPlurale(plurale).stream().map(nazSin -> nazSin.nome).collect(Collectors.toList());
-    }
-
-    public Map<String, String> getMappaSingolarePlurale() {
-        Map<String, String> mappa = new LinkedHashMap<>();
-
-        for (NazSingolare naz : findAll()) {
-            mappa.put(naz.nome, naz.plurale);
-        }
-
-        return mappa;
-    }
 
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
-     * Modulo:Bio/Plurale nazionalità
+     * Modulo:Bio/Plurale attività
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
     public WResult download() {
         WResult result = super.download();
         long inizio = System.currentTimeMillis();
-        String moduloNazionalita = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
+        String moduloAttività = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         int tempo = 3;
         int size = 0;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloNazionalita)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloAttività)));
 
-        size += downloadNazionalita(moduloNazionalita);
+        size += downloadAttivita(moduloAttività);
         result.setIntValue(size);
 
-        result = super.fixDownload(result, inizio, "nazionalità");
+        result = super.fixDownload(result, inizio, "attività");
         result = this.elabora();
 
         return result;
@@ -175,26 +158,30 @@ public class NazSingolareBackend extends WikiBackend {
 
 
     /**
-     * Legge le mappa dal Modulo:Bio/Plurale nazionalità <br>
+     * Legge le mappa dal Modulo:Bio/Plurale attività <br>
      * Crea le nazionalità <br>
      *
-     * @param moduloNazionalita della pagina su wikipedia
+     * @param moduloAttività della pagina su wikipedia
      *
      * @return entities create
      */
-    public int downloadNazionalita(String moduloNazionalita) {
+    public int downloadAttivita(String moduloAttività) {
         int size = 0;
         String singolare;
         String plurale;
         AEntity entityBean;
 
-        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloNazionalita);
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 singolare = entry.getKey();
                 plurale = entry.getValue();
+
+                if (singolare.equals("parrucchiera")) {
+                    int a=87;
+                }
 
                 entityBean = insert(newEntity(singolare, plurale));
                 if (entityBean != null) {
@@ -206,7 +193,7 @@ public class NazSingolareBackend extends WikiBackend {
             }
         }
         else {
-            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloNazionalita);
+            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloAttività);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
@@ -226,12 +213,12 @@ public class NazSingolareBackend extends WikiBackend {
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, NazSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
 
-        for (NazSingolare nazionalita : findAll()) {
-            nazionalita.numBio = bioBackend.countNazionalita(nazionalita.nome);
-            update(nazionalita);
+        for (AttSingolare attivita : findAll()) {
+            attivita.numBio = bioBackend.countAttivitaSingola(attivita.nome);
+            update(attivita);
         }
 
-        return super.fixElabora(result, inizio, "nazionalità");
+        return super.fixElabora(result, inizio, "attivita");
     }
 
     /**

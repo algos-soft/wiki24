@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Scope;
 public class TaskAttivita extends VaadTask {
 
     public TaskAttivita() {
-        super.descrizioneTask = WPref.uploadAttivita.getDescrizione();
+        super.descrizioneTask = WPref.uploadAttPlurale.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getAttivita();
         super.flagAttivazione = WPref.usaTaskAttivita;
-        super.flagPrevisione = WPref.uploadAttivitaPrevisto;
+        super.flagPrevisione = WPref.uploadAttPluralePrevisto;
     }
 
 

@@ -3,6 +3,8 @@ package it.algos.base;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
@@ -13,6 +15,7 @@ import it.algos.wiki24.backend.service.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
+import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.stream.*;
@@ -54,10 +57,39 @@ public abstract class WikiBackendTest extends BackendTest {
     protected QueryService queryService;
 
     @Autowired
+    protected AttSingolareBackend attSingolareBackend;
+
+    @Autowired
+    protected AttPluraleBackend attPluraleBackend;
+
+    @Autowired
     protected NazSingolareBackend nazSingolaBackend;
 
     @Autowired
     protected NazPluraleBackend nazPluraleBackend;
+
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    public static Stream<Arguments> ATTIVITA_SINGOLARE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false),
+                Arguments.of("abati e badesse", false),
+                Arguments.of("politico", false),
+                Arguments.of("politici", true),
+                Arguments.of("direttore di scena", true),
+                Arguments.of("attrice", true),
+                Arguments.of("attore", true),
+                Arguments.of("attori", false),
+                Arguments.of("brasiliano", true),
+                Arguments.of("vescovo ariano", false),
+                Arguments.of("errata", false),
+                Arguments.of("britannici", false),
+                Arguments.of("tedesco", true),
+                Arguments.of("tedeschi", false)
+        );
+    }
 
 
     //--nome nazionalità singolare (maiuscola o minuscola)
@@ -117,6 +149,7 @@ public abstract class WikiBackendTest extends BackendTest {
                 Arguments.of(VUOTA),
                 Arguments.of("britannici"),
                 Arguments.of("italiani"),
+                Arguments.of("tedeschi"),
                 Arguments.of("burkinabé"),
                 Arguments.of("germanici"),
                 Arguments.of("barbadiani"),

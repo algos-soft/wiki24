@@ -21,14 +21,21 @@ import java.util.*;
  */
 public enum WPref implements AIGenPref {
 
-    downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
-    downloadAttivita("downloadAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività."),
-    downloadAttivitaTime("downloadAttivitaTime", AETypePref.integer, 0, "Durata download delle attività."),
-    elaboraAttivita("elaboraAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività."),
-    elaboraAttivitaTime("elaboraAttivitaTime", AETypePref.integer, 0, "Durata elaborazione delle attività."),
-    uploadAttivita("uploadAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di attività"),
-    uploadAttivitaTime("uploadAttivitaTime", AETypePref.integer, 0, "Durata upload delle attività."),
-    uploadAttivitaPrevisto("uploadAttivitaPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le attività."),
+    downloadAttSingolare("downloadAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività e Modulo:Bio/Ex attività."),
+    downloadAttSingolareTime("downloadAttSingolareTime", AETypePref.integer, 0, "Durata download delle attività singolari."),
+    elaboraAttSingolare("elaboraAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività singolari."),
+    elaboraAttSingolareTime("elaboraAttSingolareTime", AETypePref.integer, 0, "Durata elaborazione delle attività singolari."),
+
+
+    downloadAttPlurale("downloadAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Link attività."),
+    downloadAttPluraleTime("downloadAttPluraleTime", AETypePref.integer, 0, "Durata download delle attività plurali."),
+    elaboraAttPlurale("elaboraAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività plurali."),
+    elaboraAttPluraleTime("elaboraAttPluraleTime", AETypePref.integer, 0, "Durata elaborazione delle attività plurali."),
+
+
+    uploadAttPlurale("uploadAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di attività plurali"),
+    uploadAttPluraleTime("uploadAttPluraleTime", AETypePref.integer, 0, "Durata upload delle attività plurali."),
+    uploadAttPluralePrevisto("uploadAttPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le attività plurali."),
 
 
     downloadNazSingolare("downloadNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale nazionalità."),
@@ -55,6 +62,8 @@ public enum WPref implements AIGenPref {
     uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
     uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
+
+    downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
 
     usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa", false),
     resetBio("resetBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset completo delle voci biografiche"),

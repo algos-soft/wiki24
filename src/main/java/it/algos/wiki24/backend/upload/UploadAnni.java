@@ -38,7 +38,7 @@ public class UploadAnni extends UploadGiorniAnni {
         super.summary = "[[Utente:Biobot/anniBio|anniBio]]";
         super.lastUpload = WPref.uploadAnni;
         super.durataUpload = WPref.uploadAnniTime;
-        super.nextUpload = WPref.uploadAttivitaPrevisto;
+        super.nextUpload = WPref.uploadAnniPrevisto;
         super.usaParagrafi = WPref.usaParagrafiAnni.is();
         super.typeToc = (AETypeToc) WPref.typeTocAnni.getEnumCurrentObj();
     }// end of constructor

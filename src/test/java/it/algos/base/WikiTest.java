@@ -594,13 +594,14 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    //--nome nazionalità plurale (maiuscola o minuscola)
+    //--nome nazionalità plurale (solo minuscola)
     //--esiste
     public static Stream<Arguments> NAZIONALITA_PLURALE() {
         return Stream.of(
                 Arguments.of(VUOTA, false),
                 Arguments.of("turco", false),
-                Arguments.of("Afghani", true),
+                Arguments.of("afghani", true),
+                Arguments.of("Afghani", false),
                 Arguments.of("andorrani", true),
                 Arguments.of("tedesca", false),
                 Arguments.of("arabi", true),
