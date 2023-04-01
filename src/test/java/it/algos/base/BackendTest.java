@@ -264,7 +264,7 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("21 - isExistById")
     protected boolean isExistById(String keyId) {
         sorgente = keyId;
-        ottenutoBooleano = crudBackend.isExistById(sorgente.toLowerCase());
+        ottenutoBooleano = crudBackend.isExistById(sorgente);
         if (ottenutoBooleano) {
             message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, sorgente);
         }
@@ -362,7 +362,7 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("31 - findById")
     protected AEntity findById(String keyId) {
         sorgente = keyId;
-        entityBean = crudBackend.findById(sorgente.toLowerCase());
+        entityBean = crudBackend.findById(sorgente);
         if (entityBean != null) {
             message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
         }
@@ -698,9 +698,19 @@ public abstract class BackendTest extends AlgosTest {
         printBackend(listaBeans);
     }
 
-    //Segnaposto
+    @Test
     @Order(54)
-    protected void libero54() {
+    @DisplayName("54 - findAllSortKey (entityBeans)")
+    protected void findAllSortKey() {
+        System.out.println("54 - findAllSortKey (entityBeans)");
+        System.out.println(VUOTA);
+
+        listaBeans = crudBackend.findAllSortKey();
+        assertNotNull(listaBeans);
+        ottenutoIntero = listaBeans.size();
+        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities nel database mongoDB", collectionName, clazzName, textService.format(ottenutoIntero));
+        System.out.println(message);
+        printBackend(listaBeans);
     }
 
     //Segnaposto

@@ -1,9 +1,12 @@
 package it.algos.wiki24.backend.packages.attsingolare;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -13,10 +16,6 @@ import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -61,8 +60,8 @@ public class AttSingolareView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
-        super.formPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
+        super.gridPropertyNamesList = Arrays.asList("nome", "plurale", "ex", "numBio");
+        super.formPropertyNamesList = Arrays.asList("nome", "plurale", "ex", "numBio");
 
         super.usaBottoneDeleteAll = false;
         this.usaBottoneElabora = true;
@@ -72,6 +71,7 @@ public class AttSingolareView extends WikiView {
         this.usaBottoneDownload = true;
         this.usaBottonePaginaWiki = false;
         this.usaInfoDownload = true;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -99,9 +99,9 @@ public class AttSingolareView extends WikiView {
 
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
-        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";
+        message = String.format("ResetOnlyEmpty effettua il download dei due moduli wiki: %s%s%s", PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).rosso().small());
-        message = "ResetOnlyEmpty effettua il download. Il download effettua anche l'elaborazione che può comunque essere fatta separatamente.";
+        message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";
         addSpan(ASpan.text(message).rosso().small());
     }
 
@@ -116,6 +116,41 @@ public class AttSingolareView extends WikiView {
         if (searchField != null) {
             searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
         }
+
+        fixBottoniTopSpecificiAttivita();
     }
+
+    protected void fixBottoniTopSpecificiAttivita() {
+        boxBox = new IndeterminateCheckbox();
+        boxBox.setLabel("Ex attività");
+        boxBox.setIndeterminate(true);
+        boxBox.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout = new HorizontalLayout(boxBox);
+        layout.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layout);
+
+        this.add(topPlaceHolder2);
+    }
+
+
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<AttSingolare> items = (List) super.sincroFiltri();
+
+        if (boxBox != null && !boxBox.isIndeterminate()) {
+            items = items.stream().filter(att -> att.ex == boxBox.getValue()).toList();
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
+    }
+
 
 }// end of crud @Route view class

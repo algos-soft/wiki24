@@ -285,7 +285,6 @@ public abstract class Upload {
 
     protected WResult registra(String wikiTitle, String newText) {
         String newTextSignificativo = VUOTA;
-        //        String tag = "</noinclude>";
         String tag = "progetto=biografie";
 
         if (newText.contains(tag)) {

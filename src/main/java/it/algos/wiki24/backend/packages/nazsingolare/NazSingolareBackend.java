@@ -69,7 +69,7 @@ public class NazSingolareBackend extends WikiBackend {
      * All properties <br>
      *
      * @param keyPropertyValue (obbligatorio, unico)
-     * @param plurale (obbligatorio)
+     * @param plurale          (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
@@ -155,19 +155,24 @@ public class NazSingolareBackend extends WikiBackend {
      */
     public WResult download() {
         WResult result = super.download();
-        long inizio = System.currentTimeMillis();
+        //        long inizio = System.currentTimeMillis();
         String moduloNazionalita = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         int tempo = 3;
         int size = 0;
+        List<AEntity> lista;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
         logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloNazionalita)));
 
-        size += downloadNazionalita(moduloNazionalita);
+        lista = downloadNazionalita(moduloNazionalita);
         result.setIntValue(size);
 
-        result = super.fixDownload(result, inizio, "nazionalità");
+        result.setIntValue(size);
+        //        result.setLista(lista);
+        //        public WResult fixDownload(WResult result, String clazzName, String collectionName, String modulo, List lista) {
+
+        result = super.fixDownload(result, entityClazz.getSimpleName(), lista);
         result = this.elabora();
 
         return result;
@@ -182,7 +187,8 @@ public class NazSingolareBackend extends WikiBackend {
      *
      * @return entities create
      */
-    public int downloadNazionalita(String moduloNazionalita) {
+    public List<AEntity> downloadNazionalita(String moduloNazionalita) {
+        List<AEntity> lista = null;
         int size = 0;
         String singolare;
         String plurale;
@@ -192,13 +198,14 @@ public class NazSingolareBackend extends WikiBackend {
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
+            lista = new ArrayList<>();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 singolare = entry.getKey();
                 plurale = entry.getValue();
 
                 entityBean = insert(newEntity(singolare, plurale));
                 if (entityBean != null) {
-                    size++;
+                    lista.add(entityBean);
                 }
                 else {
                     logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
@@ -210,7 +217,7 @@ public class NazSingolareBackend extends WikiBackend {
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
-        return size;
+        return lista;
     }
 
 

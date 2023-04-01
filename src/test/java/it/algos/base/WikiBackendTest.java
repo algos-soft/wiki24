@@ -12,6 +12,7 @@ import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
@@ -68,26 +69,27 @@ public abstract class WikiBackendTest extends BackendTest {
     @Autowired
     protected NazPluraleBackend nazPluraleBackend;
 
+    protected WResult result;
 
     //--nome attività singolare (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     public static Stream<Arguments> ATTIVITA_SINGOLARE() {
         return Stream.of(
-                Arguments.of(VUOTA, false),
-                Arguments.of("abati e badesse", false),
-                Arguments.of("politico", false),
-                Arguments.of("politici", true),
-                Arguments.of("direttore di scena", true),
-                Arguments.of("attrice", true),
-                Arguments.of("attore", true),
-                Arguments.of("attori", false),
-                Arguments.of("brasiliano", true),
-                Arguments.of("vescovo ariano", false),
-                Arguments.of("errata", false),
-                Arguments.of("britannici", false),
-                Arguments.of("tedesco", true),
-                Arguments.of("tedeschi", false)
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("politico", true, true),
+                Arguments.of("politici", false, false),
+                Arguments.of("errata", false, false),
+                Arguments.of("fantasmi", false, false),
+                Arguments.of("produttorediscografico", true, false),
+                Arguments.of("produttore discografico", false, true),
+                Arguments.of("attrice", true, true),
+                Arguments.of("attore", true, true),
+                Arguments.of("attori", false, false),
+                Arguments.of("nessuna", false, false),
+                Arguments.of("direttore di scena", false, false),
+                Arguments.of("accademici", false, false),
+                Arguments.of("vescovo ariano", false, true)
         );
     }
 
@@ -185,56 +187,59 @@ public abstract class WikiBackendTest extends BackendTest {
     }
 
     /**
-     * Regola tutti riferimenti incrociati <br>
-     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Qui passa prima di ogni test delle sottoclassi <br>
+     * Invocare PRIMA il metodo setUpEach() della superclasse <br>
+     * Si possono aggiungere regolazioni specifiche <br>
      */
-    //    protected void fixRiferimentiIncrociati() {
-    //        super.fixRiferimentiIncrociati();
-    //
-    //        giornoBackend.textService = textService;
-    //        giornoBackend.mongoService = mongoService;
-    //        giornoBackend.reflectionService = reflectionService;
-    //        giornoBackend.annotationService = annotationService;
-    //
-    //        annoBackend.textService = textService;
-    //        annoBackend.mongoService = mongoService;
-    //        annoBackend.reflectionService = reflectionService;
-    //        annoBackend.annotationService = annotationService;
-    //
-    //        secoloBackend.mongoService = mongoService;
-    //        secoloBackend.reflectionService = reflectionService;
-    //        secoloBackend.annotationService = annotationService;
-    //
-    //        meseBackend.mongoService = mongoService;
-    //        meseBackend.reflectionService = reflectionService;
-    //        meseBackend.annotationService = annotationService;
-    //
-    //        wikiBackend.giornoBackend = giornoBackend;
-    //        wikiBackend.giornoBackend.textService = textService;
-    //        wikiBackend.giornoBackend.mongoService = mongoService;
-    //        wikiBackend.giornoBackend.reflectionService = reflectionService;
-    //        wikiBackend.giornoBackend.annotationService = annotationService;
-    //
-    //        wikiBackend.annoBackend = annoBackend;
-    //        wikiBackend.annoBackend.textService = textService;
-    //        wikiBackend.annoBackend.mongoService = mongoService;
-    //        wikiBackend.annoBackend.reflectionService = reflectionService;
-    //        wikiBackend.annoBackend.annotationService = annotationService;
-    //
-    //        wikiBackend.wikiUtility = wikiUtility;
-    //        wikiBackend.wikiUtility.textService = textService;
-    //        wikiBackend.wikiUtility.regexService = regexService;
-    //        wikiBackend.wikiUtility.queryService = queryService;
-    //
-    //        wikiBackend.meseBackend = meseBackend;
-    //        wikiBackend.meseBackend.mongoService = mongoService;
-    //        wikiBackend.meseBackend.reflectionService = reflectionService;
-    //        wikiBackend.meseBackend.annotationService = annotationService;
-    //
-    //        attivitaBackend.wikiApiService = wikiApiService;
-    //        nazionalitaBackend.wikiApiService = wikiApiService;
-    //    }
+    @Override
+    protected void setUpEach() {
+        super.setUpEach();
+
+        this.result = WResult.errato();
+    }
+
+    @Test
+    @Order(13)
+    @DisplayName("13 - resetOnlyEmpty  (non previsto su wiki)")
+    protected void resetOnlyEmpty() {
+        System.out.println("13 - resetOnlyEmpty (non previsto su wiki)");
+        System.out.println("Previsti download() e elabora()");
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("14 - resetForcing (non previsto su wiki)")
+    protected void resetForcing() {
+        System.out.println("14 - resetForcing (non previsto su wiki)");
+        System.out.println("Previsti download() e elabora()");
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("15 - download (solo su wiki)")
+    protected void download() {
+        System.out.println("15 - download (solo su wiki)");
+        System.out.println(VUOTA);
+        WResult result;
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+        }
+        result = wikiBackend.download();
+        printRisultato(result);
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("16 - elabora (solo su wiki)")
+    protected void elabora() {
+        System.out.println("16 - elabora (solo su wiki)");
+        System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+        }
+
+    }
 
 }

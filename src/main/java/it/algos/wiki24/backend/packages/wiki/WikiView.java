@@ -190,6 +190,9 @@ public abstract class WikiView extends CrudView {
 
     protected ComboBox comboType;
 
+    protected boolean usaBottoneUploadModuloAlfabetizzato;
+    protected Button buttonUploadModulo;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -281,6 +284,7 @@ public abstract class WikiView extends CrudView {
         this.usaBottoneTestMorti = false;
         this.usaBottoneUploadNati = false;
         this.usaBottoneUploadMorti = false;
+        this.usaBottoneUploadModuloAlfabetizzato = false;
 
         fixPreferenzeBackend();
     }
@@ -485,14 +489,14 @@ public abstract class WikiView extends CrudView {
             topPlaceHolder.add(buttonUpload);
         }
 
-        //        if (usaBottoneModulo) {
-        //            buttonModulo = new Button();
-        //            buttonModulo.getElement().setAttribute("theme", "secondary");
-        //            buttonModulo.getElement().setProperty("title", "Modulo: lettura del modulo originario su wiki");
-        //            buttonModulo.setIcon(new Icon(VaadinIcon.LIST));
-        //            buttonModulo.addClickListener(event -> wikiModulo());
-        //            topPlaceHolder.add(buttonModulo);
-        //        }
+        if (usaBottoneUploadModuloAlfabetizzato) {
+            buttonUploadModulo = new Button();
+            buttonUploadModulo.getElement().setAttribute("theme", "error");
+            buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
+            buttonUploadModulo.setIcon(new Icon(VaadinIcon.UPLOAD));
+            buttonUploadModulo.addClickListener(event -> riordinaModulo());
+            topPlaceHolder.add(buttonUploadModulo);
+        }
 
         if (usaBottoneStatistiche) {
             buttonStatistiche = new Button();
@@ -795,7 +799,7 @@ public abstract class WikiView extends CrudView {
 
         if (result.isValido()) {
             reload();
-//            Avviso.message("Elaborazione effettuata").success().open();
+            //            Avviso.message("Elaborazione effettuata").success().open();
         }
         else {
             Avviso.message("Elaborazione non effettuata").error().open();
@@ -814,6 +818,12 @@ public abstract class WikiView extends CrudView {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     public void upload() {
+    }
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public void riordinaModulo() {
+        crudBackend.riordinaModulo();
     }
 
     /**

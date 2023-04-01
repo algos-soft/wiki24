@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.attsingolare;
 
+import com.vaadin.flow.component.icon.*;
 import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
@@ -34,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "attsingolare", keyPropertyName = "nome", usaReset = true)
+@AIEntity(collectionName = "attsingolare", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class AttSingolare extends AEntity {
 
     @AIField(type = AETypeField.text, header = "singolare", caption = "singolare", widthEM = 20)
@@ -42,6 +43,9 @@ public class AttSingolare extends AEntity {
 
     @AIField(type = AETypeField.text, widthEM = 20)
     public String plurale;
+
+    @AIField(type = AETypeField.booleano, headerIcon = VaadinIcon.ADD_DOCK, caption = "aggiunta (ex-attività)", usaCheckBox3Vie = true)
+    public boolean ex;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questa singola nazionalità", widthEM = 6)
     public int numBio;

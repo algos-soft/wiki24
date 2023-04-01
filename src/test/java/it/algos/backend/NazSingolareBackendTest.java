@@ -4,6 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
@@ -44,6 +45,19 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         super.setUpAll();
     }
 
+//    @Test
+//    @Order(15)
+//    @DisplayName("15 - download (solo wiki)")
+//    protected void download() {
+//        super.downloadWiki();
+//    }
+//
+//    @Test
+//    @Order(16)
+//    @DisplayName("16 - elabora (solo su wiki)")
+//    protected void elabora() {
+//        super.elabora();
+//    }
 
     @Test
     @Order(21)

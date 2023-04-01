@@ -259,6 +259,12 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public void riordinaModulo() {
+    }
+
+    /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
@@ -273,6 +279,7 @@ public abstract class WikiBackend extends CrudBackend {
 
     public WResult fixDownload(WResult result, final long inizio, String modulo) {
         result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
+
         if (lastDownload != null) {
             lastDownload.setValue(LocalDateTime.now());
         }
@@ -295,6 +302,28 @@ public abstract class WikiBackend extends CrudBackend {
         logger.debug(new WrapLog().message(message));
 
         return result;
+    }
+
+
+    public WResult fixDownload(WResult result, String clazzName, List lista) {
+        result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
+        String message;
+
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+
+            message = String.format("Download %s. Pagine scaricate %s.", clazzName.getClass().getSimpleName(), textService.format(lista.size()));
+            message += result.deltaSec();
+            logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
+            return result.validMessage(message);
+        }
+        else {
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a effettuare il download di %s.", clazzName.getClass().getSimpleName());
+            System.out.println(message);
+            return result.errorMessage(message);
+        }
     }
 
     public WResult fixElabora(WResult result, final long inizio) {

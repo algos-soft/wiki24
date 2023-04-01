@@ -3,6 +3,7 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import org.junit.jupiter.api.*;
@@ -101,23 +102,22 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
-
-//    @Test
-//    @Order(23)
-//    @DisplayName("23 - isExistByOrder")
-//    protected void isExistByOrder() {
-//        System.out.println("23 - isExistByOrder");
-//        System.out.println(VUOTA);
-//
-//        sorgenteIntero = 87;
-//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-//        assertFalse(ottenutoBooleano);
-//        System.out.println(VUOTA);
-//
-//        sorgenteIntero = 0;
-//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-//        assertFalse(ottenutoBooleano);
-//    }
+    //    @Test
+    //    @Order(23)
+    //    @DisplayName("23 - isExistByOrder")
+    //    protected void isExistByOrder() {
+    //        System.out.println("23 - isExistByOrder");
+    //        System.out.println(VUOTA);
+    //
+    //        sorgenteIntero = 87;
+    //        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+    //        assertFalse(ottenutoBooleano);
+    //        System.out.println(VUOTA);
+    //
+    //        sorgenteIntero = 0;
+    //        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+    //        assertFalse(ottenutoBooleano);
+    //    }
 
 
     @Test
@@ -192,22 +192,22 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         assertEquals(previstoBooleano, entityBean != null);
     }
 
-//    @Test
-//    @Order(33)
-//    @DisplayName("33 - findByOrder")
-//    protected void findByOrder() {
-//        System.out.println("33 - findByOrder");
-//        System.out.println(VUOTA);
-//
-//        sorgenteIntero = 87;
-//        entityBean = super.findByOrder(sorgenteIntero);
-//        assertNull(entityBean);
-//        System.out.println(VUOTA);
-//
-//        sorgenteIntero = 0;
-//        entityBean = super.findByOrder(sorgenteIntero);
-//        assertNull(entityBean);
-//    }
+    //    @Test
+    //    @Order(33)
+    //    @DisplayName("33 - findByOrder")
+    //    protected void findByOrder() {
+    //        System.out.println("33 - findByOrder");
+    //        System.out.println(VUOTA);
+    //
+    //        sorgenteIntero = 87;
+    //        entityBean = super.findByOrder(sorgenteIntero);
+    //        assertNull(entityBean);
+    //        System.out.println(VUOTA);
+    //
+    //        sorgenteIntero = 0;
+    //        entityBean = super.findByOrder(sorgenteIntero);
+    //        assertNull(entityBean);
+    //    }
 
 
     @Test

@@ -15,6 +15,8 @@ import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
@@ -43,7 +45,10 @@ public class WikiUtilityView extends UtilityView {
     public AnnoWikiBackend annoWikiBackend;
 
     @Autowired
-    public AttivitaBackend attivitaBackend;
+    public AttSingolareBackend attSingolareBackend;
+
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
 
     @Autowired
     public NazSingolareBackend nazSingolareBackend;
@@ -62,6 +67,45 @@ public class WikiUtilityView extends UtilityView {
         this.paragrafoUploadStatistiche();
     }
 
+    public void paragrafoReset() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        List<String> lista;
+        H3 paragrafo = new H3("Reset di tutte le collection");
+        paragrafo.getElement().getStyle().set("color", "blue");
+
+        message = String.format("Esegue il %s() su tutte le collection che implementano %s(). ", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
+        layout.add(ASpan.text(message));
+        layout.add(ASpan.text(DROP));
+        layout.add(ASpan.text(FLAG_DEBUG));
+        lista = classService.allModuleEntityResetOrderedName(VaadVar.moduloVaadin24);
+        message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
+        layout.add(ASpan.text(message));
+        lista = Arrays.asList("AnnoWiki", "GiornoWiki");
+        message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, lista.toString());
+        layout.add(ASpan.text(message));
+
+        Button bottone = new Button("All");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> paragrafoDownloadModuli());
+        Button bottone2 = new Button("Vaad24");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> paragrafoDownloadModuli());
+        Button bottone3 = new Button("AnnoWiki");
+        bottone3.getElement().setAttribute("theme", "primary");
+        bottone3.addClickListener(event -> paragrafoDownloadModuli());
+        Button bottone4 = new Button("GiornoWiki");
+        bottone4.getElement().setAttribute("theme", "primary");
+        bottone4.addClickListener(event -> paragrafoDownloadModuli());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4));
+        this.add(layout);
+    }
+
     public void paragrafoDownloadModuli() {
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
@@ -77,9 +121,9 @@ public class WikiUtilityView extends UtilityView {
         layout.add(ASpan.text(DROP));
         layout.add(ASpan.text(FLAG_DEBUG));
 
-        listaClazz = Arrays.asList("Attività", "Nazionalità");
+        listaClazz = Arrays.asList("AttSingolare", "AttPlurale", "NazSingolare", "NazPlurale");
         if (listaClazz != null && listaClazz.size() > 0) {
-            message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, listaClazz);
+            message = String.format("%s", listaClazz);
             layout.add(ASpan.text(message));
         }
 
@@ -87,32 +131,41 @@ public class WikiUtilityView extends UtilityView {
         bottone.getElement().setAttribute("theme", "primary");
         bottone.addClickListener(event -> downloadAll());
 
-        Button bottone2 = new Button("Attività");
+        Button bottone2 = new Button("AttSingolare");
         bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> downloadAttivita());
-
-        Button bottone3 = new Button("NazSingolare");
+        bottone2.addClickListener(event -> downloadAttivitaSingolare());
+        Button bottone3 = new Button("AttPlurale");
         bottone3.getElement().setAttribute("theme", "primary");
-        bottone3.addClickListener(event -> downloadNazSingolare());
+        bottone3.addClickListener(event -> downloadAttivitaPlurale());
+
+        Button bottone4 = new Button("NazSingolare");
+        bottone4.getElement().setAttribute("theme", "primary");
+        bottone4.addClickListener(event -> downloadNazionalitaSingolare());
+        Button bottone5 = new Button("NazPlurale");
+        bottone5.getElement().setAttribute("theme", "primary");
+        bottone5.addClickListener(event -> downloadNazionalitaPlurale());
 
         this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone, bottone2, bottone3));
+        layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5));
         this.add(layout);
     }
 
     public void downloadAll() {
-        downloadAttivita();
-        downloadNazSingolare();
+        downloadAttivitaSingolare();
+        downloadAttivitaPlurale();
+        downloadNazionalitaSingolare();
+        downloadNazionalitaPlurale();
     }
 
-    public void downloadAttivita() {
+
+    public void downloadAttivitaSingolare() {
         super.inizioDebug();
         WResult result;
         String message;
-        String task = Attivita.class.getSimpleName();
+        String task = AttSingolare.class.getSimpleName();
 
-        logger.info(new WrapLog().message("Utility: download delle Attività.").type(AETypeLog.utility));
-        result = attivitaBackend.download();
+        logger.info(new WrapLog().message("Utility: download delle attività singolari.").type(AETypeLog.download));
+        result = attSingolareBackend.download();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);
@@ -126,7 +179,48 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
-    public void downloadNazSingolare() {
+    public void downloadAttivitaPlurale() {
+        super.inizioDebug();
+        WResult result;
+        String message;
+        String task = Attivita.class.getSimpleName();
+
+        logger.info(new WrapLog().message("Utility: download delle attività plurali.").type(AETypeLog.utility));
+//        result = attPluraleBackend.download();
+//
+//        if (result.isValido()) {
+//            message = String.format("Download di %s effettuato", task);
+//            Avviso.message(message).success().durata(4).open();
+//        }
+//        else {
+//            message = String.format("Download di %s non riuscito", task);
+//            Avviso.message(message).error().durata(4).open();
+//        }
+
+        super.fineDebug();
+    }
+
+    public void downloadNazionalitaSingolare() {
+        super.inizioDebug();
+        WResult result;
+        String message;
+        String task = Nazionalita.class.getSimpleName();
+
+        logger.info(new WrapLog().message("Utility: download delle nazionalità singolari.").type(AETypeLog.utility));
+        result = nazSingolareBackend.download();
+
+        if (result.isValido()) {
+            message = String.format("Download di %s effettuato", task);
+            Avviso.message(message).success().durata(4).open();
+        }
+        else {
+            message = String.format("Download di %s non riuscito", task);
+            Avviso.message(message).error().durata(4).open();
+        }
+        super.fineDebug();
+    }
+
+    public void downloadNazionalitaPlurale() {
         super.inizioDebug();
         WResult result;
         String message;
@@ -263,13 +357,13 @@ public class WikiUtilityView extends UtilityView {
         WResult result;
 
         logger.info(new WrapLog().message("Utility: elaborazione delle Attività.").type(AETypeLog.utility));
-        result = attivitaBackend.elabora();
-        if (result.isValido()) {
-            Avviso.message("Elaborazione effettuata").success().open();
-        }
-        else {
-            Avviso.message("Elaborazione non effettuata").error().open();
-        }
+//        result = attivitaBackend.elabora();
+//        if (result.isValido()) {
+//            Avviso.message("Elaborazione effettuata").success().open();
+//        }
+//        else {
+//            Avviso.message("Elaborazione non effettuata").error().open();
+//        }
 
         super.fineDebug();
     }

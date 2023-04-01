@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -59,7 +60,7 @@ public class AttSingolareBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public AttSingolare newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, false);
     }
 
     /**
@@ -73,10 +74,11 @@ public class AttSingolareBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AttSingolare newEntity(final String keyPropertyValue, String plurale) {
+    public AttSingolare newEntity(final String keyPropertyValue, String plurale, boolean ex) {
         AttSingolare newEntityBean = AttSingolare.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
+                .ex(ex)
                 .numBio(0)
                 .build();
 
@@ -134,24 +136,22 @@ public class AttSingolareBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale attività
      * <p>
-     * Cancella la (eventuale) precedente lista di attività <br>
+     * Cancella la (eventuale) precedente lista di attività singolari <br>
      */
     public WResult download() {
         WResult result = super.download();
         long inizio = System.currentTimeMillis();
-        String moduloAttività = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         int tempo = 3;
-        int size = 0;
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
+        message = String.format("Initio %s() di %s. Tempo presto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloAttività)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività singulari")));
 
-        size += downloadAttivita(moduloAttività);
-        result.setIntValue(size);
+        result = downloadAttivitaNormale(result);
+        result = downloadAttivitaEx(result);
+        result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, inizio, "attività");
-        result = this.elabora();
+        result = super.fixDownload(result, inizio, "attività singolari");
 
         return result;
     }
@@ -159,47 +159,108 @@ public class AttSingolareBackend extends WikiBackend {
 
     /**
      * Legge le mappa dal Modulo:Bio/Plurale attività <br>
-     * Crea le nazionalità <br>
-     *
-     * @param moduloAttività della pagina su wikipedia
+     * Crea le attività normali <br>
      *
      * @return entities create
      */
-    public int downloadAttivita(String moduloAttività) {
-        int size = 0;
+    public WResult downloadAttivitaNormale(WResult result) {
+        String moduloAttività = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String singolare;
         String plurale;
         AEntity entityBean;
+        List lista = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                entityBean = null;
                 singolare = entry.getKey();
                 plurale = entry.getValue();
 
-                if (singolare.equals("parrucchiera")) {
-                    int a=87;
+                try {
+                    entityBean = insert(newEntity(singolare, plurale, false));
+                } catch (Exception unErrore) {
+                    message = String.format("Duplicate error key %", singolare);
+                    System.out.println(message);
+                    logger.error(new WrapLog().exception(new AlgosException(unErrore)));
                 }
-
-                entityBean = insert(newEntity(singolare, plurale));
                 if (entityBean != null) {
-                    size++;
+                    lista.add(entityBean);
                 }
                 else {
                     logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+            result.eseguito(lista.size() > 0);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloAttività);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
-        return size;
+        return result;
     }
 
+    /**
+     * Legge le mappa dal Modulo:Bio/Plurale attività <br>
+     * Crea le attività ex <br>
+     *
+     * @return entities create
+     */
+    public WResult downloadAttivitaEx(WResult result) {
+        String moduloEx = PATH_MODULO + PATH_EX + ATT_LOWER;
+        String singolareEx;
+        String singolareNew;
+        AttSingolare attivita;
+        List lista = new ArrayList();
+
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloEx);
+
+        if (mappa != null && mappa.size() > 0) {
+            for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                singolareEx = entry.getKey();
+                singolareNew = TAG_EX_SPAZIO + singolareEx;
+                attivita = findByKey(singolareEx);
+
+                if (attivita != null) {
+                    try {
+                        attivita = (AttSingolare) insert(newEntity(singolareNew, attivita.plurale, true));
+                    } catch (Exception unErrore) {
+                        message = String.format("Duplicate error key %", singolareEx);
+                        System.out.println(message);
+                        logger.error(new WrapLog().exception(new AlgosException(unErrore)));
+                    }
+                }
+                else {
+                    logger.info(new WrapLog().message(String.format("Nelle attività base manca la definizione '%s'", singolareEx)));
+                }
+
+                if (attivita != null) {
+                    lista.add(attivita);
+                }
+            }
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+            result.eseguito(lista.size() > 0);
+        }
+        else {
+            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloEx);
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+        }
+
+        return result;
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public void riordinaModulo() {
+        appContext.getBean(UploadModuloPluraleAttivita.class).upload();
+    }
 
     /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>

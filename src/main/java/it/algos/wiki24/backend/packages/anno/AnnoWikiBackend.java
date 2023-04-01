@@ -354,8 +354,6 @@ public class AnnoWikiBackend extends WikiBackend {
                     result.setValido(false);
                 }
             }
-            result.setIntValue(lista.size());
-            result.setLista(lista);
         }
         else {
             return result;
