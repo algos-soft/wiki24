@@ -13,9 +13,11 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -131,6 +133,14 @@ public class AttSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    public List findAllByExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
+    }
+    public List findAllByNotExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
+    }
 
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
@@ -259,7 +269,9 @@ public class AttSingolareBackend extends WikiBackend {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     public void riordinaModulo() {
+        this.download();
         appContext.getBean(UploadModuloPluraleAttivita.class).upload();
+        appContext.getBean(UploadModuoloExAttivita.class).upload();
     }
 
     /**

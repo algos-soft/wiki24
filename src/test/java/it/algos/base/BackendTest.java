@@ -713,10 +713,6 @@ public abstract class BackendTest extends AlgosTest {
         printBackend(listaBeans);
     }
 
-    //Segnaposto
-    @Order(55)
-    protected void libero55() {
-    }
 
     @Test
     @Order(60)

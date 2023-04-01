@@ -17,11 +17,11 @@ import java.util.*;
  * Created by Algos
  * User: gac
  * Date: Sat, 01-Apr-2023
- * Time: 10:22
+ * Time: 14:14
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloPluraleAttivita extends Upload {
+public class UploadModuoloExAttivita extends Upload {
 
     @Autowired
     public AttSingolareBackend attSingolareBackend;
@@ -32,8 +32,8 @@ public class UploadModuloPluraleAttivita extends Upload {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuloPluraleAttivita() {
-        super.wikiTitle = UPLOAD_TITLE_DEBUG + "ModuloPluraleAttivita";
+    public UploadModuoloExAttivita() {
+        super.wikiTitle = UPLOAD_TITLE_DEBUG + "ModuloExAttivita";
         super.summary = "Fix ordine alfabetico";
         super.uploadTest = true;
     }// end of constructor
@@ -45,19 +45,19 @@ public class UploadModuloPluraleAttivita extends Upload {
     public WResult upload() {
         StringBuffer buffer = new StringBuffer();
         String newText = VUOTA;
+        String nome;
         String riga;
-        List<AttSingolare> lista = attSingolareBackend.findAllByNotExSortKey();
+        List<AttSingolare> lista = attSingolareBackend.findAllByExSortKey();
 
         if (lista != null && lista.size() > 0) {
-            buffer.append("-- Traduzione in lua del [[Template:Bio/plurale attività]]");
-            buffer.append(CAPO);
             buffer.append("return");
             buffer.append(SPAZIO);
             buffer.append(GRAFFA_INI);
             buffer.append(CAPO);
 
             for (AttSingolare attivita : lista) {
-                riga = String.format("%s%s%s%s%s%s%s%s%s%s", QUADRA_INI, APICETTI, attivita.nome, APICETTI, QUADRA_END, UGUALE_SPAZIATO, APICETTI, attivita.plurale, APICETTI, VIRGOLA);
+                nome = textService.levaTesta(attivita.nome, "ex");
+                riga = String.format("%s%s%s%s", APICETTI, nome, APICETTI, VIRGOLA);
                 buffer.append(riga);
                 buffer.append(CAPO);
             }
