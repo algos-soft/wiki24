@@ -56,8 +56,8 @@ public class AttPluraleView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "singolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "singolari", "lista", "nazione", "numBio", "superaSoglia", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "paginaLista", "paginaAttivita", "numSingolari", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "lista", "nazione", "numBio", "superaSoglia", "esisteLista");
 
         super.usaBottoneReset = true;
         super.usaReset = true;

@@ -50,18 +50,15 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         super.setUpEach();
     }
 
-//    @Test
-//    @Order(13)
-//    @DisplayName("13 - resetOnlyEmpty  (non previsto su wiki)")
-//    protected void resetOnlyEmpty() {
-//        ottenutoRisultato = crudBackend.resetOnlyEmpty();
-//    }
-
-//    @Test
-//    @Order(14)
-//    @DisplayName("14 - resetForcing")
-//    protected void resetForcing() {
-//    }
+    @Test
+    @Order(14)
+    @DisplayName("14 - resetForcing")
+    protected void resetForcing() {
+        System.out.println("14 - resetForcing");
+        System.out.println(VUOTA);
+        ottenutoRisultato = backend.resetForcing();
+        printRisultato(ottenutoRisultato);
+    }
 
     @Test
     @Order(21)
@@ -71,10 +68,10 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
 
         System.out.println(VUOTA);
-        NAZIONALITA_PLURALE().forEach(this::isExistByIdBase);
+        ATTIVITA_PLURALE().forEach(this::isExistByIdBase);
     }
 
-    //--nome atrtività plurale (maiuscola o minuscola)
+    //--nome attività plurale (maiuscola o minuscola)
     //--esiste ID
     //--esiste key
     void isExistByIdBase(Arguments arg) {
@@ -84,6 +81,129 @@ public class AttPluraleBackendTest extends WikiBackendTest {
 
         ottenutoBooleano = super.isExistById(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
+    }
+
+
+    @Test
+    @Order(22)
+    @DisplayName("22 - isExistByKey")
+    protected void isExistByKey() {
+        System.out.println("22 - isExistByKey");
+        System.out.println(VUOTA);
+
+        System.out.println(VUOTA);
+        ATTIVITA_PLURALE().forEach(this::isExistByKeyBase);
+    }
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    void isExistByKeyBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        ottenutoBooleano = super.isExistByKey(sorgente);
+        assertEquals(previstoBooleano, ottenutoBooleano);
+    }
+
+    @Test
+    @Order(24)
+    @DisplayName("24 - isExistByProperty")
+    protected void isExistByProperty() {
+        System.out.println("24 - isExistByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgente2 = "termidoro";
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "plurale";
+        sorgente2 = "termidoro";
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+        assertFalse(ottenutoBooleano);
+        System.out.println(VUOTA);
+
+        sorgente = "attivita";
+        sorgente2 = "avvocati";
+        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+        assertTrue(ottenutoBooleano);
+    }
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - findById")
+    protected void findById() {
+        System.out.println("31 - findById");
+        System.out.println(VUOTA);
+
+        System.out.println(VUOTA);
+        ATTIVITA_PLURALE().forEach(this::findByIdBase);
+    }
+
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    void findByIdBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[1];
+
+        entityBean = super.findById(sorgente);
+        assertEquals(previstoBooleano, entityBean != null);
+    }
+
+    @Test
+    @Order(32)
+    @DisplayName("32 - findByKey")
+    protected void findByKey() {
+        System.out.println("32 - findByKey");
+        System.out.println(VUOTA);
+
+        System.out.println(VUOTA);
+        ATTIVITA_PLURALE().forEach(this::findByKeyBase);
+    }
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    void findByKeyBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        entityBean = super.findByKey(sorgente);
+        assertEquals(previstoBooleano, entityBean != null);
+    }
+
+
+    @Test
+    @Order(34)
+    @DisplayName("34 - findByProperty")
+    protected void findByProperty() {
+        System.out.println("34 - findByProperty");
+        System.out.println(VUOTA);
+
+        sorgente = "propertyInesistente";
+        sorgente2 = "termidoro";
+        entityBean = super.findByProperty(sorgente, sorgente2);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "plurale";
+        sorgente2 = "termidoro";
+        entityBean = super.findByProperty(sorgente, sorgente2);
+        assertNull(entityBean);
+        System.out.println(VUOTA);
+
+        sorgente = "attivita";
+        sorgente2 = "avvocati";
+        entityBean = super.findByProperty(sorgente, sorgente2);
+        assertNotNull(entityBean);
+        System.out.println(VUOTA);
     }
 
 }

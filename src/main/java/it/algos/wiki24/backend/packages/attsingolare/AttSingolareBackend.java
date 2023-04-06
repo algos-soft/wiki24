@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.attsingolare;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -132,6 +133,10 @@ public class AttSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    public List<AttSingolare> findAllByPlurale(String plurale) {
+        return findAllByProperty("plurale", plurale);
+    }
+
 
     public List findAllByExSortKey() {
         List<AttSingolare> listaAll = findAllSortKey();
@@ -154,7 +159,12 @@ public class AttSingolareBackend extends WikiBackend {
             }
         }
 
+        Collections.sort(lista);
         return lista;
+    }
+
+    public List<String> findAllForKeyByPlurale(String plurale) {
+        return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
     }
 
     /**

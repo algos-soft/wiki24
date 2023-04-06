@@ -70,7 +70,7 @@ public abstract class WikiBackendTest extends BackendTest {
     @Autowired
     protected NazPluraleBackend nazPluraleBackend;
 
-    protected WResult result;
+    protected WResult wResult;
 
     //--nome attività singolare (maiuscola o minuscola)
     //--esiste ID
@@ -94,6 +94,32 @@ public abstract class WikiBackendTest extends BackendTest {
         );
     }
 
+    //--nome attività plurale (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    public static Stream<Arguments> ATTIVITA_PLURALE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("politici", true, true),
+                Arguments.of("politico", false, false),
+                Arguments.of("direttore di scena", false, false),
+                Arguments.of("Congolesi (Rep. Dem. del Congo)", false, false),
+                Arguments.of("produttorediscografico", false, false),
+                Arguments.of("produttore discografico", false, false),
+                Arguments.of("produttoridiscografici", true, false),
+                Arguments.of("produttori discografici", false, true),
+                Arguments.of("Politici", false, false),
+                Arguments.of("attore", false, false),
+                Arguments.of("attrice", false, false),
+                Arguments.of("attori", true, true),
+                Arguments.of("attrici", false, false),
+                Arguments.of("vescovo ariano", false, false),
+                Arguments.of("vescoviariani", true, false),
+                Arguments.of("vescovi ariani", false, true),
+                Arguments.of("errata", false, false),
+                Arguments.of("britannici", false, false)
+        );
+    }
 
     //--nome nazionalità singolare (maiuscola o minuscola)
     //--esiste ID
@@ -196,7 +222,7 @@ public abstract class WikiBackendTest extends BackendTest {
     protected void setUpEach() {
         super.setUpEach();
 
-        this.result = WResult.errato();
+        this.wResult = WResult.errato();
     }
 
 
@@ -258,8 +284,8 @@ public abstract class WikiBackendTest extends BackendTest {
             System.out.println("Manca la variabile entityClazz in questo test");
         }
 
-        result = wikiBackend.elabora();
-        printRisultato(result);
+        wResult = wikiBackend.elabora();
+        printRisultato(wResult);
     }
 
     @Test
@@ -283,10 +309,10 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
         System.out.println(VUOTA);
 
-        result = wikiBackend.riordinaModulo();
-        printRisultato(result);
-        assertTrue(result.isValido());
-        assertTrue(result.isEseguito());
+        wResult = wikiBackend.riordinaModulo();
+        printRisultato(wResult);
+        assertTrue(wResult.isValido());
+        assertTrue(wResult.isEseguito());
     }
 
     //Segnaposto

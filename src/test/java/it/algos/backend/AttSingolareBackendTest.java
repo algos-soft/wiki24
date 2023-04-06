@@ -131,7 +131,7 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     @Order(31)
     @DisplayName("31 - findById")
     protected void findById() {
-        System.out.println("22 - isExistByKey");
+        System.out.println("31 - isExistByKey");
         System.out.println(VUOTA);
 
         System.out.println(VUOTA);
@@ -199,6 +199,77 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNotNull(entityBean);
         System.out.println(VUOTA);
+    }
+
+    @Test
+    @Order(65)
+    @DisplayName("65 - findAllByPlurale (entityBeans)")
+    protected void findAllByPlurale() {
+        System.out.println("65 - findAllByPlurale");
+        System.out.println("Tutte le attività singolari di una attività plurale");
+
+        System.out.println(VUOTA);
+        ATTIVITA_SINGOLARE().forEach(this::findAllByPluraleBase);
+    }
+
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    void findAllByPluraleBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        if (previstoBooleano) {
+            entityBean = backend.findByKey(sorgente);
+            assertTrue(entityBean != null);
+            sorgente2 = ((AttSingolare) entityBean).plurale;
+            listaBeans = backend.findAllByPlurale(sorgente2);
+            assertTrue(listaBeans != null);
+            System.out.print(sorgente2);
+            System.out.print(FORWARD);
+            System.out.println(listaBeans);
+        }
+        else {
+            return;
+        }
+    }
+
+
+    @Test
+    @Order(66)
+    @DisplayName("66 - findAllForKeyByPlurale (String)")
+    protected void findAllForKeyByPlurale() {
+        System.out.println("66 - findAllForKeyByPlurale");
+        System.out.println("Tutte le attività singolari di una attività plurale");
+
+        System.out.println(VUOTA);
+        ATTIVITA_SINGOLARE().forEach(this::findAllForKeyByPluraleBase);
+    }
+
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    void findAllForKeyByPluraleBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        if (previstoBooleano) {
+            entityBean = backend.findByKey(sorgente);
+            assertTrue(entityBean != null);
+            sorgente2 = ((AttSingolare) entityBean).plurale;
+            listaStr = backend.findAllForKeyByPlurale(sorgente2);
+            assertTrue(listaStr != null);
+            System.out.print(sorgente2);
+            System.out.print(FORWARD);
+            System.out.println(listaStr);
+        }
+        else {
+            return;
+        }
     }
 
     @Test

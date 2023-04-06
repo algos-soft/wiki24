@@ -12,6 +12,7 @@ import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -91,25 +92,72 @@ public class AttPluraleBackend extends WikiBackend {
      * All properties <br>
      *
      * @param nome     (obbligatorio, unico)
-     * @param lista    (obbligatorio, unico)
-     * @param attivita (obbligatorio)
+     * @param listaSingolari    (obbligatorio, unico)
+     * @param paginaLista (obbligatorio)
+     * @param paginaAttivita (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AttPlurale newEntity(final String nome, List<AttSingolare> singolari, final String lista, final String attivita) {
+    public AttPlurale newEntity(final String nome, List<AttSingolare> listaSingolari, final String paginaLista, final String paginaAttivita) {
         AttPlurale newEntityBean = AttPlurale.builder()
                 .nome(textService.isValid(nome) ? nome : null)
-                .singolari(singolari)
-                .lista(textService.isValid(lista) ? lista : null)
-                .attivita(textService.isValid(attivita) ? attivita : null)
+                .listaSingolari(listaSingolari)
+                .paginaLista(textService.isValid(paginaLista) ? paginaLista : null)
+                .paginaAttivita(textService.isValid(paginaAttivita) ? paginaAttivita : null)
                 .numBio(0)
                 .numSingolari(0)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
 
-        newEntityBean.lista = textService.primaMaiuscola(newEntityBean.nome);
+//        newEntityBean.listaSingolari = textService.primaMaiuscola(newEntityBean.nome);
         return (AttPlurale) super.fixKey(newEntityBean);
+    }
+
+
+    @Override
+    public AttPlurale findById(final String keyID) {
+        return (AttPlurale) super.findById(keyID);
+    }
+
+    @Override
+    public AttPlurale findByKey(final String keyValue) {
+        return (AttPlurale) super.findByKey(keyValue);
+    }
+
+    @Override
+    public AttPlurale findByOrder(final int ordine) {
+        return this.findByProperty(FIELD_NAME_ORDINE, ordine);
+    }
+
+    @Override
+    public AttPlurale findByProperty(final String propertyName, final Object propertyValue) {
+        return (AttPlurale) super.findByProperty(propertyName, propertyValue);
+    }
+
+
+    @Override
+    public List<AttPlurale> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<AttPlurale> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<AttPlurale> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<AttPlurale> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
+    }
+
+    public List<AttPlurale> findAll() {
+        return this.findAllNoSort();
     }
 
     /**
@@ -122,7 +170,7 @@ public class AttPluraleBackend extends WikiBackend {
         WResult result = attSingolareBackend.download();
         int tempo = WPref.downloadAttPluraleTime.getInt();
 
-        message = String.format("Initio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, AttSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
+        message = String.format("Initio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, AttPlurale.class.getSimpleName(), tempo, unitaMisuraDownload);
         logger.debug(new WrapLog().message(message));
         logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività plurali")));
 
@@ -141,39 +189,50 @@ public class AttPluraleBackend extends WikiBackend {
      */
     public WResult downloadAttivitaLink(WResult result) {
         String moduloLink = PATH_MODULO + PATH_LINK + ATT_LOWER;
-        String singolareEx;
-        String singolareNew;
-        AttSingolare attivita;
+        String attSingolareNome;
+        String attPluraleNome = VUOTA;
+        String paginaAttivitaOld;
+        String paginaAttivitaNew;
+        AttSingolare attivitaSin;
+        AttPlurale attivitaPlur;
         List lista = new ArrayList();
+        List listaMancanti = new ArrayList();
+        List listaDiversi = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloLink);
 
         if (mappa != null && mappa.size() > 0) {
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
-                singolareEx = entry.getKey();
-                singolareNew = TAG_EX_SPAZIO + singolareEx;
-//                attivita = findByKey(singolareEx);
+                attSingolareNome = entry.getKey();
+                paginaAttivitaNew = entry.getValue();
 
-//                if (attivita != null) {
-//                    try {
-//                        attivita = (AttSingolare) insert(newEntity(singolareNew, attivita.plurale, true));
-//                    } catch (Exception unErrore) {
-//                        message = String.format("Duplicate error key %", singolareEx);
-//                        System.out.println(message);
-//                        logger.error(new WrapLog().exception(new AlgosException(unErrore)));
-//                    }
-//                }
-//                else {
-//                    logger.info(new WrapLog().message(String.format("Nelle attività base manca la definizione '%s'", singolareEx)));
-//                }
+                attivitaSin = attSingolareBackend.findByKey(attSingolareNome);
 
-//                if (attivita != null) {
-//                    lista.add(attivita);
-//                }
+                if (attivitaSin == null) {
+                    listaMancanti.add(attSingolareNome);
+                    continue;
+                }
+                attPluraleNome = attivitaSin.plurale;
+                attivitaPlur = findByKey(attPluraleNome);
+                paginaAttivitaOld = attivitaPlur.paginaAttivita;
+
+                if (textService.isEmpty(paginaAttivitaOld)) {
+                    attivitaPlur.paginaAttivita = paginaAttivitaNew;
+                    update(attivitaPlur);
+                }
+                else {
+                    if (!paginaAttivitaNew.equals(paginaAttivitaOld)) {
+                        listaDiversi.add(paginaAttivitaNew);
+                    }
+                }
             }
-            result.setIntValue(lista.size());
-            result.setLista(lista);
-            result.eseguito(lista.size() > 0);
+
+            fixDiversi(listaDiversi);
+            result.setLista(listaDiversi);
+            result.setLista(listaMancanti);
+
+            //            result.setIntValue(lista.size());
+            //            result.eseguito(lista.size() > 0);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);
@@ -181,6 +240,8 @@ public class AttPluraleBackend extends WikiBackend {
         }
 
         return result;
+    }
+    public void fixDiversi(List lista) {
     }
 
     /**
@@ -197,6 +258,7 @@ public class AttPluraleBackend extends WikiBackend {
         AEntity entityBean = null;
         List lista = new ArrayList();
         String clazzName = entityClazz.getSimpleName();
+        List<AttSingolare> listaSingolari;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result = attSingolareBackend.download();
@@ -211,6 +273,7 @@ public class AttPluraleBackend extends WikiBackend {
 
         if (nomiAttivitaPluraliDistinte != null && nomiAttivitaPluraliDistinte.size() > 0) {
             for (String plurale : nomiAttivitaPluraliDistinte) {
+//                listaSingolari= attSingolareBackend.findAllByNotExSortKey()
                 try {
                     entityBean = insert(newEntity(plurale));
                 } catch (Exception unErrore) {
