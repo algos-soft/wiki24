@@ -1,6 +1,8 @@
 package it.algos.wiki24.backend.packages.attplurale;
 
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
@@ -56,7 +58,7 @@ public class AttPluraleView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "paginaLista", "paginaAttivita", "numSingolari", "superaSoglia", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
         super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "lista", "nazione", "numBio", "superaSoglia", "esisteLista");
 
         super.usaBottoneReset = true;
@@ -99,7 +101,7 @@ public class AttPluraleView extends WikiView {
 
         message = String.format("Reset%sPRIMA esegue un download di AttSingolare, poi crea la tabella ricavandola dalle attività DISTINCT di AttSingolare", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%s1 modulo wiki: %s tramite resetOnlyEmpty()", FORWARD, PATH_LINK + ATT_LOWER);
+        message = String.format("Download%s1 modulo wiki: %s", FORWARD, PATH_LINK + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività", FORWARD);
         addSpan(ASpan.text(message).verde());
@@ -116,6 +118,46 @@ public class AttPluraleView extends WikiView {
         if (searchField != null) {
             searchField.setPlaceholder(TAG_ALTRE_BY + "plurale");
         }
+    }
+
+    /**
+     * autoCreateColumns=false <br>
+     * Crea le colonne normali indicate in this.colonne <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void addColumnsOneByOne() {
+        super.addColumnsOneByOne();
+
+        Grid.Column paginaLista = grid.addColumn(new ComponentRenderer<>(entity -> {
+            String wikiTitle = textService.primaMaiuscola(((AttPlurale) entity).paginaLista);
+            Anchor anchor = new Anchor(PATH_WIKI + PATH_ATTIVITA + SLASH + wikiTitle, wikiTitle);
+            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+            if (((AttPlurale) entity).isEsisteLista()) {
+                anchor.getElement().getStyle().set("color", "green");
+            }
+            else {
+                anchor.getElement().getStyle().set("color", "red");
+            }
+            return new Span(anchor);
+        })).setHeader("paginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
+
+        Grid.Column linkAttivita = grid.addColumn(new ComponentRenderer<>(entity -> {
+            String wikiTitle = textService.primaMaiuscola(((AttPlurale) entity).linkAttivita);
+            Anchor anchor = new Anchor(PATH_WIKI + wikiTitle, wikiTitle);
+            anchor.getElement().getStyle().set("color", "blue");
+            return new Span(anchor);
+        })).setHeader("linkAttivita").setKey("linkAttivita").setFlexGrow(0).setWidth("18em");
+
+        Grid.Column nome = grid.getColumnByKey("nome");
+        Grid.Column listaSingolari = grid.getColumnByKey("listaSingolari");
+        Grid.Column numBio = grid.getColumnByKey("numBio");
+
+        Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
+        Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
+        Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
+
+        grid.setColumnOrder(nome, listaSingolari, numBio, paginaLista, linkAttivita, numSingolari, superaSoglia, esisteLista);
     }
 
 }// end of crud @Route view class

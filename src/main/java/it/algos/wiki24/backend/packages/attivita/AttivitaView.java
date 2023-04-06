@@ -236,7 +236,6 @@ public class AttivitaView extends WikiView {
         Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
 
-//        grid.setColumnOrder(ordine, singolare, pluraleParagrafo, pluraleLista, linkPagina, type, aggiunta, numBio, numSingolari, superaSoglia, daCancellare);
         grid.setColumnOrder( singolare, pluraleParagrafo, pluraleLista, linkPagina, type, aggiunta, numBio, numSingolari, superaSoglia, daCancellare);
     }
 

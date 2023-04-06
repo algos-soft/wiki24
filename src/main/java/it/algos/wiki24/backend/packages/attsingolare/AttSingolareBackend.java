@@ -316,7 +316,7 @@ public class AttSingolareBackend extends WikiBackend {
         long inizio = System.currentTimeMillis();
         int tempo = 2;
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, NazSingolare.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, AttSingolare.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
 
         for (AttSingolare attivita : findAll()) {

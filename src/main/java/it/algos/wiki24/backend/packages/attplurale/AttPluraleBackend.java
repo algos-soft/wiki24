@@ -11,6 +11,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
@@ -85,32 +86,36 @@ public class AttPluraleBackend extends WikiBackend {
         return newEntity(keyPropertyValue, null, VUOTA, VUOTA);
     }
 
+    public AttPlurale newEntity(final String keyPropertyValue, List<AttSingolare> listaSingolari) {
+        return newEntity(keyPropertyValue, listaSingolari, VUOTA, VUOTA);
+    }
+
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome     (obbligatorio, unico)
-     * @param listaSingolari    (obbligatorio, unico)
-     * @param paginaLista (obbligatorio)
-     * @param paginaAttivita (obbligatorio)
+     * @param nome           (obbligatorio, unico)
+     * @param listaSingolari (obbligatorio, unico)
+     * @param paginaLista    (obbligatorio)
+     * @param linkAttivita (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AttPlurale newEntity(final String nome, List<AttSingolare> listaSingolari, final String paginaLista, final String paginaAttivita) {
+    public AttPlurale newEntity(final String nome, List<AttSingolare> listaSingolari, final String paginaLista, final String linkAttivita) {
         AttPlurale newEntityBean = AttPlurale.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .listaSingolari(listaSingolari)
-                .paginaLista(textService.isValid(paginaLista) ? paginaLista : null)
-                .paginaAttivita(textService.isValid(paginaAttivita) ? paginaAttivita : null)
+                .paginaLista(textService.isValid(paginaLista) ? paginaLista : textService.primaMaiuscola(nome))
+                .linkAttivita(textService.isValid(linkAttivita) ? linkAttivita : null)
                 .numBio(0)
-                .numSingolari(0)
+                .numSingolari(listaSingolari != null ? listaSingolari.size() : 0)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
 
-//        newEntityBean.listaSingolari = textService.primaMaiuscola(newEntityBean.nome);
         return (AttPlurale) super.fixKey(newEntityBean);
     }
 
@@ -201,11 +206,16 @@ public class AttPluraleBackend extends WikiBackend {
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloLink);
 
+        for (AttPlurale att : findAll()) {
+            att.linkAttivita = VUOTA;
+            update(att);
+        }
+
         if (mappa != null && mappa.size() > 0) {
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 attSingolareNome = entry.getKey();
                 paginaAttivitaNew = entry.getValue();
-
+                paginaAttivitaNew = textService.primaMaiuscola(paginaAttivitaNew);
                 attivitaSin = attSingolareBackend.findByKey(attSingolareNome);
 
                 if (attivitaSin == null) {
@@ -214,10 +224,10 @@ public class AttPluraleBackend extends WikiBackend {
                 }
                 attPluraleNome = attivitaSin.plurale;
                 attivitaPlur = findByKey(attPluraleNome);
-                paginaAttivitaOld = attivitaPlur.paginaAttivita;
+                paginaAttivitaOld = attivitaPlur.linkAttivita;
 
                 if (textService.isEmpty(paginaAttivitaOld)) {
-                    attivitaPlur.paginaAttivita = paginaAttivitaNew;
+                    attivitaPlur.linkAttivita = paginaAttivitaNew;
                     update(attivitaPlur);
                 }
                 else {
@@ -241,7 +251,34 @@ public class AttPluraleBackend extends WikiBackend {
 
         return result;
     }
+
     public void fixDiversi(List lista) {
+    }
+
+    /**
+     * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public WResult elabora() {
+        WResult result = super.elabora();
+        long inizio = System.currentTimeMillis();
+        int tempo = 2;
+
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, AttPlurale.class.getSimpleName(), tempo);
+        logger.debug(new WrapLog().message(message));
+
+        for (AttPlurale attivita : findAll()) {
+            attivita.numBio = 0;
+            attivita.superaSoglia = false;
+            attivita.esisteLista = false;
+
+            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
+            attivita.esisteLista = esistePagina(attivita.paginaLista);
+
+            update(attivita);
+        }
+
+        return super.fixElabora(result, inizio, "attività plurali");
     }
 
     /**
@@ -273,9 +310,9 @@ public class AttPluraleBackend extends WikiBackend {
 
         if (nomiAttivitaPluraliDistinte != null && nomiAttivitaPluraliDistinte.size() > 0) {
             for (String plurale : nomiAttivitaPluraliDistinte) {
-//                listaSingolari= attSingolareBackend.findAllByNotExSortKey()
+                listaSingolari = attSingolareBackend.findAllByPlurale(plurale);
                 try {
-                    entityBean = insert(newEntity(plurale));
+                    entityBean = insert(newEntity(plurale, listaSingolari));
                 } catch (Exception unErrore) {
                     message = String.format("Duplicate error key %", plurale);
                     System.out.println(message);
@@ -291,6 +328,15 @@ public class AttPluraleBackend extends WikiBackend {
         }
 
         return super.fixReset(result, clazzName, lista, logInfo);
+    }
+
+
+    /**
+     * Controlla l'esistenza della pagina wiki relativa a questa attività (lista) <br>
+     */
+    public boolean esistePagina(String paginaLista) {
+        String wikiTitle = "Progetto:Biografie/Attività/" + textService.primaMaiuscola(paginaLista);
+        return appContext.getBean(QueryExist.class).isEsiste(wikiTitle);
     }
 
 }// end of crud backend class

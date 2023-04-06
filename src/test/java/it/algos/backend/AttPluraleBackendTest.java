@@ -126,8 +126,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         assertFalse(ottenutoBooleano);
         System.out.println(VUOTA);
 
-        sorgente = "attivita";
-        sorgente2 = "avvocati";
+        sorgente = "linkAttivita";
+        sorgente2 = "Allenatore";
         ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
         assertTrue(ottenutoBooleano);
     }
@@ -199,8 +199,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         assertNull(entityBean);
         System.out.println(VUOTA);
 
-        sorgente = "attivita";
-        sorgente2 = "avvocati";
+        sorgente = "linkAttivita";
+        sorgente2 = "Allenatore";
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNotNull(entityBean);
         System.out.println(VUOTA);

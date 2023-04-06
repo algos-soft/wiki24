@@ -51,8 +51,8 @@ public class AttPlurale extends AEntity {
     @AIField(type = AETypeField.text, widthEM = 15)
     public String paginaLista;
 
-    @AIField(type = AETypeField.text, widthEM = 15)
-    public String paginaAttivita;
+    @AIField(type = AETypeField.text, widthEM = 10)
+    public String linkAttivita;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano la stessa attività plurale", widthEM = 6)
     public int numBio;
