@@ -289,6 +289,24 @@ public abstract class WikiBackendTest extends BackendTest {
         assertTrue(result.isEseguito());
     }
 
+    //Segnaposto
+    @Order(72)
+    protected void libero72() {
+    }
+
+    //Segnaposto
+    @Order(73)
+    protected void libero73() {
+    }
+
+    //Segnaposto
+    @Order(74)
+    protected void libero74() {
+    }
+    //Segnaposto
+    @Order(75)
+    protected void libero75() {
+    }
 
     protected void printRisultato(WResult result) {
         List lista = result.getLista();

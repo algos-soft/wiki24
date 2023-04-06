@@ -114,7 +114,7 @@ public class GiornoWikiView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%scalcola le voci biografiche che usano ogni singolo giorno dell'anno.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload %stutte le pagine nati/morti per ogni giorno. Tramite upload()", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        message = String.format("Upload %stutte le pagine nati/morti per ogni giorno.", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
 
         int errati = paginaBackend.countGiorniErrati();

@@ -98,11 +98,11 @@ public class AttSingolareView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
 
-        message = String.format("Download%s2 moduli wiki: %s%s%s tramite resetOnlyEmpty()", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        message = String.format("Download%s2 moduli wiki: %s%s%s", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
         message = String.format( "Elabora%scalcola le voci biografiche che usano ogni singola attività singolare.",FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload test%s2 moduli wiki: %s%s%s: tramite riordinaModulo(). Riordinati in ordine alfabetico in 'Utente:Biobot/Modulo...'", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        message = String.format("Upload test%s2 moduli wiki: %s%s%s. Riordinati in ordine alfabetico in 'Utente:Biobot/Modulo...'", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
 
         message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";

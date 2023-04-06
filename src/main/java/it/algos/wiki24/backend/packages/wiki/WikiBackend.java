@@ -380,7 +380,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public WResult fixElabora(WResult result, final long inizio, String modulo) {
-        result.typeResult(AETypeResult.elaborazioneValida).eseguito().fine().setIntValue(count());
+        result.typeLog(AETypeLog.elabora).typeResult(AETypeResult.elaborazioneValida).eseguito().fine().setIntValue(count());
 
         if (lastElaborazione != null) {
             lastElaborazione.setValue(LocalDateTime.now());
@@ -396,8 +396,9 @@ public abstract class WikiBackend extends CrudBackend {
             logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
         }
 
-        message = String.format("Elaborazione %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
+        message = String.format("Elaborazione di %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
         logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
+        result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
         logger.debug(new WrapLog().message(message));

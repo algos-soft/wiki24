@@ -2,11 +2,9 @@ package it.algos.wiki24.backend.upload;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
-import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -22,7 +20,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuoloExAttivita extends Upload {
+public class UploadModuloExAttivita extends Upload {
 
     @Autowired
     public AttSingolareBackend attSingolareBackend;
@@ -33,13 +31,13 @@ public class UploadModuoloExAttivita extends Upload {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuoloExAttivita() {
+    public UploadModuloExAttivita() {
         super.wikiTitle = UPLOAD_TITLE_DEBUG + "ModuloExAttivita";
         super.summary = "Fix ordine alfabeticox";
         super.uploadTest = true;
     }// end of constructor
 
-    public UploadModuoloExAttivita result(WResult result) {
+    public UploadModuloExAttivita result(WResult result) {
         super.result = result;
         return this;
     }

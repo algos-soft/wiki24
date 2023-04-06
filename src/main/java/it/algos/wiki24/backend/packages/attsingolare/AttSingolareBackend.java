@@ -13,7 +13,6 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -133,6 +132,17 @@ public class AttSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+
+    public List findAllByExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
+    }
+
+    public List findAllByNotExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
+    }
+
     public List<String> findAllDistinctByPlurali() {
         List<String> lista = new ArrayList<>();
         Set<String> setPlurali = new HashSet();
@@ -145,16 +155,6 @@ public class AttSingolareBackend extends WikiBackend {
         }
 
         return lista;
-    }
-
-    public List findAllByExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
-    }
-
-    public List findAllByNotExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
     }
 
     /**
@@ -291,7 +291,7 @@ public class AttSingolareBackend extends WikiBackend {
         }
 
         if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuoloExAttivita.class).result(result).upload();
+            result = appContext.getBean(UploadModuloExAttivita.class).result(result).upload();
         }
 
         return super.fixRiordinaModulo(result);
@@ -314,7 +314,7 @@ public class AttSingolareBackend extends WikiBackend {
             update(attivita);
         }
 
-        return super.fixElabora(result, inizio, "attivita");
+        return super.fixElabora(result, inizio, "attività singolari");
     }
 
     /**

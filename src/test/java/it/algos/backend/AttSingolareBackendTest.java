@@ -54,7 +54,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     }
 
 
-
     @Test
     @Order(21)
     @DisplayName("21 - isExistById")
@@ -101,23 +100,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         ottenutoBooleano = super.isExistByKey(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
     }
-
-    //    @Test
-    //    @Order(23)
-    //    @DisplayName("23 - isExistByOrder")
-    //    protected void isExistByOrder() {
-    //        System.out.println("23 - isExistByOrder");
-    //        System.out.println(VUOTA);
-    //
-    //        sorgenteIntero = 87;
-    //        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-    //        assertFalse(ottenutoBooleano);
-    //        System.out.println(VUOTA);
-    //
-    //        sorgenteIntero = 0;
-    //        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-    //        assertFalse(ottenutoBooleano);
-    //    }
 
 
     @Test
@@ -192,23 +174,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         assertEquals(previstoBooleano, entityBean != null);
     }
 
-    //    @Test
-    //    @Order(33)
-    //    @DisplayName("33 - findByOrder")
-    //    protected void findByOrder() {
-    //        System.out.println("33 - findByOrder");
-    //        System.out.println(VUOTA);
-    //
-    //        sorgenteIntero = 87;
-    //        entityBean = super.findByOrder(sorgenteIntero);
-    //        assertNull(entityBean);
-    //        System.out.println(VUOTA);
-    //
-    //        sorgenteIntero = 0;
-    //        entityBean = super.findByOrder(sorgenteIntero);
-    //        assertNull(entityBean);
-    //    }
-
 
     @Test
     @Order(34)
@@ -236,5 +201,46 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
     }
 
+    @Test
+    @Order(76)
+    @DisplayName("76 - findAllByExSortKey")
+    protected void findAllByExSortKey() {
+        System.out.println("71 - findAllByExSortKey");
+        System.out.println("Tutte le attività singolari col flag ex=true");
+
+        listaBeans = backend.findAllByExSortKey();
+        assertTrue(listaBeans != null);
+        assertTrue(listaBeans.size() > 0);
+        printSubLista(listaBeans);
+    }
+
+    @Test
+    @Order(77)
+    @DisplayName("77 - findAllByNotExSortKey")
+    protected void findAllByNotExSortKey() {
+        System.out.println("77 - findAllByNotExSortKey");
+        System.out.println("Tutte le attività singolari col flag ex=false");
+
+        listaBeans = backend.findAllByNotExSortKey();
+        assertTrue(listaBeans != null);
+        assertTrue(listaBeans.size() > 0);
+        printSubLista(listaBeans);
+    }
+
+    @Test
+    @Order(78)
+    @DisplayName("78 - findAllDistinctByPlurali")
+    protected void findAllDistinctByPlurali() {
+        System.out.println("78 - findAllDistinctByPlurali");
+        System.out.println("Tutte i valori di attività plurali (unici)");
+        System.out.println(VUOTA);
+
+        listaStr = backend.findAllDistinctByPlurali();
+        assertTrue(listaStr != null);
+        assertTrue(listaStr.size() > 0);
+        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+        System.out.println(message);
+        print(listaStr);
+    }
 
 }

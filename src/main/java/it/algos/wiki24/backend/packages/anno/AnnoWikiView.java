@@ -118,7 +118,7 @@ public class AnnoWikiView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%scalcola le voci biografiche che usano ogni singolo anno.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload %stutte le pagine nati/morti per ogni anno. Tramite upload()", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        message = String.format("Upload %stutte le pagine nati/morti per ogni anno.", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
 
         String message = String.format("%s: %s (vedi view)", "Pagine degli anni da cancellare", backend.countListeDaCancellare()); //@todo va in errore
