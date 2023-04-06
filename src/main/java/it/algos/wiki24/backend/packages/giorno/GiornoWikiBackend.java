@@ -39,6 +39,7 @@ public class GiornoWikiBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.resetGiorni;
         super.lastElaborazione = WPref.elaboraGiorni;
         super.durataElaborazione = WPref.elaboraGiorniTime;
         super.lastUpload = WPref.uploadGiorni;
@@ -47,7 +48,7 @@ public class GiornoWikiBackend extends WikiBackend {
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
 
-        this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
     }
 
     /**
@@ -166,14 +167,14 @@ public class GiornoWikiBackend extends WikiBackend {
         long inizio = System.currentTimeMillis();
         WResult result = super.elabora();
         String message;
-        int tempo = 2;
+        int tempo = WPref.elaboraGiorniTime.getInt();
 
         //--Check di validità del database mongoDB
         if (checkValiditaDatabase().isErrato()) {
             return WResult.errato();
         }
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d minuti.", METHOD_NAME_ELABORA, Giorno.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, Giorno.class.getSimpleName(), tempo, unitaMisuraElaborazione);
         logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
@@ -242,7 +243,6 @@ public class GiornoWikiBackend extends WikiBackend {
     public AResult resetOnlyEmpty(boolean logInfo) {
         AResult result = super.resetOnlyEmpty(logInfo);
         String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
         List<Giorno> giorniBase;
         AEntity entityBean;
         List<AEntity> lista;
@@ -271,7 +271,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+        return super.fixReset(result, clazzName, lista, logInfo);
     }
 
 }// end of crud backend class

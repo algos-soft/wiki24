@@ -122,6 +122,7 @@ public abstract class Upload {
      */
     @Autowired
     public GiornoBackend giornoBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -137,6 +138,7 @@ public abstract class Upload {
      */
     @Autowired
     public AnnoBackend annoBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -204,6 +206,8 @@ public abstract class Upload {
     protected AETypeToc typeToc;
 
     protected AETypeTime unitaMisuraUpload;
+
+    protected WResult result;
 
     protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
         return null;
@@ -329,5 +333,31 @@ public abstract class Upload {
         }
     }
 
+    /**
+     * Esegue la scrittura della pagina <br>
+     */
+    public WResult uploadModulo(String newText) {
+        if (textService.isValid(newText)) {
+            WResult resultQuery = appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
+            String title = textService.isValid(result.getWikiTitle()) ? result.getWikiTitle() + SOMMA_SPAZIO + resultQuery.getWikiTitle() : resultQuery.getWikiTitle();
+            result.setWikiTitle(title);
+            result.setPageid(resultQuery.getPageid());
+            result.setResponse(resultQuery.getResponse());
+            result.valido(resultQuery.isValido());
+            result.eseguito(true);
+            result.setModificata(result.isModificata() ? true : resultQuery.isModificata() ? true : false);
+            result.typeResult(AETypeResult.uploadValido);
+            result.typeLog(AETypeLog.upload);
+            result.method("Upload");
+            result.setValidMessage("Upload di 1/+ moduli dopo averli ordinati alfabeticamente");
+            result.setIntValue(0);
+            result.setLista(null);
+
+            return result;
+        }
+        else {
+            return WResult.errato();
+        }
+    }
 
 }

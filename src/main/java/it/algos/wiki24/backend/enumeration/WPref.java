@@ -21,12 +21,37 @@ import java.util.*;
  */
 public enum WPref implements AIGenPref {
 
+
+    //giorni
+    resetGiorni("resetGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'giorni'"),
+    elaboraGiorni("elaboraGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti i giorni."),
+    elaboraGiorniTime("elaboraGiorniTime", AETypePref.integer, 0, "Durata elaborazione di tutti i giorni."),
+    uploadGiorni("uploadGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per giorno"),
+    uploadGiorniTime("uploadGiorniTime", AETypePref.integer, 0, "Durata upload dei giorni."),
+    uploadGiorniPrevisto("uploadGiorniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i giorni."),
+    statisticaGiorni("statisticaGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per i giorni."),
+    statisticaGiorniTime("statisticaGiorniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche dei giorni."),
+
+
+    //anni
+    resetAnni("resetAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'anni'"),
+    elaboraAnni("elaboraAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti gli anni."),
+    elaboraAnniTime("elaboraAnniTime", AETypePref.integer, 0, "Durata elaborazione di tutti gli anni."),
+    uploadAnni("uploadAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per anno"),
+    uploadAnniTime("uploadAnniTime", AETypePref.integer, 0, "Durata upload degli anni."),
+    uploadAnniPrevisto("uploadAnniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per gli anni."),
+    statisticaAnni("statisticaAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per gli anni."),
+    statisticaAnniTime("statisticaAnniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche degli anni."),
+
+
+    //attività
     downloadAttSingolare("downloadAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività e Modulo:Bio/Ex attività."),
     downloadAttSingolareTime("downloadAttSingolareTime", AETypePref.integer, 0, "Durata download delle attività singolari."),
     elaboraAttSingolare("elaboraAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività singolari."),
     elaboraAttSingolareTime("elaboraAttSingolareTime", AETypePref.integer, 0, "Durata elaborazione delle attività singolari."),
 
 
+    resetAttPlurale("resetAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'attivitàPlurali'"),
     downloadAttPlurale("downloadAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Link attività."),
     downloadAttPluraleTime("downloadAttPluraleTime", AETypePref.integer, 0, "Durata download delle attività plurali."),
     elaboraAttPlurale("elaboraAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività plurali."),
@@ -81,11 +106,6 @@ public enum WPref implements AIGenPref {
     //    downloadProfessione("downloadProfessione", AETypePref.localdatetime, "Download di Modulo:Bio/Link attività.", ROOT_DATA_TIME),
     //    downloadNomi("downloadNomi", AETypePref.localdatetime, "Download di Progetto:Antroponimi/Nomi doppi.", ROOT_DATA_TIME),
 
-    elaboraAnni("elaboraAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti gli anni."),
-    elaboraAnniTime("elaboraAnniTime", AETypePref.integer, 0, "Durata elaborazione di tutti gli anni."),
-    elaboraGiorni("elaboraGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti i giorni."),
-    elaboraGiorniTime("elaboraGiorniTime", AETypePref.integer, 0, "Durata elaborazione di tutti i giorni."),
-
     elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
@@ -93,18 +113,6 @@ public enum WPref implements AIGenPref {
     statisticaNazPlurale("statisticaNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità plurali."),
 
 
-    uploadGiorni("uploadGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per giorno"),
-    uploadGiorniTime("uploadGiorniTime", AETypePref.integer, 0, "Durata upload dei giorni."),
-    uploadGiorniPrevisto("uploadGiorniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i giorni."),
-    statisticaGiorni("statisticaGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per i giorni."),
-    statisticaGiorniTime("statisticaGiorniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche dei giorni."),
-
-
-    uploadAnni("uploadAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nati/morti per anno"),
-    uploadAnniTime("uploadAnniTime", AETypePref.integer, 0, "Durata upload degli anni."),
-    uploadAnniPrevisto("uploadAnniPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per gli anni."),
-    statisticaAnni("statisticaAnni", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per gli anni."),
-    statisticaAnniTime("statisticaAnniTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche degli anni."),
 
 
     usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni", false),
@@ -172,7 +180,7 @@ public enum WPref implements AIGenPref {
     sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, true, "Categorizzazione per secoli delle liste di 'Nati per anno'", false),
 
 
-    percentualeMinimaBiografie("percentualeMinimaBiografie", AETypePref.decimal, new BigDecimal(88), "Percentuale minima di biografie per avere delle elaborazioni attendibili", false),
+    percentualeMinimaBiografie("percentualeMinimaBiografie", AETypePref.decimal, new BigDecimal(99), "Percentuale minima di biografie per avere delle elaborazioni attendibili", false),
     ;
 
 

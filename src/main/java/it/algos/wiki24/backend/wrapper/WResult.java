@@ -222,6 +222,7 @@ public class WResult extends AResult {
 
     public WResult inizio() {
         this.inizio = System.currentTimeMillis();
+        this.fine = System.currentTimeMillis();
         return this;
     }
 

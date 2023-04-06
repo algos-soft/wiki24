@@ -33,6 +33,7 @@ import java.time.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
+@AIEntity(collectionName = "bio", keyPropertyName = "pageId")
 public class Bio extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)

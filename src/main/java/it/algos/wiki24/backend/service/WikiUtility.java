@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.apache.commons.lang3.*;
@@ -233,10 +234,17 @@ public class WikiUtility extends WAbstractService {
     }
 
 
+    public String wikiTitleNatiAnno(AnnoWiki anno) {
+        return wikiTitleNatiAnno(anno != null ? anno.nome : VUOTA);
+    }
+
     public String wikiTitleNatiAnno(String anno) {
         return natiMortiAnno("Nati", anno);
     }
 
+    public String wikiTitleMortiAnno(AnnoWiki anno) {
+        return wikiTitleMortiAnno(anno != null ? anno.nome : VUOTA);
+    }
     public String wikiTitleMortiAnno(String anno) {
         return natiMortiAnno("Morti", anno);
     }

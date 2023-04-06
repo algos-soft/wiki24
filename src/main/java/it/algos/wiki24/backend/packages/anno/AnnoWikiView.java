@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -70,7 +71,7 @@ public class AnnoWikiView extends WikiView {
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
-        //        super.formPropertyNamesList = Arrays.asList("nome");
+
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
 
@@ -78,7 +79,7 @@ public class AnnoWikiView extends WikiView {
         super.usaReset = true;
         super.usaBottoneElabora = true;
         super.usaBottoneDownload = false;
-        super.usaBottoneStatistiche = true;
+        super.usaBottoneStatistiche = false;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
@@ -105,14 +106,26 @@ public class AnnoWikiView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
+        Anchor anchor1 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ANNI, STATISTICHE);
+        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1));
+
+        message = String.format("Tabella degli anni recuperati dalla tabella 'Anno' di %s", VaadVar.frameworkVaadin24);
+        System.out.println(message);
+        addSpan(ASpan.text(message).verde());
+
+        message = String.format("Reset%scostruisce la tabella", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singolo anno.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload %stutte le pagine nati/morti per ogni anno. Tramite upload()", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        addSpan(ASpan.text(message).verde());
+
         String message = String.format("%s: %s (vedi view)", "Pagine degli anni da cancellare", backend.countListeDaCancellare()); //@todo va in errore
         addSpan(ASpan.text(message).rosso().small());
         addSpan(ASpan.text("Scheduled: TaskAnni (base giornaliera/2 giorni) e TaskStatistiche (base settimanale)").blue().small());
         addSpan(ASpan.text("Elaborazione: Prima di ogni statistica").blue().small());
 
-        Anchor anchor1 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ANNI, STATISTICHE);
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1));
     }
 
     @Override

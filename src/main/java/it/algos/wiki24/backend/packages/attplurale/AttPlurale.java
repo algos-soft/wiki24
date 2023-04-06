@@ -1,9 +1,11 @@
 package it.algos.wiki24.backend.packages.attplurale;
 
+import com.vaadin.flow.component.icon.*;
 import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +17,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.util.*;
 
 /**
  * Project wiki24
@@ -34,20 +38,37 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "code", keyPropertyName = "code")
+@AIEntity(collectionName = "attplurale", keyPropertyName = "nome")
 public class AttPlurale extends AEntity {
 
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento")
-    public int ordine;
 
-    @AIField(type = AETypeField.text, widthEM = 20)
-    public String code;
+    @AIField(type = AETypeField.text, header = "plurale", caption = "plurale", widthEM = 20)
+    public String nome;
 
-    public String descrizione;
+    @AIField(widthEM = 40)
+    public List<AttSingolare> singolari;
+
+    @AIField(type = AETypeField.text, widthEM = 12)
+    public String lista;
+
+    @AIField(type = AETypeField.text, widthEM = 15)
+    public String attivita;
+
+    @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano la stessa attività plurale", widthEM = 6)
+    public int numBio;
+
+    @AIField(type = AETypeField.integer, header = "sin")
+    public int numSingolari;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumb, headerIcon = VaadinIcon.LINES)
+    public boolean superaSoglia;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, headerIcon = VaadinIcon.HAMMER)
+    public boolean esisteLista;
 
     @Override
     public String toString() {
-        return code;
+        return nome;
     }
 
 }// end of crud entity class

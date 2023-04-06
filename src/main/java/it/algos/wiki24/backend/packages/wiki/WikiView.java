@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.wiki;
 
 import ch.carnet.kasparscherrer.*;
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.combobox.*;
@@ -20,6 +21,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.time.*;
@@ -191,6 +193,7 @@ public abstract class WikiView extends CrudView {
     protected ComboBox comboType;
 
     protected boolean usaBottoneUploadModuloAlfabetizzato;
+
     protected Button buttonUploadModulo;
 
     /**
@@ -291,6 +294,7 @@ public abstract class WikiView extends CrudView {
 
     protected void fixPreferenzeBackend() {
         if (crudBackend != null) {
+            lastReset = crudBackend.lastReset;
             lastDownload = crudBackend.lastDownload;
             durataDownload = crudBackend.durataDownload;
             lastElaborazione = crudBackend.lastElaborazione;
@@ -339,8 +343,12 @@ public abstract class WikiView extends CrudView {
                         message += String.format(" in circa %d %s.", durata, "minuti");
                     }
                 }
-                addSpan(ASpan.text(message).verde().small());
             }
+            else {
+                message = "Reset non previsto";
+            }
+            addSpan(ASpan.text(message).verde().small());
+
             if (lastDownload != null && lastDownload.get() instanceof LocalDateTime download) {
                 if (download.equals(ROOT_DATA_TIME)) {
                     message = "Download non ancora effettuato";
@@ -376,9 +384,11 @@ public abstract class WikiView extends CrudView {
                         }
                     }
                 }
-
-                addSpan(ASpan.text(message).verde().small());
             }
+            else {
+                message = "Elaborazione non prevista";
+            }
+            addSpan(ASpan.text(message).verde().small());
 
             if (lastUpload != null && lastUpload.get() instanceof LocalDateTime upload) {
                 if (upload.equals(ROOT_DATA_TIME)) {
@@ -393,8 +403,11 @@ public abstract class WikiView extends CrudView {
                         message += String.format(" Prossimo upload previsto %s.", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(next));
                     }
                 }
-                addSpan(ASpan.text(message).verde().small());
             }
+            else {
+                message = "Upload non previsto";
+            }
+            addSpan(ASpan.text(message).verde().small());
 
             if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
                 if (statistica.equals(ROOT_DATA_TIME)) {
@@ -446,11 +459,23 @@ public abstract class WikiView extends CrudView {
     protected void fixBottoniTopStandard() {
         if (usaBottoneDeleteAll) {
             buttonDeleteAll = new Button();
-            buttonDeleteAll.getElement().setAttribute("theme", "error");
+            buttonDeleteAll.getElement().setAttribute("theme", "primary");
+            buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonDeleteAll.getElement().setProperty("title", "Delete: cancella tutta la collection");
             buttonDeleteAll.addClickListener(event -> deleteAll());
             buttonDeleteAll.setIcon(new Icon(VaadinIcon.TRASH));
             topPlaceHolder.add(buttonDeleteAll);
+        }
+        if (usaBottoneReset) {
+            buttonReset = new Button();
+            buttonReset.getElement().setAttribute("theme", "primary");
+            buttonReset.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            buttonReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
+                    "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
+            buttonReset.addClickListener(event -> AReset.reset(this::reset));
+            buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
+            buttonReset.setIcon(new Icon(VaadinIcon.REFRESH));
+            topPlaceHolder.add(buttonReset);
         }
 
         if (usaBottoneDownload) {
@@ -482,16 +507,18 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadAll) {
             buttonUpload = new Button();
-            buttonUpload.getElement().setAttribute("theme", "error");
+            buttonUpload.getElement().setAttribute("theme", "primary");
+            buttonUpload.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUpload.getElement().setProperty("title", "Upload: costruisce tutte le pagine del package sul server wiki");
             buttonUpload.setIcon(new Icon(VaadinIcon.UPLOAD));
-            buttonUpload.addClickListener(event -> upload());
+            buttonUpload.addClickListener(event -> AUpload.upload(this::upload));
             topPlaceHolder.add(buttonUpload);
         }
 
         if (usaBottoneUploadModuloAlfabetizzato) {
             buttonUploadModulo = new Button();
-            buttonUploadModulo.getElement().setAttribute("theme", "error");
+            buttonUploadModulo.getElement().setAttribute("theme", "primary");
+            buttonUploadModulo.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
             buttonUploadModulo.setIcon(new Icon(VaadinIcon.UPLOAD));
             buttonUploadModulo.addClickListener(event -> riordinaModulo());
@@ -509,7 +536,8 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadStatistiche) {
             buttonUploadStatistiche = new Button();
-            buttonUploadStatistiche.getElement().setAttribute("theme", "error");
+            buttonUploadStatistiche.getElement().setAttribute("theme", "secondary");
+            buttonUploadStatistiche.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadStatistiche.getElement().setProperty("title", "Statistiche: costruisce una nuova pagina delle statistiche sul server wiki");
             buttonUploadStatistiche.setIcon(new Icon(VaadinIcon.TABLE));
             buttonUploadStatistiche.addClickListener(event -> uploadStatistiche());
@@ -608,7 +636,8 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadNati) {
             buttonUploadNati = new Button();
-            buttonUploadNati.getElement().setAttribute("theme", "error");
+            buttonUploadNati.getElement().setAttribute("theme", "primary");
+            buttonUploadNati.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadNati.getElement().setProperty("title", "Upload: scrittura della singola pagina 'nati' sul server wiki");
             buttonUploadNati.setIcon(new Icon(VaadinIcon.UPLOAD));
             buttonUploadNati.setEnabled(false);
@@ -618,7 +647,8 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadMorti) {
             buttonUploadMorti = new Button();
-            buttonUploadMorti.getElement().setAttribute("theme", "error");
+            buttonUploadMorti.getElement().setAttribute("theme", "primary");
+            buttonUploadMorti.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadMorti.getElement().setProperty("title", "Upload: scrittura della singola pagina 'morti' sul server wiki");
             buttonUploadMorti.setIcon(new Icon(VaadinIcon.UPLOAD));
             buttonUploadMorti.setEnabled(false);
@@ -819,6 +849,7 @@ public abstract class WikiView extends CrudView {
      */
     public void upload() {
     }
+
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */

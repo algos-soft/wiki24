@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.upload;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -34,10 +35,14 @@ public class UploadModuoloExAttivita extends Upload {
      */
     public UploadModuoloExAttivita() {
         super.wikiTitle = UPLOAD_TITLE_DEBUG + "ModuloExAttivita";
-        super.summary = "Fix ordine alfabetico";
+        super.summary = "Fix ordine alfabeticox";
         super.uploadTest = true;
     }// end of constructor
 
+    public UploadModuoloExAttivita result(WResult result) {
+        super.result = result;
+        return this;
+    }
 
     /**
      * Esegue la scrittura della pagina <br>
@@ -50,7 +55,7 @@ public class UploadModuoloExAttivita extends Upload {
         List<AttSingolare> lista = attSingolareBackend.findAllByExSortKey();
 
         if (lista != null && lista.size() > 0) {
-            buffer.append("return");
+            buffer.append("returnxxxx");
             buffer.append(SPAZIO);
             buffer.append(GRAFFA_INI);
             buffer.append(CAPO);
@@ -68,12 +73,7 @@ public class UploadModuoloExAttivita extends Upload {
             newText += GRAFFA_END;
         }
 
-        if (textService.isValid(newText)) {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
-        }
-        else {
-            return WResult.errato();
-        }
+        return uploadModulo(newText);
     }
 
 }

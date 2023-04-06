@@ -15,6 +15,8 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.genere.*;
@@ -53,12 +55,20 @@ public abstract class WikiBackend extends CrudBackend {
     public SecoloBackend secoloBackend;
 
     @Autowired
+    public AttSingolareBackend attSingolareBackend;
+
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
+
+    @Autowired
     public NazSingolareBackend nazSingolareBackend;
 
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 
     protected String message;
+
+    protected WPref lastReset;
 
     public WPref lastDownload;
 
@@ -229,7 +239,7 @@ public abstract class WikiBackend extends CrudBackend {
             numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
             percentuale = (Integer) mappa.get(KEY_MAP_VOCI_DATABASE_MONGO) * 100 * 100 / (Integer) mappa.get(KEY_MAP_VOCI_SERVER_WIKI);
             perc = percentuale.toString();
-            perc = perc.substring(0, perc.length() - 2) + VIRGOLA + perc.substring(perc.length() - 2) + PERCENTUALE;
+            //            perc = perc.substring(0, perc.length() - 2) + VIRGOLA + perc.substring(perc.length() - 2) + PERCENTUALE;
             decimal = WPref.percentualeMinimaBiografie.getDecimal();
             doppio = decimal.doubleValue();
             minimo = doppio.toString() + PERCENTUALE;
@@ -261,7 +271,32 @@ public abstract class WikiBackend extends CrudBackend {
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public void riordinaModulo() {
+    public WResult riordinaModulo() {
+        return WResult.errato();
+    }
+
+    public WResult fixRiordinaModulo(WResult result) {
+
+        message = String.format("Upload modulo(i) di %s. %s", result.getTarget(), textService.format(count()), result.deltaSec());
+        logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+        result.setValidMessage(message);
+
+        message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
+        logger.debug(new WrapLog().message(message));
+
+        if (result.isEseguito()) {
+            if (result.isModificata()) {
+                Avviso.message("Modulo(i) cambiato(i). Occorre copiare il testo").error().durata(5).open();
+            }
+            else {
+                Avviso.message("Modulo(i) non modificato(i)").success().open();
+            }
+        }
+        else {
+            Avviso.message("Avviso di errore").error().open();
+        }
+
+        return result;
     }
 
     /**
@@ -273,11 +308,25 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
 
-    public WResult fixDownload(WResult result, final long inizio) {
-        return fixDownload(result, inizio, VUOTA);
+    public AResult fixReset(AResult result, String clazzName, List lista, boolean logInfo) {
+        String collectionName = result.getTarget();
+        result = super.fixResult(result, clazzName, collectionName, lista, logInfo);
+
+        if (lastReset != null) {
+            lastReset.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastReset è nullo")));
+        }
+
+        return result;
     }
 
-    public WResult fixDownload(WResult result, final long inizio, String modulo) {
+    public WResult fixDownload(WResult result, final long inizio) {
+        return fixDownload(result, VUOTA);
+    }
+
+    public WResult fixDownload(WResult result, String modulo) {
         result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
 
         if (lastDownload != null) {
@@ -288,13 +337,13 @@ public abstract class WikiBackend extends CrudBackend {
         }
 
         if (durataDownload != null) {
-            durataDownload.setValue(unitaMisuraDownload.durata(inizio));
+            durataDownload.setValue(unitaMisuraDownload.durata(result.getInizio()));
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
         }
 
-        message = String.format("Download di %s. Pagine caricate %s. %s", modulo, textService.format(count()), unitaMisuraDownload.message(inizio));
+        message = String.format("Download di %s. Pagine scaricate %s. %s", modulo, textService.format(count()), unitaMisuraDownload.message(result.getInizio()));
         logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
         result.setValidMessage(message);
 
@@ -331,7 +380,8 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public WResult fixElabora(WResult result, final long inizio, String modulo) {
-        result.fine();
+        result.typeResult(AETypeResult.elaborazioneValida).eseguito().fine().setIntValue(count());
+
         if (lastElaborazione != null) {
             lastElaborazione.setValue(LocalDateTime.now());
         }

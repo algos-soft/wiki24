@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.giorno;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -66,8 +67,6 @@ public class GiornoWikiView extends WikiView {
 
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
-        //        super.formPropertyNamesList = Arrays.asList("nomeWiki");
-
 
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.usaRowIndex = false;
@@ -76,7 +75,7 @@ public class GiornoWikiView extends WikiView {
         super.usaReset = true;
         super.usaBottoneDownload = false;
         super.usaBottoneElabora = true;
-        super.usaBottoneStatistiche = true;
+        super.usaBottoneStatistiche = false;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneNew = false;
         super.usaBottoneEdit = false;
@@ -103,15 +102,27 @@ public class GiornoWikiView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
+        Anchor anchor1 = new Anchor(PATH_WIKI + PATH_STATISTICHE_GIORNI, STATISTICHE);
+        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1));
+
+        message = String.format("Tabella dei giorni dell'anno recuperati dalla tabella 'Giorno' di %s", VaadVar.frameworkVaadin24);
+        System.out.println(message);
+        addSpan(ASpan.text(message).verde());
+
+        message = String.format("Reset%scostruisce la tabella", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singolo giorno dell'anno.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload %stutte le pagine nati/morti per ogni giorno. Tramite upload()", FORWARD, PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        addSpan(ASpan.text(message).verde());
+
         int errati = paginaBackend.countGiorniErrati();
         message = String.format("%s: %s", "Pagine dei giorni da cancellare (vedi view)", errati);
         addSpan(ASpan.text(message).rosso().small());
         addSpan(ASpan.text("Scheduled: TaskGiorni (base giornaliera/2 giorni) e TaskStatistiche (base settimanale)").blue().small());
         addSpan(ASpan.text("Elaborazione: Prima di ogni statistica").blue().small());
 
-        Anchor anchor1 = new Anchor(PATH_WIKI + PATH_STATISTICHE_GIORNI, STATISTICHE);
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1));
     }
 
 
@@ -217,7 +228,7 @@ public class GiornoWikiView extends WikiView {
     public void upload() {
         long inizio = System.currentTimeMillis();
         appContext.getBean(UploadGiorni.class).uploadAll();
-        super.fixUpload(inizio,"dei giorni");
+        super.fixUpload(inizio, "dei giorni");
         reload();
     }
 

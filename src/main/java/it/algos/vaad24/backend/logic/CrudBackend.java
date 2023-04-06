@@ -912,7 +912,6 @@ public abstract class CrudBackend extends AbstractService {
             message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetOnlyEmpty()", collectionName, clazzName);
             return result.errorMessage(message);
         }
-
     }
 
     //    public AResult fixResult(AResult result, String clazzName, String collectionName, int numeroElementi) {

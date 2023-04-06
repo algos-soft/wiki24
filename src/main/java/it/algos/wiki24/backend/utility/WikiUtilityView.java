@@ -61,6 +61,7 @@ public class WikiUtilityView extends UtilityView {
     public void body() {
         super.body();
         this.paragrafoDownloadModuli();
+        this.paragrafoUploadModuli();
         this.paragrafoDownloadBiografie();
         this.paragrafoElaborazione();
         this.paragrafoUploadListe();
@@ -79,7 +80,7 @@ public class WikiUtilityView extends UtilityView {
 
         message = String.format("Esegue il %s() su tutte le collection che implementano %s(). ", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
-        layout.add(ASpan.text(DROP));
+        layout.add(ASpan.text(AUTOMATIC));
         layout.add(ASpan.text(FLAG_DEBUG));
         lista = classService.allModuleEntityResetOrderedName(VaadVar.moduloVaadin24);
         message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
@@ -137,13 +138,16 @@ public class WikiUtilityView extends UtilityView {
         Button bottone3 = new Button("AttPlurale");
         bottone3.getElement().setAttribute("theme", "primary");
         bottone3.addClickListener(event -> downloadAttivitaPlurale());
+        bottone3.setEnabled(false);
 
         Button bottone4 = new Button("NazSingolare");
         bottone4.getElement().setAttribute("theme", "primary");
         bottone4.addClickListener(event -> downloadNazionalitaSingolare());
+        bottone4.setEnabled(false);
         Button bottone5 = new Button("NazPlurale");
         bottone5.getElement().setAttribute("theme", "primary");
         bottone5.addClickListener(event -> downloadNazionalitaPlurale());
+        bottone5.setEnabled(false);
 
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5));
@@ -152,9 +156,9 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadAll() {
         downloadAttivitaSingolare();
-        downloadAttivitaPlurale();
-        downloadNazionalitaSingolare();
-        downloadNazionalitaPlurale();
+        //        downloadAttivitaPlurale();
+        //        downloadNazionalitaSingolare();
+        //        downloadNazionalitaPlurale();
     }
 
 
@@ -186,16 +190,16 @@ public class WikiUtilityView extends UtilityView {
         String task = Attivita.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle attività plurali.").type(AETypeLog.utility));
-//        result = attPluraleBackend.download();
-//
-//        if (result.isValido()) {
-//            message = String.format("Download di %s effettuato", task);
-//            Avviso.message(message).success().durata(4).open();
-//        }
-//        else {
-//            message = String.format("Download di %s non riuscito", task);
-//            Avviso.message(message).error().durata(4).open();
-//        }
+        //        result = attPluraleBackend.download();
+        //
+        //        if (result.isValido()) {
+        //            message = String.format("Download di %s effettuato", task);
+        //            Avviso.message(message).success().durata(4).open();
+        //        }
+        //        else {
+        //            message = String.format("Download di %s non riuscito", task);
+        //            Avviso.message(message).error().durata(4).open();
+        //        }
 
         super.fineDebug();
     }
@@ -270,7 +274,7 @@ public class WikiUtilityView extends UtilityView {
         layout.setPadding(false);
         layout.setSpacing(false);
         String message;
-        H3 paragrafo = new H3("Elaborazione delle task");
+        H3 paragrafo = new H3("Elaborazioni");
         paragrafo.getElement().getStyle().set("color", "blue");
         List<String> listaClazz;
 
@@ -357,13 +361,13 @@ public class WikiUtilityView extends UtilityView {
         WResult result;
 
         logger.info(new WrapLog().message("Utility: elaborazione delle Attività.").type(AETypeLog.utility));
-//        result = attivitaBackend.elabora();
-//        if (result.isValido()) {
-//            Avviso.message("Elaborazione effettuata").success().open();
-//        }
-//        else {
-//            Avviso.message("Elaborazione non effettuata").error().open();
-//        }
+        //        result = attivitaBackend.elabora();
+        //        if (result.isValido()) {
+        //            Avviso.message("Elaborazione effettuata").success().open();
+        //        }
+        //        else {
+        //            Avviso.message("Elaborazione non effettuata").error().open();
+        //        }
 
         super.fineDebug();
     }
@@ -399,6 +403,48 @@ public class WikiUtilityView extends UtilityView {
         }
 
         super.fineDebug();
+    }
+
+
+    public void paragrafoUploadModuli() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        H3 paragrafo = new H3("Test di upload dei moduli");
+        paragrafo.getElement().getStyle().set("color", "blue");
+        List<String> listaClazz;
+
+        message = String.format("Costruisce (come TEST) il contenuto dei moduli ordinati alfabeticamente. Prima esegue anche un download. ", METHOD_NAME_UPLOAD);
+        layout.add(ASpan.text(message));
+        layout.add(ASpan.text(FLAG_DEBUG));
+
+        listaClazz = Arrays.asList("ModuloPluraleAttività", "ModuloExAttività");
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, listaClazz);
+            layout.add(ASpan.text(message));
+        }
+
+        Button bottone = new Button("All");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> uploadModuli());
+
+        Button bottone2 = new Button("PluraleAttività + ExAttività");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> uploadModuliAttSingolare());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone, bottone2));
+        this.add(layout);
+    }
+
+    public void uploadModuli() {
+        uploadModuliAttSingolare();
+    }
+
+    public void uploadModuliAttSingolare() {
+        attSingolareBackend.riordinaModulo();
     }
 
 

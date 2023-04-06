@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -198,20 +199,36 @@ public abstract class WikiBackendTest extends BackendTest {
         this.result = WResult.errato();
     }
 
+
+    @Test
+    @Order(10)
+    @DisplayName("10--------")
+    void test10() {
+        System.out.println("11 - isExistsCollection");
+        System.out.println("12 - count");
+        System.out.println("13 - resetOnlyEmpty");
+        System.out.println("14 - resetForcing");
+        System.out.println("15 - download (solo su wiki)");
+        System.out.println("16 - elabora (solo su wiki)");
+        System.out.println("17 - upload (solo su wiki)");
+
+        System.out.println(VUOTA);
+    }
+
     @Test
     @Order(13)
-    @DisplayName("13 - resetOnlyEmpty  (non previsto su wiki)")
+    @DisplayName("13 - resetOnlyEmpty  (non previsto per questa collection)")
     protected void resetOnlyEmpty() {
-        System.out.println("13 - resetOnlyEmpty (non previsto su wiki)");
-        System.out.println("Previsti download() e elabora()");
+        System.out.println("13 - resetOnlyEmpty (non previsto per questa collection)");
+        System.out.println("Previsti (probabilmente) download() ed elabora()");
     }
 
     @Test
     @Order(14)
-    @DisplayName("14 - resetForcing (non previsto su wiki)")
+    @DisplayName("14 - resetForcing (non previsto per questa collection)")
     protected void resetForcing() {
-        System.out.println("14 - resetForcing (non previsto su wiki)");
-        System.out.println("Previsti download() e elabora()");
+        System.out.println("14 - resetForcing (non previsto per questa collection)");
+        System.out.println("Previsti (probabilmente) download() ed elabora()");
     }
 
     @Test
@@ -225,6 +242,7 @@ public abstract class WikiBackendTest extends BackendTest {
         if (entityClazz == null) {
             System.out.println("Manca la variabile entityClazz in questo test");
         }
+
         result = wikiBackend.download();
         printRisultato(result);
     }
@@ -240,6 +258,15 @@ public abstract class WikiBackendTest extends BackendTest {
             System.out.println("Manca la variabile entityClazz in questo test");
         }
 
+        result = wikiBackend.elabora();
+        printRisultato(result);
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("17 - upload (non previsto per questa collection)")
+    protected void upload() {
+        System.out.println("17 - upload (non previsto per questa collection)");
     }
 
     @Test
@@ -256,7 +283,48 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
         System.out.println(VUOTA);
 
-        wikiBackend.riordinaModulo();
+        result = wikiBackend.riordinaModulo();
+        printRisultato(result);
+        assertTrue(result.isValido());
+        assertTrue(result.isEseguito());
+    }
+
+
+    protected void printRisultato(WResult result) {
+        List lista = result.getLista();
+        lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
+        Map<String, Object> mappa = result.getMappa();
+
+        System.out.println(VUOTA);
+        System.out.println("Risultato");
+        System.out.println(String.format("Valido: %s", result.isValido()));
+        System.out.println(String.format("Eseguito: %s", result.isEseguito()));
+        System.out.println(String.format("Modificata: %s", result.isModificata()));
+        System.out.println(String.format("Result: %s", result.getTypeResult().name()));
+        System.out.println(String.format("Method: %s", result.getMethod()));
+        System.out.println(String.format("TypeLog: %s", result.getTypeLog()));
+        System.out.println(String.format("TypeCopy: %s", result.getTypeCopy()));
+        System.out.println(String.format("CopyType: %s", result.getTypeCopy() != null ? result.getTypeCopy().getType() : VUOTA));
+        //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
+        System.out.println(String.format("Target: %s", result.getTarget()));
+        System.out.println(String.format("WikiTitle: %s", result.getWikiTitle()));
+        System.out.println(String.format("TypeResultText: %s", result.getTypeResult().getTag()));
+        System.out.println(String.format("TypeText: %s", result.getTypeTxt()));
+        System.out.println(String.format("Message code: %s", result.getCodeMessage()));
+        System.out.println(String.format("Message: %s", result.getMessage()));
+        System.out.println(String.format("Exception: %s", result.getException() != null ? result.getException().getMessage() : VUOTA));
+        System.out.println(String.format("Error code: %s", result.getErrorCode()));
+        System.out.println(String.format("Error message: %s", result.getErrorMessage()));
+        System.out.println(String.format("Valid message: %s", result.getValidMessage()));
+        System.out.println(String.format("Numeric value: %s", textService.format(result.getIntValue())));
+        System.out.println(String.format("List value: %s", lista));
+        System.out.println("Map value: ");
+        if (mappa != null) {
+            for (String key : mappa.keySet()) {
+                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
+            }
+        }
+        System.out.println(String.format("Tempo: %s", result.deltaSec()));
     }
 
 }

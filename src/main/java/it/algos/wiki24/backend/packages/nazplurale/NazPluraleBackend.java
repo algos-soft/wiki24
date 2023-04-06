@@ -177,7 +177,7 @@ public class NazPluraleBackend extends WikiBackend {
         size += downloadNazionalitaLink(moduloLink);
         result.setIntValue(size);
 
-        result = super.fixDownload(result, inizio, "nazionalità");
+        result = super.fixDownload(result, "nazionalità");
         result = this.elabora();
 
         return result;

@@ -474,7 +474,7 @@ public class AttivitaBackend extends WikiBackend {
         downloadAttivitaExtra(moduloEx);
         downloadAttivitaLink(moduloLink);
 
-        return super.fixDownload(result, inizio, "attività");
+        return super.fixDownload(result, "attività");
     }
 
 

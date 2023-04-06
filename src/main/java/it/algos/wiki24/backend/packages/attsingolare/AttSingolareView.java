@@ -94,15 +94,19 @@ public class AttSingolareView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = "Vengono aggiunte anche le 'attività' previste dal modulo 'ex-attività' sul server wiki.";
         addSpan(ASpan.text(message).verde());
-        message = "L'elaborazione di questa tabella calcola le voci biografiche che usano ogni singola attività singolare.";
-        addSpan(ASpan.text(message).verde());
 
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
-        message = String.format("ResetOnlyEmpty effettua il download dei due moduli wiki: %s%s%s", PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
-        addSpan(ASpan.text(message).rosso().small());
+
+        message = String.format("Download%s2 moduli wiki: %s%s%s tramite resetOnlyEmpty()", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        addSpan(ASpan.text(message).verde());
+        message = String.format( "Elabora%scalcola le voci biografiche che usano ogni singola attività singolare.",FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload test%s2 moduli wiki: %s%s%s: tramite riordinaModulo(). Riordinati in ordine alfabetico in 'Utente:Biobot/Modulo...'", FORWARD,PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        addSpan(ASpan.text(message).verde());
+
         message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";
-        addSpan(ASpan.text(message).rosso().small());
+        addSpan(ASpan.text(message).rosso());
     }
 
     /**

@@ -133,10 +133,25 @@ public class AttSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    public List<String> findAllDistinctByPlurali() {
+        List<String> lista = new ArrayList<>();
+        Set<String> setPlurali = new HashSet();
+        List<AttSingolare> listaAll = findAll();
+
+        for (AttSingolare attivita : listaAll) {
+            if (setPlurali.add(attivita.plurale)) {
+                lista.add(attivita.plurale);
+            }
+        }
+
+        return lista;
+    }
+
     public List findAllByExSortKey() {
         List<AttSingolare> listaAll = findAllSortKey();
         return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
     }
+
     public List findAllByNotExSortKey() {
         List<AttSingolare> listaAll = findAllSortKey();
         return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
@@ -145,23 +160,23 @@ public class AttSingolareBackend extends WikiBackend {
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale attività
+     * Modulo:Bio/Ex attività
      * <p>
      * Cancella la (eventuale) precedente lista di attività singolari <br>
      */
     public WResult download() {
         WResult result = super.download();
-        long inizio = System.currentTimeMillis();
-        int tempo = 3;
+        int tempo = WPref.downloadAttSingolareTime.getInt();
 
-        message = String.format("Initio %s() di %s. Tempo presto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, AttSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
         logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività singulari")));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività singolari")));
 
         result = downloadAttivitaNormale(result);
         result = downloadAttivitaEx(result);
         result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, inizio, "attività singolari");
+        result = super.fixDownload(result, "attività singolari");
 
         return result;
     }
@@ -216,7 +231,7 @@ public class AttSingolareBackend extends WikiBackend {
     }
 
     /**
-     * Legge le mappa dal Modulo:Bio/Plurale attività <br>
+     * Legge le mappa dal Modulo:Bio/Ex attività <br>
      * Crea le attività ex <br>
      *
      * @return entities create
@@ -253,9 +268,9 @@ public class AttSingolareBackend extends WikiBackend {
                     lista.add(attivita);
                 }
             }
-            result.setIntValue(lista.size());
-            result.setLista(lista);
             result.eseguito(lista.size() > 0);
+            result.setIntValue(result.getIntValue() + lista.size());
+            result.getLista().addAll(lista);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloEx);
@@ -268,10 +283,18 @@ public class AttSingolareBackend extends WikiBackend {
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public void riordinaModulo() {
-        this.download();
-        appContext.getBean(UploadModuloPluraleAttivita.class).upload();
-        appContext.getBean(UploadModuoloExAttivita.class).upload();
+    public WResult riordinaModulo() {
+        WResult result = download();
+
+        if (result.isValido() && result.isEseguito()) {
+            result = appContext.getBean(UploadModuloPluraleAttivita.class).result(result).upload();
+        }
+
+        if (result.isValido() && result.isEseguito()) {
+            result = appContext.getBean(UploadModuoloExAttivita.class).result(result).upload();
+        }
+
+        return super.fixRiordinaModulo(result);
     }
 
     /**
@@ -302,17 +325,8 @@ public class AttSingolareBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(false);
-
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result.setValido(true);
-            result = this.download();
-            return result;
-        }
-        else {
-            return result;
-        }
+    public WResult resetOnlyEmpty(boolean logInfo) {
+        return this.download();
     }
 
 }// end of crud backend class

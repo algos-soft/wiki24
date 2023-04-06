@@ -440,7 +440,7 @@ public class NazionalitaBackend extends WikiBackend {
         size += downloadNazionalitaLink(moduloLink);
         result.setIntValue(size);
 
-        return super.fixDownload(result, inizio, "nazionalità");
+        return super.fixDownload(result, "nazionalità");
     }
 
     /**

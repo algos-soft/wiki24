@@ -40,6 +40,7 @@ public class AnnoWikiBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.resetAnni;
         super.lastElaborazione = WPref.elaboraAnni;
         super.durataElaborazione = WPref.elaboraAnniTime;
         super.lastUpload = WPref.uploadAnni;
@@ -47,6 +48,8 @@ public class AnnoWikiBackend extends WikiBackend {
         super.nextUpload = WPref.uploadAnniPrevisto;
         super.lastStatistica = WPref.statisticaAnni;
         super.durataStatistica = WPref.statisticaAnniTime;
+
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
     }
 
     /**
@@ -154,6 +157,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
         return listaNomi;
     }
+
     public List<String> findAllPagineReverseOrder() {
         List<String> listaNomi = new ArrayList<>();
         List<Anno> listaAnni = annoBackend.findAllSortCorrenteReverse();
@@ -195,50 +199,45 @@ public class AnnoWikiBackend extends WikiBackend {
         String time;
         int tot = count();
         Anno anno;
-        int bioNati;
-        int bioMorti;
+        int bioNati = 0;
+        int bioMorti = 0;
         String wikiTitleNati;
         String wikiTitleMorti;
-        boolean esistePaginaNati;
-        boolean esistePaginaMorti;
+        boolean esistePaginaNati = false;
+        boolean esistePaginaMorti = false;
         boolean natiOk;
         boolean mortiOk;
         String message;
         Map mappa;
         String bioMongoDB;
         String numPagesServerWiki;
-        int tempo = 26;
+        int tempo = WPref.elaboraAnniTime.getInt();
 
         //--Check di validità del database mongoDB
-        result = wikiUtility.checkValiditaDatabase();
-        if (result.isErrato()) {
-            mappa = result.getMappa();
-            bioMongoDB = textService.format(mappa.get(KEY_MAP_VOCI_DATABASE_MONGO));
-            numPagesServerWiki = textService.format(mappa.get(KEY_MAP_VOCI_SERVER_WIKI));
-            message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione degli anni.";
-            message += String.format(" Solo %s su %s", bioMongoDB, numPagesServerWiki);
-            logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
-            return result;
+        if (checkValiditaDatabase().isErrato()) {
+            return WResult.errato();
         }
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d minuti.", METHOD_NAME_ELABORA, Anno.class.getSimpleName(), tempo);
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, Anno.class.getSimpleName(), tempo, unitaMisuraElaborazione);
         logger.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
-            anno = annoBackend.findByKey(annoWiki.nome);
-            bioNati = bioBackend.countAnnoNato(annoWiki.nome);
-            bioMorti = bioBackend.countAnnoMorto(annoWiki.nome);
+            //            bioNati = bioBackend.countAnnoNato(annoWiki);
+            //            bioMorti = bioBackend.countAnnoMorto(annoWiki);
+            //
+            //            annoWiki.bioNati = bioNati;
+            //            annoWiki.bioMorti = bioMorti;
 
-            annoWiki.bioNati = bioNati;
-            annoWiki.bioMorti = bioMorti;
+            annoWiki.bioNati = bioBackend.countAnnoNato(annoWiki);
+            annoWiki.bioMorti = bioBackend.countAnnoMorto(annoWiki);
 
-            wikiTitleNati = wikiUtility.wikiTitleNatiAnno(anno.nome);
-            wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(anno.nome);
+            wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
+            wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
 
-            esistePaginaNati = queryService.isEsiste(wikiTitleNati);
-            esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
+            //            esistePaginaNati = queryService.isEsiste(wikiTitleNati);
+            //            esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
 
             annoWiki.esistePaginaNati = esistePaginaNati;
             annoWiki.esistePaginaMorti = esistePaginaMorti;
@@ -359,7 +358,7 @@ public class AnnoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixResult(result, clazzName, collectionName, lista, logInfo);
+        return super.fixReset(result, clazzName, lista, logInfo);
     }
 
 }// end of crud backend class
