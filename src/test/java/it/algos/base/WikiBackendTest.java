@@ -366,10 +366,11 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("Map value: ");
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                System.out.println(String.format("%s%s (%d): %s", TAB, key, ((List<String>) mappa.get(key)).size(), mappa.get(key)));
+                if (mappa.get(key) instanceof List mapList) {
+                    System.out.println(String.format("%s%s (%d): %s", TAB, key, mapList.size(), mapList));
+                }
             }
+            System.out.println(String.format("Tempo: %s", result.deltaSec()));
         }
-        System.out.println(String.format("Tempo: %s", result.deltaSec()));
     }
-
 }

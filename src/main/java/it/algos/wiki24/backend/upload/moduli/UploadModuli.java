@@ -43,11 +43,15 @@ public abstract class UploadModuli extends Upload {
         return wikiApiService.getMappaModulo(testoModulo);
     }
 
-    public Map<String, String> getMappaOrdinata() {
+    public Map<String, String> getMappaOrdinataKey() {
         Map<String, String> mappa = leggeMappa();
         return arrayService.sort(mappa);
     }
 
+    public Map<String, String> getMappaOrdinataValue() {
+        Map<String, String> mappa = leggeMappa();
+        return arrayService.sortValue(mappa);
+    }
 
     public String getWikiTitleUpload() {
         return wikiTitleUpload;
@@ -56,21 +60,54 @@ public abstract class UploadModuli extends Upload {
     public String getWikiTitleModulo() {
         return wikiTitleModulo;
     }
+
     /**
-     * Esegue la scrittura della pagina <br>
+     * Esegue la scrittura della pagina di test ordinata per singolari <br>
      */
     public WResult uploadOrdinatoSenzaModifiche() {
+        super.summary = "Fix ordine alfabetico singolari";
         String testoPagina = leggeTestoPagina();
         String testoModuloOld = leggeTestoModulo();
-        String testoModuloNew = fixTestoModulo();
+        String testoModuloNew = fixTestoModulo(getMappaOrdinataKey());
         String textDaRegistrare = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
 
         return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary);
     }
 
-    protected String fixTestoModulo() {
-        return VUOTA;
+    /**
+     * Esegue la scrittura della pagina di test ordinata per plurali <br>
+     */
+    public WResult uploadOrdinatoValoreSenzaModifiche() {
+        super.summary = "Fix ordine alfabetico plurali";
+        String testoPagina = leggeTestoPagina();
+        String testoModuloOld = leggeTestoModulo();
+        String testoModuloNew = fixTestoModulo(getMappaOrdinataValue());
+        String textDaRegistrare = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
+
+        return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary);
     }
+
+    public String fixTestoModulo(Map<String, String> mappa) {
+        StringBuffer buffer = new StringBuffer();
+        String key;
+        String value;
+
+        if (mappa != null && mappa.size() > 0) {
+            for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                key = textService.setApicetti(entry.getKey());
+                value = textService.setApicetti(entry.getValue());
+
+                buffer.append(textService.setQuadre(key));
+                buffer.append(UGUALE_SPAZIATO);
+                buffer.append(value);
+                buffer.append(VIRGOLA);
+                buffer.append(CAPO);
+            }
+        }
+
+        return fixVirgolaFinale(buffer.toString());
+    }
+
     public String fixVirgolaFinale(String testoModulo) {
         testoModulo = textService.levaCoda(testoModulo, CAPO);
         testoModulo = textService.levaCoda(testoModulo, VIRGOLA);
@@ -78,7 +115,6 @@ public abstract class UploadModuli extends Upload {
 
         return testoModulo;
     }
-
 
 
 }

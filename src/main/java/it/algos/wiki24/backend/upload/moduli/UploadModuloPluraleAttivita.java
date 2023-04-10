@@ -29,66 +29,9 @@ public class UploadModuloPluraleAttivita extends UploadModuli {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
     public UploadModuloPluraleAttivita() {
-        super.wikiTitleModulo = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
+        super.wikiTitleModulo =   PATH_MODULO_PLURALE + ATT_LOWER;
         super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleAttivita";
     }// end of constructor
-
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    @Deprecated
-    public WResult upload() {
-        StringBuffer buffer = new StringBuffer();
-        String newText = VUOTA;
-        String riga;
-        List<AttSingolare> lista = attSingolareBackend.findAllByNotExSortKey();
-
-        if (lista != null && lista.size() > 0) {
-            buffer.append("-- Traduzione in lua del [[Template:Bio/plurale attività]]");
-            buffer.append(CAPO);
-            buffer.append("return");
-            buffer.append(SPAZIO);
-            buffer.append(GRAFFA_INI);
-            buffer.append(CAPO);
-
-            for (AttSingolare attivita : lista) {
-                riga = String.format("%s%s%s%s%s%s%s%s%s%s", QUADRA_INI, APICETTI, attivita.nome, APICETTI, QUADRA_END, UGUALE_SPAZIATO, APICETTI, attivita.plurale, APICETTI, VIRGOLA);
-                buffer.append(riga);
-                buffer.append(CAPO);
-            }
-            newText = buffer.toString();
-            newText = textService.levaCoda(newText, CAPO);
-            newText = textService.levaCoda(newText, VIRGOLA);
-            newText += CAPO;
-            newText += GRAFFA_END;
-        }
-
-        return uploadModuloOld("", newText);
-    }
-
-
-    public String fixTestoModulo() {
-        StringBuffer buffer = new StringBuffer();
-        Map<String, String> mappa = getMappaOrdinata();
-        String key;
-        String value;
-
-        if (mappa != null && mappa.size() > 0) {
-            for (Map.Entry<String, String> entry : mappa.entrySet()) {
-                key = textService.setApicetti(entry.getKey());
-                value = textService.setApicetti(entry.getValue());
-
-                buffer.append(textService.setQuadre(key));
-                buffer.append(UGUALE_SPAZIATO);
-                buffer.append(value);
-                buffer.append(VIRGOLA);
-                buffer.append(CAPO);
-            }
-        }
-
-        return fixVirgolaFinale(buffer.toString());
-    }
 
 }
 

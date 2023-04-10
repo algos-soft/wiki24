@@ -29,32 +29,9 @@ public class UploadModuloPluraleNazionalita extends UploadModuli {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
     public UploadModuloPluraleNazionalita() {
-        super.wikiTitleModulo = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
+        super.wikiTitleModulo = PATH_MODULO_PLURALE + NAZ_LOWER;
         super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleNazionalita";
     }// end of constructor
-
-
-    public String fixTestoModulo() {
-        StringBuffer buffer = new StringBuffer();
-        Map<String, String> mappa = getMappaOrdinata();
-        String key;
-        String value;
-
-        if (mappa != null && mappa.size() > 0) {
-            for (Map.Entry<String, String> entry : mappa.entrySet()) {
-                key = textService.setApicetti(entry.getKey());
-                value = textService.setApicetti(entry.getValue());
-
-                buffer.append(textService.setQuadre(key));
-                buffer.append(UGUALE_SPAZIATO);
-                buffer.append(value);
-                buffer.append(VIRGOLA);
-                buffer.append(CAPO);
-            }
-        }
-
-        return fixVirgolaFinale(buffer.toString());
-    }
 
 }
 

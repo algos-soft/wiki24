@@ -1,74 +1,24 @@
-package it.algos.upload;
+package it.algos.base;
 
-import it.algos.*;
-import it.algos.base.*;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.springframework.boot.test.context.*;
-
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 09-Apr-2023
- * Time: 19:11
- * Unit test di una classe service o backend o query <br>
- * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
- * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
- * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
+ * Date: Mon, 10-Apr-2023
+ * Time: 16:47
  */
-@SpringBootTest(classes = {Wiki24App.class})
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("uploadModulo")
-@DisplayName("UploadModuloExAttivita")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadModuloExAttivitaTest extends WikiTest {
+public abstract class UploadModuliTest extends WikiTest {
 
+    protected Class moduloClazz;
 
-    /**
-     * Classe principale di riferimento <br>
-     */
-    private UploadModuloExAttivita istanza;
+    protected UploadModuli istanza;
 
-
-    /**
-     * Qui passa una volta sola, chiamato dalle sottoclassi <br>
-     * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
-     * Si possono aggiungere regolazioni specifiche <br>
-     */
-    @BeforeAll
-    protected void setUpAll() {
-        super.setUpAll();
-        assertNull(istanza);
-    }
-
-
-    /**
-     * Qui passa prima di ogni test delle sottoclassi <br>
-     * Invocare PRIMA il metodo setUp() della superclasse <br>
-     * Si possono aggiungere regolazioni specifiche <br>
-     */
-    @BeforeEach
-    protected void setUpEach() {
-        super.setUpEach();
-        istanza = null;
-    }
-
-
-    @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = new UploadModuloExAttivita();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
 
     @Test
     @Order(2)
@@ -77,7 +27,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(UploadModuloExAttivita.class);
+        istanza = (UploadModuli) appContext.getBean(moduloClazz);
         assertNotNull(istanza);
         System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
@@ -89,7 +39,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("3 - Titolo pagina wiki del modulo"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(UploadModuloExAttivita.class);
+        istanza = (UploadModuli) appContext.getBean(moduloClazz);
         assertNotNull(istanza);
         ottenuto = istanza.getWikiTitleModulo();
         assertTrue(textService.isValid(ottenuto));
@@ -104,7 +54,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("4 - Titolo pagina test su cui scrivere il modulo ordinato"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(UploadModuloExAttivita.class);
+        istanza = (UploadModuli) appContext.getBean(moduloClazz);
         assertNotNull(istanza);
         ottenuto = istanza.getWikiTitleUpload();
         assertTrue(textService.isValid(ottenuto));
@@ -120,7 +70,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("5 - Testo della pagina wiki del modulo"));
         System.out.println(VUOTA);
 
-        ottenuto = appContext.getBean(UploadModuloExAttivita.class).leggeTestoPagina();
+        ottenuto = ((UploadModuli) appContext.getBean(moduloClazz)).leggeTestoPagina();
         assertTrue(textService.isValid(ottenuto));
         System.out.println(VUOTA);
         System.out.println(ottenuto);
@@ -133,7 +83,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("6 - Testo del modulo"));
         System.out.println(VUOTA);
 
-        ottenuto = appContext.getBean(UploadModuloExAttivita.class).leggeTestoModulo();
+        ottenuto = ((UploadModuli) appContext.getBean(moduloClazz)).leggeTestoModulo();
         assertTrue(textService.isValid(ottenuto));
         System.out.println(VUOTA);
         System.out.println(ottenuto);
@@ -146,7 +96,7 @@ public class UploadModuloExAttivitaTest extends WikiTest {
         System.out.println(("7 - Mappa dei dati del modulo"));
         System.out.println(VUOTA);
 
-        mappaOttenuta = appContext.getBean(UploadModuloExAttivita.class).leggeMappa();
+        mappaOttenuta = ((UploadModuli) appContext.getBean(moduloClazz)).leggeMappa();
         assertNotNull(mappaOttenuta);
         printMappa(mappaOttenuta);
     }
@@ -154,27 +104,53 @@ public class UploadModuloExAttivitaTest extends WikiTest {
 
     @Test
     @Order(8)
-    @DisplayName("8 - Mappa ordinata dei dati del modulo")
-    void getMappaOrdinata() {
-        System.out.println(("8 - Mappa ordinata dei dati del modulo"));
+    @DisplayName("8 - Mappa ordinata key dei dati del modulo")
+    void getMappaOrdinataKey() {
+        System.out.println(("8 - Mappa ordinata key dei dati del modulo"));
         System.out.println(VUOTA);
 
-        mappaOttenuta = appContext.getBean(UploadModuloExAttivita.class).getMappaOrdinata();
+        mappaOttenuta = ((UploadModuli) appContext.getBean(moduloClazz)).getMappaOrdinataKey();
+        assertNotNull(mappaOttenuta);
+        printMappa(mappaOttenuta);
+    }
+
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - Mappa ordinata value dei dati del modulo")
+    void getMappaOrdinataValue() {
+        System.out.println(("9 - Mappa ordinata value dei dati del modulo"));
+        System.out.println(("Ordinata sul plurale (value) e non sul singolare"));
+        System.out.println(VUOTA);
+
+        mappaOttenuta = ((UploadModuli) appContext.getBean(moduloClazz)).getMappaOrdinataValue();
         assertNotNull(mappaOttenuta);
         printMappa(mappaOttenuta);
     }
 
     @Test
-    @Order(9)
-    @DisplayName("9 - Upload mappa ordinata su pagina di test")
+    @Order(10)
+    @DisplayName("10 - Upload mappa ordinata key su pagina di test")
     void uploadOrdinatoSenzaModifiche() {
-        System.out.println(("9 - Upload mappa ordinata su pagina di test"));
+        System.out.println(("10 - Upload mappa ordinata key su pagina di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadModuloExAttivita.class).uploadOrdinatoSenzaModifiche();
+        ottenutoRisultato = ((UploadModuli) appContext.getBean(moduloClazz)).uploadOrdinatoSenzaModifiche();
         printRisultato(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
     }
 
+    //    @Test
+    @Order(11)
+    @DisplayName("11 - Upload mappa ordinata value su pagina di test")
+    void uploadOrdinatoValoreSenzaModifiche() {
+        System.out.println(("11 - Upload mappa ordinata value su pagina di test"));
+        System.out.println(("Ordinata sul plurale (value) e non sul singolare"));
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = ((UploadModuli) appContext.getBean(moduloClazz)).uploadOrdinatoValoreSenzaModifiche();
+        printRisultato(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+    }
 
 }

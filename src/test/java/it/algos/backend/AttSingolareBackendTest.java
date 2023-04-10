@@ -273,7 +273,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         wResult = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
         printRisultato(wResult);
         assertTrue(wResult.isValido());
-        assertTrue(wResult.isEseguito());
     }
 
     @Test

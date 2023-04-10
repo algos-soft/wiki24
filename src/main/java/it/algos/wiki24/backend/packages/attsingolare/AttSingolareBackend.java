@@ -210,7 +210,7 @@ public class AttSingolareBackend extends WikiBackend {
         List lista = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
-//        Map<String, String> mappa2 = appContext.getBean(UploadModuloPluraleAttivita.class).leggeMappa();
+        //        Map<String, String> mappa2 = appContext.getBean(UploadModuloPluraleAttivita.class).leggeMappa();
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
@@ -302,11 +302,11 @@ public class AttSingolareBackend extends WikiBackend {
         WResult result = download();
 
         if (result.isValido() && result.isEseguito()) {
-//            result = appContext.getBean(UploadModuloPluraleAttivita.class).result(result).upload();
+            result = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
         }
 
         if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuloExAttivita.class).upload();
+            result = appContext.getBean(UploadModuloExAttivita.class).uploadOrdinatoSenzaModifiche();
         }
 
         return super.fixRiordinaModulo(result);

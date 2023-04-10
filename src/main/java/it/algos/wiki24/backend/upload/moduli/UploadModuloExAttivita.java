@@ -31,49 +31,11 @@ public class UploadModuloExAttivita extends UploadModuli {
     public UploadModuloExAttivita() {
         super.wikiTitleModulo = PATH_MODULO + PATH_EX + ATT_LOWER;
         super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloExAttivita";
-//        super.summary = "Fix ordine alfabetico";
-//        super.uploadTest = true;
     }// end of constructor
 
 
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    @Deprecated
-    public WResult upload() {
+    public String fixTestoModulo(Map<String, String> mappa) {
         StringBuffer buffer = new StringBuffer();
-        String newText = VUOTA;
-        String nome;
-        String riga;
-        List<AttSingolare> lista = attSingolareBackend.findAllByExSortKey();
-
-        if (lista != null && lista.size() > 0) {
-            buffer.append("returnxxxx");
-            buffer.append(SPAZIO);
-            buffer.append(GRAFFA_INI);
-            buffer.append(CAPO);
-
-            for (AttSingolare attivita : lista) {
-                nome = textService.levaTesta(attivita.nome, "ex");
-                riga = String.format("%s%s%s%s", APICETTI, nome, APICETTI, VIRGOLA);
-                buffer.append(riga);
-                buffer.append(CAPO);
-            }
-            newText = buffer.toString();
-            newText = textService.levaCoda(newText, CAPO);
-            newText = textService.levaCoda(newText, VIRGOLA);
-            newText += CAPO;
-            newText += GRAFFA_END;
-        }
-
-        return uploadModuloNew("",newText);
-    }
-
-
-    public String fixTestoModulo() {
-        StringBuffer buffer = new StringBuffer();
-        Map<String, String> mappa = getMappaOrdinata();
         String value;
 
         if (mappa != null && mappa.size() > 0) {
