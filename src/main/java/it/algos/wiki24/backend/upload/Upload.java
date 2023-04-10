@@ -12,6 +12,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.service.*;
@@ -147,6 +148,14 @@ public abstract class Upload {
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
 
+    @Autowired
+    public WikiApiService wikiApiService;
+
+    @Autowired
+    public ArrayService arrayService;
+
+    @Autowired
+    public AttSingolareBackend attSingolareBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -201,13 +210,18 @@ public abstract class Upload {
 
     protected boolean usaParagrafi;
 
-    protected String wikiTitle;
+    protected String wikiTitleUpload;
+
+    protected String wikiTitleModulo;
+
 
     protected AETypeToc typeToc;
 
     protected AETypeTime unitaMisuraUpload;
 
     protected WResult result;
+
+
 
     protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
         return null;
@@ -336,11 +350,11 @@ public abstract class Upload {
     /**
      * Esegue la scrittura della pagina <br>
      */
-    public WResult uploadModulo(String newText) {
+    public WResult uploadModuloOld(String wikiTitle, String newText) {
         if (textService.isValid(newText)) {
             WResult resultQuery = appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
-            String title = textService.isValid(result.getWikiTitle()) ? result.getWikiTitle() + SOMMA_SPAZIO + resultQuery.getWikiTitle() : resultQuery.getWikiTitle();
-            result.setWikiTitle(title);
+            //            String title = textService.isValid(result.getWikiTitle()) ? result.getWikiTitle() + SOMMA_SPAZIO + resultQuery.getWikiTitle() : resultQuery.getWikiTitle();
+            //            result.setWikiTitle(title);
             result.setPageid(resultQuery.getPageid());
             result.setResponse(resultQuery.getResponse());
             result.valido(resultQuery.isValido());
@@ -359,5 +373,18 @@ public abstract class Upload {
             return WResult.errato();
         }
     }
+
+
+    /**
+     * Esegue la scrittura della pagina <br>
+     */
+    public WResult uploadModuloNew(String wikiTitle, String newModuloText) {
+        String oldTextAll = wikiApiService.legge(wikiTitle);
+        String oldModuloText = wikiApiService.leggeTestoModulo(wikiTitle);
+        String newTextAll = textService.sostituisce(oldTextAll, oldModuloText, newModuloText);
+
+        return uploadModuloOld(wikiTitle, newTextAll);
+    }
+
 
 }

@@ -22,6 +22,7 @@ import java.util.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
+@Tag("wikiBackend")
 @DisplayName("AttPlurale Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AttPluraleBackendTest extends WikiBackendTest {
@@ -58,6 +59,11 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
         ottenutoRisultato = backend.resetForcing();
         printRisultato(ottenutoRisultato);
+    }
+    @Test
+    @Order(16)
+    @DisplayName("16 - elabora (solo su wiki)")
+    protected void elabora() {
     }
 
     @Test

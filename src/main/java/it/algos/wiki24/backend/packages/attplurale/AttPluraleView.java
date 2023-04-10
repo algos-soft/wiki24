@@ -59,20 +59,21 @@ public class AttPluraleView extends WikiView {
         super.fixPreferenze();
 
         super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "lista", "nazione", "numBio", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
 
         super.usaBottoneReset = true;
         super.usaReset = true;
         super.usaBottoneDeleteAll = false;
         super.usaBottoneElabora = true;
         super.usaBottoneDeleteEntity = false;
-        super.usaBottoneStatistiche = true;
+        super.usaBottoneStatistiche = false;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneUploadAll = true;
         super.usaBottoneUploadPagina = true;
         super.usaBottoneTest = true;
         super.usaBottoneDownload = true;
         super.usaInfoDownload = true;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -99,12 +100,17 @@ public class AttPluraleView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività plurali sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
 
-        message = String.format("Reset%sPRIMA esegue un download di AttSingolare, poi crea la tabella ricavandola dalle attività DISTINCT di AttSingolare", FORWARD);
+        message = String.format("Reset%sPRIMA esegue un reset di AttSingolare, poi crea la tabella ricavandola dalle attività DISTINCT di AttSingolare, poi esegue un download", FORWARD);
         addSpan(ASpan.text(message).verde());
         message = String.format("Download%s1 modulo wiki: %s", FORWARD, PATH_LINK + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività", FORWARD);
         addSpan(ASpan.text(message).verde());
+        message = String.format( "Upload%sPrevisto per tutte le liste di attività plurale con bio>50.",FORWARD);
+        addSpan(ASpan.text(message).verde());
+
+        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD,"Utente:Biobot/ModuloLinkAttivita");
+        addSpan(ASpan.text(message).blue().small());
     }
 
     /**

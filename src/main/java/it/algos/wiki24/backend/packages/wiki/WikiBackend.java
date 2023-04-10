@@ -277,8 +277,8 @@ public abstract class WikiBackend extends CrudBackend {
 
     public WResult fixRiordinaModulo(WResult result) {
 
-        message = String.format("Upload modulo(i) di %s. %s", result.getTarget(), textService.format(count()), result.deltaSec());
-        logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+        message = String.format("Upload modulo(i) di %s. %s", result.getWikiTitle(), textService.format(count()), result.deltaSec());
+        logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
         result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
@@ -307,6 +307,10 @@ public abstract class WikiBackend extends CrudBackend {
         return WResult.build().method("elabora").target(getClass().getSimpleName());
     }
 
+
+    public AResult fixReset(AResult result, String clazzName, boolean logInfo) {
+        return fixReset(result, clazzName, result.getLista(), logInfo);
+    }
 
     public AResult fixReset(AResult result, String clazzName, List lista, boolean logInfo) {
         String collectionName = result.getTarget();
@@ -349,6 +353,10 @@ public abstract class WikiBackend extends CrudBackend {
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
         logger.debug(new WrapLog().message(message));
+
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(ROOT_DATA_TIME);
+        }
 
         return result;
     }

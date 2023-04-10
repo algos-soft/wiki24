@@ -62,7 +62,7 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         this.nomeLista = textService.primaMinuscola(nomeAttivitaNazionalita);
 
         if (textService.isValid(nomeLista)) {
-            wikiTitle = switch (typeCrono) {
+            wikiTitleUpload = switch (typeCrono) {
                 case attivitaSingolare, attivitaPlurale -> wikiUtility.wikiTitleAttivita(nomeLista);
                 case nazionalitaSingolare, nazionalitaPlurale -> wikiUtility.wikiTitleNazionalita(nomeLista);
                 default -> VUOTA;
@@ -77,11 +77,11 @@ public abstract class UploadAttivitaNazionalita extends Upload {
             };
 
             if (uploadTest) {
-                this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;
             }
 
-            if (textService.isValid(wikiTitle) && mappaWrap != null && mappaWrap.size() > 0) {
-                this.esegueUpload(wikiTitle, mappaWrap);
+            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
+                this.esegueUpload(wikiTitleUpload, mappaWrap);
             }
         }
 
@@ -92,16 +92,16 @@ public abstract class UploadAttivitaNazionalita extends Upload {
      * Esegue la scrittura della sottopagina <br>
      */
     public WResult uploadSottoPagina(final String wikiTitle, String attNazPrincipale, String attNazSottoPagina, List<WrapLista> lista) {
-        this.wikiTitle = wikiTitle;
+        this.wikiTitleUpload = wikiTitle;
         this.nomeLista = attNazPrincipale;
         this.nomeSottoPagina = attNazSottoPagina;
 
         if (uploadTest) {
-            this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+            this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitle;
         }
 
-        if (textService.isValid(this.wikiTitle) && lista != null) {
-            this.esegueUploadSotto(this.wikiTitle, attNazPrincipale, attNazSottoPagina, lista);
+        if (textService.isValid(this.wikiTitleUpload) && lista != null) {
+            this.esegueUploadSotto(this.wikiTitleUpload, attNazPrincipale, attNazSottoPagina, lista);
         }
 
         return WResult.crea();
@@ -112,16 +112,16 @@ public abstract class UploadAttivitaNazionalita extends Upload {
      * Esegue la scrittura della sottosottopagina <br>
      */
     public WResult uploadSottoSottoPagina(final String wikiTitle, String attNazPrincipale, String attNazSottoPagina, String keyParagrafo, List<WrapLista> lista) {
-        this.wikiTitle = wikiTitle;
+        this.wikiTitleUpload = wikiTitle;
         this.nomeLista = attNazPrincipale;
         this.nomeSottoPagina = attNazSottoPagina + SLASH + keyParagrafo;
 
         if (uploadTest) {
-            this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+            this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitle;
         }
 
-        if (textService.isValid(this.wikiTitle) && lista != null) {
-            this.esegueUploadSottoSotto(this.wikiTitle, attNazPrincipale, attNazSottoPagina, keyParagrafo, lista);
+        if (textService.isValid(this.wikiTitleUpload) && lista != null) {
+            this.esegueUploadSottoSotto(this.wikiTitleUpload, attNazPrincipale, attNazSottoPagina, keyParagrafo, lista);
         }
 
         return WResult.crea();

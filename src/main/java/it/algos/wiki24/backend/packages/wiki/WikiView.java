@@ -517,7 +517,7 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadModuloAlfabetizzato) {
             buttonUploadModulo = new Button();
-            buttonUploadModulo.getElement().setAttribute("theme", "primary");
+            buttonUploadModulo.getElement().setAttribute("theme", "secondary");
             buttonUploadModulo.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
             buttonUploadModulo.setIcon(new Icon(VaadinIcon.UPLOAD));
@@ -743,6 +743,10 @@ public abstract class WikiView extends CrudView {
 
         if (buttonUpload != null) {
             buttonUpload.setEnabled(!singoloSelezionato);
+        }
+
+        if (buttonUploadModulo != null) {
+            buttonUploadModulo.setEnabled(!singoloSelezionato);
         }
 
         if (buttonStatistiche != null) {

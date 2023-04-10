@@ -96,7 +96,7 @@ public abstract class UploadGiorniAnni extends Upload {
         int sogliaMaxPagina = WPref.maxBioPageAnniGiorni.getInt();
 
         if (textService.isValid(nomeGiornoAnno)) {
-            wikiTitle = switch (typeCrono) {
+            wikiTitleUpload = switch (typeCrono) {
                 case giornoNascita -> wikiUtility.wikiTitleNatiGiorno(nomeGiornoAnno);
                 case giornoMorte -> wikiUtility.wikiTitleMortiGiorno(nomeGiornoAnno);
                 case annoNascita -> wikiUtility.wikiTitleNatiAnno(nomeGiornoAnno);
@@ -136,11 +136,11 @@ public abstract class UploadGiorniAnni extends Upload {
             }
 
             if (uploadTest) {
-                this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;
             }
 
-            if (textService.isValid(wikiTitle) && mappaWrap != null && mappaWrap.size() > 0) {
-                return this.esegueUpload(wikiTitle, mappaWrap);
+            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
+                return this.esegueUpload(wikiTitleUpload, mappaWrap);
             }
         }
 
@@ -231,7 +231,7 @@ public abstract class UploadGiorniAnni extends Upload {
         buffer.append(String.format("{{Lista persone per %s", typeCrono.getGiornoAnno()));
         buffer.append(CAPO);
         buffer.append("|titolo=");
-        buffer.append(wikiTitle);
+        buffer.append(wikiTitleUpload);
         buffer.append(CAPO);
         buffer.append("|voci=");
         buffer.append(numVoci);
@@ -399,7 +399,7 @@ public abstract class UploadGiorniAnni extends Upload {
 
             if (numVoci > sogliaSottoPaginaGiorniAnni) {
                 ordineSottoPagina = fixOrdineSottoPagina(keyParagrafo);
-                sottoPagina = String.format("%s%s%s", wikiTitle, SLASH, keyParagrafo);
+                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
 
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
@@ -513,12 +513,12 @@ public abstract class UploadGiorniAnni extends Upload {
      * Esegue la scrittura della sottopagina <br>
      */
     public WResult uploadSottoPagina(final String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {
-        this.wikiTitle = wikiTitle;
+        this.wikiTitleUpload = wikiTitle;
         this.nomeLista = parente;
         this.nomeSottoPagina = sottoPagina;
 
-        if (textService.isValid(this.wikiTitle) && lista != null) {
-            this.esegueUploadSotto(this.wikiTitle, parente, nomeSottoPagina, ordineSottoPagina, lista);
+        if (textService.isValid(this.wikiTitleUpload) && lista != null) {
+            this.esegueUploadSotto(this.wikiTitleUpload, parente, nomeSottoPagina, ordineSottoPagina, lista);
         }
 
         return WResult.crea();

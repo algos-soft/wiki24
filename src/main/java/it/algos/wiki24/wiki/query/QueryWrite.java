@@ -429,8 +429,8 @@ public class QueryWrite extends AQuery {
         }
         else {
             result.setErrorMessage("Pagina con lo stesso testo");
-            result.setValido(true);
         }
+        result.setValido(true);
 
         result.setTypePage(AETypePage.pagina);
         result.setPageid(pageid);

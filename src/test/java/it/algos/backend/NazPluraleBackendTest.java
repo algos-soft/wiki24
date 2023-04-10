@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
-@Tag("wikiBackend")
+//@Tag("wikiBackend")
 @DisplayName("NazPlurale Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NazPluraleBackendTest extends WikiBackendTest {

@@ -72,7 +72,13 @@ public class WResult extends AResult {
     private String content = VUOTA;
 
     public WResult() {
-        this(null);
+        this((WrapBio) null);
+    }
+
+    private WResult(WrapBio wrap) {
+        super();
+        this.wrap = wrap;
+        this.inizio = System.currentTimeMillis();
     }
 
     public WResult(final boolean valido, final String message) {
@@ -91,6 +97,9 @@ public class WResult extends AResult {
         this.inizio = System.currentTimeMillis();
     }
 
+    public static WResult aResult(AResult aResult) {
+        return new WResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato);
+    }
 
     public static WResult build() {
         return new WResult().inizio().nonEseguito().typeResult(AETypeResult.indeterminato);
@@ -236,11 +245,6 @@ public class WResult extends AResult {
         return this;
     }
 
-    private WResult(WrapBio wrap) {
-        super();
-        this.wrap = wrap;
-        this.inizio = System.currentTimeMillis();
-    }
 
     public WResult webTitle(final String webTitle) {
         this.webTitle = webTitle;

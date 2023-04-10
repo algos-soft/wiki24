@@ -45,6 +45,7 @@ public enum WPref implements AIGenPref {
 
 
     //attività
+    resetAttSingolare("resetAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'attivitàSingolari'"),
     downloadAttSingolare("downloadAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività e Modulo:Bio/Ex attività."),
     downloadAttSingolareTime("downloadAttSingolareTime", AETypePref.integer, 0, "Durata download delle attività singolari."),
     elaboraAttSingolare("elaboraAttSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le attività singolari."),

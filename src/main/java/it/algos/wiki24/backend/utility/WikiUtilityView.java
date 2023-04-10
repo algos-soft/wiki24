@@ -138,7 +138,6 @@ public class WikiUtilityView extends UtilityView {
         Button bottone3 = new Button("AttPlurale");
         bottone3.getElement().setAttribute("theme", "primary");
         bottone3.addClickListener(event -> downloadAttivitaPlurale());
-        bottone3.setEnabled(false);
 
         Button bottone4 = new Button("NazSingolare");
         bottone4.getElement().setAttribute("theme", "primary");
@@ -156,7 +155,7 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadAll() {
         downloadAttivitaSingolare();
-        //        downloadAttivitaPlurale();
+        downloadAttivitaPlurale();
         //        downloadNazionalitaSingolare();
         //        downloadNazionalitaPlurale();
     }
@@ -190,16 +189,16 @@ public class WikiUtilityView extends UtilityView {
         String task = Attivita.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle attività plurali.").type(AETypeLog.utility));
-        //        result = attPluraleBackend.download();
-        //
-        //        if (result.isValido()) {
-        //            message = String.format("Download di %s effettuato", task);
-        //            Avviso.message(message).success().durata(4).open();
-        //        }
-        //        else {
-        //            message = String.format("Download di %s non riuscito", task);
-        //            Avviso.message(message).error().durata(4).open();
-        //        }
+        result = attPluraleBackend.download();
+
+        if (result.isValido()) {
+            message = String.format("Download di %s effettuato", task);
+            Avviso.message(message).success().durata(4).open();
+        }
+        else {
+            message = String.format("Download di %s non riuscito", task);
+            Avviso.message(message).error().durata(4).open();
+        }
 
         super.fineDebug();
     }
@@ -434,17 +433,24 @@ public class WikiUtilityView extends UtilityView {
         bottone2.getElement().setAttribute("theme", "primary");
         bottone2.addClickListener(event -> uploadModuliAttSingolare());
 
+        Button bottone3 = new Button("LinkAttività");
+        bottone3.getElement().setAttribute("theme", "primary");
+        bottone3.addClickListener(event -> uploadModuliAttPlurale());
+
         this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone, bottone2));
+        layout.add(new HorizontalLayout(bottone, bottone2,bottone3));
         this.add(layout);
     }
 
     public void uploadModuli() {
         uploadModuliAttSingolare();
+        uploadModuliAttPlurale();
     }
 
     public void uploadModuliAttSingolare() {
         attSingolareBackend.riordinaModulo();
+    }
+    public void uploadModuliAttPlurale() {
     }
 
 

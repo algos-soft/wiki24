@@ -3,15 +3,13 @@ package it.algos.wiki24.backend.packages.attsingolare;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -45,6 +43,7 @@ public class AttSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.resetAttSingolare;
         super.lastDownload = WPref.downloadNazSingolare;
         super.durataDownload = WPref.downloadNazSingolareTime;
         super.lastElaborazione = WPref.elaboraNazSingolare;
@@ -167,6 +166,11 @@ public class AttSingolareBackend extends WikiBackend {
         return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
     }
 
+    public WResult download() {
+        AResult result = resetForcing();
+        return WResult.aResult(result);
+    }
+
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale attività
@@ -174,7 +178,7 @@ public class AttSingolareBackend extends WikiBackend {
      * <p>
      * Cancella la (eventuale) precedente lista di attività singolari <br>
      */
-    public WResult download() {
+    public WResult downloadReset() {
         WResult result = super.download();
         int tempo = WPref.downloadAttSingolareTime.getInt();
 
@@ -206,6 +210,7 @@ public class AttSingolareBackend extends WikiBackend {
         List lista = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
+//        Map<String, String> mappa2 = appContext.getBean(UploadModuloPluraleAttivita.class).leggeMappa();
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
@@ -297,11 +302,11 @@ public class AttSingolareBackend extends WikiBackend {
         WResult result = download();
 
         if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuloPluraleAttivita.class).result(result).upload();
+//            result = appContext.getBean(UploadModuloPluraleAttivita.class).result(result).upload();
         }
 
         if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuloExAttivita.class).result(result).upload();
+            result = appContext.getBean(UploadModuloExAttivita.class).upload();
         }
 
         return super.fixRiordinaModulo(result);
@@ -335,8 +340,18 @@ public class AttSingolareBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public WResult resetOnlyEmpty(boolean logInfo) {
-        return this.download();
+    public AResult resetOnlyEmpty(boolean logInfo) {
+        AResult result = super.resetOnlyEmpty(logInfo);
+        String clazzName = entityClazz.getSimpleName();
+
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            result = this.downloadReset();
+        }
+        else {
+            return result;
+        }
+
+        return super.fixReset(result, clazzName, logInfo);
     }
 
 }// end of crud backend class

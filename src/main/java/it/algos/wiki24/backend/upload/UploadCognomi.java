@@ -70,16 +70,16 @@ public class UploadCognomi extends Upload {
         this.nomeLista = textService.primaMaiuscola(cognomeTxt);
 
         if (textService.isValid(nomeLista)) {
-            wikiTitle = PATH_COGNOMI + nomeLista;
+            wikiTitleUpload = PATH_COGNOMI + nomeLista;
 
             mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).mappaWrap();
 
             if (uploadTest) {
-                this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;
             }
 
-            if (textService.isValid(wikiTitle) && mappaWrap != null && mappaWrap.size() > 0) {
-               return esegueUpload(wikiTitle, mappaWrap);
+            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
+               return esegueUpload(wikiTitleUpload, mappaWrap);
             }
         }
 
@@ -91,16 +91,16 @@ public class UploadCognomi extends Upload {
      * Esegue la scrittura della sottopagina <br>
      */
     public WResult uploadSottoPagina(final String wikiTitle, String nomeLista, String nomeSottoPagina, List<WrapLista> lista) {
-        this.wikiTitle = wikiTitle;
+        this.wikiTitleUpload = wikiTitle;
         this.nomeLista = nomeLista;
         this.nomeSottoPagina = nomeSottoPagina;
 
         if (uploadTest) {
-            this.wikiTitle = UPLOAD_TITLE_DEBUG + wikiTitle;
+            this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitle;
         }
 
-        if (textService.isValid(this.wikiTitle) && lista != null) {
-            this.esegueUploadSotto(this.wikiTitle, nomeLista, nomeSottoPagina, lista);
+        if (textService.isValid(this.wikiTitleUpload) && lista != null) {
+            this.esegueUploadSotto(this.wikiTitleUpload, nomeLista, nomeSottoPagina, lista);
         }
 
         return WResult.crea();

@@ -245,6 +245,7 @@ public class WikiUtility extends WAbstractService {
     public String wikiTitleMortiAnno(AnnoWiki anno) {
         return wikiTitleMortiAnno(anno != null ? anno.nome : VUOTA);
     }
+
     public String wikiTitleMortiAnno(String anno) {
         return natiMortiAnno("Morti", anno);
     }
@@ -551,6 +552,18 @@ public class WikiUtility extends WAbstractService {
         BigDecimal decimal = WPref.percentualeMinimaBiografie.getDecimal();
         double minimo = decimal.doubleValue();
         return result.validoWiki(attuale > minimo);
+    }
+
+    public String estraeTestoModulo(String testoPagina) {
+        String testoModulo = testoPagina;
+
+        if (textService.isValid(testoPagina)) {
+            testoModulo = textService.levaTestoPrimaDiEscluso(testoModulo, TAG_RETURN);
+            testoModulo = textService.levaTesta(testoModulo, GRAFFA_INI);
+            testoModulo = textService.levaCoda(testoModulo, GRAFFA_END);
+        }
+
+        return testoModulo;
     }
 
 }

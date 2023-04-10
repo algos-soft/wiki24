@@ -373,6 +373,7 @@ public class WikiApiService extends WAbstractService {
         return textService.isValid(testoModulo) ? testoModulo.trim() : VUOTA;
     }
 
+
     /**
      * Legge la mappa dei valori di modulo di una pagina wiki <br>
      *
@@ -380,7 +381,26 @@ public class WikiApiService extends WAbstractService {
      *
      * @return mappa chiave=valore del modulo
      */
-    public Map<String, String> leggeMappaModulo(final String wikiTitle) {
+    public String leggeTestoModulo(final String wikiTitle) {
+        String testoModulo = this.leggeModulo(wikiTitle);
+
+        if (textService.isValid(testoModulo)) {
+            testoModulo = textService.levaTesta(testoModulo, "return");
+            testoModulo = textService.levaTesta(testoModulo, "{");
+            testoModulo = textService.levaCoda(testoModulo, "}");
+        }
+
+        return testoModulo;
+    }
+
+    /**
+     * Legge la mappa dei valori di modulo di una pagina wiki <br>
+     *
+     * @param wikiTitle della pagina wiki
+     *
+     * @return mappa chiave=valore del modulo
+     */
+    public Map<String, String> getMappaModulo(final String testoModulo) {
         Map<String, String> mappa = null;
         String tagRighe = CAPO;
         String tagSezioni = UGUALE_SEMPLICE;
@@ -388,12 +408,8 @@ public class WikiApiService extends WAbstractService {
         String[] sezioni = null;
         String key;
         String value;
-        String testoModulo = this.leggeModulo(wikiTitle);
 
         if (textService.isValid(testoModulo)) {
-            testoModulo = textService.levaTesta(testoModulo, "return");
-            testoModulo = textService.levaTesta(testoModulo, "{");
-            testoModulo = textService.levaCoda(testoModulo, "}");
             righe = testoModulo.split(tagRighe);
         }
 
@@ -425,6 +441,60 @@ public class WikiApiService extends WAbstractService {
         }
 
         return mappa;
+    }
+
+        /**
+         * Legge la mappa dei valori di modulo di una pagina wiki <br>
+         *
+         * @param wikiTitle della pagina wiki
+         *
+         * @return mappa chiave=valore del modulo
+         */
+    public Map<String, String> leggeMappaModulo(final String wikiTitle) {
+//        Map<String, String> mappa = null;
+//        String tagRighe = CAPO;
+//        String tagSezioni = UGUALE_SEMPLICE;
+//        String[] righe = null;
+//        String[] sezioni = null;
+//        String key;
+//        String value;
+        String testoModulo = this.leggeTestoModulo(wikiTitle);
+
+//        if (textService.isValid(testoModulo)) {
+//            //            testoModulo = textService.levaTesta(testoModulo, "return");
+//            //            testoModulo = textService.levaTesta(testoModulo, "{");
+//            //            testoModulo = textService.levaCoda(testoModulo, "}");
+//            righe = testoModulo.split(tagRighe);
+//        }
+//
+//        if (righe != null && righe.length > 0) {
+//            mappa = new LinkedHashMap<>();
+//            for (String riga : righe) {
+//
+//                sezioni = riga.split(tagSezioni);
+//                if (sezioni != null && sezioni.length == 1) {
+//                    key = sezioni[0];
+//                    key = textService.levaCoda(key, VIRGOLA);
+//
+//                    key = textService.setNoQuadre(key);
+//                    key = textService.setNoDoppiApici(key);
+//                    mappa.put(key, key);
+//                }
+//                if (sezioni != null && sezioni.length == 2) {
+//                    key = sezioni[0];
+//
+//                    key = textService.setNoQuadre(key);
+//                    key = textService.setNoDoppiApici(key);
+//                    value = sezioni[1];
+//                    value = textService.levaCoda(value, VIRGOLA);
+//                    value = textService.setNoDoppiApici(value);
+//                    value = textService.setNoGraffe(value);
+//                    mappa.put(key, value);
+//                }
+//            }
+//        }
+
+        return getMappaModulo(testoModulo);
     }
 
 

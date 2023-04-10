@@ -311,8 +311,8 @@ public abstract class WikiBackendTest extends BackendTest {
 
         wResult = wikiBackend.riordinaModulo();
         printRisultato(wResult);
-//        assertTrue(wResult.isValido());
-//        assertTrue(wResult.isEseguito());
+        assertTrue(wResult.isValido());
+        assertTrue(wResult.isEseguito());
     }
 
     //Segnaposto
@@ -353,7 +353,7 @@ public abstract class WikiBackendTest extends BackendTest {
         //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("Target: %s", result.getTarget()));
         System.out.println(String.format("WikiTitle: %s", result.getWikiTitle()));
-        System.out.println(String.format("TypeResultText: %s", result.getTypeResult() != null ? result.getTypeResult().getTag():VUOTA));
+        System.out.println(String.format("TypeResultText: %s", result.getTypeResult() != null ? result.getTypeResult().getTag() : VUOTA));
         System.out.println(String.format("TypeText: %s", result.getTypeTxt()));
         System.out.println(String.format("Message code: %s", result.getCodeMessage()));
         System.out.println(String.format("Message: %s", result.getMessage()));

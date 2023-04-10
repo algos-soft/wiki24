@@ -22,7 +22,7 @@ import java.util.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
-@Tag("wikiBackend")
+//@Tag("wikiBackend")
 @DisplayName("NazSingolare Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NazSingolareBackendTest extends WikiBackendTest {

@@ -44,6 +44,8 @@ public enum AETypeField {
     //    stringLinkClassCombo(10, 14),
 
     //    multicombo,
+    listaH(10, 10),
+    listaV(10, 10),
     linkDinamico(8, 10),
     linkStatico(8, 8),
 

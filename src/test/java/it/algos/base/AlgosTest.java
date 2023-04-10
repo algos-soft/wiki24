@@ -353,6 +353,7 @@ public abstract class AlgosTest {
         MockitoAnnotations.openMocks(this);
 
         slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        this.typeBackend = TypeBackend.nessuno;
 
         initMocks();
     }
@@ -522,14 +523,12 @@ public abstract class AlgosTest {
         String message = VUOTA;
         int cont = 1;
         int tot;
-        String elementi = VUOTA;
         System.out.println(VUOTA);
 
         if (lista != null) {
-            elementi = textService.format(lista.size());
             if (lista.size() > 0) {
                 tot = Math.min(lista.size(), max);
-                message = String.format("La lista contiene %s elementi.", elementi);
+                message = String.format("La lista contiene %d elementi.", lista.size());
                 if (lista.size() > tot) {
                     message += String.format(" Mostro i primi %d", tot);
                 }

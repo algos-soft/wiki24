@@ -1,11 +1,10 @@
-package it.algos.wiki24.backend.upload;
+package it.algos.wiki24.backend.upload.moduli;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -16,14 +15,12 @@ import java.util.*;
  * Created by Algos
  * User: gac
  * Date: Sat, 01-Apr-2023
- * Time: 14:14
+ * Time: 10:22
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloExAttivita extends Upload {
+public class UploadModuloPluraleAttivita extends UploadModuli {
 
-    @Autowired
-    public AttSingolareBackend attSingolareBackend;
 
     /**
      * Costruttore base con parametri <br>
@@ -31,36 +28,32 @@ public class UploadModuloExAttivita extends Upload {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuloExAttivita() {
-        super.wikiTitle = UPLOAD_TITLE_DEBUG + "ModuloExAttivita";
-        super.summary = "Fix ordine alfabeticox";
-        super.uploadTest = true;
+    public UploadModuloPluraleAttivita() {
+        super.wikiTitleModulo = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
+        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleAttivita";
     }// end of constructor
 
-    public UploadModuloExAttivita result(WResult result) {
-        super.result = result;
-        return this;
-    }
 
     /**
      * Esegue la scrittura della pagina <br>
      */
+    @Deprecated
     public WResult upload() {
         StringBuffer buffer = new StringBuffer();
         String newText = VUOTA;
-        String nome;
         String riga;
-        List<AttSingolare> lista = attSingolareBackend.findAllByExSortKey();
+        List<AttSingolare> lista = attSingolareBackend.findAllByNotExSortKey();
 
         if (lista != null && lista.size() > 0) {
-            buffer.append("returnxxxx");
+            buffer.append("-- Traduzione in lua del [[Template:Bio/plurale attività]]");
+            buffer.append(CAPO);
+            buffer.append("return");
             buffer.append(SPAZIO);
             buffer.append(GRAFFA_INI);
             buffer.append(CAPO);
 
             for (AttSingolare attivita : lista) {
-                nome = textService.levaTesta(attivita.nome, "ex");
-                riga = String.format("%s%s%s%s", APICETTI, nome, APICETTI, VIRGOLA);
+                riga = String.format("%s%s%s%s%s%s%s%s%s%s", QUADRA_INI, APICETTI, attivita.nome, APICETTI, QUADRA_END, UGUALE_SPAZIATO, APICETTI, attivita.plurale, APICETTI, VIRGOLA);
                 buffer.append(riga);
                 buffer.append(CAPO);
             }
@@ -71,7 +64,31 @@ public class UploadModuloExAttivita extends Upload {
             newText += GRAFFA_END;
         }
 
-        return uploadModulo(newText);
+        return uploadModuloOld("", newText);
+    }
+
+
+    public String fixTestoModulo() {
+        StringBuffer buffer = new StringBuffer();
+        Map<String, String> mappa = getMappaOrdinata();
+        String key;
+        String value;
+
+        if (mappa != null && mappa.size() > 0) {
+            for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                key = textService.setApicetti(entry.getKey());
+                value = textService.setApicetti(entry.getValue());
+
+                buffer.append(textService.setQuadre(key));
+                buffer.append(UGUALE_SPAZIATO);
+                buffer.append(value);
+                buffer.append(VIRGOLA);
+                buffer.append(CAPO);
+            }
+        }
+
+        return fixVirgolaFinale(buffer.toString());
     }
 
 }
+

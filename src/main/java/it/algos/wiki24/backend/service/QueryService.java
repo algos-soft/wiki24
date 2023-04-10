@@ -154,5 +154,9 @@ public class QueryService extends WAbstractService {
         return appContext.getBean(QueryRedirect.class).getWikiLink(wikiTitleGrezzo);
     }
 
+    public String legge(final String wikiTitleGrezzo) {
+        return appContext.getBean(QueryRead.class).getText(wikiTitleGrezzo);
+    }
+
 
 }

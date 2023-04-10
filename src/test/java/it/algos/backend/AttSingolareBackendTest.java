@@ -3,22 +3,14 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.upload.moduli.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.data.domain.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -270,6 +262,18 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         else {
             return;
         }
+    }
+    @Test
+    @Order(71)
+    @DisplayName("71 - riordinaModulo (upload in ordine alfabetico)")
+    protected void riordinaModulo() {
+        System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
+        System.out.println(VUOTA);
+
+        wResult = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
+        printRisultato(wResult);
+        assertTrue(wResult.isValido());
+        assertTrue(wResult.isEseguito());
     }
 
     @Test
