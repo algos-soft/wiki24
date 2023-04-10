@@ -277,19 +277,29 @@ public abstract class WikiBackend extends CrudBackend {
 
     public WResult fixRiordinaModulo(WResult result) {
 
-        message = String.format("Upload modulo(i) di %s. %s", result.getWikiTitle(), textService.format(count()), result.deltaSec());
-        logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
-        result.setValidMessage(message);
-
-        message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
-        logger.debug(new WrapLog().message(message));
-
-        if (result.isEseguito()) {
+        if (Pref.debug.is()) {
+            message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
             if (result.isModificata()) {
-                Avviso.message("Modulo(i) cambiato(i). Occorre copiare il testo").error().durata(5).open();
+                message += " Modificato";
+                logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
             }
             else {
-                Avviso.message("Modulo(i) non modificato(i)").success().open();
+                message += " Non modificato";
+                logger.info(new WrapLog().message(message).type(AETypeLog.upload));
+            }
+
+            message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
+            logger.debug(new WrapLog().message(message));
+        }
+
+        if (result.isValido()) {
+            if (result.isModificata()) {
+                message = String.format("Cambiato il modulo %s. Occorre copiare il testo.", result.getWikiTitle());
+                Avviso.message(message).error().durata(5).open();
+            }
+            else {
+                message = String.format("Modulo %s non modificato", result.getWikiTitle());
+                Avviso.message(message).success().open();
             }
         }
         else {

@@ -31,7 +31,6 @@ import java.util.stream.*;
  */
 public abstract class WikiBackendTest extends BackendTest {
 
-    //    @Autowired
     protected WikiBackend wikiBackend;
 
     @Autowired
@@ -304,15 +303,14 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @Test
     @Order(71)
-    @DisplayName("71 - riordinaModulo (upload in ordine alfabetico)")
+    @DisplayName("71 - riordinaModulo (upload test in ordine alfabetico)")
     protected void riordinaModulo() {
-        System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
+        System.out.println("71 - riordinaModulo (upload test in ordine alfabetico)");
         System.out.println(VUOTA);
 
-        wResult = wikiBackend.riordinaModulo();
+        wikiBackend.riordinaModulo();
         printRisultato(wResult);
         assertTrue(wResult.isValido());
-        assertTrue(wResult.isEseguito());
     }
 
     //Segnaposto

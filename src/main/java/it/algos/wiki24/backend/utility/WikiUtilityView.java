@@ -60,8 +60,8 @@ public class WikiUtilityView extends UtilityView {
     @Override
     public void body() {
         super.body();
-        this.paragrafoDownloadModuli();
         this.paragrafoUploadModuli();
+        this.paragrafoDownloadModuli();
         this.paragrafoDownloadBiografie();
         this.paragrafoElaborazione();
         this.paragrafoUploadListe();
@@ -105,6 +105,75 @@ public class WikiUtilityView extends UtilityView {
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4));
         this.add(layout);
+    }
+
+
+    public void paragrafoUploadModuli() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        H3 paragrafo = new H3("Test di upload dei moduli");
+        paragrafo.getElement().getStyle().set("color", "blue");
+        List<String> listaClazz;
+
+        message = String.format("Legge il contenuto dei moduli, li riordina alfabeticamente (key o value) e li salva come TEST. ", METHOD_NAME_UPLOAD);
+        layout.add(ASpan.text(message));
+        layout.add(ASpan.text(FLAG_DEBUG));
+
+        listaClazz = Arrays.asList("ModuloPluraleAttività", "ModuloExAttività", "ModuloLinkAttività", "ModuloPluraleNazionalità", "ModuloLinkNazionalità");
+        if (listaClazz != null && listaClazz.size() > 0) {
+            message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, listaClazz);
+            layout.add(ASpan.text(message));
+        }
+
+        Button bottone = new Button("All");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> uploadModuli());
+
+        Button bottone2 = new Button("PluraleAttività + ExAttività");
+        bottone2.getElement().setAttribute("theme", "primary");
+        bottone2.addClickListener(event -> uploadModuliAttSingolare());
+
+        Button bottone3 = new Button("LinkAttività");
+        bottone3.getElement().setAttribute("theme", "primary");
+        bottone3.addClickListener(event -> uploadModuliAttPlurale());
+
+        Button bottone4 = new Button("PluraleNazionalità");
+        bottone4.getElement().setAttribute("theme", "primary");
+        bottone4.addClickListener(event -> uploadModuliNazSingolare());
+
+        Button bottone5 = new Button("LinkNazionalità");
+        bottone5.getElement().setAttribute("theme", "primary");
+        bottone5.addClickListener(event -> uploadModuliNazPlurale());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5));
+        this.add(layout);
+    }
+
+    public void uploadModuli() {
+        uploadModuliAttSingolare();
+        uploadModuliAttPlurale();
+        uploadModuliNazSingolare();
+        uploadModuliNazPlurale();
+    }
+
+    public void uploadModuliAttSingolare() {
+        attSingolareBackend.riordinaModulo();
+    }
+
+    public void uploadModuliAttPlurale() {
+        attPluraleBackend.riordinaModulo();
+    }
+
+    public void uploadModuliNazSingolare() {
+        nazSingolareBackend.riordinaModulo();
+    }
+
+    public void uploadModuliNazPlurale() {
+        nazPluraleBackend.riordinaModulo();
     }
 
     public void paragrafoDownloadModuli() {
@@ -402,55 +471,6 @@ public class WikiUtilityView extends UtilityView {
         }
 
         super.fineDebug();
-    }
-
-
-    public void paragrafoUploadModuli() {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setMargin(false);
-        layout.setPadding(false);
-        layout.setSpacing(false);
-        String message;
-        H3 paragrafo = new H3("Test di upload dei moduli");
-        paragrafo.getElement().getStyle().set("color", "blue");
-        List<String> listaClazz;
-
-        message = String.format("Costruisce (come TEST) il contenuto dei moduli ordinati alfabeticamente. Prima esegue anche un download. ", METHOD_NAME_UPLOAD);
-        layout.add(ASpan.text(message));
-        layout.add(ASpan.text(FLAG_DEBUG));
-
-        listaClazz = Arrays.asList("ModuloPluraleAttività", "ModuloExAttività");
-        if (listaClazz != null && listaClazz.size() > 0) {
-            message = String.format("Modulo %s%s%s", VaadVar.projectNameModulo, DUE_PUNTI_SPAZIO, listaClazz);
-            layout.add(ASpan.text(message));
-        }
-
-        Button bottone = new Button("All");
-        bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> uploadModuli());
-
-        Button bottone2 = new Button("PluraleAttività + ExAttività");
-        bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> uploadModuliAttSingolare());
-
-        Button bottone3 = new Button("LinkAttività");
-        bottone3.getElement().setAttribute("theme", "primary");
-        bottone3.addClickListener(event -> uploadModuliAttPlurale());
-
-        this.add(paragrafo);
-        layout.add(new HorizontalLayout(bottone, bottone2,bottone3));
-        this.add(layout);
-    }
-
-    public void uploadModuli() {
-        uploadModuliAttSingolare();
-        uploadModuliAttPlurale();
-    }
-
-    public void uploadModuliAttSingolare() {
-        attSingolareBackend.riordinaModulo();
-    }
-    public void uploadModuliAttPlurale() {
     }
 
 

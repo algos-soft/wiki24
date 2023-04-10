@@ -263,17 +263,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
             return;
         }
     }
-    @Test
-    @Order(71)
-    @DisplayName("71 - riordinaModulo (upload in ordine alfabetico)")
-    protected void riordinaModulo() {
-        System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
-        System.out.println(VUOTA);
-
-        wResult = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
-        printRisultato(wResult);
-        assertTrue(wResult.isValido());
-    }
 
     @Test
     @Order(76)

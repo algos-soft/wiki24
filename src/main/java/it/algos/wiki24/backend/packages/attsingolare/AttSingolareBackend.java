@@ -299,17 +299,15 @@ public class AttSingolareBackend extends WikiBackend {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     public WResult riordinaModulo() {
-        WResult result = download();
+        WResult result;
 
-        if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
-        }
+        result = appContext.getBean(UploadModuloPluraleAttivita.class).uploadOrdinatoSenzaModifiche();
+        super.fixRiordinaModulo(result);
 
-        if (result.isValido() && result.isEseguito()) {
-            result = appContext.getBean(UploadModuloExAttivita.class).uploadOrdinatoSenzaModifiche();
-        }
+        result = appContext.getBean(UploadModuloExAttivita.class).uploadOrdinatoSenzaModifiche();
+        super.fixRiordinaModulo(result);
 
-        return super.fixRiordinaModulo(result);
+        return result;
     }
 
     /**

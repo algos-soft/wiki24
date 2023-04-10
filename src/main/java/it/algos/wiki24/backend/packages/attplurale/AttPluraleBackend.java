@@ -93,7 +93,7 @@ public class AttPluraleBackend extends WikiBackend {
      * @param nome           (obbligatorio, unico)
      * @param listaSingolari (obbligatorio, unico)
      * @param paginaLista    (obbligatorio)
-     * @param linkAttivita (obbligatorio)
+     * @param linkAttivita   (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
@@ -253,13 +253,7 @@ public class AttPluraleBackend extends WikiBackend {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     public WResult riordinaModulo() {
-        WResult result = download();
-
-        if (result.isValido() && result.isEseguito()) {
-//            result = appContext.getBean(UploadModuloLinkAttivita.class).result(result).upload();
-        }
-
-
+        WResult result = appContext.getBean(UploadModuloLinkAttivita.class).uploadOrdinatoSenzaModifiche();
         return super.fixRiordinaModulo(result);
     }
 

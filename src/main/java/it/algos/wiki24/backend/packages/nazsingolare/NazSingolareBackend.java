@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
@@ -220,6 +221,13 @@ public class NazSingolareBackend extends WikiBackend {
         return lista;
     }
 
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public WResult riordinaModulo() {
+        WResult result = appContext.getBean(UploadModuloPluraleNazionalita.class).uploadOrdinatoSenzaModifiche();
+        return super.fixRiordinaModulo(result);
+    }
 
     /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
