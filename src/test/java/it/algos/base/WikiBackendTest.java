@@ -132,11 +132,11 @@ public abstract class WikiBackendTest extends BackendTest {
                 Arguments.of("Congolesi (Rep. Dem. del Congo)", false, false),
                 Arguments.of("brasiliano", true, true),
                 Arguments.of("burgunda", true, true),
+                Arguments.of("Burgunda", false, false),
                 Arguments.of("italiano", true, true),
-                Arguments.of("Italiano", true, false),
+                Arguments.of("Italiano", false, false),
                 Arguments.of("italiana", true, true),
                 Arguments.of("italiani", false, false),
-                Arguments.of("Burgunda", true, false),
                 Arguments.of("vescovo ariano", false, false),
                 Arguments.of("errata", false, false),
                 Arguments.of("britannici", false, false),
@@ -294,12 +294,6 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("17 - upload (non previsto per questa collection)");
     }
 
-    @Test
-    @Order(70)
-    @DisplayName("70--------")
-    void test60() {
-        System.out.println("71 - riordinaModulo (upload in ordine alfabetico)");
-    }
 
     @Test
     @Order(71)
@@ -308,7 +302,7 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("71 - riordinaModulo (upload test in ordine alfabetico)");
         System.out.println(VUOTA);
 
-        wikiBackend.riordinaModulo();
+        wResult= wikiBackend.riordinaModulo();
         printRisultato(wResult);
         assertTrue(wResult.isValido());
     }

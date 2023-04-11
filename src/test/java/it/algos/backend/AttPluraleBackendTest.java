@@ -212,4 +212,17 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
     }
 
+    @Test
+    @Order(81)
+    @DisplayName("81 - getMappaPluraleAttivita")
+    protected void getMappaSingolarePlurale() {
+        System.out.println("81 - getMappaPluraleAttivita");
+        System.out.println("Mappa di tutte le attività con la coppia plurale -> attività.");
+        System.out.println(VUOTA);
+
+        mappaOttenuta = backend.getMappaPluraleAttivita();
+        assertNotNull(mappaOttenuta);
+        printMappa(mappaOttenuta);
+    }
+
 }

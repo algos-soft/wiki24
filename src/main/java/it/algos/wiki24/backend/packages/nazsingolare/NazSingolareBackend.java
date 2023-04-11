@@ -42,6 +42,7 @@ public class NazSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.resetNazSingolare;
         super.lastDownload = WPref.downloadNazSingolare;
         super.durataDownload = WPref.downloadNazSingolareTime;
         super.lastElaborazione = WPref.elaboraNazSingolare;
@@ -148,34 +149,44 @@ public class NazSingolareBackend extends WikiBackend {
         return mappa;
     }
 
+    public WResult download() {
+        AResult result = resetForcing();
+        return WResult.aResult(result);
+    }
+
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale nazionalità
      * <p>
      * Cancella la (eventuale) precedente lista di attività <br>
      */
-    public WResult download() {
+    public WResult downloadReset() {
         WResult result = super.download();
-        //        long inizio = System.currentTimeMillis();
-        String moduloNazionalita = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
-        int tempo = 3;
-        int size = 0;
-        List<AEntity> lista;
+        int tempo = WPref.downloadNazSingolareTime.getInt();
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo);
+        //        String moduloNazionalita = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
+        //        int tempo = 3;
+        //        int size = 0;
+        //        List<AEntity> lista;
+
+        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
         logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloNazionalita)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "nazionalità singolari")));
 
-        lista = downloadNazionalita(moduloNazionalita);
-        result.setIntValue(size);
+        result = downloadNazionalita(result);
+        result.typeResult(AETypeResult.downloadValido);
 
-        result.setIntValue(size);
+        //        lista = downloadNazionalita(moduloNazionalita);
+        //        result.setIntValue(size);
+        //
+        //        result.setIntValue(size);
         //        result.setLista(lista);
         //        public WResult fixDownload(WResult result, String clazzName, String collectionName, String modulo, List lista) {
 
-        result = super.fixDownload(result, entityClazz.getSimpleName(), lista);
-        result = this.elabora();
+        //        result = super.fixDownload(result, entityClazz.getSimpleName(), lista);
+        //        result = this.elabora();
 
+        result = super.fixDownload(result, "nazionalità singolari");
         return result;
     }
 
@@ -184,23 +195,23 @@ public class NazSingolareBackend extends WikiBackend {
      * Legge le mappa dal Modulo:Bio/Plurale nazionalità <br>
      * Crea le nazionalità <br>
      *
-     * @param moduloNazionalita della pagina su wikipedia
-     *
      * @return entities create
      */
-    public List<AEntity> downloadNazionalita(String moduloNazionalita) {
-        List<AEntity> lista = null;
-        int size = 0;
+    public WResult downloadNazionalita(WResult result) {
+        String moduloNazionalità = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
+        //        List<AEntity> lista = null;
+        //        int size = 0;
         String singolare;
         String plurale;
+        List lista = new ArrayList();
         AEntity entityBean;
 
-        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloNazionalita);
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloNazionalità);
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
-            lista = new ArrayList<>();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                entityBean = null;
                 singolare = entry.getKey();
                 plurale = entry.getValue();
 
@@ -212,13 +223,16 @@ public class NazSingolareBackend extends WikiBackend {
                     logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+            result.eseguito(lista.size() > 0);
         }
         else {
-            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloNazionalita);
+            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloNazionalità);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
-        return lista;
+        return result;
     }
 
     /**
@@ -246,7 +260,7 @@ public class NazSingolareBackend extends WikiBackend {
             update(nazionalita);
         }
 
-        return super.fixElabora(result, inizio, "nazionalità");
+        return super.fixElabora(result, inizio, "nazionalità singolari");
     }
 
     /**
@@ -259,15 +273,16 @@ public class NazSingolareBackend extends WikiBackend {
     @Override
     public AResult resetOnlyEmpty(boolean logInfo) {
         AResult result = super.resetOnlyEmpty(false);
+        String clazzName = entityClazz.getSimpleName();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result.setValido(true);
-            result = this.download();
-            return result;
+            result = this.downloadReset();
         }
         else {
             return result;
         }
+
+        return super.fixReset(result, clazzName, logInfo);
     }
 
 }// end of crud backend class

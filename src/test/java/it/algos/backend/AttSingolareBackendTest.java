@@ -306,4 +306,17 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         print(listaStr);
     }
 
+    @Test
+    @Order(81)
+    @DisplayName("81 - getMappaSingolarePlurale")
+    protected void getMappaSingolarePlurale() {
+        System.out.println("81 - getMappaSingolarePlurale");
+        System.out.println("Mappa di tutte le attività con la coppia singolare -> plurale.");
+        System.out.println(VUOTA);
+
+        mappaOttenuta = backend.getMappaSingolarePlurale();
+        assertNotNull(mappaOttenuta);
+        printMappa(mappaOttenuta);
+    }
+
 }

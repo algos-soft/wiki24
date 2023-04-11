@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
-//@Tag("wikiBackend")
+@Tag("wikiBackend")
 @DisplayName("NazPlurale Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NazPluraleBackendTest extends WikiBackendTest {
@@ -48,11 +48,6 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         super.setUpEach();
     }
 
-    @Test
-    @Order(14)
-    @DisplayName("14 - resetForcing")
-    protected void resetForcing() {
-    }
 
     @Test
     @Order(21)
@@ -133,14 +128,14 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         assertFalse(ottenutoBooleano);
         System.out.println(VUOTA);
 
-        sorgente = "lista";
-        sorgente2 = "termidoro";
+        sorgente = "linkNazione";
+        sorgente2 = "australiano";
         ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
         assertFalse(ottenutoBooleano);
         System.out.println(VUOTA);
 
-        sorgente = "lista";
-        sorgente2 = "Bulgari";
+        sorgente = "linkNazione";
+        sorgente2 = "Australia";
         ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
         assertTrue(ottenutoBooleano);
     }
@@ -223,14 +218,14 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         assertNull(entityBean);
         System.out.println(VUOTA);
 
-        sorgente = "lista";
-        sorgente2 = "termidoro";
+        sorgente = "linkNazione";
+        sorgente2 = "bulgari";
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNull(entityBean);
         System.out.println(VUOTA);
 
-        sorgente = "lista";
-        sorgente2 = "Bulgari";
+        sorgente = "linkNazione";
+        sorgente2 = "Australia";
         entityBean = super.findByProperty(sorgente, sorgente2);
         assertNotNull(entityBean);
         System.out.println(VUOTA);
@@ -252,6 +247,20 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
 
         print(listaStr);
+    }
+
+
+    @Test
+    @Order(81)
+    @DisplayName("81 - getMappaPluraleNazione")
+    protected void getMappaSingolarePlurale() {
+        System.out.println("81 - getMappaPluraleNazione");
+        System.out.println("Mappa di tutte le nazionalità con la coppia plurale -> nazione.");
+        System.out.println(VUOTA);
+
+        mappaOttenuta = backend.getMappaPluraleNazione();
+        assertNotNull(mappaOttenuta);
+        printMappa(mappaOttenuta);
     }
 
 }

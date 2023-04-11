@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.upload.moduli;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.annotation.Scope;
@@ -71,7 +72,7 @@ public abstract class UploadModuli extends Upload {
         String testoModuloNew = fixTestoModulo(getMappaOrdinataKey());
         String textDaRegistrare = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
 
-        return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary);
+        return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary).typeResult(AETypeResult.uploadValido);
     }
 
     /**
@@ -84,7 +85,8 @@ public abstract class UploadModuli extends Upload {
         String testoModuloNew = fixTestoModulo(getMappaOrdinataValue());
         String textDaRegistrare = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
 
-        return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary);
+        return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary).typeResult(AETypeResult.uploadValido);
+
     }
 
     public String fixTestoModulo(Map<String, String> mappa) {

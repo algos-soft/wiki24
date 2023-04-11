@@ -59,6 +59,7 @@ public class NazSingolareView extends WikiView {
         super.gridPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
         super.formPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
 
+        super.usaBottoneReset = true;
         super.usaBottoneDeleteAll = false;
         this.usaBottoneElabora = true;
         super.usaBottoneDeleteEntity = false;
@@ -67,6 +68,7 @@ public class NazSingolareView extends WikiView {
         this.usaBottoneDownload = true;
         this.usaBottonePaginaWiki = false;
         this.usaInfoDownload = true;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -84,15 +86,23 @@ public class NazSingolareView extends WikiView {
 
         message = "Tabella nazionalità singolari del parametro 'nazionalità' recuperate dal modulo 'singolare/plurale' sul server wiki.";
         addSpan(ASpan.text(message).verde());
-        message = "L'elaborazione di questa tabella calcola le voci biografiche che usano ogni singola attività singolare.";
-        addSpan(ASpan.text(message).verde());
 
         message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
-        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task NazPlurale.";
-        addSpan(ASpan.text(message).rosso().small());
-        message = "ResetOnlyEmpty effettua il download. Il download effettua anche l'elaborazione che può comunque essere fatta separatamente.";
-        addSpan(ASpan.text(message).rosso().small());
+
+        message = String.format("Reset%sDownload", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%s1 modulo wiki: %s", FORWARD, PATH_SINGOLARE + PATH_PLURALE + NAZ_LOWER);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola nazionalità singolare.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload%sNon previsto.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+
+        message = "Il download dei link alla pagina della nazione, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task NazPlurale.";
+        addSpan(ASpan.text(message).rosso());
+        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD, "Utente:Biobot/ModuloPluraleNazionalita");
+        addSpan(ASpan.text(message).blue().small());
     }
 
     /**

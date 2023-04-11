@@ -80,25 +80,25 @@ public class NazPluraleBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome    (obbligatorio, unico)
-     * @param lista   (obbligatorio, unico)
-     * @param nazione (obbligatorio)
+     * @param nome           (obbligatorio, unico)
+     * @param listaSingolari (obbligatorio, unico)
+     * @param paginaLista    (obbligatorio)
+     * @param linkNazione    (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NazPlurale newEntity(final String nome, List<NazSingolare> singolari, final String lista, final String nazione) {
+    public NazPlurale newEntity(final String nome, List<NazSingolare> listaSingolari, final String paginaLista, final String linkNazione) {
         NazPlurale newEntityBean = NazPlurale.builder()
                 .nome(textService.isValid(nome) ? nome : null)
-                .singolari(singolari)
-                .lista(textService.isValid(lista) ? lista : null)
-                .nazione(textService.isValid(nazione) ? nazione : null)
+                .listaSingolari(listaSingolari)
+                .paginaLista(textService.isValid(paginaLista) ? paginaLista : null)
+                .linkNazione(textService.isValid(linkNazione) ? linkNazione : null)
                 .numBio(0)
                 .numSingolari(0)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
 
-        newEntityBean.lista = textService.primaMaiuscola(newEntityBean.nome);
         return (NazPlurale) super.fixKey(newEntityBean);
     }
 
@@ -150,7 +150,7 @@ public class NazPluraleBackend extends WikiBackend {
 
     public List<String> findAllForKeyBySingolari(final String keyValue) {
         NazPlurale naz = findByKey(keyValue);
-        List<NazSingolare> listaSingolare = naz != null ? naz.singolari : null;
+        List<NazSingolare> listaSingolare = naz != null ? naz.listaSingolari : null;
         return listaSingolare != null ? listaSingolare.stream().map(singolo -> singolo.nome).collect(Collectors.toList()) : null;
     }
 
@@ -158,74 +158,126 @@ public class NazPluraleBackend extends WikiBackend {
         return findAllForKeyBySingolari(keyValue);
     }
 
+    public Map<String, String> getMappaPluraleNazione() {
+        Map<String, String> mappa = new LinkedHashMap<>();
+
+        for (NazPlurale att : findAll()) {
+            mappa.put(att.nome, att.linkNazione);
+        }
+
+        return mappa;
+    }
+
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link nazionalità
-     * <p>
-     * Cancella la (eventuale) precedente lista di attività <br>
      */
     public WResult download() {
         WResult result = super.download();
-        long inizio = System.currentTimeMillis();
-        String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
-        int tempo = 3;
-        int size = 0;
+        int tempo = WPref.downloadNazPluraleTime.getInt();
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazPlurale.class.getSimpleName(), tempo);
         logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "nazionalità plurali")));
 
-        size += downloadNazionalitaLink(moduloLink);
-        result.setIntValue(size);
+        result = downloadNazionalitaLink(result);
+        result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, "nazionalità");
-        result = this.elabora();
-
-        return result;
+        return super.fixDownload(result, "nazionalità plurali");
     }
 
     /**
      * Legge le mappa dal Modulo:Bio/Link nazionalità <br>
-     * Aggiunge il link alla pagina wiki della nazionalità <br>
-     *
-     * @param moduloLink della pagina su wikipedia
-     *
-     * @return entities create
      */
-    public int downloadNazionalitaLink(String moduloLink) {
-        int cont = 0;
+    public WResult downloadNazionalitaLink(WResult result) {
+        String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
         String plurale;
         String nazione;
         NazPlurale nazPlurale;
-        Map<String, String> mappaSingolareNazione = wikiApiService.leggeMappaModulo(moduloLink);
-        Map<String, String> mappaSingolarePlurale = nazSingolareBackend.getMappaSingolarePlurale();
+        //        Map<String, String> mappaSingolareNazione = wikiApiService.leggeMappaModulo(moduloLink);
+//        Map<String, String> mappaSingolarePlurale = nazSingolareBackend.getMappaSingolarePlurale();
         Map<String, String> mappaPluraleNazione = new LinkedHashMap<>();
+        String nazSingolareNome;
+        String nazPluraleNome = VUOTA;
+        String paginaNazioneOld;
+        String paginaNazioneNew;
+        NazSingolare nazionalitaSin;
+        NazPlurale nazionalitaPlur;
+        //        List lista = new ArrayList();
+        List listaMancanti = new ArrayList();
+        List listaDiversi = new ArrayList();
 
-        if (mappaSingolareNazione != null && mappaSingolareNazione.size() > 0) {
-            for (String key : mappaSingolareNazione.keySet()) {
-                nazione = mappaSingolareNazione.get(key);
-                if (mappaSingolarePlurale.containsKey(key)) {
-                    plurale = mappaSingolarePlurale.get(key);
-                    mappaPluraleNazione.put(plurale, nazione);
-                }
-            }
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloLink);
+
+        for (NazPlurale naz : findAll()) {
+            naz.linkNazione = VUOTA;
+            update(naz);
         }
 
-        if (mappaPluraleNazione != null && mappaPluraleNazione.size() > 0) {
-            for (String key : mappaPluraleNazione.keySet()) {
-                nazPlurale = findByKey(key);
-                if (nazPlurale != null) {
-                    nazPlurale.nazione = mappaPluraleNazione.get(key);
-                    update(nazPlurale);
+        if (mappa != null && mappa.size() > 0) {
+            for (Map.Entry<String, String> entry : mappa.entrySet()) {
+                nazSingolareNome = entry.getKey();
+                paginaNazioneNew = entry.getValue();
+                paginaNazioneNew = textService.primaMaiuscola(paginaNazioneNew);
+                nazionalitaSin = nazSingolareBackend.findByKey(nazSingolareNome);
+
+                if (nazionalitaSin == null) {
+                    listaMancanti.add(nazSingolareNome);
+                    continue;
+                }
+
+                nazPluraleNome = nazionalitaSin.plurale;
+                nazionalitaPlur = findByKey(nazPluraleNome);
+                paginaNazioneOld = nazionalitaPlur.linkNazione;
+
+                if (textService.isEmpty(paginaNazioneOld)) {
+                    nazionalitaPlur.linkNazione = paginaNazioneNew;
+                    update(nazionalitaPlur);
                 }
                 else {
-                    message = String.format("Manca la nazionalità %s", key);
-                    System.out.println(message);
+                    if (!paginaNazioneNew.equals(paginaNazioneOld)) {
+                        listaDiversi.add(paginaNazioneNew);
+                    }
                 }
             }
+
+            fixDiversi(listaDiversi);
+            result.setLista(listaDiversi);
+            result.setLista(listaMancanti);
+        }
+        else {
+            message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
-        return cont;
+        //        if (mappaSingolareNazione != null && mappaSingolareNazione.size() > 0) {
+        //            for (String key : mappaSingolareNazione.keySet()) {
+        //                nazione = mappaSingolareNazione.get(key);
+        //                if (mappaSingolarePlurale.containsKey(key)) {
+        //                    plurale = mappaSingolarePlurale.get(key);
+        //                    mappaPluraleNazione.put(plurale, nazione);
+        //                }
+        //            }
+        //        }
+
+        //        if (mappaPluraleNazione != null && mappaPluraleNazione.size() > 0) {
+        //            for (String key : mappaPluraleNazione.keySet()) {
+        //                nazPlurale = findByKey(key);
+        //                if (nazPlurale != null) {
+        //                    nazPlurale.nazione = mappaPluraleNazione.get(key);
+        //                    update(nazPlurale);
+        //                }
+        //                else {
+        //                    message = String.format("Manca la nazionalità %s", key);
+        //                    System.out.println(message);
+        //                }
+        //            }
+        //        }
+
+        return result;
+    }
+
+    public void fixDiversi(List lista) {
     }
 
     /**
@@ -253,7 +305,7 @@ public class NazPluraleBackend extends WikiBackend {
             singolari = new ArrayList<>();
             nazPlurale.numBio = bioBackend.countNazionalita(nazPlurale.nome);
             singolari.addAll(nazSingolareBackend.findAllByPlurale((nazPlurale.nome)));
-            nazPlurale.singolari = singolari;
+            nazPlurale.listaSingolari = singolari;
 
             nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
             nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);

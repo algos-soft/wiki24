@@ -44,10 +44,10 @@ public class AttSingolareBackend extends WikiBackend {
         super.fixPreferenze();
 
         super.lastReset = WPref.resetAttSingolare;
-        super.lastDownload = WPref.downloadNazSingolare;
-        super.durataDownload = WPref.downloadNazSingolareTime;
-        super.lastElaborazione = WPref.elaboraNazSingolare;
-        super.durataElaborazione = WPref.elaboraNazSingolareTime;
+        super.lastDownload = WPref.downloadAttSingolare;
+        super.durataDownload = WPref.downloadAttSingolareTime;
+        super.lastElaborazione = WPref.elaboraAttSingolare;
+        super.durataElaborazione = WPref.elaboraAttSingolareTime;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
         this.unitaMisuraElaborazione = AETypeTime.secondi;
@@ -166,6 +166,17 @@ public class AttSingolareBackend extends WikiBackend {
         return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
     }
 
+
+    public Map<String, String> getMappaSingolarePlurale() {
+        Map<String, String> mappa = new LinkedHashMap<>();
+
+        for (AttSingolare att : findAll()) {
+            mappa.put(att.nome, att.plurale);
+        }
+
+        return mappa;
+    }
+
     public WResult download() {
         AResult result = resetForcing();
         return WResult.aResult(result);
@@ -191,7 +202,6 @@ public class AttSingolareBackend extends WikiBackend {
         result.typeResult(AETypeResult.downloadValido);
 
         result = super.fixDownload(result, "attività singolari");
-
         return result;
     }
 
@@ -210,7 +220,6 @@ public class AttSingolareBackend extends WikiBackend {
         List lista = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
-        //        Map<String, String> mappa2 = appContext.getBean(UploadModuloPluraleAttivita.class).leggeMappa();
 
         if (mappa != null && mappa.size() > 0) {
             deleteAll();

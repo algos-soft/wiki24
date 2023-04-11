@@ -648,8 +648,9 @@ public abstract class BackendTest extends AlgosTest {
     @DisplayName("50--------")
     void test50() {
         System.out.println("51 - findAllNoSort (entityBeans)");
-        System.out.println("52 - findAll findAllSortCorrente (entityBeans)");
+        System.out.println("52 - findAllSortCorrente (entityBeans)");
         System.out.println("53 - findAllSortCorrenteReverse (entityBeans)");
+        System.out.println("54 - findAllSortKey (entityBeans)");
     }
 
     @Test
@@ -669,7 +670,7 @@ public abstract class BackendTest extends AlgosTest {
 
     @Test
     @Order(52)
-    @DisplayName("52 - findAll findAllSortCorrente (entityBeans)")
+    @DisplayName("52 - findAllSortCorrente (entityBeans)")
     protected void findAllSortCorrente() {
         System.out.println("52 - findAll findAllSortCorrente (entityBeans)");
         System.out.println(VUOTA);
@@ -721,12 +722,13 @@ public abstract class BackendTest extends AlgosTest {
     @Test
     @Order(60)
     @DisplayName("60--------")
-    void test60() {
+    void test59() {
         System.out.println("61 - findAllForKeySortKey (String)");
         System.out.println("62 - findAllForKeySortKeyReverse (String)");
         System.out.println("63 - findAllForKeySortOrdine (String)");
         System.out.println("64 - findAllForKeySortOrdineReverse (String)");
     }
+
 
     @Test
     @Order(61)
@@ -1040,56 +1042,11 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println(message);
     }
 
-    //    //Segnaposto
-    //    @Order(141)
-    //    @DisplayName("141 - creaIfNotExist")
-    //    protected void insert() {
-    //        System.out.println("141 - creaIfNotExist");
-    //        System.out.println(VUOTA);
-    //    }
 
-    //
-    //    //Segnaposto
-    //    @Order(52)
-    //    protected void libero52() {
-    //    }
-    //
-    //
-    //    //Segnaposto
-    //    @Order(53)
-    //    protected void libero53() {
-    //    }
-    //
-    //    //Segnaposto
-    //    @Order(54)
-    //    protected void libero54() {
-    //    }
-
-    //    //Segnaposto
-    //    @Order(55)
-    //    protected void libero55() {
-    //    }
-
-
-    //Segnaposto
-    @Order(61)
-    protected void libero61() {
-    }
-
-    //Segnaposto
-    @Order(62)
-    protected void libero62() {
-    }
-
-
-    //Segnaposto
-    @Order(63)
-    protected void libero63() {
-    }
 
     @Test
     @Order(70)
-    @DisplayName("----------")
+    @DisplayName("70--------")
     void test70() {
     }
 
@@ -1111,7 +1068,7 @@ public abstract class BackendTest extends AlgosTest {
 
     @Test
     @Order(80)
-    @DisplayName("----------")
+    @DisplayName("80--------")
     void test80() {
     }
 
@@ -1131,11 +1088,11 @@ public abstract class BackendTest extends AlgosTest {
     protected void libero83() {
     }
 
-    @Test
-    @Order(90)
-    @DisplayName("----------")
-    void test90() {
-    }
+//    @Test
+//    @Order(90)
+//    @DisplayName("90--------")
+//    void test90() {
+//    }
 
 
     protected Object getParamEsistente() {

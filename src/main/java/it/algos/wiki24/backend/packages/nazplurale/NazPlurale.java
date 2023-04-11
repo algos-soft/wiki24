@@ -39,13 +39,13 @@ public class NazPlurale extends AEntity {
     public String nome;
 
     @AIField(widthEM = 40)
-    public List<NazSingolare> singolari;
+    public List<NazSingolare> listaSingolari;
 
     @AIField(type = AETypeField.text, widthEM = 12)
-    public String lista;
+    public String paginaLista;
 
     @AIField(type = AETypeField.text, widthEM = 15)
-    public String nazione;
+    public String linkNazione;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano la stessa nazionalità plurale", widthEM = 6)
     public int numBio;

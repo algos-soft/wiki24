@@ -62,19 +62,22 @@ public class NazPluraleView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "singolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "singolari", "lista", "nazione", "numBio", "superaSoglia", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari",  "numBio", "superaSoglia", "esisteLista");
 
+        super.usaBottoneReset = true;
+        super.usaReset = true;
         super.usaBottoneDeleteAll = false;
         super.usaBottoneElabora = true;
         super.usaBottoneDeleteEntity = false;
-        super.usaBottoneStatistiche = true;
+        super.usaBottoneStatistiche = false;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneUploadAll = true;
         super.usaBottoneUploadPagina = true;
         super.usaBottoneTest = true;
         super.usaBottoneDownload = true;
         super.usaInfoDownload = true;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -117,8 +120,8 @@ public class NazPluraleView extends WikiView {
     protected void addColumnsOneByOne() {
         super.addColumnsOneByOne();
 
-        Grid.Column lista = grid.addColumn(new ComponentRenderer<>(entity -> {
-            String wikiTitle = textService.primaMaiuscola(((NazPlurale) entity).lista);
+        Grid.Column paginaLista = grid.addColumn(new ComponentRenderer<>(entity -> {
+            String wikiTitle = textService.primaMaiuscola(((NazPlurale) entity).paginaLista);
             Label label = new Label(wikiTitle);
             label.getElement().getStyle().set("color", "red");
             Anchor anchor = new Anchor(PATH_WIKI + PATH_NAZIONALITA + SLASH + wikiTitle, wikiTitle);
@@ -131,23 +134,23 @@ public class NazPluraleView extends WikiView {
             else {
                 return label;
             }
-        })).setHeader("Lista").setKey("lista").setFlexGrow(0).setWidth("18em");
+        })).setHeader("paginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
 
-        Grid.Column nazione = grid.addColumn(new ComponentRenderer<>(entity -> {
-            String wikiTitle = textService.primaMaiuscola(((NazPlurale) entity).nazione);
+        Grid.Column linkNazione = grid.addColumn(new ComponentRenderer<>(entity -> {
+            String wikiTitle = textService.primaMaiuscola(((NazPlurale) entity).linkNazione);
             Anchor anchor = new Anchor(PATH_WIKI + wikiTitle, wikiTitle);
             anchor.getElement().getStyle().set("color", "blue");
             return new Span(anchor);
-        })).setHeader("Nazione").setKey("nazione").setFlexGrow(0).setWidth("18em");
+        })).setHeader("linkNazione").setKey("linkNazione").setFlexGrow(0).setWidth("18em");
 
         Grid.Column nome = grid.getColumnByKey("nome");
-        Grid.Column singolari = grid.getColumnByKey("singolari");
+        Grid.Column listaSingolari = grid.getColumnByKey("listaSingolari");
         Grid.Column numBio = grid.getColumnByKey("numBio");
         Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
         Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
 
-        grid.setColumnOrder(nome, singolari, lista, nazione, numBio, numSingolari,superaSoglia, esisteLista);
+        grid.setColumnOrder(nome, listaSingolari, paginaLista, linkNazione, numBio, numSingolari,superaSoglia, esisteLista);
     }
 
     /**

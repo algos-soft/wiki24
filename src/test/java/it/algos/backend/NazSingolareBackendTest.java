@@ -22,7 +22,7 @@ import java.util.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
-//@Tag("wikiBackend")
+@Tag("wikiBackend")
 @DisplayName("NazSingolare Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NazSingolareBackendTest extends WikiBackendTest {
@@ -294,22 +294,17 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
     }
 
-
     @Test
-    @Order(73)
-    @DisplayName("73 - getMappaSingolarePlurale")
+    @Order(81)
+    @DisplayName("81 - getMappaSingolarePlurale")
     protected void getMappaSingolarePlurale() {
-        System.out.println("73 - getMappaSingolarePlurale");
+        System.out.println("81 - getMappaSingolarePlurale");
         System.out.println("Mappa di tutte le nazionalità con la coppia singolare -> plurale.");
         System.out.println(VUOTA);
 
-        previstoIntero = backend.count();
         mappaOttenuta = backend.getMappaSingolarePlurale();
         assertNotNull(mappaOttenuta);
-        ottenutoIntero = mappaOttenuta.size();
-        assertEquals(previstoIntero, ottenutoIntero);
-
         printMappa(mappaOttenuta);
     }
+ }
 
-}

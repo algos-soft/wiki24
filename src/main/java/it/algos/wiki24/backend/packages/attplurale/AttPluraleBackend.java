@@ -158,11 +158,19 @@ public class AttPluraleBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    public Map<String, String> getMappaPluraleAttivita() {
+        Map<String, String> mappa = new LinkedHashMap<>();
+
+        for (AttPlurale att : findAll()) {
+            mappa.put(att.nome, att.linkAttivita);
+        }
+
+        return mappa;
+    }
+
     /**
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link attività
-     * <p>
-     * Cancella la (eventuale) precedente lista di attività singolari <br>
      */
     public WResult download() {
         WResult result = attSingolareBackend.download();
@@ -175,9 +183,7 @@ public class AttPluraleBackend extends WikiBackend {
         result = downloadAttivitaLink(result);
         result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, "attività plurali");
-
-        return result;
+        return super.fixDownload(result, "attività plurali");
     }
 
     /**
@@ -193,7 +199,6 @@ public class AttPluraleBackend extends WikiBackend {
         String paginaAttivitaNew;
         AttSingolare attivitaSin;
         AttPlurale attivitaPlur;
-        List lista = new ArrayList();
         List listaMancanti = new ArrayList();
         List listaDiversi = new ArrayList();
 
@@ -215,6 +220,7 @@ public class AttPluraleBackend extends WikiBackend {
                     listaMancanti.add(attSingolareNome);
                     continue;
                 }
+
                 attPluraleNome = attivitaSin.plurale;
                 attivitaPlur = findByKey(attPluraleNome);
                 paginaAttivitaOld = attivitaPlur.linkAttivita;
@@ -233,9 +239,6 @@ public class AttPluraleBackend extends WikiBackend {
             fixDiversi(listaDiversi);
             result.setLista(listaDiversi);
             result.setLista(listaMancanti);
-
-            //            result.setIntValue(lista.size());
-            //            result.eseguito(lista.size() > 0);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);

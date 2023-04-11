@@ -211,7 +211,7 @@ public class WikiUtilityView extends UtilityView {
         Button bottone4 = new Button("NazSingolare");
         bottone4.getElement().setAttribute("theme", "primary");
         bottone4.addClickListener(event -> downloadNazionalitaSingolare());
-        bottone4.setEnabled(false);
+
         Button bottone5 = new Button("NazPlurale");
         bottone5.getElement().setAttribute("theme", "primary");
         bottone5.addClickListener(event -> downloadNazionalitaPlurale());

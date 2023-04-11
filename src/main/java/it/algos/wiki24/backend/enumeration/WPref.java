@@ -64,12 +64,14 @@ public enum WPref implements AIGenPref {
     uploadAttPluralePrevisto("uploadAttPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le attività plurali."),
 
 
+    resetNazSingolare("resetNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'nazionalitàSingolari'"),
     downloadNazSingolare("downloadNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale nazionalità."),
     downloadNazSingolareTime("downloadNazSingolareTime", AETypePref.integer, 0, "Durata download delle nazionalità singolari."),
     elaboraNazSingolare("elaboraNazSingolare", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità singolari."),
     elaboraNazSingolareTime("elaboraNazSingolareTime", AETypePref.integer, 0, "Durata elaborazione delle nazionalità singolari."),
 
 
+    resetNazPlurale("resetNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'nazionalitàPlurali'"),
     downloadNazPlurale("downloadNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Link nazionalità."),
     downloadNazPluraleTime("downloadNazPluraleTime", AETypePref.integer, 0, "Durata download delle nazionalità plurali."),
     elaboraNazPlurale("elaboraNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le nazionalità plurali."),
