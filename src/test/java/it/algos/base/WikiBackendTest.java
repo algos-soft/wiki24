@@ -71,27 +71,8 @@ public abstract class WikiBackendTest extends BackendTest {
 
     protected WResult wResult;
 
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    public static Stream<Arguments> ATTIVITA_SINGOLARE() {
-        return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("politico", true, true),
-                Arguments.of("politici", false, false),
-                Arguments.of("errata", false, false),
-                Arguments.of("fantasmi", false, false),
-                Arguments.of("produttorediscografico", true, false),
-                Arguments.of("produttore discografico", false, true),
-                Arguments.of("attrice", true, true),
-                Arguments.of("attore", true, true),
-                Arguments.of("attori", false, false),
-                Arguments.of("nessuna", false, false),
-                Arguments.of("direttore di scena", false, false),
-                Arguments.of("accademici", false, false),
-                Arguments.of("vescovo ariano", false, true)
-        );
-    }
+    protected String nomeModulo;
+
 
     //--nome attività plurale (maiuscola o minuscola)
     //--esiste ID
@@ -294,17 +275,77 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("17 - upload (non previsto per questa collection)");
     }
 
+    @Test
+    @Order(70)
+    @DisplayName("70--------")
+    void test70() {
+        System.out.println("71 - findAllByPlurale (entityBeans)");
+        System.out.println("72 - findAllForKeyByPlurale (String)");
+    }
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    protected void findAllByPlurale(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        if (previstoBooleano) {
+            entityBean = wikiBackend.findByKey(sorgente);
+            assertTrue(entityBean != null);
+            sorgente2 = ((AttSingolare) entityBean).plurale;
+            listaBeans = wikiBackend.findAllByPlurale(sorgente2);
+            assertTrue(listaBeans != null);
+            System.out.print(sorgente2);
+            System.out.print(FORWARD);
+            System.out.println(listaBeans);
+        }
+        else {
+            return;
+        }
+    }
+
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    protected void findAllForKeyByPlurale(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previstoBooleano = (boolean) mat[2];
+
+        if (previstoBooleano) {
+            entityBean = wikiBackend.findByKey(sorgente);
+            assertTrue(entityBean != null);
+            sorgente2 = ((AttSingolare) entityBean).plurale;
+            listaStr = wikiBackend.findAllForKeyByPlurale(sorgente2);
+            assertTrue(listaStr != null);
+            System.out.print(sorgente2);
+            System.out.print(FORWARD);
+            System.out.println(listaStr);
+        }
+        else {
+            return;
+        }
+    }
+
 
     @Test
-    @Order(71)
-    @DisplayName("71 - riordinaModulo (upload test in ordine alfabetico)")
-    protected void riordinaModulo() {
-        System.out.println("71 - riordinaModulo (upload test in ordine alfabetico)");
+    @Order(75)
+    @DisplayName("75 - findAllDistinctByPlurali")
+    protected void findAllDistinctByPlurali() {
+        System.out.println("75 - findAllDistinctByPlurali");
+        message = String.format("Tutti i valori di %s plurali (unici)", nomeModulo);
+        System.out.println(message);
         System.out.println(VUOTA);
 
-        wResult= wikiBackend.riordinaModulo();
-        printRisultato(wResult);
-        assertTrue(wResult.isValido());
+        listaStr = wikiBackend.findAllDistinctByPlurali();
+        assertTrue(listaStr != null);
+        assertTrue(listaStr.size() > 0);
+        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+        System.out.println(message);
+        print(listaStr);
     }
 
     //Segnaposto
@@ -325,6 +366,31 @@ public abstract class WikiBackendTest extends BackendTest {
     //Segnaposto
     @Order(75)
     protected void libero75() {
+    }
+
+    @Test
+    @Order(80)
+    @DisplayName("80--------")
+    void test80() {
+    }
+
+    @Test
+    @Order(90)
+    @DisplayName("90--------")
+    void test90() {
+        System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
+    }
+
+    @Test
+    @Order(91)
+    @DisplayName("91 - riordinaModulo (upload test in ordine alfabetico)")
+    protected void riordinaModulo() {
+        System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
+        System.out.println(VUOTA);
+
+        wResult = wikiBackend.riordinaModulo();
+        printRisultato(wResult);
+        assertTrue(wResult.isValido());
     }
 
     protected void printRisultato(WResult result) {
@@ -365,4 +431,5 @@ public abstract class WikiBackendTest extends BackendTest {
             System.out.println(String.format("Tempo: %s", result.deltaSec()));
         }
     }
+
 }

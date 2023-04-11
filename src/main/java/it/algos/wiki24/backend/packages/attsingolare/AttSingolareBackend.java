@@ -133,16 +133,19 @@ public class AttSingolareBackend extends WikiBackend {
     }
 
     public List<AttSingolare> findAllByPlurale(String plurale) {
-        return findAllByProperty("plurale", plurale);
+        return super.findAllByPlurale(plurale);
     }
 
+    public List<String> findAllForKeyByPlurale(String plurale) {
+        return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
+    }
 
-    public List findAllByExSortKey() {
+    public List<AttSingolare> findAllByExSortKey() {
         List<AttSingolare> listaAll = findAllSortKey();
         return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
     }
 
-    public List findAllByNotExSortKey() {
+    public List<AttSingolare> findAllByNotExSortKey() {
         List<AttSingolare> listaAll = findAllSortKey();
         return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
     }
@@ -160,10 +163,6 @@ public class AttSingolareBackend extends WikiBackend {
 
         Collections.sort(lista);
         return lista;
-    }
-
-    public List<String> findAllForKeyByPlurale(String plurale) {
-        return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
     }
 
 

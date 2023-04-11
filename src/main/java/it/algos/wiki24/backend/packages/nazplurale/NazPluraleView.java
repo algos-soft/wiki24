@@ -89,9 +89,13 @@ public class NazPluraleView extends WikiView {
         super.fixAlert();
         String modulo = PATH_WIKI + PATH_MODULO;
 
-        Anchor anchor1 = new Anchor(modulo + PATH_LINK + NAZ_LOWER, NAZ + " plurale -> nazione");
+        Anchor anchor1 = new Anchor(modulo + PATH_LINK + NAZ_LOWER, PATH_LINK + NAZ_LOWER);
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1));
+
+        Anchor anchor2 = new Anchor(PATH_WIKI + PATH_STATISTICHE_NAZIONALITA, STATISTICHE);
+        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
 
         message = "Tabella nazionalità plurali del parametro 'nazionalità', ricavate dalla task NazSingolare. ";
         addSpan(ASpan.text(message).verde());

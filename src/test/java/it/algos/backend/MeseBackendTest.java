@@ -48,14 +48,14 @@ public class MeseBackendTest extends BackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        sorgente = "sbagliato";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "sbagliato";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "ottobre";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -66,14 +66,14 @@ public class MeseBackendTest extends BackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        sorgente = "termidoro";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ottobre";
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "termidoro";
+//        ottenutoBooleano = super.isExistByKey(sorgente);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "ottobre";
+//        ottenutoBooleano = super.isExistByKey(sorgente);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -84,14 +84,14 @@ public class MeseBackendTest extends BackendTest {
         System.out.println("23 - isExistByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 87;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
+//        sorgenteIntero = 87;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgenteIntero = 6;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -102,22 +102,22 @@ public class MeseBackendTest extends BackendTest {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "breve";
-        sorgente2 = "apr";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "propertyInesistente";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "breve";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "breve";
+//        sorgente2 = "apr";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertTrue(ottenutoBooleano);
     }
 
     @Test

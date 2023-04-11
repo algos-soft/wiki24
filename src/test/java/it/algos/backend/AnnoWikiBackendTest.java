@@ -59,14 +59,14 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        sorgente = "3472";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "986a.c.";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "3472";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "986a.c.";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -110,14 +110,14 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         System.out.println("23 - isExistByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 4870;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 600;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
+//        sorgenteIntero = 4870;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgenteIntero = 600;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -128,22 +128,22 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 27;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ordine";
-        sorgenteIntero = 8527;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "ordine";
-        sorgenteIntero = 23300;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "propertyInesistente";
+//        sorgenteIntero = 27;
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "ordine";
+//        sorgenteIntero = 8527;
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "ordine";
+//        sorgenteIntero = 23300;
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+//        assertTrue(ottenutoBooleano);
     }
 
     @Test

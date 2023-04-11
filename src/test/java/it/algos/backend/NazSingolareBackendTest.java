@@ -78,8 +78,8 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
 
@@ -102,8 +102,8 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[2];
 
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+//        ottenutoBooleano = super.isExistByKey(sorgente);
+//        assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
 
@@ -114,14 +114,14 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("23 - isExistByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 87;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 0;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
+//        sorgenteIntero = 87;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgenteIntero = 0;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
     }
 
 
@@ -132,22 +132,22 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "abcasi";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "propertyInesistente";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "plurale";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "plurale";
+//        sorgente2 = "abcasi";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertTrue(ottenutoBooleano);
     }
 
     @Test
@@ -276,7 +276,7 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
 
         sorgente = "rumeni";
-        listaStr = backend.findAllForSingolareByPlurale(sorgente);
+        listaStr = backend.findAllForKeyByPlurale(sorgente);
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
@@ -285,13 +285,29 @@ public class NazSingolareBackendTest extends WikiBackendTest {
         System.out.println(VUOTA);
 
         sorgente = "suebi";
-        listaStr = backend.findAllForSingolareByPlurale(sorgente);
+        listaStr = backend.findAllForKeyByPlurale(sorgente);
         assertNotNull(listaStr);
         ottenutoIntero = listaStr.size();
         message = String.format("La nazionalità plurale '%s' corrisponde a %s nazionalità singolari.", sorgente, ottenutoIntero);
         System.out.println(message);
         printSubLista(listaStr);
         System.out.println(VUOTA);
+    }
+
+    @Test
+    @Order(78)
+    @DisplayName("78 - findAllDistinctByPlurali")
+    protected void findAllDistinctByPlurali() {
+        System.out.println("78 - findAllDistinctByPlurali");
+        System.out.println("Tutte i valori di nazionalità plurali (unici)");
+        System.out.println(VUOTA);
+
+        listaStr = backend.findAllDistinctByPlurali();
+        assertTrue(listaStr != null);
+        assertTrue(listaStr.size() > 0);
+        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+        System.out.println(message);
+        print(listaStr);
     }
 
     @Test

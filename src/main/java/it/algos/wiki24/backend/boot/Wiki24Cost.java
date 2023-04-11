@@ -18,6 +18,10 @@ public class Wiki24Cost {
 
     public static final String WIKI_TITLE_DEBUG = "Utente:Biobot/2";
 
+    public static final String FIELD_NAME_SINGOLARE = "singolare";
+
+    public static final String FIELD_NAME_PLURALE = "plurale";
+
     public static final int DELTA_ORDINE_ANNI = 100;
 
     public static final String TAG_BOLD = "'''";
@@ -29,9 +33,11 @@ public class Wiki24Cost {
     public static final String UNCONNECTED = "__EXPECTED_UNCONNECTED_PAGE__";
 
     public static final String PATH_SINGOLARE = "Singolare/";
+
     public static final String PATH_PLURALE = "Plurale ";
 
     public static final String PATH_EX = "Ex ";
+
     public static final String WIKI_TAG_UTILITY = "wikiUtility";
 
     public static final String TAG_WIKI23_VERSION = "wikiversion";
@@ -185,7 +191,9 @@ public class Wiki24Cost {
     public static final String PATH_STATISTICHE_ANNI = PATH_PROGETTO + ANNI;
 
     public static final String PATH_CATEGORIA = PATH_WIKI + "Categoria:";
+
     public static final String LINK_PAGINA_ATTIVITA = "Progetto:Biografie/Attività/";
+
     public static final String LINK_PAGINA_NAZIONALITA = "Progetto:Biografie/Nazionalità/";
 
     public static final String TAG_EX_SPAZIO = "ex" + SPAZIO;
@@ -372,7 +380,9 @@ public class Wiki24Cost {
     public static final String KEY_MAP_MORTI_PARAMETRO_VUOTO = "mortiParametroVuoto";
 
     public static final String KEY_MAP_MORTI_VALORE_ESISTENTE = "mortiValoreEsistente";
+
     public static final String KEY_MAP_VOCI_SERVER_WIKI = "vociServerWiki";
-    public static final String KEY_MAP_VOCI_DATABASE_MONGO= "vociDatabaseMongo";
+
+    public static final String KEY_MAP_VOCI_DATABASE_MONGO = "vociDatabaseMongo";
 
 }

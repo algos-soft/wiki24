@@ -132,11 +132,26 @@ public class NazSingolareBackend extends WikiBackend {
     }
 
     public List<NazSingolare> findAllByPlurale(String plurale) {
-        return super.findAllByProperty("plurale", plurale);
+        return super.findAllByProperty(FIELD_NAME_PLURALE, plurale);
     }
 
-    public List<String> findAllForSingolareByPlurale(String plurale) {
+    public List<String> findAllForKeyByPlurale(String plurale) {
         return findAllByPlurale(plurale).stream().map(nazSin -> nazSin.nome).collect(Collectors.toList());
+    }
+
+    public List<String> findAllDistinctByPlurali() {
+        List<String> lista = new ArrayList<>();
+        Set<String> setPlurali = new HashSet();
+        List<NazSingolare> listaAll = findAll();
+
+        for (NazSingolare nazionalita : listaAll) {
+            if (setPlurali.add(nazionalita.plurale)) {
+                lista.add(nazionalita.plurale);
+            }
+        }
+
+        Collections.sort(lista);
+        return lista;
     }
 
     public Map<String, String> getMappaSingolarePlurale() {
@@ -164,27 +179,12 @@ public class NazSingolareBackend extends WikiBackend {
         WResult result = super.download();
         int tempo = WPref.downloadNazSingolareTime.getInt();
 
-        //        String moduloNazionalita = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
-        //        int tempo = 3;
-        //        int size = 0;
-        //        List<AEntity> lista;
-
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
         logger.debug(new WrapLog().message(message));
         logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "nazionalità singolari")));
 
         result = downloadNazionalita(result);
         result.typeResult(AETypeResult.downloadValido);
-
-        //        lista = downloadNazionalita(moduloNazionalita);
-        //        result.setIntValue(size);
-        //
-        //        result.setIntValue(size);
-        //        result.setLista(lista);
-        //        public WResult fixDownload(WResult result, String clazzName, String collectionName, String modulo, List lista) {
-
-        //        result = super.fixDownload(result, entityClazz.getSimpleName(), lista);
-        //        result = this.elabora();
 
         result = super.fixDownload(result, "nazionalità singolari");
         return result;

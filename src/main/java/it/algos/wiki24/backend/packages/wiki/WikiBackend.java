@@ -251,6 +251,17 @@ public abstract class WikiBackend extends CrudBackend {
         return result;
     }
 
+    public List findAllByPlurale(String plurale) {
+        return super.findAllByProperty(FIELD_NAME_PLURALE, plurale);
+    }
+    public List<String> findAllForKeyByPlurale(String plurale) {
+        return null;
+    }
+
+    public List<String> findAllDistinctByPlurali() {
+        return null;
+    }
+
     /**
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>

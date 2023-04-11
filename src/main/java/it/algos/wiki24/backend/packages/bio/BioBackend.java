@@ -1193,7 +1193,7 @@ public class BioBackend extends WikiBackend {
     public int countNazPlurale(final String nazPlurale) {
         int numBio = 0;
         int numTemp = 0;
-        List<String> listaSingolari = nazSingolareBackend.findAllForSingolareByPlurale(nazPlurale);
+        List<String> listaSingolari = nazSingolareBackend.findAllForKeyByPlurale(nazPlurale);
         Query query;
         Long lungo;
 

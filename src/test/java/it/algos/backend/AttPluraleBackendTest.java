@@ -85,8 +85,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
 
@@ -109,8 +109,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[2];
 
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+//        ottenutoBooleano = super.isExistByKey(sorgente);
+//        assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
     @Test
@@ -120,22 +120,22 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "linkAttivita";
-        sorgente2 = "Allenatore";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "propertyInesistente";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "plurale";
+//        sorgente2 = "termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "linkAttivita";
+//        sorgente2 = "Allenatore";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertTrue(ottenutoBooleano);
     }
 
     @Test

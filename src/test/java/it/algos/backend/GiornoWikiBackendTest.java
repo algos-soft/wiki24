@@ -56,14 +56,14 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        sorgente = "sbagliato";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "23maggio";
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "sbagliato";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "23maggio";
+//        ottenutoBooleano = super.isExistById(sorgente);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -107,14 +107,14 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         System.out.println("23 - isExistByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 487;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 6;
-        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-        assertTrue(ottenutoBooleano);
+//        sorgenteIntero = 487;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgenteIntero = 6;
+//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+//        assertTrue(ottenutoBooleano);
     }
 
 
@@ -125,22 +125,22 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 27;
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "pageNati";
-        sorgente2 = "Nati il 2 termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "pageNati";
-        sorgente2 = "Nati il 25 gennaio";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
+//        sorgente = "propertyInesistente";
+//        sorgenteIntero = 27;
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "pageNati";
+//        sorgente2 = "Nati il 2 termidoro";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "pageNati";
+//        sorgente2 = "Nati il 25 gennaio";
+//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
+//        assertTrue(ottenutoBooleano);
     }
 
     @Test

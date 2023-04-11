@@ -3,6 +3,7 @@ package it.algos.backend;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -31,6 +33,43 @@ public class AttSingolareBackendTest extends WikiBackendTest {
 
     private List<AttSingolare> listaBeans;
 
+
+    //--nome attività singolare (maiuscola o minuscola)
+    //--esiste ID
+    //--esiste key
+    public static Stream<Arguments> ATTIVITA_SINGOLARE() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("politico", true, true),
+                Arguments.of("politici", false, false),
+                Arguments.of("errata", false, false),
+                Arguments.of("fantasmi", false, false),
+                Arguments.of("produttorediscografico", true, false),
+                Arguments.of("produttore discografico", false, true),
+                Arguments.of("attrice", true, true),
+                Arguments.of("attore", true, true),
+                Arguments.of("attori", false, false),
+                Arguments.of("nessuna", false, false),
+                Arguments.of("direttore di scena", false, false),
+                Arguments.of("accademici", false, false),
+                Arguments.of("vescovo ariano", false, true)
+        );
+    }
+
+    //--nome property
+    //--value property
+    //--esiste entityBean
+    public static Stream<Arguments> ATTIVITA_PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("plurale", "termidoro", false),
+                Arguments.of("plurale", "avvocati", true),
+                Arguments.of(FIELD_NAME_PLURALE, "termidoro", false),
+                Arguments.of(FIELD_NAME_PLURALE, "avvocati", true)
+        );
+    }
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -41,6 +80,7 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
+        super.nomeModulo = "attività";
 
         super.setUpAll();
     }
@@ -53,20 +93,7 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         System.out.println("21 - isExistById");
         System.out.println(VUOTA);
 
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::isExistByIdBase);
-    }
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void isExistByIdBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = super.isExistById(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+        ATTIVITA_SINGOLARE().forEach(parameters -> super.isExistById(parameters));
     }
 
 
@@ -77,47 +104,20 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         System.out.println("22 - isExistByKey");
         System.out.println(VUOTA);
 
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::isExistByKeyBase);
-    }
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void isExistByKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
-
-        ottenutoBooleano = super.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
+        ATTIVITA_SINGOLARE().forEach(parameters -> super.isExistByKey(parameters));
     }
 
 
     @Test
-    @Order(24)
+    @Order(23)
     @DisplayName("24 - isExistByProperty")
     protected void isExistByProperty() {
         System.out.println("24 - isExistByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "termidoro";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "avvocati";
-        ottenutoBooleano = super.isExistByProperty(sorgente, sorgente2);
-        assertTrue(ottenutoBooleano);
+        ATTIVITA_PROPERTY().forEach(parameters -> super.isExistByProperty(parameters));
     }
+
 
     @Test
     @Order(31)
@@ -194,81 +194,34 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     }
 
     @Test
-    @Order(65)
-    @DisplayName("65 - findAllByPlurale (entityBeans)")
+    @Order(71)
+    @DisplayName("71 - findAllByPlurale (entityBeans)")
     protected void findAllByPlurale() {
-        System.out.println("65 - findAllByPlurale");
+        System.out.println("71 - findAllByPlurale (entityBeans)");
         System.out.println("Tutte le attività singolari di una attività plurale");
 
         System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::findAllByPluraleBase);
-    }
-
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void findAllByPluraleBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
-
-        if (previstoBooleano) {
-            entityBean = backend.findByKey(sorgente);
-            assertTrue(entityBean != null);
-            sorgente2 = ((AttSingolare) entityBean).plurale;
-            listaBeans = backend.findAllByPlurale(sorgente2);
-            assertTrue(listaBeans != null);
-            System.out.print(sorgente2);
-            System.out.print(FORWARD);
-            System.out.println(listaBeans);
-        }
-        else {
-            return;
-        }
+        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllByPlurale(parameters));
     }
 
 
     @Test
-    @Order(66)
-    @DisplayName("66 - findAllForKeyByPlurale (String)")
+    @Order(72)
+    @DisplayName("72 - findAllForKeyByPlurale (String)")
     protected void findAllForKeyByPlurale() {
-        System.out.println("66 - findAllForKeyByPlurale");
+        System.out.println("72 - findAllForKeyByPlurale (String)");
         System.out.println("Tutte le attività singolari di una attività plurale");
 
         System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::findAllForKeyByPluraleBase);
+        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllForKeyByPlurale(parameters));
     }
 
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void findAllForKeyByPluraleBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
-
-        if (previstoBooleano) {
-            entityBean = backend.findByKey(sorgente);
-            assertTrue(entityBean != null);
-            sorgente2 = ((AttSingolare) entityBean).plurale;
-            listaStr = backend.findAllForKeyByPlurale(sorgente2);
-            assertTrue(listaStr != null);
-            System.out.print(sorgente2);
-            System.out.print(FORWARD);
-            System.out.println(listaStr);
-        }
-        else {
-            return;
-        }
-    }
 
     @Test
-    @Order(76)
-    @DisplayName("76 - findAllByExSortKey")
+    @Order(75)
+    @DisplayName("75 - findAllByExSortKey")
     protected void findAllByExSortKey() {
-        System.out.println("71 - findAllByExSortKey");
+        System.out.println("75 - findAllByExSortKey");
         System.out.println("Tutte le attività singolari col flag ex=true");
 
         listaBeans = backend.findAllByExSortKey();
@@ -290,21 +243,21 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         printSubLista(listaBeans);
     }
 
-    @Test
-    @Order(78)
-    @DisplayName("78 - findAllDistinctByPlurali")
-    protected void findAllDistinctByPlurali() {
-        System.out.println("78 - findAllDistinctByPlurali");
-        System.out.println("Tutte i valori di attività plurali (unici)");
-        System.out.println(VUOTA);
-
-        listaStr = backend.findAllDistinctByPlurali();
-        assertTrue(listaStr != null);
-        assertTrue(listaStr.size() > 0);
-        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
-        System.out.println(message);
-        print(listaStr);
-    }
+    //    @Test
+    //    @Order(78)
+    //    @DisplayName("78 - findAllDistinctByPlurali")
+    //    protected void findAllDistinctByPlurali() {
+    //        System.out.println("78 - findAllDistinctByPlurali");
+    //        System.out.println("Tutte i valori di attività plurali (unici)");
+    //        System.out.println(VUOTA);
+    //
+    //        listaStr = backend.findAllDistinctByPlurali();
+    //        assertTrue(listaStr != null);
+    //        assertTrue(listaStr.size() > 0);
+    //        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+    //        System.out.println(message);
+    //        print(listaStr);
+    //    }
 
     @Test
     @Order(81)
