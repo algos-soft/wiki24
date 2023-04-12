@@ -45,6 +45,7 @@ public class NazPluraleBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.resetAttPlurale;
         super.lastDownload = WPref.downloadNazPlurale;
         super.durataDownload = WPref.downloadNazPluraleTime;
         super.lastElaborazione = WPref.elaboraNazPlurale;
@@ -91,7 +92,7 @@ public class NazPluraleBackend extends WikiBackend {
         NazPlurale newEntityBean = NazPlurale.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .listaSingolari(listaSingolari)
-                .paginaLista(textService.isValid(paginaLista) ? paginaLista : null)
+                .paginaLista(textService.isValid(paginaLista) ? paginaLista : textService.primaMaiuscola(nome))
                 .linkNazione(textService.isValid(linkNazione) ? linkNazione : null)
                 .numBio(0)
                 .numSingolari(0)
@@ -199,6 +200,7 @@ public class NazPluraleBackend extends WikiBackend {
         Map<String, String> mappaPluraleNazione = new LinkedHashMap<>();
         String nazSingolareNome;
         String nazPluraleNome = VUOTA;
+        String paginaLista;
         String paginaNazioneOld;
         String paginaNazioneNew;
         NazSingolare nazionalitaSin;

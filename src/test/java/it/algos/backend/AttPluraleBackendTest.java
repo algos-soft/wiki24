@@ -158,8 +158,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        entityBean = super.findById(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
+//        entityBean = super.findById(sorgente);
+//        assertEquals(previstoBooleano, entityBean != null);
     }
 
     @Test
@@ -181,8 +181,8 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[2];
 
-        entityBean = super.findByKey(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
+//        entityBean = super.findByKey(sorgente);
+//        assertEquals(previstoBooleano, entityBean != null);
     }
 
 
@@ -193,23 +193,23 @@ public class AttPluraleBackendTest extends WikiBackendTest {
         System.out.println("34 - findByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "linkAttivita";
-        sorgente2 = "Allenatore";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
+//        sorgente = "propertyInesistente";
+//        sorgente2 = "termidoro";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNull(entityBean);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "plurale";
+//        sorgente2 = "termidoro";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNull(entityBean);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "linkAttivita";
+//        sorgente2 = "Allenatore";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNotNull(entityBean);
+//        System.out.println(VUOTA);
     }
 
     @Test

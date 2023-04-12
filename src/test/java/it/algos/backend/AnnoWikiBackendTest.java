@@ -12,6 +12,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 
 /**
@@ -25,6 +26,7 @@ import java.util.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("anno")
 @Tag("backend")
+@Tag("wikiBackend")
 @DisplayName("AnnoWiki Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AnnoWikiBackendTest extends WikiBackendTest {
@@ -32,6 +34,54 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     private AnnoWikiBackend backend;
 
     private List<AnnoWiki> listaBeans;
+
+
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected static Stream<Arguments> ANNO() {
+        return Stream.of(
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("0", false, false),
+                Arguments.of("24", true, true),
+                Arguments.of("secolo", false, false),
+                Arguments.of("994a.c.", true, false),
+                Arguments.of("994 a.C.", false, true),
+                Arguments.of("24 A.C.", false, false),
+                Arguments.of("24 a.C.", false, true),
+                Arguments.of("24a.c.", true, false),
+                Arguments.of("3208", false, false)
+        );
+    }
+
+
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    public static Stream<Arguments> PROPERTY() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA, false),
+                Arguments.of("propertyInesistente", "valoreInesistente", false),
+                Arguments.of("pageNati", "Nati nel !937", false),
+                Arguments.of("pageNati", "Nati nel 1937", true)
+        );
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    public static Stream<Arguments> ORDINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(847, false),
+                Arguments.of(800, true),
+                Arguments.of(4, false),
+                Arguments.of(77235, false),
+                Arguments.of(300800, true),
+                Arguments.of(-4, false)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -50,179 +100,183 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+
+        super.streamCollection = ANNO();
+        super.streamProperty = PROPERTY();
+        super.streamOrder = ORDINE();
     }
 
-    @Test
-    @Order(21)
-    @DisplayName("21 - isExistById")
-    protected void isExistById() {
-        System.out.println("21 - isExistById");
-        System.out.println(VUOTA);
-
-//        sorgente = "3472";
-//        ottenutoBooleano = super.isExistById(sorgente);
-//        assertFalse(ottenutoBooleano);
+//    @Test
+//    @Order(21)
+//    @DisplayName("21 - isExistById")
+//    protected void isExistById() {
+//        System.out.println("21 - isExistById");
 //        System.out.println(VUOTA);
 //
-//        sorgente = "986a.c.";
-//        ottenutoBooleano = super.isExistById(sorgente);
-//        assertTrue(ottenutoBooleano);
-    }
+////        sorgente = "3472";
+////        ottenutoBooleano = super.isExistById(sorgente);
+////        assertFalse(ottenutoBooleano);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "986a.c.";
+////        ottenutoBooleano = super.isExistById(sorgente);
+////        assertTrue(ottenutoBooleano);
+//    }
 
 
-    @Test
-    @Order(22)
-    @DisplayName("22 - isExistByKey")
-    protected void isExistByKey() {
-        System.out.println("22 - isExistByKey");
-        System.out.println(VUOTA);
-        System.out.println("Anno ricavato dalla keyProperty");
-        System.out.println(VUOTA);
-
-        //--giorno
-        //--esistente
-        System.out.println(VUOTA);
-        ANNI().forEach(this::isExistKeyBase);
-    }
-
-    //--giorno
-    //--esistente
-    void isExistKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        ottenutoBooleano = backend.isExistByKey(sorgente);
-        assertEquals(previstoBooleano, ottenutoBooleano);
-        if (ottenutoBooleano) {
-            System.out.println(String.format("L'anno [%s] esiste", sorgente));
-        }
-        else {
-            System.out.println(String.format("L'anno [%s] non esiste", sorgente));
-        }
-        System.out.println(VUOTA);
-    }
-
-    @Test
-    @Order(23)
-    @DisplayName("23 - isExistByOrder")
-    protected void isExistByOrder() {
-        System.out.println("23 - isExistByOrder");
-        System.out.println(VUOTA);
-
-//        sorgenteIntero = 4870;
-//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-//        assertFalse(ottenutoBooleano);
+//    @Test
+//    @Order(22)
+//    @DisplayName("22 - isExistByKey")
+//    protected void isExistByKey() {
+//        System.out.println("22 - isExistByKey");
+//        System.out.println(VUOTA);
+//        System.out.println("Anno ricavato dalla keyProperty");
 //        System.out.println(VUOTA);
 //
-//        sorgenteIntero = 600;
-//        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
-//        assertTrue(ottenutoBooleano);
-    }
+//        //--giorno
+//        //--esistente
+////        System.out.println(VUOTA);
+////        ANNI().forEach(this::isExistKeyBase);
+//    }
 
+//    //--giorno
+//    //--esistente
+//    void isExistKeyBase(Arguments arg) {
+//        Object[] mat = arg.get();
+//        sorgente = (String) mat[0];
+//        previstoBooleano = (boolean) mat[1];
+//
+//        ottenutoBooleano = backend.isExistByKey(sorgente);
+//        assertEquals(previstoBooleano, ottenutoBooleano);
+//        if (ottenutoBooleano) {
+//            System.out.println(String.format("L'anno [%s] esiste", sorgente));
+//        }
+//        else {
+//            System.out.println(String.format("L'anno [%s] non esiste", sorgente));
+//        }
+//        System.out.println(VUOTA);
+//    }
 
-    @Test
-    @Order(24)
-    @DisplayName("24 - isExistByProperty")
-    protected void isExistByProperty() {
-        System.out.println("24 - isExistByProperty");
-        System.out.println(VUOTA);
-
-//        sorgente = "propertyInesistente";
-//        sorgenteIntero = 27;
-//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-//        assertFalse(ottenutoBooleano);
+//    @Test
+//    @Order(23)
+//    @DisplayName("23 - isExistByOrder")
+//    protected void isExistByOrder() {
+//        System.out.println("23 - isExistByOrder");
 //        System.out.println(VUOTA);
 //
-//        sorgente = "ordine";
-//        sorgenteIntero = 8527;
-//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-//        assertFalse(ottenutoBooleano);
+////        sorgenteIntero = 4870;
+////        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+////        assertFalse(ottenutoBooleano);
+////        System.out.println(VUOTA);
+////
+////        sorgenteIntero = 600;
+////        ottenutoBooleano = super.isExistByOrder(sorgenteIntero);
+////        assertTrue(ottenutoBooleano);
+//    }
+
+
+//    @Test
+//    @Order(24)
+//    @DisplayName("24 - isExistByProperty")
+//    protected void isExistByProperty() {
+//        System.out.println("24 - isExistByProperty");
 //        System.out.println(VUOTA);
 //
-//        sorgente = "ordine";
-//        sorgenteIntero = 23300;
-//        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
-//        assertTrue(ottenutoBooleano);
-    }
+////        sorgente = "propertyInesistente";
+////        sorgenteIntero = 27;
+////        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+////        assertFalse(ottenutoBooleano);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "ordine";
+////        sorgenteIntero = 8527;
+////        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+////        assertFalse(ottenutoBooleano);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "ordine";
+////        sorgenteIntero = 23300;
+////        ottenutoBooleano = super.isExistByProperty(sorgente, sorgenteIntero);
+////        assertTrue(ottenutoBooleano);
+//    }
 
-    @Test
-    @Order(31)
-    @DisplayName("31 - findById")
-    protected void findById() {
-        System.out.println("31 - findById");
-        System.out.println(VUOTA);
+//    @Test
+//    @Order(31)
+//    @DisplayName("31 - findById")
+//    protected void findById() {
+//        System.out.println("31 - findById");
+//        System.out.println(VUOTA);
+//
+////        sorgente = "3472";
+////        entityBean = super.findById(sorgente);
+////        assertNull(entityBean);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "986a.c.";
+////        entityBean = super.findById(sorgente);
+////        assertNotNull(entityBean);
+//    }
 
-        sorgente = "3472";
-        entityBean = super.findById(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
+//    @Test
+//    @Order(32)
+//    @DisplayName("32 - findByKey")
+//    protected void findByKey() {
+//        System.out.println("32 - findByKey");
+//        System.out.println(VUOTA);
+//
+////        sorgente = "986a.C.";
+////        entityBean = super.findByKey(sorgente);
+////        assertNull(entityBean);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "986 a.C.";
+////        entityBean = super.findByKey(sorgente);
+////        assertNotNull(entityBean);
+//    }
 
-        sorgente = "986a.c.";
-        entityBean = super.findById(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("32 - findByKey")
-    protected void findByKey() {
-        System.out.println("32 - findByKey");
-        System.out.println(VUOTA);
-
-        sorgente = "986a.C.";
-        entityBean = super.findByKey(sorgente);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "986 a.C.";
-        entityBean = super.findByKey(sorgente);
-        assertNotNull(entityBean);
-    }
-
-    @Test
-    @Order(33)
-    @DisplayName("33 - findByOrder")
-    protected void findByOrder() {
-        System.out.println("33 - findByOrder");
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 4870;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 600;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNotNull(entityBean);
-    }
+//    @Test
+//    @Order(33)
+//    @DisplayName("33 - findByOrder")
+//    protected void findByOrder() {
+//        System.out.println("33 - findByOrder");
+//        System.out.println(VUOTA);
+//
+////        sorgenteIntero = 4870;
+////        entityBean = super.findByOrder(sorgenteIntero);
+////        assertNull(entityBean);
+////        System.out.println(VUOTA);
+////
+////        sorgenteIntero = 600;
+////        entityBean = super.findByOrder(sorgenteIntero);
+////        assertNotNull(entityBean);
+//    }
 
 
-    @Test
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected void findByProperty() {
-        System.out.println("34 - findByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgenteIntero = 27;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "ordine";
-        sorgenteIntero = 8527;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "ordine";
-        sorgenteIntero = 23300;
-        entityBean = super.findByProperty(sorgente, sorgenteIntero);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
-    }
+//    @Test
+//    @Order(34)
+//    @DisplayName("34 - findByProperty")
+//    protected void findByProperty() {
+//        System.out.println("34 - findByProperty");
+//        System.out.println(VUOTA);
+//
+////        sorgente = "propertyInesistente";
+////        sorgenteIntero = 27;
+////        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+////        assertNull(entityBean);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "ordine";
+////        sorgenteIntero = 8527;
+////        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+////        assertNull(entityBean);
+////        System.out.println(VUOTA);
+////
+////        sorgente = "ordine";
+////        sorgenteIntero = 23300;
+////        entityBean = super.findByProperty(sorgente, sorgenteIntero);
+////        assertNotNull(entityBean);
+////        System.out.println(VUOTA);
+//    }
 
 
     @Test

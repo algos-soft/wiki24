@@ -441,9 +441,6 @@ public abstract class AlgosTest {
         listaClazz = null;
         sort = null;
         listaBackendClazz = null;
-        mappaSorgente = null;
-        mappaPrevista = null;
-        mappaOttenuta = null;
     }
 
 

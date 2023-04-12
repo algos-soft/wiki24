@@ -34,10 +34,10 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     private List<AttSingolare> listaBeans;
 
 
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    public static Stream<Arguments> ATTIVITA_SINGOLARE() {
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    public static Stream<Arguments> ATTIVITA() {
         return Stream.of(
                 Arguments.of(VUOTA, false, false),
                 Arguments.of("politico", true, true),
@@ -56,10 +56,10 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         );
     }
 
-    //--nome property
-    //--value property
+    //--nome della property
+    //--value della property
     //--esiste entityBean
-    public static Stream<Arguments> ATTIVITA_PROPERTY() {
+    public static Stream<Arguments> PROPERTY() {
         return Stream.of(
                 Arguments.of(VUOTA, VUOTA, false),
                 Arguments.of("propertyInesistente", "valoreInesistente", false),
@@ -85,113 +85,14 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         super.setUpAll();
     }
 
+    @BeforeEach
+    protected void setUpEach() {
+        super.setUpEach();
 
-    @Test
-    @Order(21)
-    @DisplayName("21 - isExistById")
-    protected void isExistById() {
-        System.out.println("21 - isExistById");
-        System.out.println(VUOTA);
-
-        ATTIVITA_SINGOLARE().forEach(parameters -> super.isExistById(parameters));
+        super.streamCollection = ATTIVITA();
+        super.streamProperty = PROPERTY();
     }
 
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - isExistByKey")
-    protected void isExistByKey() {
-        System.out.println("22 - isExistByKey");
-        System.out.println(VUOTA);
-
-        ATTIVITA_SINGOLARE().forEach(parameters -> super.isExistByKey(parameters));
-    }
-
-
-    @Test
-    @Order(23)
-    @DisplayName("24 - isExistByProperty")
-    protected void isExistByProperty() {
-        System.out.println("24 - isExistByProperty");
-        System.out.println(VUOTA);
-
-        ATTIVITA_PROPERTY().forEach(parameters -> super.isExistByProperty(parameters));
-    }
-
-
-    @Test
-    @Order(31)
-    @DisplayName("31 - findById")
-    protected void findById() {
-        System.out.println("31 - isExistByKey");
-        System.out.println(VUOTA);
-
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::findByIdBase);
-    }
-
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void findByIdBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
-
-        entityBean = super.findById(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
-    }
-
-    @Test
-    @Order(32)
-    @DisplayName("32 - findByKey")
-    protected void findByKey() {
-        System.out.println("32 - findByKey");
-        System.out.println(VUOTA);
-
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(this::findByKeyBase);
-    }
-
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    void findByKeyBase(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
-
-        entityBean = super.findByKey(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
-    }
-
-
-    @Test
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected void findByProperty() {
-        System.out.println("34 - findByProperty");
-        System.out.println(VUOTA);
-
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "plurale";
-        sorgente2 = "avvocati";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
-    }
 
     @Test
     @Order(71)
@@ -200,8 +101,8 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         System.out.println("71 - findAllByPlurale (entityBeans)");
         System.out.println("Tutte le attività singolari di una attività plurale");
 
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllByPlurale(parameters));
+//        System.out.println(VUOTA);
+//        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllByPlurale(parameters));
     }
 
 
@@ -212,8 +113,8 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         System.out.println("72 - findAllForKeyByPlurale (String)");
         System.out.println("Tutte le attività singolari di una attività plurale");
 
-        System.out.println(VUOTA);
-        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllForKeyByPlurale(parameters));
+//        System.out.println(VUOTA);
+//        ATTIVITA_SINGOLARE().forEach(parameters -> super.findAllForKeyByPlurale(parameters));
     }
 
 

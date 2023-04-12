@@ -1,7 +1,6 @@
 package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -62,32 +61,37 @@ public abstract class BackendTest extends AlgosTest {
 
     protected Sort sortOrder;
 
+    protected Stream<Arguments> streamCollection;
 
-    //--giorno
-    //--esistente
-    protected static Stream<Arguments> GIORNI() {
-        return Stream.of(
-                Arguments.of(null, false),
-                Arguments.of(VUOTA, false),
-                Arguments.of("23 febbraio", true),
-                Arguments.of("43 marzo", false),
-                Arguments.of("19 dicembra", false),
-                Arguments.of("4 gennaio", true)
-        );
-    }
+    protected Stream<Arguments> streamProperty;
 
-    //--nome
-    //--esistente
-    protected static Stream<Arguments> ANNI() {
-        return Stream.of(
-                Arguments.of(VUOTA, false),
-                Arguments.of("0", false),
-                Arguments.of("24", true),
-                Arguments.of("24 A.C.", false),
-                Arguments.of("24 a.C.", true),
-                Arguments.of("3208", false)
-        );
-    }
+    protected Stream<Arguments> streamOrder;
+
+    //    //--giorno
+    //    //--esistente
+    //    protected static Stream<Arguments> GIORNI() {
+    //        return Stream.of(
+    //                Arguments.of(null, false),
+    //                Arguments.of(VUOTA, false),
+    //                Arguments.of("23 febbraio", true),
+    //                Arguments.of("43 marzo", false),
+    //                Arguments.of("19 dicembra", false),
+    //                Arguments.of("4 gennaio", true)
+    //        );
+    //    }
+
+    //    //--nome
+    //    //--esistente
+    //    protected static Stream<Arguments> ANNI() {
+    //        return Stream.of(
+    //                Arguments.of(VUOTA, false),
+    //                Arguments.of("0", false),
+    //                Arguments.of("24", true),
+    //                Arguments.of("24 A.C.", false),
+    //                Arguments.of("24 a.C.", true),
+    //                Arguments.of("3208", false)
+    //        );
+    //    }
 
     /**
      * Qui passa una volta sola <br>
@@ -259,14 +263,45 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println("24 - isExistByOrder");
     }
 
+    @Test
+    @Order(21)
+    @DisplayName("21 - isExistById")
+    protected void isExistById() {
+        System.out.println("21 - isExistById");
+        System.out.println(VUOTA);
 
-    //--nome (maiuscolo o minuscolo)
-    //--esiste ID
-    //--esiste key
+        if (annotationService.usaReset(entityClazz)) {
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.isExistById(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
     protected void isExistById(Arguments arg) {
         Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[1];
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 1 && mat[1] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
 
         ottenutoBooleano = crudBackend.isExistById(sorgente);
         if (ottenutoBooleano) {
@@ -279,14 +314,45 @@ public abstract class BackendTest extends AlgosTest {
         assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
+    @Test
+    @Order(22)
+    @DisplayName("22 - isExistByKey")
+    protected void isExistByKey() {
+        System.out.println("22 - isExistByKey");
+        System.out.println(VUOTA);
 
-    //--nome (maiuscolo o minuscolo)
-    //--esiste ID
-    //--esiste key
+        if (annotationService.usaReset(entityClazz)) {
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.isExistByKey(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
     protected void isExistByKey(Arguments arg) {
         Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 2 && mat[2] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
 
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         if (textService.isEmpty(keyPropertyName)) {
@@ -305,48 +371,122 @@ public abstract class BackendTest extends AlgosTest {
         assertEquals(previstoBooleano, ottenutoBooleano);
     }
 
+    @Test
+    @Order(23)
+    @DisplayName("23 - isExistByProperty")
+    protected void isExistByProperty() {
+        System.out.println("23 - isExistByProperty");
+        System.out.println(VUOTA);
 
-    //--nome property
-    //--value property
-    //--esiste entityBean
-    protected void isExistByProperty(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        Object value = mat[1];
-        previstoBooleano = (boolean) mat[2];
-
-        if (!reflectionService.isEsiste(entityClazz, sorgente)) {
-            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, sorgente);
-            System.out.println(message);
-            return;
-        }
-
-        ottenutoBooleano = crudBackend.isExistByProperty(sorgente, value);
-        if (ottenutoBooleano) {
-            message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%s' della property [%s]", collectionName, value, sorgente);
+        if (annotationService.usaReset(entityClazz)) {
+            if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+                if (streamProperty != null) {
+                    streamProperty.forEach(parameters -> this.isExistByProperty(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamProperty");
+                    logger.warn(new WrapLog().message(message));
+                }
+            }
+            else {
+                message = String.format("La collection '%s' non prevede una key property", collectionName);
+                System.out.println(message);
+            }
         }
         else {
-            message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, value, sorgente);
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    protected void isExistByProperty(Arguments arg) {
+        Object objValue = null;
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (mat != null && mat.length > 1) {
+            objValue = mat[1];
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (mat != null && mat.length > 2 && mat[2] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (reflectionService.isEsiste(entityClazz, sorgente)) {
+            ottenutoBooleano = crudBackend.isExistByProperty(sorgente, objValue);
+            if (ottenutoBooleano) {
+                message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%s' della property [%s]", collectionName, objValue, sorgente);
+            }
+            else {
+                message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, objValue, sorgente);
+            }
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste la property [%s]", collectionName, sorgente);
         }
         System.out.println(message);
     }
 
-    //--nome (maiuscolo o minuscolo)
-    //--numero d'ordine
-    //--esiste
+
+    @Test
+    @Order(24)
+    @DisplayName("24 - isExistByOrder")
+    protected void isExistByOrder() {
+        System.out.println("24 - isExistByOrder");
+        System.out.println(VUOTA);
+
+        if (annotationService.usaReset(entityClazz)) {
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                if (streamOrder != null) {
+                    streamOrder.forEach(parameters -> this.isExistByOrder(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamOrder");
+                    logger.warn(new WrapLog().message(message));
+                }
+            }
+            else {
+                message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+                System.out.println(message);
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--value ordine
+    //--esiste entityBean
     protected void isExistByOrder(Arguments arg) {
         Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        sorgenteIntero = (int) mat[1];
-        previstoBooleano = (boolean) mat[2];
-
-        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
-            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
-            System.out.println(message);
-            return;
+        if (mat != null && mat.length > 0 && mat[0] instanceof Integer keyValue) {
+            sorgenteIntero = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 1 && mat[1] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
         }
 
-        ottenutoBooleano = crudBackend.isExistByOrder(sorgenteIntero);
         ottenutoBooleano = crudBackend.isExistByOrder(sorgenteIntero);
         if (ottenutoBooleano) {
             message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
@@ -355,10 +495,8 @@ public abstract class BackendTest extends AlgosTest {
             message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
         }
         System.out.println(message);
-        System.out.println(VUOTA);
         assertEquals(previstoBooleano, ottenutoBooleano);
     }
-
 
 
     @Test
@@ -371,10 +509,46 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println("34 - findByOrder");
     }
 
+    @Test
     @Order(31)
     @DisplayName("31 - findById")
-    protected AEntity findById(String keyId) {
-        sorgente = keyId;
+    protected void findById() {
+        System.out.println("31 - findById");
+        System.out.println(VUOTA);
+
+        if (annotationService.usaReset(entityClazz)) {
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.findById(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected void findById(Arguments arg) {
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 1 && mat[1] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
         entityBean = crudBackend.findById(sorgente);
         if (entityBean != null) {
             message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
@@ -383,84 +557,194 @@ public abstract class BackendTest extends AlgosTest {
             message = String.format("Nella collection '%s' NON esiste (false) nessuna entity con id = '%s'", collectionName, sorgente);
         }
         System.out.println(message);
-
-        return entityBean;
+        assertEquals(previstoBooleano, entityBean != null);
     }
 
-
+    @Test
     @Order(32)
     @DisplayName("32 - findByKey")
-    protected AEntity findByKey(String keyValue) {
-        sorgente = keyValue;
+    protected void findByKey() {
+        System.out.println("32 - findByKey");
+        System.out.println(VUOTA);
+
+        if (annotationService.usaReset(entityClazz)) {
+            if (streamCollection != null) {
+                streamCollection.forEach(parameters -> this.findByKey(parameters));
+            }
+            else {
+                message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome nella collection
+    //--esiste come ID
+    //--esiste come key
+    protected void findByKey(Arguments arg) {
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 2 && mat[2] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
 
         String keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
         if (textService.isEmpty(keyPropertyName)) {
             message = String.format("Nella collection '%s' non esiste la keyPropertyName", collectionName);
-            return null;
+            return;
         }
 
         entityBean = crudBackend.findByKey(sorgente);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE (true) una entity con la keyId = '%s'", collectionName, keyValue);
+            message = String.format("Nella collection '%s' ESISTE (true) una entity con l'id = '%s'", collectionName, entityBean.id);
         }
         else {
-            message = String.format("Nella collection '%s' NON esiste (false) nessuna entity con la keyId = '%s'", collectionName, keyValue);
+            message = String.format("Nella collection '%s' NON esiste (false) nessuna entity con id = '%s'", collectionName, sorgente);
         }
         System.out.println(message);
+        assertEquals(previstoBooleano, entityBean != null);
+    }
 
-        return entityBean;
+    @Test
+    @Order(33)
+    @DisplayName("33 - findByProperty")
+    protected void findByProperty() {
+        System.out.println("33 - findByProperty");
+        System.out.println(VUOTA);
+
+        if (annotationService.usaReset(entityClazz)) {
+            if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
+                if (streamProperty != null) {
+                    streamProperty.forEach(parameters -> this.findByProperty(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamProperty");
+                    logger.warn(new WrapLog().message(message));
+                }
+            }
+            else {
+                message = String.format("La collection '%s' non prevede una key property", collectionName);
+                System.out.println(message);
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
+            System.out.println(message);
+        }
+    }
+
+    //--nome della property
+    //--value della property
+    //--esiste entityBean
+    protected void findByProperty(Arguments arg) {
+        Object objValue = null;
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+            sorgente = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (mat != null && mat.length > 1) {
+            objValue = mat[1];
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (mat != null && mat.length > 2 && mat[2] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+
+        if (reflectionService.isEsiste(entityClazz, sorgente)) {
+            entityBean = crudBackend.findByProperty(sorgente, objValue);
+            if (entityBean != null) {
+                message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%s' della property [%s]", collectionName, objValue, sorgente);
+            }
+            else {
+                message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, objValue, sorgente);
+            }
+        }
+        else {
+            message = String.format("Nella collection '%s' non esiste la property [%s]", collectionName, sorgente);
+        }
+        System.out.println(message);
+        assertEquals(previstoBooleano, entityBean != null);
     }
 
 
-    @Order(33)
-    @DisplayName("33 - findByOrder")
-    protected AEntity findByOrder(int orderValue) {
-        sorgenteIntero = orderValue;
+    @Test
+    @Order(34)
+    @DisplayName("34 - findByOrder")
+    protected void findByOrder() {
+        System.out.println("34 - findByOrder");
+        System.out.println(VUOTA);
 
-        if (!reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
-            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+        if (annotationService.usaReset(entityClazz)) {
+            if (reflectionService.isEsiste(entityClazz, FIELD_NAME_ORDINE)) {
+                if (streamOrder != null) {
+                    streamOrder.forEach(parameters -> this.findByOrder(parameters));
+                }
+                else {
+                    message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamOrder");
+                    logger.warn(new WrapLog().message(message));
+                }
+            }
+            else {
+                message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, FIELD_NAME_ORDINE);
+                System.out.println(message);
+            }
+        }
+        else {
+            message = String.format("La collection '%s' ha il flag reset=false e non garantisce di avere valori che possano essere usati come test (potrebbe anche essere vuota)", collectionName);
             System.out.println(message);
-            return null;
+        }
+    }
+
+    //--value ordine
+    //--esiste entityBean
+    protected void findByOrder(Arguments arg) {
+        Object[] mat = arg.get();
+        if (mat != null && mat.length > 0 && mat[0] instanceof Integer keyValue) {
+            sorgenteIntero = keyValue;
+        }
+        else {
+            assertTrue(false);
+        }
+        if (mat != null && mat.length > 1 && mat[1] instanceof Boolean keyValue) {
+            previstoBooleano = keyValue;
+        }
+        else {
+            assertTrue(false);
         }
 
         entityBean = crudBackend.findByOrder(sorgenteIntero);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
-            System.out.println(message);
-            printValue(orderValue, entityBean.toString());
+            message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
         }
         else {
-            message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%d' della property [%s]", collectionName, orderValue, FIELD_NAME_ORDINE);
-            System.out.println(message);
-        }
-        System.out.println(VUOTA);
-
-        return entityBean;
-    }
-
-
-    @Order(34)
-    @DisplayName("34 - findByProperty")
-    protected AEntity findByProperty(String propertyName, Object propertyValue) {
-        sorgente = propertyName;
-
-        if (!reflectionService.isEsiste(entityClazz, propertyName)) {
-            message = String.format("Nella collection '%s' non esiste la property '%s'", collectionName, propertyName);
-            System.out.println(message);
-            return null;
-        }
-
-        entityBean = crudBackend.findByProperty(sorgente, propertyValue);
-        if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE una entity individuata dal valore '%s' della property [%s]", collectionName, propertyValue, propertyName);
-        }
-        else {
-            message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%s' della property [%s]", collectionName, propertyValue, propertyName);
+            message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
         }
         System.out.println(message);
-
-        return entityBean;
+        assertEquals(previstoBooleano, entityBean != null);
     }
+
 
     //Segnaposto
     @Order(35)

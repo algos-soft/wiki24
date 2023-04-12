@@ -63,7 +63,7 @@ public class AttSingolareView extends WikiView {
         super.gridPropertyNamesList = Arrays.asList("nome", "plurale", "ex", "numBio");
         super.formPropertyNamesList = Arrays.asList("nome", "plurale", "ex", "numBio");
 
-        super.usaBottoneReset = true;
+        super.usaBottoneReset = false;
         super.usaBottoneDeleteAll = false;
         this.usaBottoneElabora = true;
         super.usaBottoneDeleteEntity = false;
@@ -99,13 +99,11 @@ public class AttSingolareView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
 
-        message = String.format("Reset%sDownload", FORWARD);
+        message = String.format("Reset%sDownload.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%s2 moduli wiki: %s%s%s", FORWARD, PATH_SINGOLARE + PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
+        message = String.format("Download%sCancella tutto e poi scarica 2 moduli wiki: %s%s%s.", FORWARD, PATH_SINGOLARE + PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola attività singolare.", FORWARD);
-        addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sNon previsto.", FORWARD);
+        message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola attività singolare.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";

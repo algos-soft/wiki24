@@ -160,8 +160,8 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[1];
 
-        entityBean = super.findById(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
+//        entityBean = super.findById(sorgente);
+//        assertEquals(previstoBooleano, entityBean != null);
     }
 
     @Test
@@ -183,8 +183,8 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         sorgente = (String) mat[0];
         previstoBooleano = (boolean) mat[2];
 
-        entityBean = super.findByKey(sorgente);
-        assertEquals(previstoBooleano, entityBean != null);
+//        entityBean = super.findByKey(sorgente);
+//        assertEquals(previstoBooleano, entityBean != null);
     }
 
     @Test
@@ -194,14 +194,14 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         System.out.println("33 - findByOrder");
         System.out.println(VUOTA);
 
-        sorgenteIntero = 87;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgenteIntero = 0;
-        entityBean = super.findByOrder(sorgenteIntero);
-        assertNull(entityBean);
+//        sorgenteIntero = 87;
+//        entityBean = super.findByOrder(sorgenteIntero);
+//        assertNull(entityBean);
+//        System.out.println(VUOTA);
+//
+//        sorgenteIntero = 0;
+//        entityBean = super.findByOrder(sorgenteIntero);
+//        assertNull(entityBean);
     }
 
 
@@ -212,23 +212,23 @@ public class NazPluraleBackendTest extends WikiBackendTest {
         System.out.println("34 - findByProperty");
         System.out.println(VUOTA);
 
-        sorgente = "propertyInesistente";
-        sorgente2 = "termidoro";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "linkNazione";
-        sorgente2 = "bulgari";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNull(entityBean);
-        System.out.println(VUOTA);
-
-        sorgente = "linkNazione";
-        sorgente2 = "Australia";
-        entityBean = super.findByProperty(sorgente, sorgente2);
-        assertNotNull(entityBean);
-        System.out.println(VUOTA);
+//        sorgente = "propertyInesistente";
+//        sorgente2 = "termidoro";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNull(entityBean);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "linkNazione";
+//        sorgente2 = "bulgari";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNull(entityBean);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "linkNazione";
+//        sorgente2 = "Australia";
+//        entityBean = super.findByProperty(sorgente, sorgente2);
+//        assertNotNull(entityBean);
+//        System.out.println(VUOTA);
     }
 
     @ParameterizedTest

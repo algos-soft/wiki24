@@ -59,7 +59,7 @@ public class NazSingolareView extends WikiView {
         super.gridPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
         super.formPropertyNamesList = Arrays.asList("nome", "plurale", "numBio");
 
-        super.usaBottoneReset = true;
+        super.usaBottoneReset = false;
         super.usaBottoneDeleteAll = false;
         this.usaBottoneElabora = true;
         super.usaBottoneDeleteEntity = false;
@@ -90,13 +90,11 @@ public class NazSingolareView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità singolari sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
 
-        message = String.format("Reset%sDownload", FORWARD);
+        message = String.format("Reset%sDownload.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%s1 modulo wiki: %s", FORWARD, PATH_SINGOLARE + PATH_PLURALE + NAZ_LOWER);
+        message = String.format("Download%sCancella tutto e poi scarica 1 modulo wiki: %s.", FORWARD, PATH_SINGOLARE + PATH_PLURALE + NAZ_LOWER);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola nazionalità singolare.", FORWARD);
-        addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sNon previsto.", FORWARD);
+        message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola nazionalità singolare.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "Il download dei link alla pagina della nazione, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task NazPlurale.";
