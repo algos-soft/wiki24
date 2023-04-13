@@ -63,9 +63,9 @@ public class NazPluraleView extends WikiView {
         super.fixPreferenze();
 
         super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari",  "numBio", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "superaSoglia", "esisteLista");
 
-        super.usaBottoneReset = true;
+        super.usaBottoneReset = false;
         super.usaReset = true;
         super.usaBottoneDeleteAll = false;
         super.usaBottoneElabora = true;
@@ -97,21 +97,30 @@ public class NazPluraleView extends WikiView {
         anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
 
-        message = "Tabella nazionalità plurali del parametro 'nazionalità', ricavate dalla task NazSingolare. ";
+        message = "Tabella nazionalità plurali del parametro 'nazionalità', ricavate dalla task NazSingolare.";
         addSpan(ASpan.text(message).verde());
         message = "Tabella dei link alla pagina della nazione recuperati dal modulo plurale -> nazione sul server wiki.";
         addSpan(ASpan.text(message).verde());
-
         message = "Indipendentemente da come sono scritte nel modulo, tutte le nazionalità plurali sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
-        message = "ResetOnlyEmpty effettua preliminarmente il download e l'elaborazione delle attività singolari e poi il download dei link alle pagine delle nazioni.";
-        addSpan(ASpan.text(message).rosso().small());
-        message = "Il download effettua anche l'elaborazione che può comunque essere fatta separatamente.";
-        addSpan(ASpan.text(message).rosso().small());
-        message = "L'elaborazione di questa tabella calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni nazionalità";
-        addSpan(ASpan.text(message).rosso().small());
-        message = "L'upload delle liste elabora questa tabella e registra le statistiche.";
-        addSpan(ASpan.text(message).rosso().small());
+
+        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sEsegue un Download di NazSingolare.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sCrea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sAggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sScarica 1 modulo wiki: %s", FORWARD, PATH_LINK + NAZ_LOWER);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola nazionalità plurale e la effettiva presenza della paginaLista", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format( "Upload%sPrevisto per tutte le liste di nazionalità plurale con bio>50.",FORWARD);
+        addSpan(ASpan.text(message).verde());
+
+        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD,"Utente:Biobot/ModuloLinkNazionalita");
+        addSpan(ASpan.text(message).blue().small());
     }
 
 
@@ -154,7 +163,7 @@ public class NazPluraleView extends WikiView {
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
         Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
 
-        grid.setColumnOrder(nome, listaSingolari, paginaLista, linkNazione, numBio, numSingolari,superaSoglia, esisteLista);
+        grid.setColumnOrder(nome, listaSingolari, paginaLista, linkNazione, numBio, numSingolari, superaSoglia, esisteLista);
     }
 
     /**
@@ -162,7 +171,7 @@ public class NazPluraleView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void upload() {
-//        appContext.getBean(UploadNazionalita.class).uploadAll();
+        //        appContext.getBean(UploadNazionalita.class).uploadAll();
     }
 
     /**

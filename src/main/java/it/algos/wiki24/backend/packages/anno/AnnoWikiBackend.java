@@ -271,7 +271,7 @@ public class AnnoWikiBackend extends WikiBackend {
             }
         }
 
-        return super.fixElabora(result, inizio, "degli anni");
+        return super.fixElabora(result);
     }
 
     public Map elaboraValidi() {
@@ -358,7 +358,7 @@ public class AnnoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixReset(result, clazzName, lista, logInfo);
+        return super.fixReset(result, logInfo);
     }
 
 }// end of crud backend class

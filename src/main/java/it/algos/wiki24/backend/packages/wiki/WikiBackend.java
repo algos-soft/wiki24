@@ -254,6 +254,7 @@ public abstract class WikiBackend extends CrudBackend {
     public List findAllByPlurale(String plurale) {
         return super.findAllByProperty(FIELD_NAME_PLURALE, plurale);
     }
+
     public List<String> findAllForKeyByPlurale(String plurale) {
         return null;
     }
@@ -276,6 +277,12 @@ public abstract class WikiBackend extends CrudBackend {
      * Deve essere sovrascritto, senza invocare il metodo della superclasse <br>
      */
     public WResult download() {
+        if (durataDownload != null) {
+            int tempo = durataDownload.getInt();
+            message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, entityClazz.getSimpleName(), tempo, unitaMisuraDownload);
+            logger.debug(new WrapLog().message(message));
+        }
+
         return WResult.build().method("download").target(getClass().getSimpleName());
     }
 
@@ -325,17 +332,23 @@ public abstract class WikiBackend extends CrudBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
+        if (durataElaborazione != null) {
+            int tempo = durataElaborazione.getInt();
+            message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, entityClazz.getSimpleName(), tempo,unitaMisuraElaborazione);
+            logger.debug(new WrapLog().message(message));
+        }
+
         return WResult.build().method("elabora").target(getClass().getSimpleName());
     }
 
 
-    public AResult fixReset(AResult result, String clazzName, boolean logInfo) {
-        return fixReset(result, clazzName, result.getLista(), logInfo);
+    public AResult fixReset(AResult result, boolean logInfo) {
+        return fixReset(result, result.getLista(), logInfo);
     }
 
-    public AResult fixReset(AResult result, String clazzName, List lista, boolean logInfo) {
+    public AResult fixReset(AResult result,  List lista, boolean logInfo) {
         String collectionName = result.getTarget();
-        result = super.fixResult(result, clazzName, collectionName, lista, logInfo);
+        result = super.fixResult(result, entityClazz.getSimpleName(), collectionName, lista, logInfo);
 
         if (lastReset != null) {
             lastReset.setValue(LocalDateTime.now());
@@ -347,11 +360,9 @@ public abstract class WikiBackend extends CrudBackend {
         return result;
     }
 
-    public WResult fixDownload(WResult result, final long inizio) {
-        return fixDownload(result, VUOTA);
-    }
 
-    public WResult fixDownload(WResult result, String modulo) {
+    public WResult fixDownload(WResult result) {
+        String modulo = entityClazz.getSimpleName();
         result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
 
         if (lastDownload != null) {
@@ -404,11 +415,13 @@ public abstract class WikiBackend extends CrudBackend {
         }
     }
 
-    public WResult fixElabora(WResult result, final long inizio) {
-        return fixElabora(result, inizio, VUOTA);
+    public void fixDownloadModulo(String modulo) {
+        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, modulo)));
     }
 
-    public WResult fixElabora(WResult result, final long inizio, String modulo) {
+    public WResult fixElabora(WResult result) {
+        long inizio = result.getInizio();
+        String modulo = entityClazz.getSimpleName();
         result.typeLog(AETypeLog.elabora).typeResult(AETypeResult.elaborazioneValida).eseguito().fine().setIntValue(count());
 
         if (lastElaborazione != null) {

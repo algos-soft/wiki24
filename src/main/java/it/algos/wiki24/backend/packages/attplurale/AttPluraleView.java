@@ -61,7 +61,7 @@ public class AttPluraleView extends WikiView {
         super.gridPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
         super.formPropertyNamesList = Arrays.asList("nome", "listaSingolari", "numBio", "numSingolari", "superaSoglia", "esisteLista");
 
-        super.usaBottoneReset = true;
+        super.usaBottoneReset = false;
         super.usaReset = true;
         super.usaBottoneDeleteAll = false;
         super.usaBottoneElabora = true;
@@ -92,7 +92,7 @@ public class AttPluraleView extends WikiView {
         anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
 
-        message = "Tabella attività plurali del parametro 'attività', ricavate dalla task AttSingolare. ";
+        message = "Tabella attività plurali del parametro 'attività', ricavate dalla task AttSingolare.";
         addSpan(ASpan.text(message).verde());
         message = "Tabella dei link alla pagina dell'attività recuperati dal modulo plurale -> attività sul server wiki.";
         addSpan(ASpan.text(message).verde());
@@ -100,11 +100,17 @@ public class AttPluraleView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività plurali sono convertite in minuscolo.";
         addSpan(ASpan.text(message).rosso());
 
-        message = String.format("Reset%sPRIMA esegue un reset di AttSingolare, poi crea la tabella ricavandola dalle attività DISTINCT di AttSingolare, poi esegue un download", FORWARD);
+        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%s1 modulo wiki: %s", FORWARD, PATH_LINK + ATT_LOWER);
+        message = String.format("Download%sEsegue un Download di AttSingolare.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%scalcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività", FORWARD);
+        message = String.format("Download%sCrea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sAggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sScarica 1 modulo wiki: %s", FORWARD, PATH_LINK + ATT_LOWER);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola attività plurale e la effettiva presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
         message = String.format( "Upload%sPrevisto per tutte le liste di attività plurale con bio>50.",FORWARD);
         addSpan(ASpan.text(message).verde());

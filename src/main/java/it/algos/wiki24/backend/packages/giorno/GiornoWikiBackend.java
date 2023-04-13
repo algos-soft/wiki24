@@ -186,7 +186,7 @@ public class GiornoWikiBackend extends WikiBackend {
             update(giornoWiki);
         }
 
-        return super.fixElabora(result, inizio, "dei giorni");
+        return super.fixElabora(result);
     }
 
 
@@ -271,7 +271,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixReset(result, clazzName, lista, logInfo);
+        return super.fixReset(result, logInfo);
     }
 
 }// end of crud backend class

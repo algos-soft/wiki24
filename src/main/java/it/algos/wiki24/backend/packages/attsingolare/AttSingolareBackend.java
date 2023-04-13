@@ -43,7 +43,7 @@ public class AttSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.resetAttSingolare;
+        super.lastReset = null;
         super.lastDownload = WPref.downloadAttSingolare;
         super.durataDownload = WPref.downloadAttSingolareTime;
         super.lastElaborazione = WPref.elaboraAttSingolare;
@@ -176,42 +176,39 @@ public class AttSingolareBackend extends WikiBackend {
         return mappa;
     }
 
-    public WResult download() {
-        AResult result = resetForcing();
-        return WResult.aResult(result);
-    }
 
     /**
-     * Legge le mappa di valori dal modulo di wiki: <br>
-     * Modulo:Bio/Plurale attività
-     * Modulo:Bio/Ex attività
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
+     * Upload -> Non previsto. <br>
      * <p>
      * Cancella la (eventuale) precedente lista di attività singolari <br>
+     * Legge le mappa di valori dai moduli di wiki: <br>
+     * Modulo:Bio/Plurale attività
+     * Modulo:Bio/Ex attività
      */
-    public WResult downloadReset() {
+    public WResult download() {
         WResult result = super.download();
-        int tempo = WPref.downloadAttSingolareTime.getInt();
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, AttSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività singolari")));
+        //--Cancella la (eventuale) precedente lista di attività singolari
+        deleteAll();
 
-        result = downloadAttivitaNormale(result);
+        //--Scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività.
+        result = downloadAttivitaSingole(result);
         result = downloadAttivitaEx(result);
-        result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, "attività singolari");
-        return result;
+        return super.fixDownload(result);
     }
 
 
     /**
      * Legge le mappa dal Modulo:Bio/Plurale attività <br>
-     * Crea le attività normali <br>
+     * Crea le attività singolari normali <br>
      *
      * @return entities create
      */
-    public WResult downloadAttivitaNormale(WResult result) {
+    public WResult downloadAttivitaSingole(WResult result) {
         String moduloAttività = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String singolare;
         String plurale;
@@ -244,6 +241,7 @@ public class AttSingolareBackend extends WikiBackend {
             result.setIntValue(lista.size());
             result.setLista(lista);
             result.eseguito(lista.size() > 0);
+            super.fixDownloadModulo(moduloAttività);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloAttività);
@@ -294,6 +292,7 @@ public class AttSingolareBackend extends WikiBackend {
             result.eseguito(lista.size() > 0);
             result.setIntValue(result.getIntValue() + lista.size());
             result.getLista().addAll(lista);
+            super.fixDownloadModulo(moduloEx);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloEx);
@@ -319,26 +318,31 @@ public class AttSingolareBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
+     * Upload -> Non previsto. <br>
+     * <p>
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
         WResult result = super.elabora();
-        long inizio = System.currentTimeMillis();
-        int tempo = 2;
-
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, AttSingolare.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
 
         for (AttSingolare attivita : findAll()) {
             attivita.numBio = bioBackend.countAttivitaSingola(attivita.nome);
             update(attivita);
         }
 
-        return super.fixElabora(result, inizio, "attività singolari");
+        return super.fixElabora(result);
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
+     * Upload -> Non previsto. <br>
+     * <p>
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
      * Viene invocato alla creazione del programma <br>
@@ -348,16 +352,15 @@ public class AttSingolareBackend extends WikiBackend {
     @Override
     public AResult resetOnlyEmpty(boolean logInfo) {
         AResult result = super.resetOnlyEmpty(logInfo);
-        String clazzName = entityClazz.getSimpleName();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = this.downloadReset();
+            result = this.download();
         }
         else {
             return result;
         }
 
-        return super.fixReset(result, clazzName, logInfo);
+        return super.fixReset(result, logInfo);
     }
 
 }// end of crud backend class

@@ -112,7 +112,7 @@ public enum WPref implements AIGenPref {
     elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
-    statisticaAttivita("statisticaAttivita", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività."),
+    statisticaAttPlurale("statisticaAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività plurali."),
     statisticaNazPlurale("statisticaNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità plurali."),
 
 

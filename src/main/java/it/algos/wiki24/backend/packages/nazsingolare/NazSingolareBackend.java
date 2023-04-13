@@ -42,7 +42,7 @@ public class NazSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.resetNazSingolare;
+        super.lastReset = null;
         super.lastDownload = WPref.downloadNazSingolare;
         super.durataDownload = WPref.downloadNazSingolareTime;
         super.lastElaborazione = WPref.elaboraNazSingolare;
@@ -164,30 +164,27 @@ public class NazSingolareBackend extends WikiBackend {
         return mappa;
     }
 
-    public WResult download() {
-        AResult result = resetForcing();
-        return WResult.aResult(result);
-    }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
+     * Upload -> Non previsto. <br>
+     * <p>
+     * Cancella la (eventuale) precedente lista di attività singolari <br>
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale nazionalità
-     * <p>
-     * Cancella la (eventuale) precedente lista di attività <br>
      */
-    public WResult downloadReset() {
+    public WResult download() {
         WResult result = super.download();
-        int tempo = WPref.downloadNazSingolareTime.getInt();
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, NazSingolare.class.getSimpleName(), tempo, unitaMisuraDownload);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "nazionalità singolari")));
+        //--Cancella la (eventuale) precedente lista di nazionalità singolari
+        deleteAll();
 
+        //--Scarica 1 modulo wiki: Singolare/Plurale nazionalità.
         result = downloadNazionalita(result);
-        result.typeResult(AETypeResult.downloadValido);
 
-        result = super.fixDownload(result, "nazionalità singolari");
-        return result;
+        return super.fixDownload(result);
     }
 
 
@@ -199,8 +196,6 @@ public class NazSingolareBackend extends WikiBackend {
      */
     public WResult downloadNazionalita(WResult result) {
         String moduloNazionalità = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
-        //        List<AEntity> lista = null;
-        //        int size = 0;
         String singolare;
         String plurale;
         List lista = new ArrayList();
@@ -211,7 +206,6 @@ public class NazSingolareBackend extends WikiBackend {
         if (mappa != null && mappa.size() > 0) {
             deleteAll();
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
-                entityBean = null;
                 singolare = entry.getKey();
                 plurale = entry.getValue();
 
@@ -226,6 +220,7 @@ public class NazSingolareBackend extends WikiBackend {
             result.setIntValue(lista.size());
             result.setLista(lista);
             result.eseguito(lista.size() > 0);
+            super.fixDownloadModulo(moduloNazionalità);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloNazionalità);
@@ -244,26 +239,31 @@ public class NazSingolareBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
+     * Upload -> Non previsto. <br>
+     * <p>
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
         WResult result = super.elabora();
-        long inizio = System.currentTimeMillis();
-        int tempo = 2;
-
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, NazSingolare.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
 
         for (NazSingolare nazionalita : findAll()) {
             nazionalita.numBio = bioBackend.countNazionalita(nazionalita.nome);
             update(nazionalita);
         }
 
-        return super.fixElabora(result, inizio, "nazionalità singolari");
+        return super.fixElabora(result);
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
+     * Upload -> Non previsto. <br>
+     * <p>
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
      * Viene invocato alla creazione del programma <br>
@@ -272,17 +272,16 @@ public class NazSingolareBackend extends WikiBackend {
      */
     @Override
     public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(false);
-        String clazzName = entityClazz.getSimpleName();
+        AResult result = super.resetOnlyEmpty(logInfo);
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = this.downloadReset();
+            result = this.download();
         }
         else {
             return result;
         }
 
-        return super.fixReset(result, clazzName, logInfo);
+        return super.fixReset(result, logInfo);
     }
 
 }// end of crud backend class

@@ -45,7 +45,7 @@ public class NazPluraleBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.resetAttPlurale;
+        super.lastReset = null;
         super.lastDownload = WPref.downloadNazPlurale;
         super.durataDownload = WPref.downloadNazPluraleTime;
         super.lastElaborazione = WPref.elaboraNazPlurale;
@@ -170,21 +170,24 @@ public class NazPluraleBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di NazSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
+     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
+     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
+     * <p>
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link nazionalità
      */
     public WResult download() {
         WResult result = super.download();
-        int tempo = WPref.downloadNazPluraleTime.getInt();
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, NazPlurale.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "nazionalità plurali")));
-
+        //--Scarica 1 modulo wiki: Singolare/Link nazionalità.
         result = downloadNazionalitaLink(result);
-        result.typeResult(AETypeResult.downloadValido);
 
-        return super.fixDownload(result, "nazionalità plurali");
+        return super.fixDownload(result);
     }
 
     /**
@@ -196,7 +199,7 @@ public class NazPluraleBackend extends WikiBackend {
         String nazione;
         NazPlurale nazPlurale;
         //        Map<String, String> mappaSingolareNazione = wikiApiService.leggeMappaModulo(moduloLink);
-//        Map<String, String> mappaSingolarePlurale = nazSingolareBackend.getMappaSingolarePlurale();
+        //        Map<String, String> mappaSingolarePlurale = nazSingolareBackend.getMappaSingolarePlurale();
         Map<String, String> mappaPluraleNazione = new LinkedHashMap<>();
         String nazSingolareNome;
         String nazPluraleNome = VUOTA;
@@ -246,6 +249,7 @@ public class NazPluraleBackend extends WikiBackend {
             fixDiversi(listaDiversi);
             result.setLista(listaDiversi);
             result.setLista(listaMancanti);
+            super.fixDownloadModulo(moduloLink);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);
@@ -291,17 +295,20 @@ public class NazPluraleBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di NazSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
+     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
+     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
+     * <p>
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
         WResult result = super.elabora();
-        long inizio = System.currentTimeMillis();
-        int tempo = 75;
         List<NazSingolare> singolari;
-
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, NazPlurale.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
 
         for (NazPlurale nazPlurale : findAll()) {
             singolari = new ArrayList<>();
@@ -316,7 +323,7 @@ public class NazPluraleBackend extends WikiBackend {
             update(nazPlurale);
         }
 
-        return super.fixElabora(result, inizio, "nazionalità");
+        return super.fixElabora(result);
     }
 
 
@@ -329,6 +336,14 @@ public class NazPluraleBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di NazSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
+     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
+     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
+     * <p>
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
      * Viene invocato alla creazione del programma <br>

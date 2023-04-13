@@ -43,18 +43,20 @@ public class AttPluraleBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.resetAttPlurale;
+        super.lastReset = null;
         super.lastDownload = WPref.downloadAttPlurale;
         super.durataDownload = WPref.downloadAttPluraleTime;
         super.lastElaborazione = WPref.elaboraAttPlurale;
         super.durataElaborazione = WPref.elaboraAttPluraleTime;
+
         super.lastUpload = WPref.uploadAttPlurale;
         super.durataUpload = WPref.uploadAttPluraleTime;
         super.nextUpload = WPref.uploadAttPluralePrevisto;
-        super.lastStatistica = WPref.statisticaNazPlurale;
+        super.lastStatistica = WPref.statisticaAttPlurale;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
     /**
@@ -169,21 +171,63 @@ public class AttPluraleBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di AttSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
+     * Download -> Scarica 1 modulo wiki: Link attività <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
+     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
+     * <p>
+     * Esegue un Download di AttSingolare
+     * Cancella la (eventuale) precedente lista di attività plurali <br>
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link attività
      */
     public WResult download() {
-        WResult result = attSingolareBackend.download();
-        int tempo = WPref.downloadAttPluraleTime.getInt();
+        WResult result = super.download();
 
-        message = String.format("Initio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, AttPlurale.class.getSimpleName(), tempo, unitaMisuraDownload);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, "attività plurali")));
+        //--Esegue un Download di AttSingolare
+        WResult resultSingolari = attSingolareBackend.download();
 
+        //--Cancella la (eventuale) precedente lista di attività plurali
+        deleteAll();
+
+        //--Crea la tabella ricavandola dalle attività DISTINCT di AttSingolare
+        creaTabella(result);
+
+        //--Scarica 1 modulo wiki: Singolare/Link attività.
         result = downloadAttivitaLink(result);
-        result.typeResult(AETypeResult.downloadValido);
 
-        return super.fixDownload(result, "attività plurali");
+        return super.fixDownload(result);
+    }
+
+    /**
+     * Legge le mappa dal Modulo:Bio/Plurale attività <br>
+     * Crea le attività singolari normali <br>
+     *
+     * @return entities create
+     */
+    public WResult creaTabella(WResult result) {
+        List<String> nomiAttivitaPluraliDistinte = attSingolareBackend.findAllDistinctByPlurali();
+        List<AttSingolare> listaSingolari;
+        AEntity entityBean = null;
+        List lista = new ArrayList();
+
+        if (nomiAttivitaPluraliDistinte != null && nomiAttivitaPluraliDistinte.size() > 0) {
+            for (String plurale : nomiAttivitaPluraliDistinte) {
+                listaSingolari = attSingolareBackend.findAllByPlurale(plurale);
+                entityBean = insert(newEntity(plurale, listaSingolari));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", plurale))));
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -239,6 +283,7 @@ public class AttPluraleBackend extends WikiBackend {
             fixDiversi(listaDiversi);
             result.setLista(listaDiversi);
             result.setLista(listaMancanti);
+            super.fixDownloadModulo(moduloLink);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);
@@ -261,16 +306,19 @@ public class AttPluraleBackend extends WikiBackend {
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di AttSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
+     * Download -> Scarica 1 modulo wiki: Link attività <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
+     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
+     * <p>
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public WResult elabora() {
         WResult result = super.elabora();
-        long inizio = System.currentTimeMillis();
-        int tempo = 2;
-
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, AttPlurale.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
 
         for (AttPlurale attivita : findAll()) {
             attivita.numBio = 0;
@@ -283,10 +331,18 @@ public class AttPluraleBackend extends WikiBackend {
             update(attivita);
         }
 
-        return super.fixElabora(result, inizio, "attività plurali");
+        return super.fixElabora(result);
     }
 
     /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Esegue un Download di AttSingolare. <br>
+     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
+     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
+     * Download -> Scarica 1 modulo wiki: Link attività <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
+     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
+     * <p>
      * Creazione di alcuni dati <br>
      * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
      * Viene invocato alla creazione del programma <br>
@@ -332,7 +388,7 @@ public class AttPluraleBackend extends WikiBackend {
             }
         }
 
-        return super.fixReset(result, clazzName, lista, logInfo);
+        return super.fixReset(result, logInfo);
     }
 
 

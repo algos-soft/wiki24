@@ -66,7 +66,7 @@ public class AttivitaBackend extends WikiBackend {
         super.lastUpload = WPref.uploadAttPlurale;
         super.durataUpload = WPref.uploadAttPluraleTime;
         super.nextUpload = WPref.uploadAttPluralePrevisto;
-        super.lastStatistica = WPref.statisticaAttivita;
+        super.lastStatistica = WPref.statisticaAttPlurale;
 
         this.unitaMisuraDownload = AETypeTime.secondi;
         this.unitaMisuraElaborazione = AETypeTime.secondi;
@@ -474,7 +474,7 @@ public class AttivitaBackend extends WikiBackend {
         downloadAttivitaExtra(moduloEx);
         downloadAttivitaLink(moduloLink);
 
-        return super.fixDownload(result, "attività");
+        return super.fixDownload(result);
     }
 
 
