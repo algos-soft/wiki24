@@ -203,10 +203,7 @@ public class AttPluraleBackend extends WikiBackend {
     }
 
     /**
-     * Legge le mappa dal Modulo:Bio/Plurale attività <br>
-     * Crea le attività singolari normali <br>
-     *
-     * @return entities create
+     * Crea la tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
      */
     public WResult creaTabella(WResult result) {
         List<String> nomiAttivitaPluraliDistinte = attSingolareBackend.findAllDistinctByPlurali();
@@ -238,7 +235,7 @@ public class AttPluraleBackend extends WikiBackend {
     public WResult downloadAttivitaLink(WResult result) {
         String moduloLink = PATH_MODULO + PATH_LINK + ATT_LOWER;
         String attSingolareNome;
-        String attPluraleNome = VUOTA;
+        String attPluraleNome;
         String paginaAttivitaOld;
         String paginaAttivitaNew;
         AttSingolare attivitaSin;
@@ -352,40 +349,12 @@ public class AttPluraleBackend extends WikiBackend {
     @Override
     public AResult resetOnlyEmpty(boolean logInfo) {
         AResult result = super.resetOnlyEmpty(logInfo);
-        List<String> nomiAttivitaPluraliDistinte = null;
-        AEntity entityBean = null;
-        List lista = new ArrayList();
-        String clazzName = entityClazz.getSimpleName();
-        List<AttSingolare> listaSingolari;
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = attSingolareBackend.download();
+            result = this.download();
         }
         else {
             return result;
-        }
-
-        if (result.isValido()) {
-            nomiAttivitaPluraliDistinte = attSingolareBackend.findAllDistinctByPlurali();
-        }
-
-        if (nomiAttivitaPluraliDistinte != null && nomiAttivitaPluraliDistinte.size() > 0) {
-            for (String plurale : nomiAttivitaPluraliDistinte) {
-                listaSingolari = attSingolareBackend.findAllByPlurale(plurale);
-                try {
-                    entityBean = insert(newEntity(plurale, listaSingolari));
-                } catch (Exception unErrore) {
-                    message = String.format("Duplicate error key %", plurale);
-                    System.out.println(message);
-                    logger.error(new WrapLog().exception(new AlgosException(unErrore)));
-                }
-                if (entityBean != null) {
-                    lista.add(entityBean);
-                }
-                else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", plurale))));
-                }
-            }
         }
 
         return super.fixReset(result, logInfo);

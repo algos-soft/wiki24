@@ -35,16 +35,16 @@ import java.util.*;
 @AIEntity(collectionName = "nazplurale", keyPropertyName = "nome", usaReset = true)
 public class NazPlurale extends AEntity {
 
-    @AIField(type = AETypeField.text, header = "plurale", caption = "plurale", widthEM = 15)
+    @AIField(type = AETypeField.text, header = "plurale", caption = "plurale", widthEM = 20)
     public String nome;
 
-    @AIField(widthEM = 40)
+    @AIField(type = AETypeField.listaV, widthEM = 30)
     public List<NazSingolare> listaSingolari;
 
     @AIField(type = AETypeField.text, widthEM = 12)
     public String paginaLista;
 
-    @AIField(type = AETypeField.text, widthEM = 15)
+    @AIField(type = AETypeField.text, widthEM = 10)
     public String linkNazione;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano la stessa nazionalità plurale", widthEM = 6)

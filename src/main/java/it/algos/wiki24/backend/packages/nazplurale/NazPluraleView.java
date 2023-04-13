@@ -116,10 +116,10 @@ public class NazPluraleView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola nazionalità plurale e la effettiva presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format( "Upload%sPrevisto per tutte le liste di nazionalità plurale con bio>50.",FORWARD);
+        message = String.format("Upload%sPrevisto per tutte le liste di nazionalità plurale con bio>50.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD,"Utente:Biobot/ModuloLinkNazionalita");
+        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD, "Utente:Biobot/ModuloLinkNazionalita");
         addSpan(ASpan.text(message).blue().small());
     }
 
@@ -163,7 +163,7 @@ public class NazPluraleView extends WikiView {
         Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
         Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
 
-        grid.setColumnOrder(nome, listaSingolari, paginaLista, linkNazione, numBio, numSingolari, superaSoglia, esisteLista);
+        grid.setColumnOrder(nome, listaSingolari, numBio, paginaLista, linkNazione, numSingolari, superaSoglia, esisteLista);
     }
 
     /**

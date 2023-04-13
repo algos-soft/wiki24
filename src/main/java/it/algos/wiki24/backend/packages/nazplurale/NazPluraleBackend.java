@@ -75,6 +75,10 @@ public class NazPluraleBackend extends WikiBackend {
         return newEntity(keyPropertyValue, null, VUOTA, VUOTA);
     }
 
+    public NazPlurale newEntity(final String keyPropertyValue, List<NazSingolare> listaSingolari) {
+        return newEntity(keyPropertyValue, listaSingolari, VUOTA, VUOTA);
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -95,7 +99,7 @@ public class NazPluraleBackend extends WikiBackend {
                 .paginaLista(textService.isValid(paginaLista) ? paginaLista : textService.primaMaiuscola(nome))
                 .linkNazione(textService.isValid(linkNazione) ? linkNazione : null)
                 .numBio(0)
-                .numSingolari(0)
+                .numSingolari(listaSingolari != null ? listaSingolari.size() : 0)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
@@ -178,11 +182,22 @@ public class NazPluraleBackend extends WikiBackend {
      * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
      * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
      * <p>
+     * Esegue un Download di NazSingolare
+     * Cancella la (eventuale) precedente lista di nazionalità plurali <br>
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link nazionalità
      */
     public WResult download() {
         WResult result = super.download();
+
+        //--Esegue un Download di NazSingolare
+        WResult resultSingolari = nazSingolareBackend.download();
+
+        //--Cancella la (eventuale) precedente lista di nazionalità plurali
+        deleteAll();
+
+        //--Crea la tabella ricavandola dalle nazionalità DISTINCT di NazSingolare
+        creaTabella(result);
 
         //--Scarica 1 modulo wiki: Singolare/Link nazionalità.
         result = downloadNazionalitaLink(result);
@@ -190,25 +205,43 @@ public class NazPluraleBackend extends WikiBackend {
         return super.fixDownload(result);
     }
 
+
+    /**
+     * Crea la tabella ricavandola dalle nazionalità DISTINCT di NazSingolare <br>
+     */
+    public WResult creaTabella(WResult result) {
+        List<String> nomiNazionalitaPluraliDistinte = nazSingolareBackend.findAllDistinctByPlurali();
+        List<NazSingolare> listaSingolari;
+        AEntity entityBean = null;
+        List lista = new ArrayList();
+
+        if (nomiNazionalitaPluraliDistinte != null && nomiNazionalitaPluraliDistinte.size() > 0) {
+            for (String plurale : nomiNazionalitaPluraliDistinte) {
+                listaSingolari = nazSingolareBackend.findAllByPlurale(plurale);
+                entityBean = insert(newEntity(plurale, listaSingolari));
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", plurale))));
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Legge le mappa dal Modulo:Bio/Link nazionalità <br>
      */
     public WResult downloadNazionalitaLink(WResult result) {
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
-        String plurale;
-        String nazione;
-        NazPlurale nazPlurale;
-        //        Map<String, String> mappaSingolareNazione = wikiApiService.leggeMappaModulo(moduloLink);
-        //        Map<String, String> mappaSingolarePlurale = nazSingolareBackend.getMappaSingolarePlurale();
-        Map<String, String> mappaPluraleNazione = new LinkedHashMap<>();
         String nazSingolareNome;
-        String nazPluraleNome = VUOTA;
-        String paginaLista;
+        String nazPluraleNome;
         String paginaNazioneOld;
         String paginaNazioneNew;
         NazSingolare nazionalitaSin;
         NazPlurale nazionalitaPlur;
-        //        List lista = new ArrayList();
         List listaMancanti = new ArrayList();
         List listaDiversi = new ArrayList();
 
@@ -256,30 +289,6 @@ public class NazPluraleBackend extends WikiBackend {
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
-        //        if (mappaSingolareNazione != null && mappaSingolareNazione.size() > 0) {
-        //            for (String key : mappaSingolareNazione.keySet()) {
-        //                nazione = mappaSingolareNazione.get(key);
-        //                if (mappaSingolarePlurale.containsKey(key)) {
-        //                    plurale = mappaSingolarePlurale.get(key);
-        //                    mappaPluraleNazione.put(plurale, nazione);
-        //                }
-        //            }
-        //        }
-
-        //        if (mappaPluraleNazione != null && mappaPluraleNazione.size() > 0) {
-        //            for (String key : mappaPluraleNazione.keySet()) {
-        //                nazPlurale = findByKey(key);
-        //                if (nazPlurale != null) {
-        //                    nazPlurale.nazione = mappaPluraleNazione.get(key);
-        //                    update(nazPlurale);
-        //                }
-        //                else {
-        //                    message = String.format("Manca la nazionalità %s", key);
-        //                    System.out.println(message);
-        //                }
-        //            }
-        //        }
-
         return result;
     }
 
@@ -311,14 +320,8 @@ public class NazPluraleBackend extends WikiBackend {
         List<NazSingolare> singolari;
 
         for (NazPlurale nazPlurale : findAll()) {
-            singolari = new ArrayList<>();
-            nazPlurale.numBio = bioBackend.countNazionalita(nazPlurale.nome);
-            singolari.addAll(nazSingolareBackend.findAllByPlurale((nazPlurale.nome)));
-            nazPlurale.listaSingolari = singolari;
-
             nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
             nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);
-            nazPlurale.numSingolari = singolari.size();
 
             update(nazPlurale);
         }
@@ -352,53 +355,16 @@ public class NazPluraleBackend extends WikiBackend {
      */
     @Override
     public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(false);
-        String clazzName = entityClazz.getSimpleName();
-        String collectionName = result.getTarget();
-        List<NazSingolare> listaSingolari = nazSingolareBackend.findAll();
-        List<String> listaPlurali;
-        AEntity entityBean;
-        List<AEntity> lista;
+        AResult result = super.resetOnlyEmpty(logInfo);
 
-        if (nazSingolareBackend.count() < 1) {
-            AResult resultSingolare = nazSingolareBackend.resetOnlyEmpty(logInfo);
-            if (resultSingolare.isErrato()) {
-                logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'nazSingolare'")).usaDb());
-                return result.fine();
-            }
-        }
-
-        if (result.getTypeResult() == AETypeResult.collectionVuota && listaSingolari != null && listaSingolari.size() > 0) {
-            result.setValido(true);
-            lista = new ArrayList<>();
-            listaPlurali = new ArrayList<>();
-            for (NazSingolare nazSingola : listaSingolari) {
-                if (!listaPlurali.contains(nazSingola.plurale)) {
-                    listaPlurali.add(nazSingola.plurale);
-                }
-            }
-            if (listaPlurali.size() > 0) {
-                for (String nome : listaPlurali) {
-                    entityBean = insert(newEntity(nome));
-                    if (entityBean != null) {
-                        lista.add(entityBean);
-                    }
-                    else {
-                        logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                        result.setValido(false);
-                    }
-                }
-                result.setIntValue(lista.size());
-                result.setLista(lista);
-            }
+        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+            result = this.download();
         }
         else {
             return result;
         }
 
-        result = super.fixResult(result, clazzName, collectionName, lista, logInfo);
-        result = this.elabora();
-        return result;
+        return super.fixReset(result, logInfo);
     }
 
 }// end of crud backend class

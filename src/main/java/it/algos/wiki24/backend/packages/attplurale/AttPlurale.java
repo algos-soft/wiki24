@@ -48,7 +48,7 @@ public class AttPlurale extends AEntity {
     @AIField(type = AETypeField.listaV, widthEM = 30)
     public List<AttSingolare> listaSingolari;
 
-    @AIField(type = AETypeField.text, widthEM = 15)
+    @AIField(type = AETypeField.text, widthEM = 12)
     public String paginaLista;
 
     @AIField(type = AETypeField.text, widthEM = 10)
