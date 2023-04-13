@@ -215,7 +215,6 @@ public class WikiUtilityView extends UtilityView {
         Button bottone5 = new Button("NazPlurale");
         bottone5.getElement().setAttribute("theme", "primary");
         bottone5.addClickListener(event -> downloadNazionalitaPlurale());
-        bottone5.setEnabled(false);
 
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4, bottone5));
@@ -225,8 +224,8 @@ public class WikiUtilityView extends UtilityView {
     public void downloadAll() {
         downloadAttivitaSingolare();
         downloadAttivitaPlurale();
-        //        downloadNazionalitaSingolare();
-        //        downloadNazionalitaPlurale();
+        downloadNazionalitaSingolare();
+        downloadNazionalitaPlurale();
     }
 
 
@@ -236,7 +235,7 @@ public class WikiUtilityView extends UtilityView {
         String message;
         String task = AttSingolare.class.getSimpleName();
 
-        logger.info(new WrapLog().message("Utility: download delle attività singolari.").type(AETypeLog.download));
+        logger.info(new WrapLog().message("Utility: download delle attività singolari.").type(AETypeLog.utility));
         result = attSingolareBackend.download();
 
         if (result.isValido()) {
@@ -255,7 +254,7 @@ public class WikiUtilityView extends UtilityView {
         super.inizioDebug();
         WResult result;
         String message;
-        String task = Attivita.class.getSimpleName();
+        String task = AttPlurale.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle attività plurali.").type(AETypeLog.utility));
         result = attPluraleBackend.download();
@@ -276,7 +275,7 @@ public class WikiUtilityView extends UtilityView {
         super.inizioDebug();
         WResult result;
         String message;
-        String task = Nazionalita.class.getSimpleName();
+        String task = NazSingolare.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle nazionalità singolari.").type(AETypeLog.utility));
         result = nazSingolareBackend.download();
@@ -296,10 +295,10 @@ public class WikiUtilityView extends UtilityView {
         super.inizioDebug();
         WResult result;
         String message;
-        String task = Nazionalita.class.getSimpleName();
+        String task = NazPlurale.class.getSimpleName();
 
-        logger.info(new WrapLog().message("Utility: download delle nazionalità singolari.").type(AETypeLog.utility));
-        result = nazSingolareBackend.download();
+        logger.info(new WrapLog().message("Utility: download delle nazionalità plurali.").type(AETypeLog.utility));
+        result = nazPluraleBackend.download();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);

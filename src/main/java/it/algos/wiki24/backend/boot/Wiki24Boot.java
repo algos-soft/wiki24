@@ -223,10 +223,8 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(WikiUtilityView.class);
         VaadVar.menuRouteListProject.add(GiornoWikiView.class);
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
-        VaadVar.menuRouteListProject.add(AttivitaView.class);
         VaadVar.menuRouteListProject.add(AttSingolareView.class);
         VaadVar.menuRouteListProject.add(AttPluraleView.class);
-        VaadVar.menuRouteListProject.add(NazionalitaView.class);
         VaadVar.menuRouteListProject.add(NazSingolareView.class);
         VaadVar.menuRouteListProject.add(NazPluraleView.class);
 
