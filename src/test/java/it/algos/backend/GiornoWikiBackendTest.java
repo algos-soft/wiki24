@@ -238,6 +238,17 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
             print(listaStr.subList(0, num));
         }
     }
+    @Test
+    @Order(75)
+    @DisplayName("75 - findAllDistinctByPlurali (solo Attività e Nazionalità)")
+    protected void findAllDistinctByPlurali() {
+    }
+
+    @Test
+    @Order(91)
+    @DisplayName("91 - riordinaModulo (solo Attività e Nazionalità)")
+    protected void riordinaModulo() {
+    }
 
 
     @Override

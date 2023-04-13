@@ -163,6 +163,10 @@ public class NazPluraleBackend extends WikiBackend {
         return findAllForKeyBySingolari(keyValue);
     }
 
+    public List<String> findAllDistinctByPlurali() {
+        return findAllForKeySortKey();
+    }
+
     public Map<String, String> getMappaPluraleNazione() {
         Map<String, String> mappa = new LinkedHashMap<>();
 

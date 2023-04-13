@@ -160,6 +160,10 @@ public class AttPluraleBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    public List<String> findAllDistinctByPlurali() {
+        return findAllForKeySortKey();
+    }
+
     public Map<String, String> getMappaPluraleAttivita() {
         Map<String, String> mappa = new LinkedHashMap<>();
 
