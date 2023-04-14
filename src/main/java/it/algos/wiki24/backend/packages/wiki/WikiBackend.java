@@ -334,7 +334,7 @@ public abstract class WikiBackend extends CrudBackend {
     public WResult elabora() {
         if (durataElaborazione != null) {
             int tempo = durataElaborazione.getInt();
-            message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, entityClazz.getSimpleName(), tempo,unitaMisuraElaborazione);
+            message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, entityClazz.getSimpleName(), tempo, unitaMisuraElaborazione);
             logger.debug(new WrapLog().message(message));
         }
 
@@ -346,7 +346,7 @@ public abstract class WikiBackend extends CrudBackend {
         return fixReset(result, result.getLista(), logInfo);
     }
 
-    public AResult fixReset(AResult result,  List lista, boolean logInfo) {
+    public AResult fixReset(AResult result, List lista, boolean logInfo) {
         String collectionName = result.getTarget();
         result = super.fixResult(result, entityClazz.getSimpleName(), collectionName, lista, logInfo);
 
@@ -354,7 +354,8 @@ public abstract class WikiBackend extends CrudBackend {
             lastReset.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastReset è nullo")));
+            message = String.format("lastReset è nullo nel target %s", result.getTarget());
+            logger.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
         return result;
@@ -369,7 +370,8 @@ public abstract class WikiBackend extends CrudBackend {
             lastDownload.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastDownload è nullo")));
+            message = String.format("lastDownload è nullo nel target %s", result.getTarget());
+            logger.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
         if (durataDownload != null) {

@@ -271,7 +271,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixReset(result, logInfo);
+        return super.fixReset(result, lista,logInfo);
     }
 
 }// end of crud backend class
