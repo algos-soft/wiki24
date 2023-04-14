@@ -356,11 +356,8 @@ public class AttSingolareBackend extends WikiBackend {
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result = this.download();
         }
-        else {
-            return result;
-        }
 
-        return super.fixReset(result, logInfo);
+        return result;
     }
 
 }// end of crud backend class

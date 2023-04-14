@@ -87,6 +87,7 @@ public abstract class WikiTest extends AlgosTest {
     public BotLogin botLogin;
 
     protected CrudBackend crudBackend;
+
     protected WikiBackend wikiBackend;
 
     @Autowired
@@ -112,8 +113,10 @@ public abstract class WikiTest extends AlgosTest {
 
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+
     @Autowired
     public NazSingolareBackend nazSingolareBackend;
+
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 
@@ -720,7 +723,7 @@ public abstract class WikiTest extends AlgosTest {
         slf4jLogger = LoggerFactory.getLogger("wiki23.admin");
 
         initMocks();
-//        fixRiferimentiIncrociati();
+        //        fixRiferimentiIncrociati();
     }
 
     /**
@@ -750,25 +753,26 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(annoWikiBackend);
     }
 
-//    /**
-//     * Regola tutti riferimenti incrociati <br>
-//     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-//     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-//     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    protected void fixRiferimentiIncrociati() {
-//        super.fixRiferimentiIncrociati();
-//
-//        elaboraService.wikiBotService = wikiBotService;
-//        wikiUtility.queryService = queryService;
-//        wikiUtility.regexService = regexService;
-//        attivitaBackend.logger = logService;
-//        nazionalitaBackend.logger = logService;
-//        bioBackend.giornoBackend = giornoBackend;
-//        bioBackend.meseBackend = meseBackend;
-//        cognomeBackend.bioBackend = bioBackend;
-//    }
-//
+    //    /**
+    //     * Regola tutti riferimenti incrociati <br>
+    //     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
+    //     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
+    //     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+    //     */
+    //    protected void fixRiferimentiIncrociati() {
+    //        super.fixRiferimentiIncrociati();
+    //
+    //        elaboraService.wikiBotService = wikiBotService;
+    //        wikiUtility.queryService = queryService;
+    //        wikiUtility.regexService = regexService;
+    //        attivitaBackend.logger = logService;
+    //        nazionalitaBackend.logger = logService;
+    //        bioBackend.giornoBackend = giornoBackend;
+    //        bioBackend.meseBackend = meseBackend;
+    //        cognomeBackend.bioBackend = bioBackend;
+    //    }
+    //
+
     /**
      * Qui passa prima di ogni test delle sottoclassi <br>
      * Invocare PRIMA il metodo setUpEach() della superclasse <br>
@@ -886,7 +890,7 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.print(cont);
                 System.out.print(PARENTESI_TONDA_END);
                 System.out.print(SPAZIO);
-                System.out.println(bio.wikiTitle);
+                System.out.println(bio != null ? bio.wikiTitle : VUOTA);
             }
         }
     }

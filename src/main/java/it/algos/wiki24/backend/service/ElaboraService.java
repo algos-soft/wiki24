@@ -48,6 +48,10 @@ public class ElaboraService extends WAbstractService {
      */
     public Bio esegue(Bio bio) {
 
+        if (bio == null) {
+            return null;
+        }
+
         //--Recupera i valori base di tutti i parametri dal tmplBioServer
         Map<String, String> mappa = bioService.estraeMappa(bio);
 
@@ -63,7 +67,7 @@ public class ElaboraService extends WAbstractService {
     }
 
     public Bio fixErrori(Bio bio) {
-        if ( textService.isEmpty(bio.sesso)) {
+        if (textService.isEmpty(bio.sesso)) {
             bio.errato = true;
             bio.errore = AETypeBioError.sessoMancante;
             return bio;
@@ -78,7 +82,7 @@ public class ElaboraService extends WAbstractService {
             bio.errore = AETypeBioError.sessoErrato;
             return bio;
         }
-        if ( textService.isEmpty(bio.ordinamento)) {
+        if (textService.isEmpty(bio.ordinamento)) {
             bio.errato = true;
             bio.errore = AETypeBioError.mancaOrdinamento;
             return bio;
@@ -94,7 +98,7 @@ public class ElaboraService extends WAbstractService {
      * Quello che resta è affidabile e utilizzabile per le liste <br>
      */
     public Bio esegueSave(Bio bio) {
-        return (Bio)bioBackend.save(esegue(bio));
+        return (Bio) bioBackend.save(esegue(bio));
     }
 
     //--Inserisce i valori nella entity Bio

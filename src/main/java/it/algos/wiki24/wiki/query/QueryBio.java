@@ -1,6 +1,7 @@
 package it.algos.wiki24.wiki.query;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
@@ -81,16 +82,6 @@ public class QueryBio extends AQuery {
         return result;
     }
 
-    /**
-     * Wrap della pagina biografica <br>
-     *
-     * @param wikiTitleGrezzoBio della pagina biografica wiki (necessita di codifica) usato nella urlRequest. Non accetta il separatore PIPE
-     *
-     * @return wrap della pagina
-     */
-    public WrapBio getWrap(final String wikiTitleGrezzoBio) {
-        return urlRequest(wikiTitleGrezzoBio).getWrap();
-    }
 
     /**
      * Request principale <br>
@@ -109,6 +100,18 @@ public class QueryBio extends AQuery {
         return requestGetPage(WIKI_QUERY_BASE_PAGE, pageid);
     }
 
+
+    /**
+     * Wrap della pagina biografica <br>
+     *
+     * @param wikiTitleGrezzoBio della pagina biografica wiki (necessita di codifica) usato nella urlRequest. Non accetta il separatore PIPE
+     *
+     * @return wrap della pagina
+     */
+    public WrapBio getWrap(final String wikiTitleGrezzoBio) {
+        return urlRequest(wikiTitleGrezzoBio).getWrap();
+    }
+
     /**
      * Wrap della pagina biografica <br>
      *
@@ -120,20 +123,6 @@ public class QueryBio extends AQuery {
         return urlRequest(pageid).getWrap();
     }
 
-    /**
-     * Bio della pagina biografica <br>
-     *
-     * @param pageid della pagina wiki usato nella urlRequest
-     *
-     * @return bio della pagina
-     */
-    public Bio getBio(final long pageid) {
-        Bio bio;
-        WrapBio wrap = getWrap(pageid);
-        bio = bioBackend.newEntity(wrap);
-        bio = elaboraService.esegue(bio);
-        return bio;
-    }
 
     /**
      * Bio della pagina biografica <br>
@@ -159,6 +148,45 @@ public class QueryBio extends AQuery {
         return bio;
     }
 
+    /**
+     * Bio della pagina biografica <br>
+     *
+     * @param pageid della pagina wiki usato nella urlRequest
+     *
+     * @return bio della pagina
+     */
+    public Bio getBio(final long pageid) {
+        Bio bio;
+        WrapBio wrap = getWrap(pageid);
+        bio = bioBackend.newEntity(wrap);
+        bio = elaboraService.esegue(bio);
+        return bio;
+    }
+
+    /**
+     * Testo del template bio della pagina <br>
+     *
+     * @param wikiTitleGrezzoBio della pagina biografica wiki (necessita di codifica) usato nella urlRequest. Non accetta il separatore PIPE
+     *
+     * @return Testo del template bio della pagina
+     */
+    public String getTmplBio(final String wikiTitleGrezzoBio) {
+        Bio bio = getBio(wikiTitleGrezzoBio);
+        return bio != null ? bio.getTmplBio() : VUOTA;
+    }
+
+
+    /**
+     * Testo del template bio della pagina <br>
+     *
+     * @param pageid della pagina wiki usato nella urlRequest
+     *
+     * @return Testo del template bio della pagina
+     */
+    public String getTmplBio(final long pageid) {
+        Bio bio = getBio(pageid);
+        return bio != null ? bio.getTmplBio() : VUOTA;
+    }
 
     /**
      * Elabora la risposta <br>
