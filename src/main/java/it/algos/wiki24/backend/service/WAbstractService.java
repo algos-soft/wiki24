@@ -4,11 +4,13 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.doppionome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -83,6 +85,8 @@ public class WAbstractService extends AbstractService {
      */
     @Autowired
     public AttivitaBackend attivitaBackend;
+    @Autowired
+    public AttSingolareBackend attSingolareBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -91,6 +95,8 @@ public class WAbstractService extends AbstractService {
      */
     @Autowired
     public NazionalitaBackend nazionalitaBackend;
+    @Autowired
+    public NazSingolareBackend nazSingolareBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>

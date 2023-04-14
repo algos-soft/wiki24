@@ -203,6 +203,20 @@ public abstract class WikiTest extends AlgosTest {
     protected LinkedHashMap<String, List<WrapLista>> mappaWrap;
 
 
+    //--nome della pagina
+    //--esiste sul server wiki
+    public static Stream<Arguments> PAGINA() {
+        return Stream.of(
+                Arguments.of(VUOTA, false),
+                Arguments.of("paginaInesistente", false),
+                Arguments.of("Matteo Salvini", true),
+                Arguments.of("Matteo Renzi", true),
+                Arguments.of("Charles Collins", true),
+                Arguments.of("Bernadette Soubirous", true)
+
+        );
+    }
+
     //--valore grezzo
     //--valore valido
     protected static Stream<Arguments> NOMI() {
@@ -1211,6 +1225,26 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.println(VUOTA);
             }
         }
+    }
+
+    protected void printBio(Bio bio) {
+        System.out.println(String.format("wikiTitle: %s", bio.wikiTitle));
+        System.out.println(String.format("pageId: %s", bio.pageId));
+        System.out.println(String.format("nome: %s", textService.isValid(bio.nome)?bio.nome:VUOTA));
+        System.out.println(String.format("cognome: %s", textService.isValid(bio.cognome)?bio.cognome:VUOTA));
+        System.out.println(String.format("sesso: %s", textService.isValid(bio.sesso)?bio.sesso:VUOTA));
+        System.out.println(String.format("luogoNato: %s", textService.isValid(bio.luogoNato)?bio.luogoNato:VUOTA));
+        System.out.println(String.format("luogoNatoLink: %s", textService.isValid(bio.luogoNatoLink)?bio.luogoNatoLink:VUOTA));
+        System.out.println(String.format("giornoNato: %s", textService.isValid(bio.giornoNato)?bio.giornoNato:VUOTA));
+        System.out.println(String.format("annoNato: %s", textService.isValid(bio.annoNato)?bio.annoNato:VUOTA));
+        System.out.println(String.format("luogoMorto: %s", textService.isValid(bio.luogoMorto)?bio.luogoMorto:VUOTA));
+        System.out.println(String.format("luogoMortoLink: %s", textService.isValid(bio.luogoMortoLink)?bio.luogoMortoLink:VUOTA));
+        System.out.println(String.format("giornoMorto: %s", textService.isValid(bio.giornoMorto)?bio.giornoMorto:VUOTA));
+        System.out.println(String.format("annoMorto: %s", textService.isValid(bio.annoMorto)?bio.annoMorto:VUOTA));
+        System.out.println(String.format("attivita: %s", textService.isValid(bio.attivita)?bio.attivita:VUOTA));
+        System.out.println(String.format("attivita2: %s", textService.isValid(bio.attivita2)?bio.attivita2:VUOTA));
+        System.out.println(String.format("attivita3: %s", textService.isValid(bio.attivita3)?bio.attivita3:VUOTA));
+        System.out.println(String.format("nazionalita: %s", textService.isValid(bio.nazionalita)?bio.nazionalita:VUOTA));
     }
 
     protected void printMappaBio(Map<String, String> mappa) {

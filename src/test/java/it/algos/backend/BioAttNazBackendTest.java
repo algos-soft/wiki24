@@ -92,10 +92,10 @@ public class BioAttNazBackendTest extends WikiTest {
     protected void creaBiografieIniziali() {
 
         if (!backend.isExist(BIO_RENZI_PAGEID)) {
-            bioRenzi = queryService.getBio(BIO_RENZI_PAGEID);
+            bioRenzi = queryService.getBioGrezzo(BIO_RENZI_PAGEID);
         }
         if (!backend.isExist(BIO_SALVINI_PAGEID)) {
-            bioSalvini = queryService.getBio(BIO_SALVINI_PAGEID);
+            bioSalvini = queryService.getBioGrezzo(BIO_SALVINI_PAGEID);
         }
     }
 

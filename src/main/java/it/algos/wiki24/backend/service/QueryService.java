@@ -110,12 +110,12 @@ public class QueryService extends WAbstractService {
         return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo).getTemplBio();
     }
 
-    public Bio getBio(final String wikiTitleGrezzo) {
-        return appContext.getBean(QueryBio.class).getBio(wikiTitleGrezzo);
+    public Bio getBioGrezzo(final String wikiTitleGrezzo) {
+        return appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
     }
 
-    public Bio getBio(final Long pageId) {
-        return appContext.getBean(QueryBio.class).getBio(pageId);
+    public Bio getBioGrezzo(final Long pageId) {
+        return appContext.getBean(QueryBio.class).getBioGrezzo(pageId);
     }
 
     public boolean isEsiste(final String wikiTitleGrezzo) {
@@ -123,7 +123,7 @@ public class QueryService extends WAbstractService {
     }
 
     public boolean isBio(final String wikiTitleGrezzo) {
-        return getBio(wikiTitleGrezzo) != null;
+        return getBioGrezzo(wikiTitleGrezzo) != null;
     }
 
     public List<String> getList(final String tagIniziale) {

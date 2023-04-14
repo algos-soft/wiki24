@@ -51,16 +51,6 @@ public class QueryBioTest extends WikiTest {
 
     private String tmplBio;
 
-    //--nome della pagina
-    //--esiste sul server wiki
-    public static Stream<Arguments> PAGINA() {
-        return Stream.of(
-                Arguments.of(VUOTA, false),
-                Arguments.of("paginaInesistente", false),
-                Arguments.of("Matteo Salvini", true),
-                Arguments.of("Matteo Renzi", true)
-        );
-    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -182,7 +172,7 @@ public class QueryBioTest extends WikiTest {
             assertTrue(false);
         }
 
-        bio = appContext.getBean(QueryBio.class).getBio(sorgente);
+        bio = appContext.getBean(QueryBio.class).getBioGrezzo(sorgente);
         if (bio != null) {
             message = String.format("[%s]: Sono riuscito a recuperare una Bio dal wikiTitle%s%s", sorgente, FORWARD, sorgente);
         }

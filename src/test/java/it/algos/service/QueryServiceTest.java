@@ -284,7 +284,7 @@ public class QueryServiceTest extends WikiTest {
     @DisplayName("15 - singola biografia")
     void getBio() {
         sorgente = BIO_RENZI;
-        bio = service.getBio(sorgente);
+        bio = service.getBioGrezzo(sorgente);
         assertNotNull(bio);
         System.out.println(String.format("Trovata la biografia [[%s]] su wikipedia", sorgente));
     }

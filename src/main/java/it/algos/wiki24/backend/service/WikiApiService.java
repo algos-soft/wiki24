@@ -593,9 +593,10 @@ public class WikiApiService extends WAbstractService {
     }
 
     public Bio downloadAndSave(String wikiTitle) {
-        Bio bio = this.queryService.getBio(wikiTitle);
+        Bio bio = this.queryService.getBioGrezzo(wikiTitle);
 
         if (bio != null) {
+            bio=elaboraService.esegue(bio);
             bio = elaboraService.esegueSave(bio);
         }
 

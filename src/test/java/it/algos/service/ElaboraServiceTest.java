@@ -10,6 +10,8 @@ import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.mockito.InjectMocks;
 
 import org.springframework.beans.factory.annotation.*;
@@ -73,13 +75,13 @@ public class ElaboraServiceTest extends WikiTest {
      * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-//    @Override
-//    protected void fixRiferimentiIncrociati() {
-//        super.fixRiferimentiIncrociati();
-//        giornoWikiBackend.lastElaborazione = WPref.elaboraGiorni;
-//        giornoWikiBackend.durataElaborazione = WPref.elaboraGiorniTime;
-//
-//    }
+    //    @Override
+    //    protected void fixRiferimentiIncrociati() {
+    //        super.fixRiferimentiIncrociati();
+    //        giornoWikiBackend.lastElaborazione = WPref.elaboraGiorni;
+    //        giornoWikiBackend.durataElaborazione = WPref.elaboraGiorniTime;
+    //
+    //    }
 
     /**
      * Qui passa a ogni test delle sottoclassi <br>
@@ -91,12 +93,34 @@ public class ElaboraServiceTest extends WikiTest {
         super.setUpEach();
     }
 
-
-    @Test
+    @ParameterizedTest
     @Order(1)
-    @DisplayName("1 - elabora giorni")
+    @MethodSource(value = "PAGINA")
+    @DisplayName("1 - esegue")
+        //--nome della pagina
+        //--esiste sul server wiki
+    void esegue(String nomePagina, boolean esiste) {
+        System.out.println("1 - esegue");
+        sorgente = nomePagina;
+        previstoBooleano = esiste;
+
+        if (previstoBooleano && textService.isValid(sorgente)) {
+            bio = queryService.getBioGrezzo(sorgente);
+            bio = service.esegue(bio);
+        }
+        else {
+            return;
+        }
+
+        printBio(bio);
+        System.out.println(message);
+    }
+
+//    @Test
+    @Order(91)
+    @DisplayName("91 - elabora giorni")
     void elaboraGiorni() {
-        System.out.println("1 - elabora giorni");
+        System.out.println("91 - elabora giorni");
         System.out.println(VUOTA);
         System.out.println("Elabora controlla solo il numero di voci biografiche per ogni giorno");
         System.out.println("Non effettua controlli sulle pagine esistenti o meno sul server");
@@ -106,11 +130,11 @@ public class ElaboraServiceTest extends WikiTest {
         giornoWikiBackend.elabora();
     }
 
-    @Test
-    @Order(2)
-    @DisplayName("2 - elabora anni")
+//    @Test
+    @Order(92)
+    @DisplayName("92 - elabora anni")
     void elaboraAnni() {
-        System.out.println("2 - elabora giorni");
+        System.out.println("92 - elabora giorni");
         System.out.println(VUOTA);
         System.out.println("Elabora controlla solo il numero di voci biografiche per ogni anno");
         System.out.println("Effettua controlli sulle pagine esistenti o meno sul server");

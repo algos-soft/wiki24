@@ -131,7 +131,7 @@ public class QueryBio extends AQuery {
      *
      * @return bio della pagina
      */
-    public Bio getBio(final String wikiTitleGrezzoBio) {
+    public Bio getBioGrezzo(final String wikiTitleGrezzoBio) {
         Bio bio = null;
         WrapBio wrap;
 
@@ -142,7 +142,6 @@ public class QueryBio extends AQuery {
         wrap = getWrap(wikiTitleGrezzoBio);
         if (wrap != null) {
             bio = bioBackend.newEntity(wrap);
-            bio = elaboraService.esegue(bio);
         }
 
         return bio;
@@ -155,11 +154,19 @@ public class QueryBio extends AQuery {
      *
      * @return bio della pagina
      */
-    public Bio getBio(final long pageid) {
-        Bio bio;
-        WrapBio wrap = getWrap(pageid);
-        bio = bioBackend.newEntity(wrap);
-        bio = elaboraService.esegue(bio);
+    public Bio getBioGrezzo(final long pageid) {
+        Bio bio = null;
+        WrapBio wrap;
+
+        if (pageid < 1) {
+            return null;
+        }
+
+        wrap = getWrap(pageid);
+        if (wrap != null) {
+            bio = bioBackend.newEntity(wrap);
+        }
+
         return bio;
     }
 
@@ -171,7 +178,7 @@ public class QueryBio extends AQuery {
      * @return Testo del template bio della pagina
      */
     public String getTmplBio(final String wikiTitleGrezzoBio) {
-        Bio bio = getBio(wikiTitleGrezzoBio);
+        Bio bio = getBioGrezzo(wikiTitleGrezzoBio);
         return bio != null ? bio.getTmplBio() : VUOTA;
     }
 
@@ -184,7 +191,7 @@ public class QueryBio extends AQuery {
      * @return Testo del template bio della pagina
      */
     public String getTmplBio(final long pageid) {
-        Bio bio = getBio(pageid);
+        Bio bio = getBioGrezzo(pageid);
         return bio != null ? bio.getTmplBio() : VUOTA;
     }
 
