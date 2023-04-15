@@ -62,10 +62,10 @@ public class ElaboraService extends WAbstractService {
         //--Inserisce i valori nella entity Bio
         if (mappa != null) {
             setValue(bio, mappa);
+            bio.elaborato = true;
+            bio = fixErrori(bio);
         }
 
-        bio.elaborato = true;
-        bio = fixErrori(bio);
         return bio;
     }
 

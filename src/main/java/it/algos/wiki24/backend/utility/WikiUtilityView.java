@@ -17,10 +17,12 @@ import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -56,6 +58,15 @@ public class WikiUtilityView extends UtilityView {
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 
+    @Autowired
+    public ElaboraService elaboraService;
+
+    @Autowired
+    public BioService bioService;
+
+    @Autowired
+    public BioBackend bioBackend;
+
 
     @Override
     public void body() {
@@ -64,6 +75,7 @@ public class WikiUtilityView extends UtilityView {
         this.paragrafoDownloadModuli();
         this.paragrafoDownloadBiografie();
         this.paragrafoElaborazione();
+        this.paragrafoElaborazioneBiografie();
         this.paragrafoUploadListe();
         this.paragrafoUploadStatistiche();
     }
@@ -472,6 +484,34 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
+    public void paragrafoElaborazioneBiografie() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setMargin(false);
+        layout.setPadding(false);
+        layout.setSpacing(false);
+        String message;
+        H3 paragrafo = new H3("Elaborazione di tutte le biografie");
+        paragrafo.getElement().getStyle().set("color", "blue");
+        List<String> listaClazz;
+
+        Button bottone = new Button("Elabora");
+        bottone.getElement().setAttribute("theme", "primary");
+        bottone.addClickListener(event -> elaboraBio());
+
+        this.add(paragrafo);
+        layout.add(new HorizontalLayout(bottone));
+        this.add(layout);
+    }
+
+    public void elaboraBio() {
+        int elaborate = 0;
+        logger.info(new WrapLog().message("Utility: elaborazione delle biografie.").type(AETypeLog.utility));
+
+        for (Bio bio : bioBackend.findAllAll()) {
+            elaboraService.esegueSave(bio);
+            elaborate = elaborate + 1;
+        }
+    }
 
     public void paragrafoUploadListe() {
         VerticalLayout layout = new VerticalLayout();

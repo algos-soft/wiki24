@@ -122,6 +122,10 @@ public class BioService extends WAbstractService {
             return null;
         }
         tmplBio = bio.getTmplBio();
+        if (textService.isEmpty(tmplBio)) {
+            logger.warn(new WrapLog().message(String.format("Manca il tmplBio nella voce %s", bio.wikiTitle)));
+            return null;
+        }
 
         if (tmplBio.startsWith(DOPPIE_GRAFFE_INI) && tmplBio.endsWith(DOPPIE_GRAFFE_END)) {
             tmplBio = textService.setNoDoppieGraffe(tmplBio);
