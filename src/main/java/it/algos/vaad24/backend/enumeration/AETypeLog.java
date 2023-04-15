@@ -52,6 +52,7 @@ public enum AETypeLog implements AIType {
     schedule("schedule"),
     flow("flow"),
     utility("utility"),
+    ideJar("ideJar"),
     ;
 
     private String tag;
