@@ -192,4 +192,13 @@ public abstract class AbstractService {
     @Autowired
     public BeanService beanService;
 
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
+     * al termine del ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public JarFileService jarFileService;
+
 }

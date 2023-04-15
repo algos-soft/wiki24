@@ -347,11 +347,6 @@ public class ClassService extends AbstractService {
         moduleName = textService.primaMinuscola(moduleName);
         allPath = fileService.getAllSubFilesJava(moduleName + tagFinale);
 
-        //@todo da levare
-        for (String stringa : allPath) {
-            logger.info(new WrapLog().type(AETypeLog.ideJar).message(String.format(stringa)));;
-        }
-
         if (allPath != null) {
             allClazz = new ArrayList<>();
             for (String canonicalName : allPath) {

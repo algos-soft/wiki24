@@ -1712,7 +1712,7 @@ public class FileService extends AbstractService {
     /**
      * Crea una lista di tutte le Entity esistenti nella directory packages <br>
      */
-    public List<String> getAllSubFilesEntity(String path) {
+    public List<String> getAllSubFilesEntity(String path)  {
         return getAllSubFilesJava(path)
                 .stream()
                 .filter(n -> !n.endsWith(SUFFIX_BACKEND))
@@ -1726,8 +1726,8 @@ public class FileService extends AbstractService {
         List<String> allPath = new ArrayList<>();
         String tagFinale = "/backend/packages";
 
-        allPath.addAll(getAllSubFilesJava(VaadVar.moduloVaadin24 + tagFinale));
-        allPath.addAll(getAllSubFilesJava(VaadVar.projectNameModulo + tagFinale));
+        allPath.addAll( getAllSubFilesJava( VaadVar.moduloVaadin24 + tagFinale));
+        allPath.addAll( getAllSubFilesJava(  VaadVar.projectNameModulo + tagFinale));
 
         return allPath;
     }
@@ -1739,11 +1739,9 @@ public class FileService extends AbstractService {
      */
     public List<String> getAllSubFilesJava(String path) {
         if (reflectionService.isJarRunning()) {
-            logger.info(new WrapLog().type(AETypeLog.ideJar).message(String.format("Sto girando da JAR ed il path è %s", PATH_PREFIX_ALGOS + path)));
             return getAllSubFilesJavaJAR(PATH_PREFIX_ALGOS + path);
         }
         else {
-            logger.info(new WrapLog().type(AETypeLog.ideJar).message(String.format("Sto girando da IDE ed il path è %s", PATH_PREFIX + path)));
             return getAllSubFilesJavaIDE(PATH_PREFIX + path);
         }
     }
@@ -1806,16 +1804,14 @@ public class FileService extends AbstractService {
         List<String> listaPathNamesOnlyFiles = new ArrayList<>();
         List<String> listaAllPathNames = null;
         File unaDirectory = new File(path);
-        Path start;
+        Path start = Paths.get(unaDirectory.getAbsolutePath());
 
-        if (reflectionService.isJarRunning()) {
-            start = Paths.get(unaDirectory.getPath());
+        try {
+            listaAllPathNames = recursionSubPathNames(start);
+        } catch (Exception unErrore) {
+            //            throw AlgosException.crea(unErrore);
+            int a = 87;
         }
-        else {
-            start = Paths.get(unaDirectory.getAbsolutePath());
-        }
-
-        listaAllPathNames = recursionSubPathNames(start);
 
         if (arrayService.isAllValid(listaAllPathNames)) {
             for (String pathName : listaAllPathNames) {
@@ -1860,7 +1856,6 @@ public class FileService extends AbstractService {
         }
 
         pathPackage = getPathDir(nomeModulo);
-
         return getAllSubPathFiles(pathPackage);
     }
 
@@ -1875,15 +1870,9 @@ public class FileService extends AbstractService {
             return null;
         }
 
-        if (reflectionService.isJarRunning()) {
-            pathDir = PATH_PREFIX_ALGOS;
-            pathDir += nomeDirectory + SLASH;
-        }
-        else {
-            pathDir = System.getProperty("user.dir") + SLASH;
-            pathDir += PATH_PREFIX;
-            pathDir += nomeDirectory + SLASH;
-        }
+        pathDir += System.getProperty("user.dir") + SLASH;
+        pathDir += PATH_PREFIX;
+        pathDir += nomeDirectory + SLASH;
 
         return pathDir;
     }
@@ -1980,6 +1969,7 @@ public class FileService extends AbstractService {
         if (simpleName.endsWith(JAVA_SUFFIX)) {
             simpleName = textService.levaCoda(simpleName, JAVA_SUFFIX);
         }
+        simpleName = textService.primaMaiuscola(simpleName);
 
         listaPath = getPathBreveAllPackageFiles();
         if (listaPath == null || listaPath.size() < 1) {
@@ -2036,25 +2026,14 @@ public class FileService extends AbstractService {
      *
      * @return path name completo
      */
-    public List<String> recursionSubPathNames(Path start) {
-        List<String> collect = null;
-        Stream<Path> stream = null;
+    public List<String> recursionSubPathNames(Path start) throws IOException {
+        List<String> collect;
 
-        try {
-            stream = Files.walk(start, Integer.MAX_VALUE);
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)));
-            logger.warn(new WrapLog().message(String.format("start = %s",start)));
-            return collect;
-        }
-
-        try {
+        try (Stream<Path> stream = Files.walk(start, Integer.MAX_VALUE)) {
             collect = stream
                     .map(String::valueOf)
                     .sorted()
                     .collect(Collectors.toList());
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)));
         }
 
         return collect;

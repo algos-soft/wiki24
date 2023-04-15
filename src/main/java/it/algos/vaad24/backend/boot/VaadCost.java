@@ -60,7 +60,7 @@ public class VaadCost {
 
     public static final String PROJECT_VAADIN23 = "vaadin23";
 
-    //    public static final String PROJECT_VAADIN24 = "vaad24";
+        public static final String PROJECT_VAADIN24 = "vaad24";
 
     public static final String TAG_LOG_ADMIN = "vaad24.admin";
 

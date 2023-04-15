@@ -270,6 +270,9 @@ public abstract class AlgosTest {
     @Autowired
     protected PreferenzaBackend preferenzaBackend;
 
+    @Autowired
+    protected JarFileService jarFileService;
+
     //--clazz
     //--simpleName
     protected static Stream<Arguments> CLAZZ_FOR_NAME() {

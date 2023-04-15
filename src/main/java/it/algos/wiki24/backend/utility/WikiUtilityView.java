@@ -7,6 +7,12 @@ import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -41,10 +47,28 @@ import java.util.*;
 public class WikiUtilityView extends UtilityView {
 
     @Autowired
-    public GiornoWikiBackend giornoWikiBackend;
+    public ViaBackend viaBackend;
+
+    @Autowired
+    public ContinenteBackend continenteBackend;
+
+    @Autowired
+    public GiornoBackend giornoBackend;
+
+    @Autowired
+    public AnnoBackend annoBackend;
+
+    @Autowired
+    public MeseBackend meseBackend;
+
+    @Autowired
+    public SecoloBackend secoloBackend;
 
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+
+    @Autowired
+    public GiornoWikiBackend giornoWikiBackend;
 
     @Autowired
     public AttSingolareBackend attSingolareBackend;
@@ -92,9 +116,10 @@ public class WikiUtilityView extends UtilityView {
 
         message = String.format("Esegue il %s() su tutte le collection che implementano %s(). ", METHOD_NAME_RESET_FORCING, METHOD_NAME_RESET_ONLY);
         layout.add(ASpan.text(message));
-        layout.add(ASpan.text(AUTOMATIC));
+        layout.add(ASpan.text(DROP));
         layout.add(ASpan.text(FLAG_DEBUG));
-        lista = classService.allModuleEntityResetOrderedName(VaadVar.moduloVaadin24);
+        //        lista = classService.allModuleEntityResetOrderedName(VaadVar.moduloVaadin24);
+        lista = Arrays.asList("Via", "Giorno", "Anno", "Mese", " Secolo", "Continente");
         message = String.format("Modulo %s%s%s", VaadVar.moduloVaadin24, DUE_PUNTI_SPAZIO, lista.toString());
         layout.add(ASpan.text(message));
         lista = Arrays.asList("AnnoWiki", "GiornoWiki");
@@ -103,22 +128,44 @@ public class WikiUtilityView extends UtilityView {
 
         Button bottone = new Button("All");
         bottone.getElement().setAttribute("theme", "primary");
-        bottone.addClickListener(event -> paragrafoDownloadModuli());
+        bottone.addClickListener(event -> resetAll());
         Button bottone2 = new Button("Vaad24");
         bottone2.getElement().setAttribute("theme", "primary");
-        bottone2.addClickListener(event -> paragrafoDownloadModuli());
+        bottone2.addClickListener(event -> resetVaad());
         Button bottone3 = new Button("AnnoWiki");
         bottone3.getElement().setAttribute("theme", "primary");
-        bottone3.addClickListener(event -> paragrafoDownloadModuli());
+        bottone3.addClickListener(event -> resetAnno());
         Button bottone4 = new Button("GiornoWiki");
         bottone4.getElement().setAttribute("theme", "primary");
-        bottone4.addClickListener(event -> paragrafoDownloadModuli());
+        bottone4.addClickListener(event -> resetGiorno());
 
         this.add(paragrafo);
         layout.add(new HorizontalLayout(bottone, bottone2, bottone3, bottone4));
         this.add(layout);
     }
 
+    public void resetAll() {
+        resetVaad();
+        resetAnno();
+        resetGiorno();
+    }
+
+    public void resetVaad() {
+        viaBackend.resetForcing();
+        continenteBackend.resetForcing();
+        giornoBackend.resetForcing();
+        annoBackend.resetForcing();
+        meseBackend.resetForcing();
+        secoloBackend.resetForcing();
+    }
+
+    public void resetAnno() {
+        annoWikiBackend.resetForcing();
+    }
+
+    public void resetGiorno() {
+        giornoWikiBackend.resetForcing();
+    }
 
     public void paragrafoUploadModuli() {
         VerticalLayout layout = new VerticalLayout();
