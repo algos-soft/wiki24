@@ -4,12 +4,14 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.doppionome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -87,6 +89,8 @@ public class WAbstractService extends AbstractService {
     public AttivitaBackend attivitaBackend;
     @Autowired
     public AttSingolareBackend attSingolareBackend;
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -97,6 +101,8 @@ public class WAbstractService extends AbstractService {
     public NazionalitaBackend nazionalitaBackend;
     @Autowired
     public NazSingolareBackend nazSingolareBackend;
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -155,5 +161,18 @@ public class WAbstractService extends AbstractService {
     @Autowired
     public WikiUtility wikiUtility;
 
+    protected void fixAllServices() {
+        super.fixAllServices();
+        SERVIZI.add(this.wikiApiService);
+        SERVIZI.add(this.wikiUtility);
+        SERVIZI.add(this.wikiBotService);
+        SERVIZI.add(this.elaboraService);
+        SERVIZI.add(this.bioService);
+        SERVIZI.add(this.queryService);
+        SERVIZI.add(this.attSingolareBackend);
+        SERVIZI.add(this.attPluraleBackend);
+        SERVIZI.add(this.nazSingolareBackend);
+        SERVIZI.add(this.nazPluraleBackend);
+    }
 
 }

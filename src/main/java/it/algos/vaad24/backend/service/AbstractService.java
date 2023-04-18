@@ -25,7 +25,7 @@ import java.util.*;
  */
 public abstract class AbstractService {
 
-    protected static List<AbstractService> SERVIZI = new ArrayList<>();
+    protected static Set<AbstractService> SERVIZI = new HashSet();
 
     /**
      * Istanza di una interfaccia SpringBoot <br>
@@ -168,6 +168,7 @@ public abstract class AbstractService {
      */
     @Autowired
     public PreferenzaBackend preferenzaBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
@@ -227,7 +228,7 @@ public abstract class AbstractService {
         fixLinkPreferenze();
     }
 
-    private void fixAllServices() {
+    protected void fixAllServices() {
         SERVIZI.add(this.annotationService);
         SERVIZI.add(this.htmlService);
         SERVIZI.add(this.textService);
@@ -250,9 +251,10 @@ public abstract class AbstractService {
         SERVIZI.add(this.aLoggerBackend);
     }
 
-    private void fixLinkIncrociati() {
+    protected void fixLinkIncrociati() {
         String publicFieldName = VUOTA;
         String message;
+        String clazzName;
 
         if (logService.slf4jLogger == null) {
             logService.postConstruct();
@@ -264,18 +266,23 @@ public abstract class AbstractService {
                     try {
                         publicFieldName = textService.primaMinuscola(valoreLinkato.getClass().getSimpleName());
                     } catch (Exception unErrore) {
-                        message = String.format("Non sono riuscito ad pippare i link di %s nel service %s", valoreLinkato, valoreLinkato);
+                        message = String.format("Non sono riuscito a trovare il field %s nel service %s", valoreLinkato, valoreLinkato);
                         System.out.println(message);
                         logService.error(new WrapLog().message(message));
                     }
 
                     try {
                         reflectionService.setPropertyValue(servizio, publicFieldName, valoreLinkato);
-
                     } catch (Exception unErrore) {
-                        message = String.format("Non sono riuscito ad incrociare i link di %s nel service %s", publicFieldName, valoreLinkato);
-                        System.out.println(message);
-                        logService.error(new WrapLog().message(message));
+
+                        clazzName = valoreLinkato.getClass().getSimpleName();
+                        clazzName = textService.primaMinuscola(clazzName);
+                        if (!clazzName.equals(publicFieldName)) {
+                            message = String.format("Non sono riuscito ad incrociare i link di %s nel service %s", publicFieldName, clazzName);
+                            System.out.println(message);
+                            logService.error(new WrapLog().message(message));
+                        }
+
                     }
 
                 }

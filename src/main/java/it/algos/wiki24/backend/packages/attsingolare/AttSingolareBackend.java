@@ -53,6 +53,7 @@ public class AttSingolareBackend extends WikiBackend {
         this.unitaMisuraElaborazione = AETypeTime.secondi;
     }
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>

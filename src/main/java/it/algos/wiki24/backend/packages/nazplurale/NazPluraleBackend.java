@@ -59,6 +59,7 @@ public class NazPluraleBackend extends WikiBackend {
         this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -195,7 +196,7 @@ public class NazPluraleBackend extends WikiBackend {
         AResult result = super.resetDownload();
 
         //--Esegue un Download di NazSingolare
-//        AResult resultSingolari = nazSingolareBackend.resetDownload();
+        AResult resultSingolari = nazSingolareBackend.resetDownload();
 
         //--Cancella la (eventuale) precedente lista di nazionalità plurali
         deleteAll();

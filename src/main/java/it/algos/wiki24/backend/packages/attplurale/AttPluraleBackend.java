@@ -192,7 +192,7 @@ public class AttPluraleBackend extends WikiBackend {
         AResult result = super.resetDownload();
 
         //--Esegue un Download di AttSingolare
-//        AResult resultSingolari = attSingolareBackend.resetDownload();
+        AResult resultSingolari = attSingolareBackend.resetDownload();
 
         //--Cancella la (eventuale) precedente lista di attività plurali
         deleteAll();

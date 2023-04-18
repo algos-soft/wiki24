@@ -46,12 +46,14 @@ public class ReflectionService extends AbstractService {
     public Field getField(final Class<?> genericClazz, final String publicFieldName) {
         Field field = null;
         String propertyName = publicFieldName;
+        String message;
 
         try {
             propertyName = propertyName.replaceAll(FIELD_NAME_ID_CON, FIELD_NAME_ID_SENZA);
             field = genericClazz.getField(propertyName);
         } catch (Exception unErrore) {
-            logService.error(new WrapLog().exception(unErrore).usaDb());
+            message = String.format("Manca la property %s nella classe % ", propertyName, genericClazz.getSimpleName());
+            logService.error(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
         return field;

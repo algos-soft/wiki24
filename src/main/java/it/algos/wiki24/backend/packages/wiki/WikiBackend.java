@@ -348,7 +348,7 @@ public abstract class WikiBackend extends CrudBackend {
 
     public AResult fixReset(AResult result, List lista, boolean logInfo) {
         String collectionName = result.getTarget();
-        result = super.fixResult(result,  lista);
+        result = super.fixResult(result, lista);
 
         if (lastReset != null) {
             lastReset.setValue(LocalDateTime.now());
