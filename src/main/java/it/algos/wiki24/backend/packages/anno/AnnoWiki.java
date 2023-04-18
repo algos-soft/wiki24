@@ -36,7 +36,7 @@ import javax.persistence.*;
 public class AnnoWiki extends AEntity {
 
     @Indexed(unique = true, direction = IndexDirection.ASCENDING)
-    @AIField(type = AETypeField.integer, header = "#", widthEM = 3, caption = "Ordinamento")
+    @AIField(type = AETypeField.integer, header = "#", widthEM = 6, caption = "Ordinamento")
     public int ordine;
 
     @AIField(type = AETypeField.text, caption = "Nome corrente", sortProperty = "ordine")

@@ -191,11 +191,11 @@ public class NazPluraleBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link nazionalità
      */
-    public WResult download() {
-        WResult result = super.download();
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
 
         //--Esegue un Download di NazSingolare
-        WResult resultSingolari = nazSingolareBackend.download();
+//        AResult resultSingolari = nazSingolareBackend.resetDownload();
 
         //--Cancella la (eventuale) precedente lista di nazionalità plurali
         deleteAll();
@@ -206,14 +206,15 @@ public class NazPluraleBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Link nazionalità.
         result = downloadNazionalitaLink(result);
 
-        return super.fixDownload(result);
+//        return super.fixDownload(result);
+        return result;
     }
 
 
     /**
      * Crea la tabella ricavandola dalle nazionalità DISTINCT di NazSingolare <br>
      */
-    public WResult creaTabella(WResult result) {
+    public AResult creaTabella(AResult result) {
         List<String> nomiNazionalitaPluraliDistinte = nazSingolareBackend.findAllDistinctByPlurali();
         List<NazSingolare> listaSingolari;
         AEntity entityBean = null;
@@ -238,7 +239,7 @@ public class NazPluraleBackend extends WikiBackend {
     /**
      * Legge le mappa dal Modulo:Bio/Link nazionalità <br>
      */
-    public WResult downloadNazionalitaLink(WResult result) {
+    public AResult downloadNazionalitaLink(AResult result) {
         String moduloLink = PATH_MODULO + PATH_LINK + NAZ_LOWER;
         String nazSingolareNome;
         String nazPluraleNome;
@@ -270,6 +271,10 @@ public class NazPluraleBackend extends WikiBackend {
 
                 nazPluraleNome = nazionalitaSin.plurale;
                 nazionalitaPlur = findByKey(nazPluraleNome);
+                if (nazionalitaPlur==null) {
+                    return null;
+                }
+
                 paginaNazioneOld = nazionalitaPlur.linkNazione;
 
                 if (textService.isEmpty(paginaNazioneOld)) {
@@ -342,30 +347,30 @@ public class NazPluraleBackend extends WikiBackend {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitle);
     }
 
-    /**
-     * ResetOnlyEmpty -> Download. <br>
-     * Download -> Esegue un Download di NazSingolare. <br>
-     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
-     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
-     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
-     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
-     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
-     * <p>
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
-
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = this.download();
-        }
-
-        return result;
-    }
+//    /**
+//     * ResetOnlyEmpty -> Download. <br>
+//     * Download -> Esegue un Download di NazSingolare. <br>
+//     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
+//     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
+//     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
+//     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
+//     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
+//     * <p>
+//     * Creazione di alcuni dati <br>
+//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+//     * Viene invocato alla creazione del programma <br>
+//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+//     */
+//    @Override
+//    public AResult resetOnlyEmpty() {
+//        AResult result = super.resetOnlyEmpty();
+//
+//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+//            result = this.download();
+//        }
+//
+//        return result;
+//    }
 
 }// end of crud backend class

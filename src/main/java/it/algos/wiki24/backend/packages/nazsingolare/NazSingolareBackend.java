@@ -175,8 +175,8 @@ public class NazSingolareBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale nazionalità
      */
-    public WResult download() {
-        WResult result = super.download();
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
 
         //--Cancella la (eventuale) precedente lista di nazionalità singolari
         deleteAll();
@@ -184,7 +184,7 @@ public class NazSingolareBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Plurale nazionalità.
         result = downloadNazionalita(result);
 
-        return super.fixDownload(result);
+        return result;
     }
 
 
@@ -194,7 +194,7 @@ public class NazSingolareBackend extends WikiBackend {
      *
      * @return entities create
      */
-    public WResult downloadNazionalita(WResult result) {
+    public AResult downloadNazionalita(AResult result) {
         String moduloNazionalità = PATH_MODULO + PATH_PLURALE + NAZ_LOWER;
         String singolare;
         String plurale;
@@ -258,27 +258,27 @@ public class NazSingolareBackend extends WikiBackend {
         return super.fixElabora(result);
     }
 
-    /**
-     * ResetOnlyEmpty -> Download. <br>
-     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
-     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
-     * Upload -> Non previsto. <br>
-     * <p>
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
-
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = this.download();
-        }
-
-        return result;
-    }
+//    /**
+//     * ResetOnlyEmpty -> Download. <br>
+//     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
+//     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
+//     * Upload -> Non previsto. <br>
+//     * <p>
+//     * Creazione di alcuni dati <br>
+//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+//     * Viene invocato alla creazione del programma <br>
+//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+//     */
+//    @Override
+//    public AResult resetDownload() {
+//        AResult result = super.resetDownload();
+//
+//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+//            result = this.download();
+//        }
+//
+//        return result;
+//    }
 
 }// end of crud backend class

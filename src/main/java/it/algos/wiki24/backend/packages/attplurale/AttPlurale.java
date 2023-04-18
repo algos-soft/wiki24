@@ -38,7 +38,7 @@ import java.util.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "attplurale", keyPropertyName = "nome")
+@AIEntity(collectionName = "attplurale", usaReset = true, keyPropertyName = "nome")
 public class AttPlurale extends AEntity {
 
 

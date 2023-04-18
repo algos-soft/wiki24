@@ -240,38 +240,47 @@ public class GiornoWikiBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty( ) {
-        AResult result = super.resetOnlyEmpty();
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
         String clazzName = entityClazz.getSimpleName();
-        List<Giorno> giorniBase;
         AEntity entityBean;
+        List<Giorno> giorniBase;
         List<AEntity> lista;
         String nome;
 
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logService.debug(new WrapLog().message(message));
-            giorniBase = giornoBackend.findAllNoSort();
-            result.setValido(true);
-            lista = new ArrayList<>();
+        giorniBase = giornoBackend.findAllNoSort();
+        if (giorniBase.size() < 1) {
+            logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Giorno'")).usaDb());
+            return result.fine();
+        }
 
-            for (Giorno giorno : giorniBase) {
-                nome = giorno.nome;
-                entityBean = insert(newEntity(nome));
-                if (entityBean != null) {
-                    lista.add(entityBean);
-                }
-                else {
-                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                    result.setValido(false);
-                }
+        result.setValido(true);
+        lista = new ArrayList<>();
+        for (Giorno giorno : giorniBase) {
+            nome = giorno.nome;
+            entityBean = insert(newEntity(nome));
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                result.setValido(false);
             }
         }
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+        }
         else {
-            return result;
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+            return result.errorMessage(message);
         }
 
-        return super.fixReset(result,false);
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
     }
+
 
 }// end of crud backend class

@@ -188,8 +188,8 @@ public class AttSingolareBackend extends WikiBackend {
      * Modulo:Bio/Plurale attività
      * Modulo:Bio/Ex attività
      */
-    public WResult download() {
-        WResult result = super.download();
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
 
         //--Cancella la (eventuale) precedente lista di attività singolari
         deleteAll();
@@ -198,7 +198,7 @@ public class AttSingolareBackend extends WikiBackend {
         result = downloadAttivitaSingole(result);
         result = downloadAttivitaEx(result);
 
-        return super.fixDownload(result);
+        return result;
     }
 
 
@@ -208,7 +208,7 @@ public class AttSingolareBackend extends WikiBackend {
      *
      * @return entities create
      */
-    public WResult downloadAttivitaSingole(WResult result) {
+    public AResult downloadAttivitaSingole(AResult result) {
         String moduloAttività = PATH_MODULO + PATH_PLURALE + ATT_LOWER;
         String singolare;
         String plurale;
@@ -257,7 +257,7 @@ public class AttSingolareBackend extends WikiBackend {
      *
      * @return entities create
      */
-    public WResult downloadAttivitaEx(WResult result) {
+    public AResult downloadAttivitaEx(AResult result) {
         String moduloEx = PATH_MODULO + PATH_EX + ATT_LOWER;
         String singolareEx;
         String singolareNew;
@@ -337,27 +337,27 @@ public class AttSingolareBackend extends WikiBackend {
         return super.fixElabora(result);
     }
 
-    /**
-     * ResetOnlyEmpty -> Download. <br>
-     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
-     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
-     * Upload -> Non previsto. <br>
-     * <p>
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    public AResult resetOnlyEmpty() {
-        AResult result = super.resetOnlyEmpty();
-
-        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-            result = this.download();
-        }
-
-        return result;
-    }
+//    /**
+//     * ResetOnlyEmpty -> Download. <br>
+//     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
+//     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
+//     * Upload -> Non previsto. <br>
+//     * <p>
+//     * Creazione di alcuni dati <br>
+//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+//     * Viene invocato alla creazione del programma <br>
+//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+//     */
+//    @Override
+//    public AResult resetOnlyEmpty() {
+//        AResult result = super.resetOnlyEmpty();
+//
+//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+//            result = this.download();
+//        }
+//
+//        return result;
+//    }
 
 }// end of crud backend class
