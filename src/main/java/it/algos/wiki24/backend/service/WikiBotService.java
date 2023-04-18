@@ -116,7 +116,7 @@ public class WikiBotService extends WAbstractService {
         try {
             return !bioBackend.isExist(wrap.getPageid());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
             return false;
         }
     };
@@ -128,7 +128,7 @@ public class WikiBotService extends WAbstractService {
         try {
             return bioBackend.isExist(wrap.getPageid());
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
         return false;
     };
@@ -143,7 +143,7 @@ public class WikiBotService extends WAbstractService {
         try {
             bio = bioBackend.findByKey(key);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
         LocalDateTime mongoTime = bio != null ? bio.getLastMongo() : MONGO_TIME_ORIGIN;
 

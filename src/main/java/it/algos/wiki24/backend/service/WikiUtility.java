@@ -497,7 +497,7 @@ public class WikiUtility extends WAbstractService {
                 mappaOrdinata.put((String) chiave, mappaDisordinata.get(chiave));
             }
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
         return mappaOrdinata;

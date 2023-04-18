@@ -77,7 +77,7 @@ public class GiornoWikiBackend extends WikiBackend {
         GiornoWiki newEntityBean = GiornoWiki.builderGiornoWiki().build();
         Giorno giornoBase = giornoBackend.findByKey(keyPropertyValue);
         if (giornoBase == null) {
-            logger.error(new WrapLog().message(String.format("Manca il giorno base di riferimento dal nome %s", keyPropertyValue)));
+            logService.error(new WrapLog().message(String.format("Manca il giorno base di riferimento dal nome %s", keyPropertyValue)));
             return null;
         }
 
@@ -175,7 +175,7 @@ public class GiornoWikiBackend extends WikiBackend {
         }
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, Giorno.class.getSimpleName(), tempo, unitaMisuraElaborazione);
-        logger.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(message));
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
@@ -214,11 +214,11 @@ public class GiornoWikiBackend extends WikiBackend {
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logger.warn(WrapLog.build().message("Somma giorno di nascita errata"));
+            logService.warn(WrapLog.build().message("Somma giorno di nascita errata"));
         }
         checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logger.warn(WrapLog.build().message("Somma giorno di morte errata"));
+            logService.warn(WrapLog.build().message("Somma giorno di morte errata"));
         }
 
         mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());
@@ -240,8 +240,8 @@ public class GiornoWikiBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetOnlyEmpty( ) {
+        AResult result = super.resetOnlyEmpty();
         String clazzName = entityClazz.getSimpleName();
         List<Giorno> giorniBase;
         AEntity entityBean;
@@ -250,7 +250,7 @@ public class GiornoWikiBackend extends WikiBackend {
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             message = String.format("Inizio resetOnlyEmpty() di %s. Tempo previsto: meno di 1 secondo.", clazzName);
-            logger.debug(new WrapLog().message(message));
+            logService.debug(new WrapLog().message(message));
             giorniBase = giornoBackend.findAllNoSort();
             result.setValido(true);
             lista = new ArrayList<>();
@@ -262,7 +262,7 @@ public class GiornoWikiBackend extends WikiBackend {
                     lista.add(entityBean);
                 }
                 else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
                     result.setValido(false);
                 }
             }
@@ -271,7 +271,7 @@ public class GiornoWikiBackend extends WikiBackend {
             return result;
         }
 
-        return super.fixReset(result, lista,logInfo);
+        return super.fixReset(result,false);
     }
 
 }// end of crud backend class

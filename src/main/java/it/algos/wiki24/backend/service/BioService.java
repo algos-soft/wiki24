@@ -123,7 +123,7 @@ public class BioService extends WAbstractService {
         }
         tmplBio = bio.getTmplBio();
         if (textService.isEmpty(tmplBio)) {
-            logger.warn(new WrapLog().message(String.format("Manca il tmplBio nella voce %s", bio.wikiTitle)));
+            logService.warn(new WrapLog().message(String.format("Manca il tmplBio nella voce %s", bio.wikiTitle)));
             return null;
         }
 
@@ -193,10 +193,10 @@ public class BioService extends WAbstractService {
         if (mappa != null && mappa.size() < 9) {
             message = String.format("Parametri insufficienti (%d) nella bio %s", mappa.size(), bio.wikiTitle);
             if (mappa.size() < 7) {
-                logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+                logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
             else {
-                logger.info(new WrapLog().exception(new AlgosException(message)));
+                logService.info(new WrapLog().exception(new AlgosException(message)));
             }
         }
 
@@ -500,7 +500,7 @@ public class BioService extends WAbstractService {
         List<Bio> lista3;
 
         if (listaNomiSingoli == null) {
-            logger.info(new WrapLog().exception(new AlgosException("Non ci sono attività singole")).usaDb());
+            logService.info(new WrapLog().exception(new AlgosException("Non ci sono attività singole")).usaDb());
             return null;
         }
 
@@ -588,7 +588,7 @@ public class BioService extends WAbstractService {
         List<Bio> listaSenzaAnnoNato;
 
         if (textService.isEmpty(giornoNato)) {
-            logger.info(new WrapLog().exception(new AlgosException("Manca l'indicazione del giorno")));
+            logService.info(new WrapLog().exception(new AlgosException("Manca l'indicazione del giorno")));
             return null;
         }
 
@@ -638,7 +638,7 @@ public class BioService extends WAbstractService {
         List<Bio> listaSenzaAnnoMorto;
 
         if (textService.isEmpty(giornoMorto)) {
-            logger.info(new WrapLog().exception(new AlgosException("Manca l'indicazione del giorno")));
+            logService.info(new WrapLog().exception(new AlgosException("Manca l'indicazione del giorno")));
             return null;
         }
 
@@ -688,7 +688,7 @@ public class BioService extends WAbstractService {
         List<Bio> listaSenzaGiornoNato;
 
         if (textService.isEmpty(annoNato)) {
-            logger.info(new WrapLog().exception(new AlgosException("Manca l'indicazione dell'anno")));
+            logService.info(new WrapLog().exception(new AlgosException("Manca l'indicazione dell'anno")));
             return null;
         }
 
@@ -738,7 +738,7 @@ public class BioService extends WAbstractService {
         List<Bio> listaSenzaGiornoMorto;
 
         if (textService.isEmpty(annoMorto)) {
-            logger.info(new WrapLog().exception(new AlgosException("Manca l'indicazione dell'anno")));
+            logService.info(new WrapLog().exception(new AlgosException("Manca l'indicazione dell'anno")));
             return null;
         }
 
@@ -785,7 +785,7 @@ public class BioService extends WAbstractService {
         List<Bio> listaNonOrdinata = new ArrayList<>();
 
         if (listaNomiSingoli == null) {
-            logger.info(new WrapLog().exception(new AlgosException("Non ci sono nazionalità singole")).usaDb());
+            logService.info(new WrapLog().exception(new AlgosException("Non ci sono nazionalità singole")).usaDb());
             return null;
         }
 
@@ -856,7 +856,7 @@ public class BioService extends WAbstractService {
                 default -> null;
             };
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
             return null;
         }
     }

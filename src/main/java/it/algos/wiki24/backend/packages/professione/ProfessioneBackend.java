@@ -122,7 +122,7 @@ public class ProfessioneBackend extends WikiBackend {
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", wikiTitle);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
         super.fixDownloadSecondi(inizio, wikiTitle, mappa.size(), size);
     }

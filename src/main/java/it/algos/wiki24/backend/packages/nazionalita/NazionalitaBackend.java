@@ -432,9 +432,9 @@ public class NazionalitaBackend extends WikiBackend {
         int size = 0;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, Nazionalita.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
+        logService.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
 
         size += downloadNazionalitaPlurali(moduloPlurale);
         size += downloadNazionalitaLink(moduloLink);
@@ -486,13 +486,13 @@ public class NazionalitaBackend extends WikiBackend {
                     size++;
                 }
                 else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloPlurale);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
         return size;
@@ -530,19 +530,19 @@ public class NazionalitaBackend extends WikiBackend {
                     }
                     else {
                         cont++;
-                        logger.info(new WrapLog().message(String.format("Manca %s", singolare)));
+                        logService.info(new WrapLog().message(String.format("Manca %s", singolare)));
                     }
                 }
             }
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il %s", mappaLink);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
         if (cont > 0) {
-            logger.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
+            logService.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
         }
 
         return cont;
@@ -587,7 +587,7 @@ public class NazionalitaBackend extends WikiBackend {
         }
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_ELABORA, Nazionalita.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(message));
 
         for (Nazionalita nazionalita : findAll()) {
             nazionalita.numSingolari = 0;
@@ -625,7 +625,7 @@ public class NazionalitaBackend extends WikiBackend {
                         size = textService.format(cont);
                         time = dateService.deltaText(inizio);
                         message = String.format("Finora controllata l'esistenza di %s/%s liste di nazionalità, in %s", size, tot, time);
-                        logger.info(new WrapLog().message(message).type(AETypeLog.elabora));
+                        logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
                     }
                 }
             }
@@ -738,8 +738,8 @@ public class NazionalitaBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(false);
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             return this.download();

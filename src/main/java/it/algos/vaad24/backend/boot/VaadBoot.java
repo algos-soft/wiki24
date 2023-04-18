@@ -18,8 +18,8 @@ import org.springframework.context.*;
 import org.springframework.context.event.EventListener;
 import org.springframework.context.event.*;
 import org.springframework.core.env.*;
+import org.springframework.stereotype.*;
 
-import javax.servlet.*;
 import java.util.*;
 
 /**
@@ -45,7 +45,8 @@ import java.util.*;
  * 7) costruisce una versione demo <br>
  * 8) controlla l' esistenza di utenti abilitati all' accesso <br>
  */
-public class VaadBoot implements ServletContextListener {
+@Service
+public class VaadBoot {
 
     protected boolean allDebugSetup;
 
@@ -188,7 +189,7 @@ public class VaadBoot implements ServletContextListener {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void creaEnumerationPreferenze() {
-        for (Pref pref : Pref.getAllEnums()) {
+        for (Pref pref : Pref.values()) {
             VaadVar.prefList.add(pref);
         }
     }
@@ -215,7 +216,7 @@ public class VaadBoot implements ServletContextListener {
      * Non deve essere sovrascritto <br>
      */
     public void creaPreferenzeMongoDB() {
-        preferenzaBackend.creaAll();
+        preferenzaBackend.resetDownload();
     }
 
     public void printInfo() {
@@ -229,7 +230,7 @@ public class VaadBoot implements ServletContextListener {
 
         printInfo("VaadVar.mongoDatabaseName", VaadVar.mongoDatabaseName);
         printInfo("VaadVar.mongoDatabaseVersion", VaadVar.mongoDatabaseVersion);
-        printInfo("VaadVar.usaCreazioneAutomaticaIndiciMongoDB", VaadVar.usaCreazioneAutomaticaIndiciMongoDB?"vero":"falso");
+        printInfo("VaadVar.usaCreazioneAutomaticaIndiciMongoDB", VaadVar.usaCreazioneAutomaticaIndiciMongoDB ? "vero" : "falso");
         printInfo("VaadVar.projectDate", VaadVar.projectDate);
         printInfo("VaadVar.projectNote", VaadVar.projectNote);
     }
@@ -581,7 +582,7 @@ public class VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListVaadin.add(UtilityView.class);
         VaadVar.menuRouteListVaadin.add(NotaView.class);
         VaadVar.menuRouteListVaadin.add(VersioneView.class);
-        VaadVar.menuRouteListVaadin.add(LoggerView.class);
+        VaadVar.menuRouteListVaadin.add(ALoggerView.class);
         VaadVar.menuRouteListVaadin.add(PreferenzaView.class);
     }
 

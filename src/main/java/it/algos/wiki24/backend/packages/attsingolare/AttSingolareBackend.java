@@ -229,13 +229,13 @@ public class AttSingolareBackend extends WikiBackend {
                 } catch (Exception unErrore) {
                     message = String.format("Duplicate error key %", singolare);
                     System.out.println(message);
-                    logger.error(new WrapLog().exception(new AlgosException(unErrore)));
+                    logService.error(new WrapLog().exception(new AlgosException(unErrore)));
                 }
                 if (entityBean != null) {
                     lista.add(entityBean);
                 }
                 else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
             result.setIntValue(lista.size());
@@ -245,7 +245,7 @@ public class AttSingolareBackend extends WikiBackend {
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloAttività);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
         return result;
@@ -278,11 +278,11 @@ public class AttSingolareBackend extends WikiBackend {
                     } catch (Exception unErrore) {
                         message = String.format("Duplicate error key %", singolareEx);
                         System.out.println(message);
-                        logger.error(new WrapLog().exception(new AlgosException(unErrore)));
+                        logService.error(new WrapLog().exception(new AlgosException(unErrore)));
                     }
                 }
                 else {
-                    logger.info(new WrapLog().message(String.format("Nelle attività base manca la definizione '%s'", singolareEx)));
+                    logService.info(new WrapLog().message(String.format("Nelle attività base manca la definizione '%s'", singolareEx)));
                 }
 
                 if (attivita != null) {
@@ -296,7 +296,7 @@ public class AttSingolareBackend extends WikiBackend {
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloEx);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
         return result;
@@ -350,8 +350,8 @@ public class AttSingolareBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result = this.download();

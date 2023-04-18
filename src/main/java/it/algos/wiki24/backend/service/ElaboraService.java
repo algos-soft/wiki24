@@ -340,7 +340,7 @@ public class ElaboraService extends WAbstractService {
         try {
             giorno = giornoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
 
         return giorno != null ? giorno.nome : VUOTA;
@@ -415,7 +415,7 @@ public class ElaboraService extends WAbstractService {
         try {
             giorno = giornoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
 
         return giorno != null ? giorno.nome : VUOTA;
@@ -511,7 +511,7 @@ public class ElaboraService extends WAbstractService {
         try {
             anno = annoWikiBackend.findByKey(testoValido);
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(unErrore).usaDb());
+            logService.error(new WrapLog().exception(unErrore).usaDb());
         }
 
         return anno != null ? anno.nome : VUOTA;
@@ -711,14 +711,14 @@ public class ElaboraService extends WAbstractService {
         boolean doppioGenere = false;
 
         if (textService.isEmpty(genere)) {
-            logger.info(new WrapLog().message(String.format("Manca genere di %s", testoGrezzo)));
+            logService.info(new WrapLog().message(String.format("Manca genere di %s", testoGrezzo)));
             return VUOTA;
         }
 
         try {
             nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
         } catch (Exception unErrore) {
-            logger.info(new WrapLog().exception(unErrore));
+            logService.info(new WrapLog().exception(unErrore));
         }
         if (nazionalita != null) {
             nazionalitaTxt = nazionalita.getSingolare();
@@ -733,7 +733,7 @@ public class ElaboraService extends WAbstractService {
 
             nazionalita2 = nazionalitaBackend.findFirstBySingolare(nazionalitaTxt);
             if (nazionalita2 != null) {
-                logger.info(new WrapLog().message(String.format("Nella bio %s modificato il genere di %s in %s (che esiste)", bio.wikiTitle, testoGrezzo, nazionalitaTxt)).usaDb());
+                logService.info(new WrapLog().message(String.format("Nella bio %s modificato il genere di %s in %s (che esiste)", bio.wikiTitle, testoGrezzo, nazionalitaTxt)).usaDb());
                 bio.errato = true;
                 bio.errore = AETypeBioError.nazionalitaGenere;
             }
@@ -790,7 +790,7 @@ public class ElaboraService extends WAbstractService {
             try {
                 nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(unErrore).usaDb());
+                logService.error(new WrapLog().exception(unErrore).usaDb());
             }
         }
 

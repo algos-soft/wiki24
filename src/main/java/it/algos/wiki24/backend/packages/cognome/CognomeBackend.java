@@ -233,7 +233,7 @@ public class CognomeBackend extends WikiBackend {
             }
         }
 
-        logger.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
+        logService.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
         return super.fixElaboraMinuti(result, inizio, "cognomi");
         //        logger.info("Creazione di " + text.format(cont) + " cognomi su un totale di " + text.format(tot) + " cognomi distinti. Tempo impiegato: " + date.deltaText(inizio));
     }

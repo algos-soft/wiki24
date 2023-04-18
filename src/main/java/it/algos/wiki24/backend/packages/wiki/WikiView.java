@@ -472,7 +472,7 @@ public abstract class WikiView extends CrudView {
             buttonReset.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonReset.getElement().setProperty("title", "Reset: ripristina nel database i valori di default annullando le " +
                     "eventuali modifiche apportate successivamente\nShortcut SHIFT+R");
-            buttonReset.addClickListener(event -> AReset.reset(this::reset));
+            buttonReset.addClickListener(event -> AReset.reset(this::resetForcing));
             buttonReset.addClickShortcut(Key.KEY_R, KeyModifier.SHIFT);
             buttonReset.setIcon(new Icon(VaadinIcon.REFRESH));
             topPlaceHolder.add(buttonReset);

@@ -429,7 +429,7 @@ public class VaadCost {
 
     public static final String TAG_FLOW_PREFERENCES = "23preferences";
 
-    public static final int PAD_TYPE = 10;
+    public static final int PAD_TYPE = 14;
 
     public static final int PAD_CLASS = 20;
 

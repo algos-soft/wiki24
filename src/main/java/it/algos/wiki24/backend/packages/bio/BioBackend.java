@@ -127,7 +127,7 @@ public class BioBackend extends WikiBackend {
                 message = "Manca il pageid";
             } if (textService.isEmpty(wrap.getTitle())) {
                 message = "Manca il wikiTitle";
-            } logger.info(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
+            } logService.info(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
         }
     }
 
@@ -216,14 +216,14 @@ public class BioBackend extends WikiBackend {
                 try {
                     repository.save(bio);
                 } catch (Exception unErrore) {
-                    logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb()); return null;
+                    logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb()); return null;
                 }
             }
             else {
                 try {
                     repository.insert(bio);
                 } catch (Exception unErrore) {
-                    logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb()); return null;
+                    logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb()); return null;
                 }
             } return bio;
         }
@@ -1377,7 +1377,7 @@ public class BioBackend extends WikiBackend {
 
         for (int k = 0; k <= blocco; k++) {
             ini = k * dim; end = Math.min(ini + dim, lista.size()); if (Pref.debug.is()) {
-                logger.info(new WrapLog().message(String.format("Ini %s - End %s", ini, end)).type(AETypeLog.elabora));
+                logService.info(new WrapLog().message(String.format("Ini %s - End %s", ini, end)).type(AETypeLog.elabora));
             }
 
             for (Bio bio : lista.subList(ini, end)) {
@@ -1389,7 +1389,7 @@ public class BioBackend extends WikiBackend {
             if (Pref.debug.is()) {
                 size = textService.format(cont); time = dateService.deltaText(inizio);
                 message = String.format("Elaborate finora %s voci biografiche, in %s", size, time);
-                logger.info(new WrapLog().message(message).type(AETypeLog.elabora));
+                logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
             }
         } super.fixElaboraMinuti(result, inizio, "biografie");
 
@@ -1491,7 +1491,7 @@ public class BioBackend extends WikiBackend {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
         }
 
         Bson bsonSort = Sorts.ascending(wikiTitle);
@@ -1513,7 +1513,7 @@ public class BioBackend extends WikiBackend {
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb()); return null;
         }
 
         Bson bsonSort = Sorts.ascending(wikiTitleField);

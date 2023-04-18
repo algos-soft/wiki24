@@ -58,7 +58,7 @@ public class ParametroView extends CrudView {
         super.gridPropertyNamesList = Arrays.asList("pageId","titolo"); // controllare la congruità con la Entity
 //        super.formPropertyNamesList = Arrays.asList("pageId","titolo"); // controllare la congruità con la Entity
         super.riordinaColonne = true; //se rimane true, uguale al default, si può cancellare
-        super.usaBottoneRefresh = false; //se rimane false, uguale al default, si può cancellare
+//        super.usaBottoneRefresh = false; //se rimane false, uguale al default, si può cancellare
         super.usaBottoneReset = false; //se rimane false, uguale al default, si può cancellare
         super.usaBottoneNew = true; //se rimane true, uguale al default, si può cancellare
         super.usaBottoneEdit = true; //se rimane true, uguale al default, si può cancellare

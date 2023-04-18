@@ -465,10 +465,10 @@ public class AttivitaBackend extends WikiBackend {
         int tempo = 88;
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d secondi.", METHOD_NAME_DOWLOAD, Attivita.class.getSimpleName(), tempo);
-        logger.debug(new WrapLog().message(message));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloEx)));
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
+        logService.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloPlurale)));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloEx)));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, moduloLink)));
 
         downloadAttivitaPlurali(moduloPlurale);
         downloadAttivitaExtra(moduloEx);
@@ -511,7 +511,7 @@ public class AttivitaBackend extends WikiBackend {
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il %s", moduloPlurale);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
@@ -545,13 +545,13 @@ public class AttivitaBackend extends WikiBackend {
                     }
                 }
                 else {
-                    logger.info(new WrapLog().message(String.format("Manca negli extra %s", singolareEx)));
+                    logService.info(new WrapLog().message(String.format("Manca negli extra %s", singolareEx)));
                 }
             }
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il %s", mappaEx);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
@@ -592,18 +592,18 @@ public class AttivitaBackend extends WikiBackend {
                     }
                     else {
                         cont++;
-                        logger.info(new WrapLog().message(String.format("Manca %s", singolareConOSenzaEx)));
+                        logService.info(new WrapLog().message(String.format("Manca %s", singolareConOSenzaEx)));
                     }
                 }
             }
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il %s", mappaLink);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return 0;
         }
 
-        logger.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
+        logService.info(new WrapLog().message(String.format("Mancano %d linkAttivita", cont)));
         return cont;
     }
 
@@ -701,7 +701,7 @@ public class AttivitaBackend extends WikiBackend {
                         size = textService.format(cont);
                         time = dateService.deltaText(inizio);
                         message = String.format("Finora controllata l'esistenza di %s/%s liste di attività, in %s", size, tot, time);
-                        logger.info(new WrapLog().message(message).type(AETypeLog.elabora));
+                        logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
                     }
                 }
             }
@@ -774,23 +774,23 @@ public class AttivitaBackend extends WikiBackend {
                     message = String.format("Attività %s utilizzata in %s voci biografiche. %s", pluraleAttivitaMinuscola, voci, result.getValidMessage());
                 }
                 if (Pref.debug.is()) {
-                    logger.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    logService.info(new WrapLog().message(message).type(AETypeLog.upload));
                 }
             }
             else {
-                logger.warn(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload));
+                logService.warn(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload));
             }
         }
         else {
             message = String.format("L'attività %s ha solo %s voci biografiche e non raggiunge il numero necessario per avere una pagina dedicata", pluraleAttivitaMinuscola, voci);
             if (Pref.debug.is()) {
                 result.setErrorMessage(message).setValido(false);
-                logger.info(new WrapLog().message(message).type(AETypeLog.upload));
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload));
             }
             if (esistePagina(pluraleAttivitaMinuscola)) {
                 result.setErrorCode(KEY_ERROR_CANCELLANDA);
                 message = String.format("Esiste la pagina %s che andrebbe cancellata", wikiTitle);
-                logger.warn(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+                logService.warn(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
             }
         }
 

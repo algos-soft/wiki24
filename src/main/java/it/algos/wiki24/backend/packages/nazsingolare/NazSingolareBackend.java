@@ -214,7 +214,7 @@ public class NazSingolareBackend extends WikiBackend {
                     lista.add(entityBean);
                 }
                 else {
-                    logger.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", singolare))));
                 }
             }
             result.setIntValue(lista.size());
@@ -224,7 +224,7 @@ public class NazSingolareBackend extends WikiBackend {
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloNazionalità);
-            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            logService.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
 
         return result;
@@ -271,8 +271,8 @@ public class NazSingolareBackend extends WikiBackend {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public AResult resetOnlyEmpty(boolean logInfo) {
-        AResult result = super.resetOnlyEmpty(logInfo);
+    public AResult resetOnlyEmpty() {
+        AResult result = super.resetOnlyEmpty();
 
         if (result.getTypeResult() == AETypeResult.collectionVuota) {
             result = this.download();

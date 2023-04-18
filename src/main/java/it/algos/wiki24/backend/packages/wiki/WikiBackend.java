@@ -245,7 +245,7 @@ public abstract class WikiBackend extends CrudBackend {
             minimo = doppio.toString() + PERCENTUALE;
             message = "Nel database mongoDB non ci sono abbastanza voci biografiche per effettuare l'elaborazione richiesta.";
             message += String.format(" Solo %s su %s (=%s). Percentuale richiesta (da pref) %s", bioMongoDB, numPagesServerWiki, perc, minimo);
-            logger.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
+            logService.warn(WrapLog.build().type(AETypeLog.elabora).message(message).usaDb());
         }
 
         return result;
@@ -280,7 +280,7 @@ public abstract class WikiBackend extends CrudBackend {
         if (durataDownload != null) {
             int tempo = durataDownload.getInt();
             message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_DOWLOAD, entityClazz.getSimpleName(), tempo, unitaMisuraDownload);
-            logger.debug(new WrapLog().message(message));
+            logService.debug(new WrapLog().message(message));
         }
 
         return WResult.build().method("download").target(getClass().getSimpleName());
@@ -299,15 +299,15 @@ public abstract class WikiBackend extends CrudBackend {
             message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
             if (result.isModificata()) {
                 message += " Modificato";
-                logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
             }
             else {
                 message += " Non modificato";
-                logger.info(new WrapLog().message(message).type(AETypeLog.upload));
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload));
             }
 
             message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
-            logger.debug(new WrapLog().message(message));
+            logService.debug(new WrapLog().message(message));
         }
 
         if (result.isValido()) {
@@ -335,7 +335,7 @@ public abstract class WikiBackend extends CrudBackend {
         if (durataElaborazione != null) {
             int tempo = durataElaborazione.getInt();
             message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, entityClazz.getSimpleName(), tempo, unitaMisuraElaborazione);
-            logger.debug(new WrapLog().message(message));
+            logService.debug(new WrapLog().message(message));
         }
 
         return WResult.build().method("elabora").target(getClass().getSimpleName());
@@ -348,14 +348,14 @@ public abstract class WikiBackend extends CrudBackend {
 
     public AResult fixReset(AResult result, List lista, boolean logInfo) {
         String collectionName = result.getTarget();
-        result = super.fixResult(result, entityClazz.getSimpleName(), collectionName, lista, logInfo);
+        result = super.fixResult(result,  lista);
 
         if (lastReset != null) {
             lastReset.setValue(LocalDateTime.now());
         }
         else {
             message = String.format("lastReset è nullo nel target %s", result.getTarget());
-            logger.warn(new WrapLog().exception(new AlgosException(message)));
+            logService.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
         return result;
@@ -371,22 +371,22 @@ public abstract class WikiBackend extends CrudBackend {
         }
         else {
             message = String.format("lastDownload è nullo nel target %s", result.getTarget());
-            logger.warn(new WrapLog().exception(new AlgosException(message)));
+            logService.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
         if (durataDownload != null) {
             durataDownload.setValue(unitaMisuraDownload.durata(result.getInizio()));
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
         }
 
         message = String.format("Download di %s. Pagine scaricate %s. %s", modulo, textService.format(count()), unitaMisuraDownload.message(result.getInizio()));
-        logger.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
+        logService.info(new WrapLog().message(message).type(AETypeLog.download).usaDb());
         result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
-        logger.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(message));
 
         if (lastElaborazione != null) {
             lastElaborazione.setValue(ROOT_DATA_TIME);
@@ -406,7 +406,7 @@ public abstract class WikiBackend extends CrudBackend {
 
             message = String.format("Download %s. Pagine scaricate %s.", clazzName.getClass().getSimpleName(), textService.format(lista.size()));
             message += result.deltaSec();
-            logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
+            logService.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
             return result.validMessage(message);
         }
         else {
@@ -418,7 +418,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public void fixDownloadModulo(String modulo) {
-        logger.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, modulo)));
+        logService.debug(new WrapLog().message(String.format("%sModulo %s.", FORWARD, modulo)));
     }
 
     public WResult fixElabora(WResult result) {
@@ -430,22 +430,22 @@ public abstract class WikiBackend extends CrudBackend {
             lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
         }
 
         if (durataElaborazione != null) {
             durataElaborazione.setValue(unitaMisuraElaborazione.durata(inizio));
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
         }
 
         message = String.format("Elaborazione di %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
-        logger.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
+        logService.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
         result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());
-        logger.debug(new WrapLog().message(message));
+        logService.debug(new WrapLog().message(message));
 
         return result;
     }
@@ -472,7 +472,7 @@ public abstract class WikiBackend extends CrudBackend {
             lastDownload.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastDownload è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("lastDownload è nullo")));
             return;
         }
 
@@ -485,7 +485,7 @@ public abstract class WikiBackend extends CrudBackend {
             durataDownload.setValue(delta.intValue());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
             return;
         }
 
@@ -497,7 +497,7 @@ public abstract class WikiBackend extends CrudBackend {
                 message = String.format("Download di %s righe da [%s] convertite in %s elementi su mongoDB", wikiTxt, wikiTitle, mongoTxt);
             }
 
-            logger.info(new WrapLog().message(message));
+            logService.info(new WrapLog().message(message));
         }
     }
 
@@ -512,7 +512,7 @@ public abstract class WikiBackend extends CrudBackend {
             lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
             return;
         }
 
@@ -521,12 +521,12 @@ public abstract class WikiBackend extends CrudBackend {
             durataElaborazione.setValue(delta.intValue());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
             return;
         }
 
         message = String.format("Elaborate %s %s in circa %d secondi", mongoTxt, modulo, delta);
-        logger.info(new WrapLog().message(message));
+        logService.info(new WrapLog().message(message));
     }
 
     @Deprecated
@@ -539,7 +539,7 @@ public abstract class WikiBackend extends CrudBackend {
             lastElaborazione.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
             return result;
         }
 
@@ -548,12 +548,12 @@ public abstract class WikiBackend extends CrudBackend {
             durataElaborazione.setValue(delta.intValue());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataElaborazione è nullo")));
             return result;
         }
 
         message = String.format("Elaborate %s %s in %d millisecondi", mongoTxt, modulo, delta);
-        logger.info(new WrapLog().message(message));
+        logService.info(new WrapLog().message(message));
 
         return result;
     }
@@ -568,7 +568,7 @@ public abstract class WikiBackend extends CrudBackend {
             lastUpload.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
             return;
         }
 
@@ -577,12 +577,12 @@ public abstract class WikiBackend extends CrudBackend {
             durataUpload.setValue(delta.intValue());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
+            logService.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
             return;
         }
 
         message = String.format("Check di %s %s, in %s minuti. Sotto soglia: %s. Da cancellare: %s. Non modificate: %s. Modificate: %s.", tot, modulo, delta, sottoSoglia, daCancellare, nonModificate, modificate);
-        logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+        logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
     }
 
 }
