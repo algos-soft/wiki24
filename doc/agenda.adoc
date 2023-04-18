@@ -200,9 +200,6 @@ mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24
 == Terminal ==
 
  mvn clean package -Pproduction
-
  mvn clean package -Pproduction -Dmaven.test.skip=true
-
  java -jar -Dserver.port=8090 vaadin23.jar
-
  java -jar -Dserver.port=8090 wiki24.jar
