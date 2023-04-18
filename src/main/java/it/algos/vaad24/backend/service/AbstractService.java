@@ -168,7 +168,6 @@ public abstract class AbstractService {
      */
     @Autowired
     public PreferenzaBackend preferenzaBackend;
-
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
@@ -273,6 +272,7 @@ public abstract class AbstractService {
 
                     try {
                         reflectionService.setPropertyValue(servizio, publicFieldName, valoreLinkato);
+
                     } catch (Exception unErrore) {
 
                         clazzName = valoreLinkato.getClass().getSimpleName();
