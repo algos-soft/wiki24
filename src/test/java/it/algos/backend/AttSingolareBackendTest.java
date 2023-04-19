@@ -37,7 +37,7 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     private List<AttSingolare> listaBeans;
 
 
-    //--nome nella collection
+    //--nome
     //--esiste come ID
     //--esiste come key
     //--crea una nuova entity

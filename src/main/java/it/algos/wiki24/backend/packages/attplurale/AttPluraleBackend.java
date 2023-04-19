@@ -92,18 +92,18 @@ public class AttPluraleBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome           (obbligatorio, unico)
-     * @param listaSingolari (obbligatorio, unico)
-     * @param paginaLista    (obbligatorio)
-     * @param linkAttivita   (obbligatorio)
+     * @param keyPropertyValue (obbligatorio, unico)
+     * @param listaSingolari   (obbligatorio, unico)
+     * @param paginaLista      (obbligatorio)
+     * @param linkAttivita     (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public AttPlurale newEntity(final String nome, List<AttSingolare> listaSingolari, final String paginaLista, final String linkAttivita) {
+    public AttPlurale newEntity(final String keyPropertyValue, List<AttSingolare> listaSingolari, final String paginaLista, final String linkAttivita) {
         AttPlurale newEntityBean = AttPlurale.builder()
-                .nome(textService.isValid(nome) ? nome : null)
+                .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .listaSingolari(listaSingolari)
-                .paginaLista(textService.isValid(paginaLista) ? paginaLista : textService.primaMaiuscola(nome))
+                .paginaLista(textService.isValid(paginaLista) ? paginaLista : textService.primaMaiuscola(keyPropertyValue))
                 .linkAttivita(textService.isValid(linkAttivita) ? linkAttivita : null)
                 .numBio(0)
                 .numSingolari(listaSingolari != null ? listaSingolari.size() : 0)
@@ -160,6 +160,7 @@ public class AttPluraleBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    @Override
     public List<String> findAllDistinctByPlurali() {
         return findAllForKeySortKey();
     }
@@ -203,7 +204,7 @@ public class AttPluraleBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Link attività.
         result = downloadAttivitaLink(result);
 
-//        return super.fixDownload(result);
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
     }
 
@@ -322,45 +323,45 @@ public class AttPluraleBackend extends WikiBackend {
     public WResult elabora() {
         WResult result = super.elabora();
 
-        for (AttPlurale attivita : findAll()) {
-            attivita.numBio = 0;
-            attivita.superaSoglia = false;
-            attivita.esisteLista = false;
-
-            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
-            attivita.esisteLista = esistePagina(attivita.paginaLista);
-
-            update(attivita);
-        }
+//        for (AttPlurale attivita : findAll()) {
+//            attivita.numBio = 0;
+//            attivita.superaSoglia = false;
+//            attivita.esisteLista = false;
+//
+//            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
+//            attivita.esisteLista = esistePagina(attivita.paginaLista);
+//
+//            update(attivita);
+//        }
 
         return super.fixElabora(result);
     }
 
-//    /**
-//     * ResetOnlyEmpty -> Download. <br>
-//     * Download -> Esegue un Download di AttSingolare. <br>
-//     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
-//     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
-//     * Download -> Scarica 1 modulo wiki: Link attività <br>
-//     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
-//     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
-//     * <p>
-//     * Creazione di alcuni dati <br>
-//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-//     * Viene invocato alla creazione del programma <br>
-//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public AResult resetOnlyEmpty() {
-//        AResult result = super.resetOnlyEmpty();
-//
-//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            result = this.download();
-//        }
-//
-//        return result;
-//    }
+    //    /**
+    //     * ResetOnlyEmpty -> Download. <br>
+    //     * Download -> Esegue un Download di AttSingolare. <br>
+    //     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
+    //     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
+    //     * Download -> Scarica 1 modulo wiki: Link attività <br>
+    //     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
+    //     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
+    //     * <p>
+    //     * Creazione di alcuni dati <br>
+    //     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+    //     * Viene invocato alla creazione del programma <br>
+    //     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+    //     */
+    //    @Override
+    //    public AResult resetOnlyEmpty() {
+    //        AResult result = super.resetOnlyEmpty();
+    //
+    //        if (result.getTypeResult() == AETypeResult.collectionVuota) {
+    //            result = this.download();
+    //        }
+    //
+    //        return result;
+    //    }
 
 
     /**

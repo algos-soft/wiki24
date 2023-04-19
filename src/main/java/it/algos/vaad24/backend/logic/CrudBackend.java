@@ -263,6 +263,10 @@ public abstract class CrudBackend extends AbstractService {
 
         if (annotationService.isEsisteKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
+            boolean esiste = isExistByProperty(keyPropertyName, keyValue);
+
+            //            Object alfa= mongoService.mongoOp.insert(entityBean);
+
             return isExistByProperty(keyPropertyName, keyValue);
         }
         else {

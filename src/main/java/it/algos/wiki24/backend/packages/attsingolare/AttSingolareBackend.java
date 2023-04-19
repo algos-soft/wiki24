@@ -137,6 +137,7 @@ public class AttSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    @Override
     public List<AttSingolare> findAllByPlurale(String plurale) {
         return super.findAllByPlurale(plurale);
     }
