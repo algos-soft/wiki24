@@ -646,7 +646,7 @@ public abstract class WikiTest extends AlgosTest {
 
     //--nome singolare
     //--esiste
-    protected static Stream<Arguments> ATTIVITA_SINGOLARE() {
+    public static Stream<Arguments> ATTIVITA_SINGOLARE() {
         return Stream.of(
                 Arguments.of(VUOTA, false),
                 Arguments.of("politico", true),
@@ -660,20 +660,6 @@ public abstract class WikiTest extends AlgosTest {
         );
     }
 
-    //--nome plurale
-    //--esiste
-    protected static Stream<Arguments> ATTIVITA_PLURALI() {
-        return Stream.of(
-                Arguments.of(VUOTA, false),
-                Arguments.of("politici", true),
-                Arguments.of("politico", false),
-                Arguments.of("fantasmi", false),
-                Arguments.of("attori", true),
-                Arguments.of("attrice", false),
-                Arguments.of("nessuna", false),
-                Arguments.of("accademici", true)
-        );
-    }
 
 
     //--nome nazionalità
@@ -810,6 +796,8 @@ public abstract class WikiTest extends AlgosTest {
         typeUser = null;
         pageId = 0L;
     }
+
+
 
     protected void printRisultato(WResult result) {
         List lista = result.getLista();

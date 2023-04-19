@@ -251,28 +251,28 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("72 - findAllForKeyByPlurale (String)");
     }
 
-    //--nome attività singolare (maiuscola o minuscola)
-    //--esiste ID
-    //--esiste key
-    protected void findAllByPlurale(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgente = (String) mat[0];
-        previstoBooleano = (boolean) mat[2];
-
-        if (previstoBooleano) {
-            entityBean = wikiBackend.findByKey(sorgente);
-            assertTrue(entityBean != null);
-            sorgente2 = ((AttSingolare) entityBean).plurale;
-            listaBeans = wikiBackend.findAllByPlurale(sorgente2);
-            assertTrue(listaBeans != null);
-            System.out.print(sorgente2);
-            System.out.print(FORWARD);
-            System.out.println(listaBeans);
-        }
-        else {
-            return;
-        }
-    }
+//    //--nome attività singolare (maiuscola o minuscola)
+//    //--esiste ID
+//    //--esiste key
+//    protected void findAllByPlurale(Arguments arg) {
+//        Object[] mat = arg.get();
+//        sorgente = (String) mat[0];
+//        previstoBooleano = (boolean) mat[2];
+//
+//        if (previstoBooleano) {
+//            entityBean = wikiBackend.findByKey(sorgente);
+//            assertTrue(entityBean != null);
+//            sorgente2 = ((AttSingolare) entityBean).plurale;
+//            listaBeans = wikiBackend.findAllByPlurale(sorgente2);
+//            assertTrue(listaBeans != null);
+//            System.out.print(sorgente2);
+//            System.out.print(FORWARD);
+//            System.out.println(listaBeans);
+//        }
+//        else {
+//            return;
+//        }
+//    }
 
 
     //--nome attività singolare (maiuscola o minuscola)

@@ -65,6 +65,10 @@ public class AttSingolareBackend extends WikiBackend {
         return newEntity(VUOTA, VUOTA, false);
     }
 
+    public AttSingolare newEntity(final String keyPropertyValue) {
+        return newEntity(keyPropertyValue, VUOTA, false);
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -141,16 +145,6 @@ public class AttSingolareBackend extends WikiBackend {
         return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
     }
 
-    public List<AttSingolare> findAllByExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
-    }
-
-    public List<AttSingolare> findAllByNotExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
-    }
-
     public List<String> findAllDistinctByPlurali() {
         List<String> lista = new ArrayList<>();
         Set<String> setPlurali = new HashSet();
@@ -165,6 +159,17 @@ public class AttSingolareBackend extends WikiBackend {
         Collections.sort(lista);
         return lista;
     }
+
+    public List<AttSingolare> findAllByExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
+    }
+
+    public List<AttSingolare> findAllByNotExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
+    }
+
 
 
     public Map<String, String> getMappaSingolarePlurale() {
@@ -199,6 +204,7 @@ public class AttSingolareBackend extends WikiBackend {
         result = downloadAttivitaSingole(result);
         result = downloadAttivitaEx(result);
 
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
     }
 

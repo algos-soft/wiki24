@@ -66,18 +66,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     }
 
 
-    //--value ordine
-    //--esiste entityBean
-    public static Stream<Arguments> ORDINE() {
-        return Stream.of(
-                Arguments.of(0, false),
-                Arguments.of(847, false),
-                Arguments.of(4, true),
-                Arguments.of(27, true),
-                Arguments.of(235, true),
-                Arguments.of(-4, false)
-        );
-    }
 
     /**
      * Qui passa una volta sola <br>
@@ -99,10 +87,25 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
 
         super.streamCollection = GIORNO();
         super.streamProperty = PROPERTY();
-        super.streamOrder = ORDINE();
+        super.streamOrder = GiornoBackendTest.ORDINE();
+    }
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - creaIfNotExist (non previsto per questa collection)")
+    protected void creaIfNotExist() {
+        System.out.println("41 - creaIfNotExist (non previsto per questa collection)");
+        System.out.println(message);
+        System.out.println(VUOTA);
     }
 
 
+    @Test
+    @Order(16)
+    @DisplayName("16 - upload (non previsto per questa collection)")
+    protected void upload() {
+        System.out.println("16 - upload (non previsto per questa collection)");
+    }
 
     @Test
     @Order(42)

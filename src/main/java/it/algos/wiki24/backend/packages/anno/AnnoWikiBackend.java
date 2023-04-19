@@ -132,17 +132,30 @@ public class AnnoWikiBackend extends WikiBackend {
         return super.findAllSort(sort);
     }
 
+    @Override
+    public List<AnnoWiki> findAllSortKey() {
+        return (List<AnnoWiki>) super.findAllSortKey();
+    }
+
+    @Override
+    public List<AnnoWiki> findAllSortOrder() {
+        return (List<AnnoWiki>) super.findAllSortOrder();
+    }
+    @Override
+    public List<AnnoWiki> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<AnnoWiki>) super.findAllByProperty(propertyName, propertyValue);
+    }
+
     public List<AnnoWiki> findAllBySecolo(Secolo secolo) {
         return super.findAllByProperty(FIELD_NAME_SECOLO, secolo);
+    }
+    public List<String> findAllForNomeBySecolo(Secolo secolo) {
+        return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
 
 
     public List<String> findAllForNome() {
         return findAllForKeySortOrdine();
-    }
-
-    public List<String> findAllForNomeBySecolo(Secolo secolo) {
-        return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
 
 
