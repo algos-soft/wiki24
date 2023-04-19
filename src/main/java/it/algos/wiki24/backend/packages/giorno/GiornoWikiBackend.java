@@ -259,12 +259,12 @@ public class GiornoWikiBackend extends WikiBackend {
         lista = new ArrayList<>();
         for (Giorno giorno : giorniBase) {
             nome = giorno.nome;
-            entityBean = insert(newEntity(nome));
+            entityBean = creaIfNotExist(nome);
             if (entityBean != null) {
                 lista.add(entityBean);
             }
             else {
-                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata creata. Probabilmente esiste già.", nome))));
                 result.setValido(false);
             }
         }

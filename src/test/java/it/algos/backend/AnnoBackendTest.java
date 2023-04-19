@@ -36,21 +36,21 @@ public class AnnoBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> ANNO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("0", false, false),
-                Arguments.of("24", true, true),
-                Arguments.of("secolo", false, false),
-                Arguments.of("994a.c.", true, false),
-                Arguments.of("994 a.C.", false, true),
-                Arguments.of("24 A.C.", false, false),
-                Arguments.of("24 a.C.", false, true),
-                Arguments.of("24a.c.", true, false),
-                Arguments.of("3208", false, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("0", false, false, true),
+                Arguments.of("24", true, true, false),
+                Arguments.of("secolo", false, false, true),
+                Arguments.of("994a.c.", true, false, false),
+                Arguments.of("994 a.C.", false, true, false),
+                Arguments.of("24 A.C.", false, false, false),
+                Arguments.of("24 a.C.", false, true, false),
+                Arguments.of("24a.c.", true, false, false),
+                Arguments.of("3208", false, false, true)
         );
     }
-
 
 
     //--nome della property
@@ -100,30 +100,6 @@ public class AnnoBackendTest extends BackendTest {
         super.streamOrder = ORDINE();
     }
 
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "1876";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "3472";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
     @Test
     @Order(42)
@@ -156,10 +132,10 @@ public class AnnoBackendTest extends BackendTest {
 
 
     @Test
-    @Order(55)
-    @DisplayName("55 - findAllBySecolo (entity)")
+    @Order(56)
+    @DisplayName("56 - findAllBySecolo (entity)")
     void findAllBySecolo() {
-        System.out.println("55 - findAllBySecolo (entity)");
+        System.out.println("56 - findAllBySecolo (entity)");
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
             listaBeans = backend.findAllBySecolo(sorgente);
@@ -175,26 +151,17 @@ public class AnnoBackendTest extends BackendTest {
     @Order(65)
     @DisplayName("65 - findAllForNome (String)")
     protected void findAllForNome() {
-        System.out.println("64 - findAllForNome (String)");
+        System.out.println("65 - findAllForNome (String)");
+        System.out.println("Uguale a 61 - findAllForKeySortKey");
         System.out.println(VUOTA);
-
-        //        listaStr = backend.findAllForNome();
-        //        assertNotNull(listaStr);
-        //        ottenutoIntero = listaStr.size();
-        //        sorgente = textService.format(ottenutoIntero);
-        //        sorgente2 = keyPropertyName;
-        //        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        //        System.out.println(message);
-
-        printSubLista(listaStr);
     }
 
 
     @Test
-    @Order(65)
-    @DisplayName("65 - findAllForNomeBySecolo (String)")
+    @Order(66)
+    @DisplayName("66 - findAllForNomeBySecolo (String)")
     protected void findAllForNomeByMese() {
-        System.out.println("65 - findAllForNomeByMese (String)");
+        System.out.println("66 - findAllForNomeByMese (String)");
         int num = 3;
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {

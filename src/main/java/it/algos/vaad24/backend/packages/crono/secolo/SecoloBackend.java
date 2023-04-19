@@ -87,6 +87,40 @@ public class SecoloBackend extends CrudBackend {
         return (Secolo) super.findByProperty(propertyName, propertyValue);
     }
 
+    @Override
+    public List<Secolo> findAllNoSort() {
+        return (List<Secolo>) super.findAllNoSort();
+    }
+
+    @Override
+    public List<Secolo> findAllSortCorrente() {
+        return (List<Secolo>) super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<Secolo> findAllSortCorrenteReverse() {
+        return (List<Secolo>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Secolo> findAllSort(Sort sort) {
+        return (List<Secolo>) super.findAllSort(sort);
+    }
+
+    @Override
+    public List<Secolo> findAllSortKey() {
+        return (List<Secolo>) super.findAllSortKey();
+    }
+
+    @Override
+    public List<Secolo> findAllSortOrder() {
+        return (List<Secolo>) super.findAllSortOrder();
+    }
+
+    @Override
+    public List<Secolo> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Secolo>) super.findAllByProperty(propertyName, propertyValue);
+    }
 
     /**
      * Seleziona un secolo dato l'anno <br>
@@ -140,13 +174,20 @@ public class SecoloBackend extends CrudBackend {
         return entity;
     }
 
+
     @Override
-    public List<Secolo> findAllSortCorrente() {
-        return (List<Secolo>) super.findAllSortCorrente();
+    public Secolo save(AEntity entity) {
+        return (Secolo) super.save(entity);
     }
 
-    public List<Secolo> findAllSortOrder() {
-        return (List<Secolo>) super.findAllSortOrder();
+    @Override
+    public Secolo insert(AEntity entity) {
+        return (Secolo) super.insert(entity);
+    }
+
+    @Override
+    public Secolo update(AEntity entity) {
+        return (Secolo) super.update(entity);
     }
 
     @Override
@@ -158,7 +199,7 @@ public class SecoloBackend extends CrudBackend {
         String nomeFile = "secoli";
         Map<String, List<String>> mappa;
         List<String> riga;
-        List<AEntity> lista ;
+        List<AEntity> lista;
         int ordine;
         String nome;
         int inizio;

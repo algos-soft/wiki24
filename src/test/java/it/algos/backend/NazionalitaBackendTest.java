@@ -243,30 +243,30 @@ public class NazionalitaBackendTest extends BackendTest {
     }
 
 
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "polacco";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "tirolese";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
+//    @Test
+//    @Order(41)
+//    @DisplayName("41 - creaIfNotExist")
+//    protected void creaIfNotExist() {
+//        System.out.println("41 - creaIfNotExist");
+//        System.out.println(VUOTA);
+//
+//        sorgente = "polacco";
+//        ottenutoBooleano = super.creaIfNotExist(sorgente);
+//        assertFalse(ottenutoBooleano);
+//        System.out.println(VUOTA);
+//
+//        sorgente = "tirolese";
+//        ottenutoBooleano = super.creaIfNotExist(sorgente);
+//        assertTrue(ottenutoBooleano);
+//
+//        entityBean = backend.findByKey(sorgente);
+//        assertNotNull(entityBean);
+//        ottenutoBooleano = backend.delete(entityBean);
+//        assertTrue(ottenutoBooleano);
+//
+//        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
+//        assertFalse(ottenutoBooleano);
+//    }
 
 
     @Test

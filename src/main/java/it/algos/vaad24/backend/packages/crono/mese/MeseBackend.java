@@ -1,6 +1,5 @@
 package it.algos.vaad24.backend.packages.crono.mese;
 
-import com.mongodb.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -108,22 +107,38 @@ public class MeseBackend extends CrudBackend {
     }
 
     @Override
+    public List<Mese> findAllSortCorrenteReverse() {
+        return (List<Mese>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
     public List<Mese> findAllSortOrder() {
         return (List<Mese>) super.findAllSortOrder();
     }
 
-    public List<String> findAllForKey() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, 1));
+    @Override
+    public List<Mese> findAllSortKey() {
+        return (List<Mese>) super.findAllSortKey();
     }
 
-
-    public List<String> findAllForKeyReverseOrder() {
-        return mongoService.projectionString(entityClazz, FIELD_NAME_NOME, new BasicDBObject(FIELD_NAME_ORDINE, -1));
+    @Override
+    public List<Mese> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Mese>) super.findAllByProperty(propertyName, propertyValue);
     }
 
     @Override
     public Mese save(AEntity entity) {
         return (Mese) super.save(entity);
+    }
+
+    @Override
+    public Mese insert(AEntity entity) {
+        return (Mese) super.insert(entity);
+    }
+
+    @Override
+    public Mese update(AEntity entity) {
+        return (Mese) super.update(entity);
     }
 
     @Override

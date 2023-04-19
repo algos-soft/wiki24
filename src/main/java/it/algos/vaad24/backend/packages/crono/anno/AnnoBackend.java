@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -109,13 +110,33 @@ public class AnnoBackend extends CrudBackend {
         return (List<Anno>) super.findAllSortCorrente();
     }
 
+    @Override
+    public List<Anno> findAllSortCorrenteReverse() {
+        return (List<Anno>) super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Anno> findAllSort(Sort sort) {
+        return (List<Anno>) super.findAllSort(sort);
+    }
+    @Override
+    public List<Anno> findAllSortKey() {
+        return (List<Anno>) super.findAllSortKey();
+    }
+
+    @Override
+    public List<Anno> findAllSortOrder() {
+        return (List<Anno>) super.findAllSortOrder();
+    }
+    @Override
+    public List<Anno> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return (List<Anno>) super.findAllByProperty(propertyName, propertyValue);
+    }
+
     public List<Anno> findAllBySecolo(Secolo secolo) {
         return findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
-    public List<Anno> findAllSortOrder() {
-        return (List<Anno>) super.findAllSortOrder();
-    }
 
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
         return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
@@ -125,6 +146,16 @@ public class AnnoBackend extends CrudBackend {
     @Override
     public Anno save(AEntity entity) {
         return (Anno) super.save(entity);
+    }
+
+    @Override
+    public Anno insert(AEntity entity) {
+        return (Anno) super.insert(entity);
+    }
+
+    @Override
+    public Anno update(AEntity entity) {
+        return (Anno) super.update(entity);
     }
 
     /**

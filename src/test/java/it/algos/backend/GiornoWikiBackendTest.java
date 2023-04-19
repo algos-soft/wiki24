@@ -1,6 +1,7 @@
 package it.algos.backend;
 
 import it.algos.*;
+import static it.algos.backend.GiornoBackendTest.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
@@ -41,13 +42,14 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
-    protected static Stream<Arguments> GIORNO() {
+    //--crea una nuova entity
+    public static Stream<Arguments> GIORNO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("23 febbraio", false, true),
-                Arguments.of("43 marzo", false, false),
-                Arguments.of("19 dicembra", false, false),
-                Arguments.of("4gennaio", true, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("23 febbraio", false, true, false),
+                Arguments.of("43 marzo", false, false, false),
+                Arguments.of("19 dicembra", false, false, false),
+                Arguments.of("4gennaio", true, false, false)
         );
     }
 
@@ -100,23 +102,6 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         super.streamOrder = ORDINE();
     }
 
-
-    @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "23 maggio";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = VUOTA;
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
 
 
     @Test
@@ -188,18 +173,8 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
     @DisplayName("65 - findAllForNome (String)")
     protected void findAllForNome() {
         System.out.println("65 - findAllForNome (String)");
-        System.out.println("Uguale a 61 - findAllForKey");
+        System.out.println("Uguale a 61 - findAllForKeySortKey");
         System.out.println(VUOTA);
-
-        listaStr = backend.findAllForNome();
-        assertNotNull(listaStr);
-        ottenutoIntero = listaStr.size();
-        sorgente = textService.format(ottenutoIntero);
-        sorgente2 = keyPropertyName;
-        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        System.out.println(message);
-
-        printSubLista(listaStr);
     }
 
     @Test
@@ -238,6 +213,7 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
             print(listaStr.subList(0, num));
         }
     }
+
     @Test
     @Order(75)
     @DisplayName("75 - findAllDistinctByPlurali (solo Attività e Nazionalità)")

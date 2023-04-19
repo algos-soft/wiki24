@@ -214,50 +214,18 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("12 - count");
         System.out.println("13 - resetOnlyEmpty");
         System.out.println("14 - resetForcing");
-        System.out.println("15 - download (solo su wiki)");
-        System.out.println("16 - elabora (solo su wiki)");
-        System.out.println("17 - upload (solo su wiki)");
+        System.out.println("15 - elabora (solo su wiki)");
+        System.out.println("16 - upload (solo su wiki)");
 
         System.out.println(VUOTA);
     }
 
-    @Test
-    @Order(13)
-    @DisplayName("13 - resetOnlyEmpty  (non previsto per questa collection)")
-    protected void resetOnlyEmpty() {
-        System.out.println("13 - resetOnlyEmpty (non previsto per questa collection)");
-        System.out.println("Previsti (probabilmente) download() ed elabora()");
-    }
-
-    @Test
-    @Order(14)
-    @DisplayName("14 - resetForcing (non previsto per questa collection)")
-    protected void resetForcing() {
-        System.out.println("14 - resetForcing (non previsto per questa collection)");
-        System.out.println("Previsti (probabilmente) download() ed elabora()");
-    }
 
     @Test
     @Order(15)
-    @DisplayName("15 - download (solo su wiki)")
-    protected void download() {
-        System.out.println("15 - download (solo su wiki)");
-        System.out.println(VUOTA);
-        WResult result;
-
-        if (entityClazz == null) {
-            System.out.println("Manca la variabile entityClazz in questo test");
-        }
-
-        result = wikiBackend.download();
-        printRisultato(result);
-    }
-
-    @Test
-    @Order(16)
-    @DisplayName("16 - elabora (solo su wiki)")
+    @DisplayName("15 - elabora (solo su wiki)")
     protected void elabora() {
-        System.out.println("16 - elabora (solo su wiki)");
+        System.out.println("15 - elabora (solo su wiki)");
         System.out.println(VUOTA);
 
         if (entityClazz == null) {
@@ -269,10 +237,10 @@ public abstract class WikiBackendTest extends BackendTest {
     }
 
     @Test
-    @Order(17)
-    @DisplayName("17 - upload (non previsto per questa collection)")
+    @Order(16)
+    @DisplayName("16 - upload (non previsto per questa collection)")
     protected void upload() {
-        System.out.println("17 - upload (non previsto per questa collection)");
+        System.out.println("16 - upload (non previsto per questa collection)");
     }
 
     @Test

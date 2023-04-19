@@ -35,13 +35,14 @@ public class GiornoBackendTest extends BackendTest {
     //--nome nella collection
     //--esiste come ID
     //--esiste come key
+    //--crea una nuova entity
     protected static Stream<Arguments> GIORNO() {
         return Stream.of(
-                Arguments.of(VUOTA, false, false),
-                Arguments.of("23 febbraio", false, true),
-                Arguments.of("43 marzo", false, false),
-                Arguments.of("19 dicembra", false, false),
-                Arguments.of("4gennaio", true, false)
+                Arguments.of(VUOTA, false, false, false),
+                Arguments.of("23 febbraio", false, true, false),
+                Arguments.of("43 marzo", false, false, true),
+                Arguments.of("19 dicembra", false, false, true),
+                Arguments.of("4gennaio", true, false, false)
         );
     }
 
@@ -94,31 +95,6 @@ public class GiornoBackendTest extends BackendTest {
 
 
     @Test
-    @Order(41)
-    @DisplayName("41 - creaIfNotExist")
-    protected void creaIfNotExist() {
-        System.out.println("41 - creaIfNotExist");
-        System.out.println(VUOTA);
-
-        sorgente = "23 maggio";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertFalse(ottenutoBooleano);
-        System.out.println(VUOTA);
-
-        sorgente = "12 termidoro";
-        ottenutoBooleano = super.creaIfNotExist(sorgente);
-        assertTrue(ottenutoBooleano);
-
-        entityBean = backend.findByKey(sorgente);
-        assertNotNull(entityBean);
-        ottenutoBooleano = backend.delete(entityBean);
-        assertTrue(ottenutoBooleano);
-
-        ottenutoBooleano = crudBackend.isExistByKey(sorgente);
-        assertFalse(ottenutoBooleano);
-    }
-
-    @Test
     @Order(42)
     @DisplayName("42 - newEntity")
     protected void newEntity() {
@@ -148,10 +124,10 @@ public class GiornoBackendTest extends BackendTest {
     }
 
     @Test
-    @Order(55)
-    @DisplayName("55 - findAllByMese (entity)")
+    @Order(56)
+    @DisplayName("56 - findAllByMese (entity)")
     protected void findAllByMese() {
-        System.out.println("55 - findAllByMese (entity)");
+        System.out.println("56 - findAllByMese (entity)");
         System.out.println("Rimanda a findAllByProperty(FIELD_NAME_MESE, mese)");
 
         for (Mese sorgente : meseBackend.findAllNoSort()) {
@@ -169,18 +145,8 @@ public class GiornoBackendTest extends BackendTest {
     @DisplayName("65 - findAllForNome (String)")
     protected void findAllForNome() {
         System.out.println("65 - findAllForNome (String)");
-        System.out.println("Uguale a 61 - findAllForKey");
+        System.out.println("Uguale a 61 - findAllForKeySortKey");
         System.out.println(VUOTA);
-
-        //        listaStr = backend.findAllForNome();
-        //        assertNotNull(listaStr);
-        //        ottenutoIntero = listaStr.size();
-        //        sorgente = textService.format(ottenutoIntero);
-        //        sorgente2 = keyPropertyName;
-        //        message = String.format("La collection '%s' della classe [%s] ha in totale %s entities. Valori (String) del campo chiave '%s':", collectionName, clazzName, sorgente, sorgente2);
-        //        System.out.println(message);
-        //
-        //        printSubLista(listaStr);
     }
 
 
