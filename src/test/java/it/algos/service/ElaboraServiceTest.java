@@ -95,7 +95,7 @@ public class ElaboraServiceTest extends WikiTest {
 
     @ParameterizedTest
     @Order(1)
-    @MethodSource(value = "PAGINA")
+    @MethodSource(value = "VOCE_BIOGRAFICA")
     @DisplayName("1 - esegue")
         //--nome della pagina
         //--esiste sul server wiki
@@ -105,18 +105,23 @@ public class ElaboraServiceTest extends WikiTest {
         previstoBooleano = esiste;
 
         if (previstoBooleano && textService.isValid(sorgente)) {
-            bio = queryService.getBioGrezzo(sorgente);
-            bio = service.esegue(bio);
+            bio = bioService.getBioGrezzo(sorgente);
+            if (bio != null) {
+                bio = service.esegue(bio);
+            }
+            else {
+                System.out.println("manca");
+            }
         }
         else {
             return;
         }
 
         printBio(bio);
-        System.out.println(message);
+//        System.out.println(message);
     }
 
-//    @Test
+    //    @Test
     @Order(91)
     @DisplayName("91 - elabora giorni")
     void elaboraGiorni() {
@@ -130,7 +135,7 @@ public class ElaboraServiceTest extends WikiTest {
         giornoWikiBackend.elabora();
     }
 
-//    @Test
+    //    @Test
     @Order(92)
     @DisplayName("92 - elabora anni")
     void elaboraAnni() {

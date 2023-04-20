@@ -92,7 +92,6 @@ public class AttSingolareBackendTest extends WikiBackendTest {
     }
 
 
-
     /**
      * Qui passa una volta sola <br>
      */
@@ -220,6 +219,34 @@ public class AttSingolareBackendTest extends WikiBackendTest {
         mappaOttenuta = backend.getMappaSingolarePlurale();
         assertNotNull(mappaOttenuta);
         printMappa(mappaOttenuta);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA")
+    @Order(82)
+    @DisplayName("82 - findAllForKeyBySingolare (String)")
+        //--nome singolare
+        //--esiste come ID
+        //--esiste come key
+    void findAllForKeyBySingolare(final String nomeAttivitaSingolare, boolean nonUsato, boolean esisteComeKey) {
+        System.out.println("82 - findAllForKeyBySingolare (String)");
+        System.out.println("Tutte le attività singolari dello stesso 'gruppo' di un'attività singolare");
+        System.out.println(VUOTA);
+
+        sorgente = nomeAttivitaSingolare;
+        previstoBooleano = esisteComeKey;
+
+        if (!previstoBooleano) {
+            return;
+        }
+
+        listaStr = backend.findAllForKeyBySingolare(sorgente);
+        ottenutoBooleano = listaStr != null && listaStr.size() > 0;
+        assertTrue(ottenutoBooleano);
+        message = String.format("Ci sono %s nomi di attività singolari dello stesso 'gruppo' di [%s].", listaStr.size(), sorgente);
+        System.out.println(message);
+        printSubLista(listaStr);
     }
 
 }

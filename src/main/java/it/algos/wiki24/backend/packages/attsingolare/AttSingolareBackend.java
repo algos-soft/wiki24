@@ -142,10 +142,22 @@ public class AttSingolareBackend extends WikiBackend {
         return super.findAllByPlurale(plurale);
     }
 
-    public List<String> findAllForKeyByPlurale(String plurale) {
-        return findAllByPlurale(plurale).stream().map(att -> att.nome).collect(Collectors.toList());
+    public List<AttSingolare> findAllByExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
     }
 
+    public List<AttSingolare> findAllByNotExSortKey() {
+        List<AttSingolare> listaAll = findAllSortKey();
+        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findAllForKeyByPlurale(String plurale) {
+        return findAllByPlurale(plurale).stream().map(naz -> naz.nome).collect(Collectors.toList());
+    }
+
+    @Override
     public List<String> findAllDistinctByPlurali() {
         List<String> lista = new ArrayList<>();
         Set<String> setPlurali = new HashSet();
@@ -161,17 +173,6 @@ public class AttSingolareBackend extends WikiBackend {
         return lista;
     }
 
-    public List<AttSingolare> findAllByExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> att.ex).collect(Collectors.toList());
-    }
-
-    public List<AttSingolare> findAllByNotExSortKey() {
-        List<AttSingolare> listaAll = findAllSortKey();
-        return listaAll.stream().filter(att -> !att.ex).collect(Collectors.toList());
-    }
-
-
 
     public Map<String, String> getMappaSingolarePlurale() {
         Map<String, String> mappa = new LinkedHashMap<>();
@@ -181,6 +182,11 @@ public class AttSingolareBackend extends WikiBackend {
         }
 
         return mappa;
+    }
+
+    public List<String> findAllForKeyBySingolare(final String keyValueSingolare) {
+        AttSingolare attSingolare = findByKey(keyValueSingolare);
+        return findAllForKeyByPlurale(attSingolare.plurale);
     }
 
 
@@ -195,6 +201,7 @@ public class AttSingolareBackend extends WikiBackend {
      * Modulo:Bio/Plurale attività
      * Modulo:Bio/Ex attività
      */
+    @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
 
@@ -334,6 +341,7 @@ public class AttSingolareBackend extends WikiBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
+    @Override
     public WResult elabora() {
         WResult result = super.elabora();
 
@@ -344,28 +352,5 @@ public class AttSingolareBackend extends WikiBackend {
 
         return super.fixElabora(result);
     }
-
-//    /**
-//     * ResetOnlyEmpty -> Download. <br>
-//     * Download -> Cancella tutto e scarica 2 moduli wiki: Singolare/Plurale attività, Ex attività. <br>
-//     * Elabora -> Calcola le voci biografiche che usano ogni singola attività singolare. <br>
-//     * Upload -> Non previsto. <br>
-//     * <p>
-//     * Creazione di alcuni dati <br>
-//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-//     * Viene invocato alla creazione del programma <br>
-//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public AResult resetOnlyEmpty() {
-//        AResult result = super.resetOnlyEmpty();
-//
-//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            result = this.download();
-//        }
-//
-//        return result;
-//    }
 
 }// end of crud backend class

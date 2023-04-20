@@ -16,7 +16,6 @@ import it.algos.wiki24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -64,7 +63,7 @@ public abstract class WikiBackendTest extends BackendTest {
     protected AttPluraleBackend attPluraleBackend;
 
     @Autowired
-    protected NazSingolareBackend nazSingolaBackend;
+    protected NazSingolareBackend nazSingolareBackend;
 
     @Autowired
     protected NazPluraleBackend nazPluraleBackend;

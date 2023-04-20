@@ -189,6 +189,7 @@ public class AttPluraleBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link attività
      */
+    @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
 
@@ -337,37 +338,11 @@ public class AttPluraleBackend extends WikiBackend {
         return super.fixElabora(result);
     }
 
-    //    /**
-    //     * ResetOnlyEmpty -> Download. <br>
-    //     * Download -> Esegue un Download di AttSingolare. <br>
-    //     * Download -> Crea una nuova tabella ricavandola dalle attività DISTINCT di AttSingolare <br>
-    //     * Download -> Aggiunge un link alla paginaLista di ogni attività in base al nome dell'attività plurale <br>
-    //     * Download -> Scarica 1 modulo wiki: Link attività <br>
-    //     * Elabora -> Calcola le voci biografiche che usano ogni singola attività plurale e la presenza o meno della pagina con la lista di ogni attività <br>
-    //     * Upload -> Previsto per tutte le liste di attività plurale con numBio>50 <br>
-    //     * <p>
-    //     * Creazione di alcuni dati <br>
-    //     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-    //     * Viene invocato alla creazione del programma <br>
-    //     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    @Override
-    //    public AResult resetOnlyEmpty() {
-    //        AResult result = super.resetOnlyEmpty();
-    //
-    //        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-    //            result = this.download();
-    //        }
-    //
-    //        return result;
-    //    }
-
 
     /**
      * Controlla l'esistenza della pagina wiki relativa a questa attività (lista) <br>
      */
-    public boolean esistePagina(String paginaLista) {
+    public boolean esistePaginaLista(String paginaLista) {
         String wikiTitle = "Progetto:Biografie/Attività/" + textService.primaMaiuscola(paginaLista);
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitle);
     }

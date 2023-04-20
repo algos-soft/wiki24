@@ -63,6 +63,9 @@ public class NazSingolareBackend extends WikiBackend {
         return newEntity(VUOTA, VUOTA);
     }
 
+    public NazSingolare newEntity(final String keyPropertyValue) {
+        return newEntity(keyPropertyValue, VUOTA);
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -131,14 +134,17 @@ public class NazSingolareBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
+    @Override
     public List<NazSingolare> findAllByPlurale(String plurale) {
-        return super.findAllByProperty(FIELD_NAME_PLURALE, plurale);
+        return super.findAllByPlurale(plurale);
     }
 
+    @Override
     public List<String> findAllForKeyByPlurale(String plurale) {
-        return findAllByPlurale(plurale).stream().map(nazSin -> nazSin.nome).collect(Collectors.toList());
+        return findAllByPlurale(plurale).stream().map(naz -> naz.nome).collect(Collectors.toList());
     }
 
+    @Override
     public List<String> findAllDistinctByPlurali() {
         List<String> lista = new ArrayList<>();
         Set<String> setPlurali = new HashSet();
@@ -154,6 +160,7 @@ public class NazSingolareBackend extends WikiBackend {
         return lista;
     }
 
+
     public Map<String, String> getMappaSingolarePlurale() {
         Map<String, String> mappa = new LinkedHashMap<>();
 
@@ -164,6 +171,10 @@ public class NazSingolareBackend extends WikiBackend {
         return mappa;
     }
 
+    public List<String> findAllForKeyBySingolare(final String keyValueSingolare) {
+        NazSingolare nazSingolare = findByKey(keyValueSingolare);
+        return findAllForKeyByPlurale(nazSingolare.plurale);
+    }
 
     /**
      * ResetOnlyEmpty -> Download. <br>
@@ -175,6 +186,7 @@ public class NazSingolareBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Plurale nazionalità
      */
+    @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
 
@@ -184,6 +196,7 @@ public class NazSingolareBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Plurale nazionalità.
         result = downloadNazionalita(result);
 
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
     }
 
@@ -247,6 +260,7 @@ public class NazSingolareBackend extends WikiBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
+    @Override
     public WResult elabora() {
         WResult result = super.elabora();
 
@@ -258,27 +272,5 @@ public class NazSingolareBackend extends WikiBackend {
         return super.fixElabora(result);
     }
 
-//    /**
-//     * ResetOnlyEmpty -> Download. <br>
-//     * Download -> Cancella tutto e scarica 1 modulo wiki: Singolare/Plurale nazionalità. <br>
-//     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità singolare. <br>
-//     * Upload -> Non previsto. <br>
-//     * <p>
-//     * Creazione di alcuni dati <br>
-//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-//     * Viene invocato alla creazione del programma <br>
-//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public AResult resetDownload() {
-//        AResult result = super.resetDownload();
-//
-//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            result = this.download();
-//        }
-//
-//        return result;
-//    }
 
 }// end of crud backend class

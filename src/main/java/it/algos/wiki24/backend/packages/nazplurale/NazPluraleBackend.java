@@ -50,6 +50,7 @@ public class NazPluraleBackend extends WikiBackend {
         super.durataDownload = WPref.downloadNazPluraleTime;
         super.lastElaborazione = WPref.elaboraNazPlurale;
         super.durataElaborazione = WPref.elaboraNazPluraleTime;
+
         super.lastUpload = WPref.uploadNazPlurale;
         super.durataUpload = WPref.uploadNazPluraleTime;
         super.nextUpload = WPref.uploadNazPluralePrevisto;
@@ -57,6 +58,7 @@ public class NazPluraleBackend extends WikiBackend {
 
         this.unitaMisuraDownload = AETypeTime.secondi;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
 
@@ -154,25 +156,27 @@ public class NazPluraleBackend extends WikiBackend {
         return this.findAllNoSort();
     }
 
-    public List<String> findAllForKeyBySingolari(final String keyValue) {
-        NazPlurale naz = findByKey(keyValue);
-        List<NazSingolare> listaSingolare = naz != null ? naz.listaSingolari : null;
-        return listaSingolare != null ? listaSingolare.stream().map(singolo -> singolo.nome).collect(Collectors.toList()) : null;
-    }
-
-    public List<String> findSingolari(final String keyValue) {
-        return findAllForKeyBySingolari(keyValue);
-    }
-
+    @Override
     public List<String> findAllDistinctByPlurali() {
         return findAllForKeySortKey();
     }
 
+//    public List<String> findAllForKeyBySingolari(final String keyValue) {
+//        NazPlurale naz = findByKey(keyValue);
+//        List<NazSingolare> listaSingolare = naz != null ? naz.listaSingolari : null;
+//        return listaSingolare != null ? listaSingolare.stream().map(singolo -> singolo.nome).collect(Collectors.toList()) : null;
+//    }
+//
+//    public List<String> findSingolari(final String keyValue) {
+//        return findAllForKeyBySingolari(keyValue);
+//    }
+
+
     public Map<String, String> getMappaPluraleNazione() {
         Map<String, String> mappa = new LinkedHashMap<>();
 
-        for (NazPlurale att : findAll()) {
-            mappa.put(att.nome, att.linkNazione);
+        for (NazPlurale naz : findAll()) {
+            mappa.put(naz.nome, naz.linkNazione);
         }
 
         return mappa;
@@ -192,6 +196,7 @@ public class NazPluraleBackend extends WikiBackend {
      * Legge le mappa di valori dal modulo di wiki: <br>
      * Modulo:Bio/Link nazionalità
      */
+    @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
 
@@ -207,7 +212,7 @@ public class NazPluraleBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Link nazionalità.
         result = downloadNazionalitaLink(result);
 
-//        return super.fixDownload(result);
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
     }
 
@@ -325,16 +330,17 @@ public class NazPluraleBackend extends WikiBackend {
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
+    @Override
     public WResult elabora() {
         WResult result = super.elabora();
         List<NazSingolare> singolari;
 
-        for (NazPlurale nazPlurale : findAll()) {
-            nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
-            nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);
-
-            update(nazPlurale);
-        }
+//        for (NazPlurale nazPlurale : findAll()) {
+//            nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
+//            nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);
+//
+//            update(nazPlurale);
+//        }
 
         return super.fixElabora(result);
     }
@@ -348,30 +354,5 @@ public class NazPluraleBackend extends WikiBackend {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitle);
     }
 
-//    /**
-//     * ResetOnlyEmpty -> Download. <br>
-//     * Download -> Esegue un Download di NazSingolare. <br>
-//     * Download -> Crea una nuova tabella ricavandola dalle nazionalità DISTINCT di NazSingolare. <br>
-//     * Download -> Aggiunge un link alla paginaLista di ogni nazionalità in base al nome della nazionalità plurale. <br>
-//     * Download -> Scarica 1 modulo wiki: Link nazionalità <br>
-//     * Elabora -> Calcola le voci biografiche che usano ogni singola nazionalità plurale e la presenza o meno della pagina con la lista di ogni nazionalità <br>
-//     * Upload -> Previsto per tutte le liste di nazionalità plurale con numBio>50 <br>
-//     * <p>
-//     * Creazione di alcuni dati <br>
-//     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-//     * Viene invocato alla creazione del programma <br>
-//     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public AResult resetOnlyEmpty() {
-//        AResult result = super.resetOnlyEmpty();
-//
-//        if (result.getTypeResult() == AETypeResult.collectionVuota) {
-//            result = this.download();
-//        }
-//
-//        return result;
-//    }
 
 }// end of crud backend class

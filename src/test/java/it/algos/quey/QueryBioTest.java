@@ -111,7 +111,7 @@ public class QueryBioTest extends WikiTest {
         System.out.println("3 - getWrap");
         System.out.println(VUOTA);
 
-        PAGINA().forEach(parameters -> this.getWrap(parameters));
+        VOCE_BIOGRAFICA().forEach(parameters -> this.getWrap(parameters));
     }
 
     //--nome della pagina
@@ -151,7 +151,7 @@ public class QueryBioTest extends WikiTest {
         System.out.println("4 - getBio");
         System.out.println(VUOTA);
 
-        PAGINA().forEach(parameters -> this.getBio(parameters));
+        VOCE_BIOGRAFICA().forEach(parameters -> this.getBio(parameters));
     }
 
 
@@ -196,7 +196,7 @@ public class QueryBioTest extends WikiTest {
         System.out.println("5 - getTmplBio");
         System.out.println(VUOTA);
 
-        PAGINA().forEach(parameters -> this.getTmplBio(parameters));
+        VOCE_BIOGRAFICA().forEach(parameters -> this.getTmplBio(parameters));
     }
 
 

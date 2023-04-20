@@ -105,11 +105,6 @@ public class QueryService extends WAbstractService {
     public WrapBio getBioWrap(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo);
     }
-
-    public String getBioTmpl(final String wikiTitleGrezzo) {
-        return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo).getTemplBio();
-    }
-
     public Bio getBioGrezzo(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
     }
@@ -117,6 +112,11 @@ public class QueryService extends WAbstractService {
     public Bio getBioGrezzo(final Long pageId) {
         return appContext.getBean(QueryBio.class).getBioGrezzo(pageId);
     }
+
+    public String getBioTmpl(final String wikiTitleGrezzo) {
+        return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo).getTemplBio();
+    }
+
 
     public boolean isEsiste(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitleGrezzo);

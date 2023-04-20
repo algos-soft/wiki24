@@ -32,7 +32,7 @@ import java.util.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nazplurale", keyPropertyName = "nome", usaReset = true)
+@AIEntity(collectionName = "nazplurale", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class NazPlurale extends AEntity {
 
     @AIField(type = AETypeField.text, header = "plurale", caption = "plurale", widthEM = 20)

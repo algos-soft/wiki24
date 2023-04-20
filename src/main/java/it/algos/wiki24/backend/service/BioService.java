@@ -7,6 +7,8 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -55,6 +57,24 @@ public class BioService extends WAbstractService {
     public static Function<Bio, Integer> giornoDopo = bio -> bio.giornoNatoOrd == 0 ? 400 : bio.giornoNatoOrd;
 
 
+    public WrapBio getBioWrap(final String wikiTitleGrezzo) {
+        return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo);
+    }
+
+    public Bio getBioGrezzo(final String wikiTitleGrezzo) {
+        return appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
+    }
+
+    public String getTmplBio(final String wikiTitleGrezzo) {
+        Bio bio = appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
+        return bio != null ? bio.getTmplBio() : VUOTA;
+    }
+
+    public Map<String, String> estraeMappa(final String wikiTitleGrezzo) {
+        Bio bio = appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
+        return bio != null ? estraeMappa(bio) : null;
+    }
+
     /**
      * Estrae una mappa chiave/valore dal testo contenuto tutto in una riga <br>
      * Presuppone che la riga sia unica e i parametri siano separati da pipe <br>
@@ -97,6 +117,7 @@ public class BioService extends WAbstractService {
         return mappa;
     }
 
+
     /**
      * Estrae una mappa chiave-valore dal testo del template <br>
      * Presuppone che le righe siano separate da pipe e return
@@ -123,7 +144,7 @@ public class BioService extends WAbstractService {
         }
         tmplBio = bio.getTmplBio();
         if (textService.isEmpty(tmplBio)) {
-            logService.warn(new WrapLog().message(String.format("Manca il tmplBio nella voce %s", bio.wikiTitle)));
+            logService.warn(new WrapLog().message(String.format("Manca il tmplBio")));
             return null;
         }
 

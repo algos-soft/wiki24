@@ -68,21 +68,132 @@ public class BioServiceTest extends WikiTest {
         bio = null;
     }
 
-
-
     @ParameterizedTest
-    @MethodSource(value = "PAGINA")
-    @DisplayName("1 - estraeMappa")
+    @Order(1)
+    @MethodSource(value = "VOCE_BIOGRAFICA")
+    @DisplayName("1 - getBioWrap")
         //--nome della pagina
         //--esiste sul server wiki
-    void estraeMappa(String nomePagina, boolean esiste) {
-        System.out.println("1 - estraeMappa");
+    void getBioWrap(String nomePagina, boolean esiste) {
+        System.out.println("1 - getBioWrap");
         sorgente = nomePagina;
         previstoBooleano = esiste;
 
         if (previstoBooleano && textService.isValid(sorgente)) {
-            bio = queryService.getBioGrezzo(sorgente);
-            mappaOttenuta = service.estraeMappa(bio);
+            wrapBio = service.getBioWrap(sorgente);
+        }
+        else {
+            message = String.format("Biografia inesistente [%s] o nulla o pagina non biografica", sorgente);
+            System.out.println(VUOTA);
+            System.out.println(message);
+            return;
+        }
+
+        if (wrapBio != null) {
+            message = String.format("Recuperato il wrapBio della pagina %s", sorgente);
+            System.out.println(message);
+            printWrapBio(wrapBio);
+        }
+        else {
+            message = String.format("Non sono riuscito a recuperare il wrapBio della pagina %s", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @Order(2)
+    @MethodSource(value = "VOCE_BIOGRAFICA")
+    @DisplayName("2 - getBioGrezzo")
+        //--nome della pagina
+        //--esiste sul server wiki
+    void getBioGrezzo(String nomePagina, boolean esiste) {
+        System.out.println("2 - getBioGrezzo");
+        sorgente = nomePagina;
+        previstoBooleano = esiste;
+
+        if (previstoBooleano && textService.isValid(sorgente)) {
+            bio = service.getBioGrezzo(sorgente);
+            System.out.println(VUOTA);
+        }
+        else {
+            message = String.format("Biografia inesistente [%s] o nulla o pagina non biografica", sorgente);
+            System.out.println(VUOTA);
+            System.out.println(message);
+            return;
+        }
+
+        if (bio != null) {
+            message = String.format("Creata un'istanza Bio (grezza, non elaborata) della pagina %s", sorgente);
+            System.out.println(message);
+            message = String.format("Contiene solo %s, %s e %s", "wikiTitle", "pageId", "tmplBio");
+            System.out.println(message);
+            message = String.format("Nel %s sono stati eliminati (solo visivamente) i ritorni a capo", "tmplBio");
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printBioTmpl(bio);
+        }
+        else {
+            message = String.format("Non sono riuscito a creare un'istanza Bio dalla pagina %s", sorgente);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @Order(3)
+    @MethodSource(value = "VOCE_BIOGRAFICA")
+    @DisplayName("3 - getTmplBio")
+        //--nome della pagina
+        //--esiste sul server wiki
+    void getTmplBio(String nomePagina, boolean esiste) {
+        System.out.println("3 - getTmplBio");
+        sorgente = nomePagina;
+        previstoBooleano = esiste;
+
+        if (previstoBooleano && textService.isValid(sorgente)) {
+            ottenuto = service.getTmplBio(sorgente);
+            System.out.println(VUOTA);
+        }
+        else {
+            message = String.format("Biografia inesistente [%s] o nulla o pagina non biografica", sorgente);
+            System.out.println(VUOTA);
+            System.out.println(message);
+            return;
+        }
+
+        if (textService.isValid(ottenuto)) {
+            message = String.format("Recuperato un tmplBio dalla pagina %s", sorgente);
+            System.out.println(message);
+            message = String.format("Nel %s sono stati eliminati (solo visivamente) i ritorni a capo", "tmplBio");
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            ottenuto = textService.sostituisce(ottenuto, CAPO, SPAZIO);
+            System.out.println(ottenuto);
+        }
+        else {
+            message = String.format("Non sono riuscito a recuperare un tmplBio dalla pagina %s", sorgente);
+            System.out.println(message);
+        }
+
+    }
+
+
+    @ParameterizedTest
+    @Order(4)
+    @MethodSource(value = "VOCE_BIOGRAFICA")
+    @DisplayName("4 - estraeMappa")
+        //--nome della pagina
+        //--esiste sul server wiki
+    void estraeMappa(String nomePagina, boolean esiste) {
+        System.out.println("4 - estraeMappa");
+        sorgente = nomePagina;
+        previstoBooleano = esiste;
+        System.out.println(VUOTA);
+
+        if (previstoBooleano && textService.isValid(sorgente)) {
+            mappaOttenuta = service.estraeMappa(sorgente);
         }
         else {
             return;
@@ -95,11 +206,11 @@ public class BioServiceTest extends WikiTest {
             message = String.format("Non sono riuscito a costruire la mappa di %s", sorgente);
         }
         System.out.println(message);
+        System.out.println(VUOTA);
         if (mappaOttenuta != null) {
             printMappaBio(mappaOttenuta);
         }
     }
-
 
 
     /**

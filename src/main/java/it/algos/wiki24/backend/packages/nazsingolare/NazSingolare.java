@@ -28,7 +28,7 @@ import org.springframework.stereotype.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nazsingolare", keyPropertyName = "nome", usaReset = true)
+@AIEntity(collectionName = "nazsingolare", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class NazSingolare extends AEntity {
 
     @AIField(type = AETypeField.text, header = "singolare", caption = "singolare", widthEM = 20)

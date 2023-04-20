@@ -41,8 +41,6 @@ import java.util.regex.*;
 public class ElaboraService extends WAbstractService {
 
 
-
-
     /**
      * Elabora la singola voce biografica <br>
      * Estrae dal tmplBioServer i singoli parametri previsti nella enumeration ParBio <br>
@@ -627,16 +625,16 @@ public class ElaboraService extends WAbstractService {
      */
     public String fixAttivitaValida(String testoGrezzo) {
         String testoValido = fixAttivita(testoGrezzo);
-//        AttSingolare attivita = null;
-//
-//        try {
-//            attivita = attSingolareBackend.findByKey(testoValido);
-//        } catch (Exception unErrore) {
-//            logger.info(new WrapLog().exception(unErrore));
-//        }
-//
-//        return attivita != null ? attivita.nome : VUOTA;
-        return attSingolareBackend.isExistByKey(testoValido)?testoValido:VUOTA;
+        AttSingolare attivita = null;
+
+        try {
+            attivita = attSingolareBackend.findByKey(testoValido);
+        } catch (Exception unErrore) {
+            logService.info(new WrapLog().exception(unErrore));
+        }
+
+        return attivita != null ? attivita.nome : VUOTA;
+        //        return attSingolareBackend.isExistByKey(testoValido)?testoValido:VUOTA;
     }
 
     /**
@@ -675,16 +673,16 @@ public class ElaboraService extends WAbstractService {
     @Deprecated
     public String fixNazionalitaValida(String testoGrezzo) {
         String testoValido = fixNazionalita(testoGrezzo);
-//        Nazionalita nazionalita = null;
-//
-//        try {
-//            nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
-//        } catch (Exception unErrore) {
-//            logger.info(new WrapLog().exception(unErrore));
-//        }
-//
-//        return nazionalita != null ? nazionalita.getSingolare() : VUOTA;
-        return nazSingolareBackend.isExistByKey(testoValido)?testoValido:VUOTA;
+        //        Nazionalita nazionalita = null;
+        //
+        //        try {
+        //            nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
+        //        } catch (Exception unErrore) {
+        //            logger.info(new WrapLog().exception(unErrore));
+        //        }
+        //
+        //        return nazionalita != null ? nazionalita.getSingolare() : VUOTA;
+        return nazSingolareBackend.isExistByKey(testoValido) ? testoValido : VUOTA;
     }
 
     /**

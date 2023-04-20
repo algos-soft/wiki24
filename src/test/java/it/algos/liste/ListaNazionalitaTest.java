@@ -126,7 +126,7 @@ public class ListaNazionalitaTest extends WikiTest {
 
 
     private void printSingoleAndBio(final String nomePlurale, final List<Bio> listaBio) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findSingolari(nomePlurale);
+        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
 
         if (listaBio != null && listaBio.size() > 0) {
             assertTrue(previstoBooleano);
@@ -147,7 +147,7 @@ public class ListaNazionalitaTest extends WikiTest {
 
 
     private void printSingoleAndListaWrap(final String nomePlurale, final List<WrapLista> listaWrapLista) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findSingolari(nomePlurale);
+        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
 
         if (listaWrapLista != null && listaWrapLista.size() > 0) {
             assertTrue(previstoBooleano);
@@ -166,7 +166,7 @@ public class ListaNazionalitaTest extends WikiTest {
         }
     }
     private void printSingoleAndMappaWrap(final String nomePlurale, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findSingolari(nomePlurale);
+        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             assertTrue(previstoBooleano);
