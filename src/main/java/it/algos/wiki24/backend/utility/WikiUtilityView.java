@@ -13,6 +13,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -43,7 +44,8 @@ import java.util.*;
  * Date: Fri, 10-Mar-2023
  * Time: 18:26
  */
-@Route(value = Wiki24Cost.WIKI_TAG_UTILITY, layout = MainLayout.class)
+//@Route(value = Wiki24Cost.WIKI_TAG_UTILITY, layout = MainLayout.class)
+@Route(value = TAG_ROUTE_ALIAS_PARTE_PER_PRIMA, layout = MainLayout.class)
 public class WikiUtilityView extends UtilityView {
 
     @Autowired
@@ -91,6 +93,13 @@ public class WikiUtilityView extends UtilityView {
     @Autowired
     public BioBackend bioBackend;
 
+    @Autowired
+    public MongoService mongoService;
+
+    @Override
+    protected void postConstruct() {
+        super.postConstruct();
+    }
 
     @Override
     public void body() {
@@ -102,6 +111,29 @@ public class WikiUtilityView extends UtilityView {
         this.paragrafoElaborazioneBiografie();
         this.paragrafoUploadListe();
         this.paragrafoUploadStatistiche();
+
+//        regolazioniFinali();
+    }
+
+    public void regolazioniFinali() {
+        if (mongoService.isCollectionNullOrEmpty(GiornoWiki.class)) {
+            resetGiorno();
+        }
+        if (mongoService.isCollectionNullOrEmpty(AnnoWiki.class)) {
+            resetAnno();
+        }
+        if (mongoService.isCollectionNullOrEmpty(AttSingolare.class)) {
+            downloadAttivitaSingolare();
+        }
+        if (mongoService.isCollectionNullOrEmpty(AttPlurale.class)) {
+            downloadAttivitaPlurale();
+        }
+        if (mongoService.isCollectionNullOrEmpty(NazSingolare.class)) {
+            downloadNazionalitaSingolare();
+        }
+        if (mongoService.isCollectionNullOrEmpty(NazPlurale.class)) {
+            downloadNazionalitaPlurale();
+        }
     }
 
     public void paragrafoReset() {
@@ -146,8 +178,8 @@ public class WikiUtilityView extends UtilityView {
 
     public void resetAll() {
         resetVaad();
-        resetAnno();
         resetGiorno();
+        resetAnno();
     }
 
     public void resetVaad() {
@@ -159,13 +191,14 @@ public class WikiUtilityView extends UtilityView {
         secoloBackend.resetForcing();
     }
 
+    public void resetGiorno() {
+        giornoWikiBackend.resetForcing();
+    }
+
     public void resetAnno() {
         annoWikiBackend.resetForcing();
     }
 
-    public void resetGiorno() {
-        giornoWikiBackend.resetForcing();
-    }
 
     public void paragrafoUploadModuli() {
         VerticalLayout layout = new VerticalLayout();
@@ -290,12 +323,12 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadAttivitaSingolare() {
         super.inizioDebug();
-        WResult result;
+        AResult result;
         String message;
         String task = AttSingolare.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle attività singolari.").type(AETypeLog.utility));
-        result = attSingolareBackend.download();
+        result = attSingolareBackend.resetDownload();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);
@@ -311,12 +344,12 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadAttivitaPlurale() {
         super.inizioDebug();
-        WResult result;
+        AResult result;
         String message;
         String task = AttPlurale.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle attività plurali.").type(AETypeLog.utility));
-        result = attPluraleBackend.download();
+        result = attPluraleBackend.resetDownload();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);
@@ -332,12 +365,12 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadNazionalitaSingolare() {
         super.inizioDebug();
-        WResult result;
+        AResult result;
         String message;
         String task = NazSingolare.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle nazionalità singolari.").type(AETypeLog.utility));
-        result = nazSingolareBackend.download();
+        result = nazSingolareBackend.resetDownload();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);
@@ -352,12 +385,12 @@ public class WikiUtilityView extends UtilityView {
 
     public void downloadNazionalitaPlurale() {
         super.inizioDebug();
-        WResult result;
+        AResult result;
         String message;
         String task = NazPlurale.class.getSimpleName();
 
         logger.info(new WrapLog().message("Utility: download delle nazionalità plurali.").type(AETypeLog.utility));
-        result = nazPluraleBackend.download();
+        result = nazPluraleBackend.resetDownload();
 
         if (result.isValido()) {
             message = String.format("Download di %s effettuato", task);

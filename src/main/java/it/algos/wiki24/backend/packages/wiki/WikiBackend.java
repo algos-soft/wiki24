@@ -342,13 +342,12 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
 
-    public AResult fixReset(AResult result, boolean logInfo) {
-        return fixReset(result, result.getLista(), logInfo);
-    }
 
-    public AResult fixReset(AResult result, List lista, boolean logInfo) {
-        String collectionName = result.getTarget();
-        result = super.fixResult(result, lista);
+    public AResult fixReset(AResult result, List lista) {
+        if (lista.size() > 0) {
+            result.setIntValue(lista.size());
+            result.setLista(lista);
+        }
 
         if (lastReset != null) {
             lastReset.setValue(LocalDateTime.now());
@@ -358,11 +357,33 @@ public abstract class WikiBackend extends CrudBackend {
             logService.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(ROOT_DATA_TIME);
+        }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
         return result;
     }
 
 
-    public WResult fixDownload(WResult result) {
+    public AResult fixResetDownload(AResult result) {
+        if (lastDownload != null) {
+            lastDownload.setValue(LocalDateTime.now());
+        }
+        else {
+            message = String.format("lastDownload è nullo nel target %s", result.getTarget());
+            logService.warn(new WrapLog().exception(new AlgosException(message)));
+        }
+
+        if (lastElaborazione != null) {
+            lastElaborazione.setValue(ROOT_DATA_TIME);
+        }
+
+        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
+        return result;
+    }
+
+        public WResult fixDownload(WResult result) {
         String modulo = entityClazz.getSimpleName();
         result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
 

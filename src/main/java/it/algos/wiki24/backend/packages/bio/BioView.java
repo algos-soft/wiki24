@@ -402,7 +402,7 @@ public class BioView extends WikiView {
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void download() {
+    public void resetDownload() {
         if (backend.count() == 0) {
             downloadService.cicloIniziale();
         }

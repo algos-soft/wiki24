@@ -22,7 +22,7 @@ public class WrapBio {
 
     private String title;
 
-    private LocalDateTime time;
+    private LocalDateTime timeStamp;
 
     private String templBio;
 
@@ -47,8 +47,8 @@ public class WrapBio {
         return this;
     }
 
-    public WrapBio time(final LocalDateTime time) {
-        this.time = time;
+    public WrapBio timeStamp(final LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
         return this;
     }
 
@@ -63,7 +63,7 @@ public class WrapBio {
     }
 
     public WrapBio time(final String stringTimestamp) {
-        this.time = (stringTimestamp != null && stringTimestamp.length() > 0) ? LocalDateTime.parse(stringTimestamp, DateTimeFormatter.ISO_DATE_TIME) : null;
+        this.timeStamp = (stringTimestamp != null && stringTimestamp.length() > 0) ? LocalDateTime.parse(stringTimestamp, DateTimeFormatter.ISO_DATE_TIME) : null;
         return this;
     }
 
@@ -96,8 +96,8 @@ public class WrapBio {
         return title;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
     }
 
     public String getTemplBio() {

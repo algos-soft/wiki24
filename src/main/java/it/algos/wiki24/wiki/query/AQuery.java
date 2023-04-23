@@ -18,6 +18,7 @@ import org.springframework.context.*;
 
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -847,6 +848,7 @@ public abstract class AQuery {
         String wikiTitle = VUOTA;
         long pageId = 0L;
         String tmplBio;
+        LocalDateTime timestamp = ROOT_DATA_TIME;
 
         if (jsonPageZero.get(KEY_JSON_PAGE_ID) instanceof Long pageid) {
             pageId = pageid;
@@ -864,6 +866,12 @@ public abstract class AQuery {
                         mappaUrlResponse.put(KEY_JSON_CONTENT, content);
                     }
                 }
+                if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String timestampText) {
+                    //                    timestamp = LocalDateTime.parse(timestampText);
+                    //                    // @todo ma scherzi?
+                    //                    timestamp=LocalDateTime.of(2023,4,7,3,4);
+                    mappaUrlResponse.put(KEY_JSON_TIMESTAMP, timestamp);
+                }
                 if (jsonRevZero.get(KEY_JSON_CONTENT) instanceof String contenuto) {
                     content = contenuto;
                     mappaUrlResponse.put(KEY_JSON_CONTENT, content);
@@ -873,10 +881,10 @@ public abstract class AQuery {
 
         tmplBio = wikiBot.estraeTmpl(content);
         if (textService.isValid(tmplBio)) {
-            wrapBio = new WrapBio().valida(true).title(wikiTitle).pageid(pageId).type(AETypePage.testoConTmpl).templBio(tmplBio);
+            wrapBio = new WrapBio().valida(true).title(wikiTitle).pageid(pageId).type(AETypePage.testoConTmpl).timeStamp(timestamp).templBio(tmplBio);
         }
         else {
-            wrapBio = new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(AETypePage.testoSenzaTmpl).templBio(tmplBio);
+            wrapBio = new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(AETypePage.testoSenzaTmpl).timeStamp(timestamp).templBio(tmplBio);
         }
 
         return wrapBio;

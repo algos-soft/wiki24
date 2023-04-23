@@ -205,8 +205,7 @@ public class AttPluraleBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Link attività.
         result = downloadAttivitaLink(result);
 
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
+        return super.fixResetDownload(result);
     }
 
     /**

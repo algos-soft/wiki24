@@ -212,8 +212,7 @@ public class NazPluraleBackend extends WikiBackend {
         //--Scarica 1 modulo wiki: Singolare/Link nazionalità.
         result = downloadNazionalitaLink(result);
 
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
+        return super.fixResetDownload(result);
     }
 
 

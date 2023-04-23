@@ -483,7 +483,7 @@ public abstract class WikiView extends CrudView {
             buttonDownload.getElement().setAttribute("theme", "primary");
             buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server wiki");
             buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
-            buttonDownload.addClickListener(event -> download());
+            buttonDownload.addClickListener(event -> resetDownload());
             topPlaceHolder.add(buttonDownload);
         }
 
@@ -819,8 +819,8 @@ public abstract class WikiView extends CrudView {
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void download() {
-        crudBackend.download();
+    public void resetDownload() {
+        crudBackend.resetDownload();
         reload();
     }
 

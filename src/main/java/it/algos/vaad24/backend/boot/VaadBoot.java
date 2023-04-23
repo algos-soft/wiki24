@@ -4,6 +4,12 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.packages.anagrafica.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.packages.geografia.continente.*;
 import it.algos.vaad24.backend.packages.utility.log.*;
 import it.algos.vaad24.backend.packages.utility.nota.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
@@ -13,6 +19,7 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.wizard.*;
+import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.context.event.EventListener;
@@ -47,6 +54,25 @@ import java.util.*;
  */
 @Service
 public class VaadBoot {
+
+    public static void start() {
+        VaadBoot.CREA_LISTA_PREFERENZE_VAADIN();
+    }
+
+    /**
+     * Crea le Enumeration in memoria <br>
+     * Aggiunge le singole Enumeration alla lista globale <br>
+     * NON usa la injection di SpringBoot <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public static void CREA_LISTA_PREFERENZE_VAADIN() {
+        for (Pref pref : Pref.values()) {
+            VaadVar.prefList.add(pref);
+        }
+        Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN);
+        slf4jLogger.warn("Preferenze - Aggiunge le singole Enumeration generali alla lista globale 'VaadVar.prefList' (metodo statico)");
+    }
 
     protected boolean allDebugSetup;
 
@@ -121,6 +147,24 @@ public class VaadBoot {
     @Autowired
     protected PreferenzaBackend preferenzaBackend;
 
+    @Autowired
+    protected ViaBackend viaBackend;
+
+    @Autowired
+    protected ContinenteBackend continenteBackend;
+
+    @Autowired
+    protected GiornoBackend giornoBackend;
+
+    @Autowired
+    protected AnnoBackend annoBackend;
+
+    @Autowired
+    protected SecoloBackend secoloBackend;
+
+    @Autowired
+    protected MeseBackend meseBackend;
+
     /**
      * Constructor with @Autowired on setter. Usato quando ci sono sottoclassi. <br>
      * Per evitare di avere nel costruttore tutte le property che devono essere iniettate e per poterle aumentare <br>
@@ -137,13 +181,6 @@ public class VaadBoot {
     }// end of constructor with @Autowired on setter
 
 
-    /**
-     * The ContextRefreshedEvent happens after both Vaadin and Spring are fully initialized. At the time of this
-     * event, the application is ready to service Vaadin requests <br>
-     */
-    @EventListener(ContextRefreshedEvent.class)
-    public void onContextRefreshEvent() {
-    }
 
     /**
      * Primo ingresso nel programma <br>
@@ -161,7 +198,6 @@ public class VaadBoot {
      */
     protected void inizia() {
         this.fixVariabili();
-        this.creaEnumerationPreferenze();
         this.fixEnumerationPreferenze();
         this.creaPreferenzeMongoDB();
         logger.setUpIni();
@@ -179,19 +215,6 @@ public class VaadBoot {
         this.fixLogin();
 
         logger.setUpEnd();
-    }
-
-    /**
-     * Crea le Enumeration in memoria <br>
-     * Aggiunge le singole Enumeration alla lista globale <br>
-     * NON usa la injection di SpringBoot <br>
-     * NON crea le preferenze su mondoDB <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    public void creaEnumerationPreferenze() {
-        for (Pref pref : Pref.values()) {
-            VaadVar.prefList.add(pref);
-        }
     }
 
 
@@ -216,8 +239,18 @@ public class VaadBoot {
      * Non deve essere sovrascritto <br>
      */
     public void creaPreferenzeMongoDB() {
-        preferenzaBackend.resetDownload();
+        preferenzaBackend.resetOnlyEmpty();
     }
+
+    public void allResetOnlyEmpty() {
+        viaBackend.resetOnlyEmpty();
+        continenteBackend.resetOnlyEmpty();
+        giornoBackend.resetOnlyEmpty();
+        annoBackend.resetOnlyEmpty();
+        secoloBackend.resetOnlyEmpty();
+        meseBackend.resetOnlyEmpty();
+    }
+
 
     public void printInfo() {
         printInfo("VaadVar.frameworkVaadin24", VaadVar.frameworkVaadin24);
@@ -268,7 +301,7 @@ public class VaadBoot {
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
         //
         //        MongoDatabase db = mongoService.getDataBase();
-//                MongoDatabase dbAdmin = mongoService.getDBAdmin();
+        //                MongoDatabase dbAdmin = mongoService.getDBAdmin();
         //        message = String.format("Database mongo versione: %s", databaseVersion);
         //        logger.info(new WrapLog().message(message).type(AETypeLog.info));
 

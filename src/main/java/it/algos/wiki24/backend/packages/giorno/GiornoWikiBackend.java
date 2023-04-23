@@ -109,6 +109,10 @@ public class GiornoWikiBackend extends WikiBackend {
         return (GiornoWiki) super.findByProperty(propertyName, propertyValue);
     }
 
+    @Override
+    public List<GiornoWiki> findAll() {
+        return super.findAll();
+    }
 
     @Override
     public List<GiornoWiki> findAllNoSort() {
@@ -156,6 +160,50 @@ public class GiornoWikiBackend extends WikiBackend {
         return listaNomi;
     }
 
+    /**
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
+     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String clazzName = entityClazz.getSimpleName();
+        AEntity entityBean;
+        List<Giorno> giorniBase;
+        List<AEntity> lista;
+        String nome;
+
+        giorniBase = giornoBackend.findAllNoSort();
+        if (giorniBase.size() < 1) {
+            logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Giorno'")).usaDb());
+            return result.fine();
+        }
+
+        result.setValido(true);
+        lista = new ArrayList<>();
+        for (Giorno giorno : giorniBase) {
+            nome = giorno.nome;
+            entityBean = creaIfNotExist(nome);
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata creata. Probabilmente esiste già.", nome))));
+                result.setValido(false);
+            }
+        }
+        if (lista.size() < 1) {
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+            return result.errorMessage(message);
+        }
+
+        return fixReset(result, lista);
+    }
 
     /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
@@ -164,8 +212,9 @@ public class GiornoWikiBackend extends WikiBackend {
      */
     @Override
     public WResult elabora() {
-        long inizio = System.currentTimeMillis();
         WResult result = super.elabora();
+        AEntity entityBean;
+        long inizio = System.currentTimeMillis();
         String message;
         int tempo = WPref.elaboraGiorniTime.getInt();
 
@@ -183,7 +232,8 @@ public class GiornoWikiBackend extends WikiBackend {
             giornoWiki.bioNati = bioBackend.countGiornoNato(giornoWiki);
             giornoWiki.bioMorti = bioBackend.countGiornoMorto(giornoWiki);
 
-            update(giornoWiki);
+            entityBean = update(giornoWiki);
+            int a=87;
         }
 
         return super.fixElabora(result);
@@ -230,56 +280,6 @@ public class GiornoWikiBackend extends WikiBackend {
         mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente.intValue());
 
         return mappa;
-    }
-
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    public AResult resetDownload() {
-        AResult result = super.resetDownload();
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String clazzName = entityClazz.getSimpleName();
-        AEntity entityBean;
-        List<Giorno> giorniBase;
-        List<AEntity> lista;
-        String nome;
-
-        giorniBase = giornoBackend.findAllNoSort();
-        if (giorniBase.size() < 1) {
-            logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Giorno'")).usaDb());
-            return result.fine();
-        }
-
-        result.setValido(true);
-        lista = new ArrayList<>();
-        for (Giorno giorno : giorniBase) {
-            nome = giorno.nome;
-            entityBean = creaIfNotExist(nome);
-            if (entityBean != null) {
-                lista.add(entityBean);
-            }
-            else {
-                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata creata. Probabilmente esiste già.", nome))));
-                result.setValido(false);
-            }
-        }
-        if (lista.size() > 0) {
-            result.setIntValue(lista.size());
-            result.setLista(lista);
-        }
-        else {
-            result.typeResult(AETypeResult.error);
-            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
-            return result.errorMessage(message);
-        }
-
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
     }
 
 

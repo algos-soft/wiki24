@@ -211,6 +211,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("paginaInesistente", false),
                 Arguments.of("Matteo Salvini", true),
                 Arguments.of("Matteo Renzi", true),
+                Arguments.of("Rocco Commisso", true),
                 Arguments.of("Charles Collins", true),
                 Arguments.of("Bernadette Soubirous", true)
 
@@ -850,6 +851,7 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("Wrap title: %s", wrap.getTitle()));
             System.out.println(String.format("Wrap pageid: %s", wrap.getPageid()));
             System.out.println(String.format("Wrap type: %s", wrap.getType()));
+            System.out.println(String.format("Wrap timeStamp: %s", wrap.getTimeStamp()));
             System.out.println(String.format("Wrap templBio: %s", textService.isValid(wrap.getTemplBio()) ? "valido" : "non esiste"));
             if (textService.isValid(wrap.getTemplBio())) {
                 System.out.println(String.format("templBio: %s", getMax(wrap.getTemplBio())));

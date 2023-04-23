@@ -212,8 +212,7 @@ public class AttSingolareBackend extends WikiBackend {
         result = downloadAttivitaSingole(result);
         result = downloadAttivitaEx(result);
 
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
+        return super.fixResetDownload(result);
     }
 
 

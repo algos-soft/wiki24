@@ -49,7 +49,7 @@ public class AnnoWikiBackend extends WikiBackend {
         super.lastStatistica = WPref.statisticaAnni;
         super.durataStatistica = WPref.statisticaAnniTime;
 
-        this.unitaMisuraElaborazione = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
     /**
@@ -141,6 +141,7 @@ public class AnnoWikiBackend extends WikiBackend {
     public List<AnnoWiki> findAllSortOrder() {
         return (List<AnnoWiki>) super.findAllSortOrder();
     }
+
     @Override
     public List<AnnoWiki> findAllByProperty(final String propertyName, final Object propertyValue) {
         return (List<AnnoWiki>) super.findAllByProperty(propertyName, propertyValue);
@@ -149,6 +150,7 @@ public class AnnoWikiBackend extends WikiBackend {
     public List<AnnoWiki> findAllBySecolo(Secolo secolo) {
         return super.findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
+
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
         return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
@@ -199,13 +201,61 @@ public class AnnoWikiBackend extends WikiBackend {
     }
 
     /**
+     * Creazione di alcuni dati <br>
+     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
+     * Viene invocato alla creazione del programma <br>
+     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        String clazzName = entityClazz.getSimpleName();
+        AEntity entityBean;
+        List<Anno> anniBase;
+        List<AEntity> lista;
+        String nome;
+
+        anniBase = annoBackend.findAllNoSort();
+        if (anniBase.size() < 1) {
+            logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Anno'")).usaDb());
+            return result.fine();
+        }
+
+        result.setValido(true);
+        lista = new ArrayList<>();
+        for (Anno anno : anniBase) {
+            nome = anno.nome;
+
+            entityBean = insert(newEntity(nome));
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
+                result.setValido(false);
+            }
+        }
+
+        if (lista.size() < 1) {
+            result.typeResult(AETypeResult.error);
+            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
+            return result.errorMessage(message);
+        }
+
+        return fixReset(result, lista);
+    }
+
+    /**
      * Esegue un azione di elaborazione, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
     public WResult elabora() {
-        long inizio = System.currentTimeMillis();
         WResult result = super.elabora();
+        AEntity entityBean;
+        long inizio = System.currentTimeMillis();
         int cont = 0;
         int blocco = 303;
         String size;
@@ -271,7 +321,7 @@ public class AnnoWikiBackend extends WikiBackend {
             annoWiki.natiOk = natiOk;
             annoWiki.mortiOk = mortiOk;
 
-            update(annoWiki);
+            entityBean = update(annoWiki);
 
             if (Pref.debug.is()) {
                 cont++;
@@ -327,58 +377,6 @@ public class AnnoWikiBackend extends WikiBackend {
         mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente.intValue());
 
         return mappa;
-    }
-
-    /**
-     * Creazione di alcuni dati <br>
-     * Esegue SOLO se la collection NON esiste oppure esiste ma è VUOTA <br>
-     * Viene invocato alla creazione del programma <br>
-     * I dati possono essere presi da una Enumeration, da un file CSV locale, da un file CSV remoto o creati hardcoded <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    public AResult resetDownload() {
-        AResult result = super.resetDownload();
-        String collectionName = annotationService.getCollectionName(entityClazz);
-        String clazzName = entityClazz.getSimpleName();
-        AEntity entityBean;
-        List<Anno> anniBase;
-        List<AEntity> lista;
-        String nome;
-
-        anniBase = annoBackend.findAllNoSort();
-        if (anniBase.size() < 1) {
-            logService.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Anno'")).usaDb());
-            return result.fine();
-        }
-
-        result.setValido(true);
-        lista = new ArrayList<>();
-        for (Anno anno : anniBase) {
-            nome = anno.nome;
-
-            entityBean = insert(newEntity(nome));
-            if (entityBean != null) {
-                lista.add(entityBean);
-            }
-            else {
-                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))));
-                result.setValido(false);
-            }
-        }
-
-        if (lista.size() > 0) {
-            result.setIntValue(lista.size());
-            result.setLista(lista);
-        }
-        else {
-            result.typeResult(AETypeResult.error);
-            message = String.format("Non sono riuscito a creare la collection '%s'. Controlla il metodo [%s].resetDownload()", collectionName, clazzName);
-            return result.errorMessage(message);
-        }
-
-        result = result.valido(true).fine().eseguito().typeResult(AETypeResult.collectionPiena);
-        return result;
     }
 
 
