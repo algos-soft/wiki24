@@ -66,7 +66,6 @@ public class UploadAnni extends UploadGiorniAnni {
 
     /**
      * Esegue la scrittura della pagina <br>
-     *
      */
     @Override
     public WResult upload(String nomeAnno) {
@@ -93,14 +92,14 @@ public class UploadAnni extends UploadGiorniAnni {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti degli anni"));
         long inizio = System.currentTimeMillis();
-        List<String> anni=new ArrayList<>();
+        List<String> anni;
         String message;
         int modificatiNati;
         int modificatiMorti;
 
         List<Secolo> secoli = secoloBackend.findAllSortCorrente();
         for (Secolo secolo : secoli) {
-//            anni = annoBackend.findAllForProperty(secolo);
+            anni = annoBackend.findAllForNomeBySecolo(secolo);
             modificatiNati = 0;
             modificatiMorti = 0;
 
@@ -162,7 +161,7 @@ public class UploadAnni extends UploadGiorniAnni {
     @Override
     protected String categorieSotto() {
         StringBuffer buffer = new StringBuffer();
-        Secolo secolo = secoloBackend.findByProperty("secolo",anno.secolo); //@todo controllare
+        Secolo secolo = secoloBackend.findByProperty("secolo", anno.secolo); //@todo controllare
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {
