@@ -107,7 +107,6 @@ public class GiornoWikiView extends WikiView {
         alertPlaceHolder.add(new Span(anchor1));
 
         message = String.format("Tabella dei giorni dell'anno recuperati dalla tabella 'Giorno' di %s", VaadVar.frameworkVaadin24);
-        System.out.println(message);
         addSpan(ASpan.text(message).verde());
 
         message = String.format("Reset%scostruisce la tabella", FORWARD);

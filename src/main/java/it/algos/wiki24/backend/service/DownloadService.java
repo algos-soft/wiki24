@@ -547,6 +547,7 @@ public class DownloadService extends WAbstractService {
                 else {
                     message = String.format("La pagina %s non è una biografia", wrap.getTitle());
                     logService.warn(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
+                    //@todo inviare mail
                 }
             }
         }
