@@ -87,11 +87,11 @@ public class UploadAnniTest extends WikiTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - Upload test di un anno di nascita complesso (con sottopagine)")
+    @DisplayName("2 - Upload test di un anno di morte complesso (con sottopagine)")
     void upload2() {
-        System.out.println("2 - Upload test di un anno di nascita complesso (con sottopagine)");
-        sorgente = "2001";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
+        System.out.println("2 - Upload test di un anno di morte complesso (con sottopagine)");
+        sorgente = "2018";
+        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoMorte).upload(sorgente);
     }
 
 

@@ -90,8 +90,8 @@ public abstract class UploadGiorniAnni extends Upload {
      */
     public WResult upload(final String nomeGiornoAnno) {
         this.nomeLista = nomeGiornoAnno;
-        int numVoci ;
-        int numBio ;
+        int numVoci;
+        int numBio;
         int sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         int sogliaMaxPagina = WPref.maxBioPageAnniGiorni.getInt();
 
@@ -475,8 +475,8 @@ public abstract class UploadGiorniAnni extends Upload {
     }
 
     protected int fixOrdineSottoPagina(String titoloParagrafoLink) {
-//        int ordine = meseBackend.getOrdine(titoloParagrafoLink); @todo ASSOLUTAMENTE da sistemare
-        int ordine = 17;
+        Mese mese = meseBackend.findByKey(titoloParagrafoLink.toLowerCase());
+        int ordine = mese != null ? mese.ordine : 1;
 
         if (ordine == 0 && titoloParagrafoLink.equals(TAG_LISTA_NO_GIORNO)) {
             ordine = 13;

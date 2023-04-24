@@ -163,9 +163,16 @@ public class UploadAnni extends UploadGiorniAnni {
         StringBuffer buffer = new StringBuffer();
         Secolo secolo = anno.secolo;
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
+        String message;
 
         if (uploadTest) {
-            return VUOTA;
+            if (WPref.sottoCategorieNatiPerAnno.is()) {
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]]}}", typeCrono.getTagLower(), secoloTxt, ordineGiornoAnno);
+            }
+            else {
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]]}}", typeCrono.getTagLower(), typeCrono.getGiornoAnno(), ordineGiornoAnno);
+            }
+            buffer.append(message);
         }
 
         if (WPref.sottoCategorieNatiPerAnno.is()) {
