@@ -476,10 +476,12 @@ public abstract class UploadGiorniAnni extends Upload {
 
     protected int fixOrdineSottoPagina(String titoloParagrafoLink) {
         Mese mese = meseBackend.findByKey(titoloParagrafoLink.toLowerCase());
-        int ordine = mese != null ? mese.ordine : 1;
+        int ordine = mese != null ? mese.ordine : 0;
 
-        if (ordine == 0 && titoloParagrafoLink.equals(TAG_LISTA_NO_GIORNO)) {
-            ordine = 13;
+        if (ordine == 0) {
+            if (titoloParagrafoLink.equals(TAG_LISTA_NO_GIORNO) || titoloParagrafoLink.equals(TAG_LISTA_NO_ANNO)) {
+                ordine = 13;
+            }
         }
 
         return ordine;
