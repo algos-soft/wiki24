@@ -20,8 +20,8 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 08-Mar-2023
- * Time: 19:42
+ * Date: Mon, 24-Apr-2023
+ * Time: 11:35
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -30,15 +30,15 @@ import com.vaadin.flow.component.textfield.TextField;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("upload")
-@DisplayName("Giorni upload")
+@DisplayName("Anni upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadGiorniTest extends WikiTest {
+public class UploadAnniTest extends WikiTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadGiorni istanza;
+    private UploadAnni istanza;
 
 
     /**
@@ -51,6 +51,7 @@ public class UploadGiorniTest extends WikiTest {
         super.setUpAll();
         assertNull(istanza);
     }
+
 
     /**
      * Qui passa prima di ogni test delle sottoclassi <br>
@@ -68,7 +69,7 @@ public class UploadGiorniTest extends WikiTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new UploadGiorni();
+        istanza = new UploadAnni();
         assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
@@ -77,12 +78,22 @@ public class UploadGiorniTest extends WikiTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - Upload test di un giorno di nascita")
+    @DisplayName("2 - Upload test di un anno di nascita semplice (senza sottopagine)")
     void upload() {
-        System.out.println("2 - Upload test di un giorno");
-        sorgente = "24 aprile";
-        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
+        System.out.println("2 - Upload test di un anno di nascita semplice (senza sottopagine)");
+        sorgente = "1837";
+        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
     }
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - Upload test di un anno di nascita complesso (con sottopagine)")
+    void upload2() {
+        System.out.println("2 - Upload test di un anno di nascita complesso (con sottopagine)");
+        sorgente = "2013";
+        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoMorte).upload(sorgente);
+    }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>

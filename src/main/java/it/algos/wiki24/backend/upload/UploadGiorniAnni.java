@@ -90,8 +90,8 @@ public abstract class UploadGiorniAnni extends Upload {
      */
     public WResult upload(final String nomeGiornoAnno) {
         this.nomeLista = nomeGiornoAnno;
-        int numVoci = 0;
-        int numBio = 0;
+        int numVoci ;
+        int numBio ;
         int sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         int sogliaMaxPagina = WPref.maxBioPageAnniGiorni.getInt();
 
