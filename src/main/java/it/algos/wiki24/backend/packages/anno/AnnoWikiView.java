@@ -111,7 +111,6 @@ public class AnnoWikiView extends WikiView {
         alertPlaceHolder.add(new Span(anchor1));
 
         message = String.format("Tabella degli anni recuperati dalla tabella 'Anno' di %s", VaadVar.frameworkVaadin24);
-        System.out.println(message);
         addSpan(ASpan.text(message).verde());
 
         message = String.format("Reset%scostruisce la tabella", FORWARD);
