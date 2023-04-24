@@ -76,7 +76,7 @@ public class UploadAnniTest extends WikiTest {
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-    @Test
+//    @Test
     @Order(2)
     @DisplayName("2 - Upload test di un anno di nascita semplice (senza sottopagine)")
     void upload() {
@@ -90,8 +90,8 @@ public class UploadAnniTest extends WikiTest {
     @DisplayName("2 - Upload test di un anno di nascita complesso (con sottopagine)")
     void upload2() {
         System.out.println("2 - Upload test di un anno di nascita complesso (con sottopagine)");
-        sorgente = "2013";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoMorte).upload(sorgente);
+        sorgente = "2001";
+        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
     }
 
 

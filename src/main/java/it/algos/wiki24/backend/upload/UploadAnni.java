@@ -161,7 +161,7 @@ public class UploadAnni extends UploadGiorniAnni {
     @Override
     protected String categorieSotto() {
         StringBuffer buffer = new StringBuffer();
-        Secolo secolo = secoloBackend.findByProperty("secolo", anno.secolo); //@todo controllare
+        Secolo secolo = anno.secolo;
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {
