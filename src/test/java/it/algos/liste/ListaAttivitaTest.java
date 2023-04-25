@@ -24,13 +24,10 @@ import java.util.stream.*;
  * Date: Fri, 03-Jun-2022
  * Time: 20:06
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
-@Tag("production")
 @Tag("liste")
-@DisplayName("Attività lista")
+@DisplayName("ListaAttivita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaAttivitaTest extends WikiTest {
 
@@ -82,9 +79,13 @@ public class ListaAttivitaTest extends WikiTest {
     @DisplayName("2 - Lista bio di varie attivita")
         //--nome attivita
         //--typeLista
-    void listaBio(final String attività, final AETypeLista type) {
+    void listaBio(final String nomeAttivita, final AETypeLista type) {
         System.out.println("2 - Lista bio di varie attivita");
-        sorgente = attività;
+        sorgente = nomeAttivita;
+
+        if (!valido(nomeAttivita, type)) {
+            return;
+        }
 
         listBio = switch (type) {
             case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(sorgente).listaBio();
@@ -96,8 +97,8 @@ public class ListaAttivitaTest extends WikiTest {
             message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), sorgente, type.getTagLower());
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                System.out.println(listaNomiSingoli);
+                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
+                //                System.out.println(listaNomiSingoli);
             }
             System.out.println(VUOTA);
             printBioLista(listBio);
@@ -131,8 +132,8 @@ public class ListaAttivitaTest extends WikiTest {
             message = String.format("Ci sono %d wrapLista che implementano l'attività %s%s", listWrapLista.size(), sorgente, type.getTagLower());
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                System.out.println(listaNomiSingoli);
+                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
+                //                System.out.println(listaNomiSingoli);
             }
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
@@ -167,8 +168,8 @@ public class ListaAttivitaTest extends WikiTest {
             message = String.format("Ci sono %d wrapLista che implementano l'attività %s %s", numVoci, sorgente, type.getTagLower());
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                System.out.println(listaNomiSingoli);
+                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
+                //                System.out.println(listaNomiSingoli);
             }
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
@@ -528,18 +529,31 @@ public class ListaAttivitaTest extends WikiTest {
     }
 
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
+    private boolean valido(final String nomeAttivita, final AETypeLista type) {
+        if (textService.isEmpty(nomeAttivita)) {
+            System.out.println("Manca il nome dell'attività");
+            return false;
+        }
 
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+        if (type != AETypeLista.attivitaSingolare && type != AETypeLista.attivitaPlurale) {
+            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, ListaAttivita.class.getSimpleName());
+            System.out.println(message);
+            return false;
+        }
+
+        if (type == AETypeLista.attivitaSingolare && !attSingolareBackend.isExistByKey(nomeAttivita)) {
+            message = String.format("L'attività singolare [%s] indicata NON esiste", nomeAttivita);
+            System.out.println(message);
+            return false;
+        }
+
+        if (type == AETypeLista.attivitaPlurale && !attPluraleBackend.isExistByKey(nomeAttivita)) {
+            message = String.format("L'attività plurale [%s] indicata NON esiste", nomeAttivita);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

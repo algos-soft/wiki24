@@ -10,6 +10,8 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
@@ -77,11 +79,11 @@ public abstract class WikiTest extends AlgosTest {
     @Autowired
     public BioBackend bioBackend;
 
-    @Autowired
-    public AttivitaBackend attivitaBackend;
-
-    @Autowired
-    public NazionalitaBackend nazionalitaBackend;
+//    @Autowired
+//    public AttivitaBackend attivitaBackend;
+//
+//    @Autowired
+//    public NazionalitaBackend nazionalitaBackend;
 
     @Autowired
     public BotLogin botLogin;
@@ -113,6 +115,12 @@ public abstract class WikiTest extends AlgosTest {
 
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+
+    @Autowired
+    public AttSingolareBackend attSingolareBackend;
+
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
 
     @Autowired
     public NazSingolareBackend nazSingolareBackend;
@@ -563,11 +571,15 @@ public abstract class WikiTest extends AlgosTest {
         return Stream.of(
                 Arguments.of(VUOTA, AETypeLista.listaBreve),
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
+                Arguments.of("soprano", AETypeLista.giornoNascita),
+                Arguments.of("soprano", AETypeLista.attivitaSingolare),
+                Arguments.of("attrice", AETypeLista.attivitaSingolare),
+                Arguments.of("abate", AETypeLista.attivitaSingolare),
+                Arguments.of("badessa", AETypeLista.attivitaSingolare),
                 Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
                 Arguments.of("bassisti", AETypeLista.attivitaPlurale),
                 Arguments.of("allevatori", AETypeLista.attivitaPlurale),
                 Arguments.of("diplomatici", AETypeLista.attivitaPlurale),
-                Arguments.of("soprano", AETypeLista.attivitaSingolare),
                 Arguments.of("romanziere", AETypeLista.attivitaSingolare),
                 Arguments.of("accademici", AETypeLista.attivitaPlurale),
                 Arguments.of("dogi", AETypeLista.attivitaPlurale)
@@ -746,8 +758,6 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(giornoBackend);
         assertNotNull(meseBackend);
         assertNotNull(annoBackend);
-        assertNotNull(attivitaBackend);
-        assertNotNull(nazionalitaBackend);
         assertNotNull(cognomeBackend);
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoWikiBackend);

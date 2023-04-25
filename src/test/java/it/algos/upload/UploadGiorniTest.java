@@ -75,7 +75,7 @@ public class UploadGiorniTest extends WikiTest {
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-//    @Test
+    @Test
     @Order(2)
     @DisplayName("2 - Upload test di un giorno di nascita")
     void upload() {

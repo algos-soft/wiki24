@@ -6,6 +6,8 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
@@ -818,7 +820,22 @@ public class BioService extends WAbstractService {
     }
 
     /**
-     * Cerca tutte le entities di una collection filtrate con una serie di attività. <br>
+     * Cerca tutte le entities di una collection filtrate per una singola attività. <br>
+     * Selects documents in a collection or view and returns a list of the selected documents. <br>
+     *
+     * @param nomeAttivitaSingola per costruire la query
+     *
+     * @return lista di entityBeans ordinata per cognome
+     *
+     * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
+     */
+    public List<Bio> fetchAttivitaSingolare(String nomeAttivitaSingola) {
+        return repository.findAllByAttivitaOrderByOrdinamento(nomeAttivitaSingola);
+    }
+
+
+    /**
+     * Cerca tutte le entities di una collection filtrate per una serie di attività singolari. <br>
      * Selects documents in a collection or view and returns a list of the selected documents. <br>
      *
      * @param attivitaPlurale per costruire la query
@@ -827,9 +844,20 @@ public class BioService extends WAbstractService {
      *
      * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
      */
-    public List<Bio> fetchAttivita(String attivitaPlurale) {
-        List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-        return fetchAttivita(listaNomiSingoli);
+    public List<Bio> fetchAttivitaPlurale(String attivitaPlurale) {
+        List<Bio> listaNonOrdinata = new ArrayList<>();
+        AttPlurale attPlurale = attPluraleBackend.findByKey(attivitaPlurale);
+        List<AttSingolare> listaAttivitaSingolari = attPlurale != null ? attPlurale.listaSingolari : null;
+
+        if (listaAttivitaSingolari == null) {
+            return null;
+        }
+
+        for (AttSingolare attivitaSingola : listaAttivitaSingolari) {
+            listaNonOrdinata.addAll(repository.findAllByAttivitaOrderByOrdinamento(attivitaSingola.nome));
+        }
+
+        return sortByForzaOrdinamento(listaNonOrdinata);
     }
 
     /**
@@ -869,10 +897,10 @@ public class BioService extends WAbstractService {
                 case giornoMorte -> bioService.fetchGiornoMorto(nomeLista);
                 case annoNascita -> bioService.fetchAnnoNato(nomeLista);
                 case annoMorte -> bioService.fetchAnnoMorto(nomeLista);
+                case attivitaSingolare -> bioService.fetchAttivitaSingolare(nomeLista);
+                case attivitaPlurale -> bioService.fetchAttivitaPlurale(nomeLista);
                 case nazionalitaSingolare -> repository.findAllByNazionalitaOrderByOrdinamento(nomeLista);
                 case nazionalitaPlurale -> bioService.fetchNazionalita(nomeLista);
-                case attivitaSingolare -> bioService.fetchAttivita(nomeLista);
-                case attivitaPlurale -> bioService.fetchAttivita(nomeLista);
                 case cognomi -> bioService.fetchCognomi(nomeLista);
                 default -> null;
             };

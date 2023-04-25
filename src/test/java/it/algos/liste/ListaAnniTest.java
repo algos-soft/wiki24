@@ -26,8 +26,8 @@ import java.util.stream.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 08-Mar-2023
- * Time: 21:06
+ * Date: Tue, 25-Apr-2023
+ * Time: 13:23
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -36,30 +36,29 @@ import java.util.stream.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("liste")
-@DisplayName("ListaGiorni")
+@DisplayName("ListaAnni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaGiorniTest extends WikiTest {
+public class ListaAnniTest extends WikiTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private ListaGiorni istanza;
+    private ListaAnni istanza;
 
 
-    //--nome giorno
+    //--nome anno
     //--typeCrono
-    protected static Stream<Arguments> GIORNI_LISTA() {
+    protected static Stream<Arguments> ANNI_LISTA() {
         return Stream.of(
-                Arguments.of(VUOTA, AETypeLista.giornoNascita),
-                Arguments.of(VUOTA, AETypeLista.giornoMorte),
-                Arguments.of("1857", AETypeLista.giornoNascita),
-                Arguments.of("34 febbraio", AETypeLista.giornoMorte),
-                Arguments.of("23 marzo", AETypeLista.annoMorte),
-                Arguments.of("23 marzo", AETypeLista.giornoNascita),
-                Arguments.of("1º gennaio", AETypeLista.giornoMorte),
-                Arguments.of("25 ottobre", AETypeLista.giornoNascita),
-                Arguments.of("29 febbraio", AETypeLista.giornoMorte)
+                Arguments.of(VUOTA, AETypeLista.annoNascita),
+                Arguments.of(VUOTA, AETypeLista.annoMorte),
+                Arguments.of("4 gennaio", AETypeLista.annoNascita),
+                Arguments.of("1º gennaio", AETypeLista.annoMorte),
+                Arguments.of("1467", AETypeLista.giornoNascita),
+                Arguments.of("406 a.C.", AETypeLista.annoMorte),
+                Arguments.of("1467", AETypeLista.annoNascita),
+                Arguments.of("560", AETypeLista.annoMorte)
         );
     }
 
@@ -91,7 +90,7 @@ public class ListaGiorniTest extends WikiTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new ListaGiorni();
+        istanza = new ListaAnni();
         assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
@@ -100,67 +99,69 @@ public class ListaGiorniTest extends WikiTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
+    @MethodSource(value = "ANNI_LISTA")
     @Order(2)
-    @DisplayName("2 - Lista bio di vari giorni")
-        //--nome giorno
+    @DisplayName("2 - Lista bio di vari anni")
+        //--nome anno
         //--typeLista
-    void listaBio(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("2 - Lista bio di vari giorni");
-        sorgente = nomeGiorno;
+    void listaBio(final String nomeAnno, final AETypeLista type) {
+        System.out.println("2 - Lista bio di vari anni");
+        sorgente = nomeAnno;
 
-        if (!valido(nomeGiorno, type)) {
+        if (!valido(nomeAnno, type)) {
             return;
         }
 
         listBio = switch (type) {
-            case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(sorgente).listaBio();
-            case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(sorgente).listaBio();
+            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).listaBio();
+            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).listaBio();
             default -> null;
         };
 
         if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
+            message = String.format("Ci sono %d biografie che implementano l'anno di %s %s", listBio.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
             switch (type) {
-                case giornoNascita -> printBioListaGiorniNato(listBio);
-                case giornoMorte -> printBioListaGiorniMorto(listBio);
+                case annoNascita -> printBioListaAnniNato(listBio);
+                case annoMorte -> printBioListaAnniMorto(listBio);
             }
         }
         else {
-            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeGiorno);
+            message = String.format("Non esiste la listBio per le persone %s l'anno [%s]", type.getTagF(), nomeAnno);
             System.out.println(message);
         }
     }
 
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
+    @MethodSource(value = "ANNI_LISTA")
     @Order(3)
-    @DisplayName("3 - Lista wrapLista di vari giorni")
-        //--nome giorno
+    @DisplayName("3 - Lista wrapLista di vari anni")
+        //--nome anno
         //--typeLista
-    void listaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("3 - Lista wrapLista di vari giorni");
-        sorgente = nomeGiorno;
+    void listaWrap(final String nomeAnno, final AETypeLista type) {
+        System.out.println("3 - Lista wrapLista di vari anni");
+        sorgente = nomeAnno;
+        int size;
 
-        if (!valido(nomeGiorno, type)) {
+        if (!valido(nomeAnno, type)) {
             return;
         }
 
         listWrapLista = switch (type) {
-            case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(sorgente).listaWrap();
-            case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(sorgente).listaWrap();
+            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).listaWrap();
+            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).listaWrap();
             default -> null;
         };
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
+            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
-            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
+            printWrapLista(listWrapLista.subList(size - 5, size));
         }
         else {
             message = "La lista è nulla";
@@ -170,29 +171,29 @@ public class ListaGiorniTest extends WikiTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
+    @MethodSource(value = "ANNI_LISTA")
     @Order(4)
-    @DisplayName("4 - Key della mappa wrapLista di vari giorni")
-        //--nome giorno
+    @DisplayName("4 - Key della mappa wrapLista di vari anni")
+        //--nome anno
         //--typeLista
-    void mappaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("4 - Key della mappa wrapLista di vari giorni");
-        sorgente = nomeGiorno;
+    void mappaWrap(final String nomeAnno, final AETypeLista type) {
+        System.out.println("4 - Key della mappa wrapLista di vari anni");
+        sorgente = nomeAnno;
         int numVoci;
 
-        if (!valido(nomeGiorno, type)) {
+        if (!valido(nomeAnno, type)) {
             return;
         }
 
         mappaWrap = switch (type) {
-            case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(sorgente).mappaWrap();
-            case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(sorgente).mappaWrap();
+            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).mappaWrap();
+            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).mappaWrap();
             default -> null;
         };
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getCivile(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getCivile(), sorgente);
             System.out.println(message);
             printMappaWrapKeyOrder(mappaWrap);
         }
@@ -204,29 +205,29 @@ public class ListaGiorniTest extends WikiTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
+    @MethodSource(value = "ANNI_LISTA")
     @Order(5)
-    @DisplayName("5 - Mappa wrapLista di vari giorni")
-        //--nome giorno
+    @DisplayName("5 - Mappa wrapLista di vari anni")
+        //--nome anno
         //--typeLista
-    void mappaWrap2(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("5 - Mappa wrapLista di vari giorni");
-        sorgente = nomeGiorno;
+    void mappaWrap2(final String nomeAnno, final AETypeLista type) {
+        System.out.println("5 - Mappa wrapLista di vari anni");
+        sorgente = nomeAnno;
         int numVoci;
 
-        if (!valido(nomeGiorno, type)) {
+        if (!valido(nomeAnno, type)) {
             return;
         }
 
         mappaWrap = switch (type) {
-            case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(sorgente).mappaWrap();
-            case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(sorgente).mappaWrap();
+            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).mappaWrap();
+            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).mappaWrap();
             default -> null;
         };
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getGiornoAnno(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getGiornoAnno(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
@@ -238,21 +239,7 @@ public class ListaGiorniTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(11)
-    @DisplayName("11 - Paragrafo singolo")
-    void costruttoresBase() {
-        System.out.println(("11 - Paragrafo singolo"));
-        System.out.println(VUOTA);
-
-        sorgente = "4 gennaio";
-        sorgente2 = "XVI secolo";
-
-        listBio = appContext.getBean(ListaGiorni.class).nascita(sorgente).listaBio();
-        printBioListaGiorniNato(listBio);
-    }
-
-    protected void printBioListaGiorniNato(List<Bio> listaBio) {
+    protected void printBioListaAnniNato(List<Bio> listaBio) {
         String message;
         int max = 50;
         int tot = listaBio.size();
@@ -264,21 +251,21 @@ public class ListaGiorniTest extends WikiTest {
         if (listaBio != null) {
             message = String.format("Faccio vedere una lista delle prime e delle ultime %d biografie", max);
             System.out.println(message);
-            message = "Ordinate per anni, forzaOrdinamento";
+            message = "Ordinate per giorni, forzaOrdinamento";
             System.out.println(message);
-            message = "Anno, ordinamento, wikiTitle, nome, cognome";
+            message = "Giorno, ordinamento, wikiTitle, nome, cognome";
             System.out.println(message);
             System.out.println(VUOTA);
 
-            printBioBaseGiorniNato(listaBio.subList(iniA, endA), iniA);
+            printBioBaseAnniNato(listaBio.subList(iniA, endA), iniA);
             System.out.println(TRE_PUNTI);
-            printBioBaseGiorniNato(listaBio.subList(iniB, endB), iniB);
+            printBioBaseAnniNato(listaBio.subList(iniB, endB), iniB);
         }
     }
 
-    protected void printBioListaGiorniMorto(List<Bio> listaBio) {
+    protected void printBioListaAnniMorto(List<Bio> listaBio) {
         String message;
-        int max = 10;
+        int max = 50;
         int tot = listaBio.size();
         int iniA = 0;
         int endA = Math.min(max, tot);
@@ -288,19 +275,20 @@ public class ListaGiorniTest extends WikiTest {
         if (listaBio != null) {
             message = String.format("Faccio vedere una lista delle prime e delle ultime %d biografie", max);
             System.out.println(message);
-            message = "Ordinate per anni, forzaOrdinamento";
+            message = "Ordinate per giorni, forzaOrdinamento";
             System.out.println(message);
-            message = "Anno, ordinamento, wikiTitle, nome, cognome";
+            message = "Giorno, ordinamento, wikiTitle, nome, cognome";
             System.out.println(message);
             System.out.println(VUOTA);
 
-            printBioBaseGiorniMorto(listaBio.subList(iniA, endA), iniA);
+            printBioBaseAnniMorto(listaBio.subList(iniA, endA), iniA);
             System.out.println(TRE_PUNTI);
-            printBioBaseGiorniMorto(listaBio.subList(iniB, endB), iniB);
+            printBioBaseAnniMorto(listaBio.subList(iniB, endB), iniB);
         }
     }
 
-    protected void printBioBaseGiorniNato(List<Bio> listaBio, final int inizio) {
+
+    protected void printBioBaseAnniNato(List<Bio> listaBio, final int inizio) {
         int cont = inizio;
 
         for (Bio bio : listaBio) {
@@ -309,7 +297,7 @@ public class ListaGiorniTest extends WikiTest {
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
 
-            System.out.print(textService.setQuadre(bio.annoNato + SPAZIO + "(" + bio.annoNatoOrd + ")"));
+            System.out.print(textService.setQuadre(bio.giornoNato + SPAZIO + "(" + bio.giornoNatoOrd + ")"));
             System.out.print(SPAZIO);
 
             System.out.print(textService.setQuadre(bio.ordinamento));
@@ -328,7 +316,7 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
-    protected void printBioBaseGiorniMorto(List<Bio> listaBio, final int inizio) {
+    protected void printBioBaseAnniMorto(List<Bio> listaBio, final int inizio) {
         int cont = inizio;
 
         for (Bio bio : listaBio) {
@@ -337,7 +325,7 @@ public class ListaGiorniTest extends WikiTest {
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
 
-            System.out.print(textService.setQuadre(bio.annoMorto + SPAZIO + "(" + bio.annoMortoOrd + ")"));
+            System.out.print(textService.setQuadre(bio.giornoMorto + SPAZIO + "(" + bio.giornoMortoOrd + ")"));
             System.out.print(SPAZIO);
 
             System.out.print(textService.setQuadre(bio.ordinamento));
@@ -356,21 +344,20 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
-
-    private boolean valido(final String nomeGiorno, final AETypeLista type) {
-        if (textService.isEmpty(nomeGiorno)) {
-            System.out.println("Manca il nome del giorno");
+    private boolean valido(final String nomeAnno, final AETypeLista type) {
+        if (textService.isEmpty(nomeAnno)) {
+            System.out.println("Manca il nome dell'anno");
             return false;
         }
 
-        if (type != AETypeLista.giornoNascita && type != AETypeLista.giornoMorte) {
-            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, ListaGiorni.class.getSimpleName());
+        if (type != AETypeLista.annoNascita && type != AETypeLista.annoMorte) {
+            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, ListaAnni.class.getSimpleName());
             System.out.println(message);
             return false;
         }
 
-        if (!giornoWikiBackend.isExistByKey(nomeGiorno)) {
-            message = String.format("Il giorno [%s] indicato NON esiste", nomeGiorno);
+        if (!annoWikiBackend.isExistByKey(nomeAnno)) {
+            message = String.format("L'anno [%s] indicato NON esiste", nomeAnno);
             System.out.println(message);
             return false;
         }

@@ -10,28 +10,34 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
  * Time: 13:54
  */
 public enum AETypeLista {
-    giornoNascita("nati", "giorno"),
-    giornoMorte("morti", "giorno"),
-    annoNascita("nati", "anno"),
-    annoMorte("morti", "anno"),
-    nazionalitaSingolare("singolare", VUOTA),
-    nazionalitaPlurale("plurale", VUOTA),
-    attivitaSingolare("singolare", VUOTA),
-    attivitaPlurale("plurale", VUOTA),
-    cognomi(VUOTA, VUOTA),
-    listaBreve(VUOTA, VUOTA),
-    listaEstesa(VUOTA, VUOTA);
+    giornoNascita("nati", "nate", "giorno", "nascita"),
+    giornoMorte("morti", "morte", "giorno", "morte"),
+    annoNascita("nati", "nate", "anno", "nascita"),
+    annoMorte("morti", "morte", "anno", "morte"),
+    nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA),
+    nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
+    attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA),
+    attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
+    cognomi(VUOTA, VUOTA, VUOTA, VUOTA),
+    listaBreve(VUOTA, VUOTA, VUOTA, VUOTA),
+    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA);
 
     private String tagLower;
+
+    private String tagF;
 
     private String tagUpper;
 
     private String giornoAnno;
 
+    private String civile;
 
-    AETypeLista(String tag, String giornoAnno) {
+
+    AETypeLista(String tag, String tagF, String giornoAnno, String civile) {
         this.tagLower = tag;
+        this.tagF = tagF;
         this.giornoAnno = giornoAnno;
+        this.civile = civile;
         this.tagUpper = tag != null && tag.length() > 0 ? tag.substring(0, 1).toUpperCase() + tag.substring(1) : VUOTA;
     }
 
@@ -45,5 +51,13 @@ public enum AETypeLista {
 
     public String getGiornoAnno() {
         return giornoAnno;
+    }
+
+    public String getTagF() {
+        return tagF;
+    }
+
+    public String getCivile() {
+        return civile;
     }
 }
