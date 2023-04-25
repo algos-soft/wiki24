@@ -161,7 +161,6 @@ public abstract class Statistiche {
         this.elabora();
         this.creaLista();
         this.creaMappa();
-
     }
 
     /**

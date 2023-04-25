@@ -48,7 +48,7 @@ public class GiornoWikiBackend extends WikiBackend {
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
 
-        this.unitaMisuraElaborazione = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
     /**
