@@ -5,6 +5,8 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,11 +96,12 @@ public class ListaAttivitaTest extends WikiTest {
         };
 
         if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), sorgente, type.getTagLower());
+            message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), type.getTagLower(), sorgente);
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                //                System.out.println(listaNomiSingoli);
+                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
+                System.out.println(message);
             }
             System.out.println(VUOTA);
             printBioLista(listBio);
@@ -116,10 +119,14 @@ public class ListaAttivitaTest extends WikiTest {
     @DisplayName("3 - Lista wrapLista di varie attivita")
         //--nome attivita
         //--typeLista
-    void listaWrapDidascalie(final String attività, final AETypeLista type) {
+    void listaWrapDidascalie(final String nomeAttivita, final AETypeLista type) {
         System.out.println("3 - Lista wrapLista di varie attivita");
-        sorgente = attività;
+        sorgente = nomeAttivita;
         int size;
+
+        if (!valido(nomeAttivita, type)) {
+            return;
+        }
 
         listWrapLista = switch (type) {
             case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(sorgente).listaWrap();
@@ -129,11 +136,12 @@ public class ListaAttivitaTest extends WikiTest {
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             size = listWrapLista.size();
-            message = String.format("Ci sono %d wrapLista che implementano l'attività %s%s", listWrapLista.size(), sorgente, type.getTagLower());
+            message = String.format("Ci sono %d wrapLista che implementano l'attività %s %s", listWrapLista.size(), sorgente, type.getTagLower());
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                //                System.out.println(listaNomiSingoli);
+                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
+                System.out.println(message);
             }
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
@@ -149,13 +157,56 @@ public class ListaAttivitaTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA")
     @Order(4)
-    @DisplayName("4 - Mappa wrapLista di varie attivita")
+    @DisplayName("4 - Key della mappa wrapLista delle varie attività")
         //--nome attivita
         //--typeLista
-    void mappaWrapDidascalie(final String attività, final AETypeLista type) {
-        System.out.println("4 - Mappa wrapLista di varie attivita");
-        sorgente = attività;
+    void mappaWrap(final String nomeAttivita, final AETypeLista type) {
+        System.out.println("4 - Key della mappa wrapLista delle varie attività");
+        sorgente = nomeAttivita;
         int numVoci;
+
+        if (!valido(nomeAttivita, type)) {
+            return;
+        }
+
+        mappaWrap = switch (type) {
+            case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(sorgente).mappaWrap();
+            case attivitaPlurale -> appContext.getBean(ListaAttivita.class).plurale(sorgente).mappaWrap();
+            default -> null;
+        };
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+            message = String.format("Ci sono %d wrapLista che implementano l'attività di %s %s", numVoci, type.getCivile(), sorgente);
+            System.out.println(message);
+            if (type == AETypeLista.attivitaPlurale) {
+                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
+                System.out.println(message);
+            }
+            printMappaWrapKeyOrder(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA")
+    @Order(5)
+    @DisplayName("5 - Mappa wrapLista di varie attivita")
+        //--nome attivita
+        //--typeLista
+    void mappaWrapDidascalie(final String nomeAttivita, final AETypeLista type) {
+        System.out.println("5 - Mappa wrapLista di varie attivita");
+        sorgente = nomeAttivita;
+        int numVoci;
+
+        if (!valido(nomeAttivita, type)) {
+            return;
+        }
 
         mappaWrap = switch (type) {
             case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(sorgente).mappaWrap();
@@ -168,8 +219,9 @@ public class ListaAttivitaTest extends WikiTest {
             message = String.format("Ci sono %d wrapLista che implementano l'attività %s %s", numVoci, sorgente, type.getTagLower());
             System.out.println(message);
             if (type == AETypeLista.attivitaPlurale) {
-                //                List<String> listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(sorgente);
-                //                System.out.println(listaNomiSingoli);
+                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
+                System.out.println(message);
             }
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
@@ -182,10 +234,10 @@ public class ListaAttivitaTest extends WikiTest {
 
 
     @Test
-    @Order(5)
-    @DisplayName("5 - nobiliTedeschi")
+    @Order(6)
+    @DisplayName("6 - nobiliTedeschi")
     void nobiliTedeschi() {
-        System.out.println("5 - nobiliTedeschi");
+        System.out.println("6 - nobiliTedeschi");
         sorgente = "nobili";
         sorgente2 = "Tedeschi";
         int numVoci;

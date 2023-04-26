@@ -9,6 +9,8 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
@@ -794,30 +796,6 @@ public class BioService extends WAbstractService {
     }
 
 
-    /**
-     * Cerca tutte le entities di una collection filtrate con una serie di nazionalità. <br>
-     * Selects documents in a collection or view and returns a list of the selected documents. <br>
-     *
-     * @param listaNomiSingoli per costruire la query
-     *
-     * @return lista di entityBeans ordinata per cognome
-     *
-     * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
-     */
-    public List<Bio> fetchNazionalita(List<String> listaNomiSingoli) {
-        List<Bio> listaNonOrdinata = new ArrayList<>();
-
-        if (listaNomiSingoli == null) {
-            logService.info(new WrapLog().exception(new AlgosException("Non ci sono nazionalità singole")).usaDb());
-            return null;
-        }
-
-        for (String nomeNazionalitaSingola : listaNomiSingoli) {
-            listaNonOrdinata.addAll(repository.findAllByNazionalitaOrderByCognome(nomeNazionalitaSingola));
-        }
-
-        return sortByForzaOrdinamento(listaNonOrdinata);
-    }
 
     /**
      * Cerca tutte le entities di una collection filtrate per una singola attività. <br>
@@ -854,11 +832,27 @@ public class BioService extends WAbstractService {
         }
 
         for (AttSingolare attivitaSingola : listaAttivitaSingolari) {
-            listaNonOrdinata.addAll(repository.findAllByAttivitaOrderByOrdinamento(attivitaSingola.nome));
+            listaNonOrdinata.addAll(fetchAttivitaSingolare(attivitaSingola.nome));
         }
 
         return sortByForzaOrdinamento(listaNonOrdinata);
     }
+
+
+    /**
+     * Cerca tutte le entities di una collection filtrate per una singola nazionalità. <br>
+     * Selects documents in a collection or view and returns a list of the selected documents. <br>
+     *
+     * @param nomeNazionalitaSingola per costruire la query
+     *
+     * @return lista di entityBeans ordinata per cognome
+     *
+     * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
+     */
+    public List<Bio> fetchNazionalitaSingolare(String nomeNazionalitaSingola) {
+        return repository.findAllByNazionalitaOrderByOrdinamento(nomeNazionalitaSingola);
+    }
+
 
     /**
      * Cerca tutte le entities di una collection filtrate con una serie di nazionalità. <br>
@@ -870,9 +864,20 @@ public class BioService extends WAbstractService {
      *
      * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
      */
-    public List<Bio> fetchNazionalita(String nazionalitaPlurale) {
-        List<String> listaNomiSingoli = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-        return fetchNazionalita(listaNomiSingoli);
+    public List<Bio> fetchNazionalitaPlurale(String nazionalitaPlurale) {
+        List<Bio> listaNonOrdinata = new ArrayList<>();
+        NazPlurale nazPlurale = nazPluraleBackend.findByKey(nazionalitaPlurale);
+        List<NazSingolare> listaNazionalitaSingolari = nazPlurale != null ? nazPlurale.listaSingolari : null;
+
+        if (listaNazionalitaSingolari == null) {
+            return null;
+        }
+
+        for (NazSingolare nazionalitaSingola : listaNazionalitaSingolari) {
+            listaNonOrdinata.addAll(fetchNazionalitaSingolare(nazionalitaSingola.nome));
+        }
+
+        return sortByForzaOrdinamento(listaNonOrdinata);
     }
 
 
@@ -899,8 +904,8 @@ public class BioService extends WAbstractService {
                 case annoMorte -> bioService.fetchAnnoMorto(nomeLista);
                 case attivitaSingolare -> bioService.fetchAttivitaSingolare(nomeLista);
                 case attivitaPlurale -> bioService.fetchAttivitaPlurale(nomeLista);
-                case nazionalitaSingolare -> repository.findAllByNazionalitaOrderByOrdinamento(nomeLista);
-                case nazionalitaPlurale -> bioService.fetchNazionalita(nomeLista);
+                case nazionalitaSingolare -> bioService.fetchNazionalitaSingolare(nomeLista);
+                case nazionalitaPlurale -> bioService.fetchNazionalitaPlurale(nomeLista);
                 case cognomi -> bioService.fetchCognomi(nomeLista);
                 default -> null;
             };

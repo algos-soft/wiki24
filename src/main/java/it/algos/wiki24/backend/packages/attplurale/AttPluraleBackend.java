@@ -16,6 +16,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -175,6 +176,22 @@ public class AttPluraleBackend extends WikiBackend {
         return mappa;
     }
 
+    public List<AttSingolare> findAllFromAttivitaSingolariByPlurale(String nomeAttivitaPlurale) {
+        List<AttSingolare> listaAttivitaSingolePrevisteNellaAttivitaPlurale = null;
+        AttPlurale attivitaPlurale = this.findByKey(nomeAttivitaPlurale);
+
+        if (attivitaPlurale != null) {
+            listaAttivitaSingolePrevisteNellaAttivitaPlurale = attivitaPlurale.listaSingolari;
+        }
+
+        return listaAttivitaSingolePrevisteNellaAttivitaPlurale;
+    }
+
+    public List<String> findAllFromNomiSingolariByPlurale(String nomeAttivitaPlurale) {
+        List<AttSingolare> listaAttSingole = findAllFromAttivitaSingolariByPlurale(nomeAttivitaPlurale);
+        return listaAttSingole != null ? listaAttSingole.stream().map(att -> att.nome).collect(Collectors.toList()) : null;
+    }
+
     /**
      * ResetOnlyEmpty -> Download. <br>
      * Download -> Esegue un Download di AttSingolare. <br>
@@ -323,16 +340,16 @@ public class AttPluraleBackend extends WikiBackend {
     public WResult elabora() {
         WResult result = super.elabora();
 
-//        for (AttPlurale attivita : findAll()) {
-//            attivita.numBio = 0;
-//            attivita.superaSoglia = false;
-//            attivita.esisteLista = false;
-//
-//            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
-//            attivita.esisteLista = esistePagina(attivita.paginaLista);
-//
-//            update(attivita);
-//        }
+        //        for (AttPlurale attivita : findAll()) {
+        //            attivita.numBio = 0;
+        //            attivita.superaSoglia = false;
+        //            attivita.esisteLista = false;
+        //
+        //            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
+        //            attivita.esisteLista = esistePagina(attivita.paginaLista);
+        //
+        //            update(attivita);
+        //        }
 
         return super.fixElabora(result);
     }

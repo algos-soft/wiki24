@@ -29,7 +29,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("liste")
 @DisplayName("ListaNazionalita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaNazionalitaTest extends WikiTest {
@@ -78,50 +78,161 @@ public class ListaNazionalitaTest extends WikiTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA_PLURALE")
+    @MethodSource(value = "NAZIONALITA")
     @Order(2)
-    @DisplayName("2 - Lista bio di varie nazionalità plurali")
-        //--nome nazionalità plurale (solo minuscola)
-        //--esiste
-    void listaBio(final String nomePlurale, final boolean esiste) {
+    @DisplayName("2 - Lista bio di varie nazionalità")
+        //--nome nazionalità
+        //--typeLista
+    void listaBio(final String nomeNazionalita, final AETypeLista type) {
         System.out.println("2 - Lista bio di varie nazionalità plurali");
-        sorgente = nomePlurale;
-        previstoBooleano = esiste;
+        sorgente = nomeNazionalita;
 
-        listBio = appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaBio();
-        printSingoleAndBio(sorgente, listBio);
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+
+        listBio = switch (type) {
+            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).listaBio();
+            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaBio();
+            default -> null;
+        };
+
+        if (listBio != null && listBio.size() > 0) {
+            message = String.format("Ci sono %d biografie che implementano la nazionalità %s %s", listBio.size(), sorgente, type.getTagLower());
+            System.out.println(message);
+            if (type == AETypeLista.nazionalitaPlurale) {
+                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
+                System.out.println(message);
+            }
+            System.out.println(VUOTA);
+            printBioLista(listBio);
+        }
+        else {
+            message = "La listBio è nulla";
+            System.out.println(message);
+        }
     }
 
+
     @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA_PLURALE")
+    @MethodSource(value = "NAZIONALITA")
     @Order(3)
-    @DisplayName("3 - Lista wrapLista di varie nazionalità plurali")
-        //--nome nazionalità plurale (solo minuscola)
-        //--esiste
-    void listaWrapDidascalie(final String nomePlurale, final boolean esiste) {
-        System.out.println("3 - Lista wrapLista di varie nazionalità plurali");
-        sorgente = nomePlurale;
-        previstoBooleano = esiste;
+    @DisplayName("3 - Lista wrapLista di varie nazionalità")
+        //--nome nazionalità
+        //--typeLista
+    void listaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
+        System.out.println("3 - Lista wrapLista di varie nazionalità");
+        sorgente = nomeNazionalita;
+        int size;
 
-        listWrapLista = appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaWrap();
-        printSingoleAndListaWrap(sorgente, listWrapLista);
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+
+        listWrapLista = switch (type) {
+            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).listaWrap();
+            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaWrap();
+            default -> null;
+        };
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", listWrapLista.size(), sorgente, type.getTagLower());
+            System.out.println(message);
+            if (type == AETypeLista.nazionalitaPlurale) {
+                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
+                System.out.println(message);
+            }
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+            printWrapLista(listWrapLista.subList(size - 5, size));
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(4)
+    @DisplayName("4 - Key della mappa wrapLista delle varie nazionalità")
+        //--nome nazionalità
+        //--typeLista
+    void mappaWrap(final String nomeNazionalita, final AETypeLista type) {
+        System.out.println("4 - Key della mappa wrapLista delle varie nazionalità");
+        sorgente = nomeNazionalita;
+        int numVoci;
+
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+
+        mappaWrap = switch (type) {
+            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
+            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
+            default -> null;
+        };
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+            message = String.format("Ci sono %d wrapLista che implementano la nazionalità di %s %s", numVoci, type.getCivile(), sorgente);
+            System.out.println(message);
+            if (type == AETypeLista.nazionalitaPlurale) {
+                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
+                System.out.println(message);
+            }
+            printMappaWrapKeyOrder(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
     }
 
 
 
     @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA_PLURALE")
-    @Order(4)
-    @DisplayName("4 - Mappa wrapLista di varie nazionalità")
-        //--nome nazionalità plurale (solo minuscola)
-        //--esiste
-    void mappaWrapDidascalie(final String nomePlurale, final boolean esiste) {
-        System.out.println("4 - Mappa wrapLista di varie nazionalità");
-        sorgente = nomePlurale;
-        previstoBooleano = esiste;
+    @MethodSource(value = "NAZIONALITA")
+    @Order(5)
+    @DisplayName("5 - Mappa wrapLista di varie nazionalità")
+        //--nome nazionalità
+        //--typeLista
+    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
+        System.out.println("5 - Mappa wrapLista di varie nazionalità");
+        sorgente = nomeNazionalita;
+        int numVoci;
 
-        mappaWrap = appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
-        printSingoleAndMappaWrap(sorgente, mappaWrap);
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+
+        mappaWrap = switch (type) {
+            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
+            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
+            default -> null;
+        };
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", numVoci, sorgente, type.getTagLower());
+            System.out.println(message);
+            if (type == AETypeLista.nazionalitaPlurale) {
+                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
+                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
+                System.out.println(message);
+            }
+            System.out.println(VUOTA);
+            printMappaWrap(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
     }
 
 
@@ -183,6 +294,34 @@ public class ListaNazionalitaTest extends WikiTest {
             System.out.println(message);
             System.out.println("La mappaWrap è nulla");
         }
+    }
+
+
+    private boolean valido(final String nomeNazionalita, final AETypeLista type) {
+        if (textService.isEmpty(nomeNazionalita)) {
+            System.out.println("Manca il nome della nazionalità");
+            return false;
+        }
+
+        if (type != AETypeLista.nazionalitaSingolare && type != AETypeLista.nazionalitaPlurale) {
+            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, ListaNazionalita.class.getSimpleName());
+            System.out.println(message);
+            return false;
+        }
+
+        if (type == AETypeLista.nazionalitaSingolare && !nazSingolareBackend.isExistByKey(nomeNazionalita)) {
+            message = String.format("La nazionalità singolare [%s] indicata NON esiste", nomeNazionalita);
+            System.out.println(message);
+            return false;
+        }
+
+        if (type == AETypeLista.nazionalitaPlurale && !nazPluraleBackend.isExistByKey(nomeNazionalita)) {
+            message = String.format("La nazionalità plurale [%s] indicata NON esiste", nomeNazionalita);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

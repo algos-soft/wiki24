@@ -573,7 +573,6 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
                 Arguments.of("soprano", AETypeLista.giornoNascita),
                 Arguments.of("soprano", AETypeLista.attivitaSingolare),
-                Arguments.of("attrice", AETypeLista.attivitaSingolare),
                 Arguments.of("abate", AETypeLista.attivitaSingolare),
                 Arguments.of("badessa", AETypeLista.attivitaSingolare),
                 Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
@@ -583,6 +582,27 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("romanziere", AETypeLista.attivitaSingolare),
                 Arguments.of("accademici", AETypeLista.attivitaPlurale),
                 Arguments.of("dogi", AETypeLista.attivitaPlurale)
+        );
+    }
+
+
+    //--nome nazionalità
+    //--typeLista
+    protected static Stream<Arguments> NAZIONALITA() {
+        return Stream.of(
+                Arguments.of(VUOTA, AETypeLista.listaBreve),
+                Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
+                Arguments.of("attrice", AETypeLista.attivitaSingolare),
+                Arguments.of("assiri", AETypeLista.nazionalitaSingolare),
+                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
+                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
+                Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
+                Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
+                Arguments.of("afghana", AETypeLista.nazionalitaSingolare),
+                Arguments.of("afghani", AETypeLista.nazionalitaPlurale),
+                Arguments.of("mongoli", AETypeLista.nazionalitaSingolare),
+                Arguments.of("assiri", AETypeLista.nazionalitaPlurale),
+                Arguments.of("capoverdiani", AETypeLista.nazionalitaPlurale)
         );
     }
 
@@ -674,22 +694,6 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    //--nome nazionalità
-    //--typeLista
-    protected static Stream<Arguments> NAZIONALITA() {
-        return Stream.of(
-                Arguments.of(VUOTA, AETypeLista.listaBreve),
-                Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
-                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
-                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
-                Arguments.of("libanesi", AETypeLista.nazionalitaPlurale),
-                Arguments.of("afghani", AETypeLista.nazionalitaPlurale),
-                Arguments.of("mongoli", AETypeLista.nazionalitaPlurale),
-                Arguments.of("assiri", AETypeLista.nazionalitaPlurale),
-                Arguments.of("capoverdiani", AETypeLista.nazionalitaPlurale)
-
-        );
-    }
 
     //--cognome
     //--flag diacritico

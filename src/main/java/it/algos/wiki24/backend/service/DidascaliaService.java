@@ -2,12 +2,17 @@ package it.algos.wiki24.backend.service;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -419,13 +424,16 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapAttivita(final Bio bio) {
-        Nazionalita nazionalita = nazionalitaBackend.findFirstBySingolare(bio.nazionalita);
+        NazSingolare nazSingolare = nazSingolareBackend.findByKey(bio.nazionalita);
+        NazPlurale nazPlurale;
         String paragrafo;
         String paragrafoLink;
+        String message;
 
-        if (nazionalita != null) {
-            paragrafo = textService.primaMaiuscola(nazionalita.pluraleLista);
-            if (nazionalita.esistePaginaLista) {
+        if (nazSingolare != null) {
+            nazPlurale = nazPluraleBackend.findByKey(nazSingolare.plurale);
+            if (nazPlurale != null) {
+                paragrafo = textService.primaMaiuscola(nazPlurale.nome);
                 paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
                     case voce -> textService.setDoppieQuadre(paragrafo);
                     case lista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
@@ -434,7 +442,11 @@ public class DidascaliaService extends WAbstractService {
                 };
             }
             else {
+                paragrafo = textService.primaMaiuscola(nazSingolare.nome);
                 paragrafoLink = paragrafo;
+                message = String.format("Manca l'attività plurale di %s", nazSingolare);
+                System.out.println(message);
+                logService.warn(new WrapLog().message(message));
             }
         }
         else {
@@ -459,13 +471,16 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapNazionalita(final Bio bio) {
-        Attivita attivita = attivitaBackend.findFirstBySingolare(bio.attivita);
+        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
+        AttPlurale attPlurale;
         String paragrafo;
         String paragrafoLink;
+        String message;
 
-        if (attivita != null) {
-            paragrafo = textService.primaMaiuscola(attivita.pluraleLista);
-            if (attivita.esistePaginaLista) {
+        if (attSingolare != null) {
+            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
+            if (attPlurale != null) {
+                paragrafo = textService.primaMaiuscola(attPlurale.nome);
                 paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
                     case voce -> textService.setDoppieQuadre(paragrafo);
                     case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
@@ -474,12 +489,16 @@ public class DidascaliaService extends WAbstractService {
                 };
             }
             else {
+                paragrafo = textService.primaMaiuscola(attSingolare.nome);
                 paragrafoLink = paragrafo;
+                message = String.format("Manca la nazionalità plurale di %s", attSingolare);
+                System.out.println(message);
+                logService.warn(new WrapLog().message(message));
             }
         }
         else {
-            paragrafo = TAG_LISTA_ALTRE;
-            paragrafoLink = TAG_LISTA_ALTRE;
+            paragrafo = TAG_LISTA_NO_ATTIVITA;
+            paragrafoLink = TAG_LISTA_NO_ATTIVITA;
         }
 
         String sottoParagrafo = bio.ordinamento.substring(0, 1);
@@ -549,8 +568,8 @@ public class DidascaliaService extends WAbstractService {
             case giornoMorte -> this.getWrapGiornoMorto(bio);
             case annoNascita -> this.getWrapAnnoNato(bio);
             case annoMorte -> this.getWrapAnnoMorto(bio);
-            case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
+            case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
             case cognomi -> this.getWrapCognomi(bio);
             case listaBreve -> null;
             case listaEstesa -> null;

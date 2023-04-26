@@ -182,6 +182,23 @@ public class NazPluraleBackend extends WikiBackend {
         return mappa;
     }
 
+
+    public List<NazSingolare> findAllFromNazionalitaSingolariByPlurale(String nomeNazionalitaPlurale) {
+        List<NazSingolare> listaNazionalitaSingolePrevisteNellaNazionalitaPlurale = null;
+        NazPlurale nazionalitaPlurale = this.findByKey(nomeNazionalitaPlurale);
+
+        if (nazionalitaPlurale != null) {
+            listaNazionalitaSingolePrevisteNellaNazionalitaPlurale = nazionalitaPlurale.listaSingolari;
+        }
+
+        return listaNazionalitaSingolePrevisteNellaNazionalitaPlurale;
+    }
+
+    public List<String> findAllFromNomiSingolariByPlurale(String nomeNazionalitaPlurale) {
+        List<NazSingolare> listaNazSingole = findAllFromNazionalitaSingolariByPlurale(nomeNazionalitaPlurale);
+        return listaNazSingole != null ? listaNazSingole.stream().map(att -> att.nome).collect(Collectors.toList()) : null;
+    }
+
     /**
      * ResetOnlyEmpty -> Download. <br>
      * Download -> Esegue un Download di NazSingolare. <br>
