@@ -77,7 +77,7 @@ public class UploadAttivitaTest extends WikiTest {
     @DisplayName("2 - Upload test di una attività con e senza TOC")
     void uploadToc() {
         System.out.println("2 - Upload test di una attività con e senza TOC");
-        sorgente = "agronomi";
+        sorgente = "agfani";
         appContext.getBean(UploadAttivita.class).forceToc().test().upload(sorgente);
         appContext.getBean(UploadAttivita.class).noToc().test().upload(sorgente);
     }

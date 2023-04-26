@@ -379,7 +379,7 @@ public class StatisticheNazionalita extends Statistiche {
             numNazionalita = 0;
 
             for (String singolare : singolari) {
-                numNazionalita += bioBackend.countNazionalita(singolare);
+                numNazionalita += bioBackend.countNazionalitaSingola(singolare);
             }
 
             mappaSingola = new MappaStatistiche(nazionalita.pluraleLista, numNazionalita);

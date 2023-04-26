@@ -161,15 +161,15 @@ public class NazPluraleBackend extends WikiBackend {
         return findAllForKeySortKey();
     }
 
-//    public List<String> findAllForKeyBySingolari(final String keyValue) {
-//        NazPlurale naz = findByKey(keyValue);
-//        List<NazSingolare> listaSingolare = naz != null ? naz.listaSingolari : null;
-//        return listaSingolare != null ? listaSingolare.stream().map(singolo -> singolo.nome).collect(Collectors.toList()) : null;
-//    }
-//
-//    public List<String> findSingolari(final String keyValue) {
-//        return findAllForKeyBySingolari(keyValue);
-//    }
+    //    public List<String> findAllForKeyBySingolari(final String keyValue) {
+    //        NazPlurale naz = findByKey(keyValue);
+    //        List<NazSingolare> listaSingolare = naz != null ? naz.listaSingolari : null;
+    //        return listaSingolare != null ? listaSingolare.stream().map(singolo -> singolo.nome).collect(Collectors.toList()) : null;
+    //    }
+    //
+    //    public List<String> findSingolari(final String keyValue) {
+    //        return findAllForKeyBySingolari(keyValue);
+    //    }
 
 
     public Map<String, String> getMappaPluraleNazione() {
@@ -293,7 +293,7 @@ public class NazPluraleBackend extends WikiBackend {
 
                 nazPluraleNome = nazionalitaSin.plurale;
                 nazionalitaPlur = findByKey(nazPluraleNome);
-                if (nazionalitaPlur==null) {
+                if (nazionalitaPlur == null) {
                     return null;
                 }
 
@@ -351,12 +351,12 @@ public class NazPluraleBackend extends WikiBackend {
         WResult result = super.elabora();
         List<NazSingolare> singolari;
 
-//        for (NazPlurale nazPlurale : findAll()) {
-//            nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
-//            nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);
-//
-//            update(nazPlurale);
-//        }
+        for (NazPlurale nazPlurale : findAll()) {
+            nazPlurale.numBio = bioBackend.countNazPlurale(nazPlurale.nome);
+            nazPlurale.esisteLista = esistePaginaLista(nazPlurale.nome);
+
+            update(nazPlurale);
+        }
 
         return super.fixElabora(result);
     }

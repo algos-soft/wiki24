@@ -254,7 +254,6 @@ public class AnnoWikiBackend extends WikiBackend {
     @Override
     public WResult elabora() {
         WResult result = super.elabora();
-        AEntity entityBean;
         long inizio = System.currentTimeMillis();
         int cont = 0;
         int blocco = 303;
@@ -287,11 +286,11 @@ public class AnnoWikiBackend extends WikiBackend {
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
-            //            bioNati = bioBackend.countAnnoNato(annoWiki);
-            //            bioMorti = bioBackend.countAnnoMorto(annoWiki);
-            //
-            //            annoWiki.bioNati = bioNati;
-            //            annoWiki.bioMorti = bioMorti;
+            bioNati = bioBackend.countAnnoNato(annoWiki);
+            bioMorti = bioBackend.countAnnoMorto(annoWiki);
+
+            annoWiki.bioNati = bioNati;
+            annoWiki.bioMorti = bioMorti;
 
             annoWiki.bioNati = bioBackend.countAnnoNato(annoWiki);
             annoWiki.bioMorti = bioBackend.countAnnoMorto(annoWiki);
@@ -299,8 +298,8 @@ public class AnnoWikiBackend extends WikiBackend {
             wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
             wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
 
-            //            esistePaginaNati = queryService.isEsiste(wikiTitleNati);
-            //            esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
+            esistePaginaNati = queryService.isEsiste(wikiTitleNati);
+            esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
 
             annoWiki.esistePaginaNati = esistePaginaNati;
             annoWiki.esistePaginaMorti = esistePaginaMorti;
@@ -321,7 +320,7 @@ public class AnnoWikiBackend extends WikiBackend {
             annoWiki.natiOk = natiOk;
             annoWiki.mortiOk = mortiOk;
 
-            entityBean = update(annoWiki);
+            update(annoWiki);
 
             if (Pref.debug.is()) {
                 cont++;

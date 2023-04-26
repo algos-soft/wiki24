@@ -370,22 +370,22 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    /**
-     * Conta tutte le biografie con una serie di nazionalità plurali. <br>
-     *
-     * @param nazionalitaPlurale
-     *
-     * @return conteggio di biografie che la usano
-     */
-    public int countNazionalitaPlurale(final String nazionalitaPlurale) {
-        int numBio = 0; List<String> listaNomi = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-
-        for (String singolare : listaNomi) {
-            numBio += countNazionalita(singolare);
-        }
-
-        return numBio;
-    }
+//    /**
+//     * Conta tutte le biografie con una serie di nazionalità plurali. <br>
+//     *
+//     * @param nazionalitaPlurale
+//     *
+//     * @return conteggio di biografie che la usano
+//     */
+//    public int countNazionalitaPlurale(final String nazionalitaPlurale) {
+//        int numBio = 0; List<String> listaNomi = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+//
+//        for (String singolare : listaNomi) {
+//            numBio += countNazionalita(singolare);
+//        }
+//
+//        return numBio;
+//    }
 
 
     public Bio findByKey(final long pageId) {
@@ -1102,10 +1102,11 @@ public class BioBackend extends WikiBackend {
      * @return conteggio di biografie che la usano
      */
     public int countAttivitaPlurale(final String attivitaPlurale) {
-        int numBio = 0; List<String> listaNomi = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+        int numBio = 0;
+        List<String> listaNomiAttivitaSingolari = attPluraleBackend.findAllFromNomiSingolariByPlurale(attivitaPlurale);
 
-        for (String singolare : listaNomi) {
-            numBio += countAttivitaSingola(singolare);
+        for (String attivitaSingolare : listaNomiAttivitaSingolari) {
+            numBio += countAttivitaSingola(attivitaSingolare);
         }
 
         return numBio;
@@ -1170,7 +1171,7 @@ public class BioBackend extends WikiBackend {
         if (textService.isEmpty(attivitaSingola)) {
             return null;
         }
-        if (attivitaBackend.findByKey(attivitaSingola) == null) {
+        if (attSingolareBackend.findByKey(attivitaSingola) == null) {
             return null;
         }
 
@@ -1235,22 +1236,35 @@ public class BioBackend extends WikiBackend {
     //        return query;
     //    }
 
-    public int countNazionalita(final String nazionalitaSingola) {
+    public int countNazionalitaSingola(final String nazionalitaSingola) {
         int numBio = 0;
-        Query query;
+        String propertyName = "nazionalita";
+        Query  query = new Query();
+        Sort sort;
         Long lungo;
 
         if (textService.isEmpty(nazionalitaSingola)) {
             return numBio;
         }
 
-        query = queryNazionalita(nazionalitaSingola);
-        if (query == null) {
-            return numBio;
-        }
+        query.addCriteria(Criteria.where(propertyName).is(nazionalitaSingola));
+        sort = Sort.by(Sort.Direction.ASC, propertyName);
+        query.with(sort);
 
         lungo = mongoService.mongoOp.count(query, Bio.class);
         numBio = lungo > 0 ? lungo.intValue() : 0;
+
+        return numBio;
+    }
+
+
+    public int countNazionalitaPlurale(final String nazionalitaPluralePlurale) {
+        int numBio = 0;
+        List<String> listaNomiNazionalitaSingolari = nazPluraleBackend.findAllFromNomiSingolariByPlurale(nazionalitaPluralePlurale);
+
+        for (String nazionalitaSingolare : listaNomiNazionalitaSingolari) {
+            numBio += countNazionalitaSingola(nazionalitaSingolare);
+        }
 
         return numBio;
     }

@@ -264,7 +264,7 @@ public class NazSingolareBackend extends WikiBackend {
         WResult result = super.elabora();
 
         for (NazSingolare nazionalita : findAll()) {
-            nazionalita.numBio = bioBackend.countNazionalita(nazionalita.nome);
+            nazionalita.numBio = bioBackend.countNazionalitaSingola(nazionalita.nome);
             update(nazionalita);
         }
 

@@ -340,16 +340,16 @@ public class AttPluraleBackend extends WikiBackend {
     public WResult elabora() {
         WResult result = super.elabora();
 
-        //        for (AttPlurale attivita : findAll()) {
-        //            attivita.numBio = 0;
-        //            attivita.superaSoglia = false;
-        //            attivita.esisteLista = false;
-        //
-        //            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
-        //            attivita.esisteLista = esistePagina(attivita.paginaLista);
-        //
-        //            update(attivita);
-        //        }
+        for (AttPlurale attivita : findAll()) {
+            attivita.numBio = 0;
+            attivita.superaSoglia = false;
+            attivita.esisteLista = false;
+
+            attivita.numBio = bioBackend.countAttivitaPlurale(attivita.nome);
+            attivita.esisteLista = esistePaginaLista(attivita.paginaLista);
+
+            update(attivita);
+        }
 
         return super.fixElabora(result);
     }

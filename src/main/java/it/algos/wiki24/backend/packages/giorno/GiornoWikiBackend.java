@@ -213,8 +213,6 @@ public class GiornoWikiBackend extends WikiBackend {
     @Override
     public WResult elabora() {
         WResult result = super.elabora();
-        AEntity entityBean;
-        long inizio = System.currentTimeMillis();
         String message;
         int tempo = WPref.elaboraGiorniTime.getInt();
 
@@ -232,8 +230,7 @@ public class GiornoWikiBackend extends WikiBackend {
             giornoWiki.bioNati = bioBackend.countGiornoNato(giornoWiki);
             giornoWiki.bioMorti = bioBackend.countGiornoMorto(giornoWiki);
 
-            entityBean = update(giornoWiki);
-            int a=87;
+           update(giornoWiki);
         }
 
         return super.fixElabora(result);

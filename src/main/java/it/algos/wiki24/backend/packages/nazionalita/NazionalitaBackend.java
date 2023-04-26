@@ -608,7 +608,7 @@ public class NazionalitaBackend extends WikiBackend {
 
             listaSingolari = findSingolariByPlurale(plurale);
             for (String singolare : listaSingolari) {
-                numBio += bioBackend.countNazionalita(singolare);
+                numBio += bioBackend.countNazionalitaSingola(singolare);
                 numSingolari++;
             }
 
