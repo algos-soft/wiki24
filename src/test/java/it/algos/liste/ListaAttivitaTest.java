@@ -98,11 +98,7 @@ public class ListaAttivitaTest extends WikiTest {
         if (listBio != null && listBio.size() > 0) {
             message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), type.getTagLower(), sorgente);
             System.out.println(message);
-            if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printAttivitaSingole(type,sorgente);
             System.out.println(VUOTA);
             printBioLista(listBio);
         }
@@ -138,11 +134,7 @@ public class ListaAttivitaTest extends WikiTest {
             size = listWrapLista.size();
             message = String.format("Ci sono %d wrapLista che implementano l'attività %s %s", listWrapLista.size(), sorgente, type.getTagLower());
             System.out.println(message);
-            if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printAttivitaSingole(type,sorgente);
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
             printWrapLista(listWrapLista.subList(size - 5, size));
@@ -179,11 +171,7 @@ public class ListaAttivitaTest extends WikiTest {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
             message = String.format("Ci sono %d wrapLista che implementano l'attività di %s %s", numVoci, type.getCivile(), sorgente);
             System.out.println(message);
-            if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printAttivitaSingole(type,sorgente);
             printMappaWrapKeyOrder(mappaWrap);
         }
         else {
@@ -218,11 +206,7 @@ public class ListaAttivitaTest extends WikiTest {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
             message = String.format("Ci sono %d wrapLista che implementano l'attività %s %s", numVoci, sorgente, type.getTagLower());
             System.out.println(message);
-            if (type == AETypeLista.attivitaPlurale) {
-                List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printAttivitaSingole(type,sorgente);
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
         }
@@ -233,7 +217,7 @@ public class ListaAttivitaTest extends WikiTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(6)
     @DisplayName("6 - nobiliTedeschi")
     void nobiliTedeschi() {
@@ -606,6 +590,14 @@ public class ListaAttivitaTest extends WikiTest {
         }
 
         return true;
+    }
+
+    private void printAttivitaSingole(final AETypeLista type, final String nomeAttivita) {
+        if (type == AETypeLista.attivitaPlurale) {
+            List<String> listaAttivitaSingoleComprese = attPluraleBackend.findAllFromNomiSingolariByPlurale(nomeAttivita);
+            message = String.format("Che raggruppa le %d attività singolari%s%s", listaAttivitaSingoleComprese.size(), FORWARD, listaAttivitaSingoleComprese);
+            System.out.println(message);
+        }
     }
 
 }

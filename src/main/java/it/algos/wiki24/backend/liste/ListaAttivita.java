@@ -36,7 +36,7 @@ public class ListaAttivita extends Lista {
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaAttivita() {
-        super.paragrafoAltre = TAG_LISTA_ALTRE;
+        super.paragrafoAltre = TAG_LISTA_NO_NAZIONALITA;
     }// end of constructor
 
 
