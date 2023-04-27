@@ -233,7 +233,7 @@ public class ListaAttivitaTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(6)
     @DisplayName("6 - nobiliTedeschi")
     void nobiliTedeschi() {

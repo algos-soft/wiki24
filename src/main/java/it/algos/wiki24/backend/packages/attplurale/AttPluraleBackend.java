@@ -9,6 +9,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
@@ -361,6 +362,50 @@ public class AttPluraleBackend extends WikiBackend {
     public boolean esistePaginaLista(String paginaLista) {
         String wikiTitle = "Progetto:Biografie/Attività/" + textService.primaMaiuscola(paginaLista);
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitle);
+    }
+
+
+    /**
+     * Scrive una pagina definitiva sul server wiki <br>
+     */
+    public WResult uploadPagina(String attivitaPlurale) {
+        WResult result = WResult.errato();
+        String message;
+        int numVoci = bioBackend.countAttivitaPlurale(attivitaPlurale);
+        String voci = textService.format(numVoci);
+        int soglia = WPref.sogliaAttNazWiki.getInt();
+
+        if (numVoci > soglia) {
+            result = appContext.getBean(UploadAttivita.class).upload(attivitaPlurale);
+            if (result.isValido()) {
+                if (result.isModificata()) {
+                    message = String.format("Lista %s utilizzati in %s voci biografiche", attivitaPlurale, voci);
+                }
+                else {
+                    message = String.format("Attività %s utilizzata in %s voci biografiche. %s", attivitaPlurale, voci, result.getValidMessage());
+                }
+                if (Pref.debug.is()) {
+                    logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                }
+            }
+            else {
+                logService.warn(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload));
+            }
+        }
+        else {
+            message = String.format("L'attività %s ha solo %s voci biografiche e non raggiunge il numero necessario per avere una pagina dedicata", attivitaPlurale, voci);
+            if (Pref.debug.is()) {
+                result.setErrorMessage(message).setValido(false);
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+            }
+//            if (esistePagina(pluraleAttivitaMinuscola)) {
+//                result.setErrorCode(KEY_ERROR_CANCELLANDA);
+//                message = String.format("Esiste la pagina %s che andrebbe cancellata", wikiTitle);
+//                logService.warn(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+//            }
+        }
+
+        return result;
     }
 
 }// end of crud backend class

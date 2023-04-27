@@ -11,6 +11,7 @@ import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -112,10 +113,10 @@ public class AttPluraleView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola attività plurale e la effettiva presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format( "Upload%sPrevisto per tutte le liste di attività plurale con bio>50.",FORWARD);
+        message = String.format("Upload%sPrevisto per tutte le liste di attività plurale con bio>50.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD,"Utente:Biobot/ModuloLinkAttivita");
+        message = String.format("Upload moduli%s1 modulo wiki riordinato in ordine alfabetico in %s", FORWARD, "Utente:Biobot/ModuloLinkAttivita");
         addSpan(ASpan.text(message).blue().small());
     }
 
@@ -170,6 +171,38 @@ public class AttPluraleView extends WikiView {
         Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
 
         grid.setColumnOrder(nome, listaSingolari, numBio, paginaLista, linkAttivita, numSingolari, superaSoglia, esisteLista);
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void upload() {
+        appContext.getBean(UploadAttivita.class).uploadAll();
+    }
+
+    /**
+     * Scrive una pagina definitiva sul server wiki <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void uploadPagina() {
+        AttPlurale attPlurale = getAttivitaCorrente();
+
+        if (attPlurale != null) {
+            backend.uploadPagina(attPlurale.nome);
+            reload();
+        }
+    }
+
+    public AttPlurale getAttivitaCorrente() {
+        AttPlurale attPlurale = null;
+
+        Optional entityBean = grid.getSelectedItems().stream().findFirst();
+        if (entityBean.isPresent()) {
+            attPlurale = (AttPlurale) entityBean.get();
+        }
+
+        return attPlurale;
     }
 
 }// end of crud @Route view class

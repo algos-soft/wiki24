@@ -72,18 +72,27 @@ public class UploadAttivitaTest extends WikiTest {
     }
 
 
-    //    @Test
+    @Test
     @Order(2)
-    @DisplayName("2 - Upload test di una attività con e senza TOC")
-    void uploadToc() {
-        System.out.println("2 - Upload test di una attività con e senza TOC");
-        sorgente = "agfani";
-        appContext.getBean(UploadAttivita.class).forceToc().test().upload(sorgente);
+    @DisplayName("2 - Upload test di una attività plurale con TOC (default)")
+    void upload() {
+        System.out.println("2 - Upload test di una attività plurale con TOC (default)");
+        sorgente = "agenti segreti";
+        appContext.getBean(UploadAttivita.class).test().upload(sorgente);
+    }
+
+
+    //    @Test
+    @Order(3)
+    @DisplayName("3 - Upload test di una attività plurale senza TOC")
+    void uploadNoToc() {
+        System.out.println("3 - Upload test di una attività senza TOC");
+        sorgente = "agenti segreti";
         appContext.getBean(UploadAttivita.class).noToc().test().upload(sorgente);
     }
 
 
-//        @Test
+    //        @Test
     @Order(3)
     @DisplayName("3 - Upload di una attività plurale")
     void upload3() {
@@ -119,7 +128,7 @@ public class UploadAttivitaTest extends WikiTest {
         appContext.getBean(UploadAttivita.class).test().upload(sorgente);
     }
 
-//    @Test
+    //    @Test
     @Order(7)
     @DisplayName("7 - Upload di una attività con sottoPagina")
     void upload7() {

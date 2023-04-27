@@ -5,6 +5,8 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -35,7 +37,15 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public AttivitaBackend attivitaBackend;
+    public AttPluraleBackend attPluraleBackend;
+
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
 
     /**
@@ -53,6 +63,7 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         super.lastUpload = WPref.uploadAttPlurale;
         super.durataUpload = WPref.uploadAttPluraleTime;
         super.nextUpload = WPref.uploadAttPluralePrevisto;
+        this.typeCrono = AETypeLista.attivitaPlurale;
     }// end of constructor
 
 
@@ -211,7 +222,7 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         WResult result = WResult.errato();
         long inizio = System.currentTimeMillis();
 
-        List<String> listaPlurali = attivitaBackend.findAllPlurali();
+        List<String> listaPlurali = attPluraleBackend.findAllForKeySortKey();
         for (String plurale : listaPlurali) {
             upload(plurale);
         }
