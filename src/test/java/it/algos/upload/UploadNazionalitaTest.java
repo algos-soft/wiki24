@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("upload")
-@DisplayName("UploadNazionalita")
+@DisplayName("Nazionalità upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadNazionalitaTest extends WikiTest {
 
@@ -72,13 +72,25 @@ public class UploadNazionalitaTest extends WikiTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - Upload test di una nazionalità")
-    void uploadToc() {
-        System.out.println("2 - Upload test di una nazionalità");
+    @DisplayName("2 - Upload test di una nazionalità plurale con TOC (default)")
+    void upload() {
+        System.out.println("2 - Upload test di una nazionalità plurale con TOC (default)");
+        System.out.println(VUOTA);
+
+        sorgente = "afghani";
+        appContext.getBean(UploadNazionalita.class).test().upload(sorgente);
+    }
+
+
+//    @Test
+    @Order(3)
+    @DisplayName("3 - Upload test di una nazionalità plurale senza TOC")
+    void uploadNoToc() {
+        System.out.println("3 - Upload test di una nazionalità plurale senza TOC");
         System.out.println(VUOTA);
 
         sorgente = "arabi";
-        appContext.getBean(UploadNazionalita.class).test().upload(sorgente);
+        appContext.getBean(UploadNazionalita.class).noToc().test().upload(sorgente);
     }
 
     /**
