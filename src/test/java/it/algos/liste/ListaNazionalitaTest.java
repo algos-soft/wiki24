@@ -100,11 +100,7 @@ public class ListaNazionalitaTest extends WikiTest {
         if (listBio != null && listBio.size() > 0) {
             message = String.format("Ci sono %d biografie che implementano la nazionalità %s %s", listBio.size(), sorgente, type.getTagLower());
             System.out.println(message);
-            if (type == AETypeLista.nazionalitaPlurale) {
-                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printNazionalitaSingole(type, sorgente);
             System.out.println(VUOTA);
             printBioLista(listBio);
         }
@@ -140,11 +136,7 @@ public class ListaNazionalitaTest extends WikiTest {
             size = listWrapLista.size();
             message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", listWrapLista.size(), sorgente, type.getTagLower());
             System.out.println(message);
-            if (type == AETypeLista.nazionalitaPlurale) {
-                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printNazionalitaSingole(type, sorgente);
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
             printWrapLista(listWrapLista.subList(size - 5, size));
@@ -181,11 +173,7 @@ public class ListaNazionalitaTest extends WikiTest {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
             message = String.format("Ci sono %d wrapLista che implementano la nazionalità di %s %s", numVoci, type.getCivile(), sorgente);
             System.out.println(message);
-            if (type == AETypeLista.nazionalitaPlurale) {
-                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printNazionalitaSingole(type, sorgente);
             printMappaWrapKeyOrder(mappaWrap);
         }
         else {
@@ -193,7 +181,6 @@ public class ListaNazionalitaTest extends WikiTest {
             System.out.println(message);
         }
     }
-
 
 
     @ParameterizedTest
@@ -221,78 +208,13 @@ public class ListaNazionalitaTest extends WikiTest {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
             message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", numVoci, sorgente, type.getTagLower());
             System.out.println(message);
-            if (type == AETypeLista.nazionalitaPlurale) {
-                List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(sorgente);
-                message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
-                System.out.println(message);
-            }
+            this.printNazionalitaSingole(type, sorgente);
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
         }
         else {
             message = "La mappa è nulla";
             System.out.println(message);
-        }
-    }
-
-
-    private void printSingoleAndBio(final String nomePlurale, final List<Bio> listaBio) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
-
-        if (listaBio != null && listaBio.size() > 0) {
-            assertTrue(previstoBooleano);
-            message = String.format("Ci sono %d biografie che usano la nazionalità plurale %s", listaBio.size(), nomePlurale);
-            System.out.println(message);
-            message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitàSingoleComprese.size(), FORWARD, listaNazionalitàSingoleComprese);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printBioLista(listBio);
-        }
-        else {
-            assertFalse(previstoBooleano);
-            message = String.format("Non esiste la nazionalità plurale '%s'", nomePlurale);
-            System.out.println(message);
-            System.out.println("La listBio è nulla");
-        }
-    }
-
-
-    private void printSingoleAndListaWrap(final String nomePlurale, final List<WrapLista> listaWrapLista) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
-
-        if (listaWrapLista != null && listaWrapLista.size() > 0) {
-            assertTrue(previstoBooleano);
-            message = String.format("Ci sono %d biografie che usano la nazionalità plurale %s", listaWrapLista.size(), nomePlurale);
-            System.out.println(message);
-            message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitàSingoleComprese.size(), FORWARD, listaNazionalitàSingoleComprese);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printWrapLista(listaWrapLista);
-        }
-        else {
-            assertFalse(previstoBooleano);
-            message = String.format("Non esiste la nazionalità plurale '%s'", nomePlurale);
-            System.out.println(message);
-            System.out.println("La wrapLista è nulla");
-        }
-    }
-    private void printSingoleAndMappaWrap(final String nomePlurale, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
-        List<String> listaNazionalitàSingoleComprese = nazPluraleBackend.findAllForKeyByPlurale(nomePlurale);
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            assertTrue(previstoBooleano);
-            message = String.format("Ci sono %d biografie che usano la nazionalità plurale %s", mappaWrap.size(), nomePlurale);
-            System.out.println(message);
-            message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitàSingoleComprese.size(), FORWARD, listaNazionalitàSingoleComprese);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printMappaWrap(mappaWrap);
-        }
-        else {
-            assertFalse(previstoBooleano);
-            message = String.format("Non esiste la nazionalità plurale '%s'", nomePlurale);
-            System.out.println(message);
-            System.out.println("La mappaWrap è nulla");
         }
     }
 
@@ -322,6 +244,15 @@ public class ListaNazionalitaTest extends WikiTest {
         }
 
         return true;
+    }
+
+
+    private void printNazionalitaSingole(final AETypeLista type, final String nomeNazionalita) {
+        if (type == AETypeLista.nazionalitaPlurale) {
+            List<String> listaNazionalitaSingoleComprese = nazPluraleBackend.findAllFromNomiSingolariByPlurale(nomeNazionalita);
+            message = String.format("Che raggruppa le %d nazionalità singolari%s%s", listaNazionalitaSingoleComprese.size(), FORWARD, listaNazionalitaSingoleComprese);
+            System.out.println(message);
+        }
     }
 
 }
