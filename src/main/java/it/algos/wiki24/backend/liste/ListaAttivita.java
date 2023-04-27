@@ -3,12 +3,14 @@ package it.algos.wiki24.backend.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki23
@@ -40,26 +42,33 @@ public class ListaAttivita extends Lista {
     }// end of constructor
 
 
-    public ListaAttivita attivita(final Attivita attivita) {
-        this.nomeLista = attivita.pluraleParagrafo;
-        listaNomiSingoli = attivitaBackend.findAllSingolariByPlurale(attivita.pluraleParagrafo);
+    public ListaAttivita attivita(final AttSingolare attivita) {
+        this.nomeLista = attivita.nome;
+        super.typeLista = AETypeLista.attivitaSingolare;
         return this;
     }
+
 
     public ListaAttivita singolare(final String nomeAttivitaSingolare) {
         this.nomeLista = nomeAttivitaSingolare;
         super.typeLista = AETypeLista.attivitaSingolare;
-//        listaNomiSingoli = arrayService.creaArraySingolo(nomeAttivitaSingolare);
+        //        listaNomiSingoli = arrayService.creaArraySingolo(nomeAttivitaSingolare);
         return this;
     }
 
     public ListaAttivita plurale(final String nomeAttivitaPlurale) {
         this.nomeLista = nomeAttivitaPlurale;
         super.typeLista = AETypeLista.attivitaPlurale;
-//        listaNomiSingoli = attivitaBackend.findSingolariByPlurale(nomeAttivitaPlurale);
+        //        listaNomiSingoli = attivitaBackend.findSingolariByPlurale(nomeAttivitaPlurale);
         return this;
     }
 
+    public ListaAttivita attivita(final AttPlurale attivita) {
+        this.nomeLista = attivita.nome;
+        listaNomiSingoli = attivita.listaSingolari.stream().map(att -> att.nome).collect(Collectors.toList());
+        super.typeLista = AETypeLista.attivitaPlurale;
+        return this;
+    }
 
     /**
      * Ordina la mappa <br>
@@ -69,105 +78,103 @@ public class ListaAttivita extends Lista {
         return wikiUtility.sort(mappa);
     }
 
-
-
     //    /**
-//     * Lista ordinata (per cognome) delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
-//     */
-//    @Override
-//    public List<Bio> listaBio() {
-//        super.listaBio();
-//
-//        try {
-//            listaBio = bioService.fetchAttivita(listaNomiSingoli);
-//        } catch (Exception unErrore) {
-//            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-//            return null;
-//        }
-//
-//        return listaBio;
-//    }
-//
-//
-//    /**
-//     * Costruisce una lista dei wrapper per gestire i dati necessari ad una didascalia <br>
-//     * La sottoclasse specifica esegue l'ordinamento <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public List<WrapDidascalia> listaWrapDidascalie() {
-//        listaWrapDidascalie = super.listaWrapDidascalie();
-//        return listaWrapDidascalie != null ? sortByNazionalita(listaWrapDidascalie) : null;
-//    }
-//
-//    /**
-//     * Mappa ordinata dei wrapper (WrapDidascalia) per gestire i dati necessari ad una didascalia <br>
-//     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-//     */
-//    @Override
-//    public LinkedHashMap<String, LinkedHashMap<String, List<WrapDidascalia>>> mappaWrapDidascalie() {super.mappaWrapDidascalie();
-//
-//        LinkedHashMap<String, List<WrapDidascalia>> mappaNaz = creaMappaNazionalita(listaWrapDidascalie);
-//        LinkedHashMap<String, List<WrapDidascalia>> mappaLista;
-//
-//        if (mappaNaz != null) {
-//            for (String key : mappaNaz.keySet()) {
-//                mappaLista = creaMappaCarattere(mappaNaz.get(key));
-//                mappaWrapDidascalie.put(key, mappaLista);
-//            }
-//        }
-//
-//        return mappaWrapDidascalie;
-//    }
-//
-//
-//
-//    public LinkedHashMap<String, List<WrapDidascalia>> creaMappaNazionalita(List<WrapDidascalia> listaWrapNonOrdinata) {
-//        LinkedHashMap<String, List> mappa = new LinkedHashMap<>();
-//        List lista;
-//        String nazionalita;
-//
-//        if (listaWrapNonOrdinata != null) {
-//            for (WrapDidascalia wrap : listaWrapNonOrdinata) {
-//                nazionalita = wrap.getNazionalitaParagrafo();
-//                nazionalita = nazionalita != null ? nazionalita : VUOTA;
-//
-//                if (mappa.containsKey(nazionalita)) {
-//                    lista = mappa.get(nazionalita);
-//                }
-//                else {
-//                    lista = new ArrayList();
-//                }
-//                lista.add(wrap);
-//                mappa.put(nazionalita, lista);
-//            }
-//        }
-//
-//        return (LinkedHashMap) arrayService.sortVuota(mappa);
-//    }
-//
-//
-//
-//
-//    public List<WrapDidascalia> sortByNazionalita(List<WrapDidascalia> listaWrapNonOrdinata) {
-//        List<WrapDidascalia> sortedList = new ArrayList<>();
-//        List<WrapDidascalia> listaConNazionalitaOrdinata = new ArrayList<>(); ;
-//        List<WrapDidascalia> listaSenzaNazionalitaOrdinata = new ArrayList<>(); ;
-//
-//        listaConNazionalitaOrdinata = listaWrapNonOrdinata
-//                .stream()
-//                .filter(wrap -> textService.isValid(wrap.getNazionalitaSingola()))
-//                .sorted(Comparator.comparing(funNazionalita))
-//                .collect(Collectors.toList());
-//
-//        listaSenzaNazionalitaOrdinata = listaWrapNonOrdinata
-//                .stream()
-//                .filter(wrap -> textService.isEmpty(wrap.getNazionalitaSingola()))
-//                .collect(Collectors.toList());
-//
-//        sortedList.addAll(listaConNazionalitaOrdinata);
-//        sortedList.addAll(listaSenzaNazionalitaOrdinata);
-//        return sortedList;
-//    }
+    //     * Lista ordinata (per cognome) delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+    //     */
+    //    @Override
+    //    public List<Bio> listaBio() {
+    //        super.listaBio();
+    //
+    //        try {
+    //            listaBio = bioService.fetchAttivita(listaNomiSingoli);
+    //        } catch (Exception unErrore) {
+    //            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+    //            return null;
+    //        }
+    //
+    //        return listaBio;
+    //    }
+    //
+    //
+    //    /**
+    //     * Costruisce una lista dei wrapper per gestire i dati necessari ad una didascalia <br>
+    //     * La sottoclasse specifica esegue l'ordinamento <br>
+    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+    //     */
+    //    @Override
+    //    public List<WrapDidascalia> listaWrapDidascalie() {
+    //        listaWrapDidascalie = super.listaWrapDidascalie();
+    //        return listaWrapDidascalie != null ? sortByNazionalita(listaWrapDidascalie) : null;
+    //    }
+    //
+    //    /**
+    //     * Mappa ordinata dei wrapper (WrapDidascalia) per gestire i dati necessari ad una didascalia <br>
+    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+    //     */
+    //    @Override
+    //    public LinkedHashMap<String, LinkedHashMap<String, List<WrapDidascalia>>> mappaWrapDidascalie() {super.mappaWrapDidascalie();
+    //
+    //        LinkedHashMap<String, List<WrapDidascalia>> mappaNaz = creaMappaNazionalita(listaWrapDidascalie);
+    //        LinkedHashMap<String, List<WrapDidascalia>> mappaLista;
+    //
+    //        if (mappaNaz != null) {
+    //            for (String key : mappaNaz.keySet()) {
+    //                mappaLista = creaMappaCarattere(mappaNaz.get(key));
+    //                mappaWrapDidascalie.put(key, mappaLista);
+    //            }
+    //        }
+    //
+    //        return mappaWrapDidascalie;
+    //    }
+    //
+    //
+    //
+    //    public LinkedHashMap<String, List<WrapDidascalia>> creaMappaNazionalita(List<WrapDidascalia> listaWrapNonOrdinata) {
+    //        LinkedHashMap<String, List> mappa = new LinkedHashMap<>();
+    //        List lista;
+    //        String nazionalita;
+    //
+    //        if (listaWrapNonOrdinata != null) {
+    //            for (WrapDidascalia wrap : listaWrapNonOrdinata) {
+    //                nazionalita = wrap.getNazionalitaParagrafo();
+    //                nazionalita = nazionalita != null ? nazionalita : VUOTA;
+    //
+    //                if (mappa.containsKey(nazionalita)) {
+    //                    lista = mappa.get(nazionalita);
+    //                }
+    //                else {
+    //                    lista = new ArrayList();
+    //                }
+    //                lista.add(wrap);
+    //                mappa.put(nazionalita, lista);
+    //            }
+    //        }
+    //
+    //        return (LinkedHashMap) arrayService.sortVuota(mappa);
+    //    }
+    //
+    //
+    //
+    //
+    //    public List<WrapDidascalia> sortByNazionalita(List<WrapDidascalia> listaWrapNonOrdinata) {
+    //        List<WrapDidascalia> sortedList = new ArrayList<>();
+    //        List<WrapDidascalia> listaConNazionalitaOrdinata = new ArrayList<>(); ;
+    //        List<WrapDidascalia> listaSenzaNazionalitaOrdinata = new ArrayList<>(); ;
+    //
+    //        listaConNazionalitaOrdinata = listaWrapNonOrdinata
+    //                .stream()
+    //                .filter(wrap -> textService.isValid(wrap.getNazionalitaSingola()))
+    //                .sorted(Comparator.comparing(funNazionalita))
+    //                .collect(Collectors.toList());
+    //
+    //        listaSenzaNazionalitaOrdinata = listaWrapNonOrdinata
+    //                .stream()
+    //                .filter(wrap -> textService.isEmpty(wrap.getNazionalitaSingola()))
+    //                .collect(Collectors.toList());
+    //
+    //        sortedList.addAll(listaConNazionalitaOrdinata);
+    //        sortedList.addAll(listaSenzaNazionalitaOrdinata);
+    //        return sortedList;
+    //    }
 
 }

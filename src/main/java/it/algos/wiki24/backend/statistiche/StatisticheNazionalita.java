@@ -6,7 +6,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -353,7 +353,7 @@ public class StatisticheNazionalita extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-        nazionalitaBackend.elabora();
+        nazPluraleBackend.elabora();
     }
 
     /**
@@ -361,7 +361,7 @@ public class StatisticheNazionalita extends Statistiche {
      */
     @Override
     protected void creaLista() {
-        lista = nazionalitaBackend.findNazionalitaDistinctByPluraliSortPlurali();
+        lista = nazPluraleBackend.findAllSortCorrente();
     }
 
     /**
@@ -374,16 +374,16 @@ public class StatisticheNazionalita extends Statistiche {
         List<String> singolari;
         int numNazionalita;
 
-        for (Nazionalita nazionalita : (List<Nazionalita>) lista) {
-            singolari = nazionalitaBackend.findSingolariByPlurale(nazionalita.pluraleLista);
+        for (NazPlurale nazionalita : (List<NazPlurale>) lista) {
+            singolari = nazPluraleBackend.findAllFromNomiSingolariByPlurale(nazionalita.nome);
             numNazionalita = 0;
 
             for (String singolare : singolari) {
                 numNazionalita += bioBackend.countNazionalitaSingola(singolare);
             }
 
-            mappaSingola = new MappaStatistiche(nazionalita.pluraleLista, numNazionalita);
-            mappa.put(nazionalita.pluraleLista, mappaSingola);
+            mappaSingola = new MappaStatistiche(nazionalita.nome, numNazionalita);
+            mappa.put(nazionalita.nome, mappaSingola);
         }
     }
 

@@ -252,13 +252,15 @@ public class BioBackend extends WikiBackend {
     }
 
     public int countAttivitaNazionalita(final String attivitaSingola, final String nazionalitaSingolarePlurale) {
-        int numBio = 0; List<String> listaNazionalita = nazionalitaBackend.findAllSingolari(nazionalitaSingolarePlurale);
+        //        int numBio = 0; List<String> listaNazionalita = nazionalitaBackend.findAllSingolari(nazionalitaSingolarePlurale);
+        //
+        //        for (String nazionalitaSingola : listaNazionalita) {
+        //            numBio += countAttivitaNazionalitaBase(attivitaSingola, nazionalitaSingola);
+        //        }
+        //
+        //        return numBio;
 
-        for (String nazionalitaSingola : listaNazionalita) {
-            numBio += countAttivitaNazionalitaBase(attivitaSingola, nazionalitaSingola);
-        }
-
-        return numBio;
+        return 0;
     }
 
     /**
@@ -288,32 +290,32 @@ public class BioBackend extends WikiBackend {
      */
     public int countAttivitaNazionalitaAll(String attivitaSingolarePlurale, String nazionalitaSingolarePlurale, String letteraIniziale) {
         int numBio = 0;
-        List<String> listaAttivita;
-        List<String> listaNazionalita;
-        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
-        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
-
-        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-
-        for (String nazionalitaSingola : listaNazionalita) {
-            for (String attivitaSingola : listaAttivita) {
-                numBio += countAttivitaNazionalitaBase(attivitaSingola, nazionalitaSingola);
-            }
-        }
-
-        if (listaNazionalita.size() == 0 && nazionalitaSingolarePlurale.equalsIgnoreCase(TAG_LISTA_NO_NAZIONALITA)) {
-            numBio = 0;
-            for (String attivitaSingola : listaAttivita) {
-                numBio += countAttivitaNazionalitaBase(attivitaSingola, null);
-                //                List listone = bioService.fetchAttivita(attivitaSingola);
-            }
-        }
-
-        if (textService.isValid(letteraIniziale)) {
-            numBio = findAllAttivitaNazionalita(attivitaSingolarePlurale, nazionalitaSingolarePlurale, letteraIniziale).size();
-        }
-
+        //        List<String> listaAttivita;
+        //        List<String> listaNazionalita;
+        //        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
+        //        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
+        //
+        //        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+        //        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+        //
+        //        for (String nazionalitaSingola : listaNazionalita) {
+        //            for (String attivitaSingola : listaAttivita) {
+        //                numBio += countAttivitaNazionalitaBase(attivitaSingola, nazionalitaSingola);
+        //            }
+        //        }
+        //
+        //        if (listaNazionalita.size() == 0 && nazionalitaSingolarePlurale.equalsIgnoreCase(TAG_LISTA_NO_NAZIONALITA)) {
+        //            numBio = 0;
+        //            for (String attivitaSingola : listaAttivita) {
+        //                numBio += countAttivitaNazionalitaBase(attivitaSingola, null);
+        //                //                List listone = bioService.fetchAttivita(attivitaSingola);
+        //            }
+        //        }
+        //
+        //        if (textService.isValid(letteraIniziale)) {
+        //            numBio = findAllAttivitaNazionalita(attivitaSingolarePlurale, nazionalitaSingolarePlurale, letteraIniziale).size();
+        //        }
+        //
         return numBio;
     }
 
@@ -349,43 +351,43 @@ public class BioBackend extends WikiBackend {
      * @return conteggio di biografie che usano l'attività e la nazionalità
      */
     public int countNazionalitaAttivitaAll(String nazionalitaSingolarePlurale, final String attivitaSingolarePlurale, String letteraIniziale) {
-        int numBio = 0; List<String> listaNazionalita; List<String> listaAttivita;
-        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
-        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
-
-        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-
-        for (String nazionalitaSingola : listaNazionalita) {
-            for (String attivitaSingola : listaAttivita) {
-                numBio += countNazionalitaAttivita(nazionalitaSingola, attivitaSingola);
-            }
-        }
-
-        if (textService.isValid(letteraIniziale)) {
-            numBio = findAllAttivitaNazionalita(attivitaSingolarePlurale, nazionalitaSingolarePlurale, letteraIniziale).size();
-        }
-
-        return numBio;
+        //        int numBio = 0; List<String> listaNazionalita; List<String> listaAttivita;
+        //        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
+        //        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
+        //
+        //        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+        //        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+        //
+        //        for (String nazionalitaSingola : listaNazionalita) {
+        //            for (String attivitaSingola : listaAttivita) {
+        //                numBio += countNazionalitaAttivita(nazionalitaSingola, attivitaSingola);
+        //            }
+        //        }
+        //
+        //        if (textService.isValid(letteraIniziale)) {
+        //            numBio = findAllAttivitaNazionalita(attivitaSingolarePlurale, nazionalitaSingolarePlurale, letteraIniziale).size();
+        //        }
+        //
+        //        return numBio;
+        return 0;
     }
 
-
-//    /**
-//     * Conta tutte le biografie con una serie di nazionalità plurali. <br>
-//     *
-//     * @param nazionalitaPlurale
-//     *
-//     * @return conteggio di biografie che la usano
-//     */
-//    public int countNazionalitaPlurale(final String nazionalitaPlurale) {
-//        int numBio = 0; List<String> listaNomi = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-//
-//        for (String singolare : listaNomi) {
-//            numBio += countNazionalita(singolare);
-//        }
-//
-//        return numBio;
-//    }
+    //    /**
+    //     * Conta tutte le biografie con una serie di nazionalità plurali. <br>
+    //     *
+    //     * @param nazionalitaPlurale
+    //     *
+    //     * @return conteggio di biografie che la usano
+    //     */
+    //    public int countNazionalitaPlurale(final String nazionalitaPlurale) {
+    //        int numBio = 0; List<String> listaNomi = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+    //
+    //        for (String singolare : listaNomi) {
+    //            numBio += countNazionalita(singolare);
+    //        }
+    //
+    //        return numBio;
+    //    }
 
 
     public Bio findByKey(final long pageId) {
@@ -413,21 +415,22 @@ public class BioBackend extends WikiBackend {
     }
 
     public List<Bio> findAttivitaNazionalita(final String attivitaSingola, final String nazionalitaSingolarePlurale) {
-        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita = nazionalitaBackend.findAllSingolari(nazionalitaSingolarePlurale);
-
-        if (listaNazionalita != null) {
-            for (String nazionalitaSingola : listaNazionalita) {
-                lista.addAll(repository.findAllByAttivitaAndNazionalitaOrderByOrdinamento(attivitaSingola, nazionalitaSingola));
-            }
-        }
-        else {
-            if (nazionalitaSingolarePlurale.equalsIgnoreCase(TAG_LISTA_NO_NAZIONALITA)) {
-                lista = repository.findAllByAttivitaOrderByOrdinamento(attivitaSingola);
-                lista = lista.stream().filter(bio -> (textService.isEmpty(bio.nazionalita))).collect(Collectors.toList());
-            }
-        }
-
-        return lista;
+        //        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita = nazionalitaBackend.findAllSingolari(nazionalitaSingolarePlurale);
+        //
+        //        if (listaNazionalita != null) {
+        //            for (String nazionalitaSingola : listaNazionalita) {
+        //                lista.addAll(repository.findAllByAttivitaAndNazionalitaOrderByOrdinamento(attivitaSingola, nazionalitaSingola));
+        //            }
+        //        }
+        //        else {
+        //            if (nazionalitaSingolarePlurale.equalsIgnoreCase(TAG_LISTA_NO_NAZIONALITA)) {
+        //                lista = repository.findAllByAttivitaOrderByOrdinamento(attivitaSingola);
+        //                lista = lista.stream().filter(bio -> (textService.isEmpty(bio.nazionalita))).collect(Collectors.toList());
+        //            }
+        //        }
+        //
+        //        return lista;
+        return null;
     }
 
     public List<Bio> findNazionalitaAttivita(final String nazionalitaSingolare, final String attivitaSingolare) {
@@ -461,23 +464,24 @@ public class BioBackend extends WikiBackend {
      * @return Lista di biografie che usano l'attività e la nazionalità
      */
     public List<Bio> findAllAttivitaNazionalita(String attivitaSingolarePlurale, String nazionalitaSingolarePlurale, String letteraIniziale) {
-        List<Bio> lista = new ArrayList<>();
-        List<String> listaAttivita;
-        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
-
-        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-
-        for (String attivitaSingola : listaAttivita) {
-            lista.addAll(findAttivitaNazionalita(attivitaSingola, nazionalitaSingolarePlurale));
-        }
-
-        if (textService.isValid(letteraIniziale)) {
-            lista = lista.stream()
-                    .filter(bio -> (textService.isValid(bio.ordinamento) && bio.ordinamento.startsWith(letteraIniziale)))
-                    .collect(Collectors.toList());
-        }
-
-        return bioService.sortByForzaOrdinamento(lista);
+        //        List<Bio> lista = new ArrayList<>();
+        //        List<String> listaAttivita;
+        //        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
+        //
+        //        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+        //
+        //        for (String attivitaSingola : listaAttivita) {
+        //            lista.addAll(findAttivitaNazionalita(attivitaSingola, nazionalitaSingolarePlurale));
+        //        }
+        //
+        //        if (textService.isValid(letteraIniziale)) {
+        //            lista = lista.stream()
+        //                    .filter(bio -> (textService.isValid(bio.ordinamento) && bio.ordinamento.startsWith(letteraIniziale)))
+        //                    .collect(Collectors.toList());
+        //        }
+        //
+        //        return bioService.sortByForzaOrdinamento(lista);
+        return null;
     }
 
 
@@ -493,24 +497,25 @@ public class BioBackend extends WikiBackend {
      * @return Lista di biografie che usano l'attività e la nazionalità
      */
     public List<Bio> findAllNazionalitaAttivita(String nazionalitaSingolarePlurale, String attivitaSingolarePlurale, String letteraIniziale) {
-        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita; List<String> listaAttivita;
-        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
-        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
-
-        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-
-        for (String nazionalitaSingola : listaNazionalita) {
-            for (String attivitaSingola : listaAttivita) {
-                lista.addAll(findNazionalitaAttivita(nazionalitaSingola, attivitaSingola));
-            }
-        }
-
-        if (textService.isValid(letteraIniziale)) {
-            lista = lista.stream().filter(bio -> (textService.isValid(bio.cognome) && bio.cognome.startsWith(letteraIniziale))).collect(Collectors.toList());
-        }
-
-        return bioService.sortByForzaOrdinamento(lista);
+//        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita; List<String> listaAttivita;
+//        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
+//        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
+//
+//        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+//        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+//
+//        for (String nazionalitaSingola : listaNazionalita) {
+//            for (String attivitaSingola : listaAttivita) {
+//                lista.addAll(findNazionalitaAttivita(nazionalitaSingola, attivitaSingola));
+//            }
+//        }
+//
+//        if (textService.isValid(letteraIniziale)) {
+//            lista = lista.stream().filter(bio -> (textService.isValid(bio.cognome) && bio.cognome.startsWith(letteraIniziale))).collect(Collectors.toList());
+//        }
+//
+//        return bioService.sortByForzaOrdinamento(lista);
+        return null;
     }
 
 
@@ -1239,7 +1244,7 @@ public class BioBackend extends WikiBackend {
     public int countNazionalitaSingola(final String nazionalitaSingola) {
         int numBio = 0;
         String propertyName = "nazionalita";
-        Query  query = new Query();
+        Query query = new Query();
         Sort sort;
         Long lungo;
 

@@ -3,14 +3,12 @@ package it.algos.wiki24.backend.service;
 import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.doppionome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.springframework.beans.factory.annotation.*;
@@ -80,15 +78,9 @@ public class WAbstractService extends AbstractService {
     @Autowired
     public DoppionomeBackend doppionomeBackend;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public AttivitaBackend attivitaBackend;
     @Autowired
     public AttSingolareBackend attSingolareBackend;
+
     @Autowired
     public AttPluraleBackend attPluraleBackend;
 
@@ -98,9 +90,8 @@ public class WAbstractService extends AbstractService {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public NazionalitaBackend nazionalitaBackend;
-    @Autowired
     public NazSingolareBackend nazSingolareBackend;
+
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 

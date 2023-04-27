@@ -11,7 +11,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
@@ -113,7 +113,7 @@ public abstract class Upload {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public AttivitaBackend attivitaBackend;
+    public AttPluraleBackend attPluraleBackend;
 
 
     /**

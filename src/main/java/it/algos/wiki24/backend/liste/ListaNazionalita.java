@@ -3,7 +3,8 @@ package it.algos.wiki24.backend.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -39,8 +40,13 @@ public class ListaNazionalita extends Lista {
     }// end of constructor
 
 
-    public ListaNazionalita nazionalita(final Nazionalita nazionalita) {
-        this.nomeLista = nazionalita.pluraleLista;
+    public ListaNazionalita nazionalita(final NazSingolare nazionalitaSingolare) {
+        this.nomeLista = nazionalitaSingolare.nome;
+        super.typeLista = AETypeLista.nazionalitaSingolare;
+        return this;
+    }
+    public ListaNazionalita nazionalita(final NazPlurale nazionalitaPlurale) {
+        this.nomeLista = nazionalitaPlurale.nome;
         super.typeLista = AETypeLista.nazionalitaPlurale;
         return this;
     }

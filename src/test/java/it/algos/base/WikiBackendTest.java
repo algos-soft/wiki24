@@ -2,12 +2,10 @@ package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
@@ -40,12 +38,6 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @Autowired
     protected AnnoWikiBackend annoWikiBackend;
-
-    @Autowired
-    protected AttivitaBackend attivitaBackend;
-
-    @Autowired
-    protected NazionalitaBackend nazionalitaBackend;
 
     @Autowired
     protected WikiApiService wikiApiService;
@@ -182,8 +174,6 @@ public abstract class WikiBackendTest extends BackendTest {
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoBackend);
         assertNotNull(annoWikiBackend);
-        assertNotNull(attivitaBackend);
-        assertNotNull(nazionalitaBackend);
         assertNotNull(wikiApiService);
         assertNotNull(wikiUtility);
         assertNotNull(queryService);

@@ -6,9 +6,7 @@ import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.boot.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
@@ -36,9 +34,6 @@ public class BioAttNazBackendTest extends WikiTest {
 
     private List<Bio> listaBeans;
 
-    private Attivita attivita;
-
-    private Nazionalita nazionalita;
 
     private Bio bioSalvini;
 

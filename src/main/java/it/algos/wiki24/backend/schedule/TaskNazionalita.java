@@ -6,7 +6,6 @@ import it.algos.vaad24.backend.schedule.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.*;
 import it.sauronsoftware.cron4j.*;
@@ -34,14 +33,14 @@ public class TaskNazionalita extends VaadTask {
     }
 
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public NazionalitaBackend nazionalitaBackend;
-
+//    /**
+//     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+//     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+//     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+//     */
+//    @Autowired
+//    public NazionalitaBackend nazionalitaBackend;
+//
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
         super.execute(taskExecutionContext);

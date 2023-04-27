@@ -7,11 +7,10 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
@@ -697,49 +696,49 @@ public class ElaboraService extends WAbstractService {
      */
     public String nazionalitaValida(Bio bio, String testoGrezzo) {
         String nazionalitaTxt = VUOTA;
-        String testoValido = fixNazionalita(testoGrezzo);
-        Nazionalita nazionalita = null;
-        Nazionalita nazionalita2 = null;
-        String tagFinale = VUOTA;
-        String tagMaschile = "o";
-        String tagFemminile = "a";
-        String genere = bio.sesso;
-        boolean maschile = genere.equals("M");
-        int numSingolari;
-        boolean doppioGenere = false;
-
-        if (textService.isEmpty(genere)) {
-            logService.info(new WrapLog().message(String.format("Manca genere di %s", testoGrezzo)));
-            return VUOTA;
-        }
-
-        try {
-            nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
-        } catch (Exception unErrore) {
-            logService.info(new WrapLog().exception(unErrore));
-        }
-        if (nazionalita != null) {
-            nazionalitaTxt = nazionalita.getSingolare();
-            tagFinale = nazionalitaTxt.substring(nazionalitaTxt.length() - 1);
-            numSingolari = nazionalita.numSingolari;
-            doppioGenere = numSingolari > 1;
-        }
-
-        if (nazionalita != null && tagFinale.equals(tagFemminile) && maschile && doppioGenere) {
-            nazionalitaTxt = nazionalitaTxt.substring(0, nazionalitaTxt.length() - 1);
-            nazionalitaTxt += tagMaschile;
-
-            nazionalita2 = nazionalitaBackend.findFirstBySingolare(nazionalitaTxt);
-            if (nazionalita2 != null) {
-                logService.info(new WrapLog().message(String.format("Nella bio %s modificato il genere di %s in %s (che esiste)", bio.wikiTitle, testoGrezzo, nazionalitaTxt)).usaDb());
-                bio.errato = true;
-                bio.errore = AETypeBioError.nazionalitaGenere;
-            }
-            else {
-                nazionalitaTxt = nazionalita.getSingolare();
-            }
-        }
-
+//        String testoValido = fixNazionalita(testoGrezzo);
+//        Nazionalita nazionalita = null;
+//        Nazionalita nazionalita2 = null;
+//        String tagFinale = VUOTA;
+//        String tagMaschile = "o";
+//        String tagFemminile = "a";
+//        String genere = bio.sesso;
+//        boolean maschile = genere.equals("M");
+//        int numSingolari;
+//        boolean doppioGenere = false;
+//
+//        if (textService.isEmpty(genere)) {
+//            logService.info(new WrapLog().message(String.format("Manca genere di %s", testoGrezzo)));
+//            return VUOTA;
+//        }
+//
+//        try {
+//            nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
+//        } catch (Exception unErrore) {
+//            logService.info(new WrapLog().exception(unErrore));
+//        }
+//        if (nazionalita != null) {
+//            nazionalitaTxt = nazionalita.getSingolare();
+//            tagFinale = nazionalitaTxt.substring(nazionalitaTxt.length() - 1);
+//            numSingolari = nazionalita.numSingolari;
+//            doppioGenere = numSingolari > 1;
+//        }
+//
+//        if (nazionalita != null && tagFinale.equals(tagFemminile) && maschile && doppioGenere) {
+//            nazionalitaTxt = nazionalitaTxt.substring(0, nazionalitaTxt.length() - 1);
+//            nazionalitaTxt += tagMaschile;
+//
+//            nazionalita2 = nazionalitaBackend.findFirstBySingolare(nazionalitaTxt);
+//            if (nazionalita2 != null) {
+//                logService.info(new WrapLog().message(String.format("Nella bio %s modificato il genere di %s in %s (che esiste)", bio.wikiTitle, testoGrezzo, nazionalitaTxt)).usaDb());
+//                bio.errato = true;
+//                bio.errore = AETypeBioError.nazionalitaGenere;
+//            }
+//            else {
+//                nazionalitaTxt = nazionalita.getSingolare();
+//            }
+//        }
+//
         return nazionalitaTxt;
     }
 
@@ -776,8 +775,8 @@ public class ElaboraService extends WAbstractService {
      *
      * @return istanza di nazionalità valida
      */
-    public Nazionalita fixNazionalitaLink(String testoGrezzo) {
-        Nazionalita nazionalita = null;
+    public NazSingolare fixNazionalitaLink(String testoGrezzo) {
+        NazSingolare nazionalita = null;
         String testoValido = VUOTA;
 
         if (textService.isValid(testoGrezzo)) {
@@ -786,7 +785,7 @@ public class ElaboraService extends WAbstractService {
 
         if (textService.isValid(testoValido)) {
             try {
-                nazionalita = nazionalitaBackend.findFirstBySingolare(testoValido);
+                nazionalita = nazSingolareBackend.findByKey(testoValido);
             } catch (Exception unErrore) {
                 logService.error(new WrapLog().exception(unErrore).usaDb());
             }

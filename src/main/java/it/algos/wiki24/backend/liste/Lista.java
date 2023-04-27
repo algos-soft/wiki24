@@ -8,9 +8,9 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attivita.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -75,13 +75,6 @@ public abstract class Lista {
     @Autowired
     public DidascaliaService didascaliaService;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public NazionalitaBackend nazionalitaBackend;
 
 
     /**
@@ -90,7 +83,14 @@ public abstract class Lista {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public AttivitaBackend attivitaBackend;
+    public AttPluraleBackend attPluraleBackend;
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
 
     /**

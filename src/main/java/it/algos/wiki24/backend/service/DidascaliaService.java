@@ -5,12 +5,10 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.attivita.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -519,39 +517,41 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapCognomi(final Bio bio) {
-        Cognome cognome = cognomeBackend.findByCognome(bio.cognome);
-        String ordinamento = textService.isValid(bio.nome) ? bio.nome : bio.ordinamento;
-        String sottoParagrafo = ordinamento.substring(0, 1);
-        String didascalia = this.lista(bio);
-        Attivita attivita = attivitaBackend.findFirstBySingolare(bio.attivita);
+//        Cognome cognome = cognomeBackend.findByCognome(bio.cognome);
+//        String ordinamento = textService.isValid(bio.nome) ? bio.nome : bio.ordinamento;
+//        String sottoParagrafo = ordinamento.substring(0, 1);
+//        String didascalia = this.lista(bio);
+//        Attivita attivita = attivitaBackend.findFirstBySingolare(bio.attivita);
+//
+//        if (attivita == null) {
+//            return new WrapLista(TAG_LISTA_NO_ATTIVITA, TAG_LISTA_NO_ATTIVITA, ordinamento, sottoParagrafo, didascalia);
+//        }
+//
+//        String paragrafo;
+//        String paragrafoLink;
+//
+//        if (cognome != null) {
+//            paragrafo = textService.primaMaiuscola(attivita.pluraleLista);
+//            if (attivita.esistePaginaLista) {
+//                paragrafoLink = switch ((AETypeLink) WPref.linkCognomi.getEnumCurrentObj()) {
+//                    case voce -> textService.setDoppieQuadre(paragrafo);
+//                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+//                    case pagina -> textService.setDoppieQuadre(attivita.linkPaginaAttivita + PIPE + paragrafo);
+//                    case nessuno -> paragrafo;
+//                };
+//            }
+//            else {
+//                paragrafoLink = paragrafo;
+//            }
+//        }
+//        else {
+//            paragrafo = TAG_LISTA_ALTRE;
+//            paragrafoLink = TAG_LISTA_ALTRE;
+//        }
+//
+//        return new WrapLista(paragrafo, paragrafoLink, ordinamento, sottoParagrafo, didascalia);
 
-        if (attivita == null) {
-            return new WrapLista(TAG_LISTA_NO_ATTIVITA, TAG_LISTA_NO_ATTIVITA, ordinamento, sottoParagrafo, didascalia);
-        }
-
-        String paragrafo;
-        String paragrafoLink;
-
-        if (cognome != null) {
-            paragrafo = textService.primaMaiuscola(attivita.pluraleLista);
-            if (attivita.esistePaginaLista) {
-                paragrafoLink = switch ((AETypeLink) WPref.linkCognomi.getEnumCurrentObj()) {
-                    case voce -> textService.setDoppieQuadre(paragrafo);
-                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case pagina -> textService.setDoppieQuadre(attivita.linkPaginaAttivita + PIPE + paragrafo);
-                    case nessuno -> paragrafo;
-                };
-            }
-            else {
-                paragrafoLink = paragrafo;
-            }
-        }
-        else {
-            paragrafo = TAG_LISTA_ALTRE;
-            paragrafoLink = TAG_LISTA_ALTRE;
-        }
-
-        return new WrapLista(paragrafo, paragrafoLink, ordinamento, sottoParagrafo, didascalia);
+        return null;
     }
 
 

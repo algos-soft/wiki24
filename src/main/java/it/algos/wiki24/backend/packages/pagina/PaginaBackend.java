@@ -3,7 +3,6 @@ package it.algos.wiki24.backend.packages.pagina;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nazionalita.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.apache.commons.collections4.*;
@@ -354,7 +353,7 @@ public class PaginaBackend extends WikiBackend {
         int nameSpace = 102;
         String tag = "Biografie/Attività";
         List<String> pagineAll = queryService.getList(tag, nameSpace);
-        List<String> valideBase = attivitaBackend.findAllPlurali();
+        List<String> valideBase = attPluraleBackend.findAllForKeySortKey();
 
         //        elaboraAttivitaPagine(valideBase, getPagine(pagineAll));
         //        elaboraAttivitaSottoPagine(valideBase, getSottoPagine(pagineAll));
@@ -401,12 +400,12 @@ public class PaginaBackend extends WikiBackend {
             // ???
 
             // Quelle di primo livello singolari e non plurali
-            String gamma = attivitaBackend.pluraleBySingolarePlurale(paginaBase);
-            if (paginaBase.equals(gamma)) {
-                voci = bioBackend.countAttivitaPlurale(paginaBase);
-                creaIfNotExist(wikiTitle, AETypePaginaCancellare.attivitaBase, voci, false);
-                continue;
-            }
+//            String gamma = attivitaBackend.pluraleBySingolarePlurale(paginaBase);
+//            if (paginaBase.equals(gamma)) {
+//                voci = bioBackend.countAttivitaPlurale(paginaBase);
+//                creaIfNotExist(wikiTitle, AETypePaginaCancellare.attivitaBase, voci, false);
+//                continue;
+//            }
 
             // Quelle di primo livello che non superano le 50 voci
             voci = bioBackend.countAttivitaPlurale(paginaBase);
@@ -528,11 +527,11 @@ public class PaginaBackend extends WikiBackend {
         int nameSpace = 102;
         String tag = "Biografie/Nazionalità/";
         List<String> pagineAll = queryService.getList(tag, nameSpace);
-        List<String> valideBase = nazionalitaBackend.findAllPluraliDistinti();
-
-        elaboraNazionalitaPagine(valideBase, getPagine(pagineAll));
-        elaboraNazionalitaSottoPagine(valideBase, getSottoPagine(pagineAll));
-        elaboraNazionalitaSottoSottoPagine(valideBase, getSottoSottoPagine(pagineAll));
+//        List<String> valideBase = nazionalitaBackend.findAllPluraliDistinti();
+//
+//        elaboraNazionalitaPagine(valideBase, getPagine(pagineAll));
+//        elaboraNazionalitaSottoPagine(valideBase, getSottoPagine(pagineAll));
+//        elaboraNazionalitaSottoSottoPagine(valideBase, getSottoSottoPagine(pagineAll));
     }
 
 
@@ -582,14 +581,14 @@ public class PaginaBackend extends WikiBackend {
             // ???
 
             // Quelle di primo livello singolari e non plurali
-            String gamma = nazionalitaBackend.pluraleBySingolarePlurale(paginaBase);
-            Nazionalita delta = nazionalitaBackend.findFirstBySingolare(paginaBase);
-            Nazionalita delta2 = nazionalitaBackend.findFirstByPluraleLista(paginaBase);
-            if (paginaBase.equals(gamma)) {
-                //                voci = bioBackend.countNazionalitaPlurale(paginaBase);
-                //                creaIfNotExist(wikiTitle, AETypePaginaCancellare.nazionalitaBase, voci, false);
-                continue;
-            }
+//            String gamma = nazionalitaBackend.pluraleBySingolarePlurale(paginaBase);
+//            Nazionalita delta = nazionalitaBackend.findFirstBySingolare(paginaBase);
+//            Nazionalita delta2 = nazionalitaBackend.findFirstByPluraleLista(paginaBase);
+//            if (paginaBase.equals(gamma)) {
+//                //                voci = bioBackend.countNazionalitaPlurale(paginaBase);
+//                //                creaIfNotExist(wikiTitle, AETypePaginaCancellare.nazionalitaBase, voci, false);
+//                continue;
+//            }
 
             // Quelle di primo livello che non superano le 50 voci
             voci = bioBackend.countNazionalitaPlurale(paginaBase);
