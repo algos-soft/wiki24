@@ -37,7 +37,7 @@ public class UploadNazionalita extends UploadAttivitaNazionalita {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public NazionalitaBackend nazionalitaBackend;
+    public NazPluraleBackend nazPluraleBackend;
 
     /**
      * Costruttore base con parametri <br>
@@ -216,7 +216,7 @@ public class UploadNazionalita extends UploadAttivitaNazionalita {
         WResult result = WResult.errato();
         long inizio = System.currentTimeMillis();
 
-        List<String> listaPlurali = nazionalitaBackend.findAllPluraliDistinti();
+        List<String> listaPlurali = nazPluraleBackend.findAllForKeySortKey();
         for (String plurale : listaPlurali) {
             upload(plurale);
         }

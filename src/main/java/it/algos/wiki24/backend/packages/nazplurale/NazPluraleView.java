@@ -171,8 +171,23 @@ public class NazPluraleView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void upload() {
-        //        appContext.getBean(UploadNazionalita.class).uploadAll();
+        appContext.getBean(UploadNazionalita.class).uploadAll();
     }
+
+
+    /**
+     * Scrive una pagina definitiva sul server wiki <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void uploadPagina() {
+        NazPlurale nazPlurale = getNazionalitaCorrente();
+
+        if (nazPlurale != null) {
+            backend.uploadPagina(nazPlurale.nome);
+            reload();
+        }
+    }
+
 
     /**
      * Scrive una voce di prova su Utente:Biobot/test <br>
@@ -193,29 +208,6 @@ public class NazPluraleView extends WikiView {
                 Avviso.message(message).primary().open();
             }
         }
-    }
-
-    /**
-     * Scrive una pagina definitiva sul server wiki <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    public void uploadPagina() {
-        NazPlurale nazionalita = getNazionalitaCorrente();
-
-        if (nazionalita != null) {
-            uploadPagina(nazionalita.nome);
-            reload();
-        }
-    }
-
-    /**
-     * Scrive una pagina definitiva sul server wiki <br>
-     */
-    public WResult uploadPagina(String pluraleNazionalitaMinuscolo) {
-        WResult result = WResult.errato();
-        appContext.getBean(UploadNazionalita.class).upload(pluraleNazionalitaMinuscolo);
-
-        return result;
     }
 
     public NazPlurale getNazionalitaCorrente() {
