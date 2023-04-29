@@ -41,16 +41,12 @@ public class TaskBio extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        super.execute(taskExecutionContext);
-
-        if (flagAttivazione.is()) {
-            super.fixNext();
+        if (super.execute()) {
 
             downloadService.cicloCorrente();
+
             appContext.getBean(StatisticheBio.class).upload();
-            super.loggerTask();
-        }
-        else {
+
             super.loggerNoTask();
         }
     }

@@ -30,18 +30,11 @@ public class TaskAnni extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        super.execute(taskExecutionContext);
-
-        if (flagAttivazione.is()) {
-            super.fixNext();
+        if (super.execute()) {
 
             //--L'upload comprende anche le info per la view
             inizio = System.currentTimeMillis();
             appContext.getBean(UploadAnni.class).uploadAll();
-            super.loggerTask();
-        }
-        else {
-            super.loggerNoTask();
         }
     }
 
