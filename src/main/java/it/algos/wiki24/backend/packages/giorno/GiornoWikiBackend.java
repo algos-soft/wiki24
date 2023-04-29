@@ -261,11 +261,11 @@ public class GiornoWikiBackend extends WikiBackend {
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logService.warn(WrapLog.build().message("Somma giorno di nascita errata"));
+            logService.info(WrapLog.build().message("Somma giorno di nascita errata"));
         }
         checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logService.warn(WrapLog.build().message("Somma giorno di morte errata"));
+            logService.info(WrapLog.build().message("Somma giorno di morte errata"));
         }
 
         mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());

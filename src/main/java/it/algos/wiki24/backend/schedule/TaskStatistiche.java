@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -29,21 +30,15 @@ public class TaskStatistiche extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        super.execute(taskExecutionContext);
+        if (super.execute()) {
 
-        if (flagAttivazione.is()) {
-            super.fixNext();
-
-            //--Le statistiche dei giorni comprendono anche l'elaborazione
+            //--Le statistiche dei giorni comprendono anche una preliminare elaborazione
             appContext.getBean(StatisticheGiorni.class).upload();
 
-            //--Le statistiche degli anni comprendono anche l'elaborazione
+            //--Le statistiche degli anni comprendono anche una preliminare elaborazione
             appContext.getBean(StatisticheAnni.class).upload();
 
             super.loggerTask();
-        }
-        else {
-            super.loggerNoTask();
         }
     }
 

@@ -832,6 +832,7 @@ public abstract class WikiView extends CrudView {
         WResult result = crudBackend.elabora();
 
         if (result.isValido()) {
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.elabora).usaDb());
             reload();
             //            Avviso.message("Elaborazione effettuata").success().open();
         }

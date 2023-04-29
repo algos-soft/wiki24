@@ -260,19 +260,15 @@ public class AnnoWikiBackend extends WikiBackend {
         String size;
         String time;
         int tot = count();
-        Anno anno;
-        int bioNati = 0;
-        int bioMorti = 0;
+        int bioNati ;
+        int bioMorti ;
         String wikiTitleNati;
         String wikiTitleMorti;
-        boolean esistePaginaNati = false;
-        boolean esistePaginaMorti = false;
+        boolean esistePaginaNati ;
+        boolean esistePaginaMorti ;
         boolean natiOk;
         boolean mortiOk;
         String message;
-        Map mappa;
-        String bioMongoDB;
-        String numPagesServerWiki;
         int tempo = WPref.elaboraAnniTime.getInt();
 
         //--Check di validità del database mongoDB
@@ -292,33 +288,32 @@ public class AnnoWikiBackend extends WikiBackend {
             annoWiki.bioNati = bioNati;
             annoWiki.bioMorti = bioMorti;
 
-            annoWiki.bioNati = bioBackend.countAnnoNato(annoWiki);
-            annoWiki.bioMorti = bioBackend.countAnnoMorto(annoWiki);
+            if (WPref.controllaPagine.is()) {
+                wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
+                wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
 
-            wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
-            wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
+                esistePaginaNati = queryService.isEsiste(wikiTitleNati);
+                esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
 
-            esistePaginaNati = queryService.isEsiste(wikiTitleNati);
-            esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
+                annoWiki.esistePaginaNati = esistePaginaNati;
+                annoWiki.esistePaginaMorti = esistePaginaMorti;
 
-            annoWiki.esistePaginaNati = esistePaginaNati;
-            annoWiki.esistePaginaMorti = esistePaginaMorti;
+                if (esistePaginaNati) {
+                    natiOk = bioNati > 0;
+                }
+                else {
+                    natiOk = bioNati == 0;
+                }
+                if (esistePaginaMorti) {
+                    mortiOk = bioMorti > 0;
+                }
+                else {
+                    mortiOk = bioMorti == 0;
+                }
 
-            if (esistePaginaNati) {
-                natiOk = bioNati > 0;
+                annoWiki.natiOk = natiOk;
+                annoWiki.mortiOk = mortiOk;
             }
-            else {
-                natiOk = bioNati == 0;
-            }
-            if (esistePaginaMorti) {
-                mortiOk = bioMorti > 0;
-            }
-            else {
-                mortiOk = bioMorti == 0;
-            }
-
-            annoWiki.natiOk = natiOk;
-            annoWiki.mortiOk = mortiOk;
 
             update(annoWiki);
 
@@ -360,11 +355,11 @@ public class AnnoWikiBackend extends WikiBackend {
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logService.warn(WrapLog.build().message("Somma anno di nascita errata"));
+            logService.info(WrapLog.build().message("Somma anno di nascita errata"));
         }
         checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
-            logService.warn(WrapLog.build().message("Somma anno di morte errata"));
+            logService.info(WrapLog.build().message("Somma anno di morte errata"));
         }
 
         mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());

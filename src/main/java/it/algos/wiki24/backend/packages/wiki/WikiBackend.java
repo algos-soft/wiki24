@@ -446,7 +446,6 @@ public abstract class WikiBackend extends CrudBackend {
         }
 
         message = String.format("Elaborazione di %s. Pagine esaminate %s. %s", modulo, textService.format(count()), unitaMisuraElaborazione.message(inizio));
-        logService.info(new WrapLog().message(message).type(AETypeLog.elabora).usaDb());
         result.setValidMessage(message);
 
         message = String.format("Tempo effettivo in millisecondi: %d", result.durataLong());

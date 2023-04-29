@@ -213,8 +213,7 @@ public abstract class Statistiche {
         buffer.append(categorie());
         result = registra(wikiTitle, buffer.toString());
 
-        fixInfo();
-        return result;
+        return fixInfo(result);
     }
 
     protected String avviso() {
@@ -357,7 +356,7 @@ public abstract class Statistiche {
     }
 
 
-    public void fixInfo() {
+    public WResult fixInfo(WResult result) {
         String message = VUOTA;
 
         if (typeTime != null) {
@@ -369,7 +368,7 @@ public abstract class Statistiche {
 
         if (lastStatistica != null) {
             lastStatistica.setValue(LocalDateTime.now());
-            logger.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+            result.validMessage(message);
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastStatistica è nullo")));
@@ -378,6 +377,8 @@ public abstract class Statistiche {
         if (durataStatistica != null) {
             durataStatistica.setValue(typeTime.durata(inizio));
         }
+
+        return result;
     }
 
 }

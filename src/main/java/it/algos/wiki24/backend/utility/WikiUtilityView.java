@@ -485,9 +485,9 @@ public class WikiUtilityView extends UtilityView {
         super.inizioDebug();
         WResult result;
 
-        logger.info(new WrapLog().message("Utility: elaborazione dei Giorni.").type(AETypeLog.utility));
         result = giornoWikiBackend.elabora();
         if (result.isValido()) {
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.utility).usaDb());
             Avviso.message("Elaborazione effettuata").success().open();
         }
         else {

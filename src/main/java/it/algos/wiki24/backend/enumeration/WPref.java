@@ -162,7 +162,7 @@ public enum WPref implements AIGenPref {
     usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi", false),
     usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi", false),
     usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori", false),
-    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche", false),
+    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, true, "Elaborazione delle statistiche", false),
 
 
     usaRigheGiorni("usaRigheGiorni", AETypePref.bool, false, "Usa righe raggruppate per anno nelle liste dei giorni", false),
@@ -184,6 +184,7 @@ public enum WPref implements AIGenPref {
 
 
     percentualeMinimaBiografie("percentualeMinimaBiografie", AETypePref.decimal, new BigDecimal(99), "Percentuale minima di biografie per avere delle elaborazioni attendibili", false),
+    controllaPagine("controllaPagine", AETypePref.bool, false, "Controlla le pagine da cancellare per gli Anni", false),
     ;
 
 
