@@ -239,7 +239,19 @@ public class VaadBoot {
      * Non deve essere sovrascritto <br>
      */
     public void creaPreferenzeMongoDB() {
-        preferenzaBackend.resetOnlyEmpty();
+        String message;
+
+        if (true) {
+            for (AIGenPref pref : VaadVar.prefList) {
+                if (preferenzaBackend.crea(pref)) {
+                    message = String.format("È stata aggiunta la preferenza [%s] che mancava",pref.getKeyCode());
+                    logger.info(new WrapLog().message(message).type(AETypeLog.preferenze).usaDb());
+                }
+            }
+        }
+        else {
+            preferenzaBackend.resetOnlyEmpty();
+        }
     }
 
     public void allResetOnlyEmpty() {
