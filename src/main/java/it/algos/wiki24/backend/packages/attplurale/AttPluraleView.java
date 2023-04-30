@@ -7,11 +7,14 @@ import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -171,6 +174,18 @@ public class AttPluraleView extends WikiView {
         Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
 
         grid.setColumnOrder(nome, listaSingolari, numBio, paginaLista, linkAttivita, numSingolari, superaSoglia, esisteLista);
+    }
+
+    /**
+     * Esegue un azione di upload delle statistiche, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Prima esegue una Elaborazione <br>
+     */
+    @Override
+    public void uploadStatistiche() {
+        WResult result = appContext.getBean(StatisticheAttivita.class).upload();
+        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
+        super.uploadStatistiche();
     }
 
     /**
