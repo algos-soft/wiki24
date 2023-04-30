@@ -11,7 +11,7 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-<!--                        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) - %C.%M:%L %n-->
+            <!--                        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) - %C.%M:%L %n-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) %n
             </pattern>
         </encoder>
@@ -75,7 +75,7 @@
         <appender-ref ref="springContextAppender"/>
     </logger>
 
-    <logger name="wiki24.admin" level="INFO" additivity="true">
+    <logger name="vaad24.admin" level="INFO" additivity="true">
         <appender-ref ref="adminAppender"/>
     </logger>
 
