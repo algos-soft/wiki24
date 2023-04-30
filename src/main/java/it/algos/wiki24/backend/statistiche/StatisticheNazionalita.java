@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.statistiche;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -50,6 +51,47 @@ public class StatisticheNazionalita extends Statistiche {
     protected void fixPreferenze() {
         super.fixPreferenze();
         super.typeToc = AETypeToc.forceToc;
+        super.lastStatistica = WPref.statisticaNazPlurale;
+        super.typeTime = AETypeTime.minuti;
+    }
+
+
+    /**
+     * Elabora i dati
+     */
+    protected void elabora() {
+        nazPluraleBackend.elabora();
+    }
+
+    /**
+     * Recupera la lista
+     */
+    @Override
+    protected void creaLista() {
+        lista = nazPluraleBackend.findAllSortCorrente();
+    }
+
+    /**
+     * Costruisce la mappa <br>
+     */
+    @Override
+    protected void creaMappa() {
+        super.creaMappa();
+        MappaStatistiche mappaSingola;
+        List<String> singolari;
+        int numNazionalita;
+
+        for (NazPlurale nazionalita : (List<NazPlurale>) lista) {
+            singolari = nazPluraleBackend.findAllFromNomiSingolariByPlurale(nazionalita.nome);
+            numNazionalita = 0;
+
+            for (String singolare : singolari) {
+                numNazionalita += bioBackend.countNazionalitaSingola(singolare);
+            }
+
+            mappaSingola = new MappaStatistiche(nazionalita.nome, numNazionalita);
+            mappa.put(nazionalita.nome, mappaSingola);
+        }
     }
 
 
@@ -349,43 +391,6 @@ public class StatisticheNazionalita extends Statistiche {
     }
 
 
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        nazPluraleBackend.elabora();
-    }
-
-    /**
-     * Recupera la lista
-     */
-    @Override
-    protected void creaLista() {
-        lista = nazPluraleBackend.findAllSortCorrente();
-    }
-
-    /**
-     * Costruisce la mappa <br>
-     */
-    @Override
-    protected void creaMappa() {
-        super.creaMappa();
-        MappaStatistiche mappaSingola;
-        List<String> singolari;
-        int numNazionalita;
-
-        for (NazPlurale nazionalita : (List<NazPlurale>) lista) {
-            singolari = nazPluraleBackend.findAllFromNomiSingolariByPlurale(nazionalita.nome);
-            numNazionalita = 0;
-
-            for (String singolare : singolari) {
-                numNazionalita += bioBackend.countNazionalitaSingola(singolare);
-            }
-
-            mappaSingola = new MappaStatistiche(nazionalita.nome, numNazionalita);
-            mappa.put(nazionalita.nome, mappaSingola);
-        }
-    }
 
 
     /**
@@ -402,7 +407,7 @@ public class StatisticheNazionalita extends Statistiche {
      */
     public WResult uploadTest() {
         super.esegue();
-        return super.upload(UPLOAD_TITLE_DEBUG + NAZ);
+        return super.upload(UPLOAD_TITLE_DEBUG + PATH_NAZIONALITA);
     }
 
 }

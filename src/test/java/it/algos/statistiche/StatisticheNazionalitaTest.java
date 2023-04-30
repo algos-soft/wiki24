@@ -3,38 +3,41 @@ package it.algos.statistiche;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.statistiche.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.extension.*;
+
 import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit.jupiter.*;
+
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.component.textfield.TextField;
 
 /**
- * Project wiki23
+ * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Mon, 01-Aug-2022
- * Time: 13:34
+ * Date: Sun, 30-Apr-2023
+ * Time: 08:42
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("statistiche")
-@DisplayName("Test StatisticheAnni")
+@DisplayName("Statistiche Nazionalita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StatisticheAnniTest extends WikiTest {
+public class StatisticheNazionalitaTest extends AlgosTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private StatisticheAnni istanza;
+    private StatisticheNazionalita istanza;
 
 
     /**
@@ -68,24 +71,23 @@ public class StatisticheAnniTest extends WikiTest {
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = new StatisticheAnni();
+        istanza = new StatisticheNazionalita();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-
     @Test
     @Order(2)
-    @DisplayName("2 - Upload")
-    void upload2() {
-        System.out.println(("2 - Upload"));
+    @DisplayName("2 - Upload test statistiche (non le pagine di nazionalità)")
+    void uploadTest() {
+        System.out.println(("2 - Upload test statistiche (non le pagine di nazionalità)"));
 
         System.out.println(VUOTA);
-        ottenutoRisultato = appContext.getBean(StatisticheAnni.class).uploadTest();
+        ottenutoRisultato = appContext.getBean(StatisticheNazionalita.class).uploadTest();
         assertTrue(ottenutoRisultato.isValido());
+        ottenutoRisultato.setMappa(null);
         printRisultato(ottenutoRisultato);
     }
-
     /**
      * Qui passa al termine di ogni singolo test <br>
      */

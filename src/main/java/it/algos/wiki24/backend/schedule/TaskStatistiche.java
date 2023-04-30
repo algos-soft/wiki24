@@ -38,6 +38,12 @@ public class TaskStatistiche extends VaadTask {
             //--Le statistiche degli anni comprendono anche una preliminare elaborazione
             appContext.getBean(StatisticheAnni.class).upload();
 
+            //--Le statistiche delle attività comprendono anche una preliminare elaborazione
+            appContext.getBean(StatisticheAttivita.class).upload();
+
+            //--Le statistiche delle nazionalità comprendono anche una preliminare elaborazione
+            appContext.getBean(StatisticheNazionalita.class).upload();
+
             super.loggerTask();
         }
     }

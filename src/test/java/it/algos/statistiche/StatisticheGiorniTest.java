@@ -25,9 +25,8 @@ import org.springframework.test.context.junit.jupiter.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
 @Tag("statistiche")
-@DisplayName("Test StatisticheGiorni")
+@DisplayName("Statistiche Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StatisticheGiorniTest extends WikiTest {
 
@@ -66,10 +65,11 @@ public class StatisticheGiorniTest extends WikiTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new StatisticheGiorni();
-        assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
+
+        istanza = new StatisticheGiorni();
+        assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 

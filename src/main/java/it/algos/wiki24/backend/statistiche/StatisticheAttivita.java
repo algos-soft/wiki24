@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.statistiche;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -41,10 +42,6 @@ public class StatisticheAttivita extends Statistiche {
     public StatisticheAttivita() {
     }// end of constructor
 
-    public StatisticheAttivita test() {
-        this.uploadTest = true;
-        return this;
-    }
 
     /**
      * Preferenze usate da questa 'view' <br>
@@ -55,8 +52,21 @@ public class StatisticheAttivita extends Statistiche {
     protected void fixPreferenze() {
         super.fixPreferenze();
         super.typeToc = AETypeToc.forceToc;
+        super.lastStatistica = WPref.statisticaAttPlurale;
+        super.typeTime = AETypeTime.minuti;
     }
 
+    @Override
+    protected String incipit() {
+        StringBuffer buffer = new StringBuffer();
+        String message;
+
+        message = "Le attività sono quelle [[Discussioni progetto:Biografie/Attività|'''convenzionalmente''' previste]] " +
+                "dalla comunità ed [[Modulo:Bio/Plurale attività|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]";
+        buffer.append(message);
+
+        return buffer.toString();
+    }
 
     /**
      * Elabora i dati
@@ -94,7 +104,7 @@ public class StatisticheAttivita extends Statistiche {
 
         for (AttPlurale attivita : (List<AttPlurale>) lista) {
             singolari = attPluraleBackend.findAllFromNomiSingolariByPlurale(attivita.nome);
-//            esistePagina = attivita.esistePaginaLista;@todo rimettere
+            //            esistePagina = attivita.esistePaginaLista;@todo rimettere
             esistePagina = false;
             numAttivitaUno = 0;
             numAttivitaDue = 0;
@@ -115,37 +125,27 @@ public class StatisticheAttivita extends Statistiche {
                 logger.info(new WrapLog().message(String.format("Aggiornato il flag '%s' di %s. Adesso è %s", "superaSoglia", attivita.nome, superaSoglia)));
             }
 
-//            if (numVoci < 50 && attivita.esistePaginaLista) {
-//                esistePagina = attivitaBackend.esistePagina(attivita.pluraleLista);
-//                cancellande++;
-//                logger.info(new WrapLog().message(String.format("Check del flag %s (che è true) anche se l'attività %s ha solo %d voci", "esistePagina", attivita.pluraleLista, numVoci)));
-//            }
-//            if (numVoci >= 50 && !attivita.esistePaginaLista) {
-//                esistePagina = attivitaBackend.esistePagina(attivita.pluraleLista);
-//                logger.info(new WrapLog().message(String.format("Check del flag %s (che è false) anche se l'attività %s ha addirittura %d voci", "esistePagina", attivita.pluraleLista, numVoci)));
-//            }
-//            if (esistePagina != attivita.esistePaginaLista) {
-//                attivita.esistePaginaLista = esistePagina;
-//                attivitaBackend.save(attivita);
-//                logger.info(new WrapLog().message(String.format("Aggiornato il flag '%s' di %s. Adesso è %s", "esistePagina", attivita.pluraleLista, esistePagina)));
-//            }
+            if (WPref.controllaPagine.is()) {
+//                if (numVoci < 50 && attivita.isEsisteLista()) {
+//                    esistePagina = attPluraleBackend.esistePagina(attivita.pluraleLista);
+//                    cancellande++;
+//                    logger.info(new WrapLog().message(String.format("Check del flag %s (che è true) anche se l'attività %s ha solo %d voci", "esistePagina", attivita.pluraleLista, numVoci)));
+//                }
+//                if (numVoci >= 50 && !attivita.isEsisteLista()) {
+//                    esistePagina = attivitaBackend.esistePagina(attivita.pluraleLista);
+//                    logger.info(new WrapLog().message(String.format("Check del flag %s (che è false) anche se l'attività %s ha addirittura %d voci", "esistePagina", attivita.pluraleLista, numVoci)));
+//                }
+//                if (esistePagina != attivita.isEsisteLista()) {
+//                    attivita.esistePaginaLista = esistePagina;
+//                    attivitaBackend.save(attivita);
+//                    logger.info(new WrapLog().message(String.format("Aggiornato il flag '%s' di %s. Adesso è %s", "esistePagina", attivita.pluraleLista, esistePagina)));
+//                }
+            }
 
             mappaSingola = new MappaStatistiche(attivita.nome, numAttivitaUno, numAttivitaDue, numAttivitaTre, superaSoglia, esistePagina);
             mappa.put(attivita.nome, mappaSingola); //@todo sbagliato
         }
         logger.info(new WrapLog().message(String.format("Ci sono %d pagine di Attività che andrebbero cancellate", cancellande)).usaDb());
-    }
-
-    @Override
-    protected String incipit() {
-        StringBuffer buffer = new StringBuffer();
-        String message;
-
-        message = "Le attività sono quelle [[Discussioni progetto:Biografie/Attività|'''convenzionalmente''' previste]] " +
-                "dalla comunità ed [[Modulo:Bio/Plurale attività|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]";
-        buffer.append(message);
-
-        return buffer.toString();
     }
 
 
@@ -664,7 +664,15 @@ public class StatisticheAttivita extends Statistiche {
      */
     public WResult upload() {
         super.esegue();
-        return super.upload(uploadTest ? UPLOAD_TITLE_DEBUG + PATH_ATTIVITA : PATH_ATTIVITA);
+        return super.upload(PATH_ATTIVITA);
+    }
+
+    /**
+     * Esegue la scrittura della pagina <br>
+     */
+    public WResult uploadTest() {
+        super.esegue();
+        return super.upload(UPLOAD_TITLE_DEBUG + PATH_ATTIVITA);
     }
 
 }
