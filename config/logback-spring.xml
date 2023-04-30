@@ -18,7 +18,7 @@
     </appender>
 
 
-    <variable name="VAAD24_LOG_FILE" value="log/wiki24.log"/>
+    <variable name="VAAD24_LOG_FILE" value="log/vaad24.log"/>
     <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${VAAD24_LOG_FILE}</file>
         <encoder>
@@ -33,7 +33,7 @@
         </triggeringPolicy>
     </appender>
 
-    <variable name="SPRING_LOG_FILE" value="log/wiki24-spring.log"/>
+    <variable name="SPRING_LOG_FILE" value="log/vaad24-spring.log"/>
     <appender name="springContextAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${SPRING_LOG_FILE}</file>
         <encoder>
@@ -48,7 +48,7 @@
         </triggeringPolicy>
     </appender>
 
-    <variable name="ADMIN_LOG_FILE" value="log/wiki24-admin.log"/>
+    <variable name="ADMIN_LOG_FILE" value="log/vaad24-admin.log"/>
     <appender name="adminAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${ADMIN_LOG_FILE}</file>
         <encoder>

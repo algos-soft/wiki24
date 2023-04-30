@@ -104,7 +104,7 @@ public abstract class CrudBackend extends AbstractService {
 
         //--Controllo iniziale del database per tutte le classi che hanno il flag usaReset=true
         if (annotationService.usaReset(entityClazz)) {
-//            resetOnlyEmpty();
+            resetOnlyEmpty();
         }
     }
 
