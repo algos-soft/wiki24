@@ -66,7 +66,7 @@ public class CognomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("numBio");
+        super.gridPropertyNamesList = Arrays.asList("cognome", "numBio");
         super.formPropertyNamesList = Arrays.asList("cognome", "numBio");
         super.sortOrder = Sort.by(Sort.Direction.DESC, "numBio");
 
@@ -93,20 +93,32 @@ public class CognomeView extends WikiView {
     @Override
     public void fixAlert() {
         super.fixAlert();
+        String cognomi = PATH_ANTROPONIMI + "Cognomi";
+        String categoria = PATH_WIKI + "Categoria:Liste di persone per cognome";
         int numMongo = WPref.sogliaCognomiMongo.getInt();
         int numMWiki = WPref.sogliaCognomiWiki.getInt();
+
+        Anchor anchor1 = new Anchor(cognomi, "Cognomi");
+        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+
+        Anchor anchor2 = new Anchor(categoria, "Categoria");
+        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+
+        Anchor anchor3 = new Anchor(PATH_STATISTICHE_COGNOMI, STATISTICHE);
+        anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = "Sono elencati i cognomi.";
         message += " BioBot crea una lista di biografati una volta superate le 50 biografie che usano quel cognome.";
         addSpan(ASpan.text(message).verde());
 
-        message = "Vedi anche la ";
-        Span span = ASpan.text(message).verde().bold();
-        Anchor anchor = new Anchor(VaadCost.PATH_WIKI + "Categoria:Liste di persone per cognome", "[[categoria:Liste di persone per cognome]]");
-        anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        anchor.getElement().getStyle().set(AEFontSize.HTML, AEFontSize.em9.getTag());
-        anchor.getElement().getStyle().set(AETypeColor.HTML, AETypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(span, anchor));
+//        message = "Vedi anche la ";
+//        Span span = ASpan.text(message).verde().bold();
+//        Anchor anchor = new Anchor(VaadCost.PATH_WIKI + "Categoria:Liste di persone per cognome", "[[categoria:Liste di persone per cognome]]");
+//        anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+//        anchor.getElement().getStyle().set(AEFontSize.HTML, AEFontSize.em9.getTag());
+//        anchor.getElement().getStyle().set(AETypeColor.HTML, AETypeColor.verde.getTag());
+//        alertPlaceHolder.add(new Span(span, anchor));
 
         message = String.format("Elabora crea sul database locale mongo tutti i cognomi usati da almeno %d voci.", numMongo);
         addSpan(ASpan.text(message).rosso());
@@ -128,7 +140,7 @@ public class CognomeView extends WikiView {
             String wikiTitle = textService.primaMaiuscola(((Cognome) entity).cognome);
             Anchor anchor = new Anchor(PATH_WIKI + PATH_COGNOMI + wikiTitle, wikiTitle);
             anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-            if (((Cognome) entity).esistePagina) {
+            if (((Cognome) entity).esisteLista) {
                 anchor.getElement().getStyle().set("color", "green");
             }
             else {
@@ -156,10 +168,10 @@ public class CognomeView extends WikiView {
         //            }
         //        })).setHeader("X").setKey("cancella").setFlexGrow(0).setWidth("8em");
 
-        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+        Grid.Column cognome = grid.getColumnByKey("cognome");
         Grid.Column numBio = grid.getColumnByKey("numBio");
 
-        grid.setColumnOrder(ordine, pagina, numBio);
+        grid.setColumnOrder(cognome, pagina, numBio);
     }
 
 
@@ -193,7 +205,7 @@ public class CognomeView extends WikiView {
             sicroBottomLayout();
         }
 
-        return (List)items;
+        return (List) items;
     }
 
     /**

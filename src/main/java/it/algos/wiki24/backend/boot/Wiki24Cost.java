@@ -46,7 +46,6 @@ public class Wiki24Cost {
 
     public static final String PATH_MODULO = "Modulo:Bio/";
 
-    public static final String PATH_PROGETTO = "Progetto:Biografie/";
 
     public static final String PATH_MODULO_LINK = PATH_MODULO + PATH_LINK;
 
@@ -151,19 +150,25 @@ public class Wiki24Cost {
 
     //    public static final String API_HISTORY = "https://it.wikipedia.org/w/index.php?action=history&title=";
 
+    public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";
+
+    public static final String TAG_ANTROPONIMI = "Progetto:Antroponimi/";
+
+    public static final String PATH_ANTROPONIMI = PATH_WIKI + TAG_ANTROPONIMI;
+
     public static final String MESI_REGEX = "(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
 
-    public static final String PATH_ATTIVITA = PATH_PROGETTO + ATT;
+    public static final String PATH_ATTIVITA = PATH_BIOGRAFIE + ATT;
 
     public static final String PATH_COGNOMI = "Persone di cognome" + SPAZIO;
 
-    public static final String PATH_NAZIONALITA = PATH_PROGETTO + NAZ;
+    public static final String PATH_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
 
-    public static final String PATH_GIORNI = PATH_PROGETTO + GIORNI;
+    public static final String PATH_GIORNI = PATH_BIOGRAFIE + GIORNI;
 
-    public static final String PATH_ANNI = PATH_PROGETTO + ANNI;
+    public static final String PATH_ANNI = PATH_BIOGRAFIE + ANNI;
 
-    public static final String PATH_STATISTICHE = PATH_PROGETTO + STATISTICHE;
+    public static final String PATH_STATISTICHE = PATH_BIOGRAFIE + STATISTICHE;
 
     public static final String ATT_LOWER = ATT.toLowerCase();
 
@@ -180,15 +185,15 @@ public class Wiki24Cost {
 
     public static final String PATH_MODULO_NAZIONALITA = PATH_MODULO_PLURALE + NAZ_LOWER;
 
-    public static final String PATH_STATISTICHE_ATTIVITA = PATH_PROGETTO + ATT;
+    public static final String PATH_STATISTICHE_ATTIVITA = PATH_BIOGRAFIE + ATT;
 
-    public static final String PATH_STATISTICHE_NAZIONALITA = PATH_PROGETTO + NAZ;
+    public static final String PATH_STATISTICHE_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
 
-    public static final String PATH_MODULO_PRENOME = "Progetto:Antroponimi/Nomi doppi";
+    public static final String PATH_STATISTICHE_COGNOMI = PATH_ANTROPONIMI + "Liste cognomi";
 
-    public static final String PATH_STATISTICHE_GIORNI = PATH_PROGETTO + GIORNI;
+    public static final String PATH_STATISTICHE_GIORNI = PATH_BIOGRAFIE + GIORNI;
 
-    public static final String PATH_STATISTICHE_ANNI = PATH_PROGETTO + ANNI;
+    public static final String PATH_STATISTICHE_ANNI = PATH_BIOGRAFIE + ANNI;
 
     public static final String PATH_CATEGORIA = PATH_WIKI + "Categoria:";
 

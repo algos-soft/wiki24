@@ -88,13 +88,17 @@ public class AttPluraleView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
         String modulo = PATH_WIKI + PATH_MODULO;
+        String categoria = PATH_WIKI + "Categoria:Bio attività";
 
         Anchor anchor1 = new Anchor(modulo + PATH_LINK + ATT_LOWER, PATH_LINK + ATT_LOWER);
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
 
-        Anchor anchor2 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ATTIVITA, STATISTICHE);
+        Anchor anchor2 = new Anchor(categoria, "Categoria");
         anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
+
+        Anchor anchor3 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ATTIVITA, STATISTICHE);
+        anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = "Tabella attività plurali del parametro 'attività', ricavate dalla task AttSingolare.";
         addSpan(ASpan.text(message).verde());

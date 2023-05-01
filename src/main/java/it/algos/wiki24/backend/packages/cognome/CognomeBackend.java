@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.cognome;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -10,6 +11,7 @@ import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -33,43 +35,43 @@ import java.util.stream.*;
 @Service
 public class CognomeBackend extends WikiBackend {
 
-    public CognomeRepository repository;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public MongoService mongoService;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    //@todo registrare eventualmente come costante in VaadCost il valore del Qualifier
-    public CognomeBackend(@Autowired @Qualifier(TAG_COGNOME) final MongoRepository crudRepository) {
-        super(crudRepository, Cognome.class);
-        this.repository = (CognomeRepository) crudRepository;
+    public CognomeBackend() {
+        super(Cognome.class);
     }
 
-    public Cognome creaIfNotExist(final String cognomeTxt, int numBio, boolean esistePagina) {
-        return checkAndSave(newEntity(cognomeTxt, numBio, esistePagina));
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.lastReset = null;
+        super.lastDownload = WPref.downloadAttPlurale;
+        super.durataDownload = WPref.downloadAttPluraleTime;
+        super.lastElaborazione = WPref.elaboraAttPlurale;
+        super.durataElaborazione = WPref.elaboraAttPluraleTime;
+
+        super.lastUpload = WPref.uploadAttPlurale;
+        super.durataUpload = WPref.uploadAttPluraleTime;
+        super.nextUpload = WPref.uploadAttPluralePrevisto;
+        super.lastStatistica = WPref.statisticaAttPlurale;
+
+        this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraElaborazione = AETypeTime.minuti;
+        this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
-    public Cognome checkAndSave(final Cognome cognome) {
-        return isExist(cognome.cognome) ? null : repository.insert(cognome);
-    }
-
-    public boolean isExist(final String cognome) {
-        return repository.findFirstByCognome(cognome) != null;
-    }
+//    public Cognome creaIfNotExist(final String cognomeTxt, int numBio, boolean esistePagina) {
+//        return checkAndSave(newEntity(cognomeTxt, numBio, esistePagina));
+//    }
+//
+//    public Cognome checkAndSave(final Cognome cognome) {
+//        return isExist(cognome.cognome) ? null : repository.insert(cognome);
+//    }
+//
+//    public boolean isExist(final String cognome) {
+//        return repository.findFirstByCognome(cognome) != null;
+//    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -90,29 +92,64 @@ public class CognomeBackend extends WikiBackend {
      *
      * @param cognomeTxt   (obbligatorio, unico)
      * @param numBio       (obbligatorio)
-     * @param esistePagina (facoltativo)
+     * @param esisteLista (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Cognome newEntity(final String cognomeTxt, int numBio, boolean esistePagina) {
-        return Cognome.builder()
+    public Cognome newEntity(final String cognomeTxt, int numBio, boolean esisteLista) {
+        Cognome newEntityBean = Cognome.builderCognome()
                 .cognome(textService.isValid(cognomeTxt) ? cognomeTxt : null)
                 .numBio(numBio)
-                .esistePagina(esistePagina)
+                .esisteLista(esisteLista)
                 .build();
+
+        return (Cognome) super.fixKey(newEntityBean);
     }
 
 
-    public Cognome findByCognome(final String cognome) {
-        return repository.findFirstByCognome(cognome);
+    @Override
+    public Cognome findById(final String keyID) {
+        return (Cognome) super.findById(keyID);
+    }
+
+    @Override
+    public Cognome findByKey(final String keyValue) {
+        return (Cognome) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Cognome findByProperty(final String propertyName, final Object propertyValue) {
+        return (Cognome) super.findByProperty(propertyName, propertyValue);
+    }
+
+
+    @Override
+    public List<Cognome> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<Cognome> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<Cognome> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Cognome> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
     }
 
     public List<Cognome> findAll() {
-        List<Cognome> lista = super.findAllSortCorrente();
-
-        return lista.stream()
-                .sorted(Comparator.comparing(c -> c.cognome))
-                .collect(Collectors.toList());
+        return this.findAllNoSort();
+//        List<Cognome> lista = super.findAllSortCorrente();
+//
+//        return lista.stream()
+//                .sorted(Comparator.comparing(c -> c.cognome))
+//                .collect(Collectors.toList());
     }
 
     public List<Cognome> findAllSortNumBio() {
@@ -247,7 +284,7 @@ public class CognomeBackend extends WikiBackend {
         long numBio = bioBackend.countCognome(cognomeTxt);
 
         if (numBio >= sogliaMongo) {
-            cognome = creaIfNotExist(cognomeTxt, (int) numBio, esistePagina(cognomeTxt));
+//            cognome = creaIfNotExist(cognomeTxt, (int) numBio, esistePagina(cognomeTxt));
         }
 
         return cognome != null;

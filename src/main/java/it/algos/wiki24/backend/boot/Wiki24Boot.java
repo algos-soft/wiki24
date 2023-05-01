@@ -16,6 +16,7 @@ import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.errore.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
@@ -133,7 +134,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
      */
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshEvent() {
-//        this.allResetOnlyEmpty();
+        //        this.allResetOnlyEmpty();
     }
 
     public void allResetOnlyEmpty() {
@@ -271,7 +272,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         //        VaadVar.menuRouteListProject.add(GenereView.class);
         //        VaadVar.menuRouteListProject.add(ProfessioneView.class);
         //        VaadVar.menuRouteListProject.add(DoppionomeView.class);
-        //        VaadVar.menuRouteListProject.add(CognomeView.class);
+        VaadVar.menuRouteListProject.add(CognomeView.class);
         VaadVar.menuRouteListProject.add(TemplateView.class);
         VaadVar.menuRouteListProject.add(BioView.class);
         VaadVar.menuRouteListProject.add(StatisticaBioView.class);

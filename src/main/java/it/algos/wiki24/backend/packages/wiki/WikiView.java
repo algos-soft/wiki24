@@ -295,12 +295,19 @@ public abstract class WikiView extends CrudView {
     protected void fixPreferenzeBackend() {
         if (crudBackend != null) {
             lastReset = crudBackend.lastReset;
+
             lastDownload = crudBackend.lastDownload;
             durataDownload = crudBackend.durataDownload;
+
             lastElaborazione = crudBackend.lastElaborazione;
             durataElaborazione = crudBackend.durataElaborazione;
+
             lastUpload = crudBackend.lastUpload;
             durataUpload = crudBackend.durataUpload;
+
+            lastStatistica = crudBackend.lastStatistica;
+            durataStatistica = crudBackend.durataStatistica;
+
             unitaMisuraDownload = crudBackend.unitaMisuraDownload;
             unitaMisuraElaborazione = crudBackend.unitaMisuraElaborazione;
             unitaMisuraUpload = crudBackend.unitaMisuraUpload;
