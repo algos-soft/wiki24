@@ -230,7 +230,7 @@ public class GiornoWikiBackend extends WikiBackend {
             giornoWiki.bioNati = bioBackend.countGiornoNato(giornoWiki);
             giornoWiki.bioMorti = bioBackend.countGiornoMorto(giornoWiki);
 
-           update(giornoWiki);
+            update(giornoWiki);
         }
 
         return super.fixElabora(result);

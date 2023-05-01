@@ -59,7 +59,6 @@ public class QueryWrite extends AQuery {
      * @param summary         oggetto della modifica (facoltativo)
      *
      * @return wrapper di informazioni
-     *
      */
     private WResult checkWrite(final String wikiTitleGrezzo, final String newText, final String summary) {
         queryType = AETypeQuery.getLoggatoConCookies;
@@ -221,7 +220,6 @@ public class QueryWrite extends AQuery {
      * @param summary         oggetto della modifica (facoltativo)
      *
      * @return wrapper di informazioni
-     *
      */
     public WResult urlRequest(final String wikiTitleGrezzo, final String newText, final String summary) {
         WResult result = checkWrite(wikiTitleGrezzo, newText, summary);
@@ -444,7 +442,6 @@ public class QueryWrite extends AQuery {
     /**
      * Restituisce il token dal testo JSON di una pagina di GET preliminary
      *
-     *
      * @return logintoken
      */
     public String getCsrfToken(String contenutoCompletoPaginaWebInFormatoJSON) {
@@ -471,7 +468,6 @@ public class QueryWrite extends AQuery {
     /**
      * Restituisce il token dal testo JSON di una pagina di GET preliminary
      *
-     *
      * @return logintoken
      */
     public long getPageid(String contenutoCompletoPaginaWebInFormatoJSON) {
@@ -491,7 +487,6 @@ public class QueryWrite extends AQuery {
 
     /**
      * Restituisce il token dal testo JSON di una pagina di GET preliminary
-     *
      *
      * @return logintoken
      */
@@ -527,7 +522,7 @@ public class QueryWrite extends AQuery {
         }
 
         try {
-            newtimestamp = (String) objectEdit.get(NEW_TIME_STAMP);
+            newtimestamp = objectEdit != null ? (String) objectEdit.get(NEW_TIME_STAMP) : VUOTA;
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
@@ -554,7 +549,7 @@ public class QueryWrite extends AQuery {
             logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
 
-        return objectEdit != null ? objectEdit.get(NO_CHANGE) == null:false;
+        return objectEdit != null ? objectEdit.get(NO_CHANGE) == null : false;
     }
 
 }

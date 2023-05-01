@@ -121,7 +121,7 @@ public class AnnoWikiView extends WikiView {
         message = String.format("Tabella degli anni recuperati dalla tabella 'Anno' di %s", VaadVar.frameworkVaadin24);
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("Reset%scostruisce la tabella", FORWARD);
+        message = String.format("Reset%scostruisce la tabella, azzerando l'elaborazione", FORWARD);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%scalcola le voci biografiche che usano ogni singolo anno.", FORWARD);
         addSpan(ASpan.text(message).verde());
