@@ -93,6 +93,8 @@ public abstract class CrudDialog extends Dialog {
 
     protected CrudBackend crudBackend;
 
+    protected String currentEntityNameForTitle;
+
     protected String textAnnullaButton = "Annulla";
 
     protected String textSaveButton = "Registra";
@@ -101,9 +103,9 @@ public abstract class CrudDialog extends Dialog {
 
     protected Button annullaButton = new Button(textAnnullaButton);
 
-    protected Button saveButton = new Button(textSaveButton);
+    protected Button saveButton;
 
-    protected Button deleteButton = new Button(textDeleteButton);
+    protected Button deleteButton;
 
     protected BiConsumer<AEntity, CrudOperation> saveHandler;
 
@@ -180,8 +182,11 @@ public abstract class CrudDialog extends Dialog {
      */
     @PostConstruct
     private void postConstruct() {
+        //--Preferenze usate da questa 'logica'
+        this.fixPreferenze();
+
         //--Titolo placeholder del dialogo
-        this.add(fixHeader());
+        this.fixHeader();
 
         //--Form placeholder standard per i campi
         this.add(getFormLayout());
@@ -205,18 +210,32 @@ public abstract class CrudDialog extends Dialog {
     }
 
     /**
+     * Preferenze (eventuali) usate da questo 'dialogo' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        currentEntityNameForTitle = currentItem.getClass().getSimpleName().toLowerCase();
+    }
+
+    /**
      * Titolo del dialogo <br>
      * Placeholder (eventuale, presente di default) <br>
      */
-    protected Component fixHeader() {
+    protected void fixHeader() {
+        String message;
+
         String tag = switch (operation) {
             case READ -> "Mostra";
             case ADD -> "Nuova";
-            case UPDATE -> "Modifica";
-            case DELETE -> "Cancella";
+            case UPDATE, DELETE -> "Modifica";
         };
 
-        return new H2(String.format("%s %s", tag, currentItem.getClass().getSimpleName().toLowerCase()));
+        message = String.format("%s %s", tag, currentEntityNameForTitle);
+        Label label = new Label(message);
+        label.getStyle().set("font-weight", "bold");
+        label.getStyle().set("font-size", "1.2em");
+        add(label);
     }
 
     /**
@@ -254,7 +273,7 @@ public abstract class CrudDialog extends Dialog {
      */
     protected void fixBody() {
         AETypeField type;
-        AbstractSinglePropertyField field;
+        AbstractField field;
         AComboField aField;
         Class enumClazz;
         Class linkClazz;
@@ -275,13 +294,13 @@ public abstract class CrudDialog extends Dialog {
                 nullSelectionAllowed = annotationService.nullSelectionAllowed(currentItem.getClass(), key);
 
                 if (type == AETypeField.listaH) {
-                    AListaFieldH cField= new AListaFieldH(caption);
+                    AListaFieldH cField = new AListaFieldH(caption);
                     formLayout.add(cField);
                     binder.forField(cField).bind(key);
                     continue;
                 }
                 if (type == AETypeField.listaV) {
-                    AListaFieldV cField= new AListaFieldV(caption);
+                    AListaFieldV cField = new AListaFieldV(caption);
                     formLayout.add(cField);
                     binder.forField(cField).bind(key);
                     continue;
@@ -429,38 +448,42 @@ public abstract class CrudDialog extends Dialog {
      * Placeholder (eventuale, presente di default) <br>
      */
     protected void fixBottom() {
-        bottomPlaceHolder = new HorizontalLayout();
-        bottomPlaceHolder.setClassName("buttons");
-        bottomPlaceHolder.setPadding(false);
-        bottomPlaceHolder.setSpacing(true);
-        bottomPlaceHolder.setMargin(false);
-        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
+//        bottomPlaceHolder = new HorizontalLayout();
+//        bottomPlaceHolder.setClassName("buttons");
+//        bottomPlaceHolder.setPadding(false);
+//        bottomPlaceHolder.setSpacing(true);
+//        bottomPlaceHolder.setMargin(false);
+//        bottomPlaceHolder.setClassName("confirm-dialog-buttons");
 
-        Label spazioVuotoEspandibile = new Label("");
+        Div elasticSpace = new Div();
+        elasticSpace.getStyle().set("flex-grow", "1");
 
-        annullaButton.setText(textAnnullaButton);
-        //        annullaButton.getElement().setProperty("title", "Shortcut SHIFT");
-        annullaButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "secondary" : "primary");
-        annullaButton.addClickListener(e -> annullaHandler());
-        annullaButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
-        bottomPlaceHolder.add(annullaButton);
-
-        if (operation == CrudOperation.ADD || operation == CrudOperation.UPDATE) {
-            saveButton.setText(textSaveButton);
-            saveButton.getElement().setAttribute("theme", operation == CrudOperation.ADD ? "primary" : "secondary");
-            saveButton.addClickListener(e -> saveHandler());
-            saveButton.setIcon(new Icon(VaadinIcon.CHECK));
-            bottomPlaceHolder.add(saveButton);
-        }
-
-        if (operation == CrudOperation.DELETE) {
-            deleteButton.setText(textDeleteButton);
-            deleteButton.getElement().setAttribute("theme", "error");
+        if (operation == CrudOperation.UPDATE || operation == CrudOperation.DELETE) {
+            deleteButton = new Button(textDeleteButton);
+            deleteButton.getElement().setAttribute("theme", "primary");
+            deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
             deleteButton.addClickListener(e -> deleteHandler());
             deleteButton.setIcon(new Icon(VaadinIcon.TRASH));
+            deleteButton.getStyle().set("margin-left", "auto");
             deleteButton.getElement().setProperty("title", "Shortcut SHIFT+D");
             deleteButton.addClickShortcut(Key.KEY_D, KeyModifier.SHIFT);
-            bottomPlaceHolder.add(deleteButton);
+            super.getFooter().add(deleteButton);
+            super.getFooter().add(elasticSpace);
+        }
+
+        annullaButton.setText(textAnnullaButton);
+        annullaButton.getElement().setAttribute("theme", "secondary");
+        //        annullaButton.getElement().setProperty("title", "Shortcut SHIFT");
+        annullaButton.addClickListener(e -> annullaHandler());
+        annullaButton.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
+        super.getFooter().add(annullaButton);
+
+        if (operation != CrudOperation.READ) {
+            saveButton = new Button(textSaveButton);
+            saveButton.getElement().setAttribute("theme", "primary");
+            saveButton.addClickListener(e -> saveHandler());
+            saveButton.setIcon(new Icon(VaadinIcon.CHECK));
+            super.getFooter().add(saveButton);
         }
 
         switch (operation) {
@@ -468,14 +491,18 @@ public abstract class CrudDialog extends Dialog {
             case ADD -> {
                 annullaButton.getElement().setProperty("title", "Shortcut SHIFT+freccia sinistra");
                 annullaButton.addClickShortcut(Key.ARROW_LEFT, KeyModifier.SHIFT);
-                saveButton.getElement().setProperty("title", "Shortcut ENTER");
-                saveButton.addClickShortcut(Key.ENTER);
+                if (saveButton != null) {
+                    saveButton.getElement().setProperty("title", "Shortcut ENTER");
+                    saveButton.addClickShortcut(Key.ENTER);
+                }
             }
             case UPDATE -> {
                 annullaButton.getElement().setProperty("title", "Shortcut ENTER");
                 annullaButton.addClickShortcut(Key.ENTER);
-                saveButton.getElement().setProperty("title", "Shortcut SHIFT+ENTER");
-                saveButton.addClickShortcut(Key.ENTER, KeyModifier.SHIFT);
+                if (saveButton != null) {
+                    saveButton.getElement().setProperty("title", "Shortcut SHIFT+ENTER");
+                    saveButton.addClickShortcut(Key.ENTER, KeyModifier.SHIFT);
+                }
             }
             case DELETE -> {
                 annullaButton.getElement().setProperty("title", "Shortcut ENTER");
@@ -483,12 +510,10 @@ public abstract class CrudDialog extends Dialog {
             }
         }
 
-        bottomPlaceHolder.setFlexGrow(1, spazioVuotoEspandibile);
-
         //--Controlla la visibilità dei bottoni
-        saveButton.setVisible(operation == CrudOperation.ADD || operation == CrudOperation.UPDATE);
-
-        this.add(bottomPlaceHolder);
+        if (saveButton != null) {
+            saveButton.setVisible(operation != CrudOperation.READ);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.packages.bio;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
+import com.vaadin.flow.data.provider.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -1545,6 +1546,44 @@ public class BioBackend extends WikiBackend {
 
             wrap = new WrapTime(pageId, wikiTitle, lastServer); listaWrap.add(wrap);
         } return listaWrap;
+    }
+
+
+    /**
+     * Costruisce un provider SOLO per la collection Bio
+     * Provider NON filtrato da usare per la Grid
+     * Metodo effettivamente utilizzato.
+     */
+    public DataProvider<Bio, Void> getProvider() {
+        return DataProvider.fromCallbacks(
+                query -> this.fetch(query.getOffset(), query.getLimit()),
+                query -> this.getCount()
+        );
+    }
+
+
+    /**
+     * Query find()
+     */
+    public Stream<Bio> fetch(final int offset, final int limit) {
+        List<Bio> lista;
+        Query query = new Query();
+
+        query.skip(offset);
+        query.limit(limit);
+        lista = mongoService.mongoOp.find(query, Bio.class);
+
+        return lista.stream();
+    }
+
+    /**
+     * Query count()
+     */
+    public int getCount() {
+        Long lungo;
+
+        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
+        return lungo > 0 ? lungo.intValue() : 0;
     }
 
 }// end of crud backend class
