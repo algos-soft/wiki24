@@ -1,20 +1,17 @@
 package it.algos.wiki24.backend.packages.template;
 
 import it.algos.vaad24.backend.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
+import org.springframework.data.mongodb.core.index.*;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.time.*;
 
@@ -39,14 +36,35 @@ import java.time.*;
 @AIEntity(collectionName = "template", keyPropertyName = "pageid")
 public class Template extends AEntity {
 
-    private long pageid;
+    @Positive()
+    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
+    @AIField(type = AETypeField.lungo, enabled = false, widthEM = 7)
+    public long pageId;
 
-    private String wikiTitle;
 
-    private LocalDateTime timestamp;
+    @NotBlank()
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING)
+    @AIField(type = AETypeField.text, widthEM = 16)
+    public String wikiTitle;
 
-    private String templBio;
+    @Lob
+    @AIField(type = AETypeField.textArea, required = true, widthEM = 48)
+    public String tmplBio;
 
+
+    @AIField(type = AETypeField.localDateTime)
+    public LocalDateTime timestamp;
+
+
+    @AIField(type = AETypeField.localDateTime)
+    public LocalDateTime lastMongo;
+
+
+    /**
+     * valido se lastMongo >= timestamp
+     */
+    @AIField(type = AETypeField.booleano)
+    public boolean valido;
 
     @Override
     public String toString() {

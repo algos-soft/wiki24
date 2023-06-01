@@ -55,8 +55,8 @@ public class TemplateView extends CrudView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("ordine", "code", "descrizione"); // controllare la congruità con la Entity
-        super.formPropertyNamesList = Arrays.asList("code", "descrizione"); // controllare la congruità con la Entity
+        super.gridPropertyNamesList = Arrays.asList("pageId", "wikiTitle", "timestamp", "lastMongo", "valido");
+        super.formPropertyNamesList = Arrays.asList("pageId", "wikiTitle", "timestamp", "lastMongo", "valido", "tmplBio");
     }
 
     /**

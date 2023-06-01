@@ -44,7 +44,7 @@ public class TemplateBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Template newEntity() {
-        return newEntity(0, VUOTA, null, VUOTA);
+        return newEntity(0, VUOTA, null, null,VUOTA);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TemplateBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     public Template newEntity(final long keyPropertyValue) {
-        return newEntity(keyPropertyValue, VUOTA, null, VUOTA);
+        return newEntity(keyPropertyValue, VUOTA, null, null, VUOTA);
     }
 
     /**
@@ -62,19 +62,21 @@ public class TemplateBackend extends CrudBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param pageid    interno del server wiki (obbligatorio, unico)
+     * @param pageId    interno del server wiki (obbligatorio, unico)
      * @param wikiTitle (obbligatorio, unico)
-     * @param timestamp  ultima modifica sul server - ora di greenwich (obbligatorio)
-     * @param templBio  (obbligatorio)
+     * @param timestamp ultima modifica sul server - ora di greenwich (obbligatorio)
+     * @param tmplBio   (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Template newEntity(long pageid, String wikiTitle, LocalDateTime timestamp, String templBio) {
+    public Template newEntity(long pageId, String wikiTitle, LocalDateTime timestamp, LocalDateTime lastMongo, String tmplBio) {
         Template newEntityBean = Template.builder()
-                .pageid(pageid)
+                .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .timestamp(timestamp != null ? timestamp : ROOT_DATA_TIME)
-                .templBio(textService.isValid(templBio) ? templBio : null)
+                .lastMongo(lastMongo != null ? lastMongo : ROOT_DATA_TIME)
+                .tmplBio(textService.isValid(tmplBio) ? tmplBio : null)
+                .valido(true)
                 .build();
 
         return (Template) super.fixKey(newEntityBean);
