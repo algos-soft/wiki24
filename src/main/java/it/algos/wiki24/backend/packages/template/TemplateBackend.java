@@ -1,5 +1,10 @@
 package it.algos.wiki24.backend.packages.template;
 
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
+import com.vaadin.flow.data.provider.*;
+import org.bson.*;
+import org.bson.conversions.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.logic.*;
@@ -8,6 +13,7 @@ import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -44,7 +50,7 @@ public class TemplateBackend extends CrudBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Template newEntity() {
-        return newEntity(0, VUOTA, null, null,VUOTA);
+        return newEntity(0, VUOTA, null, null, VUOTA);
     }
 
     /**
@@ -54,6 +60,18 @@ public class TemplateBackend extends CrudBackend {
      */
     public Template newEntity(final long keyPropertyValue) {
         return newEntity(keyPropertyValue, VUOTA, null, null, VUOTA);
+    }
+
+    public Template newEntity(final Document doc) {
+        Template newEntityBean = Template.builder()
+                .pageId(doc.getLong("pageId"))
+                .wikiTitle(doc.getString("wikiTitle"))
+                //                .timestamp(timestamp != null ? timestamp : ROOT_DATA_TIME)
+                //                .lastMongo(lastMongo != null ? lastMongo : ROOT_DATA_TIME)
+                .build();
+
+        newEntityBean.id = doc.getString("_id");
+        return newEntityBean;
     }
 
     /**
@@ -76,10 +94,10 @@ public class TemplateBackend extends CrudBackend {
                 .timestamp(timestamp != null ? timestamp : ROOT_DATA_TIME)
                 .lastMongo(lastMongo != null ? lastMongo : ROOT_DATA_TIME)
                 .tmplBio(textService.isValid(tmplBio) ? tmplBio : null)
-                .valido(true)
                 .build();
 
-        return (Template) super.fixKey(newEntityBean);
+        newEntityBean.id = String.valueOf(pageId);
+        return newEntityBean;
     }
 
 
@@ -100,7 +118,11 @@ public class TemplateBackend extends CrudBackend {
 
     @Override
     public Template save(AEntity entity) {
-        return (Template) super.save(entity);
+        Template template = (Template) entity;
+        entity.id = String.valueOf(((Template) entity).pageId);
+
+        template.valido = template.lastMongo.isAfter(template.timestamp);
+        return (Template) super.save(template);
     }
 
     @Override
@@ -137,5 +159,57 @@ public class TemplateBackend extends CrudBackend {
     public List<Template> findAllSort(Sort sort) {
         return super.findAllSort(sort);
     }
+
+
+    public DataProvider<Template, ?> getProvider() {
+        return DataProvider.fromCallbacks(
+                query -> this.fetch(query.getOffset(), query.getLimit()),
+                query -> this.count()
+        );
+    }
+
+    public Stream<Template> fetch(final int offset, final int limit) {
+        List<Template> lista = new ArrayList<>();
+        //        Query query = getQuery();
+        Bson sort = null;
+        String property = "tmplBio";
+        //        query.skip(offset);
+        //        query.limit(limit);
+        MongoCollection collection = mongoService.getCollection("template");
+        Bson projection;
+        FindIterable<Document> documents;
+        Template entityBean;
+
+        projection = Projections.fields(Projections.exclude(property));
+        documents = collection.find().sort(sort).projection(projection);
+
+        //        lista = mongoService.mongoOp.find(query, Template.class);
+        //        lista = mongoService.projectionExclude(Template.class, this, sort, "tmplBio");
+
+        for (var singolo : documents) {
+            entityBean = newEntity(singolo);
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+        }
+
+        return lista.stream();
+    }
+
+    //    public int getCount() {
+    //        Query query = getQuery();
+    //        Long lungo;
+    //
+    //        lungo = mongoService .mongoOp.count(query, Template.class);
+    //        return lungo > 0 ? lungo.intValue() : 0;
+    //    }
+
+    //    public Query getQuery() {
+    //        Query query = new Query();
+    //        String keyProperty = "admin";
+    //
+    //        query.addCriteria(Criteria.where(keyProperty).is(true));
+    //        return query;
+    //    }
 
 }// end of crud backend class

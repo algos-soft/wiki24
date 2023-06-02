@@ -4,6 +4,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import com.vaadin.flow.data.provider.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
