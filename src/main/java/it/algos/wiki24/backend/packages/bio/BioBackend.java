@@ -1550,41 +1550,41 @@ public class BioBackend extends WikiBackend {
     }
 
 
-    /**
-     * Costruisce un provider SOLO per la collection Bio
-     * Provider NON filtrato da usare per la Grid
-     * Metodo effettivamente utilizzato.
-     */
-    public DataProvider<Bio, Void> getProvider() {
-        return DataProvider.fromCallbacks(
-                query -> this.fetch(query.getOffset(), query.getLimit()),
-                query -> this.getCount()
-        );
-    }
+//    /**
+//     * Costruisce un provider SOLO per la collection Bio
+//     * Provider NON filtrato da usare per la Grid
+//     * Metodo effettivamente utilizzato.
+//     */
+//    public DataProvider<Bio, Void> getProvider() {
+//        return DataProvider.fromCallbacks(
+//                query -> this.fetch(query.getOffset(), query.getLimit()),
+//                query -> this.getCount()
+//        );
+//    }
 
 
-    /**
-     * Query find()
-     */
-    public Stream<Bio> fetch(final int offset, final int limit) {
-        List<Bio> lista;
-        Query query = new Query();
+//    /**
+//     * Query find()
+//     */
+//    public Stream<Bio> fetch(final int offset, final int limit) {
+//        List<Bio> lista;
+//        Query query = new Query();
+//
+//        query.skip(offset);
+//        query.limit(limit);
+//        lista = mongoService.mongoOp.find(query, Bio.class);
+//
+//        return lista.stream();
+//    }
 
-        query.skip(offset);
-        query.limit(limit);
-        lista = mongoService.mongoOp.find(query, Bio.class);
-
-        return lista.stream();
-    }
-
-    /**
-     * Query count()
-     */
-    public int getCount() {
-        Long lungo;
-
-        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
-        return lungo > 0 ? lungo.intValue() : 0;
-    }
+//    /**
+//     * Query count()
+//     */
+//    public int getCount() {
+//        Long lungo;
+//
+//        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
+//        return lungo > 0 ? lungo.intValue() : 0;
+//    }
 
 }// end of crud backend class

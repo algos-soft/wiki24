@@ -98,6 +98,7 @@ public class BioView extends WikiView {
         super.lastElaborazione = WPref.elaboraBio;
         super.durataElaborazione = WPref.elaboraBioTime;
 
+        super.usaDataProvider = true;
         super.usaBottoneElabora = true;
         super.usaBottoneErrori = true;
         super.usaBottoneReset = true;

@@ -2,11 +2,9 @@ package it.algos.vaad24.backend.entity;
 
 
 import com.vaadin.flow.component.template.*;
-import com.vaadin.flow.component.template.Id;
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.enumeration.*;
 
-import javax.persistence.*;
 import java.io.*;
 import java.time.*;
 

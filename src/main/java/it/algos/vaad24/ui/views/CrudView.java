@@ -21,7 +21,6 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
-import it.algos.wiki24.backend.packages.template.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;
@@ -46,6 +45,15 @@ import java.util.stream.*;
  * La sottoclasse concreta usa @Route e viene chiamata dal menu generale <br>
  */
 public abstract class CrudView extends VerticalLayout implements AfterNavigationObserver {
+
+    protected static String TEXT_CSV = "Usati solo in background. File originale (CSV) sul server /www.algos.it/vaadin23/config/";
+
+    protected static String TEXT_BACK = "Usati solo in background. Costruiti hardcoded.";
+
+    protected static String TEXT_HARD = "Solo hard coded. Non creabili e non modificabili.";
+
+    protected static String TEXT_RESET = "Cancellabili (dalla lista per prova). Reset ripristina la collezione.";
+
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -136,6 +144,8 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     protected boolean cancellaColonnaKeyId;
 
     protected boolean autoCreateColumns;
+
+    protected boolean usaDataProvider;
 
     protected boolean usaRowIndex;
 
@@ -277,6 +287,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         sortOrder = crudBackend.getSortOrder();
         sortOrder = sortOrder != null ? sortOrder : Sort.by(Sort.Direction.ASC, FIELD_NAME_ID_SENZA);
         usaRowIndex = true;
+        usaDataProvider = false;
         riordinaColonne = true;
         gridPropertyNamesList = new ArrayList<>();
         formPropertyNamesList = new ArrayList<>();
@@ -488,7 +499,11 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         // layout configuration
         setSizeFull();
         this.add(grid);
-        sincroFiltri();
+
+        if (!usaDataProvider) {
+            sincroFiltri();
+        }
+
     }
 
 
@@ -522,11 +537,21 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
     }
 
     protected void fixItems() {
+        DataProvider provider = null;
         List items;
 
-        items = crudBackend.findAllSort(sortOrder);
-        if (items != null) {
-            grid.setItems(items);
+        if (usaDataProvider) {
+            provider = crudBackend.getProvider();
+            if (provider != null) {
+                grid.setDataProvider(provider);
+            }
+        }
+
+        if (provider == null) {
+            items = crudBackend.findAllSort(sortOrder);
+            if (items != null) {
+                grid.setItems(items);
+            }
         }
     }
 
@@ -651,14 +676,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         }
 
         if (items != null) {
-            provider = crudBackend.getProvider();
-            if (provider != null) {
-                grid.setDataProvider(provider);
-            }
-            else {
-                grid.setItems((List) items);
-            }
-
+            grid.setItems((List) items);
             elementiFiltrati = items.size();
             sicroBottomLayout();
         }
@@ -777,7 +795,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
             operation = CrudOperation.READ;
         }
         dialog = (CrudDialog) appContext.getBean(dialogClazz, entityBeanDaRegistrare, operation, crudBackend, formPropertyNamesList);
-        dialog.open(this::saveHandler, this::annullaHandler);
+        dialog.open(this::saveHandler, this::deleteHandler, this::annullaHandler);
     }
 
     /**
@@ -801,16 +819,33 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         grid.setItems(crudBackend.findAllSort(sortOrder));
     }
 
+
     public void deleteHandler() {
         Optional<AEntity> entityBean = grid.getSelectedItems().stream().findFirst();
         if (entityBean.isPresent()) {
-            crudBackend.delete(entityBean.get());
-            grid.setItems(crudBackend.findAllSort(sortOrder));
-            Avviso.message(String.format("%s successfully deleted", entityBean.get())).success().open();
+            deleteHandler(entityBean.get());
         }
         else {
             Avviso.message("Nessuna entity selezionata").error().open();
         }
+    }
+
+    /**
+     * Questo handler viene chiamato sia dal bottone della View che come ritorno dal Dialogo <br>
+     * Forza comunque la cancellazione, anche se è stata effettuata dal Dialogo (nel caso di Dialogo) <br>
+     * Esegue comunque sempre il reload della View <br>
+     */
+    protected void deleteHandler(final AEntity entityBean) {
+        boolean cancellato;
+
+        cancellato = crudBackend.delete(entityBean);
+        if (!cancellato) {
+            //Avviso interno -> Già cancellato (probabilmente nel dialogo)
+        }
+
+        Avviso.message(String.format("%s successfully deleted", entityBean)).success().open();
+        //@todo Non riesco a fermare l'esecuzione PRIMA del reload della pagina per poter far vedere l'avviso
+        reload();
     }
 
     public void annullaHandler(final AEntity entityBean) {

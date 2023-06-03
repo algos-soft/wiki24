@@ -57,6 +57,8 @@ public class TemplateView extends CrudView {
 
         super.gridPropertyNamesList = Arrays.asList("pageId", "wikiTitle", "timestamp", "lastMongo", "valido");
         super.formPropertyNamesList = Arrays.asList("pageId", "wikiTitle", "timestamp", "lastMongo", "valido", "tmplBio");
+
+        super.usaDataProvider = true;
     }
 
     /**

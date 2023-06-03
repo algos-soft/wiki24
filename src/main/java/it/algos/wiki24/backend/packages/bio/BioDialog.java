@@ -83,14 +83,16 @@ public class BioDialog extends CrudDialog {
         buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server wiki");
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
         buttonDownload.addClickListener(event -> downloadHandler());
-        bottomPlaceHolder.add(buttonDownload);
+//        bottomPlaceHolder.add(buttonDownload);
+        super.getFooter().add(buttonDownload);
 
         Button elaboraButton = new Button();
         elaboraButton.setText("Elabora");
         elaboraButton.getElement().setAttribute("theme", "error");
         elaboraButton.addClickListener(e -> elaboraHandler());
         elaboraButton.setIcon(new Icon(VaadinIcon.AMBULANCE));
-        bottomPlaceHolder.add(elaboraButton);
+//        bottomPlaceHolder.add(elaboraButton);
+        super.getFooter().add(elaboraButton);
     }
 
     public void openBio(final BiConsumer<AEntity, CrudOperation> saveHandler, final Consumer<AEntity> annullaHandler,

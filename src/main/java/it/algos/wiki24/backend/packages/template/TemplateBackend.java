@@ -161,40 +161,40 @@ public class TemplateBackend extends CrudBackend {
     }
 
 
-    public DataProvider<Template, ?> getProvider() {
-        return DataProvider.fromCallbacks(
-                query -> this.fetch(query.getOffset(), query.getLimit()),
-                query -> this.count()
-        );
-    }
+//    public DataProvider<Template, ?> getProvider() {
+//        return DataProvider.fromCallbacks(
+//                query -> this.fetch(query.getOffset(), query.getLimit()),
+//                query -> this.count()
+//        );
+//    }
 
-    public Stream<Template> fetch(final int offset, final int limit) {
-        List<Template> lista = new ArrayList<>();
-        //        Query query = getQuery();
-        Bson sort = null;
-        String property = "tmplBio";
-        //        query.skip(offset);
-        //        query.limit(limit);
-        MongoCollection collection = mongoService.getCollection("template");
-        Bson projection;
-        FindIterable<Document> documents;
-        Template entityBean;
-
-        projection = Projections.fields(Projections.exclude(property));
-        documents = collection.find().sort(sort).projection(projection);
-
-        //        lista = mongoService.mongoOp.find(query, Template.class);
-        //        lista = mongoService.projectionExclude(Template.class, this, sort, "tmplBio");
-
-        for (var singolo : documents) {
-            entityBean = newEntity(singolo);
-            if (entityBean != null) {
-                lista.add(entityBean);
-            }
-        }
-
-        return lista.stream();
-    }
+//    public Stream<Template> fetch(final int offset, final int limit) {
+//        List<Template> lista = new ArrayList<>();
+//        //        Query query = getQuery();
+//        Bson sort = null;
+//        String property = "tmplBio";
+//        //        query.skip(offset);
+//        //        query.limit(limit);
+//        MongoCollection collection = mongoService.getCollection("template");
+//        Bson projection;
+//        FindIterable<Document> documents;
+//        Template entityBean;
+//
+//        projection = Projections.fields(Projections.exclude(property));
+//        documents = collection.find().sort(sort).projection(projection);
+//
+//        //        lista = mongoService.mongoOp.find(query, Template.class);
+//        //        lista = mongoService.projectionExclude(Template.class, this, sort, "tmplBio");
+//
+//        for (var singolo : documents) {
+//            entityBean = newEntity(singolo);
+//            if (entityBean != null) {
+//                lista.add(entityBean);
+//            }
+//        }
+//
+//        return lista.stream();
+//    }
 
     //    public int getCount() {
     //        Query query = getQuery();
