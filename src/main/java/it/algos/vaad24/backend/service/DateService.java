@@ -358,13 +358,14 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalDateTime localDateTime, AETypeData pattern) {
-        if (pattern.isSenzaTime()) {
-            return VUOTA;
-        }
-        else {
-            return get(localDateTime, pattern.getPattern());
-        }
+    public String get(LocalDateTime localDateTime, AETypeDate pattern) {
+        return get(localDateTime, pattern.getPattern());
+        //        if (pattern.isSenzaTime()) {
+        //            return VUOTA;
+        //        }
+        //        else {
+        //            return get(localDateTime, pattern.getPattern());
+        //        }
     }
 
 
@@ -378,7 +379,7 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalDate localDate, AETypeData pattern) {
+    public String get(LocalDate localDate, AETypeDate pattern) {
         if (pattern.isSenzaTime()) {
             return get(localDate, pattern.getPattern());
         }
@@ -398,7 +399,7 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String get(LocalTime localTime, AETypeData pattern) {
+    public String get(LocalTime localTime, AETypeDate pattern) {
         return get(localTime, pattern.getPattern());
     }
 
@@ -462,6 +463,35 @@ public class DateService extends AbstractService {
         }
     }
 
+    /**
+     * Trasforma la data e l'orario nel formato standard ISO 8601.
+     * <p>
+     * 2017-02-16T21:00:00
+     * Unsupported field: OffsetSeconds
+     * Dovrebbe essere 2017-02-16T21:00:00.000+01:00 per essere completa
+     *
+     * @param localDateTime fornito
+     *
+     * @return testo standard ISO senza OffsetSeconds
+     */
+    public String getISO(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.iso8601.getPattern(), LOCALE));
+    }
+
+    /**
+     * Trasforma la data e l'orario nel formato standard Algos (gac).
+     * <p>
+     * 2017-02-16T21:00:00
+     * Unsupported field: OffsetSeconds
+     * Dovrebbe essere 2017-02-16T21:00:00.000+01:00 per essere completa
+     *
+     * @param localDateTime fornito
+     *
+     * @return testo standard ISO senza OffsetSeconds
+     */
+    public String getStandard(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.standard.getPattern(), LOCALE));
+    }
 
     /**
      * Restituisce la data nella forma del pattern previsto. <br>
@@ -476,8 +506,8 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String getCorta(LocalDate localDate) {
-        return get(localDate, AETypeData.dateShort);
+    public String getShort(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dateShort.getPattern(), LOCALE));
     }
 
 
@@ -492,8 +522,8 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String getNormale(LocalDate localDate) {
-        return get(localDate, AETypeData.dateNormal);
+    public String getNormale(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dateNormal.getPattern(), LOCALE));
     }
 
 
@@ -509,7 +539,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getLunga(LocalDate localDate) {
-        return get(localDate, AETypeData.dateLong);
+        return get(localDate, AETypeDate.dateLong);
     }
 
 
@@ -524,8 +554,8 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String getCompleta(LocalDate localDate) {
-        return get(localDate, AETypeData.dataCompleta);
+    public String getCompleta(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dataCompleta.getPattern(), LOCALE));
     }
 
     /**
@@ -539,8 +569,8 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String getCompletaShort(LocalDate localDate) {
-        return get(localDate, AETypeData.dataCompletaShort);
+    public String getCompletaShort(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.dataCompletaShort.getPattern(), LOCALE));
     }
 
 
@@ -555,8 +585,8 @@ public class DateService extends AbstractService {
      *
      * @return la data sotto forma di stringa
      */
-    public String getDataOrario(LocalDateTime localDateTime) {
-        return get(localDateTime, AETypeData.normaleOrario);
+    public String getNormaleOrario(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeDate.normaleOrario.getPattern(), LOCALE));
     }
 
 
@@ -572,7 +602,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getDataOrarioCompleta(LocalDateTime localDateTime) {
-        return get(localDateTime, AETypeData.completaOrario);
+        return get(localDateTime, AETypeDate.completaOrario);
     }
 
 
@@ -588,7 +618,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getDataOrarioBreve(LocalDateTime localDateTime) {
-        return get(localDateTime, AETypeData.breveOrario);
+        return get(localDateTime, AETypeDate.breveOrario);
     }
 
 
@@ -614,7 +644,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getOrario(LocalTime localTime) {
-        return localTime != null ? localTime.format(DateTimeFormatter.ofPattern(AETypeData.orario.getPattern(), LOCALE)) : VUOTA;
+        return localTime != null ? localTime.format(DateTimeFormatter.ofPattern(AETypeDate.orario.getPattern(), LOCALE)) : VUOTA;
     }
 
 
@@ -644,7 +674,7 @@ public class DateService extends AbstractService {
      * @return la data sotto forma di stringa
      */
     public String getOrarioCompleto(LocalDateTime localDateTime) {
-        return localDateTimeToLocalTime(localDateTime).format(DateTimeFormatter.ofPattern(AETypeData.orarioLungo.getPattern(), LOCALE));
+        return localDateTimeToLocalTime(localDateTime).format(DateTimeFormatter.ofPattern(AETypeDate.orarioLungo.getPattern(), LOCALE));
     }
 
     /**
@@ -672,7 +702,7 @@ public class DateService extends AbstractService {
      */
     public Date oldDateFromISO(String isoStringa) {
         Date data = null;
-        DateFormat format = new SimpleDateFormat(AETypeData.iso8601.getPattern());
+        DateFormat format = new SimpleDateFormat(AETypeDate.iso8601.getPattern());
 
         try {
             data = format.parse(isoStringa);
@@ -681,6 +711,18 @@ public class DateService extends AbstractService {
         }
 
         return data;
+    }
+
+    /**
+     * Costruisce una data da una stringa in formato ISO 8601
+     *
+     * @param isoStringa da leggere
+     *
+     * @return data costruita
+     */
+    public LocalDateTime dateTimeFromISO(String isoStringa) {
+        Date data = oldDateFromISO(isoStringa);
+        return dateToLocalDateTime(data);
     }
 
 
@@ -694,18 +736,18 @@ public class DateService extends AbstractService {
     public LocalDateTime dateFromISO(String isoStringa) {
         Date data = oldDateFromISO(isoStringa);
         return data != null ? dateToLocalDateTime(data) : null;
-//        ;
-//        //        LocalDateTime format = new LocalDateTimeDeserializer(AETypeData.iso8601.getPattern());
-//        //        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
-//
-//        //        try {
-//        //            data = format.parse(isoStringa);
-//        //        } catch (Exception unErrore) {
-//        //            logService.error(unErrore, this.getClass(), "dateFromISO");
-//        //
-//        //        }
-//
-//        return data;
+        //        ;
+        //        //        LocalDateTime format = new LocalDateTimeDeserializer(AETypeData.iso8601.getPattern());
+        //        //        return localDateTime.format(DateTimeFormatter.ofPattern(AETypeData.iso8601.getPattern(), LOCALE));
+        //
+        //        //        try {
+        //        //            data = format.parse(isoStringa);
+        //        //        } catch (Exception unErrore) {
+        //        //            logService.error(unErrore, this.getClass(), "dateFromISO");
+        //        //
+        //        //        }
+        //
+        //        return data;
     }
 
 }

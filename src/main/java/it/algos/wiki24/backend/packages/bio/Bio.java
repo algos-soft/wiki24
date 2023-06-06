@@ -51,10 +51,11 @@ public class Bio extends AEntity {
     public String tmplBio;
 
 
-    @AIField(type = AETypeField.localDateTime)
+    @Indexed(unique = true, direction = IndexDirection.ASCENDING)
+    @AIField(type = AETypeField.localDateTime, typeDate = AETypeDate.normaleOrario)
     public LocalDateTime lastServer;
 
-    @AIField(type = AETypeField.localDateTime)
+    @AIField(type = AETypeField.localDateTime, typeDate = AETypeDate.normaleOrario)
     public LocalDateTime lastMongo;
 
     /**

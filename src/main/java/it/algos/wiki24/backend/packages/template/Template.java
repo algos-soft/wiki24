@@ -53,7 +53,7 @@ public class Template extends AEntity {
 
 
     @AIField(type = AETypeField.localDateTime)
-    public LocalDateTime timestamp;
+    public LocalDateTime lastServer;
 
 
     @AIField(type = AETypeField.localDateTime)

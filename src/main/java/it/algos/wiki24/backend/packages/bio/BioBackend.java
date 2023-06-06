@@ -98,6 +98,16 @@ public class BioBackend extends WikiBackend {
         super(crudRepository, Bio.class); this.repository = (BioRepository) crudRepository;
     }
 
+    /**
+     * Preferenze usate da questa 'backend' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+        //        super.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_WIKI_TITLE);
+    }
 
     public Bio creaIfNotExist(final WrapBio wrap) {
         return checkAndSave(newEntity(wrap));
@@ -197,11 +207,12 @@ public class BioBackend extends WikiBackend {
     }
 
     @Override
-    public Bio save(final Object entity) {
+    public Bio save(final AEntity entity) {
         Bio bioTemp;
 
         if (entity instanceof Bio bio) {
 
+            bio.valido = bio.lastMongo.isAfter(bio.lastServer);
             if (textService.isEmpty(bio.id) && bio.pageId > 0) {
                 bioTemp = findByKey(bio.pageId); if (bioTemp != null) {
                     bio.id = bioTemp.id;
@@ -499,24 +510,24 @@ public class BioBackend extends WikiBackend {
      * @return Lista di biografie che usano l'attività e la nazionalità
      */
     public List<Bio> findAllNazionalitaAttivita(String nazionalitaSingolarePlurale, String attivitaSingolarePlurale, String letteraIniziale) {
-//        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita; List<String> listaAttivita;
-//        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
-//        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
-//
-//        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
-//        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
-//
-//        for (String nazionalitaSingola : listaNazionalita) {
-//            for (String attivitaSingola : listaAttivita) {
-//                lista.addAll(findNazionalitaAttivita(nazionalitaSingola, attivitaSingola));
-//            }
-//        }
-//
-//        if (textService.isValid(letteraIniziale)) {
-//            lista = lista.stream().filter(bio -> (textService.isValid(bio.cognome) && bio.cognome.startsWith(letteraIniziale))).collect(Collectors.toList());
-//        }
-//
-//        return bioService.sortByForzaOrdinamento(lista);
+        //        List<Bio> lista = new ArrayList<>(); List<String> listaNazionalita; List<String> listaAttivita;
+        //        String nazionalitaPlurale = nazionalitaBackend.pluraleBySingolarePlurale(nazionalitaSingolarePlurale);
+        //        String attivitaPlurale = attivitaBackend.pluraleBySingolarePlurale(attivitaSingolarePlurale);
+        //
+        //        listaNazionalita = nazionalitaBackend.findSingolariByPlurale(nazionalitaPlurale);
+        //        listaAttivita = attivitaBackend.findAllSingolariByPlurale(attivitaPlurale);
+        //
+        //        for (String nazionalitaSingola : listaNazionalita) {
+        //            for (String attivitaSingola : listaAttivita) {
+        //                lista.addAll(findNazionalitaAttivita(nazionalitaSingola, attivitaSingola));
+        //            }
+        //        }
+        //
+        //        if (textService.isValid(letteraIniziale)) {
+        //            lista = lista.stream().filter(bio -> (textService.isValid(bio.cognome) && bio.cognome.startsWith(letteraIniziale))).collect(Collectors.toList());
+        //        }
+        //
+        //        return bioService.sortByForzaOrdinamento(lista);
         return null;
     }
 
@@ -1549,42 +1560,40 @@ public class BioBackend extends WikiBackend {
         } return listaWrap;
     }
 
+    //    /**
+    //     * Costruisce un provider SOLO per la collection Bio
+    //     * Provider NON filtrato da usare per la Grid
+    //     * Metodo effettivamente utilizzato.
+    //     */
+    //    public DataProvider<Bio, Void> getProvider() {
+    //        return DataProvider.fromCallbacks(
+    //                query -> this.fetch(query.getOffset(), query.getLimit()),
+    //                query -> this.getCount()
+    //        );
+    //    }
 
-//    /**
-//     * Costruisce un provider SOLO per la collection Bio
-//     * Provider NON filtrato da usare per la Grid
-//     * Metodo effettivamente utilizzato.
-//     */
-//    public DataProvider<Bio, Void> getProvider() {
-//        return DataProvider.fromCallbacks(
-//                query -> this.fetch(query.getOffset(), query.getLimit()),
-//                query -> this.getCount()
-//        );
-//    }
+    //    /**
+    //     * Query find()
+    //     */
+    //    public Stream<Bio> fetch(final int offset, final int limit) {
+    //        List<Bio> lista;
+    //        Query query = new Query();
+    //
+    //        query.skip(offset);
+    //        query.limit(limit);
+    //        lista = mongoService.mongoOp.find(query, Bio.class);
+    //
+    //        return lista.stream();
+    //    }
 
-
-//    /**
-//     * Query find()
-//     */
-//    public Stream<Bio> fetch(final int offset, final int limit) {
-//        List<Bio> lista;
-//        Query query = new Query();
-//
-//        query.skip(offset);
-//        query.limit(limit);
-//        lista = mongoService.mongoOp.find(query, Bio.class);
-//
-//        return lista.stream();
-//    }
-
-//    /**
-//     * Query count()
-//     */
-//    public int getCount() {
-//        Long lungo;
-//
-//        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
-//        return lungo > 0 ? lungo.intValue() : 0;
-//    }
+    //    /**
+    //     * Query count()
+    //     */
+    //    public int getCount() {
+    //        Long lungo;
+    //
+    //        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
+    //        return lungo > 0 ? lungo.intValue() : 0;
+    //    }
 
 }// end of crud backend class

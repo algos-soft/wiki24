@@ -573,14 +573,14 @@ public class DownloadService extends WAbstractService {
             if (bio != null) {
                 bio.setTmplBio(wrap.getTemplBio());
                 bio = elaboraService.esegue(bio);
-                bio.lastServer = LocalDateTime.now();
+                bio.lastServer = wrap.getTimeStamp();
                 bio.lastMongo = LocalDateTime.now();
                 bioBackend.save(bio);
             }
             else {
                 bio = bioBackend.newEntity(wrap);
                 bio = elaboraService.esegue(bio);
-                bio.lastServer = LocalDateTime.now();
+                bio.lastServer = wrap.getTimeStamp();
                 bio.lastMongo = LocalDateTime.now();
                 bioBackend.insert(bio);
             }

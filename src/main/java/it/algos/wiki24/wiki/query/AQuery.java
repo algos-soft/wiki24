@@ -868,6 +868,7 @@ public abstract class AQuery {
                 }
                 if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String timestampText) {
                     //                    timestamp = LocalDateTime.parse(timestampText);
+                    timestamp= dateService.dateTimeFromISO(timestampText);
                     //                    // @todo ma scherzi?
                     //                    timestamp=LocalDateTime.of(2023,4,7,3,4);
                     mappaUrlResponse.put(KEY_JSON_TIMESTAMP, timestamp);

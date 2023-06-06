@@ -82,16 +82,16 @@ public class TemplateBackend extends CrudBackend {
      *
      * @param pageId    interno del server wiki (obbligatorio, unico)
      * @param wikiTitle (obbligatorio, unico)
-     * @param timestamp ultima modifica sul server - ora di greenwich (obbligatorio)
+     * @param lastServer ultima modifica sul server - ora di greenwich (obbligatorio)
      * @param tmplBio   (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Template newEntity(long pageId, String wikiTitle, LocalDateTime timestamp, LocalDateTime lastMongo, String tmplBio) {
+    public Template newEntity(long pageId, String wikiTitle, LocalDateTime lastServer, LocalDateTime lastMongo, String tmplBio) {
         Template newEntityBean = Template.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
-                .timestamp(timestamp != null ? timestamp : ROOT_DATA_TIME)
+                .lastServer(lastServer != null ? lastServer : ROOT_DATA_TIME)
                 .lastMongo(lastMongo != null ? lastMongo : ROOT_DATA_TIME)
                 .tmplBio(textService.isValid(tmplBio) ? tmplBio : null)
                 .build();
@@ -121,7 +121,7 @@ public class TemplateBackend extends CrudBackend {
         Template template = (Template) entity;
         entity.id = String.valueOf(((Template) entity).pageId);
 
-        template.valido = template.lastMongo.isAfter(template.timestamp);
+        template.valido = template.lastMongo.isAfter(template.lastServer);
         return (Template) super.save(template);
     }
 

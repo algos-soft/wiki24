@@ -3,6 +3,8 @@ package it.algos.vaad24.backend.enumeration;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 
+import java.util.*;
+
 /**
  * Project vaadflow
  * Created by Algos
@@ -10,7 +12,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
  * Date: gio, 27-set-2018
  * Time: 16:23
  */
-public enum AETypeData {
+public enum AETypeDate {
 
     /**
      * Usata di default <br>
@@ -18,7 +20,6 @@ public enum AETypeData {
      * Esempio: 20 gen 2019 <br>
      */
     standard("data standard", "d MMM yyyy", "20 gen 2019", 8),
-
 
     /**
      * Pattern: d-M-yy <br>
@@ -56,7 +57,6 @@ public enum AETypeData {
      */
     meseLong("mese lungo", "d MMMM", "5 ottobre", 8),
 
-
     /**
      * Pattern: EEE d <br>
      * Esempio: dom 5 <br>
@@ -69,20 +69,17 @@ public enum AETypeData {
      */
     weekShortMese("settimana corta mese", "EEE, d MMM", "dom, 5 apr", 7),
 
-
     /**
      * Pattern: EEEE d <br>
      * Esempio: domenica 5 <br>
      */
     weekLong("settimana lunga", "EEEE d", "domenica 5", 8),
 
-
     /**
      * Pattern: MMMM yyy <br>
      * Esempio: ottobre 2014 <br>
      */
     meseCorrente("meseCorrente", "MMMM yyy", "ottobre 2014", 10),
-
 
     /**
      * Pattern: EEEE, d-MMMM-yyy <br>
@@ -112,8 +109,7 @@ public enum AETypeData {
      * Pattern: d-MMM-yy H:mm <br>
      * Esempio: 18-nov-17 13:45 <br>
      */
-    normaleOrario("data e orario", "d-MMM-yy H:mm", "18-nov-17 13:45", 10, false),
-
+    normaleOrario("data e orario", "d-MMM-yy H:mm", "18-nov-17 13:45", 11, false),
 
     /**
      * ISO8601: yyyy-MM-dd'T'HH:mm:ss.SSSXXX <br>
@@ -121,7 +117,6 @@ public enum AETypeData {
      * Esempio: 2017-02-16T21:00:00.000+01:00 <br>
      */
     iso8601("data e orario iso8601", "yyyy-MM-dd'T'HH:mm:ss", "2017-02-16T21:00:00", 13, false),
-
 
     /**
      * Pattern: H:mm <br>
@@ -147,12 +142,12 @@ public enum AETypeData {
     private int width;
 
 
-    AETypeData(String tag, String pattern, String esempio, int width) {
+    AETypeDate(String tag, String pattern, String esempio, int width) {
         this(tag, pattern, esempio, width, true);
     }
 
 
-    AETypeData(String tag, String pattern, String esempio, int width, boolean senzaTime) {
+    AETypeDate(String tag, String pattern, String esempio, int width, boolean senzaTime) {
         this.tag = tag;
         this.pattern = pattern;
         this.esempio = esempio;
@@ -160,6 +155,9 @@ public enum AETypeData {
         this.senzaTime = senzaTime;
     }
 
+    public static List<AETypeDate> getAllEnums() {
+        return Arrays.stream(values()).toList();
+    }
 
     public String getTag() {
         return tag;
