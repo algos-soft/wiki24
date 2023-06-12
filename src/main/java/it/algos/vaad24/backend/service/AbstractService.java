@@ -25,7 +25,7 @@ import java.util.*;
  */
 public abstract class AbstractService {
 
-    protected static Set<AbstractService> SERVIZI = new HashSet();
+    public static Set<AbstractService> SERVIZI = new HashSet();
 
     /**
      * Istanza di una interfaccia SpringBoot <br>
@@ -223,7 +223,7 @@ public abstract class AbstractService {
     @PostConstruct
     private void postConstruct() {
         fixAllServices();
-//        fixLinkIncrociati();
+        fixLinkIncrociati();
         fixLinkPreferenze();
     }
 

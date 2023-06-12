@@ -10,6 +10,8 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.springframework.beans.factory.config.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 

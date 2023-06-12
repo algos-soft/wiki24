@@ -4,6 +4,7 @@ import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
 import it.algos.vaad24.backend.boot.*;
+import it.algos.vaad24.backend.configuration.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import org.springframework.beans.factory.annotation.*;
