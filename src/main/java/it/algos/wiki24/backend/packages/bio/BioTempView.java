@@ -64,7 +64,6 @@ public class BioTempView extends CrudView {
 
         super.gridPropertyNamesList = Arrays.asList(FIELD_NAME_PAGE_ID, FIELD_NAME_WIKI_TITLE, "lastServer", "lastMongo", "valido");
         super.formPropertyNamesList = Arrays.asList(FIELD_NAME_PAGE_ID, FIELD_NAME_WIKI_TITLE, "lastServer", "lastMongo", "valido", "tmplBio");
-        //        backend.sortOrder = Sort.by(Sort.Direction.ASC, FIELD_NAME_WIKI_TITLE);
         super.sortOrder = backend.sortOrder;
         super.usaDataProvider = true;
     }
@@ -95,7 +94,7 @@ public class BioTempView extends CrudView {
         ComboBox<String> comboSort = new ComboBox<>();
         comboSort.setClearButtonVisible(true);
         comboSort.setPlaceholder("Sort...");
-        comboSort.setItems(Arrays.asList(FIELD_NAME_ID_CON, FIELD_NAME_PAGE_ID, FIELD_NAME_WIKI_TITLE,"lastServer"));
+        comboSort.setItems(Arrays.asList(FIELD_NAME_ID_CON, FIELD_NAME_PAGE_ID, FIELD_NAME_WIKI_TITLE,"lastServer","lastMongo"));
         comboSort.setValue(startingProperty);
         comboSort.addValueChangeListener(event -> {
             String property = comboSort.getValue();
