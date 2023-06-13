@@ -76,7 +76,7 @@ public class WAbstractService extends AbstractService {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public DoppionomeBackend doppionomeBackend;
+    public DoppioNomeBackend doppioNomeBackend;
 
     @Autowired
     public AttSingolareBackend attSingolareBackend;

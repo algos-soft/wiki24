@@ -105,7 +105,7 @@ public class VaadConfiguration {
             LogService.debugBean(new WikiApiService());
             LogService.debugBean(new WikiBotService());
             LogService.debugBean(new ElaboraService());
-            LogService.debugBean(new DoppionomeBackend(null));
+            LogService.debugBean(new DoppioNomeBackend());
             LogService.debugBean(new AttSingolareBackend());
             LogService.debugBean(new AttPluraleBackend());
             LogService.debugBean(new NazSingolareBackend());

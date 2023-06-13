@@ -144,7 +144,7 @@ public class ElaboraService extends WAbstractService {
 
         testoValido = wikiBotService.fixDopo(testoValido);
         if (testoValido.contains(SPAZIO)) {
-            listaDoppiNomi = doppionomeBackend.fetchCode();
+            listaDoppiNomi = doppioNomeBackend.fetchCode();
             if (!listaDoppiNomi.contains(testoValido)) {
                 testoValido = testoValido.substring(0, testoValido.indexOf(SPAZIO)).trim();
             }
