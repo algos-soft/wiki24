@@ -1519,7 +1519,7 @@ public class BioBackend extends WikiBackend {
 
     public List<Bio> findAllWikiTitlePageId() {
         List<Bio> listaBio = new ArrayList(); Bio bio; String wikiTitle = "wikiTitle"; String pageId = "pageId"; String message;
-        MongoCollection collection = mongoService.getCollection("bio");
+        MongoCollection collection = mongoService.getCollection(TAG_BIO);
 
         if (collection == null) {
             message = String.format("Non esiste la collection", entityClazz.getSimpleName());

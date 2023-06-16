@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.doppionome;
+package it.algos.wiki24.backend.packages.nome;
 
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -16,8 +16,8 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Mon, 12-Jun-2023
- * Time: 18:21
+ * Date: Wed, 14-Jun-2023
+ * Time: 09:10
  * <p>
  * Vista iniziale e principale di un package <br>
  *
@@ -25,13 +25,13 @@ import com.vaadin.flow.component.textfield.TextField;
  * Presenta la Grid <br>
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
-@PageTitle("DoppioNome")
-@Route(value = "doppionome", layout = MainLayout.class)
-public class DoppioNomeView extends CrudView {
+@PageTitle("nomi")
+@Route(value = "nomi", layout = MainLayout.class)
+public class NomeView extends CrudView {
 
 
     //--per eventuali metodi specifici
-    private DoppioNomeBackend backend;
+    private NomeBackend backend;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -41,8 +41,8 @@ public class DoppioNomeView extends CrudView {
      *
      * @param crudBackend service specifico per la businessLogic e il collegamento con la persistenza dei dati
      */
-    public DoppioNomeView(@Autowired final DoppioNomeBackend crudBackend) {
-        super(crudBackend, DoppioNome.class);
+    public NomeView(@Autowired final NomeBackend crudBackend) {
+        super(crudBackend, Nome.class);
         this.backend = crudBackend;
     }
 
@@ -55,8 +55,8 @@ public class DoppioNomeView extends CrudView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome");
-        super.formPropertyNamesList = Arrays.asList("nome");
+        super.gridPropertyNamesList = Arrays.asList("nome",  "numBio","doppio", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "numBio");
     }
 
     /**

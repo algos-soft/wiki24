@@ -89,7 +89,7 @@ public class NazPluraleView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
         String modulo = PATH_WIKI + PATH_MODULO;
-        String categoria = PATH_WIKI + "Categoria:Bio nazionalità";
+        String categoria = PATH_CATEGORIA + "Bio nazionalità";
 
         Anchor anchor1 = new Anchor(modulo + PATH_LINK + NAZ_LOWER, PATH_LINK + NAZ_LOWER);
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());

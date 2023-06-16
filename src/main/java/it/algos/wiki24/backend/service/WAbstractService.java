@@ -7,7 +7,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.packages.doppionome.*;
+import it.algos.wiki24.backend.packages.nomidoppi.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
@@ -76,7 +76,7 @@ public class WAbstractService extends AbstractService {
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
     @Autowired
-    public DoppioNomeBackend doppioNomeBackend;
+    public NomeDoppioBackend doppioNomeBackend;
 
     @Autowired
     public AttSingolareBackend attSingolareBackend;

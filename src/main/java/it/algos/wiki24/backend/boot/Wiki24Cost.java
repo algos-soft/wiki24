@@ -62,6 +62,7 @@ public class Wiki24Cost {
     public static final String ATT = "Attività";
 
     public static final String NAZ = "Nazionalità";
+    public static final String DOPPI= "Nomi doppi";
 
     public static final String TAG_LISTA_ALTRE = "Altre...";
 

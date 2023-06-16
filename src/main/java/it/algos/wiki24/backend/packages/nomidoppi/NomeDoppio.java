@@ -1,7 +1,6 @@
-package it.algos.wiki24.backend.packages.doppionome;
+package it.algos.wiki24.backend.packages.nomidoppi;
 
 import it.algos.vaad24.backend.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
@@ -10,11 +9,6 @@ import javax.persistence.*;
 
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -34,8 +28,8 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "doppionome", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
-public class DoppioNome extends AEntity {
+@AIEntity(collectionName = "nomedoppio", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+public class NomeDoppio extends AEntity {
 
 
     @AIField(type = AETypeField.text, widthEM = 20)

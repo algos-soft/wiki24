@@ -53,7 +53,7 @@ public class ReflectionService extends AbstractService {
             field = genericClazz.getField(propertyName);
         } catch (Exception unErrore) {
             message = String.format("Manca la property %s nella classe %s", propertyName, genericClazz.getSimpleName());
-            logService.debug(new WrapLog().exception(unErrore).message(message));
+            logService.error(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
         return field;

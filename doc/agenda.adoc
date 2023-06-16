@@ -197,13 +197,15 @@ mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24 mongorestore -d wi
 
 == Terminal ==
 
- mvn clean package -Pproduction
- mvn clean package -Pproduction -Dmaven.test.skip=true
- java -jar -Dserver.port=8090 vaadin23.jar
- java -jar -Dserver.port=8090 wiki24.jar
- sudo mongodump --db wiki24 --out /Users/gac/Desktop/dump
- mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24
- mongorestore -d wiki24 /Users/gac/dump/wiki24
+ terminal
+mvn clean package -Pproduction
+mvn clean package -Pproduction -Dmaven.test.skip=true
+java -jar -Dserver.port=8090 vaadin23.jar
+java -jar -Dserver.port=8090 wiki24.jar
+sudo mongodump --db wiki24 --out /Users/gac/Desktop/dump
+mongorestore -d wiki24 /Users/gac/Desktop/dump/wiki24
+sudo mongodump --db wiki24 --out /Users/gac/dump
+mongorestore -d wiki24 /Users/gac/dump/wiki24
 cd Desktop
 cd wiki
 java -jar -Dserver.port=8090 wiki24-1.0.jar

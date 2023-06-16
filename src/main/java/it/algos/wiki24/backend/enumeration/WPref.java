@@ -87,6 +87,8 @@ public enum WPref implements AIGenPref {
     uploadCognomiTime("uploadCognomiTime", AETypePref.integer, 0, "Durata upload dei cognomi."),
     uploadCognomiPrevisto("uploadCognomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i cognomi."),
 
+    downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
+
     uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
     uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
