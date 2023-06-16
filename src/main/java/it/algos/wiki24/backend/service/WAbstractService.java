@@ -154,6 +154,7 @@ public class WAbstractService extends AbstractService {
 
     protected void fixAllServices() {
         super.fixAllServices();
+
         SERVIZI.add(this.wikiApiService);
         SERVIZI.add(this.wikiUtility);
         SERVIZI.add(this.wikiBotService);

@@ -28,6 +28,7 @@ public class Wiki24App implements AppShellConfigurator {
     public static void main(String[] args) {
         VaadBoot.start();
         Wiki24Boot.start();
+        VaadConfiguration.START();
         SpringApplication.run(Wiki24App.class, args);
     }
 

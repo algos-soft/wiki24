@@ -16,6 +16,7 @@ import it.algos.wiki24.wiki.query.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
+import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 

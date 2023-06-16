@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.nome;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -27,7 +28,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @PageTitle("nomi")
 @Route(value = "nomi", layout = MainLayout.class)
-public class NomeView extends CrudView {
+public class NomeView extends WikiView {
 
 
     //--per eventuali metodi specifici
@@ -57,6 +58,18 @@ public class NomeView extends CrudView {
 
         super.gridPropertyNamesList = Arrays.asList("nome",  "numBio","doppio", "superaSoglia", "esisteLista");
         super.formPropertyNamesList = Arrays.asList("nome", "numBio");
+
+        super.usaBottoneReset = false;
+        super.usaReset = true;
+        super.usaBottoneDeleteAll = false;
+        super.usaBottoneElabora = true;
+        super.usaBottoneDeleteEntity = false;
+        super.usaBottoneStatistiche = true;
+        super.usaBottoneUploadStatistiche = true;
+        super.usaBottoneUploadAll = true;
+        super.usaBottoneUploadPagina = true;
+        super.usaBottoneTest = true;
+        super.usaInfoDownload = true;
     }
 
     /**

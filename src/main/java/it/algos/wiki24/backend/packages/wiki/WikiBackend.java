@@ -64,6 +64,7 @@ public abstract class WikiBackend extends CrudBackend {
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 
+
     protected String message;
 
     protected WPref lastReset;
@@ -117,7 +118,6 @@ public abstract class WikiBackend extends CrudBackend {
      */
     @Autowired
     public BioBackend bioBackend;
-
 
 
     /**
@@ -326,7 +326,6 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
 
-
     public AResult fixReset(AResult result, List lista) {
         if (lista.size() > 0) {
             result.setIntValue(lista.size());
@@ -367,7 +366,7 @@ public abstract class WikiBackend extends CrudBackend {
         return result;
     }
 
-        public WResult fixDownload(WResult result) {
+    public WResult fixDownload(WResult result) {
         String modulo = entityClazz.getSimpleName();
         result.valido(true).fine().typeLog(AETypeLog.download).eseguito().typeResult(AETypeResult.downloadValido);
 

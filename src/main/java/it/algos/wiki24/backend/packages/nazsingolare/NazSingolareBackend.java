@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
+import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -215,6 +217,9 @@ public class NazSingolareBackend extends WikiBackend {
         List lista = new ArrayList();
         AEntity entityBean;
 
+        if (wikiApiService == null) {
+            wikiApiService = appContext.getBean(WikiApiService.class);
+        }
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloNazionalità);
 
         if (mappa != null && mappa.size() > 0) {

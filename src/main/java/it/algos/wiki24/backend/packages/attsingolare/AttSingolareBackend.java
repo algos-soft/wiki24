@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
@@ -229,6 +230,9 @@ public class AttSingolareBackend extends WikiBackend {
         AEntity entityBean;
         List lista = new ArrayList();
 
+        if (wikiApiService == null) {
+            wikiApiService = appContext.getBean(WikiApiService.class);
+        }
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloAttività);
 
         if (mappa != null && mappa.size() > 0) {
