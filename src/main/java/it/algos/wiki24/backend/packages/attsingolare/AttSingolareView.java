@@ -125,10 +125,10 @@ public class AttSingolareView extends WikiView {
             searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
         }
 
-        fixBottoniTopSpecificiAttivita();
+//        fixBottoniTopSpecificiAttivita();
     }
 
-    protected void fixBottoniTopSpecificiAttivita() {
+    protected void fixBottoniTopSpecifici() {
         boxBox = new IndeterminateCheckbox();
         boxBox.setLabel("Ex attività");
         boxBox.setIndeterminate(true);

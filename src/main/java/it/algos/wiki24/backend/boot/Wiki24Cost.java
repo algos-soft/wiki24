@@ -62,7 +62,8 @@ public class Wiki24Cost {
     public static final String ATT = "Attività";
 
     public static final String NAZ = "Nazionalità";
-    public static final String DOPPI= "Nomi doppi";
+
+    public static final String DOPPI = "Nomi doppi";
 
     public static final String TAG_LISTA_ALTRE = "Altre...";
 
@@ -180,7 +181,9 @@ public class Wiki24Cost {
 
     public static final String PATH_MODULO_PROFESSIONE = PATH_MODULO_LINK + ATT_LOWER;
 
-    public static final String PATH_TABELLA_NOMI_DOPPI = "Progetto:Antroponimi/Nomi_doppi";
+    public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + "Nomi_doppi";
+    public static final String TAG_LISTA_NOMI =   "Liste nomi";
+    public static final String TAG_NOMI =   "Nomi";
 
     public static final String NAZ_LOWER = NAZ.toLowerCase();
 

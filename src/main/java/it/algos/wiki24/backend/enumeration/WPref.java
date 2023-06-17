@@ -83,15 +83,21 @@ public enum WPref implements AIGenPref {
     uploadNazPluralePrevisto("uploadNazPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità plurali."),
 
 
+    downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
+    downloadNomi("downloadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
+    elaboraNomi("elaboraNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei nomi."),
+    elaboraNomiTime("elaboraNomiTime", AETypePref.integer, 0, "Durata elaborazione dei nomi."),
+    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
+    uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
+    uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
+
+
+
+    elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
     uploadCognomi("uploadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di cognomi oltre la soglia di 50 biografie"),
     uploadCognomiTime("uploadCognomiTime", AETypePref.integer, 0, "Durata upload dei cognomi."),
     uploadCognomiPrevisto("uploadCognomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i cognomi."),
 
-    downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
-
-    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
-    uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
-    uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 
     downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
 
@@ -111,7 +117,6 @@ public enum WPref implements AIGenPref {
     //    downloadProfessione("downloadProfessione", AETypePref.localdatetime, "Download di Modulo:Bio/Link attività.", ROOT_DATA_TIME),
     //    downloadNomi("downloadNomi", AETypePref.localdatetime, "Download di Progetto:Antroponimi/Nomi doppi.", ROOT_DATA_TIME),
 
-    elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
     statisticaAttPlurale("statisticaAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività plurali."),

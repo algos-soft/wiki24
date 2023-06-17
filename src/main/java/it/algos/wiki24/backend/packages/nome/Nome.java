@@ -35,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome", usaReset = true)
+@AIEntity(keyPropertyName = "nome", usaKeyIdMinuscolaCaseInsensitive = false, usaReset = false)
 public class Nome extends AEntity {
 
     @AIField(type = AETypeField.text, header = "nome", caption = "nome", widthEM = 14)
@@ -47,7 +47,13 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano lo stesso nome", widthEM = 6)
     public int numBio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumb, headerIcon = VaadinIcon.LINES)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "distinto", widthEM = 7)
+    public boolean distinto;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "incipit", widthEM = 7)
+    public boolean incipit;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "doppio", widthEM = 7)
     public boolean doppio;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumb, headerIcon = VaadinIcon.LINES)
