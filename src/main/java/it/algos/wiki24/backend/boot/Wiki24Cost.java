@@ -182,8 +182,14 @@ public class Wiki24Cost {
     public static final String PATH_MODULO_PROFESSIONE = PATH_MODULO_LINK + ATT_LOWER;
 
     public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + "Nomi_doppi";
-    public static final String TAG_LISTA_NOMI =   "Liste nomi";
-    public static final String TAG_NOMI =   "Nomi";
+
+    public static final String TAG_LISTA_NOMI = "Liste nomi";
+
+    public static final String TAG_INCIPIT_NOMI = "Template:Incipit lista nomi";
+
+    public static final String TAG_PERSONE_NOME = "Persone di nome ";
+
+    public static final String TAG_NOMI = "Nomi";
 
     public static final String NAZ_LOWER = NAZ.toLowerCase();
 

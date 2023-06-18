@@ -1312,6 +1312,40 @@ public class BioBackend extends WikiBackend {
 
     //
     //
+    // NOME
+    //
+    //
+    public int countNome(final String nomeTxt) {
+        Long numBio = textService.isValid(nomeTxt) ? repository.countBioByNome(nomeTxt) : 0;
+        return numBio.intValue();
+    }
+
+    public List<Bio> findNome(String nomeTxt) {
+        Query query = queryNome(nomeTxt);
+        return query != null ? mongoService.mongoOp.find(query, Bio.class) : new ArrayList<>();
+    }
+
+    public Query queryNome(String nomeTxt) {
+        Query query = new Query(); Sort sort;
+
+        if (textService.isEmpty(nomeTxt)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where("nome").is(nomeTxt));
+        sort = Sort.by(Sort.Direction.ASC, "ordinamento");
+        query.with(sort);
+
+        return query;
+    }
+    //
+    // nome end
+    //
+
+
+
+    //
+    //
     // COGNOME
     //
     //

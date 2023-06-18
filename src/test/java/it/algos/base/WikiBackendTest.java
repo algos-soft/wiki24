@@ -249,6 +249,21 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("72 - findAllForKeyByPlurale (String)");
     }
 
+    //Segnaposto
+    @Order(72)
+    protected void libero72() {
+    }
+
+    //Segnaposto
+    @Order(73)
+    protected void libero73() {
+    }
+
+    //Segnaposto
+    @Order(74)
+    protected void libero74() {
+    }
+
 
     @Test
     @Order(75)
@@ -267,25 +282,6 @@ public abstract class WikiBackendTest extends BackendTest {
         print(listaStr);
     }
 
-    //Segnaposto
-    @Order(72)
-    protected void libero72() {
-    }
-
-    //Segnaposto
-    @Order(73)
-    protected void libero73() {
-    }
-
-    //Segnaposto
-    @Order(74)
-    protected void libero74() {
-    }
-
-    //Segnaposto
-    @Order(75)
-    protected void libero75() {
-    }
 
     @Test
     @Order(80)

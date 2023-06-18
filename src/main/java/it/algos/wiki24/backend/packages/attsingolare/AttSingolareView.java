@@ -124,8 +124,6 @@ public class AttSingolareView extends WikiView {
         if (searchField != null) {
             searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
         }
-
-//        fixBottoniTopSpecificiAttivita();
     }
 
     protected void fixBottoniTopSpecifici() {

@@ -358,6 +358,13 @@ public abstract class WikiBackend extends CrudBackend {
             logService.warn(new WrapLog().exception(new AlgosException(message)));
         }
 
+        if (durataDownload != null) {
+            durataDownload.setValue(unitaMisuraDownload.durata(result.getInizio()));
+        }
+        else {
+            logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+        }
+
         if (lastElaborazione != null) {
             lastElaborazione.setValue(ROOT_DATA_TIME);
         }

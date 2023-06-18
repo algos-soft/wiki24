@@ -41,25 +41,27 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.text, header = "nome", caption = "nome", widthEM = 14)
     public String nome;
 
-    @AIField(type = AETypeField.text, widthEM = 14)
-    public String paginaLista;
-
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano lo stesso nome", widthEM = 6)
     public int numBio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "distinto", widthEM = 7)
+
+    @AIField(type = AETypeField.text, widthEM = 18)
+    public String paginaLista;
+
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
     public boolean distinto;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "incipit", widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "incipit", widthEM = 7)
     public boolean incipit;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, header = "doppio", widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "doppio", widthEM = 7)
     public boolean doppio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.thumb, headerIcon = VaadinIcon.LINES)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
     public boolean superaSoglia;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, headerIcon = VaadinIcon.HAMMER)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkBox, headerIcon = VaadinIcon.LIST)
     public boolean esisteLista;
 
     @Override

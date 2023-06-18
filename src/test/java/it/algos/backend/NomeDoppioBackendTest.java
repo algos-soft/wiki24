@@ -4,7 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.nomidoppi.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.*;
@@ -22,30 +22,29 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 14-Jun-2023
- * Time: 17:29
+ * Date: Sun, 18-Jun-2023
+ * Time: 12:09
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("backend")
-@DisplayName("Nome Backend")
+@DisplayName("NomeDoppio Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NomeBackendTest extends WikiBackendTest {
+public class NomeDoppioBackendTest extends BackendTest {
 
-    private NomeBackend backend;
+    @InjectMocks
+    private NomeDoppioBackend backend;
 
-    private List<Nome> listaBeans;
+    private List<NomeDoppio> listaBeans;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        this.backend = super.nomeBackend;
-        super.entityClazz = Nome.class;
-        super.typeBackend = TypeBackend.nessuno;
+        assertNotNull(backend);
+        super.entityClazz = NomeDoppio.class;
         super.crudBackend = backend;
-        super.wikiBackend = backend;
 
         super.setUpAll();
     }
@@ -53,23 +52,6 @@ public class NomeBackendTest extends WikiBackendTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
-        listaBackendClazz = classService.getAllBackend();
-    }
-
-    @Test
-    @Order(15)
-    @DisplayName("15 - elabora (solo su wiki)")
-    protected void elabora() {
-    }
-
-    @Test
-    @Order(81)
-    protected void isEsiste() {
-        sorgente = "Persone di nome Ada";
-
-        ottenutoBooleano = queryService.isEsiste(sorgente);
-        System.out.println(sorgente);
-        System.out.println(ottenutoBooleano);
     }
 
 }
