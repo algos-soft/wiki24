@@ -78,17 +78,17 @@ public class NomeDoppioView extends WikiView {
         String progetto = PATH_WIKI + PATH_TABELLA_NOMI_DOPPI;
         String categoria = PATH_CATEGORIA + "Prenomi composti";
 
-        Anchor anchor1 = new Anchor(progetto, "Lista progetto");
+        Anchor anchor1 = new Anchor(progetto, "Progetto");
         anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
 
         Anchor anchor2 = new Anchor(categoria, "Categoria");
         anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
 
-        message = "Sono elencati i nomi doppi (ad esempio 'Maria Teresa').";
+        message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("I nomi doppi mantengono le maiuscole e minuscole riportate nella lista su wiki");
+        message = String.format("I nomi doppi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso());
         message = "Quando si crea la lista nomi, i nomi doppi vengono scaricati e aggiunti alla lista stessa.";
         addSpan(ASpan.text(message).rosso());

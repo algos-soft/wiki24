@@ -89,9 +89,9 @@ public abstract class WikiView extends CrudView {
 
     protected Button buttonDeleteAll;
 
-    //    protected boolean usaBottoneModulo;
-    //
-    //    protected Button buttonModulo;
+    protected boolean usaBottoneRefreshModulo;
+
+    protected Button buttonRefreshModulo;
 
     protected boolean usaBottoneCategoria;
 
@@ -345,16 +345,18 @@ public abstract class WikiView extends CrudView {
                     message = "Reset non ancora effettuato";
                 }
                 else {
-                    message = String.format("Ultimo reset effettuato %s", dateService.getDataOrarioCompleta(reset));
-                    if (durataReset != null && durataDownload.get() instanceof Integer durata) {
-                        message += String.format(" in circa %d %s.", durata, "minuti");
+                    if (lastReset == lastDownload) {
+                        message = String.format("%s%s%s", "ResetOnlyEmpty", FORWARD, "download");
+                    }
+                    else {
+                        message = String.format("Ultimo reset effettuato %s", dateService.getDataOrarioCompleta(reset));
+                        if (durataReset != null && durataDownload.get() instanceof Integer durata) {
+                            message += String.format(" in circa %d %s.", durata, "minuti");
+                        }
                     }
                 }
+                addSpan(ASpan.text(message).verde().small());
             }
-            else {
-                message = "Reset non previsto";
-            }
-            addSpan(ASpan.text(message).verde().small());
 
             if (lastDownload != null && lastDownload.get() instanceof LocalDateTime download) {
                 if (download.equals(ROOT_DATA_TIME)) {
@@ -373,11 +375,8 @@ public abstract class WikiView extends CrudView {
                         }
                     }
                 }
+                addSpan(ASpan.text(message).verde().small());
             }
-            else {
-                message = "Download non previsto";
-            }
-            addSpan(ASpan.text(message).verde().small());
 
             if (lastElaborazione != null && lastElaborazione.get() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
@@ -391,11 +390,8 @@ public abstract class WikiView extends CrudView {
                         }
                     }
                 }
+                addSpan(ASpan.text(message).verde().small());
             }
-            else {
-                message = "Elaborazione non prevista";
-            }
-            addSpan(ASpan.text(message).verde().small());
 
             if (lastUpload != null && lastUpload.get() instanceof LocalDateTime upload) {
                 if (upload.equals(ROOT_DATA_TIME)) {
@@ -410,11 +406,8 @@ public abstract class WikiView extends CrudView {
                         message += String.format(" Prossimo upload previsto %s.", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(next));
                     }
                 }
+                addSpan(ASpan.text(message).verde().small());
             }
-            else {
-                message = "Upload non previsto";
-            }
-            addSpan(ASpan.text(message).verde().small());
 
             if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
                 if (statistica.equals(ROOT_DATA_TIME)) {
@@ -488,6 +481,7 @@ public abstract class WikiView extends CrudView {
         if (usaBottoneDownload) {
             buttonDownload = new Button();
             buttonDownload.getElement().setAttribute("theme", "primary");
+            buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server wiki");
             buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
             buttonDownload.addClickListener(event -> resetDownload());
@@ -524,10 +518,10 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadModuloAlfabetizzato) {
             buttonUploadModulo = new Button();
-            buttonUploadModulo.getElement().setAttribute("theme", "secondary");
+            buttonUploadModulo.getElement().setAttribute("theme", "primary");
             buttonUploadModulo.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
-            buttonUploadModulo.setIcon(new Icon(VaadinIcon.UPLOAD));
+            buttonUploadModulo.setIcon(new Icon(VaadinIcon.REFRESH));
             buttonUploadModulo.addClickListener(event -> riordinaModulo());
             topPlaceHolder.add(buttonUploadModulo);
         }

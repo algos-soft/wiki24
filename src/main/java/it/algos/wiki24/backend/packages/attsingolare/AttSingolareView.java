@@ -95,20 +95,18 @@ public class AttSingolareView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = "Vengono aggiunte anche le 'attività' previste dal modulo 'ex-attività' sul server wiki.";
         addSpan(ASpan.text(message).verde());
-        message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
-        addSpan(ASpan.text(message).rosso());
+        message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo mentre mantengono spazi e caratteri accentati.";
+        addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
-        addSpan(ASpan.text(message).verde());
+//        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
+//        addSpan(ASpan.text(message).verde());
         message = String.format("Download%sCancella tutto e scarica 2 moduli wiki: %s%s%s.", FORWARD, PATH_SINGOLARE + PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%sCalcola le voci biografiche che usano ogni singola attività singolare.", FORWARD);
-        addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sNon previsto", FORWARD);
+        message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
-        message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload sono gestiti dalla task AttPlurale.";
-        addSpan(ASpan.text(message).rosso());
+        message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
+        addSpan(ASpan.text(message).rosso().small());
         message = String.format("Upload moduli%s2 moduli wiki riordinati in ordine alfabetico in %s e %s", FORWARD, "Utente:Biobot/ModuloPluraleAttivita", "Utente:Biobot/ModuloExAttivita");
         addSpan(ASpan.text(message).blue().small());
     }

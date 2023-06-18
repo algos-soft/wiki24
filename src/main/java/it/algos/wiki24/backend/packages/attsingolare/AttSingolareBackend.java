@@ -44,7 +44,7 @@ public class AttSingolareBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = null;
+        super.lastReset = WPref.downloadAttSingolare;
         super.lastDownload = WPref.downloadAttSingolare;
         super.durataDownload = WPref.downloadAttSingolareTime;
         super.lastElaborazione = WPref.elaboraAttSingolare;
