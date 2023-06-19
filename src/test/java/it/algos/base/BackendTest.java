@@ -203,7 +203,10 @@ public abstract class BackendTest extends AlgosTest {
         ottenutoRisultato = crudBackend.resetOnlyEmpty();
         assertNotNull(ottenutoRisultato);
         if (ottenutoRisultato.isValido()) {
-            System.out.println(ottenutoRisultato.getMessage());
+            if (textService.isValid(ottenutoRisultato.getMessage())){
+                System.out.println(ottenutoRisultato.getMessage());
+            }
+
             printRisultato(ottenutoRisultato);
 
             System.out.println(VUOTA);

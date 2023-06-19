@@ -181,8 +181,6 @@ public class NomeDoppioBackend extends WikiBackend {
         String tag = CAPO + "\\*";
         String nome;
         String[] righe = null;
-        List lista = new ArrayList();
-        AEntity entityBean;
 
         testoPagina = wikiApiService.legge(paginaNomiDoppi);
 
@@ -199,7 +197,7 @@ public class NomeDoppioBackend extends WikiBackend {
                 nome = nome.substring(0, nome.indexOf("\n\n"));
             }// end of if cycle
 
-            entityBean = insert(newEntity(nome));
+            creaIfNotExist(nome);
 
         }// end of for cycle
 

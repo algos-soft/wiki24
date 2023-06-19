@@ -147,6 +147,19 @@ public class NomeTemplateBackend extends WikiBackend {
         return super.findAllSort(sort);
     }
 
+
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+
+        //--Cancella la (eventuale) precedente lista di nomi template
+        deleteAll();
+
+        result = downloadNomiTemplate(result);
+
+        return super.fixResetDownload(result);
+    }
+
     /**
      * Legge i valori dalla pagina wiki: Template:Incipit lista nomi
      * Crea nomi template <br>
@@ -154,13 +167,11 @@ public class NomeTemplateBackend extends WikiBackend {
      * @return entities create
      */
     public AResult downloadNomiTemplate(AResult result) {
-        String paginaNomiDoppi = TAG_ANTROPONIMI + DOPPI;
+        String paginaNomiDoppi = TAG_INCIPIT_NOMI;
         String testoPagina;
         String tag = CAPO + "\\*";
         String nome;
         String[] righe = null;
-        List lista = new ArrayList();
-        AEntity entityBean;
 
         testoPagina = wikiApiService.legge(paginaNomiDoppi);
 
@@ -177,7 +188,7 @@ public class NomeTemplateBackend extends WikiBackend {
                 nome = nome.substring(0, nome.indexOf("\n\n"));
             }// end of if cycle
 
-            entityBean = insert(newEntity(nome));
+            creaIfNotExist(nome);
 
         }// end of for cycle
 

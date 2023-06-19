@@ -83,14 +83,14 @@ public class NomeTemplateView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Button button = new Button("Progetto");
-        button.addClickListener(click -> wikiApiService.openWikiPage(PATH_TABELLA_NOMI_DOPPI));
-        Button button2 = new Button("Categoria");
-        button2.addClickListener(click -> wikiApiService.openWikiPage(  "Categoria:Prenomi composti"));
-        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
+        Button button = new Button("Template");
+        button.addClickListener(click -> wikiApiService.openWikiPage(TAG_INCIPIT_NOMI));
+        alertPlaceHolder.add(new Span(fixButton(button)));
 
-        message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
+        message = "Sono elencate le pagine di riferimento per ogni nome (esempio: 'Archibald->Arcibaldo') da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
+        message = "I nomi mancanti nel template puntano, in automatico, ad una pagina con lo stesso nome.";
+        addSpan(ASpan.text(message).rosso().small());
     }
 
 }// end of crud @Route view class

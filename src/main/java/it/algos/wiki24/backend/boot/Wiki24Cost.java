@@ -155,7 +155,6 @@ public class Wiki24Cost {
     public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";
 
     public static final String TAG_ANTROPONIMI = "Progetto:Antroponimi/";
-
     public static final String PATH_ANTROPONIMI = PATH_WIKI + TAG_ANTROPONIMI;
 
     public static final String MESI_REGEX = "(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";

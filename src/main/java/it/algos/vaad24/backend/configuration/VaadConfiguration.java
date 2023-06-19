@@ -2,11 +2,6 @@ package it.algos.vaad24.backend.configuration;
 
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.wiki24.backend.packages.attplurale.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
-import it.algos.wiki24.backend.packages.nazplurale.*;
-import it.algos.wiki24.backend.packages.nazsingolare.*;
-import it.algos.wiki24.backend.service.*;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -39,22 +34,22 @@ public class VaadConfiguration {
         return new VaadBoot();
     }
 
-//    @Autowired
-//    TextService textService;
-//
-//    @Autowired
-//    AnnotationService annotationService;
+    //    @Autowired
+    //    TextService textService;
+    //
+    //    @Autowired
+    //    AnnotationService annotationService;
 
 
-//    @Bean
-//    public  TextService getTextServiceBean() {
-//        return textService;
-//    }
+    //    @Bean
+    //    public  TextService getTextServiceBean() {
+    //        return textService;
+    //    }
 
-//    @Bean
-//    public  AnnotationService getAnnotationServiceBean() {
-//        return annotationService;
-//    }
+    //    @Bean
+    //    public  AnnotationService getAnnotationServiceBean() {
+    //        return annotationService;
+    //    }
 
     //    @Autowired
     //    Pref.PreferenzaServiceInjector preferenzaServiceInjector;
@@ -72,44 +67,38 @@ public class VaadConfiguration {
     //    }
 
     //    static {
-        public static void START() {
+    public static void START() {
 
-            LogService.debugBean(new VaadCost());
-            //        new Pref.PreferenzaServiceInjector();
-    //        for (Pref pref : Pref.getAllEnums()) {
-    ////
-    ////            LogService.debugBean(pref);
-    ////        }
-    //
-    //            LogService.debugBean(pref);
-    //    }
+        LogService.debugBean(new VaadCost());
+        //        new Pref.PreferenzaServiceInjector();
+        //        for (Pref pref : Pref.getAllEnums()) {
+        ////
+        ////            LogService.debugBean(pref);
+        ////        }
+        //
+        //            LogService.debugBean(pref);
+        //    }
 
-            LogService.debugBean(new VaadBoot());
-            LogService.debugBean(new PreferenceService());
-            LogService.debugBean(new VaadData());
-            LogService.debugBean(new VaadPref());
-            LogService.debugBean(new VaadVar());
-            LogService.debugBean(new VaadVers());
-            LogService.debugBean(new AnnotationService());
-            LogService.debugBean(new ArrayService());
-            LogService.debugBean(new ClassService());
-            LogService.debugBean(new ColumnService());
-            LogService.debugBean(new FileService());
-            LogService.debugBean(new HtmlService());
-            LogService.debugBean(new MailService());
-            LogService.debugBean(new MathService());
-            LogService.debugBean(new ReflectionService());
-            LogService.debugBean(new RegexService());
-            LogService.debugBean(new ResourceService());
-            LogService.debugBean(new RouteService());
-            LogService.debugBean(new TextService());
-            LogService.debugBean(new UtilityService());
-            LogService.debugBean(new WikiBotService());
-            LogService.debugBean(new WikiApiService());
-            LogService.debugBean(new NazSingolareBackend());
-            LogService.debugBean(new NazPluraleBackend());
-            LogService.debugBean(new AttSingolareBackend());
-            LogService.debugBean(new AttPluraleBackend());
-        }
+        LogService.debugBean(new VaadBoot());
+        LogService.debugBean(new PreferenceService());
+        LogService.debugBean(new VaadData());
+        LogService.debugBean(new VaadPref());
+        LogService.debugBean(new VaadVar());
+        LogService.debugBean(new VaadVers());
+        LogService.debugBean(new AnnotationService());
+        LogService.debugBean(new ArrayService());
+        LogService.debugBean(new ClassService());
+        LogService.debugBean(new ColumnService());
+        LogService.debugBean(new FileService());
+        LogService.debugBean(new HtmlService());
+        LogService.debugBean(new MailService());
+        LogService.debugBean(new MathService());
+        LogService.debugBean(new ReflectionService());
+        LogService.debugBean(new RegexService());
+        LogService.debugBean(new ResourceService());
+        LogService.debugBean(new RouteService());
+        LogService.debugBean(new TextService());
+        LogService.debugBean(new UtilityService());
+    }
 
 }
