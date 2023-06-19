@@ -1,8 +1,13 @@
 package it.algos.wiki24.backend.packages.nomitemplate;
 
+import com.vaadin.flow.component.button.*;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -27,7 +32,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @PageTitle("NomiTemplate")
 @Route(value = "nometemplate", layout = MainLayout.class)
-public class NomeTemplateView extends CrudView {
+public class NomeTemplateView extends WikiView {
 
 
     //--per eventuali metodi specifici
@@ -57,6 +62,17 @@ public class NomeTemplateView extends CrudView {
 
         super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina");
         super.formPropertyNamesList = Arrays.asList("nome", "linkPagina");
+
+        super.usaBottoneReset = false;
+        super.usaReset = true;
+        super.usaBottoneDownload = true;
+        super.usaBottoneNew = true;
+        super.usaBottoneEdit = true;
+        super.usaBottoneTest = false;
+        super.usaBottoneDeleteEntity = false;
+        super.usaBottoneUploadAll = false;
+        super.usaBottonePaginaWiki = false;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -66,7 +82,15 @@ public class NomeTemplateView extends CrudView {
     @Override
     public void fixAlert() {
         super.fixAlert();
-        addSpan(ASpan.text("Prova di colore").verde());
+
+        Button button = new Button("Progetto");
+        button.addClickListener(click -> wikiApiService.openWikiPage(PATH_TABELLA_NOMI_DOPPI));
+        Button button2 = new Button("Categoria");
+        button2.addClickListener(click -> wikiApiService.openWikiPage(  "Categoria:Prenomi composti"));
+        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
+
+        message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
+        addSpan(ASpan.text(message).verde());
     }
 
 }// end of crud @Route view class

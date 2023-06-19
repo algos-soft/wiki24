@@ -30,7 +30,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Tag("backend")
 @DisplayName("NomeDoppio Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NomeDoppioBackendTest extends BackendTest {
+public class NomeDoppioBackendTest extends WikiBackendTest {
 
     @InjectMocks
     private NomeDoppioBackend backend;
@@ -42,16 +42,27 @@ public class NomeDoppioBackendTest extends BackendTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNotNull(backend);
+        this.backend = super.nomeDoppioBackend;
         super.entityClazz = NomeDoppio.class;
+        super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
+        super.wikiBackend = backend;
+        super.nomeModulo = "nomedoppio";
 
         super.setUpAll();
     }
 
+
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+    }
+
+    @Test
+    @Order(75)
+    @DisplayName("75 - findAllDistinctByPlurali")
+    protected void findAllDistinctByPlurali() {
+        System.out.println("75 - findAllDistinctByPlurali (non previsto per questa collection)");
     }
 
 }

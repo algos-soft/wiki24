@@ -1,8 +1,13 @@
 package it.algos.wiki24.backend.packages.nomitemplate;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
@@ -30,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
-public class NomeTemplateBackend extends CrudBackend {
+public class NomeTemplateBackend extends WikiBackend {
 
 
     public NomeTemplateBackend() {
@@ -40,6 +45,10 @@ public class NomeTemplateBackend extends CrudBackend {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastReset = WPref.downloadNomiTemplate;
+        super.lastDownload = WPref.downloadNomiTemplate;
+        this.unitaMisuraDownload = AETypeTime.secondi;
     }
 
     /**
@@ -136,6 +145,43 @@ public class NomeTemplateBackend extends CrudBackend {
     @Override
     public List<NomeTemplate> findAllSort(Sort sort) {
         return super.findAllSort(sort);
+    }
+
+    /**
+     * Legge i valori dalla pagina wiki: Template:Incipit lista nomi
+     * Crea nomi template <br>
+     *
+     * @return entities create
+     */
+    public AResult downloadNomiTemplate(AResult result) {
+        String paginaNomiDoppi = TAG_ANTROPONIMI + DOPPI;
+        String testoPagina;
+        String tag = CAPO + "\\*";
+        String nome;
+        String[] righe = null;
+        List lista = new ArrayList();
+        AEntity entityBean;
+
+        testoPagina = wikiApiService.legge(paginaNomiDoppi);
+
+        if (textService.isValid(testoPagina)) {
+            righe = testoPagina.split(tag);
+        }// end of if cycle
+
+        //--il primo va eliminato (non pertinente)
+        for (int k = 1; k < righe.length; k++) {
+            nome = righe[k];
+
+            //--l'ultimo va troncato
+            if (k == righe.length - 1) {
+                nome = nome.substring(0, nome.indexOf("\n\n"));
+            }// end of if cycle
+
+            entityBean = insert(newEntity(nome));
+
+        }// end of for cycle
+
+        return result;
     }
 
 }// end of crud backend class

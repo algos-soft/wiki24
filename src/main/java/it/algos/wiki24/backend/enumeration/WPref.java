@@ -84,6 +84,7 @@ public enum WPref implements AIGenPref {
 
 
     downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
+    downloadNomiTemplate("downloadNomiTemplate", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
     downloadNomi("downloadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
     downloadNomiTime("downloadNomiTime", AETypePref.integer, 0, "Durata download dei nomi."),
     sogliaNomiMongo("sogliaNomiMongo", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Nomi sul mongoDB", false),

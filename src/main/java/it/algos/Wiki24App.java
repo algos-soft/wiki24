@@ -6,6 +6,7 @@ import com.vaadin.flow.theme.Theme;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.configuration.*;
 import it.algos.wiki24.backend.boot.*;
+import it.algos.wiki24.backend.configuration.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +29,7 @@ public class Wiki24App implements AppShellConfigurator {
     public static void main(String[] args) {
         VaadBoot.start();
         Wiki24Boot.start();
-        VaadConfiguration.START();
+        Wiki24Configuration.START();
         SpringApplication.run(Wiki24App.class, args);
     }
 

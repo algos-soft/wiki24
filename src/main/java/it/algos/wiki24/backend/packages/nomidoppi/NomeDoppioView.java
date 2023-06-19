@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.nomidoppi;
 
+import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
@@ -62,10 +63,13 @@ public class NomeDoppioView extends WikiView {
         super.usaBottoneReset = false;
         super.usaReset = true;
         super.usaBottoneDownload = true;
+        super.usaBottoneNew = true;
+        super.usaBottoneEdit = true;
         super.usaBottoneTest = false;
         super.usaBottoneDeleteEntity = false;
         super.usaBottoneUploadAll = false;
         super.usaBottonePaginaWiki = false;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -75,35 +79,28 @@ public class NomeDoppioView extends WikiView {
     @Override
     public void fixAlert() {
         super.fixAlert();
-        String progetto = PATH_WIKI + PATH_TABELLA_NOMI_DOPPI;
-        String categoria = PATH_CATEGORIA + "Prenomi composti";
 
-        Anchor anchor1 = new Anchor(progetto, "Progetto");
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor2 = new Anchor(categoria, "Categoria");
-        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
+        Button button = new Button("Progetto");
+        button.addClickListener(click -> wikiApiService.openWikiPage(PATH_TABELLA_NOMI_DOPPI));
+        Button button2 = new Button("Categoria");
+        button2.addClickListener(click -> wikiApiService.openWikiPage(  "Categoria:Prenomi composti"));
+        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
         addSpan(ASpan.text(message).verde());
 
         message = String.format("I nomi doppi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
-        addSpan(ASpan.text(message).rosso());
+        addSpan(ASpan.text(message).rosso().small());
         message = "Quando si crea la lista nomi, i nomi doppi vengono scaricati e aggiunti alla lista stessa.";
-        addSpan(ASpan.text(message).rosso());
+        addSpan(ASpan.text(message).rosso().small());
         
-        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
-        addSpan(ASpan.text(message).verde());
         message = String.format("Download%sCancella tutto e scarica la lista wiki: %s.", FORWARD, "Antroponimi/Nomi doppi");
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%sNon previsto.", FORWARD);
-        addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sNon previsto", FORWARD);
-        addSpan(ASpan.text(message).verde());
 
-        message = "L'elaborazione delle liste biografiche è gestito dalla task Nome.";
-        addSpan(ASpan.text(message).rosso());
+        message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico in %s. Se non si vogliono le modifiche, fare prima un Download", FORWARD, "Utente:Biobot/NomiDoppi");
+        addSpan(ASpan.text(message).blue().small());
     }
 
 }// end of crud @Route view class

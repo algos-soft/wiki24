@@ -7,6 +7,9 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.moduli.*;
+import it.algos.wiki24.backend.upload.progetto.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -38,7 +41,7 @@ public class NomeDoppioBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = null;
+        super.lastReset = WPref.downloadNomiDoppi;
         super.lastDownload = WPref.downloadNomiDoppi;
         this.unitaMisuraDownload = AETypeTime.secondi;
     }
@@ -61,9 +64,7 @@ public class NomeDoppioBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param ordine      di presentazione nel popup/combobox (obbligatorio, unico)
-     * @param code        (obbligatorio, unico)
-     * @param descrizione (obbligatorio)
+     * @param nome        (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
@@ -201,6 +202,18 @@ public class NomeDoppioBackend extends WikiBackend {
             entityBean = insert(newEntity(nome));
 
         }// end of for cycle
+
+        return result;
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public WResult riordinaModulo() {
+        WResult result;
+
+        result = appContext.getBean(UploadProgettoAntroponimiNomiDoppi.class).uploadOrdinatoConModifiche();
+        super.fixRiordinaModulo(result);
 
         return result;
     }

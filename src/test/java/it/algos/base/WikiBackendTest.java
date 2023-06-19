@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.nomidoppi.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -62,7 +63,11 @@ public abstract class WikiBackendTest extends BackendTest {
     protected NazPluraleBackend nazPluraleBackend;
 
     @Autowired
+    protected NomeDoppioBackend nomeDoppioBackend;
+
+    @Autowired
     protected NomeBackend nomeBackend;
+
 
     protected WResult wResult;
 
@@ -185,6 +190,7 @@ public abstract class WikiBackendTest extends BackendTest {
         assertNotNull(attPluraleBackend);
         assertNotNull(nazSingolareBackend);
         assertNotNull(nazPluraleBackend);
+        assertNotNull(nomeDoppioBackend);
         assertNotNull(nomeBackend);
 
         super.crudBackend = wikiBackend;

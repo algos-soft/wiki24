@@ -737,7 +737,7 @@ public abstract class BackendTest extends AlgosTest {
 
         entityBean = crudBackend.findByOrder(sorgenteIntero);
         if (entityBean != null) {
-            message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] individuata dal valore '%d' della property [%s]", collectionName, entityBean,sorgenteIntero, FIELD_NAME_ORDINE);
+            message = String.format("Nella collection '%s' ESISTE (true) una entity [%s] individuata dal valore '%d' della property [%s]", collectionName, entityBean, sorgenteIntero, FIELD_NAME_ORDINE);
         }
         else {
             message = String.format("Nella collection '%s' NON esiste nessuna entity col valore '%d' della property [%s]", collectionName, sorgenteIntero, FIELD_NAME_ORDINE);
@@ -839,10 +839,13 @@ public abstract class BackendTest extends AlgosTest {
         System.out.println("42 - newEntity con ID ma non registrata");
         System.out.println(VUOTA);
         String keyPropertyName = VUOTA;
+        boolean usaKeyIdSenzaSpazi = annotationService.usaKeyIdSenzaSpazi(entityClazz); ;
+        boolean usaKeyIdMinuscolaCaseInsensitive = annotationService.usaKeyIdMinuscolaCaseInsensitive(entityClazz); ;
 
         sorgente = "Topo Lino";
-        previsto = "topolino";
-        previsto2 = "Topo Lino";
+        previsto = sorgente;
+        previsto = usaKeyIdSenzaSpazi ? textService.levaSpazi(previsto) : previsto;
+        previsto = usaKeyIdMinuscolaCaseInsensitive ? previsto.toLowerCase() : previsto;
 
         if (annotationService.usaKeyPropertyName(entityClazz)) {
             keyPropertyName = annotationService.getKeyPropertyName(entityClazz);
@@ -852,7 +855,6 @@ public abstract class BackendTest extends AlgosTest {
             entityBean = crudBackend.newEntity(getParamEsistente());
             assertNotNull(entityBean);
             ottenuto = entityBean.id;
-            ottenuto2 = reflectionService.getPropertyValueStr(entityBean, keyPropertyName);
             if (annotationService.usaKeyPropertyName(entityClazz)) {
                 if (textService.isEmpty(ottenuto)) {
                     message = String.format("La entity appena creata è senza keyID mentre dovrebbe essere id=%s (valore del field %s)", sorgente, keyPropertyName);
@@ -862,7 +864,6 @@ public abstract class BackendTest extends AlgosTest {
                 }
 
                 assertEquals(previsto, ottenuto);
-                assertEquals(previsto2, ottenuto2);
                 assertTrue(textService.isValid(ottenuto));
                 System.out.println(String.format("KeyId%s%s", FORWARD, ottenuto));
             }

@@ -423,6 +423,7 @@ public class QueryWrite extends AQuery {
 
         result.setModificata(modificata);
         if (modificata) {
+            result.eseguito(true);
             result.setValidMessage("Pagina modificata");
         }
         else {

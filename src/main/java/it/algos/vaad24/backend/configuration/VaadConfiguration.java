@@ -71,15 +71,18 @@ public class VaadConfiguration {
     //        return new ArrayService();
     //    }
 
-//        static {
+    //    static {
         public static void START() {
 
             LogService.debugBean(new VaadCost());
             //        new Pref.PreferenzaServiceInjector();
     //        for (Pref pref : Pref.getAllEnums()) {
+    ////
+    ////            LogService.debugBean(pref);
+    ////        }
     //
     //            LogService.debugBean(pref);
-    //        }
+    //    }
 
             LogService.debugBean(new VaadBoot());
             LogService.debugBean(new PreferenceService());
