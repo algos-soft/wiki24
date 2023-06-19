@@ -1,13 +1,18 @@
 package it.algos.wiki24.backend.packages.attsingolare;
 
 import ch.carnet.kasparscherrer.*;
+import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.ui.components.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -82,14 +87,12 @@ public class AttSingolareView extends WikiView {
     @Override
     public void fixAlert() {
         super.fixAlert();
-        String modulo = PATH_WIKI + PATH_MODULO;
 
-        Anchor anchor1 = new Anchor(modulo + PATH_PLURALE + ATT_LOWER, ATT + " singolare/plurale");
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor2 = new Anchor(modulo + PATH_EX + ATT_LOWER, PATH_EX + ATT_LOWER);
-        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2));
+        Button button = new Button(ATT + " singolare/plurale");
+        button.addClickListener(click -> wikiApiService.openWikiPage(PATH_MODULO_ATTIVITA));
+        Button button2 = new Button(PATH_EX + ATT_LOWER);
+        button2.addClickListener(click -> wikiApiService.openWikiPage(PATH_MODULO + PATH_EX + ATT_LOWER));
+        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Tabella attività singolari del (primo) parametro 'attività' recuperate dal modulo 'singolare/plurale' sul server wiki.";
         addSpan(ASpan.text(message).verde());
@@ -98,8 +101,6 @@ public class AttSingolareView extends WikiView {
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo mentre mantengono spazi e caratteri accentati.";
         addSpan(ASpan.text(message).rosso().small());
 
-//        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
-//        addSpan(ASpan.text(message).verde());
         message = String.format("Download%sCancella tutto e scarica 2 moduli wiki: %s%s%s.", FORWARD, PATH_SINGOLARE + PATH_PLURALE + ATT_LOWER, VIRGOLA_SPAZIO, PATH_EX + ATT_LOWER);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
@@ -122,6 +123,12 @@ public class AttSingolareView extends WikiView {
         if (searchField != null) {
             searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
         }
+
+        searchFieldPlurale = new TextField();
+        searchFieldPlurale.setPlaceholder(TAG_ALTRE_BY + "plurale");
+        searchFieldPlurale.setClearButtonVisible(true);
+        searchFieldPlurale.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(searchFieldPlurale);
     }
 
     protected void fixBottoniTopSpecifici() {
@@ -145,6 +152,22 @@ public class AttSingolareView extends WikiView {
 
         if (boxBox != null && !boxBox.isIndeterminate()) {
             items = items.stream().filter(att -> att.ex == boxBox.getValue()).toList();
+        }
+
+        final String textSearchPlurale = searchFieldPlurale != null ? searchFieldPlurale.getValue() : VUOTA;
+        if (textService.isValidNoSpace(textSearchPlurale)) {
+            items = items
+                    .stream()
+                    .filter(att -> att.plurale != null ? att.plurale.matches("^(?i)" + textSearchPlurale + ".*$") : false)
+                    .toList();
+        }
+        else {
+            if (textSearchPlurale.equals(SPAZIO)) {
+                items = items
+                        .stream()
+                        .filter(att -> att.plurale == null)
+                        .toList();
+            }
         }
 
         if (items != null) {

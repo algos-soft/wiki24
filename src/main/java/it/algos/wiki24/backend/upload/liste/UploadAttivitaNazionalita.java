@@ -1,10 +1,11 @@
-package it.algos.wiki24.backend.upload;
+package it.algos.wiki24.backend.upload.liste;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 
 import java.util.*;

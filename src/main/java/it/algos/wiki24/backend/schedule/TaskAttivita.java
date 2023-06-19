@@ -7,7 +7,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
-import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;

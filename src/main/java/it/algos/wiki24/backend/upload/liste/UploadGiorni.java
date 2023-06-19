@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.upload;
+package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;

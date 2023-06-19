@@ -5,6 +5,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
@@ -204,11 +205,12 @@ public abstract class WikiView extends CrudView {
     @Autowired
     public DateService dateService;
 
+    protected TextField searchFieldSingolare;
+
     protected TextField searchFieldPlurale;
 
     protected TextField searchFieldWikiTitle;
 
-    protected TextField searchFieldSingolare;
 
     protected TextField searchFieldParagrafo;
 
@@ -810,6 +812,18 @@ public abstract class WikiView extends CrudView {
 
 
     protected void sincroCancellare() {
+    }
+
+    /**
+     * Costruisce il corpo principale (obbligatorio) della Grid <br>
+     * <p>
+     * Metodo chiamato da CrudView.afterNavigation() <br>
+     * Costruisce un' istanza dedicata con la Grid <br>
+     */
+    @Override
+    protected void fixBodyLayout() {
+        super.fixBodyLayout();
+        grid.addThemeVariants(GridVariant.LUMO_COMPACT);
     }
 
     protected void fixBottomLayout() {

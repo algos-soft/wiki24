@@ -44,7 +44,7 @@ public class AttSingolare extends AEntity {
     @AIField(type = AETypeField.text, widthEM = 20)
     public String plurale;
 
-    @AIField(type = AETypeField.booleano, headerIcon = VaadinIcon.ADD_DOCK, caption = "aggiunta (ex-attività)", usaCheckBox3Vie = true)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkBox, caption = "aggiunta (ex-attività)", usaCheckBox3Vie = true)
     public boolean ex;
 
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questa singola nazionalità", widthEM = 6)

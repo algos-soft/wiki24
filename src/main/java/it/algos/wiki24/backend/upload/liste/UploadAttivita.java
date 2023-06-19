@@ -1,11 +1,11 @@
-package it.algos.wiki24.backend.upload;
+package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
-import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -49,8 +49,8 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
      */
     public UploadAttivita() {
         super.summary = "[[Utente:Biobot/attivitàBio|attivitàBio]]";
-        super.titoloLinkParagrafo = TITOLO_LINK_PARAGRAFO_NAZIONALITA;
-        super.titoloLinkVediAnche = TITOLO_LINK_PARAGRAFO_ATTIVITA;
+        super.titoloLinkParagrafo = Upload.TITOLO_LINK_PARAGRAFO_NAZIONALITA;
+        super.titoloLinkVediAnche = Upload.TITOLO_LINK_PARAGRAFO_ATTIVITA;
         super.typeCrono = AETypeLista.attivitaPlurale;
         super.lastUpload = WPref.uploadAttPlurale;
         super.durataUpload = WPref.uploadAttPluraleTime;
@@ -73,7 +73,7 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append("Questa");
-        buffer.append(textService.setRef(INFO_PAGINA_ATTIVITA));
+        buffer.append(textService.setRef(Upload.INFO_PAGINA_ATTIVITA));
         buffer.append(" è una lista");
         buffer.append(textService.setRef(INFO_DIDASCALIE));
         buffer.append(textService.setRef(INFO_ORDINE));
@@ -85,7 +85,7 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         buffer.append(textService.setRef(INFO_ATTIVITA_PREVISTE));
         buffer.append(String.format(" quella di '''%s'''.", nomeLista));
         buffer.append(" Le persone sono suddivise");
-        buffer.append(textService.setRef(INFO_PARAGRAFI_NAZIONALITA));
+        buffer.append(textService.setRef(Upload.INFO_PARAGRAFI_NAZIONALITA));
         buffer.append(" per nazionalità.");
         buffer.append(textService.setRef(INFO_NAZIONALITA_PREVISTE));
         if (mappaWrap.containsKey(TAG_LISTA_NO_NAZIONALITA)) {

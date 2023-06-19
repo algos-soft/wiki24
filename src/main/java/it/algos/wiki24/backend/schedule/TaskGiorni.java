@@ -4,7 +4,7 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;

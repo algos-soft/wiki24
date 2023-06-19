@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.nome;
 
 import ch.carnet.kasparscherrer.*;
+import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -200,23 +201,28 @@ public class NomeView extends WikiView {
         super.addColumnsOneByOne();
         int sogliaWiki = WPref.sogliaNomiWiki.getInt();
 
-        grid.addColumn(new ComponentRenderer<>(entity -> {
+        grid.addComponentColumn(entity -> {
             String wikiTitle = textService.primaMaiuscola(((Nome) entity).paginaLista);
-            Anchor anchor = new Anchor(PATH_WIKI + wikiTitle, wikiTitle);
-            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+            Button button = new Button(wikiTitle, click -> {
+                wikiApiService.openWikiPage(wikiTitle);
+            });
             if (((Nome) entity).numBio < sogliaWiki) {
-                anchor.getElement().getStyle().set("color", "red");
+                button.getStyle().set("color", "red");
             }
             else {
                 if (((Nome) entity).isEsisteLista()) {
-                    anchor.getElement().getStyle().set("color", "green");
+                    button.getStyle().set("color", "green");
                 }
                 else {
-                    anchor.getElement().getStyle().set("color", "blue");
+                    button.getStyle().set("color", "blue");
                 }
             }
-            return new Span(anchor);
-        })).setHeader("PaginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
+            button.getStyle().set("margin-top", "0");
+            button.getStyle().set("margin-bottom", "0");
+            button.getStyle().set("background-color", "transparent");
+
+            return button;
+        }).setHeader("PaginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
     }
 
 
