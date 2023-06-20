@@ -2,12 +2,15 @@ package it.algos.wiki24.backend.packages.nomitemplate;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.progetto.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
@@ -51,6 +54,18 @@ public class NomeTemplateBackend extends WikiBackend {
         this.unitaMisuraDownload = AETypeTime.secondi;
     }
 
+    public AEntity creaIfNotExist(final String keyPropertyValue, String linkPagina) {
+        AEntity entityBean;
+
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+        else {
+            entityBean = newEntity(keyPropertyValue, linkPagina);
+            return entityBean != null ? insert(entityBean) : null;
+        }
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -59,7 +74,7 @@ public class NomeTemplateBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public NomeTemplate newEntity() {
-        return newEntity(0, VUOTA, VUOTA);
+        return newEntity( VUOTA, VUOTA);
     }
 
     /**
@@ -69,7 +84,7 @@ public class NomeTemplateBackend extends WikiBackend {
      */
     @Override
     public NomeTemplate newEntity(final String keyPropertyValue) {
-        return newEntity(0, keyPropertyValue, VUOTA);
+        return newEntity(keyPropertyValue, VUOTA);
     }
 
     /**
@@ -78,14 +93,15 @@ public class NomeTemplateBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param ordine      di presentazione nel popup/combobox (obbligatorio, unico)
-     * @param code        (obbligatorio, unico)
-     * @param descrizione (obbligatorio)
+     * @param nome        (obbligatorio, unico)
+     * @param linkPagina (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NomeTemplate newEntity(final int ordine, final String code, final String descrizione) {
+    public NomeTemplate newEntity( final String nome, final String linkPagina) {
         NomeTemplate newEntityBean = NomeTemplate.builder()
+                .nome(textService.isValid(nome) ? nome : null)
+                .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .build();
 
         return (NomeTemplate) super.fixKey(newEntityBean);
@@ -169,28 +185,55 @@ public class NomeTemplateBackend extends WikiBackend {
     public AResult downloadNomiTemplate(AResult result) {
         String paginaNomiDoppi = TAG_INCIPIT_NOMI;
         String testoPagina;
-        String tag = CAPO + "\\*";
+        String testoCore;
         String nome;
+        String linkPagina;
         String[] righe = null;
+        String[] parti = null;
+        String tagIni = "switch:{{{nome}}}";
+        String tagEnd = "|#default";
+        AEntity entityBean;
+        List<AEntity> lista = new ArrayList<>();
 
         testoPagina = wikiApiService.legge(paginaNomiDoppi);
-
-        if (textService.isValid(testoPagina)) {
-            righe = testoPagina.split(tag);
+        testoCore = textService.estrae(testoPagina, tagIni, tagEnd);
+        if (textService.isValid(testoCore)) {
+            if (testoCore.startsWith(PIPE)) {
+                testoCore = textService.levaTesta(testoCore, PIPE);
+            }
+            righe = testoCore.split(PIPE_REGEX);
         }// end of if cycle
 
-        //--il primo va eliminato (non pertinente)
-        for (int k = 1; k < righe.length; k++) {
-            nome = righe[k];
+        //--valori validi
+        for (int k = 0; k < righe.length; k++) {
+            parti = righe[k].split(UGUALE);
+            if (parti.length == 2) {
+                nome = parti[0].trim();
+                linkPagina = parti[1].trim();
 
-            //--l'ultimo va troncato
-            if (k == righe.length - 1) {
-                nome = nome.substring(0, nome.indexOf("\n\n"));
-            }// end of if cycle
-
-            creaIfNotExist(nome);
-
+                entityBean = creaIfNotExist(nome, linkPagina);
+                if (entityBean != null) {
+                    lista.add(entityBean);
+                }
+                else {
+                    logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                    result.setValido(false);
+                }
+            }
         }// end of for cycle
+
+        return super.fixResult(result, lista);
+    }
+
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public WResult riordinaModulo() {
+        WResult result;
+
+        result = appContext.getBean(UploadProgettoAntroponimiNomiTemplate.class).uploadOrdinatoConModifiche();
+        super.fixRiordinaModulo(result);
 
         return result;
     }

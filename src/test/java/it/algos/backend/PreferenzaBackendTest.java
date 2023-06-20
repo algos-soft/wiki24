@@ -23,7 +23,6 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("backendx")
 @DisplayName("Preferenza Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PreferenzaBackendTest extends AlgosTest {

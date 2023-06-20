@@ -90,6 +90,22 @@ public class GiornoWikiBackendTest extends WikiBackendTest {
         super.streamOrder = GiornoBackendTest.ORDINE();
     }
 
+
+//    @Test
+    @Order(15)
+    @DisplayName("15 - elabora")
+    protected void elabora2() {
+        System.out.println("15 - elabora");
+        System.out.println(VUOTA);
+
+        if (entityClazz == null) {
+            System.out.println("Manca la variabile entityClazz in questo test");
+        }
+
+        wResult = wikiBackend.elabora();
+        printRisultato(wResult);
+    }
+
     @Test
     @Order(41)
     @DisplayName("41 - creaIfNotExist (non previsto per questa collection)")

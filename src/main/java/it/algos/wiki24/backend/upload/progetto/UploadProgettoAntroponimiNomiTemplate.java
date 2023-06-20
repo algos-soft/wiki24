@@ -4,12 +4,11 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.nomidoppi.*;
+import it.algos.wiki24.backend.packages.nomitemplate.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -17,15 +16,15 @@ import java.util.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Mon, 19-Jun-2023
- * Time: 07:51
+ * Date: Tue, 20-Jun-2023
+ * Time: 07:10
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
+public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
 
     @Autowired
-    private NomeDoppioBackend backend;
+    private NomeTemplateBackend backend;
 
 
     /**
@@ -34,9 +33,9 @@ public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadProgettoAntroponimiNomiDoppi() {
-        super.wikiTitleModulo = PATH_TABELLA_NOMI_DOPPI;
-        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "NomiDoppi";
+    public UploadProgettoAntroponimiNomiTemplate() {
+        super.wikiTitleModulo = TAG_INCIPIT_NOMI;
+        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "IncipitNomi";
     }// end of constructor
 
     /**
@@ -75,3 +74,4 @@ public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
 
 
 }
+

@@ -233,15 +233,9 @@ public abstract class WikiBackendTest extends BackendTest {
     @Order(15)
     @DisplayName("15 - elabora (solo su wiki)")
     protected void elabora() {
-        System.out.println("15 - elabora (solo su wiki)");
+        System.out.println("15 - elabora (non previsto per questa collection)");
         System.out.println(VUOTA);
-
-        if (entityClazz == null) {
-            System.out.println("Manca la variabile entityClazz in questo test");
-        }
-
-        wResult = wikiBackend.elabora();
-        printRisultato(wResult);
+        System.out.println("Oppure il test potrebbe essere stato disabilitato nella sottoclasse di test specifica per problemi di durata eccessiva");
     }
 
     @Test

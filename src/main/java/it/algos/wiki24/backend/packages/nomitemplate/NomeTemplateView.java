@@ -4,6 +4,7 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -91,6 +92,70 @@ public class NomeTemplateView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = "I nomi mancanti nel template puntano, in automatico, ad una pagina con lo stesso nome.";
         addSpan(ASpan.text(message).rosso().small());
+
+        message = String.format("I nomi template mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
+        addSpan(ASpan.text(message).rosso().small());
+        message = "Quando si crea la lista nomi, i nomi template vengono scaricati e aggiunti alla lista stessa.";
+        addSpan(ASpan.text(message).rosso().small());
+
+        message = String.format("Download%sCancella tutto e scarica il template wiki: %s.", FORWARD, TAG_INCIPIT_NOMI);
+        addSpan(ASpan.text(message).verde());
+
+        message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico in %s. Se non si vogliono le modifiche, fare prima un Download", FORWARD, "Utente:Biobot/IncipitNomi");
+        addSpan(ASpan.text(message).blue().small());
+    }
+
+    /**
+     * Bottoni standard (solo icone) Reset, New, Edit, Delete, ecc.. <br>
+     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixBottoniTopStandard() {
+        super.fixBottoniTopStandard();
+
+        if (searchField != null) {
+            searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
+        }
+
+        searchFieldPagina = new TextField();
+        searchFieldPagina.setPlaceholder(TAG_ALTRE_BY + "link");
+        searchFieldPagina.setClearButtonVisible(true);
+        searchFieldPagina.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(searchFieldPagina);
+    }
+
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<NomeTemplate> items = (List) super.sincroFiltri();
+
+
+        final String textSearchPagina = searchFieldPagina != null ? searchFieldPagina.getValue() : VUOTA;
+        if (textService.isValidNoSpace(textSearchPagina)) {
+            items = items
+                    .stream()
+                    .filter(bean -> ((String) reflectionService.getPropertyValue(bean, searchFieldName)).matches("^(?i)" + textSearchPagina + ".*$"))
+                    .toList();
+        }
+        else {
+            if (textSearchPagina.equals(SPAZIO)) {
+                items = items
+                        .stream()
+                        .filter(nome -> nome.linkPagina == null)
+                        .toList();
+            }
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
     }
 
 }// end of crud @Route view class

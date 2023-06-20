@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.nomidoppi;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -64,7 +65,7 @@ public class NomeDoppioBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome        (obbligatorio, unico)
+     * @param nome (obbligatorio, unico)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
@@ -181,6 +182,8 @@ public class NomeDoppioBackend extends WikiBackend {
         String tag = CAPO + "\\*";
         String nome;
         String[] righe = null;
+        AEntity entityBean;
+        List<AEntity> lista = new ArrayList<>();
 
         testoPagina = wikiApiService.legge(paginaNomiDoppi);
 
@@ -197,11 +200,24 @@ public class NomeDoppioBackend extends WikiBackend {
                 nome = nome.substring(0, nome.indexOf("\n\n"));
             }// end of if cycle
 
-            creaIfNotExist(nome);
-
+            entityBean = creaIfNotExist(nome);
+            if (entityBean != null) {
+                lista.add(entityBean);
+            }
+            else {
+                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
+                result.setValido(false);
+            }
         }// end of for cycle
 
-        return result;
+        return super.fixResult(result, lista);
+    }
+
+    public String pippoz() {
+        String testino=VUOTA;
+
+
+        return testino;
     }
 
     /**
