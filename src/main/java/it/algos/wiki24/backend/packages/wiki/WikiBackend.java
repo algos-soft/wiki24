@@ -270,6 +270,41 @@ public abstract class WikiBackend extends CrudBackend {
         return WResult.build().method("download").target(getClass().getSimpleName());
     }
 
+    public boolean fixLista(List<AEntity> lista, AEntity entityBean, String entityBeanID) {
+        if (entityBean != null) {
+            lista.add(entityBean);
+            return true;
+        }
+        else {
+            logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", entityBeanID))).usaDb());
+            return false;
+        }
+    }
+
+    public List<String> getRighe(String wikiTitleGrezzo, String tagIni, String tagEnd, String tag) {
+        String testoCore;
+        String[] righe;
+
+        testoCore = getCore(wikiTitleGrezzo, tagIni, tagEnd);
+        righe = testoCore.split(tag);
+
+        return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
+    }
+
+    public String getCore(String wikiTitleGrezzo, String tagIni, String tagEnd) {
+        String testoPaginaAll;
+        String testoCore;
+
+        testoPaginaAll = wikiApiService.legge(wikiTitleGrezzo);
+        testoCore = textService.estrae(testoPaginaAll, tagIni, tagEnd);
+
+        return testoCore;
+    }
+
+    public String getCore() {
+        return VUOTA;
+    }
+
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */

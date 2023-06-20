@@ -44,20 +44,13 @@ public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
      */
     public WResult uploadOrdinatoConModifiche() {
         String testoPaginaAll = leggeTestoPagina();
-        String testoCoreOld = getTestoSignificativo(testoPaginaAll);
+        String testoCoreOld = backend.getCore();
         String testoCoreNew = fixTestoModulo();
         String textDaRegistrare = textService.sostituisce(testoPaginaAll, testoCoreOld, testoCoreNew);
 
         return wikiApiService.scrive(wikiTitleUpload, textDaRegistrare, summary).typeResult(AETypeResult.uploadValido);
     }
 
-    public String getTestoSignificativo(String testoPaginaAll) {
-        String testoCore = super.getTestoSignificativo(testoPaginaAll);
-        String tag = ASTERISCO;
-
-        testoCore = textService.levaTestoPrimaDi(testoCore, tag);
-        return testoCore;
-    }
 
     public String fixTestoModulo() {
         StringBuffer buffer = new StringBuffer();

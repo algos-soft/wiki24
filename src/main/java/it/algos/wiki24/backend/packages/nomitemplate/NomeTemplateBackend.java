@@ -40,6 +40,13 @@ import com.vaadin.flow.component.textfield.TextField;
 @Service
 public class NomeTemplateBackend extends WikiBackend {
 
+    public static final String SORGENTE = TAG_INCIPIT_NOMI;
+
+    public static final String TAG_INI = "switch:{{{nome}}}";
+
+    public static final String TAG_END = "|#default";
+
+    public static final String TAG_SPLIT = PIPE_REGEX;
 
     public NomeTemplateBackend() {
         super(NomeTemplate.class);
@@ -194,6 +201,8 @@ public class NomeTemplateBackend extends WikiBackend {
         String tagEnd = "|#default";
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
+
+        List<String> listaRighe = getRighe(SORGENTE, TAG_INI, TAG_END, TAG_SPLIT);
 
         testoPagina = wikiApiService.legge(paginaNomiDoppi);
         testoCore = textService.estrae(testoPagina, tagIni, tagEnd);

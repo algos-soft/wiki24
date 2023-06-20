@@ -33,6 +33,13 @@ import java.util.*;
 @Service
 public class NomeDoppioBackend extends WikiBackend {
 
+    public static final String SORGENTE = TAG_ANTROPONIMI + DOPPI;
+
+    public static final String TAG_INI = "[[:Categoria:Prenomi composti]]." + CAPO;
+
+    public static final String TAG_END = "[[Categoria:Liste di persone per nome";
+
+    public static final String TAG_SPLIT = ASTERISCO_REGEX;
 
     public NomeDoppioBackend() {
         super(NomeDoppio.class);
@@ -177,48 +184,23 @@ public class NomeDoppioBackend extends WikiBackend {
      * @return entities create
      */
     public AResult downloadNomiDoppi(AResult result) {
-        String paginaNomiDoppi = TAG_ANTROPONIMI + DOPPI;
-        String testoPagina;
-        String tag = CAPO + "\\*";
-        String nome;
-        String[] righe = null;
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
+        List<String> listaRighe = getRighe(SORGENTE, TAG_INI, TAG_END, TAG_SPLIT);
 
-        testoPagina = wikiApiService.legge(paginaNomiDoppi);
-
-        if (textService.isValid(testoPagina)) {
-            righe = testoPagina.split(tag);
-        }// end of if cycle
-
-        //--il primo va eliminato (non pertinente)
-        for (int k = 1; k < righe.length; k++) {
-            nome = righe[k];
-
-            //--l'ultimo va troncato
-            if (k == righe.length - 1) {
-                nome = nome.substring(0, nome.indexOf("\n\n"));
-            }// end of if cycle
-
-            entityBean = creaIfNotExist(nome);
-            if (entityBean != null) {
-                lista.add(entityBean);
-            }
-            else {
-                logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", nome))).usaDb());
-                result.setValido(false);
-            }
-        }// end of for cycle
+        for (String riga : listaRighe) {
+            entityBean = creaIfNotExist(riga);
+            result.setValido(fixLista(lista, entityBean, riga));
+        }
 
         return super.fixResult(result, lista);
     }
 
-    public String pippoz() {
-        String testino=VUOTA;
 
-
-        return testino;
+    public String getCore() {
+        return getCore(SORGENTE, TAG_INI, TAG_END);
     }
+
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
