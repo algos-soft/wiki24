@@ -95,6 +95,14 @@ public abstract class WikiBackend extends CrudBackend {
 
     public AETypeTime unitaMisuraStatistiche;
 
+    public String sorgenteDownload;
+
+    public String tagIniSorgente;
+
+    public String tagEndSorgente;
+
+    public String tagSplitSorgente;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -196,10 +204,15 @@ public abstract class WikiBackend extends CrudBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        this.unitaMisuraDownload = AETypeTime.minuti;
+        this.unitaMisuraDownload = AETypeTime.nonUsata;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
         this.unitaMisuraUpload = AETypeTime.minuti;
         this.unitaMisuraStatistiche = AETypeTime.minuti;
+
+        this.sorgenteDownload = VUOTA;
+        this.tagIniSorgente = VUOTA;
+        this.tagEndSorgente = VUOTA;
+        this.tagSplitSorgente = VUOTA;
     }
 
 
@@ -281,38 +294,35 @@ public abstract class WikiBackend extends CrudBackend {
         }
     }
 
-    public List<String> getRighe(String wikiTitleGrezzo, String tagIni, String tagEnd, String tag) {
+    public List<String> getRighe() {
         String testoCore;
         String[] righe;
-
-        testoCore = getCore(wikiTitleGrezzo, tagIni, tagEnd);
-        righe = testoCore.split(tag);
+        testoCore = getCore();
+        righe = testoCore.split(tagSplitSorgente);
 
         return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
     }
 
-    public String getCore(String wikiTitleGrezzo, String tagIni, String tagEnd) {
+    public String getCore() {
         String testoPaginaAll;
         String testoCore;
 
-        testoPaginaAll = wikiApiService.legge(wikiTitleGrezzo);
-        testoCore = textService.estrae(testoPaginaAll, tagIni, tagEnd);
+        testoPaginaAll = wikiApiService.legge(sorgenteDownload);
+        testoCore = textService.estrae(testoPaginaAll, tagIniSorgente, tagEndSorgente);
 
         return testoCore;
     }
 
-    public String getCore() {
-        return VUOTA;
-    }
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public WResult riordinaModulo() {
+    public WResult uploadModulo() {
         return WResult.errato();
     }
 
     public WResult fixRiordinaModulo(WResult result) {
+        int durata = 10;
 
         if (Pref.debug.is()) {
             message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
@@ -331,12 +341,23 @@ public abstract class WikiBackend extends CrudBackend {
 
         if (result.isValido()) {
             if (result.isModificata()) {
-                message = String.format("Cambiato il modulo %s. Occorre copiare il testo.", result.getWikiTitle());
-                Avviso.message(message).error().durata(5).open();
+                if (Pref.debug.is()) {
+                    message = String.format("Cambiato il modulo %s. Occorre copiare il testo.", result.getWikiTitle());
+                    Avviso.message(message).error().durata(durata).open();
+                }
+                else {
+                    message = String.format("Modulo %s modificato regolarmente.", result.getWikiTitle());
+                    Avviso.message(message).success().durata(durata).open();
+                }
             }
             else {
-                message = String.format("Modulo %s non modificato", result.getWikiTitle());
-                Avviso.message(message).success().open();
+                message = String.format("Modulo %s non modificato.", result.getWikiTitle());
+                if (Pref.debug.is()) {
+                    Avviso.message(message).success().durata(durata).open();
+                }
+                else {
+                    Avviso.message(message).primary().durata(durata).open();
+                }
             }
         }
         else {
@@ -397,7 +418,9 @@ public abstract class WikiBackend extends CrudBackend {
             durataDownload.setValue(unitaMisuraDownload.durata(result.getInizio()));
         }
         else {
-            logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            if (unitaMisuraDownload != AETypeTime.nonUsata) {
+                logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            }
         }
 
         if (lastElaborazione != null) {
@@ -424,7 +447,9 @@ public abstract class WikiBackend extends CrudBackend {
             durataDownload.setValue(unitaMisuraDownload.durata(result.getInizio()));
         }
         else {
-            logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            if (unitaMisuraDownload != AETypeTime.nonUsata) {
+                logService.warn(new WrapLog().exception(new AlgosException("durataDownload è nullo")));
+            }
         }
 
         message = String.format("Download di %s. Pagine scaricate %s. %s", modulo, textService.format(count()), unitaMisuraDownload.message(result.getInizio()));

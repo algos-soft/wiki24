@@ -252,7 +252,8 @@ public class NazSingolareBackend extends WikiBackend {
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public WResult riordinaModulo() {
+    @Override
+    public WResult uploadModulo() {
         WResult result = appContext.getBean(UploadModuloPluraleNazionalita.class).uploadOrdinatoSenzaModifiche();
         return super.fixRiordinaModulo(result);
     }

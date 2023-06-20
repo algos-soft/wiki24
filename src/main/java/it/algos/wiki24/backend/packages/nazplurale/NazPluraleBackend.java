@@ -327,13 +327,6 @@ public class NazPluraleBackend extends WikiBackend {
     public void fixDiversi(List lista) {
     }
 
-    /**
-     * Esegue un azione di upload, specifica del programma/package in corso <br>
-     */
-    public WResult riordinaModulo() {
-        WResult result = appContext.getBean(UploadModuloLinkNazionalita.class).uploadOrdinatoSenzaModifiche();
-        return super.fixRiordinaModulo(result);
-    }
 
     /**
      * ResetOnlyEmpty -> Download. <br>
@@ -413,6 +406,15 @@ public class NazPluraleBackend extends WikiBackend {
         }
 
         return result;
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    @Override
+    public WResult uploadModulo() {
+        WResult result = appContext.getBean(UploadModuloLinkNazionalita.class).uploadOrdinatoSenzaModifiche();
+        return super.fixRiordinaModulo(result);
     }
 
 }// end of crud backend class

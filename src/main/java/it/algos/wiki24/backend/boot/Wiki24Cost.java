@@ -180,7 +180,7 @@ public class Wiki24Cost {
 
     public static final String PATH_MODULO_PROFESSIONE = PATH_MODULO_LINK + ATT_LOWER;
 
-    public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + "Nomi_doppi";
+    public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + DOPPI;
 
     public static final String TAG_LISTA_NOMI = "Liste nomi";
 

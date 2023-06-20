@@ -83,7 +83,7 @@ public class NomeDoppioView extends WikiView {
         Button button = new Button("Progetto");
         button.addClickListener(click -> wikiApiService.openWikiPage(PATH_TABELLA_NOMI_DOPPI));
         Button button2 = new Button("Categoria");
-        button2.addClickListener(click -> wikiApiService.openWikiPage(  "Categoria:Prenomi composti"));
+        button2.addClickListener(click -> wikiApiService.openWikiPage("Categoria:Prenomi composti"));
         alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
@@ -93,14 +93,16 @@ public class NomeDoppioView extends WikiView {
         addSpan(ASpan.text(message).rosso().small());
         message = "Quando si crea la lista nomi, i nomi doppi vengono scaricati e aggiunti alla lista stessa.";
         addSpan(ASpan.text(message).rosso().small());
-        
-        message = String.format("Download%sCancella tutto e scarica la lista wiki: %s.", FORWARD, "Antroponimi/Nomi doppi");
+
+        message = String.format("Download%sCancella tutto e scarica la lista wiki: %s.", FORWARD, PATH_TABELLA_NOMI_DOPPI);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico in %s. Se non si vogliono le modifiche, fare prima un Download", FORWARD, "Utente:Biobot/NomiDoppi");
+        message = String.format("Upload lista su wiki: lista mongo modificata e in ordine alfabetico su %s o su %s (debug).", PATH_TABELLA_NOMI_DOPPI, UPLOAD_TITLE_DEBUG + DOPPI);
         addSpan(ASpan.text(message).blue().small());
+        message = "Se non si vogliono le modifiche, fare prima un Download";
+        addSpan(ASpan.text(message).rosso().small());
     }
 
 }// end of crud @Route view class

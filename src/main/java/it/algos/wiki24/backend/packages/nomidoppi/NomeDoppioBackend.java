@@ -33,13 +33,6 @@ import java.util.*;
 @Service
 public class NomeDoppioBackend extends WikiBackend {
 
-    public static final String SORGENTE = TAG_ANTROPONIMI + DOPPI;
-
-    public static final String TAG_INI = "[[:Categoria:Prenomi composti]]." + CAPO;
-
-    public static final String TAG_END = "[[Categoria:Liste di persone per nome";
-
-    public static final String TAG_SPLIT = ASTERISCO_REGEX;
 
     public NomeDoppioBackend() {
         super(NomeDoppio.class);
@@ -51,7 +44,11 @@ public class NomeDoppioBackend extends WikiBackend {
 
         super.lastReset = WPref.downloadNomiDoppi;
         super.lastDownload = WPref.downloadNomiDoppi;
-        this.unitaMisuraDownload = AETypeTime.secondi;
+
+        super.sorgenteDownload = TAG_ANTROPONIMI + DOPPI;
+        super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;
+        super.tagEndSorgente = "[[Categoria:Liste di persone per nome";
+        super.tagSplitSorgente = ASTERISCO_REGEX;
     }
 
     /**
@@ -186,9 +183,8 @@ public class NomeDoppioBackend extends WikiBackend {
     public AResult downloadNomiDoppi(AResult result) {
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
-        List<String> listaRighe = getRighe(SORGENTE, TAG_INI, TAG_END, TAG_SPLIT);
 
-        for (String riga : listaRighe) {
+        for (String riga : super.getRighe()) {
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }
@@ -197,21 +193,13 @@ public class NomeDoppioBackend extends WikiBackend {
     }
 
 
-    public String getCore() {
-        return getCore(SORGENTE, TAG_INI, TAG_END);
-    }
-
-
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public WResult riordinaModulo() {
-        WResult result;
-
-        result = appContext.getBean(UploadProgettoAntroponimiNomiDoppi.class).uploadOrdinatoConModifiche();
-        super.fixRiordinaModulo(result);
-
-        return result;
+    @Override
+    public WResult uploadModulo() {
+        WResult result = appContext.getBean(UploadProgettoAntroponimiNomiDoppi.class).uploadOrdinatoConModifiche();
+        return super.fixRiordinaModulo(result);
     }
 
 }// end of crud backend class

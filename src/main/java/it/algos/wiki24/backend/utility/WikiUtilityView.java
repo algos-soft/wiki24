@@ -250,19 +250,19 @@ public class WikiUtilityView extends UtilityView {
     }
 
     public void uploadModuliAttSingolare() {
-        attSingolareBackend.riordinaModulo();
+        attSingolareBackend.uploadModulo();
     }
 
     public void uploadModuliAttPlurale() {
-        attPluraleBackend.riordinaModulo();
+        attPluraleBackend.uploadModulo();
     }
 
     public void uploadModuliNazSingolare() {
-        nazSingolareBackend.riordinaModulo();
+        nazSingolareBackend.uploadModulo();
     }
 
     public void uploadModuliNazPlurale() {
-        nazPluraleBackend.riordinaModulo();
+        nazPluraleBackend.uploadModulo();
     }
 
     public void paragrafoDownloadModuli() {

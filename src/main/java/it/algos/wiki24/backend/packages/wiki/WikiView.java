@@ -524,7 +524,7 @@ public abstract class WikiView extends CrudView {
             buttonUploadModulo.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
             buttonUploadModulo.setIcon(new Icon(VaadinIcon.REFRESH));
-            buttonUploadModulo.addClickListener(event -> riordinaModulo());
+            buttonUploadModulo.addClickListener(event -> uploadModulo());
             topPlaceHolder.add(buttonUploadModulo);
         }
 
@@ -873,8 +873,8 @@ public abstract class WikiView extends CrudView {
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public void riordinaModulo() {
-        crudBackend.riordinaModulo();
+    public void uploadModulo() {
+        crudBackend.uploadModulo();
     }
 
     /**
