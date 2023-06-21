@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import javax.annotation.*;
 import java.util.*;
 
 /**
@@ -23,9 +24,6 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
 
-    @Autowired
-    private NomeTemplateBackend backend;
-
 
     /**
      * Costruttore base con parametri <br>
@@ -33,17 +31,17 @@ public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadProgettoAntroponimiNomiTemplate() {
-        super.wikiTitleModulo = TAG_INCIPIT_NOMI;
-        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "IncipitNomi";
+    public UploadProgettoAntroponimiNomiTemplate( @Autowired NomeTemplateBackend backend) {
+        super(backend);
     }// end of constructor
+
 
     /**
      * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>
      */
     public WResult uploadOrdinatoConModifiche() {
         String testoPaginaAll = leggeTestoPagina();
-        String testoCoreOld = getTestoSignificativo(testoPaginaAll);
+        String testoCoreOld = backend.getCore();
         String testoCoreNew = fixTestoModulo();
         String textDaRegistrare = textService.sostituisce(testoPaginaAll, testoCoreOld, testoCoreNew);
 
@@ -60,12 +58,14 @@ public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
 
     public String fixTestoModulo() {
         StringBuffer buffer = new StringBuffer();
-        List<String> lista;
+        List<NomeTemplate> lista;
 
-        lista = backend.findAllForKeySortKey();
-        for (String key : lista) {
-            buffer.append(ASTERISCO);
-            buffer.append(key);
+        lista = backend.findAllSortKey();
+        for (NomeTemplate entityBean : lista) {
+            buffer.append(PIPE);
+            buffer.append(entityBean.nome);
+            buffer.append(UGUALE_SEMPLICE);
+            buffer.append(entityBean.linkPagina);
             buffer.append(CAPO);
         }
 

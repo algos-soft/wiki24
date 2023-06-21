@@ -24,9 +24,6 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
 
-    @Autowired
-    private NomeDoppioBackend backend;
-
 
     /**
      * Costruttore base con parametri <br>
@@ -34,10 +31,10 @@ public class UploadProgettoAntroponimiNomiDoppi extends UploadProgetto {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadProgettoAntroponimiNomiDoppi() {
-        super.wikiTitleModulo = PATH_TABELLA_NOMI_DOPPI;
-        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "NomiDoppi";
+    public UploadProgettoAntroponimiNomiDoppi( @Autowired NomeDoppioBackend backend) {
+        super(backend);
     }// end of constructor
+
 
     /**
      * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>

@@ -21,7 +21,6 @@ import java.util.*;
 public abstract class UploadAttivitaNazionalita extends Upload {
 
 
-
     /**
      * Costruttore base con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -78,7 +77,7 @@ public abstract class UploadAttivitaNazionalita extends Upload {
             };
 
             if (uploadTest) {
-                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(nomeAttivitaNazionalita);
             }
 
             if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
@@ -132,7 +131,7 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         StringBuffer buffer = new StringBuffer();
         int numVoci = wikiUtility.getSizeAllWrap(mappa);
 
-        if (numVoci < WPref.sogliaAttNazWiki.getInt()) {
+        if (!uploadTest && numVoci < WPref.sogliaAttNazWiki.getInt()) {
             logger.info(new WrapLog().message(String.format("Non creata la pagina %s perché ha solo %d voci", wikiTitle, numVoci)));
             return WResult.crea();
         }

@@ -61,6 +61,19 @@ public class NomeBackendTest extends WikiBackendTest {
     @DisplayName("15 - elabora (solo su wiki)")
     protected void elabora() {
     }
+    @Test
+    @Order(16)
+    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
+    protected void upload() {
+        System.out.println("16 - uploadModulo (non previsto per questa collection)");
+    }
+
+    @Test
+    @Order(75)
+    @DisplayName("75 - findAllDistinctByPlurali")
+    protected void findAllDistinctByPlurali() {
+        System.out.println("75 - findAllDistinctByPlurali (non previsto per questa collection)");
+    }
 
     @Test
     @Order(81)

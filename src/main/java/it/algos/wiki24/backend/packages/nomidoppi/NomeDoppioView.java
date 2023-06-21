@@ -81,10 +81,10 @@ public class NomeDoppioView extends WikiView {
         super.fixAlert();
 
         Button button = new Button("Progetto");
-        button.addClickListener(click -> wikiApiService.openWikiPage(PATH_TABELLA_NOMI_DOPPI));
-        Button button2 = new Button("Categoria");
-        button2.addClickListener(click -> wikiApiService.openWikiPage("Categoria:Prenomi composti"));
-        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
+        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
+        Button button3 = new Button("Test");
+        button3.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
+        alertPlaceHolder.add(new Span(fixButton(button),  new Label(SEP), fixButton(button3)));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
         addSpan(ASpan.text(message).verde());
@@ -94,12 +94,12 @@ public class NomeDoppioView extends WikiView {
         message = "Quando si crea la lista nomi, i nomi doppi vengono scaricati e aggiunti alla lista stessa.";
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sCancella tutto e scarica la lista wiki: %s.", FORWARD, PATH_TABELLA_NOMI_DOPPI);
+        message = String.format("Download%sCancella tutto e scarica la lista wiki: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload lista su wiki: lista mongo modificata e in ordine alfabetico su %s o su %s (debug).", PATH_TABELLA_NOMI_DOPPI, UPLOAD_TITLE_DEBUG + DOPPI);
+        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTest, backend.sorgenteDownload);
         addSpan(ASpan.text(message).blue().small());
         message = "Se non si vogliono le modifiche, fare prima un Download";
         addSpan(ASpan.text(message).rosso().small());

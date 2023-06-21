@@ -3,18 +3,24 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.boot.test.context.*;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.component.textfield.TextField;
+
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 25-Mar-2023
- * Time: 07:51
+ * Date: Wed, 21-Jun-2023
+ * Time: 09:18
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -24,15 +30,15 @@ import org.springframework.boot.test.context.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("production")
 @Tag("upload")
-@DisplayName("Nazionalità upload")
+@DisplayName("Nomi upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadNazionalitaTest extends WikiTest {
+public class UploadNomiTest extends WikiTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadNazionalita istanza;
+    private UploadNomi istanza;
 
 
     /**
@@ -63,45 +69,50 @@ public class UploadNazionalitaTest extends WikiTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new UploadNazionalita();
-        assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
+
+        istanza = new UploadNomi();
+        assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-
     @Test
     @Order(2)
-    @DisplayName("2 - Upload test di una nazionalità plurale con TOC (default)")
-    void upload() {
-        System.out.println("2 - Upload test di una nazionalità plurale con TOC (default)");
+    @DisplayName("2 - getBean base senza parametri")
+    void getBean() {
+        System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        sorgente = "afghani";
-        appContext.getBean(UploadNazionalita.class).test().upload(sorgente);
+        istanza = appContext.getBean(UploadNomi.class);
+        assertNotNull(istanza);
+        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
-
-
-//    @Test
-    @Order(3)
-    @DisplayName("3 - Upload test di una nazionalità plurale senza TOC")
-    void uploadNoToc() {
-        System.out.println("3 - Upload test di una nazionalità plurale senza TOC");
-        System.out.println(VUOTA);
-
-        sorgente = "arabi";
-        appContext.getBean(UploadNazionalita.class).noToc().test().upload(sorgente);
-    }
-
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Upload nazionalità test con poche voci")
-    void upload6() {
-        System.out.println("6 - Upload nazionalità test con poche voci");
-        sorgente = "aztechi";
-        appContext.getBean(UploadNazionalita.class).test().upload(sorgente);
+    @Order(3)
+    @DisplayName("3 - Upload test di un nome senza TOC")
+    void uploadNoToc() {
+        System.out.println("3 - Upload test di un nome senza TOC");
+        sorgente = "adalberto";
+        appContext.getBean(UploadNomi.class,sorgente).noToc().test().upload();
+    }
+    @Test
+    @Order(4)
+    @DisplayName("4 - Upload test di un nome con TOC")
+    void uploadToc() {
+        System.out.println("4 - Upload test di un nome con TOC");
+        sorgente = "adalberto";
+        appContext.getBean(UploadNomi.class,sorgente).forceToc().test().upload();
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("5 - Upload test di un nome")
+    void upload() {
+        System.out.println("5 - Upload test di un nome");
+        sorgente = "aaron";
+        appContext.getBean(UploadNomi.class,sorgente).forceToc().test().upload();
     }
 
     /**

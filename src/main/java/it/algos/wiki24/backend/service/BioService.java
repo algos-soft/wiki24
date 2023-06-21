@@ -882,7 +882,22 @@ public class BioService extends WAbstractService {
 
 
     /**
-     * Cerca tutte le entities di una collection filtrate con una serie di attività. <br>
+     * Cerca tutte le entities di una collection filtrate con una serie di nomi. <br>
+     * Selects documents in a collection or view and returns a list of the selected documents. <br>
+     *
+     * @param nome per costruire la query
+     *
+     * @return lista di entityBeans ordinata per nomi
+     *
+     * @see(https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find/)
+     */
+    public List<Bio> fetchNomi(String nome) {
+        return repository.findAllByNomeOrderByOrdinamento(nome);
+    }
+
+
+    /**
+     * Cerca tutte le entities di una collection filtrate con una serie di cognomi. <br>
      * Selects documents in a collection or view and returns a list of the selected documents. <br>
      *
      * @param cognome per costruire la query
@@ -906,6 +921,7 @@ public class BioService extends WAbstractService {
                 case attivitaPlurale -> bioService.fetchAttivitaPlurale(nomeLista);
                 case nazionalitaSingolare -> bioService.fetchNazionalitaSingolare(nomeLista);
                 case nazionalitaPlurale -> bioService.fetchNazionalitaPlurale(nomeLista);
+                case nomi -> bioService.fetchNomi(nomeLista);
                 case cognomi -> bioService.fetchCognomi(nomeLista);
                 default -> null;
             };

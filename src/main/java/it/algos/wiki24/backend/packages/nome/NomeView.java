@@ -2,29 +2,18 @@ package it.algos.wiki24.backend.packages.nome;
 
 import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.button.*;
-import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
-import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.entity.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -49,7 +38,7 @@ public class NomeView extends WikiView {
 
     private IndeterminateCheckbox boxDistinti;
 
-    private IndeterminateCheckbox boxIncipit;
+    private IndeterminateCheckbox boxTemplate;
 
     private IndeterminateCheckbox boxDoppi;
 
@@ -79,8 +68,8 @@ public class NomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "incipit", "doppio", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "incipit", "doppio", "superaSoglia", "paginaLista", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaLista", "esisteLista");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -104,40 +93,26 @@ public class NomeView extends WikiView {
 
         int sogliaMongo = WPref.sogliaNomiMongo.getInt();
         int sogliaWiki = WPref.sogliaNomiWiki.getInt();
-        String template = PATH_WIKI + "Template:Incipit lista nomi";
-        String nomi = PATH_ANTROPONIMI + TAG_NOMI;
-        String lista = PATH_ANTROPONIMI + TAG_LISTA_NOMI;
-        String categoria = PATH_CATEGORIA + "Liste di persone per nome";
 
-        Anchor anchor1 = new Anchor(template, "Incipit");
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        Anchor anchor2 = new Anchor(nomi, TAG_NOMI);
-        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        Anchor anchor3 = new Anchor(lista, TAG_LISTA_NOMI);
-        anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        Anchor anchor4 = new Anchor(categoria, "Categoria");
-        anchor4.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3, new Label(SEP), anchor4));
+        Button button = new Button("Categoria");
+        button.addClickListener(click -> wikiApiService.openWikiPage("Categoria:Prenomi composti"));
+        alertPlaceHolder.add(new Span(fixButton(button)));
 
-        message = "Tabella del parametro 'nome', ricavata dalle biografie.";
+        message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("I nomi mantengono spazi, maiuscole e minuscole come in originale");
-        addSpan(ASpan.text(message).rosso());
-        message = String.format("Le pagine esistenti con bio<%d sono da cancellare (rosso bold)", sogliaWiki);
-        addSpan(ASpan.text(message).rosso());
-        message = String.format("Le pagine esistenti con bio>%d sono in visione (verde)", sogliaWiki);
-        addSpan(ASpan.text(message).rosso());
-        message = String.format("Le pagine non ancora esistenti con bio>%d sono da creare (blu)", sogliaWiki);
-        addSpan(ASpan.text(message).rosso());
+        message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale.");
+        message += String.format(" Le pagine non ancora esistenti con bio>%d sono da creare (blu).", sogliaWiki);
+        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Le pagine esistenti con bio<%d sono da cancellare (rosso bold).", sogliaWiki);
+        message += String.format(" Le pagine esistenti con bio>%d sono in visione (verde).", sogliaWiki);
+        addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("ResetOnlyEmpty%sDownload.", FORWARD);
-        addSpan(ASpan.text(message).verde());
         message = String.format("Download%sRecupera una lista di nomi distinti dalle biografie. Crea una entity se bio>%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download del Template:Incipit. Aggiunge tutti i valori alla lista; anche se bio<%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista; anche se bio<%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sAggiunge alla lista tutti i nomi doppi.", FORWARD);
+        message = String.format("Download%sEsegue un Download del NomiTemplate. Aggiunge tutti i valori alla lista; anche se bio<%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%sEsegue un download. Calcola le voci biografiche che usano ogni singolo nome e la effettiva presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
@@ -155,13 +130,6 @@ public class NomeView extends WikiView {
         layoutDistinti.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutDistinti);
 
-        boxIncipit = new IndeterminateCheckbox();
-        boxIncipit.setLabel("Incipit");
-        boxIncipit.setIndeterminate(true);
-        boxIncipit.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layoutIncipit = new HorizontalLayout(boxIncipit);
-        layoutIncipit.setAlignItems(Alignment.CENTER);
-        topPlaceHolder.add(layoutIncipit);
 
         boxDoppi = new IndeterminateCheckbox();
         boxDoppi.setLabel("Doppi");
@@ -170,6 +138,14 @@ public class NomeView extends WikiView {
         HorizontalLayout layoutDoppi = new HorizontalLayout(boxDoppi);
         layoutDoppi.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutDoppi);
+
+        boxTemplate = new IndeterminateCheckbox();
+        boxTemplate.setLabel("Template");
+        boxTemplate.setIndeterminate(true);
+        boxTemplate.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutIncipit = new HorizontalLayout(boxTemplate);
+        layoutIncipit.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutIncipit);
 
         boxSuperaSoglia = new IndeterminateCheckbox();
         boxSuperaSoglia.setLabel("Soglia");
@@ -235,8 +211,8 @@ public class NomeView extends WikiView {
         if (boxDistinti != null && !boxDistinti.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.distinto == boxDistinti.getValue()).toList();
         }
-        if (boxIncipit != null && !boxIncipit.isIndeterminate()) {
-            items = items.stream().filter(nome -> nome.incipit == boxIncipit.getValue()).toList();
+        if (boxTemplate != null && !boxTemplate.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.template == boxTemplate.getValue()).toList();
         }
         if (boxDoppi != null && !boxDoppi.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.doppio == boxDoppi.getValue()).toList();

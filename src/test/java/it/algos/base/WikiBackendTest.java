@@ -240,9 +240,14 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @Test
     @Order(16)
-    @DisplayName("16 - upload (non previsto per questa collection)")
+    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
     protected void upload() {
-        System.out.println("16 - upload (non previsto per questa collection)");
+        System.out.println("16 - uploadModulo (test in ordine alfabetico)");
+        System.out.println(VUOTA);
+
+        wResult = wikiBackend.uploadModulo();
+        printRisultato(wResult);
+        assertTrue(wResult.isValido());
     }
 
     @Test
@@ -300,17 +305,17 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
     }
 
-    @Test
-    @Order(91)
-    @DisplayName("91 - riordinaModulo (upload test in ordine alfabetico)")
-    protected void riordinaModulo() {
-        System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
-        System.out.println(VUOTA);
-
-        wResult = wikiBackend.riordinaModulo();
-        printRisultato(wResult);
-        assertTrue(wResult.isValido());
-    }
+//    @Test
+//    @Order(91)
+//    @DisplayName("91 - uploadModulo (upload test in ordine alfabetico)")
+//    protected void uploadModulo() {
+//        System.out.println("91 - uploadModulo (upload test in ordine alfabetico)");
+//        System.out.println(VUOTA);
+//
+//        wResult = wikiBackend.uploadModulo();
+//        printRisultato(wResult);
+//        assertTrue(wResult.isValido());
+//    }
 
     protected void printRisultato(WResult result) {
         List lista = result.getLista();

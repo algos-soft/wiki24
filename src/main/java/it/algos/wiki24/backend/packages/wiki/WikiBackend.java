@@ -97,6 +97,8 @@ public abstract class WikiBackend extends CrudBackend {
 
     public String sorgenteDownload;
 
+    public String uploadTest;
+
     public String tagIniSorgente;
 
     public String tagEndSorgente;
@@ -213,6 +215,7 @@ public abstract class WikiBackend extends CrudBackend {
         this.tagIniSorgente = VUOTA;
         this.tagEndSorgente = VUOTA;
         this.tagSplitSorgente = VUOTA;
+        this.uploadTest = VUOTA;
     }
 
 
@@ -322,7 +325,7 @@ public abstract class WikiBackend extends CrudBackend {
     }
 
     public WResult fixRiordinaModulo(WResult result) {
-        int durata = 10;
+        int durata = 5;
 
         if (Pref.debug.is()) {
             message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
@@ -341,23 +344,12 @@ public abstract class WikiBackend extends CrudBackend {
 
         if (result.isValido()) {
             if (result.isModificata()) {
-                if (Pref.debug.is()) {
-                    message = String.format("Cambiato il modulo %s. Occorre copiare il testo.", result.getWikiTitle());
-                    Avviso.message(message).error().durata(durata).open();
-                }
-                else {
-                    message = String.format("Modulo %s modificato regolarmente.", result.getWikiTitle());
-                    Avviso.message(message).success().durata(durata).open();
-                }
+                message = String.format("Test %s modificato. Occorre copiare il testo.", result.getWikiTitle());
+                Avviso.message(message).error().durata(durata).open();
             }
             else {
                 message = String.format("Modulo %s non modificato.", result.getWikiTitle());
-                if (Pref.debug.is()) {
-                    Avviso.message(message).success().durata(durata).open();
-                }
-                else {
-                    Avviso.message(message).primary().durata(durata).open();
-                }
+                Avviso.message(message).success().durata(durata).open();
             }
         }
         else {

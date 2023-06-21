@@ -101,12 +101,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(2)
-    @DisplayName("2 - Lista bio di vari giorni")
+    @Order(3)
+    @DisplayName("3 - Lista bio di vari giorni")
         //--nome giorno
         //--typeLista
     void listaBio(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("2 - Lista bio di vari giorni");
+        System.out.println("3 - Lista bio di vari giorni");
         sorgente = nomeGiorno;
 
         if (!valido(nomeGiorno, type)) {
@@ -137,12 +137,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(3)
-    @DisplayName("3 - Lista wrapLista di vari giorni")
+    @Order(4)
+    @DisplayName("4 - Lista wrapLista di vari giorni")
         //--nome giorno
         //--typeLista
     void listaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("3 - Lista wrapLista di vari giorni");
+        System.out.println("4 - Lista wrapLista di vari giorni");
         sorgente = nomeGiorno;
 
         if (!valido(nomeGiorno, type)) {
@@ -171,12 +171,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(4)
-    @DisplayName("4 - Key della mappa wrapLista di vari giorni")
+    @Order(5)
+    @DisplayName("5 - Key della mappa wrapLista di vari giorni")
         //--nome giorno
         //--typeLista
     void mappaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("4 - Key della mappa wrapLista di vari giorni");
+        System.out.println("5 - Key della mappa wrapLista di vari giorni");
         sorgente = nomeGiorno;
         int numVoci;
 
@@ -205,12 +205,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(5)
-    @DisplayName("5 - Mappa wrapLista di vari giorni")
+    @Order(6)
+    @DisplayName("6 - Mappa wrapLista di vari giorni")
         //--nome giorno
         //--typeLista
     void mappaWrap2(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("5 - Mappa wrapLista di vari giorni");
+        System.out.println("6 - Mappa wrapLista di vari giorni");
         sorgente = nomeGiorno;
         int numVoci;
 

@@ -79,12 +79,12 @@ public class ListaNazionalitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
-    @Order(2)
-    @DisplayName("2 - Lista bio di varie nazionalità")
+    @Order(3)
+    @DisplayName("3 - Lista bio di varie nazionalità")
         //--nome nazionalità
         //--typeLista
     void listaBio(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("2 - Lista bio di varie nazionalità plurali");
+        System.out.println("3 - Lista bio di varie nazionalità plurali");
         sorgente = nomeNazionalita;
 
         if (!valido(nomeNazionalita, type)) {
@@ -113,12 +113,12 @@ public class ListaNazionalitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
-    @Order(3)
-    @DisplayName("3 - Lista wrapLista di varie nazionalità")
+    @Order(4)
+    @DisplayName("4 - Lista wrapLista di varie nazionalità")
         //--nome nazionalità
         //--typeLista
     void listaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("3 - Lista wrapLista di varie nazionalità");
+        System.out.println("4 - Lista wrapLista di varie nazionalità");
         sorgente = nomeNazionalita;
         int size;
 
@@ -150,12 +150,12 @@ public class ListaNazionalitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
-    @Order(4)
-    @DisplayName("4 - Key della mappa wrapLista delle varie nazionalità")
+    @Order(5)
+    @DisplayName("5 - Key della mappa wrapLista di varie nazionalità")
         //--nome nazionalità
         //--typeLista
     void mappaWrap(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("4 - Key della mappa wrapLista delle varie nazionalità");
+        System.out.println("5 - Key della mappa wrapLista di varie nazionalità");
         sorgente = nomeNazionalita;
         int numVoci;
 
@@ -185,12 +185,12 @@ public class ListaNazionalitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
-    @Order(5)
-    @DisplayName("5 - Mappa wrapLista di varie nazionalità")
+    @Order(6)
+    @DisplayName("6 - Mappa wrapLista di varie nazionalità")
         //--nome nazionalità
         //--typeLista
     void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("5 - Mappa wrapLista di varie nazionalità");
+        System.out.println("6 - Mappa wrapLista di varie nazionalità");
         sorgente = nomeNazionalita;
         int numVoci;
 

@@ -64,11 +64,5 @@ public class NomeTemplateBackendTest extends WikiBackendTest {
         System.out.println("75 - findAllDistinctByPlurali (non previsto per questa collection)");
     }
 
-//    @Test
-//    @Order(91)
-//    @DisplayName("91 - riordinaModulo (upload test in ordine alfabetico)")
-//    protected void riordinaModulo() {
-//        System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
-//    }
 
 }

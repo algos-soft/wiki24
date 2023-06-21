@@ -45,10 +45,11 @@ public class NomeDoppioBackend extends WikiBackend {
         super.lastReset = WPref.downloadNomiDoppi;
         super.lastDownload = WPref.downloadNomiDoppi;
 
-        super.sorgenteDownload = TAG_ANTROPONIMI + DOPPI;
+        super.sorgenteDownload = PATH_TABELLA_NOMI_DOPPI;
         super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;
         super.tagEndSorgente = "[[Categoria:Liste di persone per nome";
         super.tagSplitSorgente = ASTERISCO_REGEX;
+        super.uploadTest = UPLOAD_TITLE_DEBUG + DOPPI;
     }
 
     /**

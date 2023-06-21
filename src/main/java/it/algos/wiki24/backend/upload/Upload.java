@@ -305,6 +305,10 @@ public abstract class Upload {
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
 
+        if (uploadTest) {
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
+        }
+
         if (newText.contains(tag)) {
             newTextSignificativo = newText.substring(newText.indexOf(tag));
         }

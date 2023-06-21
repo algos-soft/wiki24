@@ -35,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "nome", usaKeyIdMinuscolaCaseInsensitive = false, usaReset = false)
+@AIEntity(collectionName = "nome", keyPropertyName = "nome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Nome extends AEntity {
 
     @AIField(type = AETypeField.text, header = "nome", caption = "nome", widthEM = 14)
@@ -52,11 +52,11 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
     public boolean distinto;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "incipit", widthEM = 7)
-    public boolean incipit;
-
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "doppio", widthEM = 7)
     public boolean doppio;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "template", widthEM = 7)
+    public boolean template;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
     public boolean superaSoglia;

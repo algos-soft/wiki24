@@ -77,12 +77,12 @@ public class ListaAttivitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA")
-    @Order(2)
-    @DisplayName("2 - Lista bio di varie attivita")
+    @Order(3)
+    @DisplayName("3 - Lista bio di varie attivita")
         //--nome attivita
         //--typeLista
     void listaBio(final String nomeAttivita, final AETypeLista type) {
-        System.out.println("2 - Lista bio di varie attivita");
+        System.out.println("3 - Lista bio di varie attivita");
         sorgente = nomeAttivita;
 
         if (!valido(nomeAttivita, type)) {
@@ -111,12 +111,12 @@ public class ListaAttivitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA")
-    @Order(3)
-    @DisplayName("3 - Lista wrapLista di varie attivita")
+    @Order(4)
+    @DisplayName("4 - Lista wrapLista di varie attivita")
         //--nome attivita
         //--typeLista
     void listaWrapDidascalie(final String nomeAttivita, final AETypeLista type) {
-        System.out.println("3 - Lista wrapLista di varie attivita");
+        System.out.println("4 - Lista wrapLista di varie attivita");
         sorgente = nomeAttivita;
         int size;
 
@@ -148,12 +148,12 @@ public class ListaAttivitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA")
-    @Order(4)
-    @DisplayName("4 - Key della mappa wrapLista delle varie attività")
+    @Order(5)
+    @DisplayName("5 - Key della mappa wrapLista di varie attività")
         //--nome attivita
         //--typeLista
     void mappaWrap(final String nomeAttivita, final AETypeLista type) {
-        System.out.println("4 - Key della mappa wrapLista delle varie attività");
+        System.out.println("5 - Key della mappa wrapLista di varie attività");
         sorgente = nomeAttivita;
         int numVoci;
 
@@ -183,12 +183,12 @@ public class ListaAttivitaTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA")
-    @Order(5)
-    @DisplayName("5 - Mappa wrapLista di varie attivita")
+    @Order(6)
+    @DisplayName("6 - Mappa wrapLista di varie attivita")
         //--nome attivita
         //--typeLista
     void mappaWrapDidascalie(final String nomeAttivita, final AETypeLista type) {
-        System.out.println("5 - Mappa wrapLista di varie attivita");
+        System.out.println("6 - Mappa wrapLista di varie attivita");
         sorgente = nomeAttivita;
         int numVoci;
 
@@ -218,10 +218,10 @@ public class ListaAttivitaTest extends WikiTest {
 
 
     //    @Test
-    @Order(6)
-    @DisplayName("6 - nobiliTedeschi")
+    @Order(7)
+    @DisplayName("7 - nobiliTedeschi")
     void nobiliTedeschi() {
-        System.out.println("6 - nobiliTedeschi");
+        System.out.println("7 - nobiliTedeschi");
         sorgente = "nobili";
         sorgente2 = "Tedeschi";
         int numVoci;

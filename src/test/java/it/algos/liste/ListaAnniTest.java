@@ -100,12 +100,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(2)
-    @DisplayName("2 - Lista bio di vari anni")
+    @Order(3)
+    @DisplayName("3 - Lista bio di vari anni")
         //--nome anno
         //--typeLista
     void listaBio(final String nomeAnno, final AETypeLista type) {
-        System.out.println("2 - Lista bio di vari anni");
+        System.out.println("3 - Lista bio di vari anni");
         sorgente = nomeAnno;
 
         if (!valido(nomeAnno, type)) {
@@ -136,12 +136,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(3)
-    @DisplayName("3 - Lista wrapLista di vari anni")
+    @Order(4)
+    @DisplayName("4 - Lista wrapLista di vari anni")
         //--nome anno
         //--typeLista
     void listaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("3 - Lista wrapLista di vari anni");
+        System.out.println("4 - Lista wrapLista di vari anni");
         sorgente = nomeAnno;
         int size;
 
@@ -172,12 +172,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(4)
-    @DisplayName("4 - Key della mappa wrapLista di vari anni")
+    @Order(5)
+    @DisplayName("5 - Key della mappa wrapLista di vari anni")
         //--nome anno
         //--typeLista
     void mappaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("4 - Key della mappa wrapLista di vari anni");
+        System.out.println("5 - Key della mappa wrapLista di vari anni");
         sorgente = nomeAnno;
         int numVoci;
 
@@ -206,12 +206,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(5)
-    @DisplayName("5 - Mappa wrapLista di vari anni")
+    @Order(6)
+    @DisplayName("6 - Mappa wrapLista di vari anni")
         //--nome anno
         //--typeLista
     void mappaWrap2(final String nomeAnno, final AETypeLista type) {
-        System.out.println("5 - Mappa wrapLista di vari anni");
+        System.out.println("6 - Mappa wrapLista di vari anni");
         sorgente = nomeAnno;
         int numVoci;
 

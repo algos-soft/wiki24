@@ -18,6 +18,7 @@ public enum AETypeLista {
     nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
     attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA),
     attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
+    nomi(VUOTA, VUOTA, VUOTA, VUOTA),
     cognomi(VUOTA, VUOTA, VUOTA, VUOTA),
     listaBreve(VUOTA, VUOTA, VUOTA, VUOTA),
     listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA);

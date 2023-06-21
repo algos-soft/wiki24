@@ -85,8 +85,10 @@ public class NomeTemplateView extends WikiView {
         super.fixAlert();
 
         Button button = new Button("Template");
-        button.addClickListener(click -> wikiApiService.openWikiPage(TAG_INCIPIT_NOMI));
-        alertPlaceHolder.add(new Span(fixButton(button)));
+        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
+        Button button2 = new Button("Test");
+        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
+        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Sono elencate le pagine di riferimento per ogni nome (esempio: 'Archibald->Arcibaldo') da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
@@ -98,13 +100,15 @@ public class NomeTemplateView extends WikiView {
         message = "Quando si crea la lista nomi, i nomi template vengono scaricati e aggiunti alla lista stessa.";
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sCancella tutto e scarica il template wiki: %s.", FORWARD, TAG_INCIPIT_NOMI);
+        message = String.format("Download%sCancella tutto e scarica il template wiki: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico in %s. Se non si vogliono le modifiche, fare prima un Download", FORWARD, "Utente:Biobot/IncipitNomi");
+        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTest, backend.sorgenteDownload);
         addSpan(ASpan.text(message).blue().small());
+        message = "Se non si vogliono le modifiche, fare prima un Download";
+        addSpan(ASpan.text(message).rosso().small());
     }
 
     /**

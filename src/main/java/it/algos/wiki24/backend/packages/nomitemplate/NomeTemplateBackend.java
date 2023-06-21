@@ -63,6 +63,7 @@ public class NomeTemplateBackend extends WikiBackend {
         super.tagIniSorgente = "switch:{{{nome}}}";
         super.tagEndSorgente = "|#default";
         super.tagSplitSorgente = PIPE_REGEX;
+        super.uploadTest = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
     }
 
     public AEntity creaIfNotExist(final String riga) {

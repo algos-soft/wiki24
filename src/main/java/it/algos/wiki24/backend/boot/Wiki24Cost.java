@@ -155,6 +155,7 @@ public class Wiki24Cost {
     public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";
 
     public static final String TAG_ANTROPONIMI = "Progetto:Antroponimi/";
+
     public static final String PATH_ANTROPONIMI = PATH_WIKI + TAG_ANTROPONIMI;
 
     public static final String MESI_REGEX = "(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
@@ -184,7 +185,9 @@ public class Wiki24Cost {
 
     public static final String TAG_LISTA_NOMI = "Liste nomi";
 
-    public static final String TAG_INCIPIT_NOMI = "Template:Incipit lista nomi";
+    public static final String INCIPIT_NOMI = "Incipit lista nomi";
+
+    public static final String TAG_INCIPIT_NOMI = "Template:" + INCIPIT_NOMI;
 
     public static final String TAG_PERSONE_NOME = "Persone di nome ";
 
