@@ -1,14 +1,13 @@
-package it.algos.wiki24.backend.packages.nomidoppi;
+package it.algos.wiki24.backend.packages.nomedoppio;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
+import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -80,11 +79,9 @@ public class NomeDoppioView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Button button = new Button("Progetto");
-        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
-        Button button3 = new Button("Test");
-        button3.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
-        alertPlaceHolder.add(new Span(fixButton(button),  new Label(SEP), fixButton(button3)));
+        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, "Progetto");
+        WAnchor anchor2 = WAnchor.build(backend.uploadTest, "Test");
+        alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
         addSpan(ASpan.text(message).verde());

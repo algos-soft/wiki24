@@ -52,15 +52,15 @@ public class UploadNomi extends Upload {
      */
     public UploadNomi(String nome) {
         super.nomeLista = nome;
-        super.summary = "[[Utente:Biobot/attivitàBio|attivitàBio]]";
+        super.summary = "[[Utente:Biobot|bioBot]]";
         super.titoloLinkParagrafo = Upload.TITOLO_LINK_PARAGRAFO_NAZIONALITA;
         super.titoloLinkVediAnche = Upload.TITOLO_LINK_PARAGRAFO_ATTIVITA;
-        super.lastUpload = WPref.uploadAttPlurale;
-        super.durataUpload = WPref.uploadAttPluraleTime;
-        super.nextUpload = WPref.uploadAttPluralePrevisto;
+        super.lastUpload = WPref.uploadNomi;
+        super.durataUpload = WPref.uploadNomiTime;
+        super.nextUpload = WPref.uploadNomiPrevisto;
         this.typeCrono = AETypeLista.listaBreve;
-        super.usaParagrafi = WPref.usaParagrafiAttNaz.is();
-        super.typeToc = (AETypeToc) WPref.typeTocAttNaz.getEnumCurrentObj();
+        super.usaParagrafi = WPref.usaParagrafiAnni.is();
+        super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
     }// end of constructor
 
     @PostConstruct
@@ -72,6 +72,7 @@ public class UploadNomi extends Upload {
         this.uploadTest = true;
         return this;
     }
+
     public UploadNomi noToc() {
         this.typeToc = AETypeToc.noToc;
         return this;
@@ -88,7 +89,7 @@ public class UploadNomi extends Upload {
      */
     public WResult upload() {
         if (textService.isValid(nomeLista)) {
-            wikiTitleUpload = wikiUtility.wikiTitleAttivita(nomeLista);
+            wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
 
             mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
 
@@ -169,6 +170,24 @@ public class UploadNomi extends Upload {
         }
 
         return buffer.toString().trim();
+    }
+
+    protected String categorie() {
+        if (uploadTest) {
+            return VUOTA;
+        }
+
+        StringBuffer buffer = new StringBuffer();
+        String cat = textService.primaMaiuscola(nomeLista);
+
+        if (textService.isValid(nomeSottoPagina)) {
+            cat += SLASH + nomeSottoPagina;
+        }
+
+        buffer.append(CAPO);
+        buffer.append(String.format("*[[Categoria:Liste di persone per nome|%s]]", cat));
+
+        return buffer.toString();
     }
 
 }

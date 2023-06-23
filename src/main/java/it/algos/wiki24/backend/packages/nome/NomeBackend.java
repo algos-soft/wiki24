@@ -7,8 +7,8 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nomidoppi.*;
-import it.algos.wiki24.backend.packages.nomitemplate.*;
+import it.algos.wiki24.backend.packages.nomedoppio.*;
+import it.algos.wiki24.backend.packages.nometemplate.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -340,7 +340,7 @@ public class NomeBackend extends WikiBackend {
             nome.esisteLista = false;
             nome.superaSoglia = nome.numBio > sogliaWiki;
             if (nome.numBio > sogliaMongo) {
-                nome.paginaLista = TAG_PERSONE_NOME + nome.nome;
+                nome.paginaLista = PATH_NOMI + nome.nome;
             }
             if (nome.superaSoglia) {
                 nome.esisteLista = queryService.isEsiste(nome.paginaLista);

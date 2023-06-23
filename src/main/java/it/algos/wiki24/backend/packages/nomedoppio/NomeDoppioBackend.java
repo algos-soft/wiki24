@@ -1,14 +1,11 @@
-package it.algos.wiki24.backend.packages.nomidoppi;
+package it.algos.wiki24.backend.packages.nomedoppio;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.entity.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
-import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.upload.progetto.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;

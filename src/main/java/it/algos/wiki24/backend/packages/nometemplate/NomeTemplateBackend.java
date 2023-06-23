@@ -1,9 +1,6 @@
-package it.algos.wiki24.backend.packages.nomitemplate;
+package it.algos.wiki24.backend.packages.nometemplate;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -11,17 +8,10 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.progetto.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -40,13 +30,6 @@ import com.vaadin.flow.component.textfield.TextField;
 @Service
 public class NomeTemplateBackend extends WikiBackend {
 
-    public static final String SORGENTE = TAG_INCIPIT_NOMI;
-
-    public static final String TAG_INI = "switch:{{{nome}}}";
-
-    public static final String TAG_END = "|#default";
-
-    public static final String TAG_SPLIT = PIPE_REGEX;
 
     public NomeTemplateBackend() {
         super(NomeTemplate.class);

@@ -29,25 +29,34 @@ import javax.validation.constraints.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder(builderMethodName = "builderCognome")
+@Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(keyPropertyName = "cognome", usaReset = false)
+@AIEntity(collectionName = "cognome", keyPropertyName = "cognome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Cognome extends AEntity {
 
-    private static final transient int WIDTHEM = 20;
 
-    @AIField(type = AETypeField.text)
+    @AIField(type = AETypeField.text, header = "cognome", caption = "cognome", widthEM = 14)
     public String cognome;
 
-    @AIField(type = AETypeField.text, widthEM = 12)
-    public String paginaLista;
-
-    @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano questo cognome", widthEM = 6)
+    @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano lo stesso cognome", widthEM = 6)
     public int numBio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNoReverse, headerIcon = VaadinIcon.HAMMER)
+    @AIField(type = AETypeField.text, widthEM = 18)
+    public String paginaLista;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
+    public boolean distinto;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "modulo", widthEM = 7)
+    public boolean modulo;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
+    public boolean superaSoglia;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkBox, headerIcon = VaadinIcon.LIST)
     public boolean esisteLista;
+
 
     @Override
     public String toString() {

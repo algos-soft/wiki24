@@ -29,7 +29,7 @@ public class Wiki24App implements AppShellConfigurator {
     public static void main(String[] args) {
         VaadBoot.start();
         Wiki24Boot.start();
-        Wiki24Configuration.START();
+//        Wiki24Configuration.START();
         SpringApplication.run(Wiki24App.class, args);
     }
 

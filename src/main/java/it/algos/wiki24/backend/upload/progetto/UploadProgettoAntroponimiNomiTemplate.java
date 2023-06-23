@@ -3,14 +3,12 @@ package it.algos.wiki24.backend.upload.progetto;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.nomitemplate.*;
+import it.algos.wiki24.backend.packages.nometemplate.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
-import javax.annotation.*;
 import java.util.*;
 
 /**

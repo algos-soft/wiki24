@@ -1,13 +1,8 @@
 package it.algos.wiki24.backend.upload.progetto;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaad24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nomidoppi.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.annotation.*;
 

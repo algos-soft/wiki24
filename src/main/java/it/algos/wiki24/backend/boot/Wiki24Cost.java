@@ -162,6 +162,8 @@ public class Wiki24Cost {
 
     public static final String PATH_ATTIVITA = PATH_BIOGRAFIE + ATT;
 
+    public static final String PATH_NOMI = "Persone di nome" + SPAZIO;
+
     public static final String PATH_COGNOMI = "Persone di cognome" + SPAZIO;
 
     public static final String PATH_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
@@ -183,15 +185,16 @@ public class Wiki24Cost {
 
     public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + DOPPI;
 
+    public static final String TAG_NOMI = "Nomi";
     public static final String TAG_LISTA_NOMI = "Liste nomi";
 
     public static final String INCIPIT_NOMI = "Incipit lista nomi";
+    public static final String INCIPIT_COGNOMI= "Incipit cognomi";
 
     public static final String TAG_INCIPIT_NOMI = "Template:" + INCIPIT_NOMI;
+    public static final String TAG_INCIPIT_COGNOMI = "Modulo:" + INCIPIT_COGNOMI;
 
-    public static final String TAG_PERSONE_NOME = "Persone di nome ";
 
-    public static final String TAG_NOMI = "Nomi";
 
     public static final String NAZ_LOWER = NAZ.toLowerCase();
 

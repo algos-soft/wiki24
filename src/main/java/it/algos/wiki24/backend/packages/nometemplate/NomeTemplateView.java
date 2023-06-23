@@ -1,21 +1,18 @@
-package it.algos.wiki24.backend.packages.nomitemplate;
+package it.algos.wiki24.backend.packages.nometemplate;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 /**
@@ -84,11 +81,15 @@ public class NomeTemplateView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Button button = new Button("Template");
-        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
-        Button button2 = new Button("Test");
-        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
-        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
+        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, "Template");
+        WAnchor anchor2 = WAnchor.build(backend.uploadTest, "Test");
+        alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2));
+
+//        Button button = new Button("Sorgente");
+//        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
+//        Button button2 = new Button("Test");
+//        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
+//        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Sono elencate le pagine di riferimento per ogni nome (esempio: 'Archibald->Arcibaldo') da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());

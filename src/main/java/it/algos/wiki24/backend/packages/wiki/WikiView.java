@@ -629,7 +629,8 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadPagina) {
             buttonUploadPagina = new Button();
-            buttonUploadPagina.getElement().setAttribute("theme", "error");
+            buttonUploadPagina.getElement().setAttribute("theme", "primary");
+            buttonUploadPagina.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadPagina.getElement().setProperty("title", "Upload: scrittura della singola pagina sul server wiki");
             buttonUploadPagina.setIcon(new Icon(VaadinIcon.UPLOAD));
             buttonUploadPagina.setEnabled(false);

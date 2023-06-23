@@ -94,7 +94,7 @@ public class CognomeBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     public Cognome newEntity(final String cognomeTxt, int numBio, boolean esisteLista) {
-        Cognome newEntityBean = Cognome.builderCognome()
+        Cognome newEntityBean = Cognome.builder()
                 .cognome(textService.isValid(cognomeTxt) ? cognomeTxt : null)
                 .numBio(numBio)
                 .esisteLista(esisteLista)

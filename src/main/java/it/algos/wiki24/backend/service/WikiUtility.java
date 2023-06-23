@@ -250,12 +250,14 @@ public class WikiUtility extends WAbstractService {
         return natiMortiAnno("Morti", anno);
     }
 
-    public String wikiTitle(AETypeLista typeCrono, String giornoAnno) {
+    public String wikiTitle(AETypeLista typeCrono, String wikiTitleSimple) {
         return switch (typeCrono) {
-            case giornoNascita -> this.wikiTitleNatiGiorno(giornoAnno);
-            case giornoMorte -> this.wikiTitleMortiGiorno(giornoAnno);
-            case annoNascita -> this.wikiTitleNatiAnno(giornoAnno);
-            case annoMorte -> this.wikiTitleMortiAnno(giornoAnno);
+            case giornoNascita -> this.wikiTitleNatiGiorno(wikiTitleSimple);
+            case giornoMorte -> this.wikiTitleMortiGiorno(wikiTitleSimple);
+            case annoNascita -> this.wikiTitleNatiAnno(wikiTitleSimple);
+            case annoMorte -> this.wikiTitleMortiAnno(wikiTitleSimple);
+            case nomi -> this.wikiTitleNomi(wikiTitleSimple);
+            case cognomi -> this.wikiTitleCognomi(wikiTitleSimple);
             default -> VUOTA;
         };
     }
@@ -267,6 +269,13 @@ public class WikiUtility extends WAbstractService {
 
     public String wikiTitleNazionalita(String nazionalitaPlurale) {
         return PATH_NAZIONALITA + SLASH + textService.primaMaiuscola(nazionalitaPlurale);
+    }
+
+    public String wikiTitleNomi(String nomePersona) {
+        return PATH_NOMI + textService.primaMaiuscola(nomePersona);
+    }
+    public String wikiTitleCognomi(String cognomePersona) {
+        return PATH_COGNOMI + textService.primaMaiuscola(cognomePersona);
     }
 
     public String fixSecoloNato(final Bio bio) {

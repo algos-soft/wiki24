@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomidoppi;
+package it.algos.wiki24.backend.packages.nomedoppio;
 
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;

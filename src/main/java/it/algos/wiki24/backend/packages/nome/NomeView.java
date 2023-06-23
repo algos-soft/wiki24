@@ -6,11 +6,15 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -91,12 +95,15 @@ public class NomeView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
+        String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
+        String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
         int sogliaMongo = WPref.sogliaNomiMongo.getInt();
         int sogliaWiki = WPref.sogliaNomiWiki.getInt();
 
-        Button button = new Button("Categoria");
-        button.addClickListener(click -> wikiApiService.openWikiPage("Categoria:Prenomi composti"));
-        alertPlaceHolder.add(new Span(fixButton(button)));
+        WAnchor anchor = WAnchor.build("Categoria:Prenomi composti", "Categoria");
+        WAnchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
+        WAnchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
+        alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
         addSpan(ASpan.text(message).verde());
@@ -118,6 +125,11 @@ public class NomeView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Upload%sPrevisto per tutte le liste di nomi con bio>%d.", FORWARD, sogliaWiki);
         addSpan(ASpan.text(message).verde());
+
+        message = "L'elaborazione delle statistiche è gestita dalla task Statistiche.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Upload statistiche%s2 pagine wiki su %s e %s", FORWARD, statisticaNomi, statisticaListe);
+        addSpan(ASpan.text(message).blue().small());
     }
 
 
@@ -129,7 +141,6 @@ public class NomeView extends WikiView {
         HorizontalLayout layoutDistinti = new HorizontalLayout(boxDistinti);
         layoutDistinti.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutDistinti);
-
 
         boxDoppi = new IndeterminateCheckbox();
         boxDoppi.setLabel("Doppi");
@@ -231,6 +242,48 @@ public class NomeView extends WikiView {
         }
 
         return (List) items;
+    }
+
+    /**
+     * Scrive una voce di prova su Utente:Biobot/test <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void testPagina() {
+        Nome entityBeanNome;
+        String message;
+
+        Optional entityBean = grid.getSelectedItems().stream().findFirst();
+        if (entityBean.isPresent()) {
+            entityBeanNome = (Nome) entityBean.get();
+            if (entityBeanNome.numBio > WPref.sogliaNomiWiki.getInt()) {
+                appContext.getBean(UploadNomi.class, entityBeanNome.nome).test().upload();
+            }
+            else {
+                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", entityBeanNome.nome, WPref.sogliaNomiWiki.getInt());
+                Avviso.message(message).primary().durata(3).open();
+            }
+        }
+    }
+
+    /**
+     * Scrive una pagina definitiva sul server wiki <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void uploadPagina() {
+        Nome entityBeanNome;
+        String message;
+
+        Optional entityBean = grid.getSelectedItems().stream().findFirst();
+        if (entityBean.isPresent()) {
+            entityBeanNome = (Nome) entityBean.get();
+            if (entityBeanNome.numBio > WPref.sogliaNomiWiki.getInt()) {
+                appContext.getBean(UploadNomi.class, entityBeanNome.nome).upload();
+            }
+            else {
+                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", entityBeanNome.nome, WPref.sogliaNomiWiki.getInt());
+                Avviso.message(message).primary().durata(3).open();
+            }
+        }
     }
 
 }// end of crud @Route view class

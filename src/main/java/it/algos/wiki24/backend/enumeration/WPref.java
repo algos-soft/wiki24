@@ -85,7 +85,7 @@ public enum WPref implements AIGenPref {
 
     downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
     downloadNomiTemplate("downloadNomiTemplate", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
-    downloadNomi("downloadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
+    downloadNomi("downloadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download dei nomi."),
     downloadNomiTime("downloadNomiTime", AETypePref.integer, 0, "Durata download dei nomi."),
     sogliaNomiMongo("sogliaNomiMongo", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Nomi sul mongoDB", false),
 
@@ -97,6 +97,9 @@ public enum WPref implements AIGenPref {
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 
 
+    downloadCognomiModulo("downloadCognomiModulo", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Incipit cognomi."),
+    downloadCognomi("downloadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download dei cognomi."),
+    downloadCognomiTime("downloadCognomiTime", AETypePref.integer, 0, "Durata download dei cognomi."),
 
     elaboraCognomi("elaboraCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi."),
     uploadCognomi("uploadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di cognomi oltre la soglia di 50 biografie"),
@@ -147,6 +150,8 @@ public enum WPref implements AIGenPref {
     typeTocAttNaz("typeTocAttNaz", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] in attività e nazionalità"),
     typeTocGiorni("typeTocGiorni", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di giorni"),
     typeTocAnni("typeTocAnni", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di anni"),
+    typeTocNomi("typeTocNomi", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di nomi"),
+    typeTocCognomi("typeTocCognomi", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di cognomi"),
     typeChiaveNulla("typeChiaveNulla", AETypePref.enumerationType, AETypeChiaveNulla.inCoda, "[AETypeChiaveNulla] Posizione del paragrafo 'nullo'"),
 
     usaSottoCognomi("usaSottoCognomi", AETypePref.bool, false, "Usa le sotto-sottopagine per i cognomi", false),
