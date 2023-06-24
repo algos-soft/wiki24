@@ -18,9 +18,11 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import org.checkerframework.checker.units.qual.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
+import javax.annotation.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -171,6 +173,8 @@ public abstract class Upload {
 
     protected String nomeSottoPagina;
 
+    protected boolean isSottopagina;
+
     /**
      * Mappa delle didascalie che hanno una valore valido per la pagina specifica <br>
      * La mappa è composta da una chiave (ordinata) che corrisponde al titolo del paragrafo <br>
@@ -193,8 +197,6 @@ public abstract class Upload {
     protected String attNazRevert;
 
     protected String attNazRevertUpper;
-
-    //    protected String nomeAttivitaNazionalitaPlurale;
 
     protected String subAttivitaNazionalita;
 
@@ -222,35 +224,105 @@ public abstract class Upload {
     protected WResult result;
 
 
+    @PostConstruct
+    private void postConstruct() {
+        this.nomeLista = textService.primaMaiuscola(nomeLista);
+        this.summary = "[[Utente:Biobot|bioBot]]"; //@todo DA CAMBIARE nella sottoclasse
+        this.typeCrono = AETypeLista.nessunaLista;
 
-    protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
-        return null;
+        this.fixPreferenze();
     }
 
+    /**
+     * Preferenze usate da questa 'backend' <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        this.isSottopagina = false;
+    }
+
+    protected void fixMappaWrap() {
+        if (!isSottopagina) {
+            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+        }
+    }
+
+    public WResult esegue() {
+        StringBuffer buffer = new StringBuffer();
+        this.fixMappaWrap();
+
+        buffer.append(creaHader());
+        buffer.append(creaBody());
+        buffer.append(creaBottom(buffer.toString().trim()));
+
+        return registra(buffer.toString().trim());
+    }
+
+    protected String creaHader() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(avviso());
+        buffer.append(include());
+        buffer.append(incipit());
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
 
     protected String avviso() {
         return "<!-- NON MODIFICATE DIRETTAMENTE QUESTA PAGINA - GRAZIE -->";
     }
 
+    protected String include() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(includeIni());
+        buffer.append(fixToc());
+        buffer.append(fixUnconnected());
+        buffer.append(torna());
+        buffer.append(tmpListaBio());
+        buffer.append(includeEnd());
+
+        return buffer.toString();
+    }
+
+    protected String incipit() {
+        return VUOTA;
+    }
 
     protected String includeIni() {
         return "<noinclude>";
     }
 
     protected String fixToc() {
-        return typeToc.get();
+        if (isSottopagina) {
+            return AETypeToc.noToc.get();
+        }
+        else {
+            return typeToc.get();
+        }
     }
 
     protected String fixUnconnected() {
         return UNCONNECTED;
     }
 
-    protected String torna(String wikiTitle) {
-        wikiTitle = textService.levaCodaDaUltimo(wikiTitle, SLASH);
-        return textService.isValid(wikiTitle) ? String.format("{{Torna a|%s}}", wikiTitle) : VUOTA;
+
+    protected String torna() {
+        String localWikiTitle = wikiTitleUpload;
+        String text = VUOTA;
+
+        if (isSottopagina) {
+            localWikiTitle = textService.levaCodaDaUltimo(localWikiTitle, SLASH);
+            text = textService.isValid(localWikiTitle) ? String.format("{{Torna a|%s}}", localWikiTitle) : VUOTA;
+        }
+
+        return text;
     }
 
-    protected String tmpListaBio(int numVoci) {
+    protected String tmpListaBio() {
+        int numVoci = mappaWrap != null ? wikiUtility.getSizeAllWrap(mappaWrap) : 0;
         String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
         String progetto = "biografie";
         String txtVoci = textService.format(numVoci);
@@ -258,19 +330,63 @@ public abstract class Upload {
         return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
     }
 
-    protected String tmpListaStat() {
-        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
-        return String.format("{{StatBio|data=%s}}", data);
-    }
-
     protected String includeEnd() {
         return "</noinclude>";
     }
 
-    protected String incipit() {
+
+    protected String creaBody() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(testoBody());
+        buffer.append(CAPO);
+        return buffer.toString();
+    }
+
+    public String testoBody() {
+        if (mappaWrap != null) {
+            return testoBody(mappaWrap);
+        }
+        else {
+            return VUOTA;
+        }
+    }
+
+    public String testoBody(Map<String, List<WrapLista>> mappa) {
         return VUOTA;
     }
 
+    protected String creaBottom(String textDaEsaminare) {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(note(textDaEsaminare));
+        buffer.append(correlate());
+
+        if (uploadTest) {
+            buffer.append(portale());
+        }
+        else {
+            buffer.append(includeIni());
+            buffer.append(portale());
+            buffer.append(categorie());
+            buffer.append(CAPO);
+            buffer.append(includeEnd());
+        }
+
+        return buffer.toString();
+    }
+
+
+    protected String note(String textDaEsaminare) {
+        StringBuffer buffer = new StringBuffer();
+        String tag = "</ref>";
+
+        if (textDaEsaminare.contains(tag)) {
+            return note();
+        }
+        else {
+            return buffer.toString();
+        }
+    }
 
     protected String note() {
         StringBuffer buffer = new StringBuffer();
@@ -300,6 +416,59 @@ public abstract class Upload {
         return VUOTA;
     }
 
+    protected String torna(String wikiTitle) {
+        wikiTitle = textService.levaCodaDaUltimo(wikiTitle, SLASH);
+        return textService.isValid(wikiTitle) ? String.format("{{Torna a|%s}}", wikiTitle) : VUOTA;
+    }
+
+    protected String tmpListaBio(int numVoci) {
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
+        String progetto = "biografie";
+        String txtVoci = textService.format(numVoci);
+
+        return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
+    }
+
+    /**
+     * Esegue la scrittura della pagina <br>
+     */
+    public WResult uploadRun() {
+        if (textService.isValid(nomeLista)) {
+            wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+
+            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+
+            if (uploadTest) {
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista;
+            }
+
+            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
+                return this.esegueUpload(wikiTitleUpload, mappaWrap);
+            }
+        }
+
+        return WResult.crea();
+    }
+
+
+    protected String tmpListaStat() {
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
+        return String.format("{{StatBio|data=%s}}", data);
+    }
+
+    protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
+        return null;
+    }
+
+
+    protected WResult registra(String newText) {
+        if (textService.isValid(wikiTitleUpload)) {
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+        }
+        else {
+            return null;
+        }
+    }
 
     protected WResult registra(String wikiTitle, String newText) {
         String newTextSignificativo = VUOTA;

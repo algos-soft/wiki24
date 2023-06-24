@@ -52,37 +52,54 @@ public class UploadNomi extends Upload {
      */
     public UploadNomi(String nome) {
         super.nomeLista = nome;
-        super.summary = "[[Utente:Biobot|bioBot]]";
-        super.titoloLinkParagrafo = Upload.TITOLO_LINK_PARAGRAFO_NAZIONALITA;
-        super.titoloLinkVediAnche = Upload.TITOLO_LINK_PARAGRAFO_ATTIVITA;
-        super.lastUpload = WPref.uploadNomi;
-        super.durataUpload = WPref.uploadNomiTime;
-        super.nextUpload = WPref.uploadNomiPrevisto;
-        this.typeCrono = AETypeLista.listaBreve;
-        super.usaParagrafi = WPref.usaParagrafiAnni.is();
+        super.titoloLinkParagrafo = VUOTA;
+        super.titoloLinkVediAnche = PATH_NOMI;
+        this.typeCrono = AETypeLista.nomi;
+        super.usaParagrafi = WPref.usaParagrafiAttNaz.is();
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
     }// end of constructor
 
-    @PostConstruct
-    private void postConstruct() {
-        this.nomeLista = textService.primaMaiuscola(nomeLista);
-    }
-
-    public UploadNomi test() {
-        this.uploadTest = true;
-        return this;
-    }
 
     public UploadNomi noToc() {
-        this.typeToc = AETypeToc.noToc;
+        super.typeToc = AETypeToc.noToc;
         return this;
     }
 
     public UploadNomi forceToc() {
-        this.typeToc = AETypeToc.forceToc;
+        super.typeToc = AETypeToc.forceToc;
         return this;
     }
 
+    public UploadNomi sottoPagina(String sottotitolo, List<WrapLista> lista) {
+        super.wikiTitleUpload = sottotitolo;
+        LinkedHashMap<String, List<WrapLista>> mappaWrapSottoPagina = new LinkedHashMap<>();
+        mappaWrapSottoPagina.put(sottotitolo, lista);
+        mappaWrap = mappaWrapSottoPagina;
+        super.isSottopagina = true;
+        return this;
+    }
+
+    public UploadNomi test() {
+        return test(true);
+    }
+
+    public UploadNomi test(boolean uploadTest) {
+        if (!isSottopagina) {
+            super.wikiTitleUpload = uploadTest ? UPLOAD_TITLE_DEBUG + nomeLista : nomeLista;
+        }
+        else {
+            super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista + textService.levaTestoPrimaDi(wikiTitleUpload, SLASH);
+        }
+
+        super.uploadTest = uploadTest;
+        return this;
+    }
+
+
+    @Override
+    protected String incipit() {
+        return String.format("{{incipit lista nomi|nome=%s}}", nomeLista);
+    }
 
     /**
      * Esegue la scrittura della pagina <br>
@@ -98,7 +115,7 @@ public class UploadNomi extends Upload {
             }
 
             if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
-                this.esegueUpload(wikiTitleUpload, mappaWrap);
+                return this.esegueUpload(wikiTitleUpload, mappaWrap);
             }
         }
 
@@ -143,19 +160,23 @@ public class UploadNomi extends Upload {
         boolean usaDiv;
         String titoloParagrafoLink;
         String vedi;
-        String parente;
+        String sottoPagina;
+        LinkedHashMap<String, List<WrapLista>> mappaWrapSottoPagina;
 
         for (String keyParagrafo : mappa.keySet()) {
             lista = mappa.get(keyParagrafo);
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
-            buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, numVoci));
+            if (!isSottopagina) {
+                buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, numVoci));
+            }
 
-            if (WPref.usaSottoCognomi.is() && numVoci > max) {
-                parente = String.format("%s%s%s%s", titoloLinkVediAnche, textService.primaMaiuscola(nomeLista), SLASH, keyParagrafo);
-                vedi = String.format("{{Vedi anche|%s}}", parente);
+            if (WPref.usaSottoNomi.is() && numVoci > max && !isSottopagina) {
+                sottoPagina = String.format("%s%s%s%s", titoloLinkVediAnche, textService.primaMaiuscola(nomeLista), SLASH, keyParagrafo);
+                vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                uploadSottoPagine(parente, nomeLista, keyParagrafo, lista);
+                //                uploadSottoPagine(parente, nomeLista, keyParagrafo, lista);
+                appContext.getBean(UploadNomi.class, nomeLista).sottoPagina(sottoPagina, lista).test(uploadTest).esegue();
             }
             else {
                 usaDiv = usaDivBase ? lista.size() > maxDiv : false;
@@ -172,11 +193,16 @@ public class UploadNomi extends Upload {
         return buffer.toString().trim();
     }
 
-    protected String categorie() {
-        if (uploadTest) {
-            return VUOTA;
-        }
+    protected String portale() {
+        StringBuffer buffer = new StringBuffer();
 
+        buffer.append(CAPO);
+        buffer.append("{{Portale|antroponimi}}");
+
+        return buffer.toString();
+    }
+
+    protected String categorie() {
         StringBuffer buffer = new StringBuffer();
         String cat = textService.primaMaiuscola(nomeLista);
 

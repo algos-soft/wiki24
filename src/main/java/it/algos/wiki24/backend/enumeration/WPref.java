@@ -131,8 +131,6 @@ public enum WPref implements AIGenPref {
     statisticaNazPlurale("statisticaNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità plurali."),
 
 
-
-
     usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni", false),
     sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki", false),
 
@@ -153,6 +151,8 @@ public enum WPref implements AIGenPref {
     typeTocNomi("typeTocNomi", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di nomi"),
     typeTocCognomi("typeTocCognomi", AETypePref.enumerationType, AETypeToc.forceToc, "[AETypeToc] nelle liste di cognomi"),
     typeChiaveNulla("typeChiaveNulla", AETypePref.enumerationType, AETypeChiaveNulla.inCoda, "[AETypeChiaveNulla] Posizione del paragrafo 'nullo'"),
+
+    usaSottoNomi("usaSottoNomi", AETypePref.bool, false, "Usa le sotto-sottopagine per i nomi", false),
 
     usaSottoCognomi("usaSottoCognomi", AETypePref.bool, false, "Usa le sotto-sottopagine per i cognomi", false),
 

@@ -130,7 +130,7 @@ public class UploadAttivitaTest extends WikiTest {
     @Order(7)
     @DisplayName("7 - Upload di una attività con sottoPagina")
     void upload7() {
-        System.out.println("3 - Upload di una attività con sottoPagina");
+        System.out.println("7 - Upload di una attività con sottoPagina");
         sorgente = "dogi";
         appContext.getBean(UploadAttivita.class).test().upload(sorgente);
     }

@@ -221,7 +221,6 @@ public abstract class Lista {
     protected String paragrafoAltre = VUOTA;
 
 
-
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
      */
@@ -238,6 +237,13 @@ public abstract class Lista {
         }
 
         return listaBio;
+    }
+
+    /**
+     * Numero di biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     */
+    public int getSize() {
+        return listaBio() != null ? listaBio.size() : 0;
     }
 
 

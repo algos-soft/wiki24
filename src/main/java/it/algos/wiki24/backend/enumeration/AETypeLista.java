@@ -21,7 +21,8 @@ public enum AETypeLista {
     nomi(VUOTA, VUOTA, VUOTA, VUOTA),
     cognomi(VUOTA, VUOTA, VUOTA, VUOTA),
     listaBreve(VUOTA, VUOTA, VUOTA, VUOTA),
-    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA);
+    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA),
+    nessunaLista(VUOTA, VUOTA, VUOTA, VUOTA);
 
     private String tagLower;
 

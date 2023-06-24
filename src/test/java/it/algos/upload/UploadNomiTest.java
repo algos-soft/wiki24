@@ -3,6 +3,8 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
@@ -91,28 +93,81 @@ public class UploadNomiTest extends WikiTest {
 
     @Test
     @Order(3)
-    @DisplayName("3 - Upload test di un nome senza TOC")
+    @DisplayName("3 - Upload test di un nome con noToc")
     void uploadNoToc() {
-        System.out.println("3 - Upload test di un nome senza TOC");
-        sorgente = "adalberto";
-        appContext.getBean(UploadNomi.class,sorgente).noToc().test().upload();
+        System.out.println("3 - Upload test di un nome con noToc");
+        System.out.println(VUOTA);
+
+        sorgente = "Adalberto";
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noToc().test().esegue();
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
     }
+
     @Test
     @Order(4)
-    @DisplayName("4 - Upload test di un nome con TOC")
+    @DisplayName("4 - Upload test di un nome con forceTOC")
     void uploadToc() {
-        System.out.println("4 - Upload test di un nome con TOC");
+        System.out.println("4 - Upload test di un nome con forceTOC");
+        System.out.println(VUOTA);
+
         sorgente = "adalberto";
-        appContext.getBean(UploadNomi.class,sorgente).forceToc().test().upload();
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().test().esegue();
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
     }
 
     @Test
     @Order(5)
-    @DisplayName("5 - Upload test di un nome")
-    void upload() {
-        System.out.println("5 - Upload test di un nome");
-        sorgente = "aaron";
-        appContext.getBean(UploadNomi.class,sorgente).forceToc().test().upload();
+    @DisplayName("5 - Upload test di un nome con TOC di default (forceToc)")
+    void uploadDefault() {
+        System.out.println("5 - Upload test di un nome con TOC di default (forceToc)");
+
+        sorgente = "gaetano";
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di medie dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(6)
+    @DisplayName("6 - Upload test di un nome con sottopagina")
+    void uploadSotto() {
+        System.out.println("6 - Upload test di un nome con sottopagina");
+
+        sorgente = "giovanni";
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di grosse dimensioni con sottopagina- Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
     }
 
     /**
