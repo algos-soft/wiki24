@@ -22,6 +22,10 @@ import java.util.*;
  * User: gac
  * Date: Wed, 21-Jun-2023
  * Time: 08:08
+ * Opzioni:
+ * A) Visualizzazione della lista di paragrafi in testa pagina: forceToc oppure noToc -> default WPref.typeTocNomi
+ * B) Uso dei paragrafi: sempre
+ * C) Titolo del singolo paragrafo: link+numeri, titolo+numeri, titolo senza numeri -> default WPref.linkNomi
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -52,10 +56,10 @@ public class UploadNomi extends Upload {
      */
     public UploadNomi(String nome) {
         super.nomeLista = nome;
-        super.titoloLinkParagrafo = VUOTA;
-        super.titoloLinkVediAnche = PATH_NOMI;
-        this.typeCrono = AETypeLista.nomi;
-        super.usaParagrafi = WPref.usaParagrafiAttNaz.is();
+//        super.titoloLinkParagrafo = VUOTA;
+//        super.titoloLinkVediAnche = PATH_NOMI;
+//        this.typeCrono = AETypeLista.nomi;
+//        super.usaParagrafi = true;
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
     }// end of constructor

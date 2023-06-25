@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -30,9 +31,12 @@ public class TaskNomi extends VaadTask {
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
         if (execute()) {
-
             super.loggerTask();
         }
+    }
+
+    public String info() {
+        return super.info() + WPref.sogliaNomiWiki.getInt();
     }
 
 }

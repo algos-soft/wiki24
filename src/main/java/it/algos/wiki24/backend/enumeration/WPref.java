@@ -92,7 +92,7 @@ public enum WPref implements AIGenPref {
     elaboraNomi("elaboraNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei nomi."),
     elaboraNomiTime("elaboraNomiTime", AETypePref.integer, 0, "Durata elaborazione dei nomi."),
     sogliaNomiWiki("sogliaNomiWiki", AETypePref.integer, 50, "Soglia minima per creare una pagina Nomi sul server wiki", false),
-    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi oltre la soglia di 50 biografie"),
+    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi che hanno un numero di biografie superiore a "),
     uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 
@@ -169,6 +169,7 @@ public enum WPref implements AIGenPref {
     linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.lista, "[AETypeLink] a giorni/anni nelle didascalie"),
     linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessuno, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
     linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessuno, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
+    linkNomi("linkNomi", AETypePref.enumerationType, AETypeLink.pagina, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
     linkCognomi("linkCognomi", AETypePref.enumerationType, AETypeLink.pagina, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
 
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),
@@ -232,7 +233,7 @@ public enum WPref implements AIGenPref {
     private boolean dinamica;
 
     //--Link injettato da un metodo static
-    private PreferenceService preferenceService;
+    public PreferenceService preferenceService;
 
     //--Link injected da un metodo static
     private LogService logger;
@@ -290,6 +291,11 @@ public enum WPref implements AIGenPref {
     }
 
     @Override
+    public PreferenceService getPreferenceService() {
+        return preferenceService;
+    }
+
+    @Override
     public void setLogger(LogService logger) {
         this.logger = logger;
     }
@@ -332,7 +338,7 @@ public enum WPref implements AIGenPref {
 
     @Override
     public int getInt() {
-        return preferenceService.getInt(type, keyCode);
+        return preferenceService != null ? preferenceService.getInt(type, keyCode) : 0;
     }
 
     @Override

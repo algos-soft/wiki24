@@ -5,15 +5,20 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.schedule.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -49,6 +54,9 @@ public class NomeView extends WikiView {
     private IndeterminateCheckbox boxSuperaSoglia;
 
     private IndeterminateCheckbox boxEsisteLista;
+
+    @Autowired
+    private UtilityService utilityService;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -95,6 +103,7 @@ public class NomeView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
+        String infoTask = VaadTask.info(TaskNomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
         int sogliaMongo = WPref.sogliaNomiMongo.getInt();
@@ -126,10 +135,19 @@ public class NomeView extends WikiView {
         message = String.format("Upload%sPrevisto per tutte le liste di nomi con bio>%d.", FORWARD, sogliaWiki);
         addSpan(ASpan.text(message).verde());
 
-        message = "L'elaborazione delle statistiche è gestita dalla task Statistiche.";
+        message = String.format("Upload liste%sEseguito da %s", FORWARD, infoTask);
+        addSpan(ASpan.text(message).blue().small());
+        message = "A) Visualizzazione della lista di paragrafi in testa pagina: forceToc oppure noToc -> default WPref.typeTocNomi.";
         addSpan(ASpan.text(message).rosso().small());
+        message = "B) Uso dei paragrafi: sempre.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = "C) Titolo del singolo paragrafo: link+numeri, titolo+numeri, titolo senza numeri -> default WPref.linkNomi.";
+        addSpan(ASpan.text(message).rosso().small());
+
         message = String.format("Upload statistiche%s2 pagine wiki su %s e %s", FORWARD, statisticaNomi, statisticaListe);
         addSpan(ASpan.text(message).blue().small());
+        message = "L'elaborazione delle statistiche è gestita dalla task Statistiche.";
+        addSpan(ASpan.text(message).rosso().small());
     }
 
 

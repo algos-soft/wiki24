@@ -151,18 +151,18 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-//    @Test
+    //    @Test
     @Order(6)
-    @DisplayName("6 - Upload test di un nome con TOC e numeri di default")
+    @DisplayName("6 - Upload test di un nome con TOC, link e numeri di default")
     void uploadDefault() {
-        System.out.println("6 - Upload test di un nome con TOC e numeri di default");
+        System.out.println("6 - Upload test di un nome con TOC, link e numeri di default");
 
-        sorgente = "gaetano";
+        sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
 
         System.out.println(String.format("Test del nome %s", sorgente));
-        System.out.println(String.format("Lista di medie dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
         System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
 

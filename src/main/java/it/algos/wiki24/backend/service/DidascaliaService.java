@@ -515,13 +515,40 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapNomi(final Bio bio) {
-        String paragrafo = textService.primaMaiuscola(bio.attivita);
-        String paragrafoLink = paragrafo;
-        String sottoParagrafo = "null";
+        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
+        AttPlurale attPlurale;
+        String paragrafo;
+        String paragrafoLink;
+        String message;
 
+        if (attSingolare != null) {
+            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
+            if (attPlurale != null) {
+                paragrafo = textService.primaMaiuscola(attPlurale.nome);
+                paragrafoLink = switch ((AETypeLink) WPref.linkNomi.getEnumCurrentObj()) {
+                    case voce -> textService.setDoppieQuadre(paragrafo);
+                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+                    case pagina -> paragrafo;
+                    case nessuno -> paragrafo;
+                };
+            }
+            else {
+                paragrafo = textService.primaMaiuscola(attSingolare.nome);
+                paragrafoLink = paragrafo;
+                message = String.format("Manca la nazionalità plurale di %s", attSingolare);
+                System.out.println(message);
+                logService.warn(new WrapLog().message(message));
+            }
+        }
+        else {
+            paragrafo = TAG_LISTA_NO_ATTIVITA;
+            paragrafoLink = TAG_LISTA_NO_ATTIVITA;
+        }
+
+        String sottoParagrafo = bio.ordinamento.substring(0, 1);
         String didascalia = this.lista(bio);
 
-        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia);
+        return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
     }
 
     /**
@@ -588,7 +615,7 @@ public class DidascaliaService extends WAbstractService {
             case annoMorte -> this.getWrapAnnoMorto(bio);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
-            case nomi -> this.getWrapNazionalita(bio);
+            case nomi -> this.getWrapNomi(bio);
             case cognomi -> this.getWrapCognomi(bio);
             case listaBreve -> null;
             case listaEstesa -> null;
