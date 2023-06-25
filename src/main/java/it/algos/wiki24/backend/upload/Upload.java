@@ -212,6 +212,8 @@ public abstract class Upload {
 
     protected boolean usaParagrafi;
 
+    protected boolean usaNumeriTitoloParagrafi;
+
     protected String wikiTitleUpload;
 
     protected String wikiTitleModulo;
@@ -225,7 +227,7 @@ public abstract class Upload {
 
 
     @PostConstruct
-    private void postConstruct() {
+    protected void postConstruct() {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
         this.summary = "[[Utente:Biobot|bioBot]]"; //@todo DA CAMBIARE nella sottoclasse
         this.typeCrono = AETypeLista.nessunaLista;
@@ -240,6 +242,7 @@ public abstract class Upload {
      */
     protected void fixPreferenze() {
         this.isSottopagina = false;
+        this.usaNumeriTitoloParagrafi = false;
     }
 
     protected void fixMappaWrap() {

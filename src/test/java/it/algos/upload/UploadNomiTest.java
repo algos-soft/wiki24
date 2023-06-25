@@ -113,14 +113,14 @@ public class UploadNomiTest extends WikiTest {
 
     @Test
     @Order(4)
-    @DisplayName("4 - Upload test di un nome con forceTOC")
-    void uploadToc() {
-        System.out.println("4 - Upload test di un nome con forceTOC");
+    @DisplayName("4 - Upload test di un nome con forceTOC e con numeri titoli paragrafi")
+    void uploadTocNum() {
+        System.out.println("4 - Upload test di un nome con forceTOC e con numeri titoli paragrafi");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().test().esegue();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().siNumVoci().test().esegue();
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -133,9 +133,29 @@ public class UploadNomiTest extends WikiTest {
 
     @Test
     @Order(5)
-    @DisplayName("5 - Upload test di un nome con TOC di default (forceToc)")
+    @DisplayName("5 - Upload test di un nome con forceTOC e senza numeri titoli paragrafi")
+    void uploadTocNoNum() {
+        System.out.println("5 - Upload test di un nome con forceTOC e senza numeri titoli paragrafi");
+        System.out.println(VUOTA);
+
+        sorgente = "adalberto";
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().noNumVoci().test().esegue();
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+//    @Test
+    @Order(6)
+    @DisplayName("6 - Upload test di un nome con TOC e numeri di default")
     void uploadDefault() {
-        System.out.println("5 - Upload test di un nome con TOC di default (forceToc)");
+        System.out.println("6 - Upload test di un nome con TOC e numeri di default");
 
         sorgente = "gaetano";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
@@ -151,7 +171,7 @@ public class UploadNomiTest extends WikiTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(6)
     @DisplayName("6 - Upload test di un nome con sottopagina")
     void uploadSotto() {

@@ -30,7 +30,7 @@ public abstract class UploadProgetto extends Upload {
     }// end of constructor
 
     @PostConstruct
-    private void postConstruct() {
+    protected void postConstruct() {
         super.wikiTitleModulo = backend.sorgenteDownload;
         super.wikiTitleUpload = backend.uploadTest;
     }

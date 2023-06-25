@@ -245,45 +245,54 @@ public class NomeView extends WikiView {
     }
 
     /**
-     * Scrive una voce di prova su Utente:Biobot/test <br>
+     * Esegue un azione di apertura di una pagina su wiki, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void testPagina() {
-        Nome entityBeanNome;
-        String message;
+    @Override
+    protected AEntity wikiPage() {
+        Nome nome = (Nome) super.wikiPage();
 
-        Optional entityBean = grid.getSelectedItems().stream().findFirst();
-        if (entityBean.isPresent()) {
-            entityBeanNome = (Nome) entityBean.get();
-            if (entityBeanNome.numBio > WPref.sogliaNomiWiki.getInt()) {
-                appContext.getBean(UploadNomi.class, entityBeanNome.nome).test().upload();
-            }
-            else {
-                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", entityBeanNome.nome, WPref.sogliaNomiWiki.getInt());
-                Avviso.message(message).primary().durata(3).open();
-            }
+        if (nome != null) {
+            wikiApiService.openWikiPage(wikiUtility.wikiTitleNomi(nome.nome));
+        }
+
+        return null;
+    }
+
+    /**
+     * Scrive una voce di prova generica su Utente:Biobot/... <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    @Override
+    public void testPagina() {
+        Nome nome = (Nome) super.getBeanSelected();
+
+        if (nome != null) {
+            appContext.getBean(UploadNomi.class, nome.nome).test().esegue();
+            message = String.format("Scritta una voce di test su %s", UPLOAD_TITLE_DEBUG + nome.nome);
+            Avviso.message(message).primary().durata(3).open();
         }
     }
 
     /**
      * Scrive una pagina definitiva sul server wiki <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadPagina() {
-        Nome entityBeanNome;
-        String message;
+        Nome nome = (Nome) super.getBeanSelected();
 
-        Optional entityBean = grid.getSelectedItems().stream().findFirst();
-        if (entityBean.isPresent()) {
-            entityBeanNome = (Nome) entityBean.get();
-            if (entityBeanNome.numBio > WPref.sogliaNomiWiki.getInt()) {
-                appContext.getBean(UploadNomi.class, entityBeanNome.nome).upload();
+        if (nome != null) {
+            if (nome.numBio > WPref.sogliaNomiWiki.getInt()) {
+                appContext.getBean(UploadNomi.class, nome.nome).esegue();
+                message = String.format("Upload di una lista di nomi su %s", wikiUtility.wikiTitleNomi(nome.nome));
+                Avviso.message(message).success().open();
             }
             else {
-                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", entityBeanNome.nome, WPref.sogliaNomiWiki.getInt());
-                Avviso.message(message).primary().durata(3).open();
+                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", nome.nome, WPref.sogliaNomiWiki.getInt());
+                Avviso.message(message).primary().open();
             }
         }
     }
+
 
 }// end of crud @Route view class

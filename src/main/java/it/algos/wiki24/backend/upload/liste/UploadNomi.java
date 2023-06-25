@@ -56,9 +56,15 @@ public class UploadNomi extends Upload {
         super.titoloLinkVediAnche = PATH_NOMI;
         this.typeCrono = AETypeLista.nomi;
         super.usaParagrafi = WPref.usaParagrafiAttNaz.is();
+        super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
     }// end of constructor
 
+    @PostConstruct
+    protected void postConstruct() {
+        this.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+        super.postConstruct();
+    }
 
     public UploadNomi noToc() {
         super.typeToc = AETypeToc.noToc;
@@ -67,6 +73,16 @@ public class UploadNomi extends Upload {
 
     public UploadNomi forceToc() {
         super.typeToc = AETypeToc.forceToc;
+        return this;
+    }
+
+    public UploadNomi siNumVoci() {
+        super.usaNumeriTitoloParagrafi = true;
+        return this;
+    }
+
+    public UploadNomi noNumVoci() {
+        super.usaNumeriTitoloParagrafi = false;
         return this;
     }
 
@@ -158,6 +174,7 @@ public class UploadNomi extends Upload {
         int maxDiv = WPref.sogliaDiv.getInt();
         boolean usaDivBase = WPref.usaDivAttNaz.is();
         boolean usaDiv;
+        boolean usaNumeri = WPref.usaNumVociNomi.is();
         String titoloParagrafoLink;
         String vedi;
         String sottoPagina;
@@ -168,7 +185,7 @@ public class UploadNomi extends Upload {
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (!isSottopagina) {
-                buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, numVoci));
+                buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
             }
 
             if (WPref.usaSottoNomi.is() && numVoci > max && !isSottopagina) {

@@ -661,6 +661,10 @@ public abstract class WikiView extends CrudView {
         }
 
         super.fixBottoniTopStandard();
+
+        if (buttonEdit != null) {
+            buttonEdit.getElement().setAttribute("theme", "secondary");
+        }
     }
 
     protected void fixBottoniTopSpecificiAttivitaNazionalita() {
@@ -933,11 +937,7 @@ public abstract class WikiView extends CrudView {
         return entiyBeanUnicoSelezionato;
     }
 
-    /**
-     * Esegue un azione di apertura di una pagina su wiki, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected AEntity wikiPage() {
+    protected AEntity getBeanSelected() {
         AEntity entiyBeanUnicoSelezionato = null;
         Set righeSelezionate;
 
@@ -949,6 +949,14 @@ public abstract class WikiView extends CrudView {
         }
 
         return entiyBeanUnicoSelezionato;
+    }
+
+    /**
+     * Esegue un azione di apertura di una pagina su wiki, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected AEntity wikiPage() {
+        return getBeanSelected();
     }
 
     /**
@@ -974,51 +982,45 @@ public abstract class WikiView extends CrudView {
 
 
     /**
-     * Scrive una voce di prova su Utente:Biobot/test <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Scrive una voce di prova generica su Utente:Biobot/... <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void testPagina() {
-        reload();
     }
 
     /**
-     * Scrive una voce di prova su Utente:Biobot/test <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Scrive una voce di prova su Utente:Biobot/... <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void testPaginaNati() {
-        reload();
     }
 
     /**
-     * Scrive una voce di prova su Utente:Biobot/test <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Scrive una voce di prova su Utente:Biobot/... <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void testPaginaMorti() {
-        reload();
     }
 
     /**
      * Scrive una pagina definitiva sul server wiki <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadPagina() {
-        reload();
     }
 
     /**
      * Scrive una pagina definitiva sul server wiki <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadPaginaNati() {
-        reload();
     }
 
     /**
      * Scrive una pagina definitiva sul server wiki <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadPaginaMorti() {
-        reload();
     }
 
     //    public void addSpanVerdeSmall(final String message) {
