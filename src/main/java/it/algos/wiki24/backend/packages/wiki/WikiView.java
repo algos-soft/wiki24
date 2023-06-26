@@ -70,6 +70,9 @@ public abstract class WikiView extends CrudView {
     @Autowired
     public PaginaBackend paginaBackend;
 
+    @Autowired
+    protected LogService logService;
+
     protected boolean usaBottoneDownload;
 
     protected Button buttonDownload;
@@ -514,7 +517,7 @@ public abstract class WikiView extends CrudView {
             buttonUpload.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUpload.getElement().setProperty("title", "Upload: costruisce tutte le pagine del package sul server wiki");
             buttonUpload.setIcon(new Icon(VaadinIcon.UPLOAD));
-            buttonUpload.addClickListener(event -> AUpload.upload(this::upload));
+            buttonUpload.addClickListener(event -> AUpload.upload(this::uploadAll));
             topPlaceHolder.add(buttonUpload);
         }
 
@@ -872,7 +875,7 @@ public abstract class WikiView extends CrudView {
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
-    public void upload() {
+    public void uploadAll() {
     }
 
     /**

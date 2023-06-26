@@ -87,12 +87,12 @@ public enum WPref implements AIGenPref {
     downloadNomiTemplate("downloadNomiTemplate", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Template:Incipit lista nomi."),
     downloadNomi("downloadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download dei nomi."),
     downloadNomiTime("downloadNomiTime", AETypePref.integer, 0, "Durata download dei nomi."),
-    sogliaNomiMongo("sogliaNomiMongo", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Nomi sul mongoDB", false),
+    sogliaMongoNomi("sogliaMongoNomi", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Nomi sul mongoDB", false),
 
     elaboraNomi("elaboraNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei nomi."),
     elaboraNomiTime("elaboraNomiTime", AETypePref.integer, 0, "Durata elaborazione dei nomi."),
-    sogliaNomiWiki("sogliaNomiWiki", AETypePref.integer, 50, "Soglia minima per creare una pagina Nomi sul server wiki", false),
-    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi che hanno un numero di biografie superiore a "),
+    sogliaWikiNomi("sogliaWikiNomi", AETypePref.integer, 50, "Soglia minima per creare una pagina Nomi sul server wiki", false),
+    uploadNomi("uploadNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di tutte le liste di nomi che hanno numBio> "),
     uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 

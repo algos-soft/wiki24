@@ -16,6 +16,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -165,6 +166,11 @@ public class NomeBackend extends WikiBackend {
         return super.findAllSort(sort);
     }
 
+    public List<String> findAllForKeyByNumBio() {
+        int soglia = WPref.sogliaWikiNomi.getInt();
+        List<Nome> listaAll = findAllSortKey();
+        return listaAll != null ? listaAll.stream().filter(nome -> nome.numBio > soglia).map(nome -> nome.nome).collect(Collectors.toList()) : null;
+    }
 
     /**
      * ResetOnlyEmpty -> Download. <br>
@@ -210,7 +216,7 @@ public class NomeBackend extends WikiBackend {
     public AResult estraeNomiDistinti(AResult result) {
         DistinctIterable<String> listaNomiDistinti = mongoService.getCollection(TAG_BIO).distinct("nome", String.class);
         int numBio;
-        int sogliaMongo = WPref.sogliaNomiMongo.getInt(); //--Soglia minima per creare una entity nella collezione Nomi sul mongoDB
+        int sogliaMongo = WPref.sogliaMongoNomi.getInt(); //--Soglia minima per creare una entity nella collezione Nomi sul mongoDB
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
 
@@ -329,8 +335,8 @@ public class NomeBackend extends WikiBackend {
     @Override
     public WResult elabora() {
         WResult result = super.elabora();
-        int sogliaMongo = WPref.sogliaNomiMongo.getInt();
-        int sogliaWiki = WPref.sogliaNomiWiki.getInt();
+        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
         resetDownload();
 

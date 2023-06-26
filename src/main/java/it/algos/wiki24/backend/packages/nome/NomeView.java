@@ -5,14 +5,13 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
-import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -20,6 +19,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.upload.liste.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -106,8 +106,8 @@ public class NomeView extends WikiView {
         String infoTask = VaadTask.info(TaskNomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
-        int sogliaMongo = WPref.sogliaNomiMongo.getInt();
-        int sogliaWiki = WPref.sogliaNomiWiki.getInt();
+        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
         WAnchor anchor = WAnchor.build("Categoria:Prenomi composti", "Categoria");
         WAnchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
@@ -117,10 +117,10 @@ public class NomeView extends WikiView {
         message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
         addSpan(ASpan.text(message).verde());
         message = String.format("Parametri%s", FORWARD);
-        message += String.format("%s%s%s%s%s", "usaTaskNomi", VIRGOLA_SPAZIO, "linkNomi", VIRGOLA_SPAZIO, "typeTocNomi");
-        message += String.format("%s%s%s%s%s%s", VIRGOLA_SPAZIO,"sogliaMongo", VIRGOLA_SPAZIO, "sogliaWiki", VIRGOLA_SPAZIO, "usaSottoNomi");
-        message += String.format("%s%s%s%s%s%s",VIRGOLA_SPAZIO, "usaNumVociNomi", VIRGOLA_SPAZIO, "elaboraNomi", VIRGOLA_SPAZIO, "uploadNomi");
-        addSpan(ASpan.text(message).blue());
+        message += String.format("%s, %s, %s", WPref.usaTaskNomi.getKeyCode(), WPref.linkNomi.getKeyCode(), WPref.typeTocNomi.getKeyCode());
+        message += String.format("%s, %s, %s", WPref.sogliaMongoNomi.getKeyCode(), WPref.sogliaWikiNomi.getKeyCode(), WPref.usaSottoNomi.getKeyCode());
+        message += String.format("%s, %s, %s", WPref.usaNumVociNomi.getKeyCode(), WPref.elaboraNomi.getKeyCode(), WPref.uploadNomi.getKeyCode());
+        addSpan(ASpan.text(message).blue().small());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale.");
         message += String.format(" Le pagine non ancora esistenti con bio>%d sono da creare (blu).", sogliaWiki);
@@ -129,15 +129,15 @@ public class NomeView extends WikiView {
         message += String.format(" Le pagine esistenti con bio>%d sono in visione (verde).", sogliaWiki);
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sRecupera una lista di nomi distinti dalle biografie. Crea una entity se bio>%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sRecupera una lista di nomi distinti dalle biografie. Crea una entity se numBio>%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista; anche se bio<%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista; anche se numBio<%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download del NomiTemplate. Aggiunge tutti i valori alla lista; anche se bio<%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download del NomiTemplate. Aggiunge tutti i valori alla lista; anche se numBio<%d", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%sEsegue un download. Calcola le voci biografiche che usano ogni singolo nome e la effettiva presenza della paginaLista", FORWARD);
+        message = String.format("Elabora%sEsegue un download. Calcola le voci biografiche che usano ogni singolo nome e la presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sPrevisto per tutte le liste di nomi con bio>%d.", FORWARD, sogliaWiki);
+        message = String.format("Upload%sPrevisto per tutte le liste di nomi con numBio>%d.", FORWARD, sogliaWiki);
         addSpan(ASpan.text(message).verde());
 
         message = String.format("Upload liste%sEseguito da %s", FORWARD, infoTask);
@@ -209,7 +209,7 @@ public class NomeView extends WikiView {
     @Override
     protected void addColumnsOneByOne() {
         super.addColumnsOneByOne();
-        int sogliaWiki = WPref.sogliaNomiWiki.getInt();
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
         grid.addComponentColumn(entity -> {
             String wikiTitle = textService.primaMaiuscola(((Nome) entity).paginaLista);
@@ -302,20 +302,49 @@ public class NomeView extends WikiView {
      * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadPagina() {
+        WResult result = WResult.crea();
         Nome nome = (Nome) super.getBeanSelected();
 
         if (nome != null) {
-            if (nome.numBio > WPref.sogliaNomiWiki.getInt()) {
-                appContext.getBean(UploadNomi.class, nome.nome).esegue();
-                message = String.format("Upload di una lista di nomi su %s", wikiUtility.wikiTitleNomi(nome.nome));
-                Avviso.message(message).success().open();
+            if (nome.numBio > WPref.sogliaWikiNomi.getInt()) {
+                result = appContext.getBean(UploadNomi.class, nome.nome).esegue();
             }
             else {
-                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche necessario=%d", nome.nome, WPref.sogliaNomiWiki.getInt());
+                message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche. Necessario=%d", nome.nome, WPref.sogliaWikiNomi.getInt());
                 Avviso.message(message).primary().open();
             }
         }
+
+        if (result.isValido()) {
+            if (result.isModificata()) {
+                message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_NOMI, nome.nome);
+                Avviso.message(message).success().open();
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+            }
+            else {
+                message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_NOMI, nome.nome);
+                Avviso.message(message).primary().open();
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+            }
+        }
+        else {
+            message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_NOMI, nome.nome);
+            Avviso.message(message).error().open();
+            logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
+        }
+
     }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    @Override
+    public void uploadAll() {
+        appContext.getBean(UploadNomi.class).uploadAll();
+        reload();
+    }
+
 
 
 }// end of crud @Route view class

@@ -16,6 +16,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
@@ -166,6 +167,7 @@ public abstract class Upload {
      */
     @Autowired
     public QueryService queryService;
+
     @Autowired
     public LogService logService;
 
@@ -229,6 +231,8 @@ public abstract class Upload {
 
     protected AETypeLink typeLink;
 
+    protected WikiBackend crudBackend;
+
     /**
      * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -255,6 +259,16 @@ public abstract class Upload {
         this.typeToc = AETypeToc.forceToc;
         this.usaNumeriTitoloParagrafi = true;
         this.isSottopagina = false;
+
+        this.fixPreferenzeBackend();
+    }
+
+    protected void fixPreferenzeBackend() {
+        if (crudBackend != null) {
+            this.lastUpload = crudBackend.lastUpload;
+            this.durataUpload = crudBackend.durataUpload;
+            this.nextUpload = crudBackend.nextUpload;
+        }
     }
 
 
@@ -454,44 +468,18 @@ public abstract class Upload {
 
 
     protected WResult registra(String newText) {
-        WResult result=WResult.crea();
+        WResult result = WResult.crea();
 
         if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
             return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
         }
 
         if (textService.isValid(wikiTitleUpload)) {
-            result= appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
         }
         else {
             return WResult.errato("Manca il wikiTitle");
         }
-
-
-//        message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
-        if (result.isValido()) {
-            if (result.isModificata()) {
-                Avviso.message("Upload modificata").success().open();
-                logService.info(new WrapLog().message("Upload effettuato").type(AETypeLog.upload).usaDb());
-            }
-            else {
-                Avviso.message("Upload non modificata").open();
-                logService.info(new WrapLog().message("Upload non modificata").type(AETypeLog.upload).usaDb());
-            }
-        }
-        else {
-            logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
-        }
-
-
-//        if (result.isModificata()) {
-//            message += " Modificato";
-//            logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
-//        }
-//        else {
-//            message += " Non modificato";
-//            logService.info(new WrapLog().message(message).type(AETypeLog.upload));
-//        }
 
         return result;
     }
@@ -522,10 +510,8 @@ public abstract class Upload {
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, List<WrapLista> lista) {
     }
 
-    @Deprecated
     public void fixUploadMinuti(final long inizio) {
         long fine = System.currentTimeMillis();
-        String message;
         Long delta = fine - inizio;
 
         if (lastUpload != null) {
@@ -542,7 +528,6 @@ public abstract class Upload {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
-            return;
         }
     }
 
@@ -585,5 +570,11 @@ public abstract class Upload {
         return uploadModuloOld(wikiTitle, newTextAll);
     }
 
+    /**
+     * Esegue la scrittura di tutte le pagine previste <br>
+     */
+    public WResult uploadAll() {
+        return null;
+    }
 
 }

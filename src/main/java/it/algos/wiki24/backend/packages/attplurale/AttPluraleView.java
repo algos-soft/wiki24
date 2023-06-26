@@ -196,7 +196,8 @@ public class AttPluraleView extends WikiView {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void upload() {
+    @Override
+    public void uploadAll() {
         appContext.getBean(UploadAttivita.class).uploadAll();
     }
 

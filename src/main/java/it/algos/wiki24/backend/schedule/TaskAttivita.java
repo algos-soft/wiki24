@@ -24,6 +24,15 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskAttivita extends VaadTask {
 
+    /**
+     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
+     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
+     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
+     */
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
+
+
     public TaskAttivita() {
         super.descrizioneTask = WPref.uploadAttPlurale.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getAttivita();
@@ -32,13 +41,6 @@ public class TaskAttivita extends VaadTask {
     }
 
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public AttPluraleBackend attPluraleBackend;
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {

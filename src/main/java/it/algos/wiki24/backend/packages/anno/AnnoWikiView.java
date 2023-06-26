@@ -319,7 +319,8 @@ public class AnnoWikiView extends WikiView {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
-    public void upload() {
+    @Override
+    public void uploadAll() {
         long inizio = System.currentTimeMillis();
         appContext.getBean(UploadAnni.class).uploadAll();
         super.fixUpload(inizio, "degli anni");

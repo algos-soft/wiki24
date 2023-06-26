@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -39,6 +40,13 @@ public class UploadNomi extends Upload {
     @Autowired
     public NomeBackend nomeBackend;
 
+    /**
+     * Costruttore base senza parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     */
+    public UploadNomi() {
+        super();
+    }// end of constructor
 
     /**
      * Costruttore base con parametri <br>
@@ -53,6 +61,8 @@ public class UploadNomi extends Upload {
 
     @PostConstruct
     protected void postConstruct() {
+        super.crudBackend = nomeBackend;
+
         super.postConstruct();
 
         super.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
@@ -60,8 +70,16 @@ public class UploadNomi extends Upload {
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
         super.typeLink = (AETypeLink) WPref.linkNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
+        //        super.crudBackend = nomeBackend;
     }
 
+    //    protected void fixPreferenzeBackend() {
+    //        if (crudBackend != null) {
+    //            this.lastUpload = crudBackend.lastUpload;
+    //            this.durataUpload = crudBackend.durataUpload;
+    //            this.nextUpload = crudBackend.nextUpload;
+    //        }
+    //    }
 
     public UploadNomi typeLink(AETypeLink typeLink) {
         super.typeLink = typeLink;
@@ -98,7 +116,7 @@ public class UploadNomi extends Upload {
 
     public UploadNomi sottoPagina(List<WrapLista> lista) {
         super.wikiTitleUpload = nomeLista;
-        mappaWrap= wikiUtility.creaMappaAlfabetica(lista);
+        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
         super.isSottopagina = true;
         return this;
     }
@@ -197,5 +215,29 @@ public class UploadNomi extends Upload {
 
         return buffer.toString();
     }
+
+    /**
+     * Esegue la scrittura di tutte le pagine <br>
+     */
+    public WResult uploadAll() {
+        WResult result = WResult.crea();
+        long inizio = System.currentTimeMillis();
+        String message;
+
+        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio().subList(3, 8);
+        for (String nome : listaNomi) {
+            result = appContext.getBean(UploadNomi.class, nome).esegue();
+        }
+
+        result.fine();
+
+        int minuti = AETypeTime.minuti.durata(result.getInizio());
+        message = String.format("Upload di %d pagine di nomi con numBio>%d, in circa %d minuti", listaNomi.size(), WPref.sogliaWikiNomi.getInt(), minuti);
+        logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+
+        fixUploadMinuti(inizio);
+        return result;
+    }
+
 
 }

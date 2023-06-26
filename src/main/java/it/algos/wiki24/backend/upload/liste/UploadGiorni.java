@@ -75,12 +75,12 @@ public class UploadGiorni extends UploadGiorniAnni {
 
         giorno.uploadSottoPagina(wikiTitle, parente, sottoPagina, ordineSottoPagina, lista);
     }
-
     /**
      * Esegue la scrittura di tutte le pagine <br>
      * Tutti i giorni nati <br>
      * Tutti i giorni morti <br>
      */
+    @Override
     public WResult uploadAll() {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));

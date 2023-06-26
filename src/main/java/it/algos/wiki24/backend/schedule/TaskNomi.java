@@ -1,11 +1,13 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -30,13 +32,24 @@ public class TaskNomi extends VaadTask {
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
-        if (execute()) {
+
+        if (flagAttivazione.is()) {
+            super.fixNext();
+
+            //--Statistiche
+
+            //--Upload
+            appContext.getBean(UploadNomi.class).uploadAll();
             super.loggerTask();
         }
+        else {
+            super.loggerNoTask();
+        }
+
     }
 
     public String info() {
-        return super.info() + WPref.sogliaNomiWiki.getInt();
+        return super.info() + WPref.sogliaWikiNomi.getInt();
     }
 
 }
