@@ -49,7 +49,7 @@ public class UploadNazionalita extends UploadAttivitaNazionalita {
         super.summary = "[[Utente:Biobot/nazionalitàBio|nazionalitàBio]]";
         super.titoloLinkParagrafo = TITOLO_LINK_PARAGRAFO_ATTIVITA;
         super.titoloLinkVediAnche = TITOLO_LINK_PARAGRAFO_NAZIONALITA;
-        super.typeCrono = AETypeLista.nazionalitaPlurale;
+        super.typeLista = AETypeLista.nazionalitaPlurale;
         super.lastUpload = WPref.uploadNazPlurale;
         super.durataUpload = WPref.uploadNazPluraleTime;
         super.nextUpload = WPref.uploadNazPluralePrevisto;
@@ -57,12 +57,12 @@ public class UploadNazionalita extends UploadAttivitaNazionalita {
 
 
     public UploadNazionalita singolare() {
-        this.typeCrono = AETypeLista.nazionalitaSingolare;
+        this.typeLista = AETypeLista.nazionalitaSingolare;
         return this;
     }
 
     public UploadNazionalita plurale() {
-        this.typeCrono = AETypeLista.nazionalitaPlurale;
+        this.typeLista = AETypeLista.nazionalitaPlurale;
         return this;
     }
 

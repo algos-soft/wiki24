@@ -1176,6 +1176,10 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.print(wrap.titoloParagrafoLink);
                 System.out.print(SEP);
             }
+            else {
+                System.out.print("null");
+                System.out.print(SEP);
+            }
             if (textService.isValid(wrap.ordinamento)) {
                 System.out.print(wrap.ordinamento);
                 System.out.print(SEP);

@@ -50,7 +50,7 @@ public class UploadCognomi extends Upload {
         super.titoloLinkParagrafo = TITOLO_LINK_PARAGRAFO_NAZIONALITA;
         super.titoloLinkVediAnche = PATH_COGNOMI;
         super.typeToc = AETypeToc.forceToc;
-        super.typeCrono = AETypeLista.cognomi;
+        super.typeLista = AETypeLista.cognomi;
         super.lastUpload = WPref.uploadCognomi;
         super.durataUpload = WPref.uploadCognomiTime;
         super.nextUpload = WPref.uploadCognomiPrevisto;

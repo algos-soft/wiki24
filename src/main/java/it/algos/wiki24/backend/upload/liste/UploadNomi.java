@@ -39,12 +39,6 @@ public class UploadNomi extends Upload {
     @Autowired
     public NomeBackend nomeBackend;
 
-    /**
-     * Costruttore base senza parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     */
-    public UploadNomi() {
-    }// end of constructor
 
 
     /**
@@ -55,19 +49,25 @@ public class UploadNomi extends Upload {
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public UploadNomi(String nome) {
-        super.nomeLista = nome;
-//        super.titoloLinkParagrafo = VUOTA;
-//        super.titoloLinkVediAnche = PATH_NOMI;
-//        this.typeCrono = AETypeLista.nomi;
-//        super.usaParagrafi = true;
-        super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
-        super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
+        super(nome);
     }// end of constructor
 
     @PostConstruct
     protected void postConstruct() {
-        this.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
         super.postConstruct();
+
+        super.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+        super.typeLista = AETypeLista.nomi;
+        super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
+        super.typeLink = (AETypeLink) WPref.linkNomi.getEnumCurrentObj();
+        super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
+    }
+
+
+    public UploadNomi typeLink(AETypeLink typeLink) {
+        super.typeLink = typeLink;
+        super.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
+        return this;
     }
 
     public UploadNomi noToc() {
@@ -90,10 +90,10 @@ public class UploadNomi extends Upload {
         return this;
     }
 
-    public UploadNomi sottoPagina(String sottotitolo, List<WrapLista> lista) {
-        super.wikiTitleUpload = sottotitolo;
+    public UploadNomi sottoPagina( List<WrapLista> lista) {
+        super.wikiTitleUpload = nomeLista;
         LinkedHashMap<String, List<WrapLista>> mappaWrapSottoPagina = new LinkedHashMap<>();
-        mappaWrapSottoPagina.put(sottotitolo, lista);
+        mappaWrapSottoPagina.put("sottotitolo", lista);
         mappaWrap = mappaWrapSottoPagina;
         super.isSottopagina = true;
         return this;
@@ -121,26 +121,26 @@ public class UploadNomi extends Upload {
         return String.format("{{incipit lista nomi|nome=%s}}", nomeLista);
     }
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload() {
-        if (textService.isValid(nomeLista)) {
-            wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
-
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
-
-            if (uploadTest) {
-                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista;
-            }
-
-            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
-                return this.esegueUpload(wikiTitleUpload, mappaWrap);
-            }
-        }
-
-        return WResult.crea();
-    }
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult upload() {
+//        if (textService.isValid(nomeLista)) {
+//            wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+//
+//            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+//
+//            if (uploadTest) {
+//                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista;
+//            }
+//
+//            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
+//                return this.esegueUpload(wikiTitleUpload, mappaWrap);
+//            }
+//        }
+//
+//        return WResult.crea();
+//    }
 
 
     protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
@@ -169,7 +169,14 @@ public class UploadNomi extends Upload {
         return registra(wikiTitle, buffer.toString().trim());
     }
 
+    @Override
+    protected void fixMappaWrap() {
+        if (!isSottopagina) {
+            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLink(typeLink).mappaWrap();
+        }
+    }
 
+    @Override
     public String testoBody(Map<String, List<WrapLista>> mappa) {
         StringBuffer buffer = new StringBuffer();
         List<WrapLista> lista;
@@ -189,15 +196,14 @@ public class UploadNomi extends Upload {
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (!isSottopagina) {
-                buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
             }
 
-            if (WPref.usaSottoNomi.is() && numVoci > max && !isSottopagina) {
-                sottoPagina = String.format("%s%s%s%s", titoloLinkVediAnche, textService.primaMaiuscola(nomeLista), SLASH, keyParagrafo);
+            if ( numVoci > max && !isSottopagina) {
+                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                //                uploadSottoPagine(parente, nomeLista, keyParagrafo, lista);
-                appContext.getBean(UploadNomi.class, nomeLista).sottoPagina(sottoPagina, lista).test(uploadTest).esegue();
+                appContext.getBean(UploadNomi.class, sottoPagina).sottoPagina( lista).test(uploadTest).esegue();
             }
             else {
                 usaDiv = usaDivBase ? lista.size() > maxDiv : false;

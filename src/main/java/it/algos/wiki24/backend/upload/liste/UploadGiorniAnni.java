@@ -97,7 +97,7 @@ public abstract class UploadGiorniAnni extends Upload {
         int sogliaMaxPagina = WPref.maxBioPageAnniGiorni.getInt();
 
         if (textService.isValid(nomeGiornoAnno)) {
-            wikiTitleUpload = switch (typeCrono) {
+            wikiTitleUpload = switch (typeLista) {
                 case giornoNascita -> wikiUtility.wikiTitleNatiGiorno(nomeGiornoAnno);
                 case giornoMorte -> wikiUtility.wikiTitleMortiGiorno(nomeGiornoAnno);
                 case annoNascita -> wikiUtility.wikiTitleNatiAnno(nomeGiornoAnno);
@@ -105,7 +105,7 @@ public abstract class UploadGiorniAnni extends Upload {
                 default -> VUOTA;
             };
 
-            switch (typeCrono) {
+            switch (typeLista) {
                 case giornoNascita, giornoMorte -> {
                     giorno = giornoWikiBackend.findByKey(nomeLista);
                     this.ordineGiornoAnno = giorno != null ? giorno.getOrdine() : 0;
@@ -116,7 +116,7 @@ public abstract class UploadGiorniAnni extends Upload {
                 }
                 default -> {}
             }
-            mappaWrap = switch (typeCrono) {
+            mappaWrap = switch (typeLista) {
                 case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(nomeLista).mappaWrap();
                 case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(nomeLista).mappaWrap();
                 case annoNascita -> appContext.getBean(ListaAnni.class).nascita(nomeLista).mappaWrap();
@@ -188,7 +188,7 @@ public abstract class UploadGiorniAnni extends Upload {
             return WResult.crea();
         }
 
-        switch (typeCrono) {
+        switch (typeLista) {
             case giornoNascita, giornoMorte -> {
                 giorno = giornoWikiBackend.findByKey(nomeLista);
                 this.ordineGiornoAnno = giorno != null ? giorno.getOrdine() : 0;
@@ -222,14 +222,14 @@ public abstract class UploadGiorniAnni extends Upload {
     }
 
     protected String tornaSotto() {
-        String torna = wikiUtility.wikiTitle(typeCrono, nomeLista);
+        String torna = wikiUtility.wikiTitle(typeLista, nomeLista);
         return textService.isValid(torna) ? String.format("{{Torna a|%s}}", torna) : VUOTA;
     }
 
     protected String tmpListaPersoneIni(int numVoci) {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append(String.format("{{Lista persone per %s", typeCrono.getGiornoAnno()));
+        buffer.append(String.format("{{Lista persone per %s", typeLista.getGiornoAnno()));
         buffer.append(CAPO);
         buffer.append("|titolo=");
         buffer.append(wikiTitleUpload);
@@ -258,7 +258,7 @@ public abstract class UploadGiorniAnni extends Upload {
         int sogliaIncludeParagrafo = WPref.sogliaIncludeParagrafo.getInt();
         boolean righeRaggruppate;
 
-        righeRaggruppate = switch (typeCrono) {
+        righeRaggruppate = switch (typeLista) {
             case giornoNascita, giornoMorte -> WPref.usaRigheGiorni.is();
             case annoNascita, annoMorte -> WPref.usaRigheAnni.is();
             default -> false;

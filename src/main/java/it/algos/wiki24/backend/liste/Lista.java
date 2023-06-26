@@ -218,6 +218,8 @@ public abstract class Lista {
 
     protected AETypeLista typeLista;
 
+    protected AETypeLink typeLink;
+
     protected String paragrafoAltre = VUOTA;
 
 
@@ -260,7 +262,7 @@ public abstract class Lista {
 
         if (listaBio != null && listaBio.size() > 0) {
             for (Bio bio : listaBio) {
-                wrap = didascaliaService.getWrap(typeLista, bio);
+                wrap = didascaliaService.getWrap(typeLista, typeLink, bio);
                 if (wrap != null) {
                     listaWrap.add(wrap);
                 }

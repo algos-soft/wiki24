@@ -96,6 +96,26 @@ public class WikiUtility extends WAbstractService {
         return paragrafoVisibile;
     }
 
+    public String fixTitoloLink(String titoloParagrafo, String titoloParagrafoLink, int numVoci) {
+        String paragrafoVisibile = VUOTA;
+
+        if (textService.isEmpty(titoloParagrafo)) {
+            return VUOTA;
+        }
+
+        titoloParagrafo = textService.primaMaiuscola(titoloParagrafo);
+        paragrafoVisibile = titoloParagrafo;
+
+        if (textService.isValid(titoloParagrafoLink)) {
+            paragrafoVisibile = titoloParagrafoLink;
+            paragrafoVisibile += PIPE;
+            paragrafoVisibile += titoloParagrafo;
+            paragrafoVisibile = textService.setDoppieQuadre(paragrafoVisibile);
+        }
+
+        return setParagrafo(paragrafoVisibile, numVoci);
+    }
+
     /**
      * Inserisce un numero in caratteri ridotti <br>
      *
@@ -274,6 +294,7 @@ public class WikiUtility extends WAbstractService {
     public String wikiTitleNomi(String nomePersona) {
         return PATH_NOMI + textService.primaMaiuscola(nomePersona);
     }
+
     public String wikiTitleCognomi(String cognomePersona) {
         return PATH_COGNOMI + textService.primaMaiuscola(cognomePersona);
     }
@@ -363,13 +384,12 @@ public class WikiUtility extends WAbstractService {
         }
 
         return switch ((AETypeLink) WPref.linkCrono.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(giornoNato);
-            case lista -> {
+            case linkVoce -> textService.setDoppieQuadre(giornoNato);
+            case linkLista -> {
                 giornoNato = this.wikiTitleNatiGiorno(giornoNato) + PIPE + giornoNato;
                 yield textService.setDoppieQuadre(giornoNato);
             }
-            case pagina -> giornoNato;
-            case nessuno -> giornoNato;
+            case nessunLink -> giornoNato;
         };
     }
 
@@ -394,13 +414,12 @@ public class WikiUtility extends WAbstractService {
         }
 
         return switch ((AETypeLink) WPref.linkCrono.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(giornoMorto);
-            case lista -> {
+            case linkVoce -> textService.setDoppieQuadre(giornoMorto);
+            case linkLista -> {
                 giornoMorto = this.wikiTitleMortiGiorno(giornoMorto) + PIPE + giornoMorto;
                 yield textService.setDoppieQuadre(giornoMorto);
             }
-            case pagina -> giornoMorto;
-            case nessuno -> giornoMorto;
+            case nessunLink -> giornoMorto;
         };
     }
 
@@ -419,6 +438,7 @@ public class WikiUtility extends WAbstractService {
 
 
     public String linkAnnoNatoTesta(final Bio bio) {
+        AETypeLink typeLink = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         String annoNato = bio.annoNato;
 
         if (textService.isEmpty(annoNato)) {
@@ -428,15 +448,20 @@ public class WikiUtility extends WAbstractService {
             return annoNato;
         }
 
-        return switch ((AETypeLink) WPref.linkCrono.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(annoNato);
-            case lista -> {
-                annoNato = this.wikiTitleNatiAnno(annoNato) + PIPE + annoNato;
-                yield textService.setDoppieQuadre(annoNato);
-            }
-            case pagina -> annoNato;
-            case nessuno -> annoNato;
-        };
+        if (typeLink != null) {
+            return switch (typeLink) {
+                case linkVoce -> textService.setDoppieQuadre(annoNato);
+                case linkLista -> {
+                    annoNato = this.wikiTitleNatiAnno(annoNato) + PIPE + annoNato;
+                    yield textService.setDoppieQuadre(annoNato);
+                }
+                case nessunLink -> annoNato;
+            };
+        }
+        else {
+            logService.warn(new WrapLog().message(String.format("In linkAnnoNatoTesta manca il typeLink per la bio %s", bio.wikiTitle)));
+            return VUOTA;
+        }
     }
 
     public String linkAnnoNatoCoda(final Bio bio, boolean flagParentesi) {
@@ -454,6 +479,7 @@ public class WikiUtility extends WAbstractService {
 
 
     public String linkAnnoMortoTesta(final Bio bio) {
+        AETypeLink typeLink = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         String annoMorto = bio.annoMorto;
 
         if (textService.isEmpty(annoMorto)) {
@@ -463,15 +489,20 @@ public class WikiUtility extends WAbstractService {
             return annoMorto;
         }
 
-        return switch ((AETypeLink) WPref.linkCrono.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(annoMorto);
-            case lista -> {
-                annoMorto = this.wikiTitleMortiAnno(annoMorto) + PIPE + annoMorto;
-                yield textService.setDoppieQuadre(annoMorto);
-            }
-            case pagina -> annoMorto;
-            case nessuno -> annoMorto;
-        };
+        if (typeLink != null) {
+            return switch (typeLink) {
+                case linkVoce -> textService.setDoppieQuadre(annoMorto);
+                case linkLista -> {
+                    annoMorto = this.wikiTitleMortiAnno(annoMorto) + PIPE + annoMorto;
+                    yield textService.setDoppieQuadre(annoMorto);
+                }
+                case nessunLink -> annoMorto;
+            };
+        }
+        else {
+            logService.warn(new WrapLog().message(String.format("In linkAnnoMortoTesta manca il typeLink per la bio %s", bio.wikiTitle)));
+            return VUOTA;
+        }
     }
 
 

@@ -62,13 +62,13 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         this.nomeLista = textService.primaMinuscola(nomeAttivitaNazionalita);
 
         if (textService.isValid(nomeLista)) {
-            wikiTitleUpload = switch (typeCrono) {
+            wikiTitleUpload = switch (typeLista) {
                 case attivitaSingolare, attivitaPlurale -> wikiUtility.wikiTitleAttivita(nomeLista);
                 case nazionalitaSingolare, nazionalitaPlurale -> wikiUtility.wikiTitleNazionalita(nomeLista);
                 default -> VUOTA;
             };
 
-            mappaWrap = switch (typeCrono) {
+            mappaWrap = switch (typeLista) {
                 case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(nomeLista).mappaWrap();
                 case attivitaPlurale -> appContext.getBean(ListaAttivita.class).plurale(nomeLista).mappaWrap();
                 case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(nomeLista).mappaWrap();

@@ -40,8 +40,10 @@ public class ListaNomi extends Lista {
     public ListaNomi(String nome) {
         this.nomeLista = nome;
         super.typeLista = AETypeLista.nomi;
+        super.typeLink = (AETypeLink) WPref.linkNomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
     }// end of constructor
+
 
     /**
      * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
@@ -57,4 +59,8 @@ public class ListaNomi extends Lista {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
     }
 
+    public ListaNomi typeLink(AETypeLink typeLink) {
+        super.typeLink = typeLink;
+        return this;
+    }
 }

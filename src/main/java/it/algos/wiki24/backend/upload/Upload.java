@@ -18,7 +18,6 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
-import org.checkerframework.checker.units.qual.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
@@ -167,7 +166,7 @@ public abstract class Upload {
     @Autowired
     public QueryService queryService;
 
-    protected AETypeLista typeCrono;
+    protected AETypeLista typeLista;
 
     protected Lista lista;
 
@@ -225,30 +224,38 @@ public abstract class Upload {
 
     protected WResult result;
 
+    protected AETypeLink typeLink;
+
+    /**
+     * Costruttore base senza parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     */
+    public Upload() {
+    }// end of constructor
+
+    /**
+     * Costruttore base con parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * Uso: appContext.getBean(UploadAttivita.class).upload(nomeAttivitaPlurale) <br>
+     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     */
+    public Upload(String nome) {
+        this.nomeLista = nome;
+    }// end of constructor
 
     @PostConstruct
     protected void postConstruct() {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
         this.summary = "[[Utente:Biobot|bioBot]]"; //@todo DA CAMBIARE nella sottoclasse
-        this.typeCrono = AETypeLista.nessunaLista;
-
-        this.fixPreferenze();
-    }
-
-    /**
-     * Preferenze usate da questa 'backend' <br>
-     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
-     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    protected void fixPreferenze() {
+        this.typeLista = AETypeLista.nessunaLista;
+        this.typeToc = AETypeToc.forceToc;
+        this.usaNumeriTitoloParagrafi = true;
         this.isSottopagina = false;
-        this.usaNumeriTitoloParagrafi = false;
     }
+
 
     protected void fixMappaWrap() {
-        if (!isSottopagina) {
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
-        }
     }
 
     public WResult esegue() {
@@ -465,11 +472,15 @@ public abstract class Upload {
 
 
     protected WResult registra(String newText) {
+        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
+            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
+        }
+
         if (textService.isValid(wikiTitleUpload)) {
             return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
         }
         else {
-            return null;
+            return WResult.errato("Manca il wikiTitle");
         }
     }
 

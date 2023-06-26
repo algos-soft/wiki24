@@ -20,7 +20,7 @@ import java.util.*;
 public abstract class UploadModuli extends Upload {
 
     /**
-     * Costruttore base con parametri <br>
+     * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>

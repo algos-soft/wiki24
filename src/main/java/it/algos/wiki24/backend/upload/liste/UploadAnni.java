@@ -45,17 +45,17 @@ public class UploadAnni extends UploadGiorniAnni {
 
 
     public UploadAnni typeCrono(AETypeLista type) {
-        this.typeCrono = type;
+        this.typeLista = type;
         return this;
     }
 
     public UploadAnni nascita() {
-        this.typeCrono = AETypeLista.annoNascita;
+        this.typeLista = AETypeLista.annoNascita;
         return this;
     }
 
     public UploadAnni morte() {
-        this.typeCrono = AETypeLista.annoMorte;
+        this.typeLista = AETypeLista.annoMorte;
         return this;
     }
 
@@ -74,7 +74,7 @@ public class UploadAnni extends UploadGiorniAnni {
     }
 
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {
-        UploadAnni anno = appContext.getBean(UploadAnni.class).typeCrono(typeCrono);
+        UploadAnni anno = appContext.getBean(UploadAnni.class).typeCrono(typeLista);
 
         if (uploadTest) {
             anno = anno.test();
@@ -126,30 +126,30 @@ public class UploadAnni extends UploadGiorniAnni {
     protected String categorie() {
         StringBuffer buffer = new StringBuffer();
         String message;
-        String title = wikiUtility.wikiTitle(typeCrono, nomeLista);
+        String title = wikiUtility.wikiTitle(typeLista, nomeLista);
         Secolo secolo = anno.secolo;
         String secoloTxt = secolo != null ? secolo.nome : VUOTA;
 
         if (uploadTest) {
             buffer.append(CAPO);
             if (WPref.sottoCategorieNatiPerAnno.is()) {
-                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]][[Categoria:%s| ]]}}", typeCrono.getTagLower(), secoloTxt, ordineGiornoAnno, title);
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno, title);
             }
             else {
-                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]][[Categoria:%s| ]]}}", typeCrono.getTagLower(), typeCrono.getGiornoAnno(), ordineGiornoAnno, title);
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno, title);
             }
             buffer.append(message);
         }
         else {
             if (WPref.sottoCategorieNatiPerAnno.is()) {
                 buffer.append(CAPO);
-                buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeCrono.getTagLower(), secoloTxt, ordineGiornoAnno));
+                buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno));
                 buffer.append(CAPO);
                 buffer.append(String.format("*[[Categoria:%s| ]]", title));
             }
             else {
                 buffer.append(CAPO);
-                buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeCrono.getTagLower(), typeCrono.getGiornoAnno(), ordineGiornoAnno));
+                buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
                 buffer.append(CAPO);
                 buffer.append(String.format("*[[Categoria:%s| ]]", title));
             }
@@ -167,22 +167,22 @@ public class UploadAnni extends UploadGiorniAnni {
 
         if (uploadTest) {
             if (WPref.sottoCategorieNatiPerAnno.is()) {
-                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]]}}", typeCrono.getTagLower(), secoloTxt, ordineGiornoAnno);
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]]}}", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno);
             }
             else {
-                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]]}}", typeCrono.getTagLower(), typeCrono.getGiornoAnno(), ordineGiornoAnno);
+                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno);
             }
             buffer.append(message);
         }
 
         if (WPref.sottoCategorieNatiPerAnno.is()) {
             buffer.append(CAPO);
-            buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeCrono.getTagLower(), secoloTxt, ordineGiornoAnno));
+            buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno));
             buffer.append(CAPO);
         }
         else {
             buffer.append(CAPO);
-            buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeCrono.getTagLower(), typeCrono.getGiornoAnno(), ordineGiornoAnno));
+            buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
             buffer.append(CAPO);
         }
 

@@ -8,7 +8,6 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -301,8 +300,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
 
         paragrafoLink = switch ((AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(paragrafo);
-            case nessuno -> paragrafo;
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case nessunLink -> paragrafo;
             default -> paragrafo;
         };
 
@@ -333,8 +332,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
 
         paragrafoLink = switch ((AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(paragrafo);
-            case nessuno -> paragrafo;
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case nessunLink -> paragrafo;
             default -> paragrafo;
         };
 
@@ -364,8 +363,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
 
         paragrafoLink = switch ((AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(paragrafo);
-            case nessuno -> paragrafo;
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case nessunLink -> paragrafo;
             default -> paragrafo;
         };
 
@@ -395,8 +394,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
 
         paragrafoLink = switch ((AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj()) {
-            case voce -> textService.setDoppieQuadre(paragrafo);
-            case nessuno -> paragrafo;
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case nessunLink -> paragrafo;
             default -> paragrafo;
         };
 
@@ -433,10 +432,9 @@ public class DidascaliaService extends WAbstractService {
             if (nazPlurale != null) {
                 paragrafo = textService.primaMaiuscola(nazPlurale.nome);
                 paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
-                    case voce -> textService.setDoppieQuadre(paragrafo);
-                    case lista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case pagina -> paragrafo;
-                    case nessuno -> paragrafo;
+                    case linkVoce -> textService.setDoppieQuadre(paragrafo);
+                    case linkLista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
+                    case nessunLink -> paragrafo;
                 };
             }
             else {
@@ -480,10 +478,9 @@ public class DidascaliaService extends WAbstractService {
             if (attPlurale != null) {
                 paragrafo = textService.primaMaiuscola(attPlurale.nome);
                 paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
-                    case voce -> textService.setDoppieQuadre(paragrafo);
-                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case pagina -> paragrafo;
-                    case nessuno -> paragrafo;
+                    case linkVoce -> textService.setDoppieQuadre(paragrafo);
+                    case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+                    case nessunLink -> paragrafo;
                 };
             }
             else {
@@ -514,7 +511,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapNomi(final Bio bio) {
+    public WrapLista getWrapNomi(final AETypeLink typeLink,final Bio bio) {
         AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
         AttPlurale attPlurale;
         String paragrafo;
@@ -525,11 +522,10 @@ public class DidascaliaService extends WAbstractService {
             attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
             if (attPlurale != null) {
                 paragrafo = textService.primaMaiuscola(attPlurale.nome);
-                paragrafoLink = switch ((AETypeLink) WPref.linkNomi.getEnumCurrentObj()) {
-                    case voce -> textService.setDoppieQuadre(paragrafo);
-                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case pagina -> paragrafo;
-                    case nessuno -> paragrafo;
+                paragrafoLink = switch (typeLink) {
+                    case linkLista -> PATH_ATTIVITA;
+                    case linkVoce -> attPlurale.linkAttivita;
+                    case nessunLink -> VUOTA;
                 };
             }
             else {
@@ -607,7 +603,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrap(final AETypeLista typeLista, final Bio bio) {
+    public WrapLista getWrap(final AETypeLista typeLista, final AETypeLink typeLink, final Bio bio) {
         return switch (typeLista) {
             case giornoNascita -> this.getWrapGiornoNato(bio);
             case giornoMorte -> this.getWrapGiornoMorto(bio);
@@ -615,7 +611,7 @@ public class DidascaliaService extends WAbstractService {
             case annoMorte -> this.getWrapAnnoMorto(bio);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
-            case nomi -> this.getWrapNomi(bio);
+            case nomi -> this.getWrapNomi(typeLink,bio);
             case cognomi -> this.getWrapCognomi(bio);
             case listaBreve -> null;
             case listaEstesa -> null;

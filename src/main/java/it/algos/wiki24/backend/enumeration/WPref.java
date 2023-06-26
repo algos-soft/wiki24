@@ -166,11 +166,11 @@ public enum WPref implements AIGenPref {
     simboloMorto("simboloMorto", AETypePref.string, "†", "Simbolo della morte nelle didascalie", false),
     usaSimboliCrono("usaSimboliCrono", AETypePref.bool, true, "Uso dei simboli crono per nati e morti", false),
 
-    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.lista, "[AETypeLink] a giorni/anni nelle didascalie"),
-    linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessuno, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
-    linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessuno, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
-    linkNomi("linkNomi", AETypePref.enumerationType, AETypeLink.pagina, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
-    linkCognomi("linkCognomi", AETypePref.enumerationType, AETypeLink.pagina, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
+    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.linkLista, "[AETypeLink] a giorni/anni nelle didascalie"),
+    linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
+    linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
+    linkNomi("linkNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
+    linkCognomi("linkCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
 
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),
     usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false),
@@ -208,7 +208,7 @@ public enum WPref implements AIGenPref {
     usaNumVociAnni("usaNumVociAnni", AETypePref.bool, false, "Numero di voci nei paragrafi di Anni'", false),
     usaNumVociAttivita("usaNumVociAttivita", AETypePref.bool, false, "Numero di voci nei paragrafi di Attività'", false),
     usaNumVociNazionalita("usaNumVociNazionalita", AETypePref.bool, false, "Numero di voci nei paragrafi di Nazionalità'", false),
-    usaNumVociNomi("usaNumVociNomi", AETypePref.bool, false, "Numero di voci nei paragrafi di Nomi'", false),
+    usaNumVociNomi("usaNumVociNomi", AETypePref.bool, true, "Numero di voci nei paragrafi di Nomi'", false),
     usaNumVociCognomi("usaNumVociCognomi", AETypePref.bool, false, "Numero di voci nei paragrafi di Cognomi'", false),
     ;
 

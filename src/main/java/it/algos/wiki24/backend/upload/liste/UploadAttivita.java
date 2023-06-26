@@ -51,21 +51,21 @@ public class UploadAttivita extends UploadAttivitaNazionalita {
         super.summary = "[[Utente:Biobot/attivitàBio|attivitàBio]]";
         super.titoloLinkParagrafo = Upload.TITOLO_LINK_PARAGRAFO_NAZIONALITA;
         super.titoloLinkVediAnche = Upload.TITOLO_LINK_PARAGRAFO_ATTIVITA;
-        super.typeCrono = AETypeLista.attivitaPlurale;
+        super.typeLista = AETypeLista.attivitaPlurale;
         super.lastUpload = WPref.uploadAttPlurale;
         super.durataUpload = WPref.uploadAttPluraleTime;
         super.nextUpload = WPref.uploadAttPluralePrevisto;
-        this.typeCrono = AETypeLista.attivitaPlurale;
+        this.typeLista = AETypeLista.attivitaPlurale;
     }// end of constructor
 
 
     public UploadAttivita singolare() {
-        this.typeCrono = AETypeLista.attivitaSingolare;
+        this.typeLista = AETypeLista.attivitaSingolare;
         return this;
     }
 
     public UploadAttivita plurale() {
-        this.typeCrono = AETypeLista.attivitaPlurale;
+        this.typeLista = AETypeLista.attivitaPlurale;
         return this;
     }
 

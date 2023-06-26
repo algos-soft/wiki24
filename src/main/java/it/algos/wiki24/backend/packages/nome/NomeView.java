@@ -116,6 +116,11 @@ public class NomeView extends WikiView {
 
         message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
         addSpan(ASpan.text(message).verde());
+        message = String.format("Parametri%s", FORWARD);
+        message += String.format("%s%s%s%s%s", "usaTaskNomi", VIRGOLA_SPAZIO, "linkNomi", VIRGOLA_SPAZIO, "typeTocNomi");
+        message += String.format("%s%s%s%s%s%s", VIRGOLA_SPAZIO,"sogliaMongo", VIRGOLA_SPAZIO, "sogliaWiki", VIRGOLA_SPAZIO, "usaSottoNomi");
+        message += String.format("%s%s%s%s%s%s",VIRGOLA_SPAZIO, "usaNumVociNomi", VIRGOLA_SPAZIO, "elaboraNomi", VIRGOLA_SPAZIO, "uploadNomi");
+        addSpan(ASpan.text(message).blue());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale.");
         message += String.format(" Le pagine non ancora esistenti con bio>%d sono da creare (blu).", sogliaWiki);
