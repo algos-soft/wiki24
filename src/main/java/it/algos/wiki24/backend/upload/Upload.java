@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.vaad24.ui.dialog.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
@@ -165,6 +166,8 @@ public abstract class Upload {
      */
     @Autowired
     public QueryService queryService;
+    @Autowired
+    public LogService logService;
 
     protected AETypeLista typeLista;
 
@@ -439,27 +442,6 @@ public abstract class Upload {
         return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
     }
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult uploadRun() {
-        if (textService.isValid(nomeLista)) {
-            wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
-
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
-
-            if (uploadTest) {
-                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista;
-            }
-
-            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
-                return this.esegueUpload(wikiTitleUpload, mappaWrap);
-            }
-        }
-
-        return WResult.crea();
-    }
-
 
     protected String tmpListaStat() {
         String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
@@ -472,16 +454,46 @@ public abstract class Upload {
 
 
     protected WResult registra(String newText) {
+        WResult result=WResult.crea();
+
         if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
             return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
         }
 
         if (textService.isValid(wikiTitleUpload)) {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            result= appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
         }
         else {
             return WResult.errato("Manca il wikiTitle");
         }
+
+
+//        message = String.format("Upload test del modulo ordinato%s%s.", FORWARD, result.getWikiTitle());
+        if (result.isValido()) {
+            if (result.isModificata()) {
+                Avviso.message("Upload modificata").success().open();
+                logService.info(new WrapLog().message("Upload effettuato").type(AETypeLog.upload).usaDb());
+            }
+            else {
+                Avviso.message("Upload non modificata").open();
+                logService.info(new WrapLog().message("Upload non modificata").type(AETypeLog.upload).usaDb());
+            }
+        }
+        else {
+            logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
+        }
+
+
+//        if (result.isModificata()) {
+//            message += " Modificato";
+//            logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+//        }
+//        else {
+//            message += " Non modificato";
+//            logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+//        }
+
+        return result;
     }
 
     protected WResult registra(String wikiTitle, String newText) {

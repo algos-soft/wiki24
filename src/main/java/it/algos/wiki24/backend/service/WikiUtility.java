@@ -225,7 +225,7 @@ public class WikiUtility extends WAbstractService {
 
         if (mappa != null) {
             for (String key : mappa.keySet()) {
-                size += mappa.get(key).size();
+                size += mappa.get(key) != null ? mappa.get(key).size() : 0;
             }
         }
 
@@ -604,6 +604,33 @@ public class WikiUtility extends WAbstractService {
         }
 
         return testoModulo;
+    }
+
+    public LinkedHashMap<String, List<WrapLista>> creaMappaAlfabetica(List<WrapLista> listaAll) {
+        LinkedHashMap<String, List<WrapLista>> mappaAlfabetica = new LinkedHashMap<>();
+        String key;
+        List<WrapLista> lista;
+
+        if (listaAll == null) {
+            return mappaAlfabetica;
+        }
+
+        for (WrapLista wrap : listaAll) {
+            key = wrap.titoloSottoParagrafo;
+            if (mappaAlfabetica.containsKey(key)) {
+                lista = mappaAlfabetica.get(key);
+                lista.add(wrap);
+            }
+            else {
+                lista = new ArrayList<>();
+                lista.add(wrap);
+                mappaAlfabetica.put(key, lista);
+            }
+
+            int a = 87;
+        }
+
+        return mappaAlfabetica;
     }
 
 }

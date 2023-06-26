@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,6 +20,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.util.*;
 
 /**
  * Project wiki24
@@ -108,6 +111,7 @@ public class UploadNomiTest extends WikiTest {
         sorgente = "Adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noToc().test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -128,6 +132,7 @@ public class UploadNomiTest extends WikiTest {
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -153,6 +158,7 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
         System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(VUOTA);
         printRisultato(ottenutoRisultato);
@@ -168,6 +174,7 @@ public class UploadNomiTest extends WikiTest {
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).siNumVoci().test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -189,6 +196,7 @@ public class UploadNomiTest extends WikiTest {
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLink(AETypeLink.linkLista).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -210,6 +218,7 @@ public class UploadNomiTest extends WikiTest {
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLink(AETypeLink.linkVoce).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -220,7 +229,7 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-    @Test
+    //    @Test
     @Order(9)
     @DisplayName("9 - Upload test di un nome inesistente (senza voci)")
     void uploadInesistente() {
@@ -239,7 +248,8 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(VUOTA);
         printRisultato(ottenutoRisultato);
     }
-//    @Test
+
+    //    @Test
     @Order(10)
     @DisplayName("10 - Upload test di un nome standard")
     void upload() {
@@ -263,9 +273,34 @@ public class UploadNomiTest extends WikiTest {
 
     //    @Test
     @Order(11)
-    @DisplayName("11 - Upload test di un nome con sottopagina")
+    @DisplayName("11 - Upload test di una sottopagina da sola")
+    void uploadOnlySottoPagina() {
+        System.out.println("11 - Upload test di una sottopagina da sola");
+        System.out.println(VUOTA);
+
+        sorgente = "adam";
+        sorgente2 = "calciatori";
+        sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
+        List<WrapLista> lista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
+
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).sottoPagina(lista).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista con sottopagina - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("12 - Upload test di un nome con sottopagina")
     void uploadSottoPagina() {
-        System.out.println("11 - Upload test di un nome con sottopagina");
+        System.out.println("12 - Upload test di un nome con sottopagina");
         System.out.println(VUOTA);
 
         sorgente = "adam";
@@ -280,7 +315,6 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(VUOTA);
         printRisultato(ottenutoRisultato);
     }
-
 
     //    @Test
     @Order(30)

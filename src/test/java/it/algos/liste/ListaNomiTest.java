@@ -51,7 +51,7 @@ public class ListaNomiTest extends WikiTest {
                 Arguments.of(VUOTA),
                 Arguments.of("Aaron"),
                 Arguments.of("Marcello"),
-                Arguments.of("giovanni"),
+                Arguments.of("adam"),
                 Arguments.of("maria teresa")
         );
     }

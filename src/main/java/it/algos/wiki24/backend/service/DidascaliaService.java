@@ -538,7 +538,7 @@ public class DidascaliaService extends WAbstractService {
         }
         else {
             paragrafo = TAG_LISTA_NO_ATTIVITA;
-            paragrafoLink = TAG_LISTA_NO_ATTIVITA;
+            paragrafoLink = VUOTA;
         }
 
         String sottoParagrafo = bio.ordinamento.substring(0, 1);
