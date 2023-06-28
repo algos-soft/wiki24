@@ -66,20 +66,14 @@ public class UploadNomi extends Upload {
         super.postConstruct();
 
         super.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+        super.summary = "[[Utente:Biobot/nomiBio|nomiBio]]";
         super.typeLista = AETypeLista.nomi;
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
-        super.typeLink = (AETypeLink) WPref.linkNomi.getEnumCurrentObj();
+        super.typeLink = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
         //        super.crudBackend = nomeBackend;
     }
 
-    //    protected void fixPreferenzeBackend() {
-    //        if (crudBackend != null) {
-    //            this.lastUpload = crudBackend.lastUpload;
-    //            this.durataUpload = crudBackend.durataUpload;
-    //            this.nextUpload = crudBackend.nextUpload;
-    //        }
-    //    }
 
     public UploadNomi typeLink(AETypeLink typeLink) {
         super.typeLink = typeLink;
@@ -144,7 +138,7 @@ public class UploadNomi extends Upload {
     @Override
     protected void fixMappaWrap() {
         if (!isSottopagina) {
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLink(typeLink).mappaWrap();
+            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLinkParagrafi(typeLink).mappaWrap();
         }
     }
 
@@ -220,13 +214,19 @@ public class UploadNomi extends Upload {
      * Esegue la scrittura di tutte le pagine <br>
      */
     public WResult uploadAll() {
-        WResult result = WResult.crea();
+        WResult result = null;
         long inizio = System.currentTimeMillis();
         String message;
 
-        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio().subList(3, 8);
+        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio().subList(1, 3);
         for (String nome : listaNomi) {
             result = appContext.getBean(UploadNomi.class, nome).esegue();
+//            switch (result.typeResult()) {
+//                case UNO, DUE -> "Eurasia";
+//                case TRE -> "America";
+//                default -> "Resto del Mondo";
+//            };
+int a=87;
         }
 
         result.fine();

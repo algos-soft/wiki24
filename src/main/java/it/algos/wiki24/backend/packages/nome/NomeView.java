@@ -109,7 +109,7 @@ public class NomeView extends WikiView {
         int sogliaMongo = WPref.sogliaMongoNomi.getInt();
         int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
-        WAnchor anchor = WAnchor.build("Categoria:Prenomi composti", "Categoria");
+        WAnchor anchor = WAnchor.build(CATEGORIA + ":Prenomi composti", CATEGORIA);
         WAnchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
         WAnchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
@@ -117,9 +117,9 @@ public class NomeView extends WikiView {
         message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
         addSpan(ASpan.text(message).verde());
         message = String.format("Parametri%s", FORWARD);
-        message += String.format("%s, %s, %s", WPref.usaTaskNomi.getKeyCode(), WPref.linkNomi.getKeyCode(), WPref.typeTocNomi.getKeyCode());
+        message += String.format("%s, %s, %s", WPref.usaTaskNomi.getKeyCode(), WPref.linkParagrafiNomi.getKeyCode(), WPref.typeTocNomi.getKeyCode());
         message += String.format("%s, %s, %s", WPref.sogliaMongoNomi.getKeyCode(), WPref.sogliaWikiNomi.getKeyCode(), WPref.usaSottoNomi.getKeyCode());
-        message += String.format("%s, %s, %s", WPref.usaNumVociNomi.getKeyCode(), WPref.elaboraNomi.getKeyCode(), WPref.uploadNomi.getKeyCode());
+        message += String.format("%s, %s, %s, %s", WPref.usaNumVociNomi.getKeyCode(), WPref.elaboraNomi.getKeyCode(), WPref.uploadNomi.getKeyCode(), WPref.linkCrono.getKeyCode());
         addSpan(ASpan.text(message).blue().small());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale.");
@@ -344,7 +344,6 @@ public class NomeView extends WikiView {
         appContext.getBean(UploadNomi.class).uploadAll();
         reload();
     }
-
 
 
 }// end of crud @Route view class

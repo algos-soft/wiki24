@@ -8,6 +8,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -56,7 +57,7 @@ public class DidascaliaService extends WAbstractService {
         if (listaBio != null) {
             listaDidascalie = new ArrayList<>();
             for (Bio bio : listaBio) {
-                didascalia = lista(bio);
+                didascalia = lista(null, bio);//@todo Controllare
                 if (textService.isValid(didascalia)) {
                     listaDidascalie.add(didascalia);
                 }
@@ -511,36 +512,12 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapNomi(final AETypeLink typeLink,final Bio bio) {
-        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
-        AttPlurale attPlurale;
+    public WrapLista getWrapNomi(final AETypeLink typeLinkParagrafi, final Bio bio) {
         String paragrafo;
         String paragrafoLink;
-        String message;
 
-        if (attSingolare != null) {
-            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
-            if (attPlurale != null) {
-                paragrafo = textService.primaMaiuscola(attPlurale.nome);
-                paragrafoLink = switch (typeLink) {
-                    case linkLista -> PATH_ATTIVITA;
-                    case linkVoce -> attPlurale.linkAttivita;
-                    case nessunLink -> VUOTA;
-                };
-            }
-            else {
-                paragrafo = textService.primaMaiuscola(attSingolare.nome);
-                paragrafoLink = paragrafo;
-                message = String.format("Manca la nazionalità plurale di %s", attSingolare);
-                System.out.println(message);
-                logService.warn(new WrapLog().message(message));
-            }
-        }
-        else {
-            paragrafo = TAG_LISTA_NO_ATTIVITA;
-            paragrafoLink = VUOTA;
-        }
-
+        paragrafo = genereBackend.getPluraleParagrafo(bio);
+        paragrafoLink = VUOTA;
         String sottoParagrafo = bio.ordinamento.substring(0, 1);
         String didascalia = this.lista(bio);
 
@@ -558,40 +535,6 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapCognomi(final Bio bio) {
-        //        Cognome cognome = cognomeBackend.findByCognome(bio.cognome);
-        //        String ordinamento = textService.isValid(bio.nome) ? bio.nome : bio.ordinamento;
-        //        String sottoParagrafo = ordinamento.substring(0, 1);
-        //        String didascalia = this.lista(bio);
-        //        Attivita attivita = attivitaBackend.findFirstBySingolare(bio.attivita);
-        //
-        //        if (attivita == null) {
-        //            return new WrapLista(TAG_LISTA_NO_ATTIVITA, TAG_LISTA_NO_ATTIVITA, ordinamento, sottoParagrafo, didascalia);
-        //        }
-        //
-        //        String paragrafo;
-        //        String paragrafoLink;
-        //
-        //        if (cognome != null) {
-        //            paragrafo = textService.primaMaiuscola(attivita.pluraleLista);
-        //            if (attivita.esistePaginaLista) {
-        //                paragrafoLink = switch ((AETypeLink) WPref.linkCognomi.getEnumCurrentObj()) {
-        //                    case voce -> textService.setDoppieQuadre(paragrafo);
-        //                    case lista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
-        //                    case pagina -> textService.setDoppieQuadre(attivita.linkPaginaAttivita + PIPE + paragrafo);
-        //                    case nessuno -> paragrafo;
-        //                };
-        //            }
-        //            else {
-        //                paragrafoLink = paragrafo;
-        //            }
-        //        }
-        //        else {
-        //            paragrafo = TAG_LISTA_ALTRE;
-        //            paragrafoLink = TAG_LISTA_ALTRE;
-        //        }
-        //
-        //        return new WrapLista(paragrafo, paragrafoLink, ordinamento, sottoParagrafo, didascalia);
-
         return null;
     }
 
@@ -603,7 +546,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrap(final AETypeLista typeLista, final AETypeLink typeLink, final Bio bio) {
+    public WrapLista getWrap(final AETypeLista typeLista, final AETypeLink typeLinkParagrafi, final Bio bio) {
         return switch (typeLista) {
             case giornoNascita -> this.getWrapGiornoNato(bio);
             case giornoMorte -> this.getWrapGiornoMorto(bio);
@@ -611,7 +554,7 @@ public class DidascaliaService extends WAbstractService {
             case annoMorte -> this.getWrapAnnoMorto(bio);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
-            case nomi -> this.getWrapNomi(typeLink,bio);
+            case nomi -> this.getWrapNomi(typeLinkParagrafi, bio);
             case cognomi -> this.getWrapCognomi(bio);
             case listaBreve -> null;
             case listaEstesa -> null;
@@ -757,6 +700,18 @@ public class DidascaliaService extends WAbstractService {
      * @return didascalia completa
      */
     public String lista(final Bio bio) {
+        return getNomeCognome(bio) + VIRGOLA_SPAZIO + getAttivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio);
+    }
+
+    /**
+     * Costruisce la didascalia completa per una lista: <br>
+     * attività, nazionalità, persone di nome, persone di cognome <br>
+     *
+     * @param bio completa
+     *
+     * @return didascalia completa
+     */
+    public String lista(final AETypeLink typeLinkCrono, final Bio bio) {
         return getNomeCognome(bio) + VIRGOLA_SPAZIO + getAttivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio);
     }
 

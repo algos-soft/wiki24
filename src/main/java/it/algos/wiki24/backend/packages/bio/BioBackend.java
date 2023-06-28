@@ -1343,7 +1343,6 @@ public class BioBackend extends WikiBackend {
     //
 
 
-
     //
     //
     // COGNOME
@@ -1629,5 +1628,15 @@ public class BioBackend extends WikiBackend {
     //        lungo = mongoService.mongoOp.count(new Query(), Bio.class);
     //        return lungo > 0 ? lungo.intValue() : 0;
     //    }
+    public AETypeGenere getGenere(Bio bio) {
+        if (bio.sesso.equals("M")) {
+            return AETypeGenere.maschile;
+        }
+        if (bio.sesso.equals("F")) {
+            return AETypeGenere.femminile;
+        }
+
+        return AETypeGenere.nessuno;
+    }
 
 }// end of crud backend class

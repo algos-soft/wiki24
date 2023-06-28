@@ -108,6 +108,7 @@ public enum WPref implements AIGenPref {
 
 
     downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
+    downloadGenereTime("downloadGenereTime", AETypePref.integer, 0, "Durata download di Genere."),
 
     usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa", false),
     resetBio("resetBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset completo delle voci biografiche"),
@@ -169,7 +170,7 @@ public enum WPref implements AIGenPref {
     linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.linkLista, "[AETypeLink] a giorni/anni nelle didascalie"),
     linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
     linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
-    linkNomi("linkNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
+    linkParagrafiNomi("linkParagrafiNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
     linkCognomi("linkCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
 
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),

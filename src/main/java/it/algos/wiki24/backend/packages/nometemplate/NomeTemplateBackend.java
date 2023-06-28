@@ -190,10 +190,6 @@ public class NomeTemplateBackend extends WikiBackend {
         List<AEntity> lista = new ArrayList<>();
 
         for (String riga : super.getRighe()) {
-            if (riga.equals("Félix=Felice")) {
-                int a = 87;
-            }
-
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }

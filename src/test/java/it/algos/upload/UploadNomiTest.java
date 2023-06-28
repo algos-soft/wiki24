@@ -249,7 +249,7 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-    //    @Test
+//    @Test
     @Order(10)
     @DisplayName("10 - Upload test di un nome standard")
     void upload() {
@@ -296,7 +296,7 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-//    @Test
+    //    @Test
     @Order(12)
     @DisplayName("12 - Upload test di un nome con sottopagina")
     void uploadSottoPagina() {
@@ -317,11 +317,86 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-//        @Test
-    @Order(30)
-    @DisplayName("30 - Upload test di un nome grosso con sottopagina")
+
+    //    @Test
+    @Order(31)
+    @DisplayName("31 - Upload test di un nome con linkCrono=nessunLink")
+    void uploadLink() {
+        System.out.println("31 - Upload test di un nome linkCrono=nessunLink");
+        System.out.println(VUOTA);
+
+        sorgente = "adalberto";
+
+        AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        WPref.linkCrono.setValue(AETypeLink.nessunLink);
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        WPref.linkCrono.setValue(typeLinkCronoOld);
+
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    //        @Test
+    @Order(32)
+    @DisplayName("32 - Upload test di un nome con linkCrono=linkVoce")
+    void uploadVoce() {
+        System.out.println("32 - Upload test di un nome linkCrono=linkVoce");
+        System.out.println(VUOTA);
+
+        sorgente = "adalberto";
+
+        AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        WPref.linkCrono.setValue(AETypeLink.linkVoce);
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        WPref.linkCrono.setValue(typeLinkCronoOld);
+
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+
+
+    @Test
+    @Order(40)
+    @DisplayName("40 - Upload test di un nome femminile")
+    void uploadFemminile() {
+        System.out.println("40 - Upload test di un nome femminile");
+        System.out.println(VUOTA);
+
+        sorgente = "adriana";
+        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+    //        @Test
+    @Order(50)
+    @DisplayName("50 - Upload test di un nome grosso con sottopagina")
     void uploadSotto() {
-        System.out.println("30 - Upload test di un nome grosso con sottopagina");
+        System.out.println("50 - Upload test di un nome grosso con sottopagina");
 
         sorgente = "giovanni";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
@@ -338,7 +413,7 @@ public class UploadNomiTest extends WikiTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(40)
     @DisplayName("40 - Upload all")
     void uploadAll() {

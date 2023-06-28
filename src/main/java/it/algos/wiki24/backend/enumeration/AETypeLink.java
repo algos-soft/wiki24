@@ -30,7 +30,7 @@ public enum AETypeLink implements AITypePref {
     public String getPref() {
         StringBuffer buffer = new StringBuffer();
 
-        getAllEnums().forEach(level -> buffer.append(level.name() + VIRGOLA));
+        getAllEnums().forEach(type -> buffer.append(type.name() + VIRGOLA));
 
         buffer.delete(buffer.length() - 1, buffer.length());
         buffer.append(PUNTO_VIRGOLA);

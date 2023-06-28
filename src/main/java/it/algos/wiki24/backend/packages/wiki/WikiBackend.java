@@ -311,7 +311,7 @@ public abstract class WikiBackend extends CrudBackend {
         String testoCore;
 
         testoPaginaAll = wikiApiService.legge(sorgenteDownload);
-        testoCore = textService.estrae(testoPaginaAll, tagIniSorgente, tagEndSorgente);
+        testoCore = textService.estraeLast(testoPaginaAll, tagIniSorgente, tagEndSorgente);
 
         return testoCore;
     }

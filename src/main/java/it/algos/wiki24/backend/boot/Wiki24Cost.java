@@ -193,6 +193,11 @@ public class Wiki24Cost {
 
     public static final String TAG_INCIPIT_NOMI = "Template:" + INCIPIT_NOMI;
     public static final String TAG_INCIPIT_COGNOMI = "Modulo:" + INCIPIT_COGNOMI;
+    public static final String MODULO = "Modulo";
+    public static final String PROGETTO = "Progetto";
+    public static final String CATEGORIA = "Categoria";
+    public static final String TEMPLATE = "Template";
+    public static final String TEST = "Test";
 
 
 
@@ -228,7 +233,8 @@ public class Wiki24Cost {
 
     public static final String TAG_PROFESSIONE = "professione";
 
-    public static final String TAG_DOPPIO_NOME = "doppionome";
+//    public static final String TAG_DOPPIO_NOME = "doppionome";
+    public static final String TAG_NOME_DOPPIO = "nomedoppio";
 
     public static final String TAG_COGNOME = "cognome";
 

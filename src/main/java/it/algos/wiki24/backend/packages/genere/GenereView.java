@@ -6,6 +6,7 @@ import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
@@ -74,14 +75,16 @@ public class GenereView extends WikiView {
         super.lastDownload = WPref.downloadGenere;
         super.wikiModuloTitle = PATH_MODULO_GENERE;
 
-        super.usaBottoneUploadAll = false;
-        //        super.usaBottoneStatistiche = false;
-        super.usaBottoneUploadStatistiche = false;
-        super.usaBottonePaginaWiki = false;
+        super.usaBottoneReset = false;
+        super.usaReset = true;
+        super.usaBottoneDownload = true;
+        super.usaBottoneNew = true;
+        super.usaBottoneEdit = true;
         super.usaBottoneTest = false;
-        super.usaBottoneUploadPagina = false;
-
-        super.fixPreferenzeBackend();
+        super.usaBottoneDeleteEntity = false;
+        super.usaBottoneUploadAll = false;
+        super.usaBottonePaginaWiki = false;
+        super.usaBottoneUploadModuloAlfabetizzato = true;
     }
 
     /**
@@ -92,8 +95,7 @@ public class GenereView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Anchor anchor = new Anchor(VaadCost.PATH_WIKI + PATH_MODULO_GENERE, PATH_MODULO_GENERE);
-        anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, MODULO);
         alertPlaceHolder.add(new Span(anchor));
 
         message = "Contiene la tabella di conversione delle attività passate via parametri 'Attività/Attività2/Attività3',";
@@ -116,7 +118,7 @@ public class GenereView extends WikiView {
     }
 
 
-    protected void fixBottoniTopSpecifici() {
+    protected void fixBottoniTopSpecifici2() {
         searchFieldPluraleMaschile = new TextField();
         searchFieldPluraleMaschile.setPlaceholder(TAG_ALTRE_BY + "maschile");
         searchFieldPluraleMaschile.setWidth(WIDTH_EM);

@@ -2,6 +2,7 @@ package it.algos.wiki24.wiki.query;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -420,14 +421,22 @@ public class QueryWrite extends AQuery {
         long revid = getNewRevid(rispostaDellaQuery);
         String newtimestamp = getNewTimestamp(rispostaDellaQuery);
         boolean modificata = getModificata(rispostaDellaQuery);
+        boolean creata = getCreata(rispostaDellaQuery);
 
         result.setModificata(modificata);
         if (modificata) {
             result.eseguito(true);
             result.setValidMessage("Pagina modificata");
+            if (creata) {
+                result.typeResult(AETypeResult.queryWriteCreata);
+            }
+            else {
+                result.typeResult(AETypeResult.queryWriteModificata);
+            }
         }
         else {
             result.setErrorMessage("Pagina con lo stesso testo");
+            result.typeResult(AETypeResult.queryWriteEsistente);
         }
         result.setValido(true);
 
@@ -436,7 +445,6 @@ public class QueryWrite extends AQuery {
         result.setNewrevid(revid);
         result.setNewtimestamp(newtimestamp);
         result.setFine();
-
         return result;
     }
 
@@ -529,6 +537,28 @@ public class QueryWrite extends AQuery {
         }
 
         return newtimestamp;
+    }
+
+    /**
+     * Restituisce lo stato del flag 'new' <br>
+     *
+     * @param contenutoCompletoPaginaWebInFormatoJSON in ingresso
+     *
+     * @return flag 'nochange'
+     */
+    public boolean getCreata(String contenutoCompletoPaginaWebInFormatoJSON) {
+        JSONObject objectAll = (JSONObject) JSONValue.parse(contenutoCompletoPaginaWebInFormatoJSON);
+        JSONObject objectEdit = null;
+
+        try {
+            if (objectAll != null && objectAll.get(EDIT) != null && objectAll.get(EDIT) instanceof JSONObject) {
+                objectEdit = (JSONObject) objectAll.get(EDIT);
+            }
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
+        return objectEdit != null ? objectEdit.get(NEW) != null && objectEdit.get(NEW).equals(true) : false;
     }
 
     /**

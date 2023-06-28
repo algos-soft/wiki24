@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -81,8 +82,8 @@ public class NomeTemplateView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, "Template");
-        WAnchor anchor2 = WAnchor.build(backend.uploadTest, "Test");
+        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, TEMPLATE);
+        WAnchor anchor2 = WAnchor.build(backend.uploadTest, TEST);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2));
 
 //        Button button = new Button("Sorgente");

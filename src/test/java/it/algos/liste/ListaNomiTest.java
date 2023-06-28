@@ -50,8 +50,8 @@ public class ListaNomiTest extends WikiTest {
         return Stream.of(
                 Arguments.of(VUOTA),
                 Arguments.of("Aaron"),
-                Arguments.of("Marcello"),
-                Arguments.of("adam"),
+                Arguments.of("Alexandra"),
+                Arguments.of("adriana"),
                 Arguments.of("maria teresa")
         );
     }
@@ -118,7 +118,7 @@ public class ListaNomiTest extends WikiTest {
             return;
         }
 
-        listBio =  appContext.getBean(ListaNomi.class,sorgente).listaBio();
+        listBio = appContext.getBean(ListaNomi.class, sorgente).listaBio();
 
         if (listBio != null && listBio.size() > 0) {
             message = String.format("Ci sono %d biografie che implementano il nome %s", listBio.size(), sorgente);
@@ -136,10 +136,10 @@ public class ListaNomiTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "NOMI")
     @Order(4)
-    @DisplayName("4 - Lista wrapLista di vari nomi con typeLink=linkLista")
+    @DisplayName("4 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista")
         //--nome
     void listaWrapDidascalie(final String nome) {
-        System.out.println("4 - Lista wrapLista di vari nomi con typeLink=linkLista");
+        System.out.println("4 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista");
         sorgente = nome;
         int size;
 
@@ -147,7 +147,7 @@ public class ListaNomiTest extends WikiTest {
             return;
         }
 
-        listWrapLista = appContext.getBean(ListaNomi.class,sorgente).typeLink(AETypeLink.linkLista).listaWrap();
+        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkLista).listaWrap();
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             size = listWrapLista.size();
@@ -162,13 +162,14 @@ public class ListaNomiTest extends WikiTest {
             System.out.println(message);
         }
     }
+
     @ParameterizedTest
     @MethodSource(value = "NOMI")
     @Order(5)
-    @DisplayName("5 - Lista wrapLista di vari nomi con typeLink=linkVoce")
+    @DisplayName("5 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce")
         //--nome
     void listaWrapDidascalie2(final String nome) {
-        System.out.println("5 - Lista wrapLista di vari nomi con typeLink=linkVoce");
+        System.out.println("5 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce");
         sorgente = nome;
         int size;
 
@@ -176,7 +177,7 @@ public class ListaNomiTest extends WikiTest {
             return;
         }
 
-        listWrapLista = appContext.getBean(ListaNomi.class,sorgente).typeLink(AETypeLink.linkVoce).listaWrap();
+        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkVoce).listaWrap();
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             size = listWrapLista.size();
@@ -191,21 +192,25 @@ public class ListaNomiTest extends WikiTest {
             System.out.println(message);
         }
     }
+
+
     @ParameterizedTest
     @MethodSource(value = "NOMI")
     @Order(6)
-    @DisplayName("6 - Lista wrapLista di vari nomi con typeLink=nessunLink (default)")
+    @DisplayName("6 - Lista wrapLista di vari nomi con linkCrono=nessunLink")
         //--nome
     void listaWrapDidascalie3(final String nome) {
-        System.out.println("6 - Lista wrapLista di vari nomi con typeLink=nessunLink (default)");
+        System.out.println("6 - Lista wrapLista di vari nomi con linkCrono=nessunLink");
         sorgente = nome;
         int size;
 
         if (textService.isEmpty(nome)) {
             return;
         }
-
-        listWrapLista = appContext.getBean(ListaNomi.class,sorgente).listaWrap();
+        AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        WPref.linkCrono.setValue(AETypeLink.nessunLink);
+        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
+        WPref.linkCrono.setValue(typeLinkCronoOld);
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             size = listWrapLista.size();
@@ -225,10 +230,74 @@ public class ListaNomiTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "NOMI")
     @Order(7)
-    @DisplayName("7 - Key della mappa wrapLista di vari nomi")
+    @DisplayName("7 - Lista wrapLista di vari nomi con linkCrono=linkVoce")
+        //--nome
+    void listaWrapDidascalie4(final String nome) {
+        System.out.println("7 - Lista wrapLista di vari nomi con linkCrono=linkVoce");
+        sorgente = nome;
+        int size;
+
+        if (textService.isEmpty(nome)) {
+            return;
+        }
+
+        AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        WPref.linkCrono.setValue(AETypeLink.linkVoce);
+        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
+        WPref.linkCrono.setValue(typeLinkCronoOld);
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano il nome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+            printWrapLista(listWrapLista.subList(size - 5, size));
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI")
+    @Order(8)
+    @DisplayName("8 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink")
+        //--nome
+    void listaWrapDidascalie5(final String nome) {
+        System.out.println("8 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink");
+        sorgente = nome;
+        int size;
+
+        if (textService.isEmpty(nome)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano il nome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+            printWrapLista(listWrapLista.subList(size - 5, size));
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI")
+    @Order(20)
+    @DisplayName("20 - Key della mappa wrapLista di vari nomi")
         //--nome
     void mappaWrap(final String nome) {
-        System.out.println("7 - Key della mappa wrapLista di vari nomi");
+        System.out.println("20 - Key della mappa wrapLista di vari nomi");
         sorgente = nome;
         int numVoci;
 
@@ -236,7 +305,7 @@ public class ListaNomiTest extends WikiTest {
             return;
         }
 
-        mappaWrap = appContext.getBean(ListaNomi.class,sorgente).mappaWrap();
+        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
@@ -253,11 +322,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(8)
-    @DisplayName("8 - Mappa wrapLista di vari nomi con typeLink=linkLista")
+    @Order(30)
+    @DisplayName("30 - Mappa wrapLista di vari nomi con typeLink=linkLista")
         //--nome
     void mappaWrapDidascalie(final String nome) {
-        System.out.println("8 - Mappa wrapLista di vari nomi con typeLink=linkLista");
+        System.out.println("30 - Mappa wrapLista di vari nomi con typeLink=linkLista");
         sorgente = nome;
         int numVoci;
 
@@ -265,7 +334,7 @@ public class ListaNomiTest extends WikiTest {
             return;
         }
 
-        mappaWrap = appContext.getBean(ListaNomi.class,sorgente).mappaWrap();
+        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);

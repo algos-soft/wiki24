@@ -7,6 +7,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
+import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
@@ -94,6 +95,9 @@ public class WAbstractService extends AbstractService {
 
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
+
+    @Autowired
+    public GenereBackend genereBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>

@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -27,7 +28,7 @@ import java.util.*;
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
 @PageTitle("NomiDoppi")
-@Route(value = "nomedoppio", layout = MainLayout.class)
+@Route(value = TAG_NOME_DOPPIO, layout = MainLayout.class)
 public class NomeDoppioView extends WikiView {
 
 
@@ -79,8 +80,8 @@ public class NomeDoppioView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, "Progetto");
-        WAnchor anchor2 = WAnchor.build(backend.uploadTest, "Test");
+        WAnchor anchor = WAnchor.build(backend.sorgenteDownload, PROGETTO);
+        WAnchor anchor2 = WAnchor.build(backend.uploadTest, TEST);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";

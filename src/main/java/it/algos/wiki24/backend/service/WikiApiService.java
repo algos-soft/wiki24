@@ -65,6 +65,7 @@ public class WikiApiService extends WAbstractService {
     public static final String NEW_TIME_STAMP = "newtimestamp";
 
     public static final String NO_CHANGE = "nochange";
+    public static final String NEW = "new";
 
     public static final String LOGIN = "login";
 

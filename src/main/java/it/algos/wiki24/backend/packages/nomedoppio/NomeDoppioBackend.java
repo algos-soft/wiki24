@@ -41,6 +41,7 @@ public class NomeDoppioBackend extends WikiBackend {
 
         super.lastReset = WPref.downloadNomiDoppi;
         super.lastDownload = WPref.downloadNomiDoppi;
+        super.durataDownload = WPref.downloadNomiTime;
 
         super.sorgenteDownload = PATH_TABELLA_NOMI_DOPPI;
         super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;

@@ -1,12 +1,16 @@
 package it.algos.wiki24.backend.packages.genere;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -34,45 +38,43 @@ public class GenereBackend extends WikiBackend {
 
     public GenereRepository repository;
 
-    /**
-     * Costruttore @Autowired (facoltativo) @Qualifier (obbligatorio) <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Si usa un @Qualifier(), per specificare la classe che incrementa l'interfaccia repository <br>
-     * Si usa una costante statica, per essere sicuri di scriverla uguale a quella di xxxRepository <br>
-     * Regola la classe di persistenza dei dati specifica e la passa al costruttore della superclasse <br>
-     * Regola la entityClazz (final nella superclasse) associata a questo service <br>
-     *
-     * @param crudRepository per la persistenza dei dati
-     */
-    public GenereBackend(@Autowired @Qualifier(TAG_GENERE) final MongoRepository crudRepository) {
-        super(crudRepository, Genere.class);
-        this.repository = (GenereRepository) crudRepository;
+    public GenereBackend() {
+        super(Genere.class);
     }
 
-    public Genere creaIfNotExist(final String singolare, final AETypeGenere type, final String pluraleMaschile, final String pluraleFemminile) {
-        return checkAndSave(newEntity(singolare, type, pluraleMaschile, pluraleFemminile));
+
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.lastReset = WPref.downloadGenere;
+        super.lastDownload = WPref.downloadGenere;
+        super.durataDownload = WPref.downloadGenereTime;
+
+        super.sorgenteDownload = PATH_MODULO_GENERE;
+        super.tagIniSorgente = "-- Attività al femminile plurale\nreturn {\n";
+        super.tagEndSorgente = "}";
+        super.tagSplitSorgente = VIRGOLA + CAPO;
+        //        super.uploadTest = UPLOAD_TITLE_DEBUG + DOPPI;
     }
 
-    public Genere checkAndSave(final Genere genere) {
-        return isExist(genere.singolare) ? null : repository.insert(genere);
+
+    public Genere creaIfNotExist(final String keyPropertyValue, final AETypeGenere type, final String pluraleMaschile, final String pluraleFemminile) {
+        Genere newGenere;
+
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+        else {
+            newGenere = newEntity(keyPropertyValue, type, pluraleMaschile, pluraleFemminile);
+            return newGenere != null ? insert(newGenere) : null;
+        }
     }
 
     public boolean isExist(final String singolare) {
         return findFirstBySingolare(singolare) != null;
     }
 
-    /**
-     * Retrieves the first entity by a 'singular' property.
-     * Cerca una singola entity con una query. <br>
-     * Restituisce un valore valido ANCHE se esistono diverse entities <br>
-     *
-     * @param genereSingolare per costruire la query
-     *
-     * @return the FIRST founded entity
-     */
-    public Genere findFirstBySingolare(final String genereSingolare) {
-        return repository.findFirstBySingolare(genereSingolare);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -109,6 +111,62 @@ public class GenereBackend extends WikiBackend {
         return newEntityBean;
     }
 
+
+    @Override
+    public Genere findById(final String keyID) {
+        return (Genere) super.findById(keyID);
+    }
+
+    @Override
+    public Genere findByKey(final String keyValue) {
+        return (Genere) super.findByKey(keyValue);
+    }
+
+    @Override
+    public Genere findByProperty(final String propertyName, final Object propertyValue) {
+        return (Genere) super.findByProperty(propertyName, propertyValue);
+    }
+
+    @Override
+    public Genere save(AEntity entity) {
+        return (Genere) super.save(entity);
+    }
+
+    @Override
+    public Genere insert(AEntity entity) {
+        return (Genere) super.insert(entity);
+    }
+
+    @Override
+    public Genere update(AEntity entity) {
+        return (Genere) super.update(entity);
+    }
+
+    @Override
+    public List<Genere> findAll() {
+        return super.findAll();
+    }
+
+    @Override
+    public List<Genere> findAllNoSort() {
+        return super.findAllNoSort();
+    }
+
+    @Override
+    public List<Genere> findAllSortCorrente() {
+        return super.findAllSortCorrente();
+    }
+
+    @Override
+    public List<Genere> findAllSortCorrenteReverse() {
+        return super.findAllSortCorrenteReverse();
+    }
+
+    @Override
+    public List<Genere> findAllSort(Sort sort) {
+        return super.findAllSort(sort);
+    }
+
     protected Predicate<Genere> startEx = genere -> genere.singolare.startsWith(TAG_EX_SPAZIO) || genere.singolare.startsWith(TAG_EX2);
 
 
@@ -116,6 +174,18 @@ public class GenereBackend extends WikiBackend {
         return (List<Genere>) findAllSortCorrente().stream().filter(startEx).collect(Collectors.toList());
     }
 
+    /**
+     * Retrieves the first entity by a 'singular' property.
+     * Cerca una singola entity con una query. <br>
+     * Restituisce un valore valido ANCHE se esistono diverse entities <br>
+     *
+     * @param genereSingolare per costruire la query
+     *
+     * @return the FIRST founded entity
+     */
+    public Genere findFirstBySingolare(final String genereSingolare) {
+        return repository.findFirstBySingolare(genereSingolare);
+    }
 
     public List<String> findAllSingolari() {
         List<String> singolari = new ArrayList<>();
@@ -179,12 +249,15 @@ public class GenereBackend extends WikiBackend {
     }
 
     public String getPlurale(String singolare) {
-        Genere genere = findFirstBySingolare(singolare);
-        return getPlurale(singolare, genere.type);
+        Genere genere = findByKey(singolare);
+        return genere != null ? getPlurale(singolare, genere.type) : VUOTA;
     }
 
     public String getPlurale(String singolare, AETypeGenere type) {
-        Genere genere = findFirstBySingolare(singolare);
+        Genere genere = findByKey(singolare);
+        if (genere == null) {
+            return VUOTA;
+        }
 
         if (type == AETypeGenere.maschile && genere.pluraleMaschile != null) {
             return genere.pluraleMaschile;
@@ -195,6 +268,63 @@ public class GenereBackend extends WikiBackend {
         }
 
         return VUOTA;
+    }
+
+    public String getPluraleParagrafo(Bio bio) {
+        String attivita = bio != null ? bio.attivita : VUOTA;
+        Genere genere = textService.isValid(attivita) ? findByKey(attivita) : null;
+        AttSingolare entityBeanAttSingolare;
+
+        if (genere != null) {
+            return getPluraleParagrafo(bio, genere);
+        }
+        else {
+            entityBeanAttSingolare = attSingolareBackend.findByKey(attivita);
+            if (entityBeanAttSingolare != null) {
+                return textService.primaMaiuscola(entityBeanAttSingolare.plurale);
+            }
+            else {
+                return TAG_LISTA_NO_ATTIVITA;
+            }
+        }
+    }
+
+
+    public String getPluraleParagrafo(Bio bio, Genere genere) {
+        String pluraleParagrafo = VUOTA;
+        AETypeGenere typeBio = AETypeGenere.nessuno;
+        if (genere == null) {
+            return VUOTA;
+        }
+        pluraleParagrafo = switch (genere.type) {
+            case maschile -> genere.pluraleMaschile;
+            case femminile -> genere.pluraleFemminile;
+            case entrambi -> VUOTA;
+            case nessuno -> TAG_LISTA_NO_ATTIVITA;
+        };
+        if (textService.isEmpty(pluraleParagrafo) && genere.type == AETypeGenere.entrambi) {
+            typeBio = bioBackend.getGenere(bio);
+            pluraleParagrafo = switch (typeBio) {
+                case maschile -> genere.pluraleMaschile;
+                case femminile -> genere.pluraleFemminile;
+                default -> TAG_LISTA_NO_ATTIVITA;
+            };
+        }
+
+        return textService.isValid(pluraleParagrafo) ? textService.primaMaiuscola(pluraleParagrafo) : TAG_LISTA_NO_ATTIVITA;
+    }
+
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+
+        //--Cancella la (eventuale) precedente lista di genere
+        deleteAll();
+
+        download(PATH_MODULO_GENERE);
+        //        result = downloadGenere(result);
+        //        return super.fixResetDownload(result);
+        return result;
     }
 
 

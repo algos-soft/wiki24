@@ -40,7 +40,7 @@ public class ListaNomi extends Lista {
     public ListaNomi(String nome) {
         this.nomeLista = nome;
         super.typeLista = AETypeLista.nomi;
-        super.typeLink = (AETypeLink) WPref.linkNomi.getEnumCurrentObj();
+        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
     }// end of constructor
 
@@ -59,8 +59,10 @@ public class ListaNomi extends Lista {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
     }
 
-    public ListaNomi typeLink(AETypeLink typeLink) {
-        super.typeLink = typeLink;
+    public ListaNomi typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
+        super.typeLinkParagrafi = typeLinkParagrafi;
         return this;
     }
+
+
 }
