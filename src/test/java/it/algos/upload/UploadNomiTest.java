@@ -3,6 +3,7 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -390,6 +391,9 @@ public class UploadNomiTest extends WikiTest {
 
         System.out.println(VUOTA);
         printRisultato(ottenutoRisultato);
+
+        message += String.format("Controllate=87 voci. %s", AETypeTime.millisecondi.message(ottenutoRisultato));
+        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
     }
 
     //        @Test

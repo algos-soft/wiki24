@@ -217,22 +217,33 @@ public class UploadNomi extends Upload {
         WResult result = null;
         long inizio = System.currentTimeMillis();
         String message;
+        int pagineCreate = 0;
+        int pagineModificate = 0;
+        int pagineEsistenti = 0;
+        int pagineControllate = 0;
 
-        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio().subList(1, 3);
+        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio();
         for (String nome : listaNomi) {
             result = appContext.getBean(UploadNomi.class, nome).esegue();
-//            switch (result.typeResult()) {
-//                case UNO, DUE -> "Eurasia";
-//                case TRE -> "America";
-//                default -> "Resto del Mondo";
-//            };
-int a=87;
-        }
 
+            switch (result.getTypeResult()) {
+                case queryWriteCreata -> pagineCreate++;
+                case queryWriteModificata -> pagineModificate++;
+                case queryWriteEsistente -> pagineEsistenti++;
+                default -> pagineControllate++;
+            } ;
+        }
         result.fine();
 
+        logService.info(new WrapLog().message(String.format("Create %d", pagineCreate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Modificate %d", pagineModificate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Esistenti %d", pagineEsistenti)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Controllate %d", pagineControllate)).type(AETypeLog.upload));
+
         int minuti = AETypeTime.minuti.durata(result.getInizio());
-        message = String.format("Upload di %d pagine di nomi con numBio>%d, in circa %d minuti", listaNomi.size(), WPref.sogliaWikiNomi.getInt(), minuti);
+        message = String.format("Upload di %d pagine di nomi con numBio>%d.", listaNomi.size(), WPref.sogliaWikiNomi.getInt());
+        message += String.format(" Nuove=%s - Modificate=%s - Esistenti=%s - Controllate=%s.", pagineCreate, pagineModificate, pagineEsistenti, pagineControllate);
+        message += String.format(" %s", AETypeTime.minuti.message(result));
         logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
 
         fixUploadMinuti(inizio);
