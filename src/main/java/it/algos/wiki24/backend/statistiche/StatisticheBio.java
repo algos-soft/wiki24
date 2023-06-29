@@ -358,7 +358,7 @@ public class StatisticheBio extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {
-        super.esegue();
+        super.prepara();
         return super.upload(PATH_STATISTICHE);
     }
 
@@ -366,7 +366,7 @@ public class StatisticheBio extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult uploadTest() {
-        super.esegue();
+        super.prepara();
         return super.upload(UPLOAD_TITLE_DEBUG + STATISTICHE);
     }
 

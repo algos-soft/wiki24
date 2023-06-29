@@ -302,7 +302,7 @@ public class StatisticheGiorni extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {
-        super.esegue();
+        super.prepara();
         return super.upload(PATH_GIORNI);
     }
 
@@ -310,7 +310,7 @@ public class StatisticheGiorni extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult uploadTest() {
-        super.esegue();
+        super.prepara();
         return super.upload(UPLOAD_TITLE_DEBUG + GIORNI);
     }
 

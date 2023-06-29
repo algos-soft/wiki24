@@ -52,6 +52,7 @@ public class StatisticheNazionalita extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.forceToc;
         super.lastStatistica = WPref.statisticaNazPlurale;
+        super.durataStatistica = WPref.statisticaNazPluraleTime;
         super.typeTime = AETypeTime.minuti;
     }
 
@@ -397,7 +398,7 @@ public class StatisticheNazionalita extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {
-        super.esegue();
+        super.prepara();
         return super.upload(PATH_NAZIONALITA);
     }
 
@@ -406,7 +407,7 @@ public class StatisticheNazionalita extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult uploadTest() {
-        super.esegue();
+        super.prepara();
         return super.upload(UPLOAD_TITLE_DEBUG + PATH_NAZIONALITA);
     }
 

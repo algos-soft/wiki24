@@ -129,7 +129,11 @@ public enum WPref implements AIGenPref {
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
 
     statisticaAttPlurale("statisticaAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività plurali."),
+    statisticaAttPluraleTime("statisticaAttPluraleTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per le attività plurali."),
     statisticaNazPlurale("statisticaNazPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le nazionalità plurali."),
+    statisticaNazPluraleTime("statisticaNazPluraleTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per le nazionalità plurali."),
+    statisticaNomi("statisticaNomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per i nomi."),
+    statisticaNomiTime("statisticaNomiTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per i nomi."),
 
 
     usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni", false),

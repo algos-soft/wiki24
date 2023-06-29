@@ -44,10 +44,11 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano lo stesso nome", widthEM = 6)
     public int numBio;
 
+    @AIField(type = AETypeField.text, widthEM = 12)
+    public String paginaVoce;
 
     @AIField(type = AETypeField.text, widthEM = 18)
     public String paginaLista;
-
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
     public boolean distinto;

@@ -11,6 +11,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
@@ -130,6 +131,9 @@ public abstract class Statistiche {
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
 
+    @Autowired
+    public NomeBackend nomeBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -156,7 +160,7 @@ public abstract class Statistiche {
 
     protected String infoTime;
 
-    protected void esegue() {
+    protected void prepara() {
         this.fixPreferenze();
         this.elabora();
         this.creaLista();
@@ -283,16 +287,21 @@ public abstract class Statistiche {
         StringBuffer buffer = new StringBuffer();
         String riga;
         MappaStatistiche mappaSingola;
+        int numRiga = 1;
 
         for (String key : mappa.keySet()) {
             mappaSingola = mappa.get(key);
-            riga = riga(mappaSingola);
+            riga = riga(numRiga++, mappaSingola);
             if (textService.isValid(riga)) {
                 buffer.append(riga);
             }
         }
 
         return buffer.toString();
+    }
+
+    protected String riga(int numRiga, MappaStatistiche mappa) {
+        return VUOTA;
     }
 
     protected String riga(MappaStatistiche mappa) {

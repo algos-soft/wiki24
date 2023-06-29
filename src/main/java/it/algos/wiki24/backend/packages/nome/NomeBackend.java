@@ -64,13 +64,17 @@ public class NomeBackend extends WikiBackend {
     }
 
     public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template) {
+        return creaIfNotExist(keyPropertyValue, numBio, distinto, doppio, template, VUOTA);
+    }
+
+    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce) {
         Nome newNome;
 
         if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
             return null;
         }
         else {
-            newNome = newEntity(keyPropertyValue, numBio, distinto, doppio, template);
+            newNome = newEntity(keyPropertyValue, numBio, distinto, doppio, template, paginaVoce);
             return newNome != null ? insert(newNome) : null;
         }
     }
@@ -93,16 +97,17 @@ public class NomeBackend extends WikiBackend {
      */
     @Override
     public Nome newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, 0, false, false, false);
+        return newEntity(keyPropertyValue, 0, false, false, false, VUOTA);
     }
 
-    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template) {
+    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce) {
         Nome newEntityBean = Nome.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .numBio(numBio)
                 .distinto(distinto)
                 .template(template)
                 .doppio(doppio)
+                .paginaVoce(textService.isValid(paginaVoce) ? paginaVoce : null)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
@@ -185,7 +190,7 @@ public class NomeBackend extends WikiBackend {
         AResult result = super.resetDownload();
         String message;
 
-        message = String.format("Creazione completa nomi delle biografie. Circa 2 minuti.");
+        message = String.format("Creazione completa nomi delle biografie. Circa %d secondi.", WPref.downloadNomiTime.getInt());
         System.out.println(message);
 
         //--Cancella tutte le entities della collezione
@@ -219,6 +224,7 @@ public class NomeBackend extends WikiBackend {
         int sogliaMongo = WPref.sogliaMongoNomi.getInt(); //--Soglia minima per creare una entity nella collezione Nomi sul mongoDB
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
+        boolean debug = Pref.debug.is();
 
         for (String distinto : listaNomiDistinti) {
             numBio = bioBackend.countNome(distinto);
@@ -227,8 +233,10 @@ public class NomeBackend extends WikiBackend {
                 result.setValido(fixLista(lista, entityBean, entityBean.id));
             }
             else {
-                message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity su mongo", numBio, distinto);
-                logService.debug(new WrapLog().message(message));
+                if (debug) {
+                    message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity su mongo", numBio, distinto);
+                    logService.info(new WrapLog().message(message));
+                }
             }
         }// end of for cycle
 
@@ -275,20 +283,23 @@ public class NomeBackend extends WikiBackend {
         List<NomeTemplate> listaTemplate;
         Nome entityBean;
         int numBio;
+        String linkPagina = VUOTA;
 
         nomeTemplateBackend.download();
         listaTemplate = nomeTemplateBackend.findAll();
 
         if (listaTemplate != null) {
             for (NomeTemplate entityBeanNomeTemplate : listaTemplate) {
+                linkPagina = textService.isValid(entityBeanNomeTemplate.linkPagina) ? textService.setDoppieQuadre(entityBeanNomeTemplate.linkPagina) : VUOTA;
                 if (isExistByKey(entityBeanNomeTemplate.nome)) {
                     entityBean = findByKey(entityBeanNomeTemplate.nome);
                     entityBean.template = true;
+                    entityBean.paginaVoce = linkPagina;
                     save(entityBean);
                 }
                 else {
                     numBio = bioBackend.countNome(entityBeanNomeTemplate.nome);
-                    creaIfNotExist(entityBeanNomeTemplate.nome, numBio, false, false, true);
+                    creaIfNotExist(entityBeanNomeTemplate.nome, numBio, false, false, true, linkPagina);
                 }
             }
         }
@@ -296,30 +307,6 @@ public class NomeBackend extends WikiBackend {
         return result;
     }
 
-    //    /**
-    //     * Registra il numero di voci biografiche che hanno il nome indicato <br>
-    //     * Sono validi i nome 'semplici' oppure quelli dell'apposita collection 'doppinomi' <br>
-    //     */
-    //    public Nome saveNome(String nomeTxt) {
-    //        Nome nome = null;
-    //        //--Soglia minima per creare una entity nella collezione Nomi sul mongoDB
-    //        int sogliaMongo = pref.getInt(SOGLIA_NOMI_MONGO, 40);
-    //        //--Soglia minima per creare una pagina sul server wiki
-    //        int sogliaWiki = pref.getInt(SOGLIA_NOMI_PAGINA_WIKI, 50);
-    //        boolean valido;
-    //        long numVoci = 0;
-    //        Query query = new Query();
-    //
-    //        query.addCriteria(Criteria.where("nome").is(nomeTxt));
-    //        numVoci = mongo.mongoOp.count(query, Bio.class);
-    //        valido = numVoci > sogliaWiki;
-    //
-    //        if (numVoci >= sogliaMongo && text.isValid(nomeTxt)) {
-    //            nome = findOrCrea(nomeTxt, (int) numVoci, valido);
-    //        }// end of if cycle
-    //
-    //        return nome;
-    //    }// end of method
 
     /**
      * ResetOnlyEmpty -> Download. <br>

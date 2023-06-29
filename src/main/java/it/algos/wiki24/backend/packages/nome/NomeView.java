@@ -80,8 +80,8 @@ public class NomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaLista", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -209,30 +209,28 @@ public class NomeView extends WikiView {
     @Override
     protected void addColumnsOneByOne() {
         super.addColumnsOneByOne();
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
-
-        grid.addComponentColumn(entity -> {
-            String wikiTitle = textService.primaMaiuscola(((Nome) entity).paginaLista);
-            Button button = new Button(wikiTitle, click -> {
-                wikiApiService.openWikiPage(wikiTitle);
-            });
-            if (((Nome) entity).numBio < sogliaWiki) {
-                button.getStyle().set("color", "red");
-            }
-            else {
-                if (((Nome) entity).isEsisteLista()) {
-                    button.getStyle().set("color", "green");
-                }
-                else {
-                    button.getStyle().set("color", "blue");
-                }
-            }
-            button.getStyle().set("margin-top", "0");
-            button.getStyle().set("margin-bottom", "0");
-            button.getStyle().set("background-color", "transparent");
-
-            return button;
-        }).setHeader("PaginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
+        //        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        //
+        //        grid.addComponentColumn(entity -> {
+        //            String wikiTitle = textService.primaMaiuscola(((Nome) entity).paginaLista);
+        //            Button button = new Button(wikiTitle, click -> {wikiApiService.openWikiPage(wikiTitle);});
+        //            if (((Nome) entity).numBio < sogliaWiki) {
+        //                button.getStyle().set("color", "red");
+        //            }
+        //            else {
+        //                if (((Nome) entity).isEsisteLista()) {
+        //                    button.getStyle().set("color", "green");
+        //                }
+        //                else {
+        //                    button.getStyle().set("color", "blue");
+        //                }
+        //            }
+        //            button.getStyle().set("margin-top", "0");
+        //            button.getStyle().set("margin-bottom", "0");
+        //            button.getStyle().set("background-color", "transparent");
+        //
+        //            return button;
+        //        }).setHeader("PaginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
     }
 
 

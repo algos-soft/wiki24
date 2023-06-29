@@ -44,7 +44,6 @@ public class StatisticheAttivita extends Statistiche {
 
 
     /**
-     * Preferenze usate da questa 'view' <br>
      * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
@@ -53,6 +52,7 @@ public class StatisticheAttivita extends Statistiche {
         super.fixPreferenze();
         super.typeToc = AETypeToc.forceToc;
         super.lastStatistica = WPref.statisticaAttPlurale;
+        super.durataStatistica = WPref.statisticaAttPluraleTime;
         super.typeTime = AETypeTime.minuti;
     }
 
@@ -663,7 +663,7 @@ public class StatisticheAttivita extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {
-        super.esegue();
+        super.prepara();
         return super.upload(PATH_ATTIVITA);
     }
 
@@ -671,7 +671,7 @@ public class StatisticheAttivita extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult uploadTest() {
-        super.esegue();
+        super.prepara();
         return super.upload(UPLOAD_TITLE_DEBUG + PATH_ATTIVITA);
     }
 

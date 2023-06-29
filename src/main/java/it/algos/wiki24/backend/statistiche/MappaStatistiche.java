@@ -33,6 +33,8 @@ public class MappaStatistiche {
 
     private int numAnnoMorto = 0;
 
+    private int numNomi = 0;
+
     private int ordine;
 
     private int pos;
@@ -93,11 +95,19 @@ public class MappaStatistiche {
         this.nati = nati;
         this.morti = morti;
     }
+
     public MappaStatistiche(String chiave, String nome, int nati, int morti) {
         this.chiave = chiave;
         this.nome = nome;
         this.nati = nati;
         this.morti = morti;
+    }
+
+    public static MappaStatistiche nome(String chiave, int numNomi, boolean superaSoglia) {
+        MappaStatistiche mappa = new MappaStatistiche(chiave);
+        mappa.numNomi = numNomi;
+        mappa.superaSoglia = superaSoglia;
+        return mappa;
     }
 
     public String getChiave() {
@@ -149,6 +159,9 @@ public class MappaStatistiche {
         return numAnnoMorto;
     }
 
+    public int getNumNomi() {
+        return numNomi;
+    }
 
     public int getOrdine() {
         return ordine;
@@ -218,6 +231,7 @@ public class MappaStatistiche {
     public boolean isSuperaSoglia() {
         return superaSoglia;
     }
+
 
     public boolean isEsistePagina() {
         return esistePagina;

@@ -283,7 +283,7 @@ public class StatisticheAnni extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult upload() {
-        super.esegue();
+        super.prepara();
         return super.upload(PATH_ANNI);
     }
 
@@ -291,7 +291,7 @@ public class StatisticheAnni extends Statistiche {
      * Esegue la scrittura della pagina <br>
      */
     public WResult uploadTest() {
-        super.esegue();
+        super.prepara();
         return super.upload(UPLOAD_TITLE_DEBUG + ANNI);
     }
 
