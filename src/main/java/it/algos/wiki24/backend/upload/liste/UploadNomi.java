@@ -231,7 +231,24 @@ public class UploadNomi extends Upload {
                 case queryWriteModificata -> pagineModificate++;
                 case queryWriteEsistente -> pagineEsistenti++;
                 default -> pagineControllate++;
-            } ;
+            }
+
+            if (Pref.debug.is()) {
+                if (result.isValido()) {
+                    if (result.isModificata()) {
+                        message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_NOMI, nome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                    else {
+                        message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_NOMI, nome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                }
+                else {
+                    message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_NOMI, nome);
+                    logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
+                }
+            }
         }
         result.fine();
 
@@ -240,7 +257,6 @@ public class UploadNomi extends Upload {
         logService.info(new WrapLog().message(String.format("Esistenti %d", pagineEsistenti)).type(AETypeLog.upload));
         logService.info(new WrapLog().message(String.format("Controllate %d", pagineControllate)).type(AETypeLog.upload));
 
-        int minuti = AETypeTime.minuti.durata(result.getInizio());
         message = String.format("Upload di %d pagine di nomi con numBio>%d.", listaNomi.size(), WPref.sogliaWikiNomi.getInt());
         message += String.format(" Nuove=%s - Modificate=%s - Esistenti=%s - Controllate=%s.", pagineCreate, pagineModificate, pagineEsistenti, pagineControllate);
         message += String.format(" %s", AETypeTime.minuti.message(result));
