@@ -53,6 +53,10 @@ public class MappaStatistiche {
 
     private boolean esistePagina;
 
+    private String paginaVoce;
+
+    private String paginaLista;
+
     public MappaStatistiche(String chiave) {
         this.chiave = chiave;
     }
@@ -103,9 +107,11 @@ public class MappaStatistiche {
         this.morti = morti;
     }
 
-    public static MappaStatistiche nome(String chiave, int numNomi, boolean superaSoglia) {
+    public static MappaStatistiche nome(String chiave, int numNomi, String paginaVoce, String paginaLista, boolean superaSoglia) {
         MappaStatistiche mappa = new MappaStatistiche(chiave);
         mappa.numNomi = numNomi;
+        mappa.paginaVoce = paginaVoce;
+        mappa.paginaLista = paginaLista;
         mappa.superaSoglia = superaSoglia;
         return mappa;
     }
@@ -235,6 +241,14 @@ public class MappaStatistiche {
 
     public boolean isEsistePagina() {
         return esistePagina;
+    }
+
+    public String getPaginaVoce() {
+        return paginaVoce;
+    }
+
+    public String getPaginaLista() {
+        return paginaLista;
     }
 
 }// end of class

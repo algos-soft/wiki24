@@ -469,19 +469,31 @@ public abstract class Upload {
 
     protected WResult registra(String newText) {
         WResult result = WResult.crea();
+        String newTextSignificativo = VUOTA;
+        String tag = "progetto=biografie";
 
         if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
             return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
         }
 
-        if (textService.isValid(wikiTitleUpload)) {
-            result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-        }
-        else {
-            return WResult.errato("Manca il wikiTitle");
+        if (textService.isEmpty(wikiTitleUpload)) {
+            return WResult.errato("Manca il wikiTitleUpload ");
         }
 
-        return result;
+        if (newText.contains(tag)) {
+            newTextSignificativo = newText.substring(newText.indexOf(tag));
+        }
+
+//        if (uploadTest) {
+//            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+//        }
+
+        if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
+            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
+        }
+        else {
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+        }
     }
 
     protected WResult registra(String wikiTitle, String newText) {

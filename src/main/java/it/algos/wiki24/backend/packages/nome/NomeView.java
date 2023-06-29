@@ -18,6 +18,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.schedule.*;
+import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -90,6 +91,7 @@ public class NomeView extends WikiView {
         super.usaBottoneDeleteEntity = false;
         super.usaBottoneUploadAll = true;
         super.usaBottoneUploadPagina = true;
+        super.usaBottoneUploadStatistiche = true;
         super.usaBottoneTest = true;
         super.usaInfoDownload = true;
         super.usaBottoneEdit = true;
@@ -331,6 +333,18 @@ public class NomeView extends WikiView {
             logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
         }
 
+    }
+
+    /**
+     * Esegue un azione di upload delle statistiche, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Prima esegue una Elaborazione <br>
+     */
+    @Override
+    public void uploadStatistiche() {
+        WResult result = appContext.getBean(StatisticheNomi.class).esegue();
+        logger.info(new WrapLog().message(result.getMessage()).type(AETypeLog.upload).usaDb());
+        super.uploadStatistiche();
     }
 
     /**

@@ -13,6 +13,7 @@ import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -64,17 +65,17 @@ public class NomeBackend extends WikiBackend {
     }
 
     public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template) {
-        return creaIfNotExist(keyPropertyValue, numBio, distinto, doppio, template, VUOTA);
+        return creaIfNotExist(keyPropertyValue, numBio, distinto, doppio, template, VUOTA, VUOTA);
     }
 
-    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce) {
+    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce, String paginaLista) {
         Nome newNome;
 
         if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
             return null;
         }
         else {
-            newNome = newEntity(keyPropertyValue, numBio, distinto, doppio, template, paginaVoce);
+            newNome = newEntity(keyPropertyValue, numBio, distinto, doppio, template, paginaVoce, paginaLista);
             return newNome != null ? insert(newNome) : null;
         }
     }
@@ -97,10 +98,10 @@ public class NomeBackend extends WikiBackend {
      */
     @Override
     public Nome newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, 0, false, false, false, VUOTA);
+        return newEntity(keyPropertyValue, 0, false, false, false, VUOTA, VUOTA);
     }
 
-    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce) {
+    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce, String paginaLista) {
         Nome newEntityBean = Nome.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .numBio(numBio)
@@ -108,11 +109,26 @@ public class NomeBackend extends WikiBackend {
                 .template(template)
                 .doppio(doppio)
                 .paginaVoce(textService.isValid(paginaVoce) ? paginaVoce : null)
+                .paginaLista(textService.isValid(paginaLista) ? PATH_NOMI + paginaLista : null)
                 .superaSoglia(false)
                 .esisteLista(false)
                 .build();
 
         return (Nome) super.fixKey(newEntityBean);
+    }
+
+
+    public int count() {
+        return super.count();
+    }
+
+    public int countBySopraSoglia() {
+        Query query = new Query();
+        String keyProperty = "superaSoglia";
+        Long lungo;
+        query.addCriteria(Criteria.where(keyProperty).is(true));
+        lungo = mongoService.mongoOp.count(query, Nome.class);
+        return lungo > 0 ? lungo.intValue() : 0;
     }
 
 
@@ -229,7 +245,7 @@ public class NomeBackend extends WikiBackend {
         for (String distinto : listaNomiDistinti) {
             numBio = bioBackend.countNome(distinto);
             if (numBio > sogliaMongo) {
-                entityBean = creaIfNotExist(distinto, numBio, true, false, false);
+                entityBean = creaIfNotExist(distinto, numBio, true, false, false, VUOTA, distinto);
                 result.setValido(fixLista(lista, entityBean, entityBean.id));
             }
             else {
@@ -290,7 +306,7 @@ public class NomeBackend extends WikiBackend {
 
         if (listaTemplate != null) {
             for (NomeTemplate entityBeanNomeTemplate : listaTemplate) {
-                linkPagina = textService.isValid(entityBeanNomeTemplate.linkPagina) ? textService.setDoppieQuadre(entityBeanNomeTemplate.linkPagina) : VUOTA;
+                linkPagina = textService.isValid(entityBeanNomeTemplate.linkPagina) ? entityBeanNomeTemplate.linkPagina : VUOTA;
                 if (isExistByKey(entityBeanNomeTemplate.nome)) {
                     entityBean = findByKey(entityBeanNomeTemplate.nome);
                     entityBean.template = true;
@@ -299,7 +315,7 @@ public class NomeBackend extends WikiBackend {
                 }
                 else {
                     numBio = bioBackend.countNome(entityBeanNomeTemplate.nome);
-                    creaIfNotExist(entityBeanNomeTemplate.nome, numBio, false, false, true, linkPagina);
+                    creaIfNotExist(entityBeanNomeTemplate.nome, numBio, false, false, true, linkPagina, entityBeanNomeTemplate.nome);
                 }
             }
         }

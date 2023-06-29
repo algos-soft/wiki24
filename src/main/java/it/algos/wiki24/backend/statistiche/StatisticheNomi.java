@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.statistiche;
 
+import com.mongodb.client.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -48,16 +49,27 @@ public class StatisticheNomi extends Statistiche {
     protected String incipit() {
         StringBuffer buffer = new StringBuffer();
         String message;
-        String totNomi = textService.format(nomeBackend.count());
+        int cont = 0;
+        String totNomi = VUOTA;
+        DistinctIterable<String> listaNomiDistinti;
+
+        String totNomiUtilizzati = textService.format(nomeBackend.count());
         String totVoci = textService.format(bioBackend.count());
+        String totListe = textService.format(nomeBackend.countBySopraSoglia());
         int sogliaMongo = WPref.sogliaMongoNomi.getInt();
         int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        listaNomiDistinti = mongoService.getCollection(TAG_BIO).distinct("nome", String.class);
+        for (String stringa : listaNomiDistinti) {
+            cont++;
+        }
+        totNomi = textService.format(cont);
 
         buffer.append(wikiUtility.setParagrafo("Nomi"));
-        message = String.format("Elenco dei '''%s''' nomi '''differenti''' utilizzati nelle %s voci biografiche con occorrenze maggiori di '''%d'''.", totNomi, totVoci, sogliaMongo);
-        buffer.append(message);
-        message = String.format(" Per ogni nome costruita una pagina con la lista delle voci biografiche se le occorrenze sono superiori a '''%d'''", sogliaWiki);
-        buffer.append(message);
+        buffer.append(String.format("Elenco dei '''%s''' nomi '''differenti''' ", totNomiUtilizzati));
+        buffer.append(textService.setRef(String.format("Nelle voci biografiche dell'enciclopedia ci sono circa '''%s''' nomi diversi.", totNomi)));
+        buffer.append(" utilizzati");
+        buffer.append(textService.setRef(String.format("In questa statistica vengono elencati i nomi che nelle '''%s''' voci biografiche presenti nell'enciclopedia ricorrono con una frequenza di almeno '''%d''' volte.", totVoci, sogliaMongo)));
+        buffer.append(String.format(" Ci sono '''%s''' pagine di liste per i nomi con occorrenze superiori a '''%d'''", totListe, sogliaWiki));
 
         return buffer.toString();
 
@@ -67,7 +79,7 @@ public class StatisticheNomi extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-//                        nomeBackend.elabora();
+        //                        nomeBackend.elabora();
     }
 
     /**
@@ -85,9 +97,12 @@ public class StatisticheNomi extends Statistiche {
     @Override
     protected void creaMappa() {
         super.creaMappa();
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        boolean supera;
 
         for (Nome nome : (List<Nome>) lista) {
-            mappa.put(nome.nome, MappaStatistiche.nome(nome.nome, nome.numBio, nome.superaSoglia));
+            supera = nome.numBio > sogliaWiki;
+            mappa.put(nome.nome, MappaStatistiche.nome(nome.nome, nome.numBio, nome.paginaVoce, nome.paginaLista, supera));
         }
     }
 
@@ -104,7 +119,7 @@ public class StatisticheNomi extends Statistiche {
     @Override
     protected String colonne() {
         StringBuffer buffer = new StringBuffer();
-        String color = "! style=\"background-color:#CCC;\" |";
+        String color = "! style=\"background-color:#CCC;text-align: left;\"; |";
 
         buffer.append(color);
         buffer.append("#");
@@ -112,6 +127,10 @@ public class StatisticheNomi extends Statistiche {
 
         buffer.append(color);
         buffer.append("Nome");
+        buffer.append(CAPO);
+
+        buffer.append(color);
+        buffer.append("Pagina");
         buffer.append(CAPO);
 
         buffer.append(color);
@@ -132,25 +151,38 @@ public class StatisticheNomi extends Statistiche {
         String doppioTag = " || ";
         String pipe = "|";
         String nomePersona;
+        String paginaVoce;
+        String paginaLista = VUOTA;
 
         buffer.append(iniTag);
         buffer.append(CAPO);
         buffer.append(pipe);
 
+        //progressivo
         buffer.append(numRiga);
         buffer.append(doppioTag);
 
+        //nome
         nomePersona = mappa.getChiave();
-        buffer.append(textService.setDoppieQuadre(nomePersona));
-        buffer.append(doppioTag);
-
         if (mappa.isSuperaSoglia()) {
-            nomePersona = textService.setDoppieQuadre(nomePersona);
             nomePersona = textService.setBold(nomePersona);
         }
         buffer.append(nomePersona);
         buffer.append(doppioTag);
 
+        //pagina
+        paginaVoce = mappa.getPaginaVoce();
+        buffer.append(textService.setDoppieQuadre(paginaVoce));
+        buffer.append(doppioTag);
+
+        if (mappa.isSuperaSoglia()) {
+            paginaLista = mappa.getPaginaLista();
+            paginaLista = textService.setDoppieQuadre(paginaLista);
+        }
+        buffer.append(paginaLista);
+        buffer.append(doppioTag);
+
+        //voci
         buffer.append(tagDex);
         buffer.append(mappa.getNumNomi());
         buffer.append(CAPO);

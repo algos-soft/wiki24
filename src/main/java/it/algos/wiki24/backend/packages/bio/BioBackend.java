@@ -1629,6 +1629,10 @@ public class BioBackend extends WikiBackend {
     //        return lungo > 0 ? lungo.intValue() : 0;
     //    }
     public AETypeGenere getGenere(Bio bio) {
+        if (bio.sesso == null) {
+            return AETypeGenere.nessuno;
+        }
+
         if (bio.sesso.equals("M")) {
             return AETypeGenere.maschile;
         }

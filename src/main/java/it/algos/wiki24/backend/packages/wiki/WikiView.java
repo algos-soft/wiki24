@@ -542,7 +542,7 @@ public abstract class WikiView extends CrudView {
 
         if (usaBottoneUploadStatistiche) {
             buttonUploadStatistiche = new Button();
-            buttonUploadStatistiche.getElement().setAttribute("theme", "secondary");
+            buttonUploadStatistiche.getElement().setAttribute("theme", "primary");
             buttonUploadStatistiche.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadStatistiche.getElement().setProperty("title", "Statistiche: costruisce una nuova pagina delle statistiche sul server wiki");
             buttonUploadStatistiche.setIcon(new Icon(VaadinIcon.TABLE));
