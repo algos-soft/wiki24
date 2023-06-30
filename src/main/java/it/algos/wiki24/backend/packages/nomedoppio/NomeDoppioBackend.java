@@ -183,7 +183,7 @@ public class NomeDoppioBackend extends WikiBackend {
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
 
-        for (String riga : super.getRigheOld()) {
+        for (String riga : super.getRighe()) {
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }

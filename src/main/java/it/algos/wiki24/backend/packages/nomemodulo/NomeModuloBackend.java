@@ -44,14 +44,13 @@ public class NomeModuloBackend extends WikiBackend {
         super.lastDownload = WPref.downloadNomiTemplate;
 
         super.sorgenteDownload = TAG_INCIPIT_NOMI;
-//        super.tagIniSorgente = "switch:{{{nome}}}";
-//        super.tagEndSorgente = "|#default";
         super.tagSplitSorgente = VIRGOLA_CAPO;
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
     }
 
     public AEntity creaIfNotExist(final String riga) {
         AEntity entityBean;
+
         String nome = VUOTA;
         String linkPagina = VUOTA;
         String[] parti = textService.isValid(riga) ? riga.split(UGUALE) : null;
@@ -201,7 +200,7 @@ public class NomeModuloBackend extends WikiBackend {
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
 
-        for (String riga : super.getRighePulite()) {
+        for (String riga : super.getRighe()) {
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }

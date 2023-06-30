@@ -301,7 +301,7 @@ public abstract class WikiBackend extends CrudBackend {
         }
     }
 
-    public List<String> getRigheOld() {
+    public List<String> getRighe() {
         String testoCore;
         String[] righe;
         testoCore = getCore();
@@ -310,14 +310,6 @@ public abstract class WikiBackend extends CrudBackend {
         return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
     }
 
-    public List<String> getRighePulite() {
-        String testoCore;
-        String[] righe;
-        testoCore = getCore();
-        righe = testoCore.split(tagSplitSorgente);
-
-        return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
-    }
 
     public String getCore() {
         String testoPaginaAll;
