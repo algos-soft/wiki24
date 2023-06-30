@@ -1,11 +1,11 @@
-package it.algos.wiki24.backend.components;
+package it.algos.vaad24.backend.components;
 
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
+import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  * Project wiki24

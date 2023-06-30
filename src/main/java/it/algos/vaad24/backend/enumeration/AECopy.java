@@ -54,4 +54,3 @@ public enum AECopy {
         return descrizione;
     }
 }
-

@@ -16,4 +16,3 @@ public interface AIType {
     List getAll();
 
 }// end of interface
-

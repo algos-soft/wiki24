@@ -83,4 +83,3 @@ public @interface AIView {
     String sortDirection() default SORT_SPRING_ASC;
 
 }// end of interface
-
