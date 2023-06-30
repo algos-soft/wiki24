@@ -8,7 +8,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
-import it.algos.wiki24.backend.packages.nometemplate.*;
+import it.algos.wiki24.backend.packages.nomemodulo.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -40,7 +40,7 @@ public class NomeBackend extends WikiBackend {
     public NomeDoppioBackend nomeDoppioBackend;
 
     @Autowired
-    public NomeTemplateBackend nomeTemplateBackend;
+    public NomeModuloBackend nomeModuloBackend;
 
 
     public NomeBackend() {
@@ -101,12 +101,12 @@ public class NomeBackend extends WikiBackend {
         return newEntity(keyPropertyValue, 0, false, false, false, VUOTA, VUOTA);
     }
 
-    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce, String paginaLista) {
+    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean modulo, String paginaVoce, String paginaLista) {
         Nome newEntityBean = Nome.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .numBio(numBio)
                 .distinto(distinto)
-                .template(template)
+                .modulo(modulo)
                 .doppio(doppio)
                 .paginaVoce(textService.isValid(paginaVoce) ? paginaVoce : null)
                 .paginaLista(textService.isValid(paginaLista) ? PATH_NOMI + paginaLista : null)
@@ -218,8 +218,8 @@ public class NomeBackend extends WikiBackend {
         //--Nome 'doppi' inseriti da apposita lista
         addNomiDoppi(result);
 
-        //--Nomi 'incipit'. Ricavati dal Template Bio sul server Wiki.
-        addNomiTemplate(result);
+        //--Nomi 'incipit'. Ricavati dal Modulo sul server Wiki.
+        addNomiModulo(result);
 
         result.fine();
         result.valido(true).eseguito();
@@ -291,25 +291,25 @@ public class NomeBackend extends WikiBackend {
     }
 
     /**
-     * Integra con i valori dalla tavola NomiTemplate
+     * Integra con i valori dal modulo incipit nomi
      *
      * @return lista dei valori
      */
-    public AResult addNomiTemplate(AResult result) {
-        List<NomeTemplate> listaTemplate;
+    public AResult addNomiModulo(AResult result) {
+        List<NomeModulo> listaModulo;
         Nome entityBean;
         int numBio;
         String linkPagina = VUOTA;
 
-        nomeTemplateBackend.download();
-        listaTemplate = nomeTemplateBackend.findAll();
+        nomeModuloBackend.download();
+        listaModulo = nomeModuloBackend.findAll();
 
-        if (listaTemplate != null) {
-            for (NomeTemplate entityBeanNomeTemplate : listaTemplate) {
+        if (listaModulo != null) {
+            for (NomeModulo entityBeanNomeTemplate : listaModulo) {
                 linkPagina = textService.isValid(entityBeanNomeTemplate.linkPagina) ? entityBeanNomeTemplate.linkPagina : VUOTA;
                 if (isExistByKey(entityBeanNomeTemplate.nome)) {
                     entityBean = findByKey(entityBeanNomeTemplate.nome);
-                    entityBean.template = true;
+                    entityBean.modulo = true;
                     entityBean.paginaVoce = linkPagina;
                     save(entityBean);
                 }

@@ -81,7 +81,7 @@ public class NomeDoppioView extends WikiView {
         super.fixAlert();
 
         WAnchor anchor = WAnchor.build(backend.sorgenteDownload, PROGETTO);
-        WAnchor anchor2 = WAnchor.build(backend.uploadTest, TEST);
+        WAnchor anchor2 = WAnchor.build(backend.uploadTestName, TEST);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2));
 
         message = "Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella lista di progetto.";
@@ -97,7 +97,7 @@ public class NomeDoppioView extends WikiView {
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTest, backend.sorgenteDownload);
+        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTestName, backend.sorgenteDownload);
         addSpan(ASpan.text(message).blue().small());
         message = "Se non si vogliono le modifiche, fare prima un Download";
         addSpan(ASpan.text(message).rosso().small());

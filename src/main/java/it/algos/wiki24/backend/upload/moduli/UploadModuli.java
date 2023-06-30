@@ -26,7 +26,7 @@ public abstract class UploadModuli extends Upload {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
     public UploadModuli() {
-        super.summary = "Fix ordine alfabetico";
+        super.summary = "Fix in ordine alfabetico";
         super.uploadTest = true;
     }// end of constructor
 
@@ -61,12 +61,18 @@ public abstract class UploadModuli extends Upload {
     public String getWikiTitleModulo() {
         return wikiTitleModulo;
     }
+    public Map<String, String> leggeMappaMongo() {
+        return wikiBackend.findMappa();
+    }
+
+    public WResult esegue() {
+        return this.uploadOrdinatoSenzaModifiche();
+    }
 
     /**
      * Esegue la scrittura della pagina di test ordinata per singolari <br>
      */
     public WResult uploadOrdinatoSenzaModifiche() {
-        super.summary = "Fix ordine alfabetico singolari";
         String testoPagina = leggeTestoPagina();
         String testoModuloOld = leggeTestoModulo();
         String testoModuloNew = fixTestoModulo(getMappaOrdinataKey());
@@ -79,7 +85,6 @@ public abstract class UploadModuli extends Upload {
      * Esegue la scrittura della pagina di test ordinata per plurali <br>
      */
     public WResult uploadOrdinatoValoreSenzaModifiche() {
-        super.summary = "Fix ordine alfabetico plurali";
         String testoPagina = leggeTestoPagina();
         String testoModuloOld = leggeTestoModulo();
         String testoModuloNew = fixTestoModulo(getMappaOrdinataValue());

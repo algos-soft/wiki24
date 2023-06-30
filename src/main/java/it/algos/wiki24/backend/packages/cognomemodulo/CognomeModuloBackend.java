@@ -51,7 +51,7 @@ public class CognomeModuloBackend extends WikiBackend {
         super.tagIniSorgente = "switch:{{{nome}}}";
         super.tagEndSorgente = "|#default";
         super.tagSplitSorgente = PIPE_REGEX;
-        super.uploadTest = UPLOAD_TITLE_DEBUG + INCIPIT_COGNOMI;
+        super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_COGNOMI;
     }
 
     public AEntity creaIfNotExist(final String riga) {

@@ -188,10 +188,10 @@ public class Wiki24Cost {
     public static final String TAG_NOMI = "Nomi";
     public static final String TAG_LISTA_NOMI = "Liste nomi";
 
-    public static final String INCIPIT_NOMI = "Incipit lista nomi";
+    public static final String INCIPIT_NOMI = "Incipit nomi";
     public static final String INCIPIT_COGNOMI= "Incipit cognomi";
 
-    public static final String TAG_INCIPIT_NOMI = "Template:" + INCIPIT_NOMI;
+    public static final String TAG_INCIPIT_NOMI = "Modulo:" + INCIPIT_NOMI;
     public static final String TAG_INCIPIT_COGNOMI = "Modulo:" + INCIPIT_COGNOMI;
     public static final String MODULO = "Modulo";
     public static final String PROGETTO = "Progetto";

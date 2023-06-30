@@ -85,7 +85,7 @@ public class CognomeModuloView extends WikiView {
         Button button = new Button("Sorgente");
         button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
         Button button2 = new Button("Test");
-        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTest));
+        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTestName));
         alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
 
         message = "Sono elencate le pagine di riferimento per ogni cognome (esempio: 'Bianchi->Bianchi (cognome)') da inserire nell'incipit della lista.";

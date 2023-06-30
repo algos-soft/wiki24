@@ -47,7 +47,7 @@ public class NomeDoppioBackend extends WikiBackend {
         super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;
         super.tagEndSorgente = "[[Categoria:Liste di persone per nome";
         super.tagSplitSorgente = ASTERISCO_REGEX;
-        super.uploadTest = UPLOAD_TITLE_DEBUG + DOPPI;
+        super.uploadTestName = UPLOAD_TITLE_DEBUG + DOPPI;
     }
 
     /**
@@ -183,7 +183,7 @@ public class NomeDoppioBackend extends WikiBackend {
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
 
-        for (String riga : super.getRighe()) {
+        for (String riga : super.getRigheOld()) {
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }

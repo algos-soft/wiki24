@@ -2,7 +2,7 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.wiki24.backend.packages.nometemplate.*;
+import it.algos.wiki24.backend.packages.nomemodulo.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.*;
@@ -21,12 +21,12 @@ import java.util.*;
 @Tag("backend")
 @DisplayName("NomeTemplate Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NomeTemplateBackendTest extends WikiBackendTest {
+public class NomeModuloBackendTest extends WikiBackendTest {
 
     @InjectMocks
-    private NomeTemplateBackend backend;
+    private NomeModuloBackend backend;
 
-    private List<NomeTemplate> listaBeans;
+    private List<NomeModulo> listaBeans;
 
     /**
      * Qui passa una volta sola <br>
@@ -34,11 +34,11 @@ public class NomeTemplateBackendTest extends WikiBackendTest {
     @BeforeAll
     protected void setUpAll() {
         this.backend = super.nomeTemplateBackend;
-        super.entityClazz = NomeTemplate.class;
+        super.entityClazz = NomeModulo.class;
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
-        super.nomeModulo = "nometemplate";
+        super.nomeModulo = "nomemodulo";
 
         super.setUpAll();
     }

@@ -48,7 +48,7 @@ public class NomeView extends WikiView {
 
     private IndeterminateCheckbox boxDistinti;
 
-    private IndeterminateCheckbox boxTemplate;
+    private IndeterminateCheckbox boxModulo;
 
     private IndeterminateCheckbox boxDoppi;
 
@@ -81,8 +81,8 @@ public class NomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "template", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "modulo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "modulo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -175,11 +175,11 @@ public class NomeView extends WikiView {
         layoutDoppi.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutDoppi);
 
-        boxTemplate = new IndeterminateCheckbox();
-        boxTemplate.setLabel("Template");
-        boxTemplate.setIndeterminate(true);
-        boxTemplate.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layoutIncipit = new HorizontalLayout(boxTemplate);
+        boxModulo = new IndeterminateCheckbox();
+        boxModulo.setLabel("Modulo");
+        boxModulo.setIndeterminate(true);
+        boxModulo.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutIncipit = new HorizontalLayout(boxModulo);
         layoutIncipit.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutIncipit);
 
@@ -245,8 +245,8 @@ public class NomeView extends WikiView {
         if (boxDistinti != null && !boxDistinti.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.distinto == boxDistinti.getValue()).toList();
         }
-        if (boxTemplate != null && !boxTemplate.isIndeterminate()) {
-            items = items.stream().filter(nome -> nome.template == boxTemplate.getValue()).toList();
+        if (boxModulo != null && !boxModulo.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.modulo == boxModulo.getValue()).toList();
         }
         if (boxDoppi != null && !boxDoppi.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.doppio == boxDoppi.getValue()).toList();

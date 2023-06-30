@@ -97,7 +97,7 @@ public abstract class WikiBackend extends CrudBackend {
 
     public String sorgenteDownload;
 
-    public String uploadTest;
+    public String uploadTestName;
 
     public String tagIniSorgente;
 
@@ -215,7 +215,7 @@ public abstract class WikiBackend extends CrudBackend {
         this.tagIniSorgente = VUOTA;
         this.tagEndSorgente = VUOTA;
         this.tagSplitSorgente = VUOTA;
-        this.uploadTest = VUOTA;
+        this.uploadTestName = VUOTA;
     }
 
 
@@ -263,6 +263,10 @@ public abstract class WikiBackend extends CrudBackend {
         return null;
     }
 
+    public LinkedHashMap<String, String> findMappa() {
+        return null;
+    }
+
     /**
      * Esegue un azione di download, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
@@ -297,7 +301,16 @@ public abstract class WikiBackend extends CrudBackend {
         }
     }
 
-    public List<String> getRighe() {
+    public List<String> getRigheOld() {
+        String testoCore;
+        String[] righe;
+        testoCore = getCore();
+        righe = testoCore.split(tagSplitSorgente);
+
+        return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
+    }
+
+    public List<String> getRighePulite() {
         String testoCore;
         String[] righe;
         testoCore = getCore();
@@ -311,7 +324,12 @@ public abstract class WikiBackend extends CrudBackend {
         String testoCore;
 
         testoPaginaAll = wikiApiService.legge(sorgenteDownload);
-        testoCore = textService.estraeLast(testoPaginaAll, tagIniSorgente, tagEndSorgente);
+        if (textService.isValid(tagIniSorgente) && textService.isValid(tagEndSorgente)) {
+            testoCore = textService.estraeLast(testoPaginaAll, tagIniSorgente, tagEndSorgente);
+        }
+        else {
+            testoCore = wikiUtility.estraeTestoModulo(testoPaginaAll);
+        }
 
         return testoCore;
     }

@@ -50,14 +50,14 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.anchor)
     public String paginaLista;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
     public boolean distinto;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "doppio", widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
     public boolean doppio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "template", widthEM = 7)
-    public boolean template;
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
+    public boolean modulo;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
     public boolean superaSoglia;

@@ -179,6 +179,8 @@ public abstract class Upload {
 
     protected boolean isSottopagina;
 
+    protected WikiBackend wikiBackend;
+
     /**
      * Mappa delle didascalie che hanno una valore valido per la pagina specifica <br>
      * La mappa è composta da una chiave (ordinata) che corrisponde al titolo del paragrafo <br>
@@ -260,7 +262,10 @@ public abstract class Upload {
         this.usaNumeriTitoloParagrafi = true;
         this.isSottopagina = false;
 
+        this.fixPreferenze();
         this.fixPreferenzeBackend();
+    }
+    protected void fixPreferenze() {
     }
 
     protected void fixPreferenzeBackend() {
@@ -472,9 +477,9 @@ public abstract class Upload {
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
 
-        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
-            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
-        }
+//        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
+//            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
+//        }
 
         if (textService.isEmpty(wikiTitleUpload)) {
             return WResult.errato("Manca il wikiTitleUpload ");
@@ -484,9 +489,9 @@ public abstract class Upload {
             newTextSignificativo = newText.substring(newText.indexOf(tag));
         }
 
-//        if (uploadTest) {
-//            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-//        }
+        if (uploadTest) {
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+        }
 
         if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
             return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);

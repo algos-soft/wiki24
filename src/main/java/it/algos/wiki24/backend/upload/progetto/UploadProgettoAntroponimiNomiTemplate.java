@@ -3,7 +3,7 @@ package it.algos.wiki24.backend.upload.progetto;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nometemplate.*;
+import it.algos.wiki24.backend.packages.nomemodulo.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
@@ -29,7 +29,7 @@ public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadProgettoAntroponimiNomiTemplate( @Autowired NomeTemplateBackend backend) {
+    public UploadProgettoAntroponimiNomiTemplate( @Autowired NomeModuloBackend backend) {
         super(backend);
     }// end of constructor
 
@@ -56,10 +56,10 @@ public class UploadProgettoAntroponimiNomiTemplate extends UploadProgetto {
 
     public String fixTestoModulo() {
         StringBuffer buffer = new StringBuffer();
-        List<NomeTemplate> lista;
+        List<NomeModulo> lista;
 
         lista = backend.findAllSortKey();
-        for (NomeTemplate entityBean : lista) {
+        for (NomeModulo entityBean : lista) {
             buffer.append(PIPE);
             buffer.append(entityBean.nome);
             buffer.append(UGUALE_SEMPLICE);

@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nometemplate;
+package it.algos.wiki24.backend.packages.nomemodulo;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
@@ -6,6 +6,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.moduli.*;
 import it.algos.wiki24.backend.upload.progetto.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
@@ -28,11 +29,11 @@ import java.util.*;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
-public class NomeTemplateBackend extends WikiBackend {
+public class NomeModuloBackend extends WikiBackend {
 
 
-    public NomeTemplateBackend() {
-        super(NomeTemplate.class);
+    public NomeModuloBackend() {
+        super(NomeModulo.class);
     }
 
     @Override
@@ -43,10 +44,10 @@ public class NomeTemplateBackend extends WikiBackend {
         super.lastDownload = WPref.downloadNomiTemplate;
 
         super.sorgenteDownload = TAG_INCIPIT_NOMI;
-        super.tagIniSorgente = "switch:{{{nome}}}";
-        super.tagEndSorgente = "|#default";
-        super.tagSplitSorgente = PIPE_REGEX;
-        super.uploadTest = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
+//        super.tagIniSorgente = "switch:{{{nome}}}";
+//        super.tagEndSorgente = "|#default";
+        super.tagSplitSorgente = VIRGOLA_CAPO;
+        super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
     }
 
     public AEntity creaIfNotExist(final String riga) {
@@ -76,7 +77,7 @@ public class NomeTemplateBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public NomeTemplate newEntity() {
+    public NomeModulo newEntity() {
         return newEntity(VUOTA, VUOTA);
     }
 
@@ -86,7 +87,7 @@ public class NomeTemplateBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     @Override
-    public NomeTemplate newEntity(final String keyPropertyValue) {
+    public NomeModulo newEntity(final String keyPropertyValue) {
         return newEntity(keyPropertyValue, VUOTA);
     }
 
@@ -101,71 +102,82 @@ public class NomeTemplateBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NomeTemplate newEntity(final String nome, final String linkPagina) {
-        NomeTemplate newEntityBean = NomeTemplate.builder()
+    public NomeModulo newEntity(final String nome, final String linkPagina) {
+        NomeModulo newEntityBean = NomeModulo.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .build();
 
-        return (NomeTemplate) super.fixKey(newEntityBean);
+        return (NomeModulo) super.fixKey(newEntityBean);
     }
 
 
     @Override
-    public NomeTemplate findById(final String keyID) {
-        return (NomeTemplate) super.findById(keyID);
+    public NomeModulo findById(final String keyID) {
+        return (NomeModulo) super.findById(keyID);
     }
 
     @Override
-    public NomeTemplate findByKey(final String keyValue) {
-        return (NomeTemplate) super.findByKey(keyValue);
+    public NomeModulo findByKey(final String keyValue) {
+        return (NomeModulo) super.findByKey(keyValue);
     }
 
     @Override
-    public NomeTemplate findByProperty(final String propertyName, final Object propertyValue) {
-        return (NomeTemplate) super.findByProperty(propertyName, propertyValue);
+    public NomeModulo findByProperty(final String propertyName, final Object propertyValue) {
+        return (NomeModulo) super.findByProperty(propertyName, propertyValue);
     }
 
     @Override
-    public NomeTemplate save(AEntity entity) {
-        return (NomeTemplate) super.save(entity);
+    public NomeModulo save(AEntity entity) {
+        return (NomeModulo) super.save(entity);
     }
 
     @Override
-    public NomeTemplate insert(AEntity entity) {
-        return (NomeTemplate) super.insert(entity);
+    public NomeModulo insert(AEntity entity) {
+        return (NomeModulo) super.insert(entity);
     }
 
     @Override
-    public NomeTemplate update(AEntity entity) {
-        return (NomeTemplate) super.update(entity);
+    public NomeModulo update(AEntity entity) {
+        return (NomeModulo) super.update(entity);
     }
 
     @Override
-    public List<NomeTemplate> findAll() {
+    public List<NomeModulo> findAll() {
         return super.findAll();
     }
 
     @Override
-    public List<NomeTemplate> findAllNoSort() {
+    public List<NomeModulo> findAllNoSort() {
         return super.findAllNoSort();
     }
 
     @Override
-    public List<NomeTemplate> findAllSortCorrente() {
+    public List<NomeModulo> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
 
     @Override
-    public List<NomeTemplate> findAllSortCorrenteReverse() {
+    public List<NomeModulo> findAllSortCorrenteReverse() {
         return super.findAllSortCorrenteReverse();
     }
 
     @Override
-    public List<NomeTemplate> findAllSort(Sort sort) {
+    public List<NomeModulo> findAllSort(Sort sort) {
         return super.findAllSort(sort);
     }
 
+    @Override
+    public LinkedHashMap<String, String> findMappa() {
+        LinkedHashMap<String, String> mappa = new LinkedHashMap<>();
+        List<NomeModulo> lista = findAllSortKey();
+
+        for (NomeModulo nomeModulo : lista) {
+            mappa.put(nomeModulo.nome, nomeModulo.linkPagina);
+        }
+
+        return mappa;
+    }
 
     @Override
     public AResult resetDownload() {
@@ -174,7 +186,7 @@ public class NomeTemplateBackend extends WikiBackend {
         //--Cancella la (eventuale) precedente lista di nomi template
         deleteAll();
 
-        result = downloadNomiTemplate(result);
+        result = downloadNomiModulo(result);
 
         return super.fixResetDownload(result);
     }
@@ -185,11 +197,11 @@ public class NomeTemplateBackend extends WikiBackend {
      *
      * @return entities create
      */
-    public AResult downloadNomiTemplate(AResult result) {
+    public AResult downloadNomiModulo(AResult result) {
         AEntity entityBean;
         List<AEntity> lista = new ArrayList<>();
 
-        for (String riga : super.getRighe()) {
+        for (String riga : super.getRighePulite()) {
             entityBean = creaIfNotExist(riga);
             result.setValido(fixLista(lista, entityBean, riga));
         }
@@ -203,7 +215,7 @@ public class NomeTemplateBackend extends WikiBackend {
      */
     @Override
     public WResult uploadModulo() {
-        WResult result = appContext.getBean(UploadProgettoAntroponimiNomiTemplate.class).uploadOrdinatoConModifiche();
+        WResult result = appContext.getBean(UploadModuloIncipitNomi.class).esegue();
         return super.fixRiordinaModulo(result);
     }
 

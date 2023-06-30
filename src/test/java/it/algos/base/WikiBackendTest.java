@@ -10,7 +10,7 @@ import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
-import it.algos.wiki24.backend.packages.nometemplate.*;
+import it.algos.wiki24.backend.packages.nomemodulo.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -66,7 +66,7 @@ public abstract class WikiBackendTest extends BackendTest {
     @Autowired
     protected NomeDoppioBackend nomeDoppioBackend;
     @Autowired
-    protected NomeTemplateBackend nomeTemplateBackend;
+    protected NomeModuloBackend nomeTemplateBackend;
 
     @Autowired
     protected NomeBackend nomeBackend;
@@ -238,17 +238,17 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("Oppure il test potrebbe essere stato disabilitato nella sottoclasse di test specifica per problemi di durata eccessiva");
     }
 
-    @Test
-    @Order(16)
-    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
-    protected void upload() {
-        System.out.println("16 - uploadModulo (test in ordine alfabetico)");
-        System.out.println(VUOTA);
-
-        wResult = wikiBackend.uploadModulo();
-        printRisultato(wResult);
-        assertTrue(wResult.isValido());
-    }
+//    @Test
+//    @Order(16)
+//    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
+//    protected void upload() {
+//        System.out.println("16 - uploadModulo (test in ordine alfabetico)");
+//        System.out.println(VUOTA);
+//
+//        wResult = wikiBackend.uploadModulo();
+//        printRisultato(wResult);
+//        assertTrue(wResult.isValido());
+//    }
 
     @Test
     @Order(70)

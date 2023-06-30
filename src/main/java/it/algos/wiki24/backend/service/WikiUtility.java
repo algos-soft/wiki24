@@ -596,11 +596,17 @@ public class WikiUtility extends WAbstractService {
 
     public String estraeTestoModulo(String testoPagina) {
         String testoModulo = testoPagina;
+        String tagLocal = "local tabella = ";
 
         if (textService.isValid(testoPagina)) {
-            testoModulo = textService.levaTestoPrimaDiEscluso(testoModulo, TAG_RETURN);
+            if (testoModulo.contains(tagLocal)) {
+                testoModulo = textService.levaTestoPrimaDiEscluso(testoModulo, tagLocal);
+            }
+            else {
+                testoModulo = textService.levaTestoPrimaDiEscluso(testoModulo, TAG_RETURN);
+            }
             testoModulo = textService.levaTesta(testoModulo, GRAFFA_INI);
-            testoModulo = textService.levaCoda(testoModulo, GRAFFA_END);
+            testoModulo = textService.levaCodaDaPrimo(testoModulo, GRAFFA_END);
         }
 
         return testoModulo;
