@@ -657,20 +657,20 @@ public class WikiUtility extends WAbstractService {
 
     public WrapDueStringhe creaWrapUgualePulito(final String riga) {
         WrapDueStringhe wrap = creaWrapUguale(riga);
-        String prima = wrap.getPrima();
-        String seconda = wrap.getSeconda();
+        String prima = wrap.prima;
+        String seconda = wrap.seconda;
 
         prima = textService.setNoDoppiApici(prima);
         prima = textService.setNoQuadre(prima);
         prima = textService.setNoDoppiApici(prima);
-        wrap.setPrima(prima);
+        wrap.prima = prima;
 
         seconda = textService.setNoDoppiApici(seconda);
         seconda = textService.setNoQuadre(seconda);
         seconda = textService.setNoDoppiApici(seconda);
-        wrap.setSeconda(seconda);
+        wrap.seconda = seconda;
 
-        return wrap ;
+        return wrap;
     }
 
 }

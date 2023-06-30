@@ -53,7 +53,7 @@ public class NomeModuloBackend extends WikiBackend {
         AEntity entityBean;
         WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
 
-        entityBean = newEntity(wrap.getPrima(), wrap.getSeconda());
+        entityBean = newEntity(wrap.prima, wrap.seconda);
         return entityBean != null ? insert(entityBean) : null;
     }
 

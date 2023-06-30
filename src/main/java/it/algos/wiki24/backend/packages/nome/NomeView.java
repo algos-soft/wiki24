@@ -6,7 +6,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.components.*;
+import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.schedule.*;
@@ -15,6 +15,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.components.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.schedule.*;
@@ -111,9 +112,9 @@ public class NomeView extends WikiView {
         int sogliaMongo = WPref.sogliaMongoNomi.getInt();
         int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
-        WAnchor anchor = WAnchor.build(CATEGORIA + ":Prenomi composti", CATEGORIA);
-        WAnchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
-        WAnchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
+        Anchor anchor = WAnchor.build(CATEGORIA + ":Prenomi composti", CATEGORIA);
+        Anchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
+        Anchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";

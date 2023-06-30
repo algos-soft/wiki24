@@ -4,11 +4,11 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.components.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -80,9 +80,9 @@ public class NomeModuloView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        WAnchor anchor = WAnchor.build("Modulo:Incipit nomi", MODULO);
-        WAnchor anchor2 = WAnchor.build(backend.sorgenteDownload, TEMPLATE);
-        WAnchor anchor3 = WAnchor.build(backend.uploadTestName, TEST);
+        Anchor anchor = WAnchor.build("Modulo:Incipit nomi", MODULO);
+        Anchor anchor2 = WAnchor.build(backend.sorgenteDownload, TEMPLATE);
+        Anchor anchor3 = WAnchor.build(backend.uploadTestName, TEST);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = "Sono elencate le pagine di riferimento per ogni nome (esempio: 'Archibald->Arcibaldo') da inserire nell'incipit della lista.";
