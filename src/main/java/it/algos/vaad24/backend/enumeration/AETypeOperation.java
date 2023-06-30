@@ -76,3 +76,4 @@ public enum AETypeOperation {
         return possibileUsoFrecce;
     }
 }
+

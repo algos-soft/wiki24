@@ -111,3 +111,4 @@ public interface AIResult {
     String getTarget();
 
 }// end of interface
+

@@ -639,4 +639,38 @@ public class WikiUtility extends WAbstractService {
         return mappaAlfabetica;
     }
 
+    public WrapDueStringhe creaWrapUguale(final String riga) {
+        WrapDueStringhe wrap = null;
+        String prima;
+        String seconda;
+        String[] parti = textService.isValid(riga) ? riga.split(UGUALE) : null;
+
+        if (parti != null && parti.length == 2) {
+            prima = parti[0].trim();
+            seconda = parti[1].trim();
+
+            wrap = new WrapDueStringhe(prima, seconda);
+        }
+
+        return wrap != null ? wrap : new WrapDueStringhe(VUOTA, VUOTA);
+    }
+
+    public WrapDueStringhe creaWrapUgualePulito(final String riga) {
+        WrapDueStringhe wrap = creaWrapUguale(riga);
+        String prima = wrap.getPrima();
+        String seconda = wrap.getSeconda();
+
+        prima = textService.setNoDoppiApici(prima);
+        prima = textService.setNoQuadre(prima);
+        prima = textService.setNoDoppiApici(prima);
+        wrap.setPrima(prima);
+
+        seconda = textService.setNoDoppiApici(seconda);
+        seconda = textService.setNoQuadre(seconda);
+        seconda = textService.setNoDoppiApici(seconda);
+        wrap.setSeconda(seconda);
+
+        return wrap ;
+    }
+
 }

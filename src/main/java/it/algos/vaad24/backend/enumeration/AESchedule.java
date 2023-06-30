@@ -295,3 +295,4 @@ public enum AESchedule {
         return giorniNext;
     }
 }// end of enum
+

@@ -21,3 +21,4 @@ public interface AITypePref {
     AITypePref get(final String name);
 
 }// end of interface
+

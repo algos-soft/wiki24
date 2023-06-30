@@ -2,7 +2,6 @@ package it.algos.vaad24.backend.enumeration;
 
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.vaad24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -81,9 +80,6 @@ public enum AETypeTime implements AIType {
         return message;
     }
 
-    public String message(AResult result) {
-        return message(result.getInizio(), "Eseguito");
-    }
     public String message(long inizio) {
         return message(inizio, "Eseguito");
     }

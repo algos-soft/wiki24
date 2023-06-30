@@ -48,25 +48,13 @@ public class NomeModuloBackend extends WikiBackend {
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
     }
 
+
     public AEntity creaIfNotExist(final String riga) {
         AEntity entityBean;
+        WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
 
-        String nome = VUOTA;
-        String linkPagina = VUOTA;
-        String[] parti = textService.isValid(riga) ? riga.split(UGUALE) : null;
-
-        if (parti != null && parti.length == 2) {
-            nome = parti[0].trim();
-            linkPagina = parti[1].trim();
-        }
-
-        if (textService.isEmpty(nome) || isExistByKey(nome)) {
-            return null;
-        }
-        else {
-            entityBean = newEntity(nome, linkPagina);
-            return entityBean != null ? insert(entityBean) : null;
-        }
+        entityBean = newEntity(wrap.getPrima(), wrap.getSeconda());
+        return entityBean != null ? insert(entityBean) : null;
     }
 
     /**
