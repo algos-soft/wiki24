@@ -1,10 +1,9 @@
-package it.algos.quey;
+package it.algos.query;
 
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.junit.jupiter.api.*;
@@ -12,14 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
-import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -37,7 +28,7 @@ import java.util.stream.*;
 @Tag("query")
 @DisplayName("QueryBio")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QueryBioTest extends WikiTest {
+public class QueryBioTest2 extends WikiTest {
 
 
     /**

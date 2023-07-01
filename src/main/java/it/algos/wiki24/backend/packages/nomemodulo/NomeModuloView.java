@@ -1,6 +1,8 @@
 package it.algos.wiki24.backend.packages.nomemodulo;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
@@ -35,6 +37,8 @@ public class NomeModuloView extends WikiView {
     //--per eventuali metodi specifici
     private NomeModuloBackend backend;
 
+    private IndeterminateCheckbox boxAggiunti;
+
     /**
      * Costruttore @Autowired (facoltativo) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -57,8 +61,8 @@ public class NomeModuloView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina");
-        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina");
+        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto");
+        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -80,29 +84,30 @@ public class NomeModuloView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Anchor anchor = WAnchor.build("Modulo:Incipit nomi", MODULO);
-        Anchor anchor2 = WAnchor.build(backend.sorgenteDownload, TEMPLATE);
-        Anchor anchor3 = WAnchor.build(backend.uploadTestName, TEST);
-        alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
+        Anchor anchor = WAnchor.build(backend.sorgenteDownload, backend.sorgenteDownload);
+//        Anchor anchor2 = WAnchor.build(backend.uploadTestName, TEST);
+        alertPlaceHolder.add(new Span(anchor));
 
-        message = "Sono elencate le pagine di riferimento per ogni nome (esempio: 'Archibald->Arcibaldo') da inserire nell'incipit della lista.";
+        message = "Pagine di riferimento per ogni nome (es.: [Felix->Felice (nome)]) da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
-        message = "I nomi mancanti nel template puntano, in automatico, ad una pagina con lo stesso nome.";
+        message = "I nomi mancanti nel modulo puntano, in automatico, ad una pagina con lo stesso nome che viene aggiunta nella tavola Mongo.";
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("I nomi template mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
+        message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
-        message = "Quando si crea la lista nomi, i nomi template vengono scaricati e aggiunti alla lista stessa.";
-        addSpan(ASpan.text(message).rosso().small());
+//        message = "Quando si crea la lista nomi, i nomi modulo vengono scaricati e aggiunti alla lista stessa.";
+//        addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sCancella tutto e scarica il template wiki: %s.", FORWARD, backend.sorgenteDownload);
+        message = String.format("Download%sCancella tutto e scarica il modulo.", FORWARD, backend.sorgenteDownload);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload%sRiscrive il modulo in ordine alfabetico.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTestName, backend.sorgenteDownload);
-        addSpan(ASpan.text(message).blue().small());
-        message = "Se non si vogliono le modifiche, fare prima un Download";
+//        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico", FORWARD);
+//        addSpan(ASpan.text(message).blue().small());
+        message = "Se non si vogliono scrivere nel modulo le modifiche presenti su Mongo, eseguire prima un Download";
         addSpan(ASpan.text(message).rosso().small());
     }
 
@@ -125,12 +130,27 @@ public class NomeModuloView extends WikiView {
         topPlaceHolder.add(searchFieldPagina);
     }
 
+    protected void fixBottoniTopSpecifici() {
+        boxAggiunti = new IndeterminateCheckbox();
+        boxAggiunti.setLabel("Aggiunti");
+        boxAggiunti.setIndeterminate(true);
+        boxAggiunti.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutAggiunti = new HorizontalLayout(boxAggiunti);
+        layoutAggiunti.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutAggiunti);
+
+        this.add(topPlaceHolder2);
+    }
+
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
         List<NomeModulo> items = (List) super.sincroFiltri();
 
+        if (boxAggiunti != null && !boxAggiunti.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.aggiunto == boxAggiunti.getValue()).toList();
+        }
 
         final String textSearchPagina = searchFieldPagina != null ? searchFieldPagina.getValue() : VUOTA;
         if (textService.isValidNoSpace(textSearchPagina)) {

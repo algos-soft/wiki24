@@ -40,8 +40,8 @@ public class NomeModuloBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.downloadNomiTemplate;
-        super.lastDownload = WPref.downloadNomiTemplate;
+        super.lastDownload = WPref.downloadNomiModulo;
+        super.lastUpload = WPref.uploadNomiNodulo;
 
         super.sorgenteDownload = TAG_INCIPIT_NOMI;
         super.tagSplitSorgente = VIRGOLA_CAPO;
@@ -203,7 +203,7 @@ public class NomeModuloBackend extends WikiBackend {
     @Override
     public WResult uploadModulo() {
         WResult result = appContext.getBean(UploadModuloIncipitNomi.class).esegue();
-        return super.fixRiordinaModulo(result);
+        return result;
     }
 
 }// end of crud backend class

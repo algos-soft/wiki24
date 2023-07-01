@@ -34,6 +34,13 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class QueryCat extends AQuery {
 
+    private AETypeQueryProp queryProp = AETypeQueryProp.ids;
+
+    public QueryCat title() {
+        queryProp = AETypeQueryProp.title;
+        return this;
+    }
+
     /**
      * Lista dei pageIds di una categoria <br>
      *
@@ -246,7 +253,7 @@ public class QueryCat extends AQuery {
     private String fixUrlCat(final String catTitle, final String continueParam) {
         String query = QUERY_CAT_REQUEST + CAT + wikiBot.wikiApiService.fixWikiTitle(catTitle);
         String type = WIKI_QUERY_CAT_TYPE + "page";
-        String prop = WIKI_QUERY_CAT_PROP + "ids";//--potrebbe essere anche "ids|title"
+        String prop =   queryProp.get();//--potrebbe essere anche "ids|title"
         String limit = botLogin.getUserType().limit();
         String user = botLogin.getUserType().affermazione();
 
