@@ -83,16 +83,13 @@ public class NomeDoppioView extends WikiView {
         super.fixAlert();
 
         Anchor anchor = WAnchor.build(backend.sorgenteDownload, PROGETTO);
-//        Anchor anchor2 = WAnchor.build(backend.uploadTestName, TEST);
         alertPlaceHolder.add(new Span(anchor));
 
-        message = String.format("Sono elencati i nomi doppi (esempio: 'Maria Teresa') presenti nella pagina di progetto",FORWARD, backend.sorgenteDownload);
+        message = String.format("Nomi doppi (esempio: 'Maria Teresa') elencati nella pagina di progetto",FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
-//        message = "Quando si crea la lista nomi, i nomi doppi vengono scaricati e aggiunti alla lista stessa.";
-//        addSpan(ASpan.text(message).rosso().small());
 
         message = String.format("Download%sLegge la pagina: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
@@ -101,21 +98,9 @@ public class NomeDoppioView extends WikiView {
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-//        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico sul test %s. (da copiare poi su %s)", FORWARD, backend.uploadTestName, backend.sorgenteDownload);
-//        addSpan(ASpan.text(message).blue().small());
-        message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s", FORWARD, WPref.usaTaskStatistiche.getDescrizione());
         message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s", FORWARD, TaskStatistiche.INFO);
         addSpan(ASpan.text(message).blue().small());
-//        message = "Se non si vogliono le modifiche, fare prima un Download";
-//        addSpan(ASpan.text(message).rosso().small());
     }
 
-
-//    /**
-//     * Esegue un azione di upload, specifica del programma/package in corso <br>
-//     */
-//    public void uploadModulo() {
-//        crudBackend.uploadModulo();
-//    }
 
 }// end of crud @Route view class

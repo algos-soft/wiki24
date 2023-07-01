@@ -40,6 +40,7 @@ public class NomeModuloBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.lastReset = WPref.downloadNomiModulo;
         super.lastDownload = WPref.downloadNomiModulo;
         super.lastUpload = WPref.uploadNomiNodulo;
 

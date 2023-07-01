@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomemodulo.*;
 import it.algos.wiki24.backend.packages.wiki.*;
@@ -37,6 +38,9 @@ import java.util.stream.*;
 public class NomeBackend extends WikiBackend {
 
     @Autowired
+    public NomeCategoriaBackend nomeCategoriaBackend;
+
+    @Autowired
     public NomeDoppioBackend nomeDoppioBackend;
 
     @Autowired
@@ -59,23 +63,23 @@ public class NomeBackend extends WikiBackend {
         super.lastUpload = WPref.uploadNomi;
         super.durataUpload = WPref.uploadNomiTime;
 
-        this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraDownload = AETypeTime.minuti;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
         this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
-    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template) {
-        return creaIfNotExist(keyPropertyValue, numBio, distinto, doppio, template, VUOTA, VUOTA);
+    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean categoria, boolean doppio, boolean modulo, boolean mongo) {
+        return creaIfNotExist(keyPropertyValue, numBio, categoria, doppio, modulo, mongo, VUOTA, VUOTA);
     }
 
-    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean template, String paginaVoce, String paginaLista) {
+    public Nome creaIfNotExist(final String keyPropertyValue, int numBio, boolean categoria, boolean doppio, boolean modulo, boolean mongo, String paginaVoce, String paginaLista) {
         Nome newNome;
 
         if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
             return null;
         }
         else {
-            newNome = newEntity(keyPropertyValue, numBio, distinto, doppio, template, paginaVoce, paginaLista);
+            newNome = newEntity(keyPropertyValue, numBio, categoria, doppio, modulo, mongo, paginaVoce, paginaLista);
             return newNome != null ? insert(newNome) : null;
         }
     }
@@ -98,16 +102,17 @@ public class NomeBackend extends WikiBackend {
      */
     @Override
     public Nome newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, 0, false, false, false, VUOTA, VUOTA);
+        return newEntity(keyPropertyValue, 0, false, false, false, false, VUOTA, VUOTA);
     }
 
-    public Nome newEntity(final String keyPropertyValue, int numBio, boolean distinto, boolean doppio, boolean modulo, String paginaVoce, String paginaLista) {
+    public Nome newEntity(final String keyPropertyValue, int numBio, boolean categoria, boolean doppio, boolean modulo, boolean mongo, String paginaVoce, String paginaLista) {
         Nome newEntityBean = Nome.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .numBio(numBio)
-                .distinto(distinto)
-                .modulo(modulo)
+                .categoria(categoria)
                 .doppio(doppio)
+                .modulo(modulo)
+                .mongo(mongo)
                 .paginaVoce(textService.isValid(paginaVoce) ? paginaVoce : null)
                 .paginaLista(textService.isValid(paginaLista) ? PATH_NOMI + paginaLista : null)
                 .superaSoglia(false)
@@ -212,14 +217,17 @@ public class NomeBackend extends WikiBackend {
         //--Cancella tutte le entities della collezione
         deleteAll();
 
-        //--Nomi 'semplici'. Ricavati dalla collection Bio sul server mongo. Quelli 'doppi' vengono inseriti dopo da apposita lista
-        estraeNomiDistinti(result);
+        //--Nomi 'categorie'. Ricavati dalla 3 categorie su wiki
+        result = addNomiCategoria(result);
 
-        //--Nome 'doppi' inseriti da apposita lista
-        addNomiDoppi(result);
+        //--Nome 'doppi' Ricavati da apposita lista di progetto
+        result = addNomiDoppi(result);
 
         //--Nomi 'incipit'. Ricavati dal Modulo sul server Wiki.
-        addNomiModulo(result);
+        result = addNomiModulo(result);
+
+        //--Nomi 'semplici'. Ricavati dalla collection Bio sul server mongo.
+        result = estraeNomiDistinti(result);
 
         result.fine();
         result.valido(true).eseguito();
@@ -229,93 +237,136 @@ public class NomeBackend extends WikiBackend {
     }// end of method
 
     /**
-     * Legge i valori dalle biografie
-     * Nomi 'semplici'. Ricavati dalla collection Bio sul server mongo. <br>
+     * Legge i valori dalla tavola NomeCategoria
      *
      * @return entities create
      */
-    public AResult estraeNomiDistinti(AResult result) {
-        DistinctIterable<String> listaNomiDistinti = mongoService.getCollection(TAG_BIO).distinct("nome", String.class);
-        int numBio;
-        int sogliaMongo = WPref.sogliaMongoNomi.getInt(); //--Soglia minima per creare una entity nella collezione Nomi sul mongoDB
-        AEntity entityBean;
+    public AResult addNomiCategoria(AResult result) {
+        Nome entityBean;
         List<AEntity> lista = new ArrayList<>();
-        boolean debug = Pref.debug.is();
+        List<NomeCategoria> listaNomiCategorie = null;
 
-        for (String distinto : listaNomiDistinti) {
-            numBio = bioBackend.countNome(distinto);
-            if (numBio > sogliaMongo) {
-                entityBean = creaIfNotExist(distinto, numBio, true, false, false, VUOTA, distinto);
-                result.setValido(fixLista(lista, entityBean, entityBean.id));
+        //--Controllo e recupero di NomiCategoria
+        nomeCategoriaBackend.resetDownload();
+        listaNomiCategorie = nomeCategoriaBackend.findAll();
+
+        if (listaNomiCategorie != null) {
+            for (NomeCategoria nomeCategoria : listaNomiCategorie) {
+                entityBean = creaIfNotExist(nomeCategoria.nome, 0, true, false, false, false, nomeCategoria.linkPagina, null);
+                result.setValido(fixLista(result, entityBean, nomeCategoria.nome));
             }
-            else {
-                if (debug) {
-                    message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity su mongo", numBio, distinto);
-                    logService.info(new WrapLog().message(message));
-                }
-            }
-        }// end of for cycle
+        }
+        else {
+            message = String.format("Mancano i NomiCategoria");
+            logService.warn(new WrapLog().message(message));
+        }
 
         return super.fixResult(result, lista);
     }
 
 
     /**
-     * Integra con i valori dalla tavola NomiDoppi <br>
-     * Ricrea al volo (per sicurezza di aggiornamento) tutta la collezione mongoDb dei doppinomi <br>
-     * Se il nome esiste già, cambia solo il flag altrimenti lo crea (anche se non esiste nessuna voce Bio sul server Mongo) <br>
+     * Legge i valori dalla tavola NomeDoppio
      */
     public AResult addNomiDoppi(AResult result) {
-        List<NomeDoppio> listaDoppi;
         Nome entityBean;
-        int numBio;
+        List<AEntity> lista = new ArrayList<>();
+        List<NomeDoppio> listaNomiDoppi = null;
 
-        nomeDoppioBackend.download();
-        listaDoppi = nomeDoppioBackend.findAll();
+        //--Controllo e recupero di NomiDoppi
+        nomeDoppioBackend.resetDownload();
+        listaNomiDoppi = nomeDoppioBackend.findAll();
 
-        if (listaDoppi != null) {
-            for (NomeDoppio entityBeanNomeDoppio : listaDoppi) {
-                if (isExistByKey(entityBeanNomeDoppio.nome)) {
-                    entityBean = findByKey(entityBeanNomeDoppio.nome);
+        if (listaNomiDoppi != null) {
+            for (NomeDoppio nomeDoppio : listaNomiDoppi) {
+                if (isExistByKey(nomeDoppio.nome)) {
+                    entityBean = findByKey(nomeDoppio.nome);
                     entityBean.doppio = true;
                     save(entityBean);
                 }
                 else {
-                    numBio = bioBackend.countNome(entityBeanNomeDoppio.nome);
-                    creaIfNotExist(entityBeanNomeDoppio.nome, numBio, false, true, false);
+                    entityBean = creaIfNotExist(nomeDoppio.nome, 0, false, true, false, false, null, null);
+                    result.setValido(fixLista(result, entityBean, nomeDoppio.nome));
                 }
             }
         }
+        else {
+            message = String.format("Mancano i NomiDoppi");
+            logService.warn(new WrapLog().message(message));
+        }
 
-        return result;
+        return super.fixResult(result, lista);
     }
+
+    /**
+     * Legge i valori dalla tavola NomeModulo
+     *
+     * @return lista dei valori
+     */
+    public AResult addNomiModulo(AResult result) {
+        Nome entityBean;
+        List<AEntity> lista = new ArrayList<>();
+        List<NomeModulo> listaNomiModulo = null;
+
+        //--Controllo e recupero di NomiDoppi
+        nomeModuloBackend.resetDownload();
+        listaNomiModulo = nomeModuloBackend.findAll();
+
+        if (listaNomiModulo != null) {
+            for (NomeModulo nomeModulo : listaNomiModulo) {
+                if (isExistByKey(nomeModulo.nome)) {
+                    entityBean = findByKey(nomeModulo.nome);
+                    entityBean.modulo = true;
+                    if (entityBean.paginaVoce == null) {
+                        entityBean.paginaVoce = nomeModulo.linkPagina;
+                    }
+                    save(entityBean);
+                }
+                else {
+                    entityBean = creaIfNotExist(nomeModulo.nome, 0, false, false, true, false, nomeModulo.linkPagina, null);
+                    result.setValido(fixLista(result, entityBean, nomeModulo.nome));
+                }
+            }
+        }
+        else {
+            message = String.format("Mancano i NomiModulo");
+            logService.warn(new WrapLog().message(message));
+        }
+
+        return super.fixResult(result, lista);
+    }
+
 
     /**
      * Integra con i valori dal modulo incipit nomi
      *
      * @return lista dei valori
      */
-    public AResult addNomiModulo(AResult result) {
-        List<NomeModulo> listaModulo;
+    public AResult estraeNomiDistinti(AResult result) {
+        DistinctIterable<String> listaNomiMongo = mongoService.getCollection(TAG_BIO).distinct("nome", String.class);
         Nome entityBean;
         int numBio;
-        String linkPagina = VUOTA;
+        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        List<AEntity> lista = new ArrayList<>();
+        boolean debug = Pref.debug.is();
 
-        nomeModuloBackend.download();
-        listaModulo = nomeModuloBackend.findAll();
-
-        if (listaModulo != null) {
-            for (NomeModulo entityBeanNomeTemplate : listaModulo) {
-                linkPagina = textService.isValid(entityBeanNomeTemplate.linkPagina) ? entityBeanNomeTemplate.linkPagina : VUOTA;
-                if (isExistByKey(entityBeanNomeTemplate.nome)) {
-                    entityBean = findByKey(entityBeanNomeTemplate.nome);
-                    entityBean.modulo = true;
-                    entityBean.paginaVoce = linkPagina;
-                    save(entityBean);
+        for (String mongo : listaNomiMongo) {
+            if (isExistByKey(mongo)) {
+                entityBean = findByKey(mongo);
+                entityBean.mongo = true;
+                save(entityBean);
+            }
+            else {
+                numBio = bioBackend.countNome(mongo);
+                if (numBio > sogliaMongo) {
+                    entityBean = creaIfNotExist(mongo, numBio, false, false, false, true, null, null);
+                    result.setValido(fixLista(result, entityBean, mongo));
                 }
                 else {
-                    numBio = bioBackend.countNome(entityBeanNomeTemplate.nome);
-                    creaIfNotExist(entityBeanNomeTemplate.nome, numBio, false, false, true, linkPagina, entityBeanNomeTemplate.nome);
+                    if (debug) {
+                        message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity su mongo", numBio, mongo);
+                        logService.info(new WrapLog().message(message));
+                    }
                 }
             }
         }

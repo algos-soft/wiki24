@@ -34,7 +34,7 @@ public class NomeModulo extends AEntity {
     @AIField(type = AETypeField.text, widthEM = 20)
     public String nome;
 
-    @AIField(type = AETypeField.text, widthEM = 14)
+    @AIField(type = AETypeField.anchor)
     public String linkPagina;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)

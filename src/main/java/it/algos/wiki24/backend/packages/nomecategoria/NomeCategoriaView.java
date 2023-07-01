@@ -93,14 +93,14 @@ public class NomeCategoriaView extends WikiView {
         Anchor anchor3 = WAnchor.build(CATEGORIA + DUE_PUNTI + backend.catEntrambi, "Entrambi");
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
-        message = "Sono elencati i prenomi presenti nelle 3 categorie su wiki.";
+        message = "Prenomi presenti nelle 3 categorie su wiki.";
         addSpan(ASpan.text(message).verde());
 
-        message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catMaschile);
+        message = String.format("Download%SLegge la categoria %s.", FORWARD, backend.catMaschile);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catFemminile);
+        message = String.format("Download%SLegge la categoria %s.", FORWARD, backend.catFemminile);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catEntrambi);
+        message = String.format("Download%SLegge la categoria %s.", FORWARD, backend.catEntrambi);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";

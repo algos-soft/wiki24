@@ -47,11 +47,15 @@ public class NomeView extends WikiView {
     //--per eventuali metodi specifici
     private NomeBackend backend;
 
-    private IndeterminateCheckbox boxDistinti;
+
+    private IndeterminateCheckbox boxCategoria;
+
+    private IndeterminateCheckbox boxDoppi;
 
     private IndeterminateCheckbox boxModulo;
 
-    private IndeterminateCheckbox boxDoppi;
+    private IndeterminateCheckbox boxMongo;
+
 
     private IndeterminateCheckbox boxSuperaSoglia;
 
@@ -82,8 +86,8 @@ public class NomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "modulo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
-        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "distinto", "doppio", "modulo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.gridPropertyNamesList = Arrays.asList("nome", "numBio", "categoria", "doppio", "modulo", "mongo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("nome", "numBio", "categoria", "doppio", "modulo", "mongo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -109,15 +113,17 @@ public class NomeView extends WikiView {
         String infoTask = VaadTask.info(TaskNomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
-        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        //        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        //        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        String sogliaMongo = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaMongoNomi.getInt()));
+        String sogliaWiki = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaWikiNomi.getInt()));
 
         Anchor anchor = WAnchor.build(CATEGORIA + ":Prenomi composti", CATEGORIA);
         Anchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
         Anchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
-        message = "Tabella del parametro 'nome', ricavata dalle biografie, da NomeDoppio e NomeTemplate.";
+        message = "Parametro <span style=\"color:red\"><em>nome</em></span> delle biografie per la creazione di liste <strong>Persone di nome...</strong>.";
         addSpan(ASpan.text(message).verde());
         message = String.format("Parametri%s", FORWARD);
         message += String.format("%s, %s, %s", WPref.usaTaskNomi.getKeyCode(), WPref.linkParagrafiNomi.getKeyCode(), WPref.typeTocNomi.getKeyCode());
@@ -126,21 +132,23 @@ public class NomeView extends WikiView {
         addSpan(ASpan.text(message).blue().small());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale.");
-        message += String.format(" Le pagine non ancora esistenti con bio>%d sono da creare (blu).", sogliaWiki);
+        message += String.format(" Le pagine non ancora esistenti con bio>%s sono da creare (blu).", sogliaWiki);
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Le pagine esistenti con bio<%d sono da cancellare (rosso bold).", sogliaWiki);
-        message += String.format(" Le pagine esistenti con bio>%d sono in visione (verde).", sogliaWiki);
+        message = String.format("Le pagine esistenti con bio<%s sono da cancellare (rosso bold).", sogliaWiki);
+        message += String.format(" Le pagine esistenti con bio>%s sono in visione (verde).", sogliaWiki);
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sRecupera una lista di nomi distinti dalle biografie. Crea una entity se numBio>%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download di NomiCategoria. Aggiunge tutti i valori alla lista.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista; anche se numBio<%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download del NomiTemplate. Aggiunge tutti i valori alla lista; anche se numBio<%d", FORWARD, sogliaMongo);
+        message = String.format("Download%sEsegue un Download di NomiModulo. Aggiunge tutti i valori alla lista.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Download%sCostruisce una lista di nomi distinti dalle biografie di Mongo. Crea una entity solo se numBio>%s", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());
         message = String.format("Elabora%sEsegue un download. Calcola le voci biografiche che usano ogni singolo nome e la presenza della paginaLista", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sPrevisto per tutte le liste di nomi con numBio>%d.", FORWARD, sogliaWiki);
+        message = String.format("Upload%sPrevisto per tutte le liste di nomi con numBio>%s.", FORWARD, sogliaWiki);
         addSpan(ASpan.text(message).verde());
 
         message = String.format("Upload liste%sEseguito da %s", FORWARD, infoTask);
@@ -160,13 +168,14 @@ public class NomeView extends WikiView {
 
 
     protected void fixBottoniTopSpecifici() {
-        boxDistinti = new IndeterminateCheckbox();
-        boxDistinti.setLabel("Distinti");
-        boxDistinti.setIndeterminate(true);
-        boxDistinti.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layoutDistinti = new HorizontalLayout(boxDistinti);
-        layoutDistinti.setAlignItems(Alignment.CENTER);
-        topPlaceHolder.add(layoutDistinti);
+
+        boxCategoria = new IndeterminateCheckbox();
+        boxCategoria.setLabel("Categorie");
+        boxCategoria.setIndeterminate(true);
+        boxCategoria.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutCategoria = new HorizontalLayout(boxCategoria);
+        layoutCategoria.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutCategoria);
 
         boxDoppi = new IndeterminateCheckbox();
         boxDoppi.setLabel("Doppi");
@@ -183,6 +192,14 @@ public class NomeView extends WikiView {
         HorizontalLayout layoutIncipit = new HorizontalLayout(boxModulo);
         layoutIncipit.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutIncipit);
+
+        boxMongo = new IndeterminateCheckbox();
+        boxMongo.setLabel("Mongo");
+        boxMongo.setIndeterminate(true);
+        boxMongo.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutMongo = new HorizontalLayout(boxMongo);
+        layoutMongo.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutMongo);
 
         boxSuperaSoglia = new IndeterminateCheckbox();
         boxSuperaSoglia.setLabel("Soglia");
@@ -243,14 +260,17 @@ public class NomeView extends WikiView {
     protected List<AEntity> sincroFiltri() {
         List<Nome> items = (List) super.sincroFiltri();
 
-        if (boxDistinti != null && !boxDistinti.isIndeterminate()) {
-            items = items.stream().filter(nome -> nome.distinto == boxDistinti.getValue()).toList();
+        if (boxCategoria != null && !boxCategoria.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.categoria == boxCategoria.getValue()).toList();
+        }
+        if (boxDoppi != null && !boxDoppi.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.doppio == boxDoppi.getValue()).toList();
         }
         if (boxModulo != null && !boxModulo.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.modulo == boxModulo.getValue()).toList();
         }
-        if (boxDoppi != null && !boxDoppi.isIndeterminate()) {
-            items = items.stream().filter(nome -> nome.doppio == boxDoppi.getValue()).toList();
+        if (boxMongo != null && !boxMongo.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.mongo == boxMongo.getValue()).toList();
         }
         if (boxSuperaSoglia != null && !boxSuperaSoglia.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.superaSoglia == boxSuperaSoglia.getValue()).toList();

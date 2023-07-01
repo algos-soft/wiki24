@@ -12,6 +12,7 @@ import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
@@ -84,8 +85,7 @@ public class NomeModuloView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Anchor anchor = WAnchor.build(backend.sorgenteDownload, backend.sorgenteDownload);
-//        Anchor anchor2 = WAnchor.build(backend.uploadTestName, TEST);
+        Anchor anchor = WAnchor.build(backend.sorgenteDownload, MODULO);
         alertPlaceHolder.add(new Span(anchor));
 
         message = "Pagine di riferimento per ogni nome (es.: [Felix->Felice (nome)]) da inserire nell'incipit della lista.";
@@ -95,20 +95,16 @@ public class NomeModuloView extends WikiView {
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
-//        message = "Quando si crea la lista nomi, i nomi modulo vengono scaricati e aggiunti alla lista stessa.";
-//        addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sCancella tutto e scarica il modulo.", FORWARD, backend.sorgenteDownload);
+        message = String.format("Download%sLegge il modulo: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
         message = String.format("Upload%sRiscrive il modulo in ordine alfabetico.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-//        message = String.format("Upload moduli%s1 lista wiki modificata e riordinata in ordine alfabetico", FORWARD);
-//        addSpan(ASpan.text(message).blue().small());
-        message = "Se non si vogliono scrivere nel modulo le modifiche presenti su Mongo, eseguire prima un Download";
-        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i nomi aggiunti.", FORWARD, TaskStatistiche.INFO);
+        addSpan(ASpan.text(message).blue().small());
     }
 
     /**

@@ -35,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nome", keyPropertyName = "nome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "nome", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Nome extends AEntity {
 
     @AIField(type = AETypeField.text, header = "nome", caption = "nome", widthEM = 14)
@@ -50,14 +50,18 @@ public class Nome extends AEntity {
     @AIField(type = AETypeField.anchor)
     public String paginaLista;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
-    public boolean distinto;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
+    public boolean categoria;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
     public boolean doppio;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
     public boolean modulo;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
+    public boolean mongo;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
     public boolean superaSoglia;
