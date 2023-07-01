@@ -93,9 +93,9 @@ public class QueryCatTest extends WikiTest {
 
     @Test
     @Order(3)
-    @DisplayName("3 - Categoria esistente -> ids")
-    void esisteIds() {
-        System.out.println(("3 - Categoria esistente -> ids"));
+    @DisplayName("3 - Categoria (istanza) -> ids")
+    void istanzaIds() {
+        System.out.println(("3 - Categoria (istanza) -> ids"));
         assertTrue(istanza == null);
         istanza = appContext.getBean(QueryCat.class);
         assertNotNull(istanza);
@@ -110,11 +110,11 @@ public class QueryCatTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-//    @Test
+    @Test
     @Order(4)
-    @DisplayName("4 - Categoria esistente -> title")
-    void esiste3() {
-        System.out.println(("4 - Categoria esistente -> title"));
+    @DisplayName("4 - Categoria (istanza) -> title")
+    void istanzaTitle() {
+        System.out.println(("4 - Categoria (istanza) -> title"));
         assertTrue(istanza == null);
         istanza = appContext.getBean(QueryCat.class).title();
         assertNotNull(istanza);
@@ -129,11 +129,91 @@ public class QueryCatTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-    //    @Test
+
+    @Test
     @Order(5)
-    @DisplayName("5 - Categoria esistente login come user")
+    @DisplayName("5 - Categoria (urlRequest) -> ids")
+    void urlRequestIds() {
+        System.out.println(("5 - Categoria (urlRequest) -> ids"));
+
+        sorgente = CATEGORIA_ESISTENTE_MEDIA;
+        ottenutoRisultato = appContext.getBean(QueryCat.class).urlRequest(sorgente);
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("6 - Categoria (urlRequest) -> title")
+    void urlRequestTitle() {
+        System.out.println(("6 - Categoria (urlRequest) -> title"));
+
+        sorgente = CATEGORIA_ESISTENTE_MEDIA;
+        ottenutoRisultato = appContext.getBean(QueryCat.class).title().urlRequest(sorgente);
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(7)
+    @DisplayName("7 - Categoria (getListaPageIds) -> ids")
+    void getListaPageIds() {
+        System.out.println(("7 - Categoria (getListaPageIds) -> ids"));
+
+        sorgente = CATEGORIA_ESISTENTE_BREVE;
+        listaPageIds = appContext.getBean(QueryCat.class).getListaPageIds(sorgente);
+        assertNotNull(listaPageIds);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printLong(listaPageIds);
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("8 - Categoria (getListaTitles) -> title")
+    void getListaTitles() {
+        System.out.println(("8 - Categoria (getListaTitles) -> title"));
+
+        sorgente = CATEGORIA_ESISTENTE_BREVE;
+        listaStr = appContext.getBean(QueryCat.class).getListaTitles(sorgente);
+        assertNotNull(listaStr);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        print(listaStr);
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - Categoria titolo errato rimediabile")
+    void getListaTitles2() {
+        System.out.println(("9 - Categoria titolo errato rimediabile"));
+
+        sorgente = "Categoria:" + CATEGORIA_ESISTENTE_BREVE;
+        listaStr = appContext.getBean(QueryCat.class).getListaTitles(sorgente);
+        assertNotNull(listaStr);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        print(listaStr);
+    }
+
+
+    //    @Test
+    @Order(10)
+    @DisplayName("10 - Categoria esistente login come user")
     void esisteUser() {
-        System.out.println(("5 - Categoria esistente login come user"));
+        System.out.println(("10 - Categoria esistente login come user"));
         appContext.getBean(QueryLogin.class).urlRequest(AETypeUser.user);
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;

@@ -1,12 +1,15 @@
 package it.algos.wiki24.backend.packages.nomecategoria;
 
+import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.components.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import org.springframework.beans.factory.annotation.*;
 
@@ -30,13 +33,15 @@ import com.vaadin.flow.component.textfield.TextField;
  * Presenta la Grid <br>
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
-@PageTitle("NomeCategoria")
+@PageTitle("NomiCategoria")
 @Route(value = "nomecategoria", layout = MainLayout.class)
 public class NomeCategoriaView extends WikiView {
 
 
     //--per eventuali metodi specifici
     private NomeCategoriaBackend backend;
+
+    private ComboBox<AETypeGenere> comboGenere;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -60,8 +65,8 @@ public class NomeCategoriaView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina");
-        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina");
+        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina", "typeGenere");
+        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina", "typeGenere");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -72,7 +77,7 @@ public class NomeCategoriaView extends WikiView {
         super.usaBottoneDeleteEntity = false;
         super.usaBottoneUploadAll = false;
         super.usaBottonePaginaWiki = false;
-        super.usaBottoneUploadModuloAlfabetizzato = true;
+        super.usaBottoneUploadModuloAlfabetizzato = false;
     }
 
     /**
@@ -88,12 +93,56 @@ public class NomeCategoriaView extends WikiView {
         Anchor anchor3 = WAnchor.build(CATEGORIA + DUE_PUNTI + backend.catEntrambi, "Entrambi");
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
+        message = "Sono elencati i prenomi presenti nelle 3 categorie su wiki.";
+        addSpan(ASpan.text(message).verde());
+
         message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catMaschile);
         addSpan(ASpan.text(message).verde());
         message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catFemminile);
         addSpan(ASpan.text(message).verde());
         message = String.format("Download%SLegge i valori da %s.", FORWARD, backend.catEntrambi);
         addSpan(ASpan.text(message).verde());
+
+        message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = String.format("Nessun Upload su wiki: sono categorie in sola lettura", FORWARD, backend.uploadTestName, backend.sorgenteDownload);
+        addSpan(ASpan.text(message).blue().small());
+    }
+
+
+    protected void fixBottoniTopSpecifici() {
+        comboGenere = new ComboBox<>();
+        comboGenere.setPlaceholder("Genere");
+        comboGenere.getElement().setProperty("title", "Filtro di selezione");
+        comboGenere.setClearButtonVisible(true);
+        comboGenere.setItems(AETypeGenere.getAllEnums());
+        comboGenere.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(comboGenere);
+
+//        this.add(topPlaceHolder2);
+    }
+
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<NomeCategoria> items = (List) super.sincroFiltri();
+
+        if (items == null) {
+            return null;
+        }
+
+        if (comboGenere != null && comboGenere.getValue() != null) {
+                items = items.stream().filter(nome -> nome.typeGenere.equals(comboGenere.getValue())).toList();
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
     }
 
 }// end of crud @Route view class

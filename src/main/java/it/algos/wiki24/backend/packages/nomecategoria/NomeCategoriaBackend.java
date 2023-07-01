@@ -1,24 +1,16 @@
 package it.algos.wiki24.backend.packages.nomecategoria;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
-import it.algos.wiki24.wiki.query.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -38,7 +30,9 @@ import com.vaadin.flow.component.textfield.TextField;
 public class NomeCategoriaBackend extends WikiBackend {
 
     public String catMaschile = "Prenomi italiani maschili";
+
     public String catFemminile = "Prenomi italiani femminili";
+
     public String catEntrambi = "Prenomi italiani sia maschili che femminili";
 
     public NomeCategoriaBackend() {
@@ -49,12 +43,34 @@ public class NomeCategoriaBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastDownload = WPref.downloadNomiModulo;
-        //        super.lastUpload = WPref.uploadNomiNodulo;
+        super.lastReset = WPref.downloadNomiCategoria;
+        super.lastDownload = WPref.downloadNomiCategoria;
+        super.durataDownload = WPref.downloadNomiCategoriaTime;
 
-        super.sorgenteDownload = TAG_INCIPIT_NOMI;
-        super.tagSplitSorgente = VIRGOLA_CAPO;
+        this.unitaMisuraDownload = AETypeTime.secondi;
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
+    }
+
+
+    public AEntity creaIfNotExist(final String wikiTitle, final AETypeGenere typeGenere) {
+        AEntity entityBean;
+        String keyPropertyValue = wikiTitle;
+
+        if (textService.isEmpty(wikiTitle)) {
+            return null;
+        }
+        if (wikiTitle.contains(PARENTESI_TONDA_INI)) {
+            keyPropertyValue = textService.levaCodaDaPrimo(wikiTitle, PARENTESI_TONDA_INI);
+        }
+
+        if (isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+
+        entityBean = newEntity(keyPropertyValue, wikiTitle, typeGenere);
+        save(entityBean);
+
+        return entityBean;
     }
 
     /**
@@ -65,7 +81,7 @@ public class NomeCategoriaBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public NomeCategoria newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, null);
     }
 
     /**
@@ -75,7 +91,7 @@ public class NomeCategoriaBackend extends WikiBackend {
      */
     @Override
     public NomeCategoria newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, VUOTA);
+        return newEntity(keyPropertyValue, VUOTA, null);
     }
 
     /**
@@ -89,10 +105,11 @@ public class NomeCategoriaBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NomeCategoria newEntity(final String nome, final String linkPagina) {
+    public NomeCategoria newEntity(final String nome, final String linkPagina, final AETypeGenere typeGenere) {
         NomeCategoria newEntityBean = NomeCategoria.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
+                .typeGenere(typeGenere != null ? typeGenere : AETypeGenere.nessuno)
                 .build();
 
         return (NomeCategoria) super.fixKey(newEntityBean);
@@ -165,6 +182,7 @@ public class NomeCategoriaBackend extends WikiBackend {
         result = downloadCatNomiFemminili(result);
         result = downloadCatNomiEntrambi(result);
 
+        result = super.fixResult(result);
         return super.fixResetDownload(result);
     }
 
@@ -175,15 +193,15 @@ public class NomeCategoriaBackend extends WikiBackend {
      */
     public AResult downloadCatNomiMaschili(AResult result) {
         AEntity entityBean;
-        List<AEntity> lista = new ArrayList<>();
+        List<String> listaWikiTitle = queryService.getCatTitles(catMaschile);
 
-         appContext.getBean(QueryCat.class).getListaPageIds(CATEGORIA + DUE_PUNTI + catMaschile);
-//        for (String riga : super.getRighe()) {
-//            entityBean = creaIfNotExist(riga);
-//            result.setValido(fixLista(lista, entityBean, riga));
-//        }
-
-        return super.fixResult(result, lista);
+        if (listaWikiTitle != null) {
+            for (String wikiTitle : listaWikiTitle) {
+                entityBean = creaIfNotExist(wikiTitle, AETypeGenere.maschile);
+                result.setValido(fixLista(result, entityBean, wikiTitle));
+            }
+        }
+        return result;
     }
 
     /**
@@ -193,14 +211,15 @@ public class NomeCategoriaBackend extends WikiBackend {
      */
     public AResult downloadCatNomiFemminili(AResult result) {
         AEntity entityBean;
-        List<AEntity> lista = new ArrayList<>();
+        List<String> listaWikiTitle = queryService.getCatTitles(catFemminile);
 
-        //        for (String riga : super.getRighe()) {
-        //            entityBean = creaIfNotExist(riga);
-        //            result.setValido(fixLista(lista, entityBean, riga));
-        //        }
-
-        return super.fixResult(result, lista);
+        if (listaWikiTitle != null) {
+            for (String wikiTitle : listaWikiTitle) {
+                entityBean = creaIfNotExist(wikiTitle, AETypeGenere.femminile);
+                result.setValido(fixLista(result, entityBean, wikiTitle));
+            }
+        }
+        return result;
     }
 
     /**
@@ -210,14 +229,15 @@ public class NomeCategoriaBackend extends WikiBackend {
      */
     public AResult downloadCatNomiEntrambi(AResult result) {
         AEntity entityBean;
-        List<AEntity> lista = new ArrayList<>();
+        List<String> listaWikiTitle = queryService.getCatTitles(catEntrambi);
 
-        //        for (String riga : super.getRighe()) {
-        //            entityBean = creaIfNotExist(riga);
-        //            result.setValido(fixLista(lista, entityBean, riga));
-        //        }
-
-        return super.fixResult(result, lista);
+        if (listaWikiTitle != null) {
+            for (String wikiTitle : listaWikiTitle) {
+                entityBean = creaIfNotExist(wikiTitle, AETypeGenere.entrambi);
+                result.setValido(fixLista(result, entityBean, wikiTitle));
+            }
+        }
+        return result;
     }
 
 }// end of crud backend class

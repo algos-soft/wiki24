@@ -220,9 +220,9 @@ public abstract class Upload {
 
     protected boolean usaNumeriTitoloParagrafi;
 
-    protected String wikiTitleUpload;
+    public String wikiTitleUpload;
 
-    protected String wikiTitleModulo;
+    public String wikiTitleModulo;
 
 
     protected AETypeToc typeToc;
@@ -233,7 +233,7 @@ public abstract class Upload {
 
     protected AETypeLink typeLink;
 
-    protected WikiBackend crudBackend;
+    public WikiBackend crudBackend;
 
     /**
      * Costruttore base senza parametri <br>

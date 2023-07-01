@@ -290,13 +290,33 @@ public abstract class WikiBackend extends CrudBackend {
         return WResult.build().method("download").target(getClass().getSimpleName());
     }
 
-    public boolean fixLista(List<AEntity> lista, AEntity entityBean, String entityBeanID) {
+
+    public boolean fixLista(AResult result, AEntity entityBean, String sigla) {
+        List lista;
+
+        if (entityBean != null) {
+            if (result.getLista() == null) {
+                result.setLista(new ArrayList<>());
+            }
+            lista = result.getLista();
+            lista.add(entityBean);
+            result.setLista(lista);
+            return true;
+        }
+        else {
+            logService.error(new WrapLog().exception(new AlgosException(String.format("La entityBean [%s]non è stata salvata", sigla))).usaDb());
+            return false;
+        }
+    }
+
+    @Deprecated
+    public boolean fixLista(List<AEntity> lista, AEntity entityBean, String sigla) {
         if (entityBean != null) {
             lista.add(entityBean);
             return true;
         }
         else {
-            logService.error(new WrapLog().exception(new AlgosException(String.format("La entity %s non è stata salvata", entityBeanID))).usaDb());
+            logService.error(new WrapLog().exception(new AlgosException(String.format("La entityBean [%s]non è stata salvata", sigla))).usaDb());
             return false;
         }
     }

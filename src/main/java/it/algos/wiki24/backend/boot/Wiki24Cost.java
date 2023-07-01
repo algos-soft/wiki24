@@ -111,7 +111,8 @@ public class Wiki24Cost {
 
     public static final String API_PAGEIDS = "&pageids=";
 
-    public static final String CAT = "Category:";
+//    public static final String CAT = "Category:";
+    public static final String CAT = "Categoria:";
 
     public static final String API_CAT = "&cmtitle=";
 

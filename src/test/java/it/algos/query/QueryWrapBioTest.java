@@ -139,7 +139,7 @@ public class QueryWrapBioTest extends WikiTest {
         System.out.println(("5 - Categoria media"));
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
 
         listWrapBio = appContext.getBean(QueryWrapBio.class).getWrap(listaPageIds);
         assertNotNull(listWrapBio);
@@ -159,7 +159,7 @@ public class QueryWrapBioTest extends WikiTest {
     void urlRequestListaCat2() {
         System.out.println(("6 - Categoria lunga"));
         sorgente = CATEGORIA_ESISTENTE_LUNGA;
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
 
         listWrapBio = appContext.getBean(QueryWrapBio.class).getWrap(listaPageIds);
         assertNotNull(listWrapBio);
@@ -182,7 +182,7 @@ public class QueryWrapBioTest extends WikiTest {
         System.out.println(("7 - Categoria media bio"));
 
         sorgente = "Nati nel 1782";
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         listBio = appContext.getBean(QueryWrapBio.class).getBio(listaPageIds);
         assertNotNull(listBio);
         assertTrue(listBio.size() > 0);

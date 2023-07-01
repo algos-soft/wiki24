@@ -21,6 +21,8 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskStatistiche extends VaadTask {
 
+    public static String INFO = Wiki24Var.typeSchedule.getStatistiche().getNota();
+
     public TaskStatistiche() {
         super.descrizioneTask = WPref.usaTaskStatistiche.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getStatistiche();

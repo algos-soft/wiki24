@@ -212,18 +212,23 @@ public class QueryServiceTest extends WikiTest {
 
     @Test
     @Order(10)
-    @DisplayName("10 - pageIds della categoria")
+    @DisplayName("10 - pageIds e titles della categoria")
     void getListaPageIds() {
         String message;
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        listaPageIds = service.getListaPageIds(sorgente);
-        message = String.format("La categoria [[%s]] contiene %d elementi. Ne stampo SOLO i primi 10 (se ci sono)", sorgente, listaPageIds.size());
+        listaPageIds = service.getCatIds(sorgente);
+        message = String.format("La categoria [[%s]] contiene %d elementi. Leggo i pageIds. Ne stampo SOLO i primi 10 (se ci sono)", sorgente, listaPageIds.size());
         System.out.println(message);
         printLista(listaPageIds.subList(0, Math.min(10, listaPageIds.size())));
 
+        listaStr = service.getCatTitles(sorgente);
+        message = String.format("La categoria [[%s]] contiene %d elementi. Leggo i title. Ne stampo SOLO i primi 10 (se ci sono)", sorgente, listaStr.size());
+        System.out.println(message);
+        printLista(listaStr.subList(0, Math.min(10, listaStr.size())));
+
         System.out.println(VUOTA);
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = service.getListaPageIds(sorgente);
+        listaPageIds = service.getCatIds(sorgente);
         message = String.format("La categoria [[%s]] contiene %d elementi. Ne stampo SOLO i primi 10 (se ci sono)", sorgente, listaPageIds.size());
         System.out.println(message);
         printLista(listaPageIds.subList(0, Math.min(10, listaPageIds.size())));
@@ -235,7 +240,7 @@ public class QueryServiceTest extends WikiTest {
     void getMiniWrap() {
         String message;
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = service.getListaPageIds(sorgente);
+        listaPageIds = service.getCatIds(sorgente);
         listMiniWrap = service.getMiniWrap(listaPageIds);
         assertNotNull(listMiniWrap);
         printMiniWrap(listMiniWrap);
@@ -249,7 +254,7 @@ public class QueryServiceTest extends WikiTest {
     void getBioWrap() {
         String message;
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = service.getListaPageIds(sorgente);
+        listaPageIds = service.getCatIds(sorgente);
         listWrapBio = service.getBioWrap(listaPageIds);
         assertNotNull(listWrapBio);
         message = String.format("La categoria [[%s]] contiene %d elementi. Ne stampo SOLO i primi 10 (se ci sono)", sorgente, listWrapBio.size());

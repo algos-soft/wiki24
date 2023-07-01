@@ -83,6 +83,8 @@ public enum WPref implements AIGenPref {
     uploadNazPluralePrevisto("uploadNazPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità plurali."),
 
 
+    downloadNomiCategoria("downloadNomiCategoria", AETypePref.localdatetime, ROOT_DATA_TIME, "Download delle Categorie di prenomi."),
+    downloadNomiCategoriaTime("downloadNomiCategoriaTime", AETypePref.integer, 0, "Durata download delle categorie di prenomi."),
     downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
     downloadNomiModulo("downloadNomiModulo", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Incipit nomi."),
     uploadNomiNodulo("uploadNomiNodulo", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload del Modulo:Incipit nomi."),

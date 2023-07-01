@@ -142,7 +142,7 @@ public class QueryTimestampTest extends WikiTest {
         assertTrue(istanza == null);
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNotNull(listaPageIds);
 
         ottenutoRisultato = appContext.getBean(QueryTimestamp.class).urlRequest(listaPageIds);
@@ -166,7 +166,7 @@ public class QueryTimestampTest extends WikiTest {
         assertTrue(istanza == null);
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNotNull(listaPageIds);
 
         ottenutoRisultato = appContext.getBean(QueryTimestamp.class).urlRequest(listaPageIds);
@@ -198,7 +198,7 @@ public class QueryTimestampTest extends WikiTest {
         assertEquals(botLogin.getUserType(), AETypeUser.anonymous);
 
         //--collegato come anonymous - nessun valore per la lista pageIds
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNull(listaPageIds);
 
         //--si collega come user/admin
@@ -209,7 +209,7 @@ public class QueryTimestampTest extends WikiTest {
 
         //--collegato come user/admin
         //--la listaPageIds la recupera comunque dalla categoria che ha criteri ''più permissivi''
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNotNull(listaPageIds);
 
         //--la queryTimestamp invece ha bisogno di un collegamento come bot anche per valori più bassi di pageIds
@@ -236,7 +236,7 @@ public class QueryTimestampTest extends WikiTest {
         assertEquals(botLogin.getUserType(), AETypeUser.bot);
 
         //--collegato come bot
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNotNull(listaPageIds);
 
         ottenutoRisultato = appContext.getBean(QueryTimestamp.class).urlRequest(listaPageIds);
@@ -269,7 +269,7 @@ public class QueryTimestampTest extends WikiTest {
         assertEquals(botLogin.getUserType(), AETypeUser.bot);
 
         //--collegato come bot
-        listaPageIds = queryService.getListaPageIds(sorgente);
+        listaPageIds = queryService.getCatIds(sorgente);
         assertNotNull(listaPageIds);
 
         ottenutoRisultato = appContext.getBean(QueryTimestamp.class).urlRequest(listaPageIds);

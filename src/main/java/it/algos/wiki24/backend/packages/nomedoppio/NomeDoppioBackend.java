@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.packages.nomedoppio;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -47,7 +48,7 @@ public class NomeDoppioBackend extends WikiBackend {
         super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;
         super.tagEndSorgente = "[[Categoria:Liste di persone per nome";
         super.tagSplitSorgente = ASTERISCO_REGEX;
-        super.uploadTestName = UPLOAD_TITLE_DEBUG + DOPPI;
+        this.unitaMisuraDownload = AETypeTime.millisecondi;
     }
 
     /**
@@ -181,14 +182,13 @@ public class NomeDoppioBackend extends WikiBackend {
      */
     public AResult downloadNomiDoppi(AResult result) {
         AEntity entityBean;
-        List<AEntity> lista = new ArrayList<>();
 
         for (String riga : super.getRighe()) {
             entityBean = creaIfNotExist(riga);
-            result.setValido(fixLista(lista, entityBean, riga));
+            result.setValido(fixLista(result, entityBean, riga));
         }
 
-        return super.fixResult(result, lista);
+        return super.fixResult(result);
     }
 
 
@@ -197,8 +197,7 @@ public class NomeDoppioBackend extends WikiBackend {
      */
     @Override
     public WResult uploadModulo() {
-        WResult result = appContext.getBean(UploadProgettoAntroponimiNomiDoppi.class).uploadOrdinatoConModifiche();
-        return super.fixRiordinaModulo(result);
+        return appContext.getBean(UploadProgettoNomiDoppi.class).esegue();
     }
 
 }// end of crud backend class

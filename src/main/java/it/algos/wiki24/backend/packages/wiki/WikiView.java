@@ -526,7 +526,7 @@ public abstract class WikiView extends CrudView {
             buttonUploadModulo.getElement().setAttribute("theme", "primary");
             buttonUploadModulo.addThemeVariants(ButtonVariant.LUMO_ERROR);
             buttonUploadModulo.getElement().setProperty("title", "Upload: riordina alfabeticamente il modulo");
-            buttonUploadModulo.setIcon(new Icon(VaadinIcon.REFRESH));
+            buttonUploadModulo.setIcon(new Icon(VaadinIcon.UPLOAD));
             buttonUploadModulo.addClickListener(event -> uploadModulo());
             topPlaceHolder.add(buttonUploadModulo);
         }

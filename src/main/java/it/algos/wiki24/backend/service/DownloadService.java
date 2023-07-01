@@ -204,7 +204,7 @@ public class DownloadService extends WAbstractService {
         String size;
         String time;
 
-        List<Long> listaPageIds = queryService.getListaPageIds(categoryTitle);
+        List<Long> listaPageIds = queryService.getCatIds(categoryTitle);
 
         size = textService.format(listaPageIds.size());
         time = dateService.deltaText(inizio);

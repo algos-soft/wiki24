@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomemodulo.*;
 import it.algos.wiki24.backend.packages.wiki.*;
@@ -64,7 +65,11 @@ public abstract class WikiBackendTest extends BackendTest {
     protected NazPluraleBackend nazPluraleBackend;
 
     @Autowired
+    protected NomeCategoriaBackend nomeCategoriaBackend;
+
+    @Autowired
     protected NomeDoppioBackend nomeDoppioBackend;
+
     @Autowired
     protected NomeModuloBackend nomeTemplateBackend;
 
@@ -238,17 +243,17 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("Oppure il test potrebbe essere stato disabilitato nella sottoclasse di test specifica per problemi di durata eccessiva");
     }
 
-//    @Test
-//    @Order(16)
-//    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
-//    protected void upload() {
-//        System.out.println("16 - uploadModulo (test in ordine alfabetico)");
-//        System.out.println(VUOTA);
-//
-//        wResult = wikiBackend.uploadModulo();
-//        printRisultato(wResult);
-//        assertTrue(wResult.isValido());
-//    }
+    //    @Test
+    //    @Order(16)
+    //    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
+    //    protected void upload() {
+    //        System.out.println("16 - uploadModulo (test in ordine alfabetico)");
+    //        System.out.println(VUOTA);
+    //
+    //        wResult = wikiBackend.uploadModulo();
+    //        printRisultato(wResult);
+    //        assertTrue(wResult.isValido());
+    //    }
 
     @Test
     @Order(70)
@@ -305,17 +310,17 @@ public abstract class WikiBackendTest extends BackendTest {
         System.out.println("91 - riordinaModulo (upload test in ordine alfabetico)");
     }
 
-//    @Test
-//    @Order(91)
-//    @DisplayName("91 - uploadModulo (upload test in ordine alfabetico)")
-//    protected void uploadModulo() {
-//        System.out.println("91 - uploadModulo (upload test in ordine alfabetico)");
-//        System.out.println(VUOTA);
-//
-//        wResult = wikiBackend.uploadModulo();
-//        printRisultato(wResult);
-//        assertTrue(wResult.isValido());
-//    }
+    //    @Test
+    //    @Order(91)
+    //    @DisplayName("91 - uploadModulo (upload test in ordine alfabetico)")
+    //    protected void uploadModulo() {
+    //        System.out.println("91 - uploadModulo (upload test in ordine alfabetico)");
+    //        System.out.println(VUOTA);
+    //
+    //        wResult = wikiBackend.uploadModulo();
+    //        printRisultato(wResult);
+    //        assertTrue(wResult.isValido());
+    //    }
 
     protected void printRisultato(WResult result) {
         List lista = result.getLista();

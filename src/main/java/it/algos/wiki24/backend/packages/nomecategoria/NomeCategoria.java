@@ -4,6 +4,7 @@ import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.wiki24.backend.enumeration.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,8 +41,12 @@ public class NomeCategoria extends AEntity {
     @AIField(type = AETypeField.text, widthEM = 20)
     public String nome;
 
-    @AIField(type = AETypeField.text, widthEM = 14)
+    @AIField(type = AETypeField.anchor)
     public String linkPagina;
+
+    @AIField(type = AETypeField.enumString)
+    public AETypeGenere typeGenere;
+
 
     @Override
     public String toString() {
