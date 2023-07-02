@@ -674,6 +674,7 @@ public abstract class AlgosTest {
         System.out.println(String.format("Valido: %s", result.isValido() ? "true" : "false"));
         System.out.println(String.format("Eseguito: %s", result.isEseguito() ? "true" : "false"));
         System.out.println(String.format("Result: %s", result.getTypeResult().name()));
+        System.out.println(String.format("WikiTitle: %s", result.getTarget()));
         System.out.println(String.format("Method: %s", result.getMethod()));
         System.out.println(String.format("TypeLog: %s", result.getTypeLog()));
         System.out.println(String.format("TypeCopy: %s", result.getTypeCopy()));

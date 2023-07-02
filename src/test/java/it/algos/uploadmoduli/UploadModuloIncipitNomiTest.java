@@ -3,17 +3,11 @@ package it.algos.uploadmoduli;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.upload.moduli.*;
+import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24

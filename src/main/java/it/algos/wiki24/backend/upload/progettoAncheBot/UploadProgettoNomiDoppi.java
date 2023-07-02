@@ -1,10 +1,11 @@
-package it.algos.wiki24.backend.upload.progetto;
+package it.algos.wiki24.backend.upload.progettoAncheBot;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
@@ -33,7 +34,7 @@ public class UploadProgettoNomiDoppi extends UploadProgetto {
 
         super.wikiTitleModulo = backend.sorgenteDownload;
         super.wikiTitleUpload = backend.sorgenteDownload;
-        super.crudBackend = backend;
+        super.wikiBackend = backend;
         super.uploadTest = false;
     }
 
@@ -51,7 +52,9 @@ public class UploadProgettoNomiDoppi extends UploadProgetto {
         String testoCoreOld = backend.getCore();
         String testoCoreNew = this.fixTestoModulo();
         String newText = textService.sostituisce(testoPaginaAll, testoCoreOld, testoCoreNew);
-        return wikiApiService.scrive(wikiTitleUpload, newText, summary).typeResult(AETypeResult.uploadValido);
+
+        return registra(newText);
+//        return wikiApiService.scrive(wikiTitleUpload, newText, summary).typeResult(AETypeResult.uploadValido);
     }
 
 
@@ -68,6 +71,5 @@ public class UploadProgettoNomiDoppi extends UploadProgetto {
 
         return buffer.toString().trim();
     }
-
 
 }

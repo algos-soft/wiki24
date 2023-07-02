@@ -1,11 +1,7 @@
-package it.algos.wiki24.backend.upload.progetto;
+package it.algos.wiki24.backend.upload;
 
-import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
-
-import javax.annotation.*;
 
 /**
  * Project wiki24
@@ -13,13 +9,10 @@ import javax.annotation.*;
  * User: gac
  * Date: Mon, 19-Jun-2023
  * Time: 07:51
+ * Upload direttamente su pagina wiki
  */
 public abstract class UploadProgetto extends Upload {
 
-
-//    public UploadProgetto() {
-//        super();
-//    }// end of constructor
 
     /**
      * Costruttore base con parametri <br>
@@ -30,12 +23,6 @@ public abstract class UploadProgetto extends Upload {
     public UploadProgetto() {
     }// end of constructor
 
-    @PostConstruct
-    protected void postConstruct() {
-//        super.wikiTitleModulo = backend.sorgenteDownload;
-//        super.wikiTitleUpload = backend.uploadTestName;
-        super.postConstruct();
-    }
 
     @Override
     protected void fixPreferenze() {
@@ -43,9 +30,6 @@ public abstract class UploadProgetto extends Upload {
 
         super.summary = "Aggiunte/modifiche e fix ordine alfabetico";
         super.uploadTest = true;
-//        super.wikiTitleModulo = backend.sorgenteDownload;
-//        super.wikiTitleUpload = backend.uploadTestName;
-//        super.crudBackend = backend;
     }
 
     public String leggeTestoPagina() {

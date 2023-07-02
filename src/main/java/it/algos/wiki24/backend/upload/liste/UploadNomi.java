@@ -61,7 +61,7 @@ public class UploadNomi extends Upload {
 
     @PostConstruct
     protected void postConstruct() {
-        super.crudBackend = nomeBackend;
+        super.wikiBackend = nomeBackend;
 
         super.postConstruct();
 

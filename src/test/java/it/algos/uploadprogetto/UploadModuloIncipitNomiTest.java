@@ -3,7 +3,7 @@ package it.algos.uploadprogetto;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.upload.progettoAncheBot.*;
+import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -13,8 +13,8 @@ import org.springframework.boot.test.context.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 01-Jul-2023
- * Time: 17:12
+ * Date: Sun, 02-Jul-2023
+ * Time: 07:05
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -23,15 +23,15 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("uploadnomi")
-@DisplayName("UploadProgettoNomiDoppi")
+@DisplayName("UploadModuloNomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadProgettoNomiDoppiTest extends AlgosTest {
+public class UploadModuloIncipitNomiTest extends AlgosTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadProgettoNomiDoppi istanza;
+    private UploadModuloIncipitNomiOld istanza;
 
 
     /**
@@ -65,7 +65,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = new UploadProgettoNomiDoppi();
+        istanza = new UploadModuloIncipitNomiOld();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
 
@@ -85,7 +85,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(UploadProgettoNomiDoppi.class);
+        istanza = appContext.getBean(UploadModuloIncipitNomiOld.class);
 
         System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
 
@@ -106,7 +106,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("3 - esegue upload di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadProgettoNomiDoppi.class).test().esegue();
+        ottenutoRisultato = appContext.getBean(UploadModuloIncipitNomi.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);

@@ -179,7 +179,7 @@ public abstract class Upload {
 
     protected boolean isSottopagina;
 
-    protected WikiBackend wikiBackend;
+    public WikiBackend wikiBackend;
 
     /**
      * Mappa delle didascalie che hanno una valore valido per la pagina specifica <br>
@@ -233,7 +233,6 @@ public abstract class Upload {
 
     protected AETypeLink typeLink;
 
-    public WikiBackend crudBackend;
 
     /**
      * Costruttore base senza parametri <br>
@@ -265,14 +264,15 @@ public abstract class Upload {
         this.fixPreferenze();
         this.fixPreferenzeBackend();
     }
+
     protected void fixPreferenze() {
     }
 
     protected void fixPreferenzeBackend() {
-        if (crudBackend != null) {
-            this.lastUpload = crudBackend.lastUpload;
-            this.durataUpload = crudBackend.durataUpload;
-            this.nextUpload = crudBackend.nextUpload;
+        if (wikiBackend != null) {
+            this.lastUpload = wikiBackend.lastUpload;
+            this.durataUpload = wikiBackend.durataUpload;
+            this.nextUpload = wikiBackend.nextUpload;
         }
     }
 
@@ -477,9 +477,9 @@ public abstract class Upload {
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
 
-//        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
-//            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
-//        }
+        //        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
+        //            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
+        //        }
 
         if (textService.isEmpty(wikiTitleUpload)) {
             return WResult.errato("Manca il wikiTitleUpload ");
@@ -490,7 +490,11 @@ public abstract class Upload {
         }
 
         if (uploadTest) {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+//            if (result.isValido() && !result.isModificata()) {
+//                result.typeResult(AETypeResult.uploadValido);
+//            }
+            return result;
         }
 
         if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {

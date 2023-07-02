@@ -2,11 +2,9 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
-import static it.algos.base.WikiTest.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
-import it.algos.wiki24.backend.upload.moduli.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;

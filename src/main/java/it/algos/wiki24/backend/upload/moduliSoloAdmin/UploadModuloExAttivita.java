@@ -1,10 +1,9 @@
-package it.algos.wiki24.backend.upload.moduli;
+package it.algos.wiki24.backend.upload.moduliSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
-import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.backend.upload.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -19,7 +18,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloExAttivita extends UploadModuli {
+public class UploadModuloExAttivita extends UploadModulo {
 
 
     /**

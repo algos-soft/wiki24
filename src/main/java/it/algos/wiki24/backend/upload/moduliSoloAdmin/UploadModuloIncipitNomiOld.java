@@ -1,8 +1,10 @@
-package it.algos.wiki24.backend.upload.progetto;
+package it.algos.wiki24.backend.upload.moduliSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
@@ -19,19 +21,40 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadProgettoNomiTemplate extends UploadProgetto {
+public class UploadModuloIncipitNomiOld extends UploadProgetto {
 
+
+    @Autowired
+    NomeModuloBackend backend;
+
+
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.wikiTitleModulo = backend.sorgenteDownload;
+        super.wikiTitleUpload = backend.sorgenteDownload;
+        super.wikiBackend = backend;
+        super.uploadTest = true;
+    }
+
+    public UploadModuloIncipitNomiOld test() {
+        super.uploadTest = true;
+        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "IncipitNomi";
+        return this;
+    }
 
     /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+     * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>
      */
-    public UploadProgettoNomiTemplate(@Autowired NomeModuloBackend backend) {
-        super();
-    }// end of constructor
-
+    public WResult esegue() {
+        String testoPaginaAll = super.leggeTestoPagina();
+        String testoCoreOld = backend.getCore();
+        String testoCoreNew = this.fixTestoModulo();
+        String newText = textService.sostituisce(testoPaginaAll, testoCoreOld, testoCoreNew);
+//        return wikiApiService.scrive(wikiTitleUpload, newText, summary).typeResult(AETypeResult.uploadValido);
+        return null;
+    }
 
     /**
      * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>
@@ -58,7 +81,7 @@ public class UploadProgettoNomiTemplate extends UploadProgetto {
         StringBuffer buffer = new StringBuffer();
         List<NomeModulo> lista;
 
-        lista = crudBackend.findAllSortKey();
+        lista = wikiBackend.findAllSortKey();
         for (NomeModulo entityBean : lista) {
             buffer.append(PIPE);
             buffer.append(entityBean.nome);

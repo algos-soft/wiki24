@@ -253,6 +253,7 @@ public class WResult extends AResult {
 
     public WResult wikiTitle(final String wikiTitle) {
         this.wikiTitle = wikiTitle;
+        this.target = wikiTitle;
         return this;
     }
 

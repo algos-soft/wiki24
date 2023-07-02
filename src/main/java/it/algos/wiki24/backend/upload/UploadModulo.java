@@ -1,12 +1,9 @@
-package it.algos.wiki24.backend.upload.moduli;
+package it.algos.wiki24.backend.upload;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.*;
 
@@ -16,8 +13,9 @@ import java.util.*;
  * User: gac
  * Date: Mon, 10-Apr-2023
  * Time: 09:04
+ * Upload sempre su pagina Test e poi copiare sul Modulo protetto solo per gli Admin
  */
-public abstract class UploadModuli extends Upload {
+public abstract class UploadModulo extends Upload {
 
     /**
      * Costruttore base senza parametri <br>
@@ -25,7 +23,7 @@ public abstract class UploadModuli extends Upload {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuli() {
+    public UploadModulo() {
         super.summary = "Fix in ordine alfabetico";
         super.uploadTest = true;
     }// end of constructor

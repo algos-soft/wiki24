@@ -1,26 +1,26 @@
-package it.algos.wiki24.backend.upload.moduli;
+package it.algos.wiki24.backend.upload.moduliSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
-import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.upload.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-
-import java.util.*;
 
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
  * Date: Mon, 10-Apr-2023
- * Time: 09:11
+ * Time: 16:43
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloPluraleNazionalita extends UploadModuli {
+public class UploadModuloLinkNazionalita extends UploadModulo {
 
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
 
     /**
      * Costruttore base con parametri <br>
@@ -28,10 +28,9 @@ public class UploadModuloPluraleNazionalita extends UploadModuli {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuloPluraleNazionalita() {
-        super.wikiTitleModulo = PATH_MODULO_PLURALE + NAZ_LOWER;
-        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleNazionalita";
+    public UploadModuloLinkNazionalita() {
+        super.wikiTitleModulo = PATH_MODULO_LINK + NAZ_LOWER;
+        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloLinkNazionalita";
     }// end of constructor
 
 }
-

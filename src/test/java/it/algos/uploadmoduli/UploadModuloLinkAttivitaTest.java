@@ -3,7 +3,7 @@ package it.algos.uploadmoduli;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.upload.moduli.*;
+import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -6,9 +6,6 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
-import it.algos.wiki24.backend.upload.moduli.*;
-import it.algos.wiki24.backend.upload.progetto.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -198,13 +195,13 @@ public class NomeModuloBackend extends WikiBackend {
     }
 
 
-    /**
-     * Esegue un azione di upload, specifica del programma/package in corso <br>
-     */
-    @Override
-    public WResult uploadModulo() {
-        WResult result = appContext.getBean(UploadModuloIncipitNomi.class).esegue();
-        return result;
-    }
+//    /**
+//     * Esegue un azione di upload, specifica del programma/package in corso <br>
+//     */
+//    @Override
+//    public WResult uploadModulo() {
+//        WResult result = appContext.getBean(UploadModuloIncipitNomi.class).esegue();
+//        return result;
+//    }
 
 }// end of crud backend class

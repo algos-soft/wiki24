@@ -10,7 +10,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.liste.*;
-import it.algos.wiki24.backend.upload.moduli.*;
+import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.springframework.data.domain.*;

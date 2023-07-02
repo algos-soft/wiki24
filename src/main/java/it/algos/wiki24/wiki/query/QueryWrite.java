@@ -435,7 +435,7 @@ public class QueryWrite extends AQuery {
             }
         }
         else {
-            result.setErrorMessage("Pagina con lo stesso testo");
+            result.setValidMessage("Pagina con lo stesso testo");
             result.typeResult(AETypeResult.queryWriteEsistente);
         }
         result.setValido(true);
