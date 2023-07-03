@@ -200,7 +200,7 @@ public class NomeDoppioBackend extends WikiBackend {
         WResult result = appContext.getBean(UploadProgettoNomiDoppi.class).esegue();
 
         if (result.isModificata()) {
-            message = String.format("Upload e modifica della pagina [%s]",super.sorgenteDownload);
+            message = String.format("Upload e modifica della pagina [%s]", super.sorgenteDownload);
             logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
         }
 

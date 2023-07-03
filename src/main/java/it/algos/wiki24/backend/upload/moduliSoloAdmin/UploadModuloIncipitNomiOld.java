@@ -3,7 +3,7 @@ package it.algos.wiki24.backend.upload.moduliSoloAdmin;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -25,7 +25,7 @@ public class UploadModuloIncipitNomiOld extends UploadProgetto {
 
 
     @Autowired
-    NomeModuloBackend backend;
+    NomeIncipitBackend backend;
 
 
     @Override
@@ -79,10 +79,10 @@ public class UploadModuloIncipitNomiOld extends UploadProgetto {
 
     public String fixTestoModulo() {
         StringBuffer buffer = new StringBuffer();
-        List<NomeModulo> lista;
+        List<NomeIncipit> lista;
 
         lista = wikiBackend.findAllSortKey();
-        for (NomeModulo entityBean : lista) {
+        for (NomeIncipit entityBean : lista) {
             buffer.append(PIPE);
             buffer.append(entityBean.nome);
             buffer.append(UGUALE_SEMPLICE);

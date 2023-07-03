@@ -2,7 +2,7 @@ package it.algos.backend;
 
 import it.algos.*;
 import it.algos.base.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.*;
@@ -24,9 +24,9 @@ import java.util.*;
 public class NomeModuloBackendTest extends WikiBackendTest {
 
     @InjectMocks
-    private NomeModuloBackend backend;
+    private NomeIncipitBackend backend;
 
-    private List<NomeModulo> listaBeans;
+    private List<NomeIncipit> listaBeans;
 
     /**
      * Qui passa una volta sola <br>
@@ -34,7 +34,7 @@ public class NomeModuloBackendTest extends WikiBackendTest {
     @BeforeAll
     protected void setUpAll() {
         this.backend = super.nomeTemplateBackend;
-        super.entityClazz = NomeModulo.class;
+        super.entityClazz = NomeIncipit.class;
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;

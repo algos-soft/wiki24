@@ -23,9 +23,9 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("uploadnomi")
-@DisplayName("UploadModuloNomi")
+@DisplayName("UploadModuloIncipitNomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadModuloIncipitNomiTest extends AlgosTest {
+public class UploadModuloNomiIncipitTest extends AlgosTest {
 
 
     /**
@@ -106,7 +106,7 @@ public class UploadModuloIncipitNomiTest extends AlgosTest {
         System.out.println(("3 - esegue upload di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadModuloIncipitNomi.class).test().esegue();
+        ottenutoRisultato = appContext.getBean(UploadModuloNomiIncipit.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);

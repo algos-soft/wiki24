@@ -208,6 +208,23 @@ public class TextServiceTest extends AlgosTest {
     }
 
 
+    @Test
+    @Order(5)
+    @DisplayName("5 - copia")
+    void getLabelHost() {
+        System.out.println("1 - copia");
+        System.out.println(VUOTA);
+
+        sorgente3 = "nome";
+
+//        sorgente = "asia";
+//        continente = service.levaPunti(sorgente);
+//        assertNotNull(continente);
+//
+//        sorgente2 = "piazza";
+//        via = viaBackend.findById(sorgente2);
+//        assertNotNull(via);
+    }
 
 
     /**

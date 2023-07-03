@@ -26,7 +26,7 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.nome.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.parametro.*;
 import it.algos.wiki24.backend.packages.statistica.*;
@@ -278,7 +278,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         //        VaadVar.menuRouteListProject.add(ProfessioneView.class);
         VaadVar.menuRouteListProject.add(NomeCategoriaView.class);
         VaadVar.menuRouteListProject.add(NomeDoppioView.class);
-        VaadVar.menuRouteListProject.add(NomeModuloView.class);
+        VaadVar.menuRouteListProject.add(NomeIncipitView.class);
         VaadVar.menuRouteListProject.add(NomeView.class);
         VaadVar.menuRouteListProject.add(CognomeModuloView.class);
         VaadVar.menuRouteListProject.add(CognomeView.class);

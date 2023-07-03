@@ -1,9 +1,8 @@
 package it.algos.wiki24.backend.upload.moduliSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -19,10 +18,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloIncipitNomi extends UploadModulo {
+public class UploadModuloNomiIncipit extends UploadModulo {
 
     @Autowired
-    public NomeModuloBackend backend;
+    public NomeIncipitBackend backend;
 
 //    /**
 //     * Costruttore base con parametri <br>
@@ -47,7 +46,7 @@ public class UploadModuloIncipitNomi extends UploadModulo {
     }
 
 
-    public UploadModuloIncipitNomi test() {
+    public UploadModuloNomiIncipit test() {
         super.uploadTest = true;
         super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloIncipitNomi";
         return this;
@@ -62,7 +61,6 @@ public class UploadModuloIncipitNomi extends UploadModulo {
         String newText = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
 
         return registra(newText);
-//        return wikiApiService.scrive(wikiTitleUpload, newText, summary).typeResult(AETypeResult.uploadValido);
     }
 
 }

@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomemodulo;
+package it.algos.wiki24.backend.packages.nomeincipit;
 
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
@@ -28,8 +28,8 @@ import org.springframework.stereotype.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nomemodulo", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
-public class NomeModulo extends AEntity {
+@AIEntity(collectionName = "nomeincipit", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+public class NomeIncipit extends AEntity {
 
     @AIField(type = AETypeField.text, widthEM = 20)
     public String nome;

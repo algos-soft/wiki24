@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomemodulo;
+package it.algos.wiki24.backend.packages.nomeincipit;
 
 import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.html.*;
@@ -30,13 +30,13 @@ import java.util.*;
  * Presenta la Grid <br>
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
-@PageTitle("NomiModulo")
-@Route(value = "nomemodulo", layout = MainLayout.class)
-public class NomeModuloView extends WikiView {
+@PageTitle("NomiIncipit")
+@Route(value = "nomeincipit", layout = MainLayout.class)
+public class NomeIncipitView extends WikiView {
 
 
     //--per eventuali metodi specifici
-    private NomeModuloBackend backend;
+    private NomeIncipitBackend backend;
 
     private IndeterminateCheckbox boxAggiunti;
 
@@ -48,8 +48,8 @@ public class NomeModuloView extends WikiView {
      *
      * @param crudBackend service specifico per la businessLogic e il collegamento con la persistenza dei dati
      */
-    public NomeModuloView(@Autowired final NomeModuloBackend crudBackend) {
-        super(crudBackend, NomeModulo.class);
+    public NomeIncipitView(@Autowired final NomeIncipitBackend crudBackend) {
+        super(crudBackend, NomeIncipit.class);
         this.backend = crudBackend;
     }
 
@@ -68,6 +68,7 @@ public class NomeModuloView extends WikiView {
         super.usaBottoneReset = false;
         super.usaReset = true;
         super.usaBottoneDownload = true;
+        super.usaBottoneElabora = true;
         super.usaBottoneNew = true;
         super.usaBottoneEdit = true;
         super.usaBottoneTest = false;
@@ -90,20 +91,20 @@ public class NomeModuloView extends WikiView {
 
         message = "Pagine di riferimento per ogni nome (es.: [Felix->Felice (nome)]) da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
-        message = "I nomi mancanti nel modulo puntano, in automatico, ad una pagina con lo stesso nome che viene aggiunta nella tavola Mongo.";
-        addSpan(ASpan.text(message).rosso().small());
 
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
 
         message = String.format("Download%sLegge il modulo: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%sAggiunge i nomi di %s.", FORWARD, "NomiCategoria");
+        addSpan(ASpan.text(message).verde());
         message = String.format("Upload%sRiscrive il modulo in ordine alfabetico.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         addSpan(ASpan.text(message).rosso().small());
-        message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i nomi aggiunti.", FORWARD, TaskStatistiche.INFO);
+        message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i nomi con la stessa pagina.", FORWARD, TaskStatistiche.INFO);
         addSpan(ASpan.text(message).blue().small());
     }
 
@@ -142,7 +143,7 @@ public class NomeModuloView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
-        List<NomeModulo> items = (List) super.sincroFiltri();
+        List<NomeIncipit> items = (List) super.sincroFiltri();
 
         if (boxAggiunti != null && !boxAggiunti.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.aggiunto == boxAggiunti.getValue()).toList();

@@ -9,7 +9,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -44,7 +44,7 @@ public class NomeBackend extends WikiBackend {
     public NomeDoppioBackend nomeDoppioBackend;
 
     @Autowired
-    public NomeModuloBackend nomeModuloBackend;
+    public NomeIncipitBackend nomeModuloBackend;
 
 
     public NomeBackend() {
@@ -306,14 +306,14 @@ public class NomeBackend extends WikiBackend {
     public AResult addNomiModulo(AResult result) {
         Nome entityBean;
         List<AEntity> lista = new ArrayList<>();
-        List<NomeModulo> listaNomiModulo = null;
+        List<NomeIncipit> listaNomiModulo = null;
 
         //--Controllo e recupero di NomiDoppi
         nomeModuloBackend.resetDownload();
         listaNomiModulo = nomeModuloBackend.findAll();
 
         if (listaNomiModulo != null) {
-            for (NomeModulo nomeModulo : listaNomiModulo) {
+            for (NomeIncipit nomeModulo : listaNomiModulo) {
                 if (isExistByKey(nomeModulo.nome)) {
                     entityBean = findByKey(nomeModulo.nome);
                     entityBean.modulo = true;

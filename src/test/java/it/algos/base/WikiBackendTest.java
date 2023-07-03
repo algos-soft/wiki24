@@ -11,7 +11,7 @@ import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
-import it.algos.wiki24.backend.packages.nomemodulo.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -71,7 +71,7 @@ public abstract class WikiBackendTest extends BackendTest {
     protected NomeDoppioBackend nomeDoppioBackend;
 
     @Autowired
-    protected NomeModuloBackend nomeTemplateBackend;
+    protected NomeIncipitBackend nomeTemplateBackend;
 
     @Autowired
     protected NomeBackend nomeBackend;

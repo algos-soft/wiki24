@@ -1,11 +1,16 @@
-package it.algos.wiki24.backend.packages.nomemodulo;
+package it.algos.wiki24.backend.packages.nomeincipit;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
+import it.algos.wiki24.backend.wrapper.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -26,11 +31,13 @@ import java.util.*;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
-public class NomeModuloBackend extends WikiBackend {
+public class NomeIncipitBackend extends WikiBackend {
 
+    @Autowired
+    public NomeCategoriaBackend nomeCategoriaBackend;
 
-    public NomeModuloBackend() {
-        super(NomeModulo.class);
+    public NomeIncipitBackend() {
+        super(NomeIncipit.class);
     }
 
     @Override
@@ -47,13 +54,26 @@ public class NomeModuloBackend extends WikiBackend {
     }
 
 
-    public AEntity creaIfNotExist(final String riga) {
-        AEntity entityBean;
+    public NomeIncipit creaIfNotExist(final String riga) {
+        NomeIncipit entityBean;
         WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
 
         entityBean = newEntity(wrap.prima, wrap.seconda);
         return entityBean != null ? insert(entityBean) : null;
     }
+
+    public NomeIncipit creaIfNotExist(final String keyPropertyValue, final String linkPagina) {
+        NomeIncipit entityBean;
+
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+        else {
+            entityBean = newEntity(keyPropertyValue, linkPagina);
+            return entityBean != null ? insert(entityBean) : null;
+        }
+    }
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -62,7 +82,7 @@ public class NomeModuloBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public NomeModulo newEntity() {
+    public NomeIncipit newEntity() {
         return newEntity(VUOTA, VUOTA);
     }
 
@@ -72,7 +92,7 @@ public class NomeModuloBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     @Override
-    public NomeModulo newEntity(final String keyPropertyValue) {
+    public NomeIncipit newEntity(final String keyPropertyValue) {
         return newEntity(keyPropertyValue, VUOTA);
     }
 
@@ -87,77 +107,77 @@ public class NomeModuloBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NomeModulo newEntity(final String nome, final String linkPagina) {
-        NomeModulo newEntityBean = NomeModulo.builder()
+    public NomeIncipit newEntity(final String nome, final String linkPagina) {
+        NomeIncipit newEntityBean = NomeIncipit.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .build();
 
-        return (NomeModulo) super.fixKey(newEntityBean);
+        return (NomeIncipit) super.fixKey(newEntityBean);
     }
 
 
     @Override
-    public NomeModulo findById(final String keyID) {
-        return (NomeModulo) super.findById(keyID);
+    public NomeIncipit findById(final String keyID) {
+        return (NomeIncipit) super.findById(keyID);
     }
 
     @Override
-    public NomeModulo findByKey(final String keyValue) {
-        return (NomeModulo) super.findByKey(keyValue);
+    public NomeIncipit findByKey(final String keyValue) {
+        return (NomeIncipit) super.findByKey(keyValue);
     }
 
     @Override
-    public NomeModulo findByProperty(final String propertyName, final Object propertyValue) {
-        return (NomeModulo) super.findByProperty(propertyName, propertyValue);
+    public NomeIncipit findByProperty(final String propertyName, final Object propertyValue) {
+        return (NomeIncipit) super.findByProperty(propertyName, propertyValue);
     }
 
     @Override
-    public NomeModulo save(AEntity entity) {
-        return (NomeModulo) super.save(entity);
+    public NomeIncipit save(AEntity entity) {
+        return (NomeIncipit) super.save(entity);
     }
 
     @Override
-    public NomeModulo insert(AEntity entity) {
-        return (NomeModulo) super.insert(entity);
+    public NomeIncipit insert(AEntity entity) {
+        return (NomeIncipit) super.insert(entity);
     }
 
     @Override
-    public NomeModulo update(AEntity entity) {
-        return (NomeModulo) super.update(entity);
+    public NomeIncipit update(AEntity entity) {
+        return (NomeIncipit) super.update(entity);
     }
 
     @Override
-    public List<NomeModulo> findAll() {
+    public List<NomeIncipit> findAll() {
         return super.findAll();
     }
 
     @Override
-    public List<NomeModulo> findAllNoSort() {
+    public List<NomeIncipit> findAllNoSort() {
         return super.findAllNoSort();
     }
 
     @Override
-    public List<NomeModulo> findAllSortCorrente() {
+    public List<NomeIncipit> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
 
     @Override
-    public List<NomeModulo> findAllSortCorrenteReverse() {
+    public List<NomeIncipit> findAllSortCorrenteReverse() {
         return super.findAllSortCorrenteReverse();
     }
 
     @Override
-    public List<NomeModulo> findAllSort(Sort sort) {
+    public List<NomeIncipit> findAllSort(Sort sort) {
         return super.findAllSort(sort);
     }
 
     @Override
     public LinkedHashMap<String, String> findMappa() {
         LinkedHashMap<String, String> mappa = new LinkedHashMap<>();
-        List<NomeModulo> lista = findAllSortKey();
+        List<NomeIncipit> lista = findAllSortKey();
 
-        for (NomeModulo nomeModulo : lista) {
+        for (NomeIncipit nomeModulo : lista) {
             mappa.put(nomeModulo.nome, nomeModulo.linkPagina);
         }
 
@@ -183,7 +203,7 @@ public class NomeModuloBackend extends WikiBackend {
      * @return entities create
      */
     public AResult downloadNomiModulo(AResult result) {
-        AEntity entityBean;
+        NomeIncipit entityBean;
         List<AEntity> lista = new ArrayList<>();
 
         for (String riga : super.getRighe()) {
@@ -195,13 +215,44 @@ public class NomeModuloBackend extends WikiBackend {
     }
 
 
-//    /**
-//     * Esegue un azione di upload, specifica del programma/package in corso <br>
-//     */
-//    @Override
-//    public WResult uploadModulo() {
-//        WResult result = appContext.getBean(UploadModuloIncipitNomi.class).esegue();
-//        return result;
-//    }
+    @Override
+    public WResult elabora() {
+        WResult result = super.elabora();
+        List<NomeCategoria> listaNomiCategorie = null;
+        NomeIncipit entityBean;
+        List<AEntity> lista = new ArrayList<>();
+
+        resetDownload();
+
+        //--Controllo e recupero di NomiCategoria
+        nomeCategoriaBackend.resetDownload();
+        listaNomiCategorie = nomeCategoriaBackend.findAll();
+
+        if (listaNomiCategorie != null) {
+            for (NomeCategoria nomeCategoria : listaNomiCategorie) {
+
+                entityBean = creaIfNotExist(nomeCategoria.nome, nomeCategoria.linkPagina);
+                result.setValido(fixLista(lista, entityBean, nomeCategoria.nome));
+            }
+        }
+
+        return super.fixElabora(result);
+    }
+
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    @Override
+    public WResult uploadModulo() {
+        WResult result = appContext.getBean(UploadModuloNomiIncipit.class).esegue();
+
+        if (result.isModificata()) {
+            message = String.format("Upload e modifica della pagina [%s]", super.sorgenteDownload);
+            logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+        }
+
+        return result;
+    }
 
 }// end of crud backend class
