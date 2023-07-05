@@ -2,8 +2,11 @@ package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+
+import java.util.*;
 
 /**
  * Project wiki23
@@ -44,6 +47,14 @@ public class ListaAnni extends Lista {
         this.nomeLista = nomeAnno;
         super.typeLista = AETypeLista.annoMorte;
         return this;
+    }
+
+    /**
+     * Ordina la mappa <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    public LinkedHashMap<String, List<WrapLista>> sortMap(LinkedHashMap<String, List<WrapLista>> mappa) {
+        return mappa;
     }
 
 }

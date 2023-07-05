@@ -39,6 +39,7 @@ public class NomeIncipitView extends WikiView {
     private NomeIncipitBackend backend;
 
     private IndeterminateCheckbox boxAggiunti;
+    private IndeterminateCheckbox boxUguali;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -62,8 +63,8 @@ public class NomeIncipitView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto");
-        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto");
+        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto", "uguale");
+        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina", "aggiunto", "uguale");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -97,12 +98,14 @@ public class NomeIncipitView extends WikiView {
 
         message = String.format("Download%sLegge il modulo: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Elabora%sAggiunge i nomi di %s.", FORWARD, "NomiCategoria");
+        message = String.format("Elabora%sAggiunge i nomi di %s e controlla gli uguali", FORWARD, "NomiCategoria");
         addSpan(ASpan.text(message).verde());
-        message = String.format("Upload%sRiscrive il modulo in ordine alfabetico.", FORWARD);
+        message = String.format("Upload%sRiscrive il modulo in ordine alfabetico, esclusi gli uguali.", FORWARD);
         addSpan(ASpan.text(message).verde());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
+        addSpan(ASpan.text(message).rosso().small());
+        message = "Per 'uguali' si intendono le pagine [Abbondio->Abbondio] oppure [Aba->Aba (nome)] che vengono correttamente indirizzate.";
         addSpan(ASpan.text(message).rosso().small());
         message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i nomi con la stessa pagina.", FORWARD, TaskStatistiche.INFO);
         addSpan(ASpan.text(message).blue().small());
@@ -136,6 +139,15 @@ public class NomeIncipitView extends WikiView {
         layoutAggiunti.setAlignItems(Alignment.CENTER);
         topPlaceHolder.add(layoutAggiunti);
 
+        boxUguali = new IndeterminateCheckbox();
+        boxUguali.setLabel("Uguali");
+        boxUguali.setIndeterminate(true);
+        boxUguali.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutUguali = new HorizontalLayout(boxUguali);
+        layoutUguali.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutUguali);
+
+
         this.add(topPlaceHolder2);
     }
 
@@ -147,6 +159,10 @@ public class NomeIncipitView extends WikiView {
 
         if (boxAggiunti != null && !boxAggiunti.isIndeterminate()) {
             items = items.stream().filter(nome -> nome.aggiunto == boxAggiunti.getValue()).toList();
+        }
+
+        if (boxUguali != null && !boxUguali.isIndeterminate()) {
+            items = items.stream().filter(nome -> nome.uguale == boxUguali.getValue()).toList();
         }
 
         final String textSearchPagina = searchFieldPagina != null ? searchFieldPagina.getValue() : VUOTA;

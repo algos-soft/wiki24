@@ -8,13 +8,15 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.wiki.*;
-import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
+import it.algos.wiki24.backend.upload.moduloProgettoAncheBot.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
+import java.text.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -44,10 +46,13 @@ public class NomeIncipitBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.downloadNomiModulo;
-        super.lastDownload = WPref.downloadNomiModulo;
+        super.lastReset = WPref.downloadNomiIncipit;
+        super.lastDownload = WPref.downloadNomiIncipit;
+        super.lastElaborazione = WPref.elaboraNomiIncipit;
+        super.durataElaborazione = WPref.elaboraNomiIncipitTime;
         super.lastUpload = WPref.uploadNomiNodulo;
 
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
         super.sorgenteDownload = TAG_INCIPIT_NOMI;
         super.tagSplitSorgente = VIRGOLA_CAPO;
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_NOMI;
@@ -58,18 +63,18 @@ public class NomeIncipitBackend extends WikiBackend {
         NomeIncipit entityBean;
         WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
 
-        entityBean = newEntity(wrap.prima, wrap.seconda);
+        entityBean = newEntity(wrap.prima, wrap.seconda, false);
         return entityBean != null ? insert(entityBean) : null;
     }
 
-    public NomeIncipit creaIfNotExist(final String keyPropertyValue, final String linkPagina) {
+    public NomeIncipit creaIfNotExist(final String keyPropertyValue, final String linkPagina, boolean aggiunto) {
         NomeIncipit entityBean;
 
         if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
             return null;
         }
         else {
-            entityBean = newEntity(keyPropertyValue, linkPagina);
+            entityBean = newEntity(keyPropertyValue, linkPagina, aggiunto);
             return entityBean != null ? insert(entityBean) : null;
         }
     }
@@ -83,7 +88,7 @@ public class NomeIncipitBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public NomeIncipit newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, false);
     }
 
     /**
@@ -93,7 +98,7 @@ public class NomeIncipitBackend extends WikiBackend {
      */
     @Override
     public NomeIncipit newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, VUOTA);
+        return newEntity(keyPropertyValue, VUOTA, false);
     }
 
     /**
@@ -107,10 +112,11 @@ public class NomeIncipitBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public NomeIncipit newEntity(final String nome, final String linkPagina) {
+    public NomeIncipit newEntity(final String nome, final String linkPagina, boolean aggiunto) {
         NomeIncipit newEntityBean = NomeIncipit.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
+                .aggiunto(aggiunto)
                 .build();
 
         return (NomeIncipit) super.fixKey(newEntityBean);
@@ -149,7 +155,12 @@ public class NomeIncipitBackend extends WikiBackend {
 
     @Override
     public List<NomeIncipit> findAll() {
-        return super.findAll();
+        Collator collator = Collator.getInstance(Locale.getDefault());
+
+        return findAllNoSort()
+                .stream()
+                .sorted(Comparator.comparing(NomeIncipit::getNome, collator))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -169,13 +180,20 @@ public class NomeIncipitBackend extends WikiBackend {
 
     @Override
     public List<NomeIncipit> findAllSort(Sort sort) {
-        return super.findAllSort(sort);
+        return this.findAll();
+    }
+
+    public List<NomeIncipit> findAllByNotUguali() {
+        return findAll()
+                .stream()
+                .filter(nome -> !nome.uguale)
+                .collect(Collectors.toList());
     }
 
     @Override
     public LinkedHashMap<String, String> findMappa() {
         LinkedHashMap<String, String> mappa = new LinkedHashMap<>();
-        List<NomeIncipit> lista = findAllSortKey();
+        List<NomeIncipit> lista = findAllByNotUguali();
 
         for (NomeIncipit nomeModulo : lista) {
             mappa.put(nomeModulo.nome, nomeModulo.linkPagina);
@@ -220,7 +238,9 @@ public class NomeIncipitBackend extends WikiBackend {
         WResult result = super.elabora();
         List<NomeCategoria> listaNomiCategorie = null;
         NomeIncipit entityBean;
-        List<AEntity> lista = new ArrayList<>();
+        List<AEntity> lista2 = new ArrayList<>();
+        List<NomeIncipit> listaNomi;
+        String suffissoNome = SPAZIO + "(nome)";
 
         resetDownload();
 
@@ -231,8 +251,37 @@ public class NomeIncipitBackend extends WikiBackend {
         if (listaNomiCategorie != null) {
             for (NomeCategoria nomeCategoria : listaNomiCategorie) {
 
-                entityBean = creaIfNotExist(nomeCategoria.nome, nomeCategoria.linkPagina);
-                result.setValido(fixLista(lista, entityBean, nomeCategoria.nome));
+                //devo fare un doppio controllo perché alcuni nomi potrebbero già esserci e NON è un errore
+                if (isExistByKey(nomeCategoria.nome)) {
+                    message = String.format("Il nome [%s] esiste già", nomeCategoria.nome);
+                    logService.debug(new WrapLog().message(message));
+                }
+                else {
+                    entityBean = creaIfNotExist(nomeCategoria.nome, nomeCategoria.linkPagina, true);
+                    result.setValido(fixLista(lista2, entityBean, nomeCategoria.nome));
+                }
+            }
+        }
+
+//        //--Controllo nomi uguali che vanno omessi nel modulo
+//        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+//        //--Sono uguali se il nome della persona coincide con la pagina di riferimento seguita dal suffisso (nome)
+//        listaNomi = findAll();
+//        for (NomeIncipit nome : listaNomi) {
+//            if (nome.linkPagina.equals(nome.nome) || nome.linkPagina.equals(nome.nome + suffissoNome)) {
+//                nome.uguale = true;
+//                save(nome);
+//            }
+//        }
+
+
+        //--Controllo nomi uguali che vanno omessi nel modulo
+        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+        listaNomi = findAll();
+        for (NomeIncipit nome : listaNomi) {
+            if (nome.linkPagina.equals(nome.nome)) {
+                nome.uguale = true;
+                save(nome);
             }
         }
 

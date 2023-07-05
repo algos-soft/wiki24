@@ -396,15 +396,13 @@ public class NomeBackend extends WikiBackend {
 
         for (Nome nome : findAll()) {
             nome.numBio = bioBackend.countNome(nome.nome);
-            nome.paginaLista = VUOTA;
-            nome.esisteLista = false;
             nome.superaSoglia = nome.numBio > sogliaWiki;
-            if (nome.numBio > sogliaMongo) {
-                nome.paginaLista = PATH_NOMI + nome.nome;
-            }
-            if (nome.superaSoglia) {
-                nome.esisteLista = queryService.isEsiste(nome.paginaLista);
-            }
+//            if (nome.numBio > sogliaMongo) {
+//                nome.paginaLista = PATH_NOMI + nome.nome;
+//            }
+//            if (nome.superaSoglia) {
+//                nome.esisteLista = queryService.isEsiste(nome.paginaLista);
+//            }
             update(nome);
         }
 

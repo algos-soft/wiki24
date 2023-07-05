@@ -4,50 +4,46 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.data.domain.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 14-Jun-2023
- * Time: 17:29
+ * Date: Sun, 18-Jun-2023
+ * Time: 12:10
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("nomibackend")
 @Tag("nomi")
 @Tag("backend")
-@DisplayName("Nome Backend")
+@DisplayName("NomeIncipit Backend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class NomeBackendTest extends WikiBackendTest {
+public class NomeIncipitBackendTest extends WikiBackendTest {
 
-    private NomeBackend backend;
+    @InjectMocks
+    private NomeIncipitBackend backend;
 
-    private List<Nome> listaBeans;
+    private List<NomeIncipit> listaBeans;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        this.backend = super.nomeBackend;
-        super.entityClazz = Nome.class;
+        this.backend = super.nomeTemplateBackend;
+        super.entityClazz = NomeIncipit.class;
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
+        super.nomeModulo = "nomemodulo";
 
         super.setUpAll();
     }
@@ -55,7 +51,6 @@ public class NomeBackendTest extends WikiBackendTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
-        listaBackendClazz = classService.getAllBackend();
     }
 
     @Test
@@ -86,13 +81,6 @@ public class NomeBackendTest extends WikiBackendTest {
     }
 
     @Test
-    @Order(16)
-    @DisplayName("16 - uploadModulo (test in ordine alfabetico)")
-    protected void upload() {
-        System.out.println("16 - uploadModulo (non previsto per questa collection)");
-    }
-
-    @Test
     @Order(75)
     @DisplayName("75 - findAllDistinctByPlurali")
     protected void findAllDistinctByPlurali() {
@@ -100,13 +88,15 @@ public class NomeBackendTest extends WikiBackendTest {
     }
 
     @Test
-    @Order(81)
-    protected void isEsiste() {
-        sorgente = "Persone di nome Ada";
+    @Order(94)
+    @DisplayName("94 - findAllByNotUgualiSort")
+    void findAllByNotUgualiSort() {
+        System.out.println(("94 - findAllByNotUgualiSort"));
+        System.out.println(VUOTA);
 
-        ottenutoBooleano = queryService.isEsiste(sorgente);
-        System.out.println(sorgente);
-        System.out.println(ottenutoBooleano);
+        listaBeans = backend.findAllByNotUguali();
+        assertNotNull(listaBeans);
+        printBackend(listaBeans, 200);
     }
 
 }

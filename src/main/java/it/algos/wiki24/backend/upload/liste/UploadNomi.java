@@ -131,7 +131,7 @@ public class UploadNomi extends Upload {
 
     @Override
     protected String incipit() {
-        return isSottopagina ? VUOTA : String.format("{{incipit lista nomi|nome=%s}}", nomeLista);
+        return isSottopagina ? VUOTA : String.format("{{incipit nomi|nome=%s}}", nomeLista);
     }
 
 

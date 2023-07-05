@@ -10,7 +10,7 @@ import it.algos.wiki24.backend.packages.wiki.*;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
+import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;

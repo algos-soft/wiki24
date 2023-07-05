@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.upload.moduliSoloAdmin;
+package it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;

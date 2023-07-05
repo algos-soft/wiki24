@@ -9,7 +9,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
+import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;

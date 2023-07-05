@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.upload.moduliSoloAdmin;
+package it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -10,12 +10,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Mon, 10-Apr-2023
- * Time: 09:11
+ * Date: Sat, 01-Apr-2023
+ * Time: 10:22
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadModuloPluraleNazionalita extends UploadModulo {
+public class UploadModuloPluraleAttivita extends UploadModulo {
 
 
     /**
@@ -24,9 +24,9 @@ public class UploadModuloPluraleNazionalita extends UploadModulo {
      * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
-    public UploadModuloPluraleNazionalita() {
-        super.wikiTitleModulo = PATH_MODULO_PLURALE + NAZ_LOWER;
-        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleNazionalita";
+    public UploadModuloPluraleAttivita() {
+        super.wikiTitleModulo =   PATH_MODULO_PLURALE + ATT_LOWER;
+        super.wikiTitleUpload = UPLOAD_TITLE_DEBUG + "ModuloPluraleAttivita";
     }// end of constructor
 
 }

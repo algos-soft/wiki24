@@ -282,7 +282,6 @@ public abstract class Lista {
         mappaWrap = new LinkedHashMap<>();
         String paragrafo;
         List<WrapLista> lista;
-        List<WrapLista> listaAltre;
 
         if (listaWrap == null || listaWrap.size() == 0) {
             this.listaWrap();

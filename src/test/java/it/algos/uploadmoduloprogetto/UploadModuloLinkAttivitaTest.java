@@ -1,9 +1,9 @@
-package it.algos.uploadmoduli;
+package it.algos.uploadmoduloprogetto;
 
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.upload.moduliSoloAdmin.*;
+import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

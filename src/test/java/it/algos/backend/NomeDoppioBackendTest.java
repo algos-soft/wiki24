@@ -18,6 +18,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("nomibackend")
 @Tag("nomi")
 @Tag("backend")
 @DisplayName("NomeDoppio Backend")

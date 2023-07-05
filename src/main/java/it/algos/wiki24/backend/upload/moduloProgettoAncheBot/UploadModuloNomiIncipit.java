@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.upload.moduliSoloAdmin;
+package it.algos.wiki24.backend.upload.moduloProgettoAncheBot;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -23,17 +23,6 @@ public class UploadModuloNomiIncipit extends UploadModulo {
     @Autowired
     public NomeIncipitBackend backend;
 
-//    /**
-//     * Costruttore base con parametri <br>
-//     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-//     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
-//     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-//     */
-//    public UploadModuloIncipitNomi() {
-//        super.wikiTitleModulo = "Modulo:Incipit nomi";
-//        super.wikiTitleUpload = wikiTitleModulo;
-//        super.uploadTest = false;
-//    }// end of constructor
 
     @Override
     protected void fixPreferenze() {

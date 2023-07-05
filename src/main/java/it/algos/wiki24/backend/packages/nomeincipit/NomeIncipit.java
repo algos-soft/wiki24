@@ -40,6 +40,9 @@ public class NomeIncipit extends AEntity {
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
     public boolean aggiunto;
 
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
+    public boolean uguale;
+
     @Override
     public String toString() {
         return nome;

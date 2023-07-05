@@ -1,20 +1,24 @@
-package it.algos.uploadprogetto;
+package it.algos.uploadmoduloprogetto;
 
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.wiki24.backend.upload.progettoAncheBot.*;
+import it.algos.wiki24.backend.upload.moduloProgettoAncheBot.*;
+import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.boot.test.context.*;
 
+import java.text.*;
+import java.util.*;
+
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 01-Jul-2023
- * Time: 17:12
+ * Date: Sun, 02-Jul-2023
+ * Time: 07:05
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -23,15 +27,15 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("uploadnomi")
-@DisplayName("UploadProgettoNomiDoppi")
+@DisplayName("UploadModuloIncipitNomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadProgettoNomiDoppiTest extends AlgosTest {
+public class UploadModuloNomiIncipitTest extends AlgosTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadProgettoNomiDoppi istanza;
+    private UploadModuloNomiIncipit istanza;
 
 
     /**
@@ -65,7 +69,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = new UploadProgettoNomiDoppi();
+        istanza = new UploadModuloNomiIncipit();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
 
@@ -85,7 +89,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(UploadProgettoNomiDoppi.class);
+        istanza = appContext.getBean(UploadModuloNomiIncipit.class);
 
         System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
 
@@ -99,18 +103,93 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
     }
 
 
-    @Test
+        @Test
     @Order(3)
     @DisplayName("3 - esegue upload di test")
     void esegue() {
         System.out.println(("3 - esegue upload di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadProgettoNomiDoppi.class).test().esegue();
+        ottenutoRisultato = appContext.getBean(UploadModuloNomiIncipit.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);
     }
+
+
+    @Test
+    @Order(91)
+    @DisplayName("91 - ordinamento")
+    void ordinamento() {
+        System.out.println(("91 - ordinamento"));
+        System.out.println(VUOTA);
+
+        String input = "openai";
+
+        // Convert the string to an array of characters
+        char[] charArray = input.toCharArray();
+
+        // Sort the array of characters
+        Arrays.sort(charArray);
+
+        // Convert the sorted array back to a string
+        String sortedString = new String(charArray);
+
+        System.out.println("Original string: " + input);
+        System.out.println("Sorted string: " + sortedString);
+    }
+
+
+    @Test
+    @Order(92)
+    @DisplayName("92 - ordinamento")
+    void ordinamento2() {
+        System.out.println(("92 - ordinamento"));
+        System.out.println(VUOTA);
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("banana");
+        stringList.add("apple");
+        stringList.add("orange");
+        stringList.add("Grape");
+
+        System.out.println("Original list: " + stringList);
+
+        // Sort the list of strings
+        Collections.sort(stringList);
+        System.out.println("Sorted list sensitiveOrder: " + stringList);
+
+        Collections.sort(stringList, String.CASE_INSENSITIVE_ORDER);
+        System.out.println(VUOTA);
+        System.out.println("Sorted list insensitiveOrder: " + stringList);
+    }
+
+
+    @Test
+    @Order(93)
+    @DisplayName("93 - ordinamento")
+    void ordinamento3() {
+        System.out.println(("93 - ordinamento"));
+        System.out.println(VUOTA);
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("Giovanni");
+        stringList.add("Sabina");
+        stringList.add("Édouard");
+        stringList.add("Ángel");
+
+        System.out.println("Original list: " + stringList);
+
+        // Create a Collator with the desired locale
+        Collator collator = Collator.getInstance(Locale.getDefault());
+
+        // Sort the list using the Collator
+        Collections.sort(stringList, collator);
+
+        System.out.println("Sorted list: " + stringList);
+    }
+
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>
