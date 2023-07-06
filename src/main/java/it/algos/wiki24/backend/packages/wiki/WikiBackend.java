@@ -325,9 +325,14 @@ public abstract class WikiBackend extends CrudBackend {
         String testoCore;
         String[] righe;
         testoCore = getCore();
-        righe = testoCore.split(tagSplitSorgente);
 
-        return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
+        if (textService.isValid(testoCore)) {
+            righe = testoCore.split(tagSplitSorgente);
+            return Arrays.stream(righe).map(riga -> riga.trim()).filter(riga -> textService.isValid(riga)).toList();
+        }
+        else {
+            return new ArrayList<>();
+        }
     }
 
 
