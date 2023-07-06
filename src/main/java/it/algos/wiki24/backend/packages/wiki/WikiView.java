@@ -544,7 +544,7 @@ public abstract class WikiView extends CrudView {
             buttonUploadStatistiche = new Button();
             buttonUploadStatistiche.getElement().setAttribute("theme", "primary");
             buttonUploadStatistiche.addThemeVariants(ButtonVariant.LUMO_ERROR);
-            buttonUploadStatistiche.getElement().setProperty("title", "Statistiche: costruisce una nuova pagina delle statistiche sul server wiki");
+            buttonUploadStatistiche.getElement().setProperty("title", "Statistiche: costruisce una nuova pagina di statistiche sul server wiki");
             buttonUploadStatistiche.setIcon(new Icon(VaadinIcon.TABLE));
             buttonUploadStatistiche.addClickListener(event -> uploadStatistiche());
             topPlaceHolder.add(buttonUploadStatistiche);
@@ -882,7 +882,9 @@ public abstract class WikiView extends CrudView {
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     public void uploadModulo() {
-        crudBackend.uploadModulo();
+        WResult result = crudBackend.uploadModulo();
+        fixUpload(result);
+        reload();
     }
 
     /**
@@ -1038,6 +1040,11 @@ public abstract class WikiView extends CrudView {
     //        alertPlaceHolder.add(getSpan(new WrapSpan(message).color(AETypeColor.rosso).weight(AEFontWeight.bold)));
     //    }
 
+
+    public void fixUpload(final WResult result) {
+        fixUpload(result.getInizio(), entityClazz.getSimpleName());
+    }
+
     public void fixUpload(final long inizio, String modulo) {
         String message;
 
@@ -1045,14 +1052,14 @@ public abstract class WikiView extends CrudView {
             lastUpload.setValue(LocalDateTime.now());
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
+            logger.debug(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
         }
 
         if (durataUpload != null) {
             durataUpload.setValue(unitaMisuraUpload.durata(inizio));
         }
         else {
-            logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
+            logger.debug(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
         }
 
         message = String.format("Upload %s. %s", modulo, unitaMisuraUpload.message(inizio));

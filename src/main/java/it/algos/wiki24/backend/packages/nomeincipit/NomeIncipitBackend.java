@@ -50,7 +50,7 @@ public class NomeIncipitBackend extends WikiBackend {
         super.lastDownload = WPref.downloadNomiIncipit;
         super.lastElaborazione = WPref.elaboraNomiIncipit;
         super.durataElaborazione = WPref.elaboraNomiIncipitTime;
-        super.lastUpload = WPref.uploadNomiNodulo;
+        super.lastUpload = WPref.uploadNomiIncipit;
 
         this.unitaMisuraElaborazione = AETypeTime.secondi;
         super.sorgenteDownload = TAG_INCIPIT_NOMI;
