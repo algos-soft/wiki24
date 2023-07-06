@@ -258,6 +258,14 @@ public class BioBackend extends WikiBackend {
         return null;
     }
 
+    public int countUomini() {
+        Long numBio = repository.countBioBySesso("M");
+        return numBio > 0 ? numBio.intValue() : 0;
+    }
+    public int countDonne() {
+        Long numBio = repository.countBioBySesso("F");
+        return numBio > 0 ? numBio.intValue() : 0;
+    }
 
     public int countAttivitaNazionalitaBase(final String attivitaSingola, final String nazionalitaSingola) {
         Long numBio = repository.countBioByAttivitaAndNazionalita(attivitaSingola, nazionalitaSingola);

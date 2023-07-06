@@ -48,7 +48,7 @@ public class NomeDoppioBackend extends WikiBackend {
         super.tagIniSorgente = "[[:Categoria:Prenomi composti]]." + CAPO;
         super.tagEndSorgente = "[[Categoria:Liste di persone per nome";
         super.tagSplitSorgente = ASTERISCO_REGEX;
-        this.unitaMisuraDownload = AETypeTime.millisecondi;
+        this.unitaMisuraDownload = AETypeTime.secondi;
     }
 
     /**
