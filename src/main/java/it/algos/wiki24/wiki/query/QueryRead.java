@@ -32,7 +32,7 @@ public class QueryRead extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final String wikiTitleGrezzo) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         WResult result = requestGetTitle(WIKI_QUERY_BASE_TITLE, wikiTitleGrezzo);
 
         if (result.getTypePage() == AETypePage.contienePipe) {

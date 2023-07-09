@@ -63,7 +63,7 @@ public class QueryList extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest( String tagIniziale) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         WResult result = checkInizialeBase(tagIniziale).limit(500);
 
         try {

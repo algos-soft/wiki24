@@ -40,7 +40,7 @@ public class QueryRedirect extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final String wikiTitoloGrezzoPagina) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         return requestGetTitle(WIKI_QUERY_BASE_TITLE, wikiTitoloGrezzoPagina);
     }
 

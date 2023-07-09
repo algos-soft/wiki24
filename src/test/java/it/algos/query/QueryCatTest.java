@@ -414,6 +414,82 @@ public class QueryCatTest extends WikiTest {
             System.out.println(String.format("La categoria [[%s]] non esiste su wikipedia", sorgente));
         }
     }
+    @Test
+    @Order(90)
+    @DisplayName("90 - Costruttore col nome -default")
+    void costruttoreNomeDefault() {
+        System.out.println(("90 - Costruttore col nome - default"));
+
+        sorgente = "Cognomi per lingua";
+        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).urlRequest();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+    @Test
+    @Order(91)
+    @DisplayName("91 - Costruttore col nome - ids")
+    void costruttoreNomeIds() {
+        System.out.println(("91 - Costruttore col nome - ids"));
+
+        sorgente = "Cognomi per lingua";
+        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).ids().urlRequest();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+    @Test
+    @Order(92)
+    @DisplayName("92 - Costruttore col nome - title")
+    void costruttoreNomeTitle() {
+        System.out.println(("92 - Costruttore col nome - title"));
+
+        sorgente = "Cognomi per lingua";
+        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).title().urlRequest();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(93)
+    @DisplayName("93 - Costruttore col nome - subCat")
+    void costruttoreNomeSubCat() {
+        System.out.println(("93 - Costruttore col nome - subCat"));
+
+        sorgente = "Cognomi per lingua";
+        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).subCat().urlRequest();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(94)
+    @DisplayName("94 - Lista subCat")
+    void listaSubCat() {
+        System.out.println(("94 - Lista subCat"));
+
+        sorgente = "Cognomi per lingua";
+        listaStr = appContext.getBean(QueryCat.class,sorgente).getSubCat();
+        assertNotNull(listaStr);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        print(listaStr);
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>

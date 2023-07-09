@@ -74,7 +74,7 @@ public class QueryInfo extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final String wikiTitoloGrezzoPagina) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         WResult result = requestGetTitle(WIKI_QUERY_INFO, wikiTitoloGrezzoPagina);
 
         return result;

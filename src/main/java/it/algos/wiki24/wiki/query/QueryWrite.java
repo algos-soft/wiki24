@@ -62,7 +62,7 @@ public class QueryWrite extends AQuery {
      * @return wrapper di informazioni
      */
     private WResult checkWrite(final String wikiTitleGrezzo, final String newText, final String summary) {
-        queryType = AETypeQuery.getLoggatoConCookies;
+        typeQuery = AETypeQuery.getLoggatoConCookies;
 
         WResult result = checkIniziale(QUERY_CAT_REQUEST, wikiTitleGrezzo);
         result.setLimit(0);

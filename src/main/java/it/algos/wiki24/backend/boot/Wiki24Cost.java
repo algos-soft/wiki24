@@ -111,7 +111,7 @@ public class Wiki24Cost {
 
     public static final String API_PAGEIDS = "&pageids=";
 
-//    public static final String CAT = "Category:";
+    //    public static final String CAT = "Category:";
     public static final String CAT = "Categoria:";
 
     public static final String API_CAT = "&cmtitle=";
@@ -187,19 +187,30 @@ public class Wiki24Cost {
     public static final String PATH_TABELLA_NOMI_DOPPI = TAG_ANTROPONIMI + DOPPI;
 
     public static final String TAG_NOMI = "Nomi";
+
     public static final String TAG_LISTA_NOMI = "Liste nomi";
 
     public static final String INCIPIT_NOMI = "Incipit nomi";
-    public static final String INCIPIT_COGNOMI= "Incipit cognomi";
+
+    public static final String INCIPIT_COGNOMI = "Incipit cognomi";
 
     public static final String TAG_INCIPIT_NOMI = "Modulo:" + INCIPIT_NOMI;
+
     public static final String TAG_INCIPIT_COGNOMI = "Modulo:" + INCIPIT_COGNOMI;
+
     public static final String MODULO = "Modulo";
+
     public static final String PROGETTO = "Progetto";
+
     public static final String CATEGORIA = "Categoria";
+
     public static final String TEMPLATE = "Template";
+
     public static final String TEST = "Test";
 
+    public static final String COGNOMI_LINGUA = "Cognomi per lingua";
+
+    public static final String CATEGORIA_COGNOMI = CATEGORIA + DUE_PUNTI + COGNOMI_LINGUA;
 
 
     public static final String NAZ_LOWER = NAZ.toLowerCase();
@@ -234,7 +245,7 @@ public class Wiki24Cost {
 
     public static final String TAG_PROFESSIONE = "professione";
 
-//    public static final String TAG_DOPPIO_NOME = "doppionome";
+    //    public static final String TAG_DOPPIO_NOME = "doppionome";
     public static final String TAG_NOME_DOPPIO = "nomedoppio";
 
     public static final String TAG_COGNOME = "cognome";

@@ -67,7 +67,7 @@ public class QueryInfoCat extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final String wikiTitoloGrezzoPaginaCategoria) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         wikiCategory = wikiTitoloGrezzoPaginaCategoria;
         return requestGetTitle(WIKI_QUERY_CAT_INFO, CAT + wikiTitoloGrezzoPaginaCategoria);
     }

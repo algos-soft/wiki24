@@ -72,7 +72,7 @@ public class QueryBio extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final String wikiTitleGrezzoBio) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         WResult result = requestGetTitle(WIKI_QUERY_BASE_TITLE, wikiTitleGrezzoBio);
 
         if (result.getTypePage() == AETypePage.contienePipe) {
@@ -96,7 +96,7 @@ public class QueryBio extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final long pageid) {
-        queryType = AETypeQuery.getSenzaLoginSenzaCookies;
+        typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         return requestGetPage(WIKI_QUERY_BASE_PAGE, pageid);
     }
 

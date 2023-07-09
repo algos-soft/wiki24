@@ -11,12 +11,15 @@ import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
+import java.text.*;
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -190,6 +193,19 @@ public class NomeBackend extends WikiBackend {
     @Override
     public List<Nome> findAllSort(Sort sort) {
         return super.findAllSort(sort);
+    }
+
+    public List<Nome> findAllByNumBio(int soglia) {
+        Collator collator = Collator.getInstance(Locale.getDefault());
+
+        return findAllNoSort()
+                .stream()
+                .filter(nome -> nome.numBio > soglia)
+                .sorted(Comparator.comparing(Nome::getNome, collator))
+                .collect(Collectors.toList());
+
+        //        List<Nome> listaAll = findAllSortKey();
+        //        return listaAll != null ? listaAll.stream().filter(nome -> nome.numBio > soglia).collect(Collectors.toList()) : null;
     }
 
     public List<String> findAllForKeyByNumBio() {
@@ -392,21 +408,45 @@ public class NomeBackend extends WikiBackend {
         int sogliaMongo = WPref.sogliaMongoNomi.getInt();
         int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //visto che l'elaborazione impiega più di 3 minuti
+        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+        LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+        lastElaborazione = lastElaborazione.plusHours(1);
+        if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            return result;
+        }
+
         resetDownload();
 
         for (Nome nome : findAll()) {
             nome.numBio = bioBackend.countNome(nome.nome);
             nome.superaSoglia = nome.numBio > sogliaWiki;
-//            if (nome.numBio > sogliaMongo) {
-//                nome.paginaLista = PATH_NOMI + nome.nome;
-//            }
-//            if (nome.superaSoglia) {
-//                nome.esisteLista = queryService.isEsiste(nome.paginaLista);
-//            }
+            if (nome.numBio > sogliaMongo) {
+                nome.paginaLista = PATH_NOMI + nome.nome;
+            }
+            if (nome.superaSoglia) {
+                nome.esisteLista = queryService.isEsiste(nome.paginaLista);
+            }
             update(nome);
         }
 
         return super.fixElabora(result);
+    }
+
+    /**
+     * Esegue un azione di upload delle statistiche, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Prima esegue una Elaborazione <br>
+     */
+    @Override
+    public WResult uploadStatistiche() {
+        WResult result = appContext.getBean(StatisticheNomi.class).esegue();
+        result = appContext.getBean(StatisticheListeNomi.class).esegue();
+
+        logger.info(new WrapLog().message(result.getMessage()).type(AETypeLog.upload).usaDb());
+        return result;
     }
 
 }// end of crud backend class

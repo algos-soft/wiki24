@@ -77,6 +77,9 @@ public class QueryService extends WAbstractService {
     public List<String> getCatTitles(final String catTitleGrezzo) {
         return appContext.getBean(QueryCat.class).getListaTitles(catTitleGrezzo);
     }
+    public List<String> getSubCat(final String catTitleGrezzo) {
+        return appContext.getBean(QueryCat.class,catTitleGrezzo).getSubCat();
+    }
 
     public List<WrapTime> getMiniWrap(final List<Long> listaPageids) {
         return appContext.getBean(QueryTimestamp.class).getWrap(listaPageids);

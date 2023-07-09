@@ -174,7 +174,7 @@ public class QueryLogin extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(AETypeUser typeUser) {
-        queryType = AETypeQuery.login;
+        typeQuery = AETypeQuery.login;
         WResult result = fixUserPassword(typeUser);
 
         if (result.isErrato()) {
@@ -210,7 +210,7 @@ public class QueryLogin extends AQuery {
      * Recupera il logintoken dalla urlResponse <br>
      */
     protected WResult preliminaryRequestGet() {
-        WResult result = WResult.valido().queryType(queryType);
+        WResult result = WResult.valido().queryType(typeQuery);
         String urlDomain = TAG_LOGIN_PRELIMINARY_REQUEST_GET;
         String urlResponse = VUOTA;
         URLConnection urlConn;

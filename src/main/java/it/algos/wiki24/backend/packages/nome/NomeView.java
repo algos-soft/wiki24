@@ -356,17 +356,6 @@ public class NomeView extends WikiView {
 
     }
 
-    /**
-     * Esegue un azione di upload delle statistiche, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
-     * Prima esegue una Elaborazione <br>
-     */
-    @Override
-    public void uploadStatistiche() {
-        WResult result = appContext.getBean(StatisticheNomi.class).esegue();
-        logger.info(new WrapLog().message(result.getMessage()).type(AETypeLog.upload).usaDb());
-        super.uploadStatistiche();
-    }
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>

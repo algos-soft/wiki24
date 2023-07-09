@@ -921,6 +921,7 @@ public abstract class WikiView extends CrudView {
      * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadStatistiche() {
+        WResult result = crudBackend.uploadStatistiche();
         reload();
     }
 

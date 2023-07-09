@@ -9,6 +9,7 @@ import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -64,6 +65,8 @@ public abstract class WikiBackend extends CrudBackend {
     @Autowired
     public NazPluraleBackend nazPluraleBackend;
 
+    @Autowired
+    public LogService logger;
 
     protected String message;
 
@@ -680,6 +683,13 @@ public abstract class WikiBackend extends CrudBackend {
 
         message = String.format("Check di %s %s, in %s minuti. Sotto soglia: %s. Da cancellare: %s. Non modificate: %s. Modificate: %s.", tot, modulo, delta, sottoSoglia, daCancellare, nonModificate, modificate);
         logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public WResult uploadStatistiche() {
+        return WResult.errato();
     }
 
 }

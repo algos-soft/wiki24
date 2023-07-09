@@ -18,6 +18,7 @@ import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
+import javax.annotation.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -160,6 +161,15 @@ public abstract class Statistiche {
 
     protected String infoTime;
 
+    public String wikiTitleUpload;
+
+    public String wikiTitleTest;
+
+    @PostConstruct
+    protected void postConstruct() {
+        this.fixPreferenze();
+    }
+
     protected void prepara() {
         this.fixPreferenze();
         this.elabora();
@@ -175,6 +185,10 @@ public abstract class Statistiche {
     protected void fixPreferenze() {
         this.typeToc = AETypeToc.forceToc;
         this.inizio = System.currentTimeMillis();
+    }
+
+    public WResult esegue() {
+        return null;
     }
 
     /**
@@ -196,6 +210,10 @@ public abstract class Statistiche {
      */
     protected void creaMappa() {
         mappa = new LinkedHashMap<>();
+    }
+
+    protected WResult upload() {
+        return textService.isValid(wikiTitleUpload) ? upload(wikiTitleUpload) : null;
     }
 
     protected WResult upload(String wikiTitle) {

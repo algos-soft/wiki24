@@ -36,9 +36,35 @@ public class QueryCat extends AQuery {
 
     private AETypeQueryProp queryProp = AETypeQueryProp.ids;
 
+    private AETypeQueryType queryType = AETypeQueryType.page;
+
+    private String wikiTitoloGrezzoPaginaCategoria;
+
+    public QueryCat() {
+    }
+
+    public QueryCat(String wikiTitoloGrezzoPaginaCategoria) {
+        this.wikiTitoloGrezzoPaginaCategoria = wikiTitoloGrezzoPaginaCategoria;
+    }
+
     public QueryCat title() {
         queryProp = AETypeQueryProp.title;
         return this;
+    }
+
+    public QueryCat ids() {
+        queryProp = AETypeQueryProp.ids;
+        return this;
+    }
+
+    public QueryCat subCat() {
+        this.queryType = AETypeQueryType.subCat;
+        this.queryProp = AETypeQueryProp.title;
+        return this;
+    }
+
+    public WResult urlRequest() {
+        return urlRequest(wikiTitoloGrezzoPaginaCategoria);
     }
 
     /**
@@ -63,6 +89,12 @@ public class QueryCat extends AQuery {
     public List<String> getListaTitles(final String catTitleGrezzo) {
         queryProp = AETypeQueryProp.title;
         return (List<String>) urlRequest(catTitleGrezzo).getLista();
+    }
+
+    public List<String> getSubCat() {
+        this.queryType = AETypeQueryType.subCat;
+        this.queryProp = AETypeQueryProp.title;
+        return (List<String>) urlRequest().getLista();
     }
 
     /**
@@ -96,8 +128,8 @@ public class QueryCat extends AQuery {
      *
      * @return wrapper di informazioni
      */
-    public WResult urlRequest( String wikiTitoloGrezzoPaginaCategoria) {
-        queryType = AETypeQuery.getLoggatoConCookies;
+    public WResult urlRequest(String wikiTitoloGrezzoPaginaCategoria) {
+        typeQuery = AETypeQuery.getLoggatoConCookies;
         String message;
         int num;
         int limit;
@@ -126,7 +158,7 @@ public class QueryCat extends AQuery {
             wikiTitoloConCATIniziale = CAT + wikiTitoloGrezzoPaginaCategoria;
         }
         if (wikiTitoloGrezzoPaginaCategoria.startsWith(CAT)) {
-            wikiTitoloGrezzoPaginaCategoria = textService.levaTesta(wikiTitoloGrezzoPaginaCategoria,CAT);
+            wikiTitoloGrezzoPaginaCategoria = textService.levaTesta(wikiTitoloGrezzoPaginaCategoria, CAT);
         }
 
         WResult result = checkIniziale(QUERY_CAT_REQUEST, wikiTitoloConCATIniziale);
@@ -249,7 +281,12 @@ public class QueryCat extends AQuery {
                 if (((JSONObject) jsonCategory.get(0)).get(TITLE) != null) {
                     for (Object obj : jsonCategory) {
                         title = (String) ((JSONObject) obj).get(TITLE);
-                        listaNew.add(title);
+                        if (queryType == AETypeQueryType.subCat) {
+                            if (title.startsWith(CAT)) {
+                                title = textService.levaTesta(title, CAT);
+                            }
+                        }
+                        listaNew.add(title.trim());
                     }
                 }
 
@@ -285,7 +322,7 @@ public class QueryCat extends AQuery {
      */
     private String fixUrlCat(final String catTitle, final String continueParam) {
         String query = QUERY_CAT_REQUEST + CAT + wikiBot.wikiApiService.fixWikiTitle(catTitle);
-        String type = WIKI_QUERY_CAT_TYPE + "page";
+        String type = queryType.get();
         String prop = queryProp.get();//--potrebbe essere anche "ids|title"
         String limit = botLogin.getUserType().limit();
         String user = botLogin.getUserType().affermazione();

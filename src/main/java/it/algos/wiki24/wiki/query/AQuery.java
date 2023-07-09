@@ -93,7 +93,7 @@ public abstract class AQuery {
 
     protected static final String TOKENS = "tokens";
 
-    protected AETypeQuery queryType;
+    protected AETypeQuery typeQuery;
 
     protected String wikiCategory;
 
@@ -264,7 +264,7 @@ public abstract class AQuery {
 
     protected WResult checkInizialeBase(final String pathQuery) {
         WResult result = WResult.valido()
-                .queryType(queryType)
+                .queryType(typeQuery)
                 .typePage(AETypePage.indeterminata)
                 .userType(AETypeUser.anonymous)
                 .limit(AETypeUser.anonymous.getLimit());
@@ -386,7 +386,7 @@ public abstract class AQuery {
         URLConnection urlConn;
         String urlResponse;
 
-        switch (queryType) {
+        switch (typeQuery) {
             case getSenzaLoginSenzaCookies -> {
                 urlDomain = fixAssert(urlDomain);
                 result.setCookies(botLogin != null ? botLogin.getCookies() : null);
@@ -419,7 +419,7 @@ public abstract class AQuery {
         WResult result = WResult.valido()
                 .queryType(AETypeQuery.getLoggatoConCookies)
                 .typePage(AETypePage.indeterminata);
-        queryType = AETypeQuery.getLoggatoConCookies;
+        typeQuery = AETypeQuery.getLoggatoConCookies;
         long inizio = System.currentTimeMillis();
         String strisciaIds;
         String message;

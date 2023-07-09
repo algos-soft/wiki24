@@ -83,7 +83,7 @@ public enum WPref implements AIGenPref {
     uploadNazPluralePrevisto("uploadNazPluralePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per le nazionalità plurali."),
 
 
-    downloadNomiCategoria("downloadNomiCategoria", AETypePref.localdatetime, ROOT_DATA_TIME, "Download delle Categorie di prenomi."),
+    downloadNomiCategoria("downloadNomiCategoria", AETypePref.localdatetime, ROOT_DATA_TIME, "Download della Categoria di prenomi."),
     downloadNomiCategoriaTime("downloadNomiCategoriaTime", AETypePref.integer, 0, "Durata download delle categorie di prenomi."),
     downloadNomiDoppi("downloadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Progetto:Antroponimi/Nomi doppi."),
     uploadNomiDoppi("uploadNomiDoppi", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload di Progetto:Antroponimi/Nomi doppi."),
@@ -102,6 +102,8 @@ public enum WPref implements AIGenPref {
     uploadNomiTime("uploadNomiTime", AETypePref.integer, 0, "Durata upload dei nomi."),
     uploadNomiPrevisto("uploadNomiPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo upload previsto per i nomi."),
 
+    downloadCognomiCategoria("downloadCognomiCategoria", AETypePref.localdatetime, ROOT_DATA_TIME, "Download delle Categorie di cognomi."),
+    downloadCognomiCategoriaTime("downloadCognomiCategoriaTime", AETypePref.integer, 0, "Durata download delle categorie di cognomi."),
 
     downloadCognomiModulo("downloadCognomiModulo", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Incipit cognomi."),
     downloadCognomi("downloadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download dei cognomi."),
