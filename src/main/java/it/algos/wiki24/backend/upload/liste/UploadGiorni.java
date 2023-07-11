@@ -97,13 +97,12 @@ public class UploadGiorni extends UploadGiorniAnni {
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {
                 result = appContext.getBean(UploadGiorni.class).nascita().upload(nomeGiorno);
-                //                result = nascita().upload(nomeGiorno);
+
                 if (result.isValido() && result.isModificata()) {
                     modificatiNati++;
                 }
 
                 result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
-//                result = morte().upload(nomeGiorno);
                 if (result.isValido() && result.isModificata()) {
                     modificatiMorti++;
                 }
@@ -111,6 +110,7 @@ public class UploadGiorni extends UploadGiorniAnni {
 
             if (Pref.debug.is()) {
                 message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
+                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
                 logger.info(new WrapLog().type(AETypeLog.upload).message(message));
             }
         }

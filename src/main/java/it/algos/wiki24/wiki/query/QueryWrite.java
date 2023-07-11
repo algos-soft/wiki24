@@ -462,6 +462,9 @@ public class QueryWrite extends AQuery {
         if (objectAll != null && objectAll.get(QUERY) != null && objectAll.get(QUERY) instanceof JSONObject) {
             objectQuery = (JSONObject) objectAll.get(QUERY);
         }
+        if (objectQuery==null) {
+            logger.error(new WrapLog().message("objectQuery==null"));
+        }
 
         if (objectQuery.get(AQuery.TOKENS) != null && objectQuery.get(AQuery.TOKENS) instanceof JSONObject) {
             objectToken = (JSONObject) objectQuery.get(TOKENS);
