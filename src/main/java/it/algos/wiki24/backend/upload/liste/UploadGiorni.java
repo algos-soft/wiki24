@@ -91,8 +91,23 @@ public class UploadGiorni extends UploadGiorniAnni {
         int modificatiMorti;
 
         List<Mese> mesi = meseBackend.findAllSortCorrente();
+        if (mesi == null) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("Mancano i mesi").usaDb());
+        }
+        if (mesi.size() != 12) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("I mesi sono sbagliati").usaDb());
+        }
+
         for (Mese mese : mesi) {
             giorni = giornoBackend.findAllForNomeByMese(mese);
+            if (mesi == null) {
+                message = String.format("Mancano i giorni del mese %s", mese);
+                logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
+            if (mesi.size() < 1) {
+                message = String.format("Nel mese %s ci sono troppi pochi giorni", mese);
+                logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
             modificatiNati = 0;
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {
@@ -101,10 +116,20 @@ public class UploadGiorni extends UploadGiorniAnni {
                 if (result.isValido() && result.isModificata()) {
                     modificatiNati++;
                 }
+                else {
+                    message = result.getMessage();
+                    message += String.format(" della pagina %s/%s", nomeGiorno, AETypeLista.giornoNascita.getTag());
+                    logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+                }
 
                 result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
                 if (result.isValido() && result.isModificata()) {
                     modificatiMorti++;
+                }
+                else {
+                    message = result.getMessage();
+                    message += String.format(" della pagina %s/%s", nomeGiorno, AETypeLista.giornoMorte.getTag());
+                    logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
                 }
             }
 

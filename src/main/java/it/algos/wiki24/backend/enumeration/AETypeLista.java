@@ -26,6 +26,8 @@ public enum AETypeLista {
 
     private String tagLower;
 
+    private String tag;
+
     private String tagF;
 
     private String tagUpper;
@@ -37,6 +39,7 @@ public enum AETypeLista {
 
     AETypeLista(String tag, String tagF, String giornoAnno, String civile) {
         this.tagLower = tag;
+        this.tag = tag;
         this.tagF = tagF;
         this.giornoAnno = giornoAnno;
         this.civile = civile;
@@ -53,6 +56,10 @@ public enum AETypeLista {
 
     public String getGiornoAnno() {
         return giornoAnno;
+    }
+
+    public String getTag() {
+        return tag;
     }
 
     public String getTagF() {
