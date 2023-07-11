@@ -3,6 +3,7 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
@@ -23,7 +24,7 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("upload")
+@Tag("uploadcrono")
 @DisplayName("Giorni upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadGiorniTest extends WikiTest {
@@ -72,10 +73,48 @@ public class UploadGiorniTest extends WikiTest {
     @Test
     @Order(2)
     @DisplayName("2 - Upload test di un giorno di nascita")
-    void upload() {
-        System.out.println("2 - Upload test di un giorno");
+    void uploadNascita() {
+        System.out.println("2 - Upload test di un giorno di nascita");
         sorgente = "24 aprile";
-        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - Upload test di un giorno di morte")
+    void uploadMorte() {
+        System.out.println("3 - Upload test di un giorno di morte");
+        sorgente = "24 aprile";
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class).test().morte().upload(sorgente);
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
+        printRisultato(ottenutoRisultato);
+    }
+
+
+//    @Test
+    @Order(4)
+    @DisplayName("4 - Costruttore col giorno di nascita")
+    void uploadCostruttoreNascita() {
+        System.out.println(" - Costruttore col giorno di nascita");
+        sorgente = "24 aprile";
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, sorgente).nascita().test().esegue();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
+        printRisultato(ottenutoRisultato);
     }
 
     /**

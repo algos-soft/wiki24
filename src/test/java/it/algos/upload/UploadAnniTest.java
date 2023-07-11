@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("upload")
+@Tag("uploadcrono")
 @DisplayName("Anni upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadAnniTest extends WikiTest {
@@ -70,7 +70,7 @@ public class UploadAnniTest extends WikiTest {
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-//    @Test
+    @Test
     @Order(2)
     @DisplayName("2 - Upload test di un anno di nascita semplice (senza sottopagine)")
     void upload() {
@@ -79,7 +79,7 @@ public class UploadAnniTest extends WikiTest {
         appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
     }
 
-    @Test
+    //    @Test
     @Order(2)
     @DisplayName("2 - Upload test di un anno di morte complesso (con sottopagine)")
     void upload2() {

@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.upload.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -35,6 +36,12 @@ public class UploadGiorni extends UploadGiorniAnni {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
     public UploadGiorni() {
+    }// end of constructor
+
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.summary = "[[Utente:Biobot/giorniBio|giorniBio]]";
         super.lastUpload = WPref.uploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
@@ -42,9 +49,7 @@ public class UploadGiorni extends UploadGiorniAnni {
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
-
-    }// end of constructor
-
+    }
 
     public UploadGiorni typeCrono(AETypeLista type) {
         this.typeLista = type;
@@ -85,12 +90,22 @@ public class UploadGiorni extends UploadGiorniAnni {
     public WResult uploadAll() {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
+        List<Mese> mesi = null;
         List<String> giorni;
         String message;
         int modificatiNati;
         int modificatiMorti;
 
-        List<Mese> mesi = meseBackend.findAllSortCorrente();
+        if (meseBackend == null) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("Manca meseBackend").usaDb());
+        }
+
+        try {
+            mesi = meseBackend.findAllSortCorrente();
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
         if (mesi == null) {
             logger.error(new WrapLog().type(AETypeLog.upload).message("Mancano i mesi").usaDb());
         }

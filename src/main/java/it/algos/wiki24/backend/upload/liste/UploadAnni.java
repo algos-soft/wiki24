@@ -35,13 +35,19 @@ public class UploadAnni extends UploadGiorniAnni {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      */
     public UploadAnni() {
+    }// end of constructor
+
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.summary = "[[Utente:Biobot/anniBio|anniBio]]";
         super.lastUpload = WPref.uploadAnni;
         super.durataUpload = WPref.uploadAnniTime;
         super.nextUpload = WPref.uploadAnniPrevisto;
         super.usaParagrafi = WPref.usaParagrafiAnni.is();
         super.typeToc = (AETypeToc) WPref.typeTocAnni.getEnumCurrentObj();
-    }// end of constructor
+    }
 
 
     public UploadAnni typeCrono(AETypeLista type) {

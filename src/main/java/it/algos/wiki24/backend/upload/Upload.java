@@ -255,7 +255,6 @@ public abstract class Upload {
     @PostConstruct
     protected void postConstruct() {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
-        this.summary = "[[Utente:Biobot|bioBot]]"; //@todo DA CAMBIARE nella sottoclasse
         this.typeLista = AETypeLista.nessunaLista;
         this.typeToc = AETypeToc.forceToc;
         this.usaNumeriTitoloParagrafi = true;
@@ -266,6 +265,7 @@ public abstract class Upload {
     }
 
     protected void fixPreferenze() {
+        this.summary = "[[Utente:Biobot|bioBot]]";
     }
 
     protected void fixPreferenzeBackend() {
@@ -491,9 +491,9 @@ public abstract class Upload {
 
         if (uploadTest) {
             result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-//            if (result.isValido() && !result.isModificata()) {
-//                result.typeResult(AETypeResult.uploadValido);
-//            }
+            //            if (result.isValido() && !result.isModificata()) {
+            //                result.typeResult(AETypeResult.uploadValido);
+            //            }
             return result;
         }
 
