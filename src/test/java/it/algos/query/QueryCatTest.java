@@ -8,7 +8,6 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.wiki.query.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
@@ -170,7 +169,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("7 - Categoria (getListaPageIds) -> ids"));
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        listaPageIds = appContext.getBean(QueryCat.class).getListaPageIds(sorgente);
+        listaPageIds = appContext.getBean(QueryCat.class).getPageIds(sorgente);
         assertNotNull(listaPageIds);
 
         System.out.println(VUOTA);
@@ -185,7 +184,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("8 - Categoria (getListaTitles) -> title"));
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        listaStr = appContext.getBean(QueryCat.class).getListaTitles(sorgente);
+        listaStr = appContext.getBean(QueryCat.class).getTitles(sorgente);
         assertNotNull(listaStr);
 
         System.out.println(VUOTA);
@@ -200,7 +199,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("9 - Categoria titolo errato rimediabile"));
 
         sorgente = "Categoria:" + CATEGORIA_ESISTENTE_BREVE;
-        listaStr = appContext.getBean(QueryCat.class).getListaTitles(sorgente);
+        listaStr = appContext.getBean(QueryCat.class).getTitles(sorgente);
         assertNotNull(listaStr);
 
         System.out.println(VUOTA);
@@ -398,7 +397,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println("Il botLogin viene resettato per collegarsi come anonymous");
         sorgente = wikiCategoria;
 
-        listaPageIds = appContext.getBean(QueryCat.class).getListaPageIds(wikiCategoria);
+        listaPageIds = appContext.getBean(QueryCat.class).getPageIds(wikiCategoria);
         if (categoriaEsistente) {
             assertNotNull(listaPageIds);
             assertEquals(categoriaEsistente, listaPageIds.size() > 0);
@@ -414,6 +413,7 @@ public class QueryCatTest extends WikiTest {
             System.out.println(String.format("La categoria [[%s]] non esiste su wikipedia", sorgente));
         }
     }
+
     @Test
     @Order(90)
     @DisplayName("90 - Costruttore col nome -default")
@@ -421,7 +421,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("90 - Costruttore col nome - default"));
 
         sorgente = "Cognomi per lingua";
-        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryCat.class, sorgente).urlRequest();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
 
@@ -429,6 +429,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
         printRisultato(ottenutoRisultato);
     }
+
     @Test
     @Order(91)
     @DisplayName("91 - Costruttore col nome - ids")
@@ -436,7 +437,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("91 - Costruttore col nome - ids"));
 
         sorgente = "Cognomi per lingua";
-        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).ids().urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryCat.class, sorgente).ids().urlRequest();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
 
@@ -444,6 +445,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
         printRisultato(ottenutoRisultato);
     }
+
     @Test
     @Order(92)
     @DisplayName("92 - Costruttore col nome - title")
@@ -451,7 +453,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("92 - Costruttore col nome - title"));
 
         sorgente = "Cognomi per lingua";
-        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).title().urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryCat.class, sorgente).title().urlRequest();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
 
@@ -467,7 +469,7 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("93 - Costruttore col nome - subCat"));
 
         sorgente = "Cognomi per lingua";
-        ottenutoRisultato = appContext.getBean(QueryCat.class,sorgente).subCat().urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryCat.class, sorgente).subCat().urlRequest();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
 
@@ -483,8 +485,39 @@ public class QueryCatTest extends WikiTest {
         System.out.println(("94 - Lista subCat"));
 
         sorgente = "Cognomi per lingua";
-        listaStr = appContext.getBean(QueryCat.class,sorgente).getSubCat();
+        listaStr = appContext.getBean(QueryCat.class, sorgente).getSubCat();
         assertNotNull(listaStr);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        print(listaStr);
+    }
+
+    @Test
+    @Order(95)
+    @DisplayName("95 - Lista normale")
+    void listaNormale() {
+        System.out.println(("95 - Lista normale"));
+
+        sorgente = "Cognomi coreani";
+        listaStr = appContext.getBean(QueryCat.class, sorgente).getTitles();
+        assertNotNull(listaStr);
+        assertEquals(11, listaStr.size());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
+        print(listaStr);
+    }
+    @Test
+    @Order(96)
+    @DisplayName("96 - Lista con filtro")
+    void listaConFiltro() {
+        System.out.println(("96 - Lista con filtro"));
+
+        sorgente = "Cognomi coreani";
+        listaStr = appContext.getBean(QueryCat.class, sorgente).filtro().getTitles();
+        assertNotNull(listaStr);
+        assertEquals(10, listaStr.size());
 
         System.out.println(VUOTA);
         System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));

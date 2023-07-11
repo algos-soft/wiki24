@@ -75,6 +75,7 @@ public class UploadGiorni extends UploadGiorniAnni {
 
         giorno.uploadSottoPagina(wikiTitle, parente, sottoPagina, ordineSottoPagina, lista);
     }
+
     /**
      * Esegue la scrittura di tutte le pagine <br>
      * Tutti i giorni nati <br>
@@ -95,12 +96,14 @@ public class UploadGiorni extends UploadGiorniAnni {
             modificatiNati = 0;
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {
-                result = nascita().upload(nomeGiorno);
+                result = appContext.getBean(UploadGiorni.class).nascita().upload(nomeGiorno);
+                //                result = nascita().upload(nomeGiorno);
                 if (result.isValido() && result.isModificata()) {
                     modificatiNati++;
                 }
 
-                result = morte().upload(nomeGiorno);
+                result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
+//                result = morte().upload(nomeGiorno);
                 if (result.isValido() && result.isModificata()) {
                     modificatiMorti++;
                 }

@@ -40,6 +40,8 @@ public class QueryCat extends AQuery {
 
     private String wikiTitoloGrezzoPaginaCategoria;
 
+    private boolean filtroNomeCat = false;
+
     public QueryCat() {
     }
 
@@ -54,6 +56,10 @@ public class QueryCat extends AQuery {
 
     public QueryCat ids() {
         queryProp = AETypeQueryProp.ids;
+        return this;
+    }
+    public QueryCat filtro() {
+        filtroNomeCat = true;
         return this;
     }
 
@@ -74,7 +80,7 @@ public class QueryCat extends AQuery {
      *
      * @return lista (pageids) degli elementi contenuti nella categoria
      */
-    public List<Long> getListaPageIds(final String catTitleGrezzo) {
+    public List<Long> getPageIds(final String catTitleGrezzo) {
         queryProp = AETypeQueryProp.ids;
         return (List<Long>) urlRequest(catTitleGrezzo).getLista();
     }
@@ -86,9 +92,14 @@ public class QueryCat extends AQuery {
      *
      * @return lista (title) degli elementi contenuti nella categoria
      */
-    public List<String> getListaTitles(final String catTitleGrezzo) {
+    public List<String> getTitles(final String catTitleGrezzo) {
         queryProp = AETypeQueryProp.title;
         return (List<String>) urlRequest(catTitleGrezzo).getLista();
+    }
+
+    public List<String> getTitles() {
+        queryProp = AETypeQueryProp.title;
+        return (List<String>) urlRequest().getLista();
     }
 
     public List<String> getSubCat() {
@@ -286,7 +297,14 @@ public class QueryCat extends AQuery {
                                 title = textService.levaTesta(title, CAT);
                             }
                         }
-                        listaNew.add(title.trim());
+                        if (filtroNomeCat) {
+                            if (!title.equals(wikiTitoloGrezzoPaginaCategoria)) {
+                                listaNew.add(title.trim());
+                            }
+                        }
+                        else {
+                            listaNew.add(title.trim());
+                        }
                     }
                 }
 

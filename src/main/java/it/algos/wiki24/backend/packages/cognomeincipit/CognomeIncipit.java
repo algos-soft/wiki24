@@ -1,7 +1,6 @@
-package it.algos.wiki24.backend.packages.cognomemodulo;
+package it.algos.wiki24.backend.packages.cognomeincipit;
 
 import it.algos.vaad24.backend.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import lombok.*;
@@ -10,11 +9,6 @@ import javax.persistence.*;
 
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -34,14 +28,20 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "cognomemodulo", keyPropertyName = "cognome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
-public class CognomeModulo extends AEntity {
+@AIEntity(collectionName = "cognomeincipit", keyPropertyName = "cognome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+public class CognomeIncipit extends AEntity {
 
     @AIField(type = AETypeField.text, widthEM = 20)
     public String cognome;
 
-    @AIField(type = AETypeField.text, widthEM = 14)
+    @AIField(type = AETypeField.anchor)
     public String linkPagina;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
+    public boolean aggiunto;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo,  widthEM = 7)
+    public boolean uguale;
 
     @Override
     public String toString() {

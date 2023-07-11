@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.wiki.query.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
@@ -199,16 +200,20 @@ public class CognomeCategoriaBackend extends WikiBackend {
      */
     public AResult downloadSubCategoria(AResult result, String catTitle) {
         AEntity entityBean;
-        List<String> listaWikiTitle = queryService.getCatTitles(catTitle);
+        String tag = "Cognomi";
+        List<String> listaWikiTitle = appContext.getBean(QueryCat.class, catTitle).filtro().getTitles();
 
         if (listaWikiTitle != null) {
             for (String wikiTitle : listaWikiTitle) {
-                entityBean = creaIfNotExist(wikiTitle, catTitle);
-                result.setValido(fixLista(result, entityBean, wikiTitle));
+                if (!wikiTitle.startsWith(tag)) {
+                    entityBean = creaIfNotExist(wikiTitle, catTitle);
+                    result.setValido(fixLista(result, entityBean, wikiTitle));
+                }
             }
         }
         return result;
     }
+
     public List<String> getLingue() {
         return queryService.getSubCat(COGNOMI_LINGUA);
     }

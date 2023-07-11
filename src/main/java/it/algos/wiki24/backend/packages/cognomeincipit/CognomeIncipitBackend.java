@@ -1,22 +1,15 @@
-package it.algos.wiki24.backend.packages.cognomemodulo;
+package it.algos.wiki24.backend.packages.cognomeincipit;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.data.mongodb.repository.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -33,11 +26,11 @@ import com.vaadin.flow.component.textfield.TextField;
  * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
-public class CognomeModuloBackend extends WikiBackend {
+public class CognomeIncipitBackend extends WikiBackend {
 
 
-    public CognomeModuloBackend() {
-        super(CognomeModulo.class);
+    public CognomeIncipitBackend() {
+        super(CognomeIncipit.class);
     }
 
     @Override
@@ -54,7 +47,27 @@ public class CognomeModuloBackend extends WikiBackend {
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_COGNOMI;
     }
 
-    public AEntity creaIfNotExist(final String riga) {
+    public CognomeIncipit creaIfNotExist(final String riga) {
+        CognomeIncipit entityBean;
+        WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
+
+        entityBean = newEntity(wrap.prima, wrap.seconda);
+        return entityBean != null ? insert(entityBean) : null;
+    }
+
+    public CognomeIncipit creaIfNotExist(final String keyPropertyValue, final String linkPagina, boolean aggiunto) {
+        CognomeIncipit entityBean;
+
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+        else {
+            entityBean = newEntity(keyPropertyValue, linkPagina);
+            return entityBean != null ? insert(entityBean) : null;
+        }
+    }
+
+    public AEntity creaIfNotExist2(final String riga) {
         AEntity entityBean;
         String nome = VUOTA;
         String linkPagina = VUOTA;
@@ -81,7 +94,7 @@ public class CognomeModuloBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata)
      */
-    public CognomeModulo newEntity() {
+    public CognomeIncipit newEntity() {
         return newEntity(VUOTA, VUOTA);
     }
 
@@ -91,7 +104,7 @@ public class CognomeModuloBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
     @Override
-    public CognomeModulo newEntity(final String keyPropertyValue) {
+    public CognomeIncipit newEntity(final String keyPropertyValue) {
         return newEntity(keyPropertyValue, VUOTA);
     }
 
@@ -106,69 +119,99 @@ public class CognomeModuloBackend extends WikiBackend {
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public CognomeModulo newEntity(final String cognome, final String linkPagina) {
-        CognomeModulo newEntityBean = CognomeModulo.builder()
+    public CognomeIncipit newEntity(final String cognome, final String linkPagina) {
+        CognomeIncipit newEntityBean = CognomeIncipit.builder()
                 .cognome(textService.isValid(cognome) ? cognome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .build();
 
-        return (CognomeModulo) super.fixKey(newEntityBean);
+        return (CognomeIncipit) super.fixKey(newEntityBean);
     }
 
 
     @Override
-    public CognomeModulo findById(final String keyID) {
-        return (CognomeModulo) super.findById(keyID);
+    public CognomeIncipit findById(final String keyID) {
+        return (CognomeIncipit) super.findById(keyID);
     }
 
     @Override
-    public CognomeModulo findByKey(final String keyValue) {
-        return (CognomeModulo) super.findByKey(keyValue);
+    public CognomeIncipit findByKey(final String keyValue) {
+        return (CognomeIncipit) super.findByKey(keyValue);
     }
 
     @Override
-    public CognomeModulo findByProperty(final String propertyName, final Object propertyValue) {
-        return (CognomeModulo) super.findByProperty(propertyName, propertyValue);
+    public CognomeIncipit findByProperty(final String propertyName, final Object propertyValue) {
+        return (CognomeIncipit) super.findByProperty(propertyName, propertyValue);
     }
 
     @Override
-    public CognomeModulo save(AEntity entity) {
-        return (CognomeModulo) super.save(entity);
+    public CognomeIncipit save(AEntity entity) {
+        return (CognomeIncipit) super.save(entity);
     }
 
     @Override
-    public CognomeModulo insert(AEntity entity) {
-        return (CognomeModulo) super.insert(entity);
+    public CognomeIncipit insert(AEntity entity) {
+        return (CognomeIncipit) super.insert(entity);
     }
 
     @Override
-    public CognomeModulo update(AEntity entity) {
-        return (CognomeModulo) super.update(entity);
+    public CognomeIncipit update(AEntity entity) {
+        return (CognomeIncipit) super.update(entity);
     }
 
     @Override
-    public List<CognomeModulo> findAll() {
+    public List<CognomeIncipit> findAll() {
         return super.findAll();
     }
 
     @Override
-    public List<CognomeModulo> findAllNoSort() {
+    public List<CognomeIncipit> findAllNoSort() {
         return super.findAllNoSort();
     }
 
     @Override
-    public List<CognomeModulo> findAllSortCorrente() {
+    public List<CognomeIncipit> findAllSortCorrente() {
         return super.findAllSortCorrente();
     }
 
     @Override
-    public List<CognomeModulo> findAllSortCorrenteReverse() {
+    public List<CognomeIncipit> findAllSortCorrenteReverse() {
         return super.findAllSortCorrenteReverse();
     }
 
     @Override
-    public List<CognomeModulo> findAllSort(Sort sort) {
+    public List<CognomeIncipit> findAllSort(Sort sort) {
         return super.findAllSort(sort);
+    }
+
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+
+        //--Cancella la (eventuale) precedente lista di nomi template
+        deleteAll();
+
+        result = downloadCognomiModulo(result);
+
+        return super.fixResetDownload(result);
+    }
+
+    /**
+     * Legge i valori dalla pagina wiki: Template:Incipit lista nomi
+     * Crea nomi template <br>
+     *
+     * @return entities create
+     */
+    public AResult downloadCognomiModulo(AResult result) {
+        CognomeIncipit entityBean;
+        List<AEntity> lista = new ArrayList<>();
+
+        for (String riga : super.getRighe()) {
+            entityBean = creaIfNotExist(riga);
+            result.setValido(fixLista(lista, entityBean, riga));
+        }
+
+        return super.fixResult(result, lista);
     }
 
 }// end of crud backend class

@@ -71,11 +71,11 @@ public class QueryService extends WAbstractService {
     }
 
     public List<Long> getCatIds(final String catTitleGrezzo) {
-        return appContext.getBean(QueryCat.class).getListaPageIds(catTitleGrezzo);
+        return appContext.getBean(QueryCat.class).getPageIds(catTitleGrezzo);
     }
 
     public List<String> getCatTitles(final String catTitleGrezzo) {
-        return appContext.getBean(QueryCat.class).getListaTitles(catTitleGrezzo);
+        return appContext.getBean(QueryCat.class).getTitles(catTitleGrezzo);
     }
     public List<String> getSubCat(final String catTitleGrezzo) {
         return appContext.getBean(QueryCat.class,catTitleGrezzo).getSubCat();

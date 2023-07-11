@@ -59,7 +59,7 @@ public class DownloadTest extends WikiTest {
         String message;
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        List<Long> lista = appContext.getBean(QueryCat.class).getListaPageIds(sorgente);
+        List<Long> lista = appContext.getBean(QueryCat.class).getPageIds(sorgente);
         assertNotNull(lista);
 
         inizio = System.currentTimeMillis();
@@ -82,7 +82,7 @@ public class DownloadTest extends WikiTest {
         String time;
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
-        listaPageIds = appContext.getBean(QueryCat.class).getListaPageIds(sorgente);
+        listaPageIds = appContext.getBean(QueryCat.class).getPageIds(sorgente);
         assertNotNull(listaPageIds);
 
         sorgente2 = arrayService.toStringaPipe(listaPageIds);
@@ -95,7 +95,7 @@ public class DownloadTest extends WikiTest {
         printRisultato(ottenutoRisultato);
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
-        listaPageIds = appContext.getBean(QueryCat.class).getListaPageIds(sorgente);
+        listaPageIds = appContext.getBean(QueryCat.class).getPageIds(sorgente);
         assertNotNull(listaPageIds);
 
         sorgente2 = arrayService.toStringaPipe(listaPageIds);

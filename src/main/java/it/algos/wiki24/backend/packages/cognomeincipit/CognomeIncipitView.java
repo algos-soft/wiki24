@@ -1,20 +1,19 @@
-package it.algos.wiki24.backend.packages.cognomemodulo;
+package it.algos.wiki24.backend.packages.cognomeincipit;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.packages.cognomecategoria.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
 
 import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -29,13 +28,13 @@ import com.vaadin.flow.component.textfield.TextField;
  * Presenta la Grid <br>
  * Su richiesta apre un Dialogo per gestire la singola entity <br>
  */
-@PageTitle("CognomiModulo")
-@Route(value = "cognomemodulo", layout = MainLayout.class)
-public class CognomeModuloView extends WikiView {
+@PageTitle("CognomiIncipit")
+@Route(value = "cognomeincipit", layout = MainLayout.class)
+public class CognomeIncipitView extends WikiView {
 
 
     //--per eventuali metodi specifici
-    private CognomeModuloBackend backend;
+    private CognomeIncipitBackend backend;
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -45,8 +44,8 @@ public class CognomeModuloView extends WikiView {
      *
      * @param crudBackend service specifico per la businessLogic e il collegamento con la persistenza dei dati
      */
-    public CognomeModuloView(@Autowired final CognomeModuloBackend crudBackend) {
-        super(crudBackend, CognomeModulo.class);
+    public CognomeIncipitView(@Autowired final CognomeIncipitBackend crudBackend) {
+        super(crudBackend, CognomeIncipit.class);
         this.backend = crudBackend;
     }
 
@@ -82,26 +81,26 @@ public class CognomeModuloView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Button button = new Button("Sorgente");
-        button.addClickListener(click -> wikiApiService.openWikiPage(backend.sorgenteDownload));
-        Button button2 = new Button("Test");
-        button2.addClickListener(click -> wikiApiService.openWikiPage(backend.uploadTestName));
-        alertPlaceHolder.add(new Span(fixButton(button), new Label(SEP), fixButton(button2)));
+        Anchor anchor = WAnchor.build(backend.sorgenteDownload, MODULO);
+        alertPlaceHolder.add(new Span(anchor));
 
-        message = "Sono elencate le pagine di riferimento per ogni cognome (esempio: 'Bianchi->Bianchi (cognome)') da inserire nell'incipit della lista.";
+        message = "Pagine di riferimento per ogni cognome (es.: [Bianchi->Bianchi (cognome)]) da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
-        message = "I cognomi vuoti nel modulo puntano, in automatico, ad una pagina con lo stesso cognome.";
-        addSpan(ASpan.text(message).rosso().small());
-        message = String.format("I cognomi modulo mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
-        addSpan(ASpan.text(message).rosso().small());
-        message = "Quando si crea la lista cognomi, i cognomi template vengono scaricati e aggiunti alla lista stessa.";
+        message = String.format("I cognomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
 
-        message = String.format("Download%sCancella tutto e scarica il template wiki: %s.", FORWARD, backend.sorgenteDownload);
+        message = String.format("Download%sLegge il modulo: %s.", FORWARD, backend.sorgenteDownload);
         addSpan(ASpan.text(message).verde());
+        message = String.format("Elabora%sAggiunge i cognomi di %s e controlla gli uguali", FORWARD, "CognomiCategoria");
+        addSpan(ASpan.text(message).verde());
+        message = String.format("Upload%sRiscrive il modulo in ordine alfabetico, esclusi gli uguali.", FORWARD);
+        addSpan(ASpan.text(message).verde());
+
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di cognomi sono gestiti dalla task Cognome.";
         addSpan(ASpan.text(message).rosso().small());
 
+        message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i cognomi con la stessa pagina.", FORWARD, TaskStatistiche.INFO);
+        addSpan(ASpan.text(message).blue().small());
     }
 
 }// end of crud @Route view class

@@ -92,7 +92,6 @@ public class NomeIncipitView extends WikiView {
 
         message = "Pagine di riferimento per ogni nome (es.: [Felix->Felice (nome)]) da inserire nell'incipit della lista.";
         addSpan(ASpan.text(message).verde());
-
         message = String.format("I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale");
         addSpan(ASpan.text(message).rosso().small());
 

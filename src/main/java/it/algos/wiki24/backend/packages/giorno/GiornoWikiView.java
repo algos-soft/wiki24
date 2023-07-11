@@ -11,6 +11,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.liste.*;
@@ -246,7 +247,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void uploadPaginaNati() {
-        appContext.getBean(UploadGiorni.class).nascita().upload(getNomeGiorno());
+        WResult result = appContext.getBean(UploadGiorni.class).nascita().upload(getNomeGiorno());
         reload();
     }
 
@@ -255,7 +256,7 @@ public class GiornoWikiView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void uploadPaginaMorti() {
-        appContext.getBean(UploadGiorni.class).morte().upload(getNomeGiorno());
+        WResult result = appContext.getBean(UploadGiorni.class).morte().upload(getNomeGiorno());
         reload();
     }
 

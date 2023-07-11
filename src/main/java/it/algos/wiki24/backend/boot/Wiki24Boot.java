@@ -18,7 +18,7 @@ import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.cognomecategoria.*;
-import it.algos.wiki24.backend.packages.cognomemodulo.*;
+import it.algos.wiki24.backend.packages.cognomeincipit.*;
 import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomedoppio.*;
@@ -282,7 +282,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(NomeIncipitView.class);
         VaadVar.menuRouteListProject.add(NomeView.class);
         VaadVar.menuRouteListProject.add(CognomeCategoriaView.class);
-        VaadVar.menuRouteListProject.add(CognomeModuloView.class);
+        VaadVar.menuRouteListProject.add(CognomeIncipitView.class);
         VaadVar.menuRouteListProject.add(CognomeView.class);
         VaadVar.menuRouteListProject.add(BioView.class);
         VaadVar.menuRouteListProject.add(BioTempView.class);
