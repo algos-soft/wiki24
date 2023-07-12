@@ -1,14 +1,19 @@
 package it.algos.wiki24.backend.packages.cognomeincipit;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.components.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.packages.cognomecategoria.*;
+import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.schedule.*;
 import org.springframework.beans.factory.annotation.*;
@@ -36,6 +41,9 @@ public class CognomeIncipitView extends WikiView {
     //--per eventuali metodi specifici
     private CognomeIncipitBackend backend;
 
+    private IndeterminateCheckbox boxAggiunti;
+    private IndeterminateCheckbox boxUguali;
+
     /**
      * Costruttore @Autowired (facoltativo) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -58,8 +66,8 @@ public class CognomeIncipitView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("cognome", "linkPagina");
-        super.formPropertyNamesList = Arrays.asList("cognome", "linkPagina");
+        super.gridPropertyNamesList = Arrays.asList("cognome", "linkPagina", "aggiunto", "uguale");
+        super.formPropertyNamesList = Arrays.asList("cognome", "linkPagina", "aggiunto", "uguale");
 
         super.usaBottoneReset = false;
         super.usaReset = true;
@@ -101,6 +109,85 @@ public class CognomeIncipitView extends WikiView {
 
         message = String.format("Upload%sElenco riordinato in ordine alfabetico. Scheduled %s. Esclusi i cognomi con la stessa pagina.", FORWARD, TaskStatistiche.INFO);
         addSpan(ASpan.text(message).blue().small());
+    }
+
+    /**
+     * Bottoni standard (solo icone) Reset, New, Edit, Delete, ecc.. <br>
+     * Può essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixBottoniTopStandard() {
+        super.fixBottoniTopStandard();
+
+        if (searchField != null) {
+            searchField.setPlaceholder(TAG_ALTRE_BY + "singolare");
+        }
+
+        searchFieldPagina = new TextField();
+        searchFieldPagina.setPlaceholder(TAG_ALTRE_BY + "link");
+        searchFieldPagina.setClearButtonVisible(true);
+        searchFieldPagina.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(searchFieldPagina);
+    }
+
+    protected void fixBottoniTopSpecifici() {
+        boxAggiunti = new IndeterminateCheckbox();
+        boxAggiunti.setLabel("Aggiunti");
+        boxAggiunti.setIndeterminate(true);
+        boxAggiunti.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutAggiunti = new HorizontalLayout(boxAggiunti);
+        layoutAggiunti.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutAggiunti);
+
+        boxUguali = new IndeterminateCheckbox();
+        boxUguali.setLabel("Uguali");
+        boxUguali.setIndeterminate(true);
+        boxUguali.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutUguali = new HorizontalLayout(boxUguali);
+        layoutUguali.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutUguali);
+
+
+        this.add(topPlaceHolder2);
+    }
+
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<CognomeIncipit> items = (List) super.sincroFiltri();
+
+        if (boxAggiunti != null && !boxAggiunti.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.aggiunto == boxAggiunti.getValue()).toList();
+        }
+
+        if (boxUguali != null && !boxUguali.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.uguale == boxUguali.getValue()).toList();
+        }
+
+        final String textSearchPagina = searchFieldPagina != null ? searchFieldPagina.getValue() : VUOTA;
+        if (textService.isValidNoSpace(textSearchPagina)) {
+            items = items
+                    .stream()
+                    .filter(bean -> ((String) reflectionService.getPropertyValue(bean, searchFieldName)).matches("^(?i)" + textSearchPagina + ".*$"))
+                    .toList();
+        }
+        else {
+            if (textSearchPagina.equals(SPAZIO)) {
+                items = items
+                        .stream()
+                        .filter(nome -> nome.linkPagina == null)
+                        .toList();
+            }
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
     }
 
 }// end of crud @Route view class

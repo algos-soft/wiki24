@@ -43,7 +43,7 @@ public class NomeIncipitBackendTest extends WikiBackendTest {
         super.typeBackend = TypeBackend.nessuno;
         super.crudBackend = backend;
         super.wikiBackend = backend;
-        super.nomeModulo = "nomemodulo";
+        super.nomeModulo = "nomeincipit";
 
         super.setUpAll();
     }

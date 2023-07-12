@@ -41,9 +41,7 @@ public class CognomeIncipitBackend extends WikiBackend {
         super.lastDownload = WPref.downloadCognomiModulo;
 
         super.sorgenteDownload = TAG_INCIPIT_COGNOMI;
-        super.tagIniSorgente = "switch:{{{nome}}}";
-        super.tagEndSorgente = "|#default";
-        super.tagSplitSorgente = PIPE_REGEX;
+        super.tagSplitSorgente = VIRGOLA_CAPO;
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_COGNOMI;
     }
 

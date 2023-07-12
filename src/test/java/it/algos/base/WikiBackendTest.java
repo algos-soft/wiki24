@@ -6,6 +6,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.cognomecategoria.*;
+import it.algos.wiki24.backend.packages.cognomeincipit.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
@@ -79,6 +80,9 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @Autowired
     protected CognomeCategoriaBackend cognomeCategoriaBackend;
+
+    @Autowired
+    protected CognomeIncipitBackend cognomeIncipitBackend;
 
     protected WResult wResult;
 
@@ -282,22 +286,22 @@ public abstract class WikiBackendTest extends BackendTest {
     }
 
 
-    @Test
-    @Order(75)
-    @DisplayName("75 - findAllDistinctByPlurali")
-    protected void findAllDistinctByPlurali() {
-        System.out.println("75 - findAllDistinctByPlurali");
-        message = String.format("Tutti i valori di %s plurali (unici)", nomeModulo);
-        System.out.println(message);
-        System.out.println(VUOTA);
-
-        listaStr = wikiBackend.findAllDistinctByPlurali();
-        assertTrue(listaStr != null);
-        assertTrue(listaStr.size() > 0);
-        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
-        System.out.println(message);
-        print(listaStr);
-    }
+//    @Test
+//    @Order(75)
+//    @DisplayName("75 - findAllDistinctByPlurali")
+//    protected void findAllDistinctByPlurali() {
+//        System.out.println("75 - findAllDistinctByPlurali");
+//        message = String.format("Tutti i valori di %s plurali (unici)", nomeModulo);
+//        System.out.println(message);
+//        System.out.println(VUOTA);
+//
+//        listaStr = wikiBackend.findAllDistinctByPlurali();
+//        assertTrue(listaStr != null);
+//        assertTrue(listaStr.size() > 0);
+//        message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+//        System.out.println(message);
+//        print(listaStr);
+//    }
 
 
     @Test

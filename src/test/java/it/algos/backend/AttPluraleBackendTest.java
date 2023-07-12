@@ -136,6 +136,22 @@ public class AttPluraleBackendTest extends WikiBackendTest {
     protected void newEntity() {
     }
 
+        @Test
+        @Order(75)
+        @DisplayName("75 - findAllDistinctByPlurali")
+        protected void findAllDistinctByPlurali() {
+            System.out.println("75 - findAllDistinctByPlurali");
+            message = String.format("Tutti i valori di %s plurali (unici)", nomeModulo);
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            listaStr = wikiBackend.findAllDistinctByPlurali();
+            assertTrue(listaStr != null);
+            assertTrue(listaStr.size() > 0);
+            message = String.format("La lista contiene %s elementi.", textService.format(listaStr.size()));
+            System.out.println(message);
+            print(listaStr);
+        }
 
     @Test
     @Order(81)
