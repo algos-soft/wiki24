@@ -2,14 +2,20 @@ package it.algos.wiki24.backend.packages.cognomeincipit;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.cognome.*;
+import it.algos.wiki24.backend.packages.cognomecategoria.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.wrapper.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -28,6 +34,8 @@ import java.util.*;
 @Service
 public class CognomeIncipitBackend extends WikiBackend {
 
+    @Autowired
+    public CognomeCategoriaBackend cognomeCategoriaBackend;
 
     public CognomeIncipitBackend() {
         super(CognomeIncipit.class);
@@ -37,9 +45,13 @@ public class CognomeIncipitBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = WPref.downloadCognomiModulo;
-        super.lastDownload = WPref.downloadCognomiModulo;
+        super.lastReset = WPref.downloadCognomiIncipit;
+        super.lastDownload = WPref.downloadCognomiIncipit;
+        super.lastElaborazione = WPref.elaboraCognomiIncipit;
+        super.durataElaborazione = WPref.elaboraCognomiIncipitTime;
+        super.lastUpload = WPref.uploadCognomiIncipit;
 
+        this.unitaMisuraElaborazione = AETypeTime.secondi;
         super.sorgenteDownload = TAG_INCIPIT_COGNOMI;
         super.tagSplitSorgente = VIRGOLA_CAPO;
         super.uploadTestName = UPLOAD_TITLE_DEBUG + INCIPIT_COGNOMI;
@@ -49,7 +61,7 @@ public class CognomeIncipitBackend extends WikiBackend {
         CognomeIncipit entityBean;
         WrapDueStringhe wrap = wikiUtility.creaWrapUgualePulito(riga);
 
-        entityBean = newEntity(wrap.prima, wrap.seconda);
+        entityBean = newEntity(wrap.prima, wrap.seconda, false);
         return entityBean != null ? insert(entityBean) : null;
     }
 
@@ -60,30 +72,11 @@ public class CognomeIncipitBackend extends WikiBackend {
             return null;
         }
         else {
-            entityBean = newEntity(keyPropertyValue, linkPagina);
+            entityBean = newEntity(keyPropertyValue, linkPagina, aggiunto);
             return entityBean != null ? insert(entityBean) : null;
         }
     }
 
-    public AEntity creaIfNotExist2(final String riga) {
-        AEntity entityBean;
-        String nome = VUOTA;
-        String linkPagina = VUOTA;
-        String[] parti = textService.isValid(riga) ? riga.split(UGUALE) : null;
-
-        if (parti != null && parti.length == 2) {
-            nome = parti[0].trim();
-            linkPagina = parti[1].trim();
-        }
-
-        if (textService.isEmpty(nome) || isExistByKey(nome)) {
-            return null;
-        }
-        else {
-            entityBean = newEntity(nome, linkPagina);
-            return entityBean != null ? insert(entityBean) : null;
-        }
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -93,7 +86,7 @@ public class CognomeIncipitBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public CognomeIncipit newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, false);
     }
 
     /**
@@ -103,7 +96,7 @@ public class CognomeIncipitBackend extends WikiBackend {
      */
     @Override
     public CognomeIncipit newEntity(final String keyPropertyValue) {
-        return newEntity(keyPropertyValue, VUOTA);
+        return newEntity(keyPropertyValue, VUOTA, false);
     }
 
     /**
@@ -112,15 +105,16 @@ public class CognomeIncipitBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param cognome       (obbligatorio, unico)
+     * @param cognome    (obbligatorio, unico)
      * @param linkPagina (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public CognomeIncipit newEntity(final String cognome, final String linkPagina) {
+    public CognomeIncipit newEntity(final String cognome, final String linkPagina, boolean aggiunto) {
         CognomeIncipit newEntityBean = CognomeIncipit.builder()
                 .cognome(textService.isValid(cognome) ? cognome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
+                .aggiunto(aggiunto)
                 .build();
 
         return (CognomeIncipit) super.fixKey(newEntityBean);
@@ -182,6 +176,25 @@ public class CognomeIncipitBackend extends WikiBackend {
         return super.findAllSort(sort);
     }
 
+    public List<CognomeIncipit> findAllByNotUguali() {
+        return findAll()
+                .stream()
+                .filter(cognome -> !cognome.uguale)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public LinkedHashMap<String, String> findMappa() {
+        LinkedHashMap<String, String> mappa = new LinkedHashMap<>();
+        List<CognomeIncipit> lista = findAllByNotUguali();
+
+        for (CognomeIncipit cognomeModulo : lista) {
+            mappa.put(cognomeModulo.cognome, cognomeModulo.linkPagina);
+        }
+
+        return mappa;
+    }
+
     @Override
     public AResult resetDownload() {
         AResult result = super.resetDownload();
@@ -210,6 +223,61 @@ public class CognomeIncipitBackend extends WikiBackend {
         }
 
         return super.fixResult(result, lista);
+    }
+
+
+    @Override
+    public WResult elabora() {
+        WResult result = super.elabora();
+        List<CognomeCategoria> listaCognomiCategorie = null;
+        CognomeIncipit entityBean;
+        List<AEntity> lista = new ArrayList<>();
+        List<CognomeIncipit> listaCognomi;
+        String suffissoCognome = SPAZIO + "(Cognome)";
+
+        resetDownload();
+
+        //--Controllo e recupero di NomiCategoria
+        cognomeCategoriaBackend.resetDownload();
+        listaCognomiCategorie = cognomeCategoriaBackend.findAll();
+
+        if (listaCognomiCategorie != null) {
+            for (CognomeCategoria cognomeCategoria : listaCognomiCategorie) {
+
+                //devo fare un doppio controllo perché alcuni nomi potrebbero già esserci e NON è un errore
+                if (isExistByKey(cognomeCategoria.cognome)) {
+                    message = String.format("Il cognome [%s] esiste già", cognomeCategoria.cognome);
+                    logService.debug(new WrapLog().message(message));
+                }
+                else {
+                    entityBean = creaIfNotExist(cognomeCategoria.cognome, cognomeCategoria.linkPagina, true);
+                    result.setValido(fixLista(lista, entityBean, cognomeCategoria.cognome));
+                }
+            }
+        }
+
+        //        //--Controllo nomi uguali che vanno omessi nel modulo
+        //        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+        //        //--Sono uguali se il nome della persona coincide con la pagina di riferimento seguita dal suffisso (nome)
+        //        listaNomi = findAll();
+        //        for (NomeIncipit nome : listaNomi) {
+        //            if (nome.linkPagina.equals(nome.nome) || nome.linkPagina.equals(nome.nome + suffissoNome)) {
+        //                nome.uguale = true;
+        //                save(nome);
+        //            }
+        //        }
+
+        //--Controllo nomi uguali che vanno omessi nel modulo
+        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+        //        listaCognomi = findAll();
+        //        for (CognomeIncipit cognome : listaCognomi) {
+        //            if (cognome.linkPagina.equals(cognome.cognome)) {
+        //                cognome.uguale = true;
+        //                save(cognome);
+        //            }
+        //        }
+
+        return super.fixElabora(result);
     }
 
 }// end of crud backend class

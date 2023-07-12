@@ -93,14 +93,14 @@ public class CognomeCategoriaBackend extends WikiBackend {
      * Eventuali regolazioni iniziali delle property <br>
      * All properties <br>
      *
-     * @param nome       (obbligatorio, unico)
+     * @param cognome       (obbligatorio, unico)
      * @param linkPagina (obbligatorio)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public CognomeCategoria newEntity(final String nome, final String linkPagina, final String lingua) {
+    public CognomeCategoria newEntity(final String cognome, final String linkPagina, final String lingua) {
         CognomeCategoria newEntityBean = CognomeCategoria.builder()
-                .nome(textService.isValid(nome) ? nome : null)
+                .cognome(textService.isValid(cognome) ? cognome : null)
                 .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .lingua(textService.isValid(lingua) ? lingua : null)
                 .build();

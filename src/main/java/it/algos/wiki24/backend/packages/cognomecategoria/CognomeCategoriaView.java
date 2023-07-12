@@ -64,8 +64,8 @@ public class CognomeCategoriaView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("nome", "linkPagina", "lingua");
-        super.formPropertyNamesList = Arrays.asList("nome", "linkPagina", "lingua");
+        super.gridPropertyNamesList = Arrays.asList("cognome", "linkPagina", "lingua");
+        super.formPropertyNamesList = Arrays.asList("cognome", "linkPagina", "lingua");
 
         super.usaBottoneReset = false;
         super.usaReset = true;

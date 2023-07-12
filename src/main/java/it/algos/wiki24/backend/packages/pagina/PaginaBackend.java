@@ -810,7 +810,7 @@ public class PaginaBackend extends WikiBackend {
         String tag = "Persone di cognome";
         String paginaBase;
         int voci = 0;
-        int sogliaCognomi = WPref.sogliaCognomiWiki.getInt();
+        int sogliaCognomi = WPref.sogliaWikiCognomi.getInt();
         sogliaCognomi = (sogliaCognomi * 8) / 10;
         List<String> cognomiAcriticiSingoli = this.getCognomiAcriticiSingoli(pagine);
         List<String> cognomiAcriticiDoppi = this.getCognomiAcriticiDoppi(pagine);

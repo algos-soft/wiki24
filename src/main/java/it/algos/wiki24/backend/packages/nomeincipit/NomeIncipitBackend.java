@@ -238,7 +238,7 @@ public class NomeIncipitBackend extends WikiBackend {
         WResult result = super.elabora();
         List<NomeCategoria> listaNomiCategorie = null;
         NomeIncipit entityBean;
-        List<AEntity> lista2 = new ArrayList<>();
+        List<AEntity> lista = new ArrayList<>();
         List<NomeIncipit> listaNomi;
         String suffissoNome = SPAZIO + "(nome)";
 
@@ -258,7 +258,7 @@ public class NomeIncipitBackend extends WikiBackend {
                 }
                 else {
                     entityBean = creaIfNotExist(nomeCategoria.nome, nomeCategoria.linkPagina, true);
-                    result.setValido(fixLista(lista2, entityBean, nomeCategoria.nome));
+                    result.setValido(fixLista(lista, entityBean, nomeCategoria.nome));
                 }
             }
         }

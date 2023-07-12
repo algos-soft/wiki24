@@ -59,6 +59,7 @@ public abstract class UploadModulo extends Upload {
     public String getWikiTitleModulo() {
         return wikiTitleModulo;
     }
+
     public Map<String, String> leggeMappaMongo() {
         return wikiBackend.findMappa();
     }
@@ -100,7 +101,7 @@ public abstract class UploadModulo extends Upload {
         if (mappa != null && mappa.size() > 0) {
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 key = textService.setApicetti(entry.getKey());
-                value = textService.setApicetti(entry.getValue());
+                value = entry.getValue() != null ? textService.setApicetti(entry.getValue()) : APICETTI+APICETTI;
 
                 buffer.append(textService.setQuadre(key));
                 buffer.append(UGUALE_SPAZIATO);

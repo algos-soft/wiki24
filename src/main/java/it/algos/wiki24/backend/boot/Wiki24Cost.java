@@ -188,7 +188,11 @@ public class Wiki24Cost {
 
     public static final String TAG_NOMI = "Nomi";
 
+    public static final String TAG_COGNOMI = "Cognomi";
+
     public static final String TAG_LISTA_NOMI = "Liste nomi";
+
+    public static final String TAG_LISTA_COGNOMI = "Liste cognomi";
 
     public static final String INCIPIT_NOMI = "Incipit nomi";
 

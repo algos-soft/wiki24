@@ -34,11 +34,11 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "cognomecategoria", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "cognomecategoria", keyPropertyName = "cognome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class CognomeCategoria extends AEntity {
 
     @AIField(type = AETypeField.text, widthEM = 20)
-    public String nome;
+    public String cognome;
 
     @AIField(type = AETypeField.anchor)
     public String linkPagina;
@@ -48,7 +48,7 @@ public class CognomeCategoria extends AEntity {
 
     @Override
     public String toString() {
-        return nome;
+        return cognome;
     }
 
 }// end of crud entity class

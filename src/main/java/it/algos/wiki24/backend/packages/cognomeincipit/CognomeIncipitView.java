@@ -72,6 +72,7 @@ public class CognomeIncipitView extends WikiView {
         super.usaBottoneReset = false;
         super.usaReset = true;
         super.usaBottoneDownload = true;
+        super.usaBottoneElabora = true;
         super.usaBottoneNew = true;
         super.usaBottoneEdit = true;
         super.usaBottoneTest = false;

@@ -113,12 +113,10 @@ public class NomeView extends WikiView {
         String infoTask = VaadTask.info(TaskNomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
-        //        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
-        //        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
         String sogliaMongo = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaMongoNomi.getInt()));
         String sogliaWiki = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaWikiNomi.getInt()));
 
-        Anchor anchor = WAnchor.build(CATEGORIA + ":Prenomi composti", CATEGORIA);
+        Anchor anchor = WAnchor.build(CATEGORIA + ":Liste di persone per nome", CATEGORIA);
         Anchor anchor2 = WAnchor.build(statisticaNomi, TAG_NOMI);
         Anchor anchor3 = WAnchor.build(statisticaListe, TAG_LISTA_NOMI);
         alertPlaceHolder.add(new Span(anchor, new Label(SEP), anchor2, new Label(SEP), anchor3));
@@ -142,7 +140,7 @@ public class NomeView extends WikiView {
         addSpan(ASpan.text(message).verde());
         message = String.format("Download%sEsegue un Download di NomiDoppi. Aggiunge tutti i valori alla lista.", FORWARD);
         addSpan(ASpan.text(message).verde());
-        message = String.format("Download%sEsegue un Download di NomiModulo. Aggiunge tutti i valori alla lista.", FORWARD);
+        message = String.format("Download%sEsegue un Download di NomiIncipit. Aggiunge tutti i valori alla lista.", FORWARD);
         addSpan(ASpan.text(message).verde());
         message = String.format("Download%sCostruisce una lista di nomi distinti dalle biografie di Mongo. Crea una entity solo se numBio>%s", FORWARD, sogliaMongo);
         addSpan(ASpan.text(message).verde());

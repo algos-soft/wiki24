@@ -105,7 +105,13 @@ public enum WPref implements AIGenPref {
     downloadCognomiCategoria("downloadCognomiCategoria", AETypePref.localdatetime, ROOT_DATA_TIME, "Download delle Categorie di cognomi."),
     downloadCognomiCategoriaTime("downloadCognomiCategoriaTime", AETypePref.integer, 0, "Durata download delle categorie di cognomi."),
 
-    downloadCognomiModulo("downloadCognomiModulo", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Incipit cognomi."),
+    downloadCognomiIncipit("downloadCognomiIncipit", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Incipit cognomi."),
+
+    elaboraCognomiIncipit("elaboraCognomiIncipit", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione dei cognomi incipit."),
+    elaboraCognomiIncipitTime("elaboraCognomiIncipitTime", AETypePref.integer, 0, "Durata elaborazione dei cognomio incipit."),
+    uploadCognomiIncipit("uploadCognomiIncipit", AETypePref.localdatetime, ROOT_DATA_TIME, "Upload del Modulo:Incipit cognomi."),
+
+
     downloadCognomi("downloadCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Download dei cognomi."),
     downloadCognomiTime("downloadCognomiTime", AETypePref.integer, 0, "Durata download dei cognomi."),
 
@@ -198,8 +204,8 @@ public enum WPref implements AIGenPref {
 
     usaRigheGiorni("usaRigheGiorni", AETypePref.bool, false, "Usa righe raggruppate per anno nelle liste dei giorni", false),
     usaRigheAnni("usaRigheAnni", AETypePref.bool, false, "Usa righe raggruppate per giorno nelle liste degli anni", false),
-    sogliaCognomiMongo("sogliaCognomiMongo", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Cognomi sul mongoDB", false),
-    sogliaCognomiWiki("sogliaCognomiWiki", AETypePref.integer, 50, "Soglia minima per creare una pagina Cognomi sul server wiki", false),
+    sogliaMongoCognomi("sogliaMongoCognomi", AETypePref.integer, 30, "Soglia minima per creare una entity nella collezione Cognomi sul mongoDB", false),
+    sogliaWikiCognomi("sogliaWikiCognomi", AETypePref.integer, 50, "Soglia minima per creare una pagina Cognomi sul server wiki", false),
     usaLoggerTask("usaLoggerTask", AETypePref.bool, true, "Registra sul log interno l'esecuzione delle task programmate", false),
 
     elaboraPagineCancella("elaboraPagineCancella", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione delle pagine da cancellare"),

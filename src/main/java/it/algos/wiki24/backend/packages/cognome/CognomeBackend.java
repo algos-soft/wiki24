@@ -42,33 +42,19 @@ public class CognomeBackend extends WikiBackend {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastReset = null;
-        super.lastDownload = WPref.downloadAttPlurale;
-        super.durataDownload = WPref.downloadAttPluraleTime;
-        super.lastElaborazione = WPref.elaboraAttPlurale;
-        super.durataElaborazione = WPref.elaboraAttPluraleTime;
+        super.lastReset = WPref.downloadCognomi;
+        super.lastDownload = WPref.downloadCognomi;
+        super.durataDownload = WPref.downloadCognomiTime;
+        super.lastElaborazione = WPref.elaboraCognomi;
+        super.durataElaborazione = WPref.elaboraCognomiTime;
+        super.lastUpload = WPref.uploadCognomi;
+        super.durataUpload = WPref.uploadCognomiTime;
 
-        super.lastUpload = WPref.uploadAttPlurale;
-        super.durataUpload = WPref.uploadAttPluraleTime;
-        super.nextUpload = WPref.uploadAttPluralePrevisto;
-        super.lastStatistica = WPref.statisticaAttPlurale;
-
-        this.unitaMisuraDownload = AETypeTime.secondi;
+        this.unitaMisuraDownload = AETypeTime.minuti;
         this.unitaMisuraElaborazione = AETypeTime.minuti;
         this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
-//    public Cognome creaIfNotExist(final String cognomeTxt, int numBio, boolean esistePagina) {
-//        return checkAndSave(newEntity(cognomeTxt, numBio, esistePagina));
-//    }
-//
-//    public Cognome checkAndSave(final Cognome cognome) {
-//        return isExist(cognome.cognome) ? null : repository.insert(cognome);
-//    }
-//
-//    public boolean isExist(final String cognome) {
-//        return repository.findFirstByCognome(cognome) != null;
-//    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -162,7 +148,7 @@ public class CognomeBackend extends WikiBackend {
 
     public List<Cognome> findAllStampabili() {
         List<Cognome> lista = super.findAllSortCorrente();
-        int max = WPref.sogliaCognomiWiki.getInt();
+        int max = WPref.sogliaWikiCognomi.getInt();
 
         lista = lista.stream()
                 .sorted(Comparator.comparing(c -> c.cognome))
@@ -173,7 +159,7 @@ public class CognomeBackend extends WikiBackend {
     }
 
     public List<Cognome> findAllStampabileSortNumBio() {
-        return findAllStampabileSortNumBio(WPref.sogliaCognomiWiki.getInt());
+        return findAllStampabileSortNumBio(WPref.sogliaWikiCognomi.getInt());
     }
 
     public List<Cognome> findAllStampabileSortNumBio(int numBio) {
@@ -188,11 +174,11 @@ public class CognomeBackend extends WikiBackend {
     }
 
     public List<Cognome> findAllEccessiviMongo() {
-        return findAllEccessivi(WPref.sogliaCognomiMongo.getInt());
+        return findAllEccessivi(WPref.sogliaMongoCognomi.getInt());
     }
 
     public List<Cognome> findAllEccessiviServer() {
-        return findAllEccessivi(WPref.sogliaCognomiWiki.getInt());
+        return findAllEccessivi(WPref.sogliaWikiCognomi.getInt());
     }
 
     public List<Cognome> findAllEccessivi(int max) {
@@ -254,9 +240,9 @@ public class CognomeBackend extends WikiBackend {
         int cont = 0;
         List<String> cognomi = bioBackend.findAllCognomiDistinti();
         //--Soglia minima per creare una entity nella collezione Cognomi sul mongoDB
-        int sogliaMongo = WPref.sogliaCognomiMongo.getInt();
+        int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
         //--Soglia minima per creare una pagina sul server wiki
-        int sogliaWiki = WPref.sogliaCognomiWiki.getInt();
+        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
 
         //--Cancella tutte le entities della collezione
         deleteAll();
