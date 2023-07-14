@@ -195,9 +195,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        WResult result = appContext.getBean(StatisticheGiorni.class).esegue();
-        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
-        super.uploadStatistiche();
+        appContext.getBean(StatisticheGiorni.class).esegue();
     }
 
     /**

@@ -424,6 +424,13 @@ public abstract class Statistiche {
             durataStatistica.setValue(typeTime.durata(inizio));
         }
 
+        if (uploadTest) {
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.statistiche));
+        }
+        else {
+            logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.statistiche).usaDb());
+        }
+
         return result;
     }
 

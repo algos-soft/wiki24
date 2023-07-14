@@ -3,9 +3,11 @@ package it.algos.wiki24.backend.schedule;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.schedule.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.statistiche.*;
+import it.algos.wiki24.backend.wrapper.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +27,7 @@ public class TaskStatistiche extends VaadTask {
 
     public TaskStatistiche() {
         super.descrizioneTask = WPref.usaTaskStatistiche.getDescrizione();
-        super.typeSchedule = Wiki24Var.typeSchedule.getStatistiche();
+        super.typeSchedule = AESchedule.minuto;
         super.flagAttivazione = WPref.usaTaskStatistiche;
         super.flagPrevisione = WPref.statistichePrevisto;
     }
@@ -35,19 +37,20 @@ public class TaskStatistiche extends VaadTask {
         if (super.execute()) {
 
             //--Statistiche generali delle biografie
-//            appContext.getBean(StatisticheBio.class).upload();
+            //            appContext.getBean(StatisticheBio.class).upload();
 
             //--La statistica dei giorni comprende anche una preliminare elaborazione
-//            appContext.getBean(StatisticheGiorni.class).upload();
+            //--La statistica dei giorni comprende anche il messaggio di log sul db
+            appContext.getBean(StatisticheGiorni.class).esegue();
 
             //--La statistica degli anni comprende anche una preliminare elaborazione
-//            appContext.getBean(StatisticheAnni.class).upload();
+            //            appContext.getBean(StatisticheAnni.class).upload();
 
             //--La statistica delle attività comprende anche una preliminare elaborazione
-//            appContext.getBean(StatisticheAttivita.class).upload();
+            //            appContext.getBean(StatisticheAttivita.class).upload();
 
             //--La statistica delle nazionalità comprende anche una preliminare elaborazione
-//            appContext.getBean(StatisticheNazionalita.class).upload();
+            //            appContext.getBean(StatisticheNazionalita.class).upload();
 
             //--La statistica delle liste di nomi comprende anche una preliminare elaborazione
             appContext.getBean(StatisticheListeNomi.class).esegue();
