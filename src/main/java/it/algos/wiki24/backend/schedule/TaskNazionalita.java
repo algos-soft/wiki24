@@ -47,10 +47,10 @@ public class TaskNazionalita extends VaadTask {
         if (flagAttivazione.is()) {
             super.fixNext();
 
-            //--Statistiche
-            inizio = System.currentTimeMillis();
-            appContext.getBean(StatisticheNazionalita.class).upload();
-            loggerElabora(inizio);
+//            //--Statistiche
+//            inizio = System.currentTimeMillis();
+//            appContext.getBean(StatisticheNazionalita.class).esegue();
+//            loggerElabora(inizio);
 
             //--Upload
             inizio = System.currentTimeMillis();

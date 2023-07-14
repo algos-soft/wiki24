@@ -6,9 +6,8 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -19,33 +18,31 @@ import java.util.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Thu, 06-Jul-2023
- * Time: 14:15
+ * Date: Thu, 13-Jul-2023
+ * Time: 19:17
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class StatisticheListeNomi extends Statistiche {
+public class StatisticheListeCognomi extends Statistiche {
 
-
-
-
-    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
-        super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_LISTA_NOMI;
+        super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_LISTA_COGNOMI;
+        super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_LISTA_COGNOMI;
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaNomi;
         super.durataStatistica = WPref.statisticaNomiTime;
         super.typeTime = AETypeTime.minuti;
     }
 
-    public StatisticheListeNomi test() {
+
+    public StatisticheListeCognomi test() {
         super.wikiTitleUpload = super.wikiTitleTest;
         this.uploadTest = true;
         return this;
     }
+
 
     public WResult esegue() {
         this.elabora();
@@ -55,6 +52,7 @@ public class StatisticheListeNomi extends Statistiche {
         return esegueUpload();
     }
 
+
     /**
      * Elabora i dati
      */
@@ -62,13 +60,14 @@ public class StatisticheListeNomi extends Statistiche {
         //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
         //visto che l'elaborazione impiega più di 3 minuti
         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
-        LocalDateTime lastElaborazione = (LocalDateTime) nomeBackend.lastElaborazione.get();
+        LocalDateTime lastElaborazione = (LocalDateTime) cognomeBackend.lastElaborazione.get();
 
         lastElaborazione = lastElaborazione.plusHours(1);
         if (elaborazioneAttuale.isAfter(lastElaborazione)) {
-            nomeBackend.elabora();
+            cognomeBackend.elabora();
         }
     }
+
 
     /**
      * Recupera la lista
@@ -76,7 +75,7 @@ public class StatisticheListeNomi extends Statistiche {
     @Override
     protected void creaLista() {
         int soglia = 30;
-        lista = nomeBackend.findAllByNumBio(soglia);
+        lista = cognomeBackend.findAllByNumBio(soglia);
     }
 
 
@@ -86,14 +85,16 @@ public class StatisticheListeNomi extends Statistiche {
     @Override
     protected void creaMappa() {
         super.creaMappa();
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
         boolean supera;
 
-        for (Nome nome : (List<Nome>) lista) {
-            supera = nome.numBio > sogliaWiki;
-            mappa.put(nome.nome, MappaStatistiche.nome(nome.nome, nome.numBio, nome.paginaVoce, nome.paginaLista, supera));
+        for (Cognome cognome : (List<Cognome>) lista) {
+            supera = cognome.numBio > sogliaWiki;
+            mappa.put(cognome.cognome, MappaStatistiche.nome(cognome.cognome, cognome.numBio, cognome.paginaVoce, cognome.paginaLista, supera));
         }
     }
+
+
 
     @Override
     protected String incipit() {
@@ -101,15 +102,15 @@ public class StatisticheListeNomi extends Statistiche {
         String message;
         int cont = 0;
         String totNomi = VUOTA;
-        DistinctIterable<String> listaNomiDistinti;
+        DistinctIterable<String> listaCognomiDistinti;
 
-        String totNomiUtilizzati = textService.format(nomeBackend.count());
+        String totCognomiUtilizzati = textService.format(cognomeBackend.count());
         String totVoci = textService.format(bioBackend.count());
-        String totListe = textService.format(nomeBackend.countBySopraSoglia());
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
-        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
-        listaNomiDistinti = mongoService.getCollection(TAG_BIO).distinct("nome", String.class);
-        for (String stringa : listaNomiDistinti) {
+        String totListe = textService.format(cognomeBackend.countBySopraSoglia());
+        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
+        int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
+        listaCognomiDistinti = mongoService.getCollection(TAG_BIO).distinct("cognome", String.class);
+        for (String stringa : listaCognomiDistinti) {
             cont++;
         }
         totNomi = textService.format(cont);
@@ -117,18 +118,17 @@ public class StatisticheListeNomi extends Statistiche {
         message = String.format("Nell'enciclopedia ci sono '''%s''' voci biografiche.", totVoci);
         buffer.append(message);
         buffer.append(CAPO_HTML);
-        message = String.format("Nelle voci biografiche ci sono circa '''%s''' nomi diversi.", totNomi);
+        message = String.format("Nelle voci biografiche ci sono circa '''%s''' cognomi diversi.", totNomi);
         buffer.append(message);
         buffer.append(CAPO_HTML);
-        message = String.format("Ci sono '''%s''' pagine di liste '''Persone di nome Xxx''' con occorrenze superiori a '''%d'''.", totListe, sogliaWiki);
+        message = String.format("Ci sono '''%s''' pagine di liste '''Persone di cognome Xxx''' con occorrenze superiori a '''%d'''.", totListe, sogliaWiki);
         buffer.append(message);
         buffer.append(CAPO_HTML);
-        message = String.format("In questa statistica vengono elencati i nomi con occorrenze superiori a '''%d'''.", sogliaMongo);
+        message = String.format("In questa statistica vengono elencati i cognomi con occorrenze superiori a '''%d'''.", sogliaMongo);
         buffer.append(message);
 
         return buffer.toString();
     }
-
 
     protected String inizioTabella() {
         String testo = VUOTA;
@@ -150,7 +150,7 @@ public class StatisticheListeNomi extends Statistiche {
         buffer.append(CAPO);
 
         buffer.append(color);
-        buffer.append("Nome");
+        buffer.append("Cognome");
         buffer.append(CAPO);
 
         buffer.append(color);
@@ -215,3 +215,4 @@ public class StatisticheListeNomi extends Statistiche {
     }
 
 }
+

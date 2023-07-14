@@ -28,7 +28,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+//@Tag("statistiche")
 @DisplayName("StatisticheListeNomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StatisticheListeNomiTest extends AlgosTest {

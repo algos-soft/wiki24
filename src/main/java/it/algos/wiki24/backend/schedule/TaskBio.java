@@ -45,7 +45,7 @@ public class TaskBio extends VaadTask {
 
             downloadService.cicloCorrente();
 
-            appContext.getBean(StatisticheBio.class).upload();
+//            appContext.getBean(StatisticheBio.class).upload();
 
             super.loggerNoTask();
         }

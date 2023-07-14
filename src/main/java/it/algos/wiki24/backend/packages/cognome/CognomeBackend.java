@@ -1,17 +1,24 @@
 package it.algos.wiki24.backend.packages.cognome;
 
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.cognomecategoria.*;
+import it.algos.wiki24.backend.packages.cognomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
+import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -33,6 +40,11 @@ import java.util.stream.*;
 public class CognomeBackend extends WikiBackend {
 
 
+    @Autowired
+    public CognomeCategoriaBackend cognomeCategoriaBackend;
+
+    @Autowired
+    public CognomeIncipitBackend cognomeIncipitBackend;
 
     public CognomeBackend() {
         super(Cognome.class);
@@ -55,6 +67,21 @@ public class CognomeBackend extends WikiBackend {
         this.unitaMisuraUpload = AETypeTime.minuti;
     }
 
+    public Cognome creaIfNotExist(final String keyPropertyValue, int numBio, boolean categoria, boolean modulo, boolean mongo) {
+        return creaIfNotExist(keyPropertyValue, numBio, categoria, modulo, mongo, VUOTA, VUOTA);
+    }
+
+    public Cognome creaIfNotExist(final String keyPropertyValue, int numBio, boolean categoria, boolean modulo, boolean mongo, String paginaVoce, String paginaLista) {
+        Cognome newCognome;
+
+        if (textService.isEmpty(keyPropertyValue) || isExistByKey(keyPropertyValue)) {
+            return null;
+        }
+        else {
+            newCognome = newEntity(keyPropertyValue, numBio, categoria, modulo, mongo, paginaVoce, paginaLista);
+            return newCognome != null ? insert(newCognome) : null;
+        }
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -64,26 +91,30 @@ public class CognomeBackend extends WikiBackend {
      * @return la nuova entity appena creata (non salvata)
      */
     public Cognome newEntity() {
-        return newEntity(VUOTA, 0, false);
+        return newEntity(VUOTA);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     * Usa il @Builder di Lombok <br>
-     * Eventuali regolazioni iniziali delle property <br>
-     * All properties <br>
-     *
-     * @param cognomeTxt   (obbligatorio, unico)
-     * @param numBio       (obbligatorio)
-     * @param esisteLista (facoltativo)
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public Cognome newEntity(final String cognomeTxt, int numBio, boolean esisteLista) {
+    @Override
+    public Cognome newEntity(final String keyPropertyValue) {
+        return newEntity(keyPropertyValue, 0, false, false, false, VUOTA, VUOTA);
+    }
+
+    public Cognome newEntity(final String keyPropertyValue, int numBio, boolean categoria, boolean modulo, boolean mongo, String paginaVoce, String paginaLista) {
         Cognome newEntityBean = Cognome.builder()
-                .cognome(textService.isValid(cognomeTxt) ? cognomeTxt : null)
+                .cognome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .numBio(numBio)
-                .esisteLista(esisteLista)
+                .categoria(categoria)
+                .modulo(modulo)
+                .mongo(mongo)
+                .paginaVoce(textService.isValid(paginaVoce) ? paginaVoce : null)
+                .paginaLista(textService.isValid(paginaLista) ? PATH_NOMI + paginaLista : null)
+                .superaSoglia(false)
+                .esisteLista(false)
                 .build();
 
         return (Cognome) super.fixKey(newEntityBean);
@@ -105,6 +136,20 @@ public class CognomeBackend extends WikiBackend {
         return (Cognome) super.findByProperty(propertyName, propertyValue);
     }
 
+    @Override
+    public Cognome save(AEntity entity) {
+        return (Cognome) super.save(entity);
+    }
+
+    @Override
+    public Cognome insert(AEntity entity) {
+        return (Cognome) super.insert(entity);
+    }
+
+    @Override
+    public Cognome update(AEntity entity) {
+        return (Cognome) super.update(entity);
+    }
 
     @Override
     public List<Cognome> findAllNoSort() {
@@ -127,12 +172,8 @@ public class CognomeBackend extends WikiBackend {
     }
 
     public List<Cognome> findAll() {
-        return this.findAllNoSort();
-//        List<Cognome> lista = super.findAllSortCorrente();
-//
-//        return lista.stream()
-//                .sorted(Comparator.comparing(c -> c.cognome))
-//                .collect(Collectors.toList());
+        List<Cognome> lista = super.findAll();
+        return lista.stream().sorted(Comparator.comparing(cognome -> ((Cognome) cognome).cognome)).collect(Collectors.toList());
     }
 
     public List<Cognome> findAllSortNumBio() {
@@ -144,6 +185,16 @@ public class CognomeBackend extends WikiBackend {
         Collections.reverse(lista);
 
         return lista;
+    }
+
+    public List<Cognome> findAllByNumBio(int soglia) {
+        Collator collator = Collator.getInstance(Locale.getDefault());
+
+        return findAllNoSort()
+                .stream()
+                .filter(cognome -> cognome.numBio > soglia)
+                .sorted(Comparator.comparing(Cognome::getCognome, collator))
+                .collect(Collectors.toList());
     }
 
     public List<Cognome> findAllStampabili() {
@@ -226,6 +277,161 @@ public class CognomeBackend extends WikiBackend {
                 .collect(Collectors.toList());
     }
 
+    public int countBySopraSoglia() {
+        Query query = new Query();
+        String keyProperty = "superaSoglia";
+        Long lungo;
+        query.addCriteria(Criteria.where(keyProperty).is(true));
+        lungo = mongoService.mongoOp.count(query, Cognome.class);
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+
+    /**
+     * ResetOnlyEmpty -> Download. <br>
+     * Download -> Recupera una lista di nomi distinti dalle biografie. Crea una entity se bio>%s. <br>
+     * Download -> Esegue un Download del Template:Incipit. Aggiunge i valori alla lista. <br>
+     * Download -> Aggiunge alla lista i nomi doppi. <br>
+     * Elabora -> Calcola le voci biografiche che usano ogni singolo nome e la effettiva presenza della paginaLista <br>
+     * Upload -> Previsto per tutte le liste di nomi con bio>%s. <br>
+     */
+    @Override
+    public AResult resetDownload() {
+        AResult result = super.resetDownload();
+        String message;
+
+        message = String.format("Creazione completa cognomi delle biografie. Circa %d secondi.", WPref.downloadCognomiTime.getInt());
+        System.out.println(message);
+
+        //--Cancella tutte le entities della collezione
+        deleteAll();
+
+        //--Cognomi 'categoria'. Ricavati dalla categoria su wiki
+        result = addCognomiCategoria(result);
+
+        //--Cognomi 'incipit'. Ricavati dal Modulo sul server Wiki.
+        result = addCognomiModulo(result);
+
+        //--Cognomi 'semplici'. Ricavati dalla collection Bio sul server mongo.
+        result = estraeCognomiDistinti(result);
+
+        result.fine();
+        result.valido(true).eseguito();
+
+        return super.fixResetDownload(result);
+
+    }// end of method
+
+
+    /**
+     * Legge i valori dalla tavola NomeCategoria
+     *
+     * @return entities create
+     */
+    public AResult addCognomiCategoria(AResult result) {
+        Cognome entityBean;
+        List<AEntity> lista = new ArrayList<>();
+        List<CognomeCategoria> listaCognomiCategorie = null;
+
+        //--Controllo e recupero di NomiCategoria
+        cognomeCategoriaBackend.resetDownload();
+        listaCognomiCategorie = cognomeCategoriaBackend.findAll();
+
+        if (listaCognomiCategorie != null) {
+            for (CognomeCategoria cognomeCategoria : listaCognomiCategorie) {
+                entityBean = creaIfNotExist(cognomeCategoria.cognome, 0, true, false, false, cognomeCategoria.linkPagina, null);
+                result.setValido(fixLista(result, entityBean, cognomeCategoria.cognome));
+            }
+        }
+        else {
+            message = String.format("Mancano i CognomiCategoria");
+            logService.warn(new WrapLog().message(message));
+        }
+
+        return super.fixResult(result, lista);
+    }
+
+
+    /**
+     * Legge i valori dalla tavola NomeModulo
+     *
+     * @return lista dei valori
+     */
+    public AResult addCognomiModulo(AResult result) {
+        Cognome entityBean;
+        List<AEntity> lista = new ArrayList<>();
+        List<CognomeIncipit> listaCognomiIncipit = null;
+
+        //--Controllo e recupero di NomiDoppi
+        cognomeIncipitBackend.resetDownload();
+        listaCognomiIncipit = cognomeIncipitBackend.findAll();
+
+        if (listaCognomiIncipit != null) {
+            for (CognomeIncipit cognomeIncipit : listaCognomiIncipit) {
+                if (isExistByKey(cognomeIncipit.cognome)) {
+                    entityBean = findByKey(cognomeIncipit.cognome);
+                    entityBean.modulo = true;
+                    if (entityBean.paginaLista == null) {
+                        entityBean.paginaLista = cognomeIncipit.linkPagina;
+                    }
+                    save(entityBean);
+                }
+                else {
+                    entityBean = creaIfNotExist(cognomeIncipit.cognome, 0, false, true, false, cognomeIncipit.linkPagina, null);
+                    result.setValido(fixLista(result, entityBean, cognomeIncipit.cognome));
+                }
+            }
+        }
+        else {
+            message = String.format("Mancano i NomiModulo");
+            logService.warn(new WrapLog().message(message));
+        }
+
+        return super.fixResult(result, lista);
+    }
+
+
+    /**
+     * @return lista dei valori
+     */
+    public AResult estraeCognomiDistinti(AResult result) {
+        DistinctIterable<String> listaCognomiMongo = mongoService.getCollection(TAG_BIO).distinct("cognome", String.class);
+        Cognome entityBean;
+        int numBio;
+        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        List<AEntity> lista = new ArrayList<>();
+        boolean debug = Pref.debug.is();
+
+        if (listaCognomiMongo == null) {
+            message = "listaCognomiMongo is null";
+            logService.warn(new WrapLog().message(message));
+            return result.errorMessage(message);
+        }
+
+        for (String cognomeMongo : listaCognomiMongo) {
+            if (isExistByKey(cognomeMongo)) {
+                entityBean = findByKey(cognomeMongo);
+                entityBean.mongo = true;
+                save(entityBean);
+            }
+            else {
+                numBio = bioBackend.countCognome(cognomeMongo);
+                if (numBio > sogliaMongo) {
+                    entityBean = creaIfNotExist(cognomeMongo, 0, false, true, false, null, null);
+                    result.setValido(fixLista(result, entityBean, cognomeMongo));
+                }
+                else {
+                    if (debug) {
+                        message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity di %s su mongo", numBio, cognomeMongo, Cognome.class.getSimpleName());
+                        logService.info(new WrapLog().message(message).type(AETypeLog.resetForcing));
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Cancella i cognomi esistenti <br>
      * Crea tutti i cognomi <br>
@@ -234,8 +440,7 @@ public class CognomeBackend extends WikiBackend {
      * Non registra la entity col cognomi mancante <br>
      */
     public WResult elabora() {
-        long inizio = System.currentTimeMillis();
-        WResult result = null;
+        WResult result = super.elabora();
         int tot = 0;
         int cont = 0;
         List<String> cognomi = bioBackend.findAllCognomiDistinti();
@@ -254,7 +459,7 @@ public class CognomeBackend extends WikiBackend {
         }
 
         logService.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
-        return super.fixElaboraMinuti(result, inizio, "cognomi");
+        return super.fixElaboraMinuti(result, result.getInizio(), "cognomi");
         //        logger.info("Creazione di " + text.format(cont) + " cognomi su un totale di " + text.format(tot) + " cognomi distinti. Tempo impiegato: " + date.deltaText(inizio));
     }
 
@@ -267,7 +472,7 @@ public class CognomeBackend extends WikiBackend {
         long numBio = bioBackend.countCognome(cognomeTxt);
 
         if (numBio >= sogliaMongo) {
-//            cognome = creaIfNotExist(cognomeTxt, (int) numBio, esistePagina(cognomeTxt));
+            //            cognome = creaIfNotExist(cognomeTxt, (int) numBio, esistePagina(cognomeTxt));
         }
 
         return cognome != null;
@@ -286,7 +491,7 @@ public class CognomeBackend extends WikiBackend {
      * Scrive una pagina definitiva sul server wiki <br>
      */
     public WResult uploadPagina(String cognomeTxt) {
-        return appContext.getBean(UploadCognomi.class).upload(cognomeTxt);
+        return appContext.getBean(UploadCognomi.class, cognomeTxt).esegue();
     }
 
 }// end of crud backend class

@@ -34,7 +34,6 @@ import com.vaadin.flow.component.textfield.TextField;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NomeCategoriaBackendTest extends WikiBackendTest {
 
-    @InjectMocks
     private NomeCategoriaBackend backend;
 
     private List<NomeCategoria> listaBeans;

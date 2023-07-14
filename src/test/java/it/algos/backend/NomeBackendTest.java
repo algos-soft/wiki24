@@ -58,7 +58,18 @@ public class NomeBackendTest extends WikiBackendTest {
         listaBackendClazz = classService.getAllBackend();
     }
 
+
     @Test
+    //--Lentissimo
+    @Order(14)
+    @DisplayName("14 - resetForcing")
+    protected void resetForcing() {
+        System.out.println("14 - resetForcing");
+        System.out.println(VUOTA);
+    }
+
+    //    @Test
+    //--Circa 3 minuti
     @Order(15)
     @DisplayName("15 - elabora (solo su wiki)")
     protected void elabora() {

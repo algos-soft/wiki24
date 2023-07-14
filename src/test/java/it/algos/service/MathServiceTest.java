@@ -176,6 +176,16 @@ public class MathServiceTest extends AlgosTest {
         assertNotNull(ottenuto);
         assertEquals(previsto, ottenuto);
         printPer(dividendoInt, divisoreInt, ottenuto);
+
+
+        System.out.println(VUOTA);
+        dividendoInt = 1476;
+        divisoreInt = 464908;
+        previsto = "0,32%";
+        ottenuto = service.percentualeTxt(dividendoInt, divisoreInt);
+        assertNotNull(ottenuto);
+        assertEquals(previsto, ottenuto);
+        printPer(dividendoInt, divisoreInt, ottenuto);
     }
 
 

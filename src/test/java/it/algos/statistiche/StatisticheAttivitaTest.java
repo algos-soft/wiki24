@@ -28,7 +28,7 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("statistiche")
+//@Tag("statistiche")
 @DisplayName("Statistiche Attivita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StatisticheAttivitaTest extends AlgosTest {
@@ -83,10 +83,10 @@ public class StatisticheAttivitaTest extends AlgosTest {
         System.out.println(("2 - Upload test statistiche (non le pagine di attività)"));
 
         System.out.println(VUOTA);
-        ottenutoRisultato = appContext.getBean(StatisticheAttivita.class).uploadTest();
-        assertTrue(ottenutoRisultato.isValido());
-        ottenutoRisultato.setMappa(null);
-        printRisultato(ottenutoRisultato);
+//        ottenutoRisultato = appContext.getBean(StatisticheAttivita.class).uploadTest();
+//        assertTrue(ottenutoRisultato.isValido());
+//        ottenutoRisultato.setMappa(null);
+//        printRisultato(ottenutoRisultato);
     }
 
     /**

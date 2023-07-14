@@ -1,11 +1,14 @@
 package it.algos.wiki24.backend.packages.giorno;
 
+import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -49,6 +52,8 @@ public class GiornoWikiView extends WikiView {
     @Autowired
     public MeseBackend meseBackend;
 
+    private ComboBox comboMese;
+
     /**
      * Costruttore @Autowired (facoltativo) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -71,8 +76,8 @@ public class GiornoWikiView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
-        super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti");
+        super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "pageNati", "pageMorti");
+        super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "pageNati", "pageMorti");
 
         super.sortOrder = Sort.by(Sort.Direction.ASC, "ordine");
         super.usaRowIndex = false;
@@ -108,14 +113,9 @@ public class GiornoWikiView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Anchor anchor1 = new Anchor(PATH_WIKI + "Categoria:Liste di nati per giorno", "Nati");
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor2 = new Anchor(PATH_WIKI + "Categoria:Liste di morti per giorno", "Morti");
-        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor3 = new Anchor(PATH_WIKI + PATH_STATISTICHE_GIORNI, STATISTICHE);
-        anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        Anchor anchor1 = WAnchor.build("Categoria:Liste di nati per giorno", "Cat. Nati");
+        Anchor anchor2 = WAnchor.build("Categoria:Liste di morti per giorno", "Cat. Morti");
+        Anchor anchor3 = WAnchor.build(PATH_STATISTICHE_GIORNI, STATISTICHE);
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = String.format("Tabella dei giorni dell'anno recuperati dalla tabella 'Giorno' di %s", VaadVar.frameworkVaadin24);
@@ -136,31 +136,47 @@ public class GiornoWikiView extends WikiView {
 
     }
 
-
     /**
-     * autoCreateColumns=false <br>
-     * Crea le colonne normali indicate in this.colonne <br>
+     * Componenti aggiuntivi oltre quelli base <br>
+     * Tipicamente bottoni di selezione/filtro <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    protected void addColumnsOneByOne() {
-        super.addColumnsOneByOne();
+    protected void fixBottoniTopSpecifici() {
+        super.fixBottoniTopSpecifici();
 
-        grid.addColumn(new ComponentRenderer<>(entity -> {
-            String wikiTitle = ((GiornoWiki) entity).pageNati;
-            Anchor anchor = new Anchor(PATH_WIKI + wikiTitle, wikiTitle);
-            anchor.getElement().getStyle().set("color", "green");
-            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-            return new Span(anchor);
-        })).setHeader("Nati").setKey("pageNati").setFlexGrow(0).setWidth("14em");
+        comboMese = new ComboBox<>();
+        comboMese.setPlaceholder("Mese");
+        comboMese.getElement().setProperty("title", "Filtro di selezione");
+        comboMese.setClearButtonVisible(true);
+        comboMese.setItems(meseBackend.findAllSortCorrente());
+        comboMese.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(comboMese);
 
-        grid.addColumn(new ComponentRenderer<>(entity -> {
-            String wikiTitle = ((GiornoWiki) entity).pageMorti;
-            Anchor anchor = new Anchor(PATH_WIKI + wikiTitle, wikiTitle);
-            anchor.getElement().getStyle().set("color", "green");
-            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-            return new Span(anchor);
-        })).setHeader("Morti").setKey("pageMorti").setFlexGrow(0).setWidth("14em");
+    }
+
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<GiornoWiki> items = (List) super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
+
+        if (comboMese != null && comboMese.getValue() != null) {
+            if (comboMese.getValue() instanceof Mese mese) {
+                items = items.stream().filter(gio -> gio.mese.nome.equals(mese.nome)).toList();
+            }
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
     }
 
 
@@ -179,7 +195,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        WResult result = appContext.getBean(StatisticheGiorni.class).upload();
+        WResult result = appContext.getBean(StatisticheGiorni.class).esegue();
         logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
         super.uploadStatistiche();
     }
@@ -240,36 +256,36 @@ public class GiornoWikiView extends WikiView {
     @Override
     public void uploadAll() {
         WResult result = WResult.errato();
-//        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
-//        List<String> giorni;
-//        String message;
-//        int modificatiNati;
-//        int modificatiMorti;
-//
-//        List<Mese> mesi = meseBackend.findAllSortCorrente();
-//        for (Mese mese : mesi) {
-//            giorni = backend.findAllForNomeByMese(mese);
-//            modificatiNati = 0;
-//            modificatiMorti = 0;
-//            for (String nomeGiorno : giorni.subList(4,7)) {
-//                result = appContext.getBean(UploadGiorni.class).nascita().upload(nomeGiorno);
-//
-//                if (result.isValido() && result.isModificata()) {
-//                    modificatiNati++;
-//                }
-//
-//                result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
-//                if (result.isValido() && result.isModificata()) {
-//                    modificatiMorti++;
-//                }
-//            }
-//
-//            if (Pref.debug.is()) {
-//                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
-//                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
-//                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
-//            }
-//        }
+        //        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
+        //        List<String> giorni;
+        //        String message;
+        //        int modificatiNati;
+        //        int modificatiMorti;
+        //
+        //        List<Mese> mesi = meseBackend.findAllSortCorrente();
+        //        for (Mese mese : mesi) {
+        //            giorni = backend.findAllForNomeByMese(mese);
+        //            modificatiNati = 0;
+        //            modificatiMorti = 0;
+        //            for (String nomeGiorno : giorni.subList(4,7)) {
+        //                result = appContext.getBean(UploadGiorni.class).nascita().upload(nomeGiorno);
+        //
+        //                if (result.isValido() && result.isModificata()) {
+        //                    modificatiNati++;
+        //                }
+        //
+        //                result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
+        //                if (result.isValido() && result.isModificata()) {
+        //                    modificatiMorti++;
+        //                }
+        //            }
+        //
+        //            if (Pref.debug.is()) {
+        //                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
+        //                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
+        //                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
+        //            }
+        //        }
 
         appContext.getBean(UploadGiorni.class).uploadAll();
         super.fixUpload(result.getInizio(), "dei giorni");

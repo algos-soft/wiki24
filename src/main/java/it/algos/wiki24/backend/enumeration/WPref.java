@@ -189,7 +189,7 @@ public enum WPref implements AIGenPref {
     linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
     linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
     linkParagrafiNomi("linkParagrafiNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
-    linkCognomi("linkCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
+    linkParagrafiCognomi("linkParagrafiCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
 
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),
     usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false),

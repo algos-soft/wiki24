@@ -81,8 +81,17 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", UploadNomi.class.getSimpleName()));
-        System.out.println("Non previsto");
+        istanza = new UploadNomi();
+        assertNotNull(istanza);
+        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita SENZA usare SpringBoot.");
+        System.out.println("NON passa da @PostConstruct().");
+        System.out.println("@Autowired NON funziona.");
+        assertNotNull(istanza);
+        assertNull(istanza.wikiTitleUpload);
+        assertNull(istanza.wikiBackend);
     }
 
     @Test
@@ -92,14 +101,17 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        try {
-            istanza = appContext.getBean(UploadNomi.class);
-        } catch (Exception unErrore) {
-            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
-        }
+        istanza = appContext.getBean(UploadNomi.class);
+
+        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
+        System.out.println("PASSA da @PostConstruct().");
+        System.out.println("@Autowired dovrebbe funzionare.");
         assertNotNull(istanza);
-        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", UploadNomi.class.getSimpleName()));
-        System.out.println("L'istanza viene creata senza parametri significativi. Serve solo per il metodo uploadAll()");
+        assertNotNull(istanza.wikiTitleUpload);
+        assertNotNull(istanza.wikiBackend);
     }
 
     //    @Test

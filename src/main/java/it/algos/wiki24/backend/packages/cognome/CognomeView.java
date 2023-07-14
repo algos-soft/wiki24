@@ -1,7 +1,9 @@
 package it.algos.wiki24.backend.packages.cognome;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
@@ -46,6 +48,16 @@ public class CognomeView extends WikiView {
     //--per eventuali metodi specifici
     private CognomeBackend backend;
 
+    private IndeterminateCheckbox boxCategoria;
+
+    private IndeterminateCheckbox boxModulo;
+
+    private IndeterminateCheckbox boxMongo;
+
+    private IndeterminateCheckbox boxSuperaSoglia;
+
+    private IndeterminateCheckbox boxEsisteLista;
+
     /**
      * Costruttore @Autowired (facoltativo) <br>
      * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
@@ -68,24 +80,21 @@ public class CognomeView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("cognome", "numBio");
-        super.formPropertyNamesList = Arrays.asList("cognome", "numBio");
-        super.sortOrder = Sort.by(Sort.Direction.DESC, "numBio");
+        super.gridPropertyNamesList = Arrays.asList("cognome", "numBio", "categoria",  "modulo", "mongo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.formPropertyNamesList = Arrays.asList("cognome", "numBio", "categoria",  "modulo", "mongo", "superaSoglia", "paginaVoce", "paginaLista", "esisteLista");
+        super.sortOrder = super.sortOrder != null ? super.sortOrder : Sort.by(Sort.Direction.ASC, "cognome");
 
-        super.lastElaborazione = WPref.elaboraCognomi;
-        super.durataElaborazione = WPref.elaboraCognomiTime;
-        super.lastUpload = WPref.uploadCognomi;
-        super.durataUpload = WPref.uploadCognomiTime;
-        super.nextUpload = WPref.uploadCognomiPrevisto;
-
-        super.usaBottoneDownload = false;
-        super.usaBottoneUploadStatistiche = false;
-        super.usaBottonePaginaWiki = false;
-        super.usaBottoneEdit = false;
-        super.usaBottoneUploadPagina = true;
+        super.usaBottoneReset = false;
+        super.usaReset = true;
+        super.usaBottoneDeleteAll = false;
         super.usaBottoneElabora = true;
-
-        super.fixPreferenzeBackend();
+        super.usaBottoneDeleteEntity = false;
+        super.usaBottoneUploadAll = true;
+        super.usaBottoneUploadPagina = true;
+        super.usaBottoneUploadStatistiche = true;
+        super.usaBottoneTest = true;
+        super.usaInfoDownload = true;
+        super.usaBottoneEdit = true;
     }
 
     /**
@@ -135,16 +144,6 @@ public class CognomeView extends WikiView {
         message = String.format("Upload%sPrevisto per tutte le liste di cognomi con numBio>%s.", FORWARD, sogliaWiki);
         addSpan(ASpan.text(message).verde());
 
-//        message = "Sono elencati i cognomi.";
-//        message += " BioBot crea una lista di biografati una volta superate le 50 biografie che usano quel cognome.";
-//        addSpan(ASpan.text(message).verde());
-
-
-//        message = String.format("Elabora crea sul database locale mongo tutti i cognomi usati da almeno %d voci.", numMongo);
-//        addSpan(ASpan.text(message).rosso());
-//        message = String.format("Upload crea sul server wiki le pagine per tutti i cognomi usati da almeno %d voci.", numMWiki);
-//        addSpan(ASpan.text(message).rosso());
-
         message = String.format("Upload liste%sEseguito da %s", FORWARD, infoTask);
         addSpan(ASpan.text(message).blue().small());
         message = "A) Visualizzazione della lista di paragrafi in testa pagina: forceToc oppure noToc -> default WPref.typeTocNomi.";
@@ -160,77 +159,74 @@ public class CognomeView extends WikiView {
         addSpan(ASpan.text(message).rosso().small());
     }
 
+    protected void fixBottoniTopSpecifici() {
 
-    /**
-     * autoCreateColumns=false <br>
-     * Crea le colonne normali indicate in this.colonne <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void addColumnsOneByOne() {
-        super.addColumnsOneByOne();
+        boxCategoria = new IndeterminateCheckbox();
+        boxCategoria.setLabel("Categorie");
+        boxCategoria.setIndeterminate(true);
+        boxCategoria.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutCategoria = new HorizontalLayout(boxCategoria);
+        layoutCategoria.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutCategoria);
 
-        Grid.Column pagina = grid.addColumn(new ComponentRenderer<>(entity -> {
-            String wikiTitle = textService.primaMaiuscola(((Cognome) entity).cognome);
-            Anchor anchor = new Anchor(PATH_WIKI + PATH_COGNOMI + wikiTitle, wikiTitle);
-            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-            if (((Cognome) entity).esisteLista) {
-                anchor.getElement().getStyle().set("color", "green");
-            }
-            else {
-                anchor.getElement().getStyle().set("color", "red");
-            }
-            return new Span(anchor);
-        })).setHeader("pagina").setKey("pagina").setFlexGrow(0).setWidth("18em");
+        boxModulo = new IndeterminateCheckbox();
+        boxModulo.setLabel("Modulo");
+        boxModulo.setIndeterminate(true);
+        boxModulo.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutIncipit = new HorizontalLayout(boxModulo);
+        layoutIncipit.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutIncipit);
 
-        //        Grid.Column daCancellare = grid.addColumn(new ComponentRenderer<>(entity -> {
-        //            String link = "https://it.wikipedia.org/w/index.php?title=Progetto:Biografie/Attivit%C3%A0/";
-        //            link += textService.primaMaiuscola(((Attivita) entity).pluraleLista);
-        //            link += TAG_DELETE;
-        //            Label label = new Label("no");
-        //            label.getElement().getStyle().set("color", "green");
-        //            Anchor anchor = new Anchor(link, "del");
-        //            anchor.getElement().getStyle().set("color", "red");
-        //            anchor.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-        //            Span span = new Span(anchor);
-        //
-        //            if (((Attivita) entity).esistePaginaLista && !((Attivita) entity).superaSoglia) {
-        //                return span;
-        //            }
-        //            else {
-        //                return label;
-        //            }
-        //        })).setHeader("X").setKey("cancella").setFlexGrow(0).setWidth("8em");
+        boxMongo = new IndeterminateCheckbox();
+        boxMongo.setLabel("Mongo");
+        boxMongo.setIndeterminate(true);
+        boxMongo.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutMongo = new HorizontalLayout(boxMongo);
+        layoutMongo.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutMongo);
 
-        Grid.Column cognome = grid.getColumnByKey("cognome");
-        Grid.Column numBio = grid.getColumnByKey("numBio");
+        boxSuperaSoglia = new IndeterminateCheckbox();
+        boxSuperaSoglia.setLabel("Soglia");
+        boxSuperaSoglia.setIndeterminate(true);
+        boxSuperaSoglia.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutSoglia = new HorizontalLayout(boxSuperaSoglia);
+        layoutSoglia.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutSoglia);
 
-        grid.setColumnOrder(cognome, pagina, numBio);
+        boxEsisteLista = new IndeterminateCheckbox();
+        boxEsisteLista.setLabel("Lista");
+        boxEsisteLista.setIndeterminate(true);
+        boxEsisteLista.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layoutLista = new HorizontalLayout(boxEsisteLista);
+        layoutLista.setAlignItems(Alignment.CENTER);
+        topPlaceHolder.add(layoutLista);
+
+        this.add(topPlaceHolder2);
     }
+
+
 
 
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
-        long inizio = System.currentTimeMillis();
-        List<Cognome> items = backend.findAllSortCorrente();
-        logger.info(new WrapLog().exception(new AlgosException(String.format("Items %s", dateService.deltaText(inizio)))));
+        List<Cognome> items = (List) super.sincroFiltri();
 
-        final String textCognome = searchField != null ? searchField.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textCognome)) {
-            items = items
-                    .stream()
-                    .filter(cognome -> cognome.cognome != null ? cognome.cognome.matches("^(?i)" + textCognome + ".*$") : false)
-                    .toList();
+        if (boxCategoria != null && !boxCategoria.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.categoria == boxCategoria.getValue()).toList();
         }
-        else {
-            if (textCognome.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(cognome -> cognome.cognome == null)
-                        .toList();
-            }
+        if (boxModulo != null && !boxModulo.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.modulo == boxModulo.getValue()).toList();
+        }
+        if (boxMongo != null && !boxMongo.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.mongo == boxMongo.getValue()).toList();
+        }
+        if (boxSuperaSoglia != null && !boxSuperaSoglia.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.superaSoglia == boxSuperaSoglia.getValue()).toList();
+        }
+        if (boxEsisteLista != null && !boxEsisteLista.isIndeterminate()) {
+            items = items.stream().filter(cognome -> cognome.esisteLista == boxEsisteLista.getValue()).toList();
         }
 
         if (items != null) {
@@ -241,6 +237,7 @@ public class CognomeView extends WikiView {
 
         return (List) items;
     }
+
 
     /**
      * Scrive una pagina definitiva sul server wiki <br>

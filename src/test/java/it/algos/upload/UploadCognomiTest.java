@@ -1,15 +1,14 @@
-package it.algos.liste;
+package it.algos.upload;
 
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.params.*;
-import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -17,14 +16,12 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
-import java.util.stream.*;
-
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 21-Jun-2023
- * Time: 17:33
+ * Date: Thu, 13-Jul-2023
+ * Time: 11:25
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -32,29 +29,17 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("liste")
-@DisplayName("ListaCognomi")
+@Tag("upload")
+@DisplayName("Cognomi upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaCognomiTest extends WikiTest {
+public class UploadCognomiTest extends WikiTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private ListaCognomi istanza;
+    private UploadCognomi istanza;
 
-    //--cognome
-    protected static Stream<Arguments> COGNOMI() {
-        return Stream.of(
-                Arguments.of(VUOTA),
-                Arguments.of("Abba"),
-                Arguments.of("Abbott"),
-                Arguments.of("Camweron"),
-                Arguments.of("Cameron"),
-                Arguments.of("cameron"),
-                Arguments.of("Rossi")
-        );
-    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -87,9 +72,17 @@ public class ListaCognomiTest extends WikiTest {
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = new ListaCognomi();
+        istanza = new UploadCognomi();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita SENZA usare SpringBoot.");
+        System.out.println("NON passa da @PostConstruct().");
+        System.out.println("@Autowired NON funziona.");
+        assertNotNull(istanza);
+        assertNull(istanza.wikiTitleUpload);
+        assertNull(istanza.wikiBackend);
     }
 
     @Test
@@ -99,36 +92,37 @@ public class ListaCognomiTest extends WikiTest {
         System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(ListaCognomi.class);
-        assertNotNull(istanza);
+        istanza = appContext.getBean(UploadCognomi.class);
+
         System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
+        System.out.println("PASSA da @PostConstruct().");
+        System.out.println("@Autowired dovrebbe funzionare.");
+        assertNotNull(istanza);
+        assertNotNull(istanza.wikiTitleUpload);
+        assertNotNull(istanza.wikiBackend);
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @Test
     @Order(3)
-    @DisplayName("3 - Lista bio di vari cognomi")
-        //--nome
-    void listaBio(final String cognome) {
-        System.out.println("3- Lista bio di vari cognomi");
-        sorgente = cognome;
+    @DisplayName("3 - Upload test di un nome con noToc")
+    void uploadNoToc() {
+        System.out.println("3 - Upload test di un nome con noToc");
+        System.out.println(VUOTA);
 
-        if (textService.isEmpty(cognome)) {
-            return;
-        }
+        sorgente = "Abbott";
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
 
-        listBio =  appContext.getBean(ListaCognomi.class,sorgente).listaBio();
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista di piccole dimensioni"));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
 
-        if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano il cognome %s", listBio.size(), sorgente);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printBioLista(listBio);
-        }
-        else {
-            message = "La listBio è nulla";
-            System.out.println(message);
-        }
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
     }
 
     /**

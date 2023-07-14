@@ -659,20 +659,20 @@ public class StatisticheAttivita extends Statistiche {
     }
 
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload() {
-        super.prepara();
-        return super.upload(PATH_ATTIVITA);
-    }
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult uploadTest() {
-        super.prepara();
-        return super.upload(UPLOAD_TITLE_DEBUG + PATH_ATTIVITA);
-    }
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult upload() {
+//        super.prepara();
+//        return super.upload(PATH_ATTIVITA);
+//    }
+//
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult uploadTest() {
+//        super.prepara();
+//        return super.upload(UPLOAD_TITLE_DEBUG + PATH_ATTIVITA);
+//    }
 
 }

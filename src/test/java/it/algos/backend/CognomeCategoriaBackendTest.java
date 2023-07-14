@@ -29,13 +29,12 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
+@Tag("cognomibackend")
 @DisplayName("CognomeCategoriaBackend")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CognomeCategoriaBackendTest extends WikiBackendTest {
 
 
-    @InjectMocks
     private CognomeCategoriaBackend backend;
 
 

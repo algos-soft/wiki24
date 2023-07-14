@@ -728,20 +728,23 @@ public class WikiUtilityView extends UtilityView {
         super.fineDebug();
     }
 
+    @Deprecated
     public void uploadStatisticheGiorni() {
         super.inizioDebug();
 
         logger.info(new WrapLog().message("Utility: test di upload per le statistiche dei Giorni.").type(AETypeLog.utility));
-        appContext.getBean(StatisticheGiorni.class).uploadTest();
+//        appContext.getBean(StatisticheGiorni.class).uploadTest();
 
         super.fineDebug();
     }
 
-    public void uploadStatisticheAnni() {
+
+   @Deprecated
+   public void uploadStatisticheAnni() {
         super.inizioDebug();
 
         logger.info(new WrapLog().message("Utility: test di upload per le statistiche degli Anni.").type(AETypeLog.utility));
-        appContext.getBean(StatisticheAnni.class).uploadTest();
+//        appContext.getBean(StatisticheAnni.class).uploadTest();
 
         super.fineDebug();
     }

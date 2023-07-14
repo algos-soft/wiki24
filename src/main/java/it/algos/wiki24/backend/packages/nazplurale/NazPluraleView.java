@@ -178,9 +178,9 @@ public class NazPluraleView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        WResult result = appContext.getBean(StatisticheNazionalita.class).upload();
-        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
-        super.uploadStatistiche();
+//        WResult result = appContext.getBean(StatisticheNazionalita.class).upload();
+//        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
+//        super.uploadStatistiche();
     }
 
     /**

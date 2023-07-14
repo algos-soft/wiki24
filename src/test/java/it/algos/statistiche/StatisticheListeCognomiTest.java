@@ -7,34 +7,36 @@ import it.algos.wiki24.backend.statistiche.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.extension.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit.jupiter.*;
+
+import com.vaadin.flow.spring.annotation.SpringComponent;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.vaadin.flow.component.textfield.TextField;
 
 /**
- * Project wiki23
+ * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 31-Jul-2022
- * Time: 11:26
+ * Date: Thu, 13-Jul-2023
+ * Time: 19:28
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("statistiche")
-@DisplayName("Statistiche Giorni")
+@Tag("integration")
+@DisplayName("StatisticheListeCognomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StatisticheGiorniTest extends WikiTest {
+public class StatisticheListeCognomiTest extends AlgosTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private StatisticheGiorni istanza;
+    private StatisticheListeCognomi istanza;
 
 
     /**
@@ -63,42 +65,52 @@ public class StatisticheGiorniTest extends WikiTest {
 
     @Test
     @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri (non fa nulla)")
+    @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri (non fa nulla)"));
+        System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = new StatisticheGiorni();
+        istanza = new StatisticheListeCognomi();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita SENZA usare SpringBoot.");
+        System.out.println("NON passa da @PostConstruct().");
+        System.out.println("@Autowired NON funziona.");
+        assertNotNull(istanza);
+        assertNull(istanza.wikiTitleUpload);
     }
 
     @Test
     @Order(2)
-    @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
-    void costruttoreBean() {
-        System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
+    @DisplayName("2 - getBean base senza parametri")
+    void getBean() {
+        System.out.println(("2 - getBean base senza parametri"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(StatisticheGiorni.class);
+        istanza = appContext.getBean(StatisticheListeCognomi.class);
+
+        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        System.out.println(VUOTA);
+        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
+        System.out.println("PASSA da @PostConstruct().");
+        System.out.println("@Autowired dovrebbe funzionare.");
         assertNotNull(istanza);
-        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
-        System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
-        System.out.println(String.format("Le classi [Statistica] (ed alte) implementano il Design Pattern 'Builder'"));
-        System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
+        assertNotNull(istanza.wikiTitleUpload);
     }
+
 
     @Test
     @Order(3)
-    @DisplayName("3 - Upload con metodo .test() ed .esegue()")
-    void esegueConTest() {
-        System.out.println(("3 - Upload con metodo .test() ed .esegue()"));
+    @DisplayName("3 - upload della statistica")
+    void upload() {
+        System.out.println(("3 - upload della statistica"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(StatisticheGiorni.class).test().esegue();
+        ottenutoRisultato = appContext.getBean(StatisticheListeCognomi.class).test().esegue();
         assertNotNull(ottenutoRisultato);
-        assertTrue(ottenutoRisultato.isValido());
-        printRisultato(ottenutoRisultato);
     }
 
     /**

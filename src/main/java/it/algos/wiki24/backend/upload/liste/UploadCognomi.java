@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.*;
 import java.util.*;
 
 /**
@@ -38,6 +39,15 @@ public class UploadCognomi extends Upload {
     @Autowired
     public CognomeBackend cognomeBackend;
 
+
+    /**
+     * Costruttore base senza parametri <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     */
+    public UploadCognomi() {
+        super();
+    }// end of constructor
+
     /**
      * Costruttore base con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -45,153 +55,94 @@ public class UploadCognomi extends Upload {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public UploadCognomi() {
-        super.summary = "[[Utente:Biobot/cognomiBio|cognomiBio]]";
-        super.titoloLinkParagrafo = TITOLO_LINK_PARAGRAFO_NAZIONALITA;
-        super.titoloLinkVediAnche = PATH_COGNOMI;
-        super.typeToc = AETypeToc.forceToc;
-        super.typeLista = AETypeLista.cognomi;
-        super.lastUpload = WPref.uploadCognomi;
-        super.durataUpload = WPref.uploadCognomiTime;
-        super.nextUpload = WPref.uploadCognomiPrevisto;
+    public UploadCognomi(String cognome) {
+        super(cognome);
     }// end of constructor
 
 
+    @PostConstruct
+    protected void postConstruct() {
+        super.wikiBackend = cognomeBackend;
+
+        super.postConstruct();
+
+        super.wikiTitleUpload = wikiUtility.wikiTitleCognomi(nomeLista);
+        super.summary = "[[Utente:Biobot/cognomiBio|cognomiBio]]";
+        super.typeLista = AETypeLista.cognomi;
+        super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
+        super.typeLink = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
+        super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
+    }
+
     public UploadCognomi test() {
-        this.uploadTest = true;
+        return test(true);
+    }
+
+    public UploadCognomi typeLink(AETypeLink typeLink) {
+        super.typeLink = typeLink;
+        super.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
         return this;
-
     }
 
+    public UploadCognomi noToc() {
+        super.typeToc = AETypeToc.noToc;
+        return this;
+    }
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload(final String cognomeTxt) {
-        this.nomeLista = textService.primaMaiuscola(cognomeTxt);
+    public UploadCognomi forceToc() {
+        super.typeToc = AETypeToc.forceToc;
+        return this;
+    }
 
-        if (textService.isValid(nomeLista)) {
-            wikiTitleUpload = PATH_COGNOMI + nomeLista;
+    public UploadCognomi siNumVoci() {
+        super.usaNumeriTitoloParagrafi = true;
+        return this;
+    }
 
-            mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).mappaWrap();
+    public UploadCognomi noNumVoci() {
+        super.usaNumeriTitoloParagrafi = false;
+        return this;
+    }
 
-            if (uploadTest) {
-                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;
-            }
+    public UploadCognomi sottoPagina(LinkedHashMap<String, List<WrapLista>> mappa) {
+        super.wikiTitleUpload = nomeLista;
+        super.mappaWrap = mappa;
+        super.isSottopagina = true;
+        return this;
+    }
 
-            if (textService.isValid(wikiTitleUpload) && mappaWrap != null && mappaWrap.size() > 0) {
-               return esegueUpload(wikiTitleUpload, mappaWrap);
-            }
+    public UploadCognomi sottoPagina(List<WrapLista> lista) {
+        super.wikiTitleUpload = nomeLista;
+        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        super.isSottopagina = true;
+        return this;
+    }
+
+    public UploadCognomi test(boolean uploadTest) {
+        if (!isSottopagina) {
+            super.wikiTitleUpload = uploadTest ? UPLOAD_TITLE_DEBUG + nomeLista : nomeLista;
         }
 
-        return WResult.crea();
+        super.uploadTest = uploadTest;
+        return this;
     }
 
 
-    /**
-     * Esegue la scrittura della sottopagina <br>
-     */
-    public WResult uploadSottoPagina(final String wikiTitle, String nomeLista, String nomeSottoPagina, List<WrapLista> lista) {
-        this.wikiTitleUpload = wikiTitle;
-        this.nomeLista = nomeLista;
-        this.nomeSottoPagina = nomeSottoPagina;
-
-        if (uploadTest) {
-            this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitle;
-        }
-
-        if (textService.isValid(this.wikiTitleUpload) && lista != null) {
-            this.esegueUploadSotto(this.wikiTitleUpload, nomeLista, nomeSottoPagina, lista);
-        }
-
-        return WResult.crea();
-    }
-
-    protected WResult esegueUpload(String wikiTitle, LinkedHashMap<String, List<WrapLista>> mappa) {
-        StringBuffer buffer = new StringBuffer();
-        int numVoci = wikiUtility.getSizeAllWrap(mappa);
-
-        if (numVoci < 1) {
-            logger.info(new WrapLog().message(String.format("Non creata la pagina %s perché non ci sono abbastanza voci", wikiTitle, numVoci)));
-            return WResult.crea();
-        }
-
-        buffer.append(avviso());
-        buffer.append(CAPO);
-        buffer.append(includeIni());
-        buffer.append(fixToc());
-        buffer.append(fixUnconnected());
-        //        buffer.append(torna(wikiTitle));
-        buffer.append(tmpListaBio(numVoci));
-        buffer.append(includeEnd());
-        buffer.append(CAPO);
-        buffer.append(incipit());
-        buffer.append(testoBody(mappa));
-        //        buffer.append(uploadTest ? VUOTA : DOPPIE_GRAFFE_END);
-        //                buffer.append(note());
-        buffer.append(CAPO);
-        buffer.append(portale());
-        buffer.append(categorie());
-
-        return registra(wikiTitle, buffer.toString().trim());
-    }
-
-
-    protected WResult esegueUploadSotto(String wikiTitle, String nomeLista, String nomeSottoPagina, List<WrapLista> lista) {
-        StringBuffer buffer = new StringBuffer();
-        int numVoci = lista.size();
-
-        buffer.append(avviso());
-        buffer.append(CAPO);
-        buffer.append(includeIni());
-        buffer.append(AETypeToc.noToc.get());
-        buffer.append(fixUnconnected());
-        buffer.append(torna(wikiTitle));
-        buffer.append(tmpListaBio(numVoci));
-        buffer.append(includeEnd());
-        buffer.append(CAPO);
-        //        buffer.append(incipitSottoPagina(nomeLista, nomeSottoPagina, numVoci));
-        buffer.append(CAPO);
-        buffer.append(testoSottoBody(lista));
-//        buffer.append(note());
-        buffer.append(CAPO);
-        buffer.append(correlate());
-        buffer.append(CAPO);
-        buffer.append(portale());
-        buffer.append(categorie());
-
-        return registra(wikiTitle, buffer.toString().trim());
-    }
-
+    @Override
     protected String incipit() {
-        StringBuffer buffer = new StringBuffer();
-        if (true) {
-            buffer.append(String.format("{{incipit lista cognomi|cognome=%s}}", nomeLista));
-        }
-        else {
-            buffer.append("Questa");
-            buffer.append(textService.setRef(INFO_PAGINA_COGNOMI));
-            buffer.append(" è una lista");
-            buffer.append(textService.setRef(INFO_DIDASCALIE));
-            buffer.append(textService.setRef(INFO_ORDINE));
-            buffer.append(" di persone");
-            buffer.append(" presenti");
-            buffer.append(textService.setRef(INFO_LISTA));
-            buffer.append(" nell'enciclopedia che hanno come cognome");
-            buffer.append(String.format(" quello di '''%s'''.", nomeLista));
-            buffer.append(" Le persone sono suddivise");
-            buffer.append(textService.setRef(INFO_PARAGRAFI_ATTIVITA));
-            buffer.append(" per attività.");
-            buffer.append(textService.setRef(INFO_ATTIVITA_PREVISTE));
-            if (mappaWrap.containsKey(TAG_LISTA_ALTRE)) {
-                buffer.append(textService.setRef(INFO_ALTRE_ATTIVITA));
-            }
-        }
-        buffer.append(CAPO);
-
-        return buffer.toString();
+        return isSottopagina ? VUOTA : String.format("{{incipit cognomi|cognome=%s}}", nomeLista);
     }
 
+
+    @Override
+    protected void fixMappaWrap() {
+        if (!isSottopagina) {
+            mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).typeLinkParagrafi(typeLink).mappaWrap();
+        }
+    }
+
+
+    @Override
     public String testoBody(Map<String, List<WrapLista>> mappa) {
         StringBuffer buffer = new StringBuffer();
         List<WrapLista> lista;
@@ -202,19 +153,24 @@ public class UploadCognomi extends Upload {
         boolean usaDiv;
         String titoloParagrafoLink;
         String vedi;
-        String parente;
+        String sottoPagina;
 
         for (String keyParagrafo : mappa.keySet()) {
             lista = mappa.get(keyParagrafo);
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
-            buffer.append(wikiUtility.fixTitolo(VUOTA, titoloParagrafoLink, numVoci));
+            if (isSottopagina) {
+                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+            }
+            else {
+                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+            }
 
-            if (WPref.usaSottoCognomi.is() && numVoci > max) {
-                parente = String.format("%s%s%s%s", titoloLinkVediAnche, textService.primaMaiuscola(nomeLista), SLASH, keyParagrafo);
-                vedi = String.format("{{Vedi anche|%s}}", parente);
+            if (numVoci > max && !isSottopagina) {
+                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
+                vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                uploadSottoPagine(parente, nomeLista, keyParagrafo, lista);
+                appContext.getBean(UploadNomi.class, sottoPagina).sottoPagina(lista).test(uploadTest).esegue();
             }
             else {
                 usaDiv = usaDivBase ? lista.size() > maxDiv : false;
@@ -231,52 +187,16 @@ public class UploadCognomi extends Upload {
         return buffer.toString().trim();
     }
 
-
-    public String testoSottoBody(List<WrapLista> listaWrap) {
+    protected String portale() {
         StringBuffer buffer = new StringBuffer();
-        String paragrafo;
-        LinkedHashMap<String, List<WrapLista>> mappaWrapSotto = new LinkedHashMap<>();
-        List<WrapLista> listaTmp;
 
-        for (WrapLista wrap : listaWrap) {
-            paragrafo = wrap.titoloSottoParagrafo;
+        buffer.append(CAPO);
+        buffer.append("{{Portale|antroponimi}}");
 
-            if (mappaWrapSotto.containsKey(paragrafo)) {
-                listaTmp = mappaWrapSotto.get(paragrafo);
-            }
-            else {
-                listaTmp = new ArrayList();
-            }
-            listaTmp.add(wrap);
-            mappaWrapSotto.put(paragrafo, listaTmp);
-        }
-
-        for (String keyParagrafoSotto : mappaWrapSotto.keySet()) {
-            buffer.append(wikiUtility.fixTitolo(keyParagrafoSotto, mappaWrapSotto.get(keyParagrafoSotto).size()));
-            for (WrapLista wrap : mappaWrapSotto.get(keyParagrafoSotto)) {
-                buffer.append(ASTERISCO);
-                buffer.append(wrap.didascaliaBreve);
-                buffer.append(CAPO);
-            }
-        }
-
-        return buffer.toString().trim();
-    }
-
-    public void uploadSottoPagine(String wikiTitle, String nomeLista, String keyParagrafo, List<WrapLista> lista) {
-        if (uploadTest) {
-            appContext.getBean(UploadCognomi.class).test().uploadSottoPagina(wikiTitle, nomeLista,keyParagrafo,lista);
-        }
-        else {
-            appContext.getBean(UploadCognomi.class).uploadSottoPagina(wikiTitle, nomeLista,keyParagrafo,lista);
-        }
+        return buffer.toString();
     }
 
     protected String categorie() {
-        if (uploadTest) {
-            return VUOTA;
-        }
-
         StringBuffer buffer = new StringBuffer();
         String cat = textService.primaMaiuscola(nomeLista);
 
@@ -299,7 +219,7 @@ public class UploadCognomi extends Upload {
 
         List<String> listaPlurali = cognomeBackend.findCognomiStampabiliSortNumBio();
         for (String plurale : listaPlurali) {
-            upload(plurale);
+            //            upload(plurale);
         }
 
         fixUploadMinuti(inizio);

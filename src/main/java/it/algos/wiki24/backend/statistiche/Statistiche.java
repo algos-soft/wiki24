@@ -5,10 +5,12 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nome.*;
@@ -43,6 +45,8 @@ public abstract class Statistiche {
     protected WPref lastStatistica;
 
     protected WPref durataStatistica;
+
+    protected AETypeSummary typeSummary;
 
     /**
      * Istanza di una interfaccia <br>
@@ -135,6 +139,9 @@ public abstract class Statistiche {
     @Autowired
     public NomeBackend nomeBackend;
 
+    @Autowired
+    public CognomeBackend cognomeBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -170,12 +177,12 @@ public abstract class Statistiche {
         this.fixPreferenze();
     }
 
-    protected void prepara() {
-        this.fixPreferenze();
-        this.elabora();
-        this.creaLista();
-        this.creaMappa();
-    }
+    //    protected void prepara() {
+    //        this.fixPreferenze();
+    //        this.elabora();
+    //        this.creaLista();
+    //        this.creaMappa();
+    //    }
 
     /**
      * Preferenze usate da questa 'view' <br>
@@ -183,12 +190,24 @@ public abstract class Statistiche {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        this.typeSummary = AETypeSummary.bioBot;
         this.typeToc = AETypeToc.forceToc;
         this.inizio = System.currentTimeMillis();
     }
 
+
+    public Statistiche test() {
+        this.uploadTest = true;
+        this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + this.getClass().getSimpleName();
+        return this;
+    }
+
     public WResult esegue() {
-        return null;
+        this.elabora();
+        this.creaLista();
+        this.creaMappa();
+
+        return esegueUpload();
     }
 
     /**
@@ -212,11 +231,11 @@ public abstract class Statistiche {
         mappa = new LinkedHashMap<>();
     }
 
-    protected WResult upload() {
-        return textService.isValid(wikiTitleUpload) ? upload(wikiTitleUpload) : null;
+    protected WResult esegueUpload() {
+        return textService.isValid(wikiTitleUpload) ? esegueUpload(wikiTitleUpload) : null;
     }
 
-    protected WResult upload(String wikiTitle) {
+    protected WResult esegueUpload(String wikiTitle) {
         WResult result;
         StringBuffer buffer = new StringBuffer();
 
@@ -379,7 +398,7 @@ public abstract class Statistiche {
 
 
     protected WResult registra(String wikiTitle, String newText) {
-        return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText);
+        return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, typeSummary.get());
     }
 
 

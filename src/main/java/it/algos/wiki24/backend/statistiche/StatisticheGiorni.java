@@ -28,14 +28,14 @@ public class StatisticheGiorni extends Statistiche {
 
     public static final String VALIDO_MORTE = VALIDO + SPAZIO + "'''giornoMeseMorte'''";
 
-    /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(StatisticheGiorni.class) <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-     */
-    public StatisticheGiorni() {
-    }// end of constructor
+    //    /**
+    //     * Costruttore base con parametri <br>
+    //     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+    //     * Uso: appContext.getBean(StatisticheGiorni.class) <br>
+    //     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+    //     */
+    //    public StatisticheGiorni() {
+    //    }// end of constructor
 
     /**
      * Preferenze usate da questa 'view' <br>
@@ -45,6 +45,9 @@ public class StatisticheGiorni extends Statistiche {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.wikiTitleUpload = PATH_BIOGRAFIE + "Giorni";
+        super.typeSummary = AETypeSummary.statBio;
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaGiorni;
         super.durataStatistica = WPref.statisticaGiorniTime;
@@ -52,13 +55,14 @@ public class StatisticheGiorni extends Statistiche {
         super.infoTime = "dei giorni";
     }
 
+
     @Override
     protected String incipit() {
         StringBuffer buffer = new StringBuffer();
         String message;
 
         buffer.append(wikiUtility.setParagrafo("Giorni"));
-        buffer.append("'''Statistiche''' dei nati e morti per ogni giorno dell'anno");
+        buffer.append("Statistiche dei nati e morti per ogni giorno dell'anno");
         message = String.format("Previsto il [[29 febbraio]] per gli [[Anno bisestile|anni bisestili]]");
         buffer.append(textService.setRef(message));
         buffer.append(PUNTO + SPAZIO);
@@ -66,6 +70,7 @@ public class StatisticheGiorni extends Statistiche {
 
         return buffer.toString();
     }
+
 
     /**
      * Elabora i dati
@@ -146,9 +151,9 @@ public class StatisticheGiorni extends Statistiche {
         String natiVuotoPer;
         String natiValidoPer;
 
-        natiSenzaPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO));
-        natiVuotoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO));
-        natiValidoPer = mathService.percentualeTxt(vociBiografiche, mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE));
+        natiSenzaPer = mathService.percentualeTxt(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO), vociBiografiche);
+        natiVuotoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO), vociBiografiche);
+        natiValidoPer = mathService.percentualeTxt(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE), vociBiografiche);
 
         buffer.append(wikiUtility.setParagrafo("Nascita"));
         message = String.format("Nelle '''%s''' voci biografiche esistenti, il giorno di nascita", numVoci);
@@ -262,7 +267,7 @@ public class StatisticheGiorni extends Statistiche {
     }
 
 
-    protected String riga(MappaStatistiche mappa) {
+    protected String riga(int numRiga, MappaStatistiche mappa) {
         StringBuffer buffer = new StringBuffer();
         String iniTag = "|-";
         String doppioTag = " || ";
@@ -297,22 +302,21 @@ public class StatisticheGiorni extends Statistiche {
         return buffer.toString();
     }
 
+    //    /**
+    //     * Esegue la scrittura della pagina <br>
+    //     */
+    //    public WResult upload() {
+    //        super.prepara();
+    //        return super.upload(PATH_GIORNI);
+    //    }
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload() {
-        super.prepara();
-        return super.upload(PATH_GIORNI);
-    }
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult uploadTest() {
-        super.prepara();
-        return super.upload(UPLOAD_TITLE_DEBUG + GIORNI);
-    }
+    //    /**
+    //     * Esegue la scrittura della pagina <br>
+    //     */
+    //    public WResult uploadTest() {
+    //        super.prepara();
+    //        return super.upload(UPLOAD_TITLE_DEBUG + GIORNI);
+    //    }
 
 
 }

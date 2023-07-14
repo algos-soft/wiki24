@@ -219,37 +219,6 @@ public class NomeView extends WikiView {
     }
 
 
-    /**
-     * autoCreateColumns=false <br>
-     * Crea le colonne normali indicate in this.colonne <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void addColumnsOneByOne() {
-        super.addColumnsOneByOne();
-        //        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
-        //
-        //        grid.addComponentColumn(entity -> {
-        //            String wikiTitle = textService.primaMaiuscola(((Nome) entity).paginaLista);
-        //            Button button = new Button(wikiTitle, click -> {wikiApiService.openWikiPage(wikiTitle);});
-        //            if (((Nome) entity).numBio < sogliaWiki) {
-        //                button.getStyle().set("color", "red");
-        //            }
-        //            else {
-        //                if (((Nome) entity).isEsisteLista()) {
-        //                    button.getStyle().set("color", "green");
-        //                }
-        //                else {
-        //                    button.getStyle().set("color", "blue");
-        //                }
-        //            }
-        //            button.getStyle().set("margin-top", "0");
-        //            button.getStyle().set("margin-bottom", "0");
-        //            button.getStyle().set("background-color", "transparent");
-        //
-        //            return button;
-        //        }).setHeader("PaginaLista").setKey("paginaLista").setFlexGrow(0).setWidth("18em");
-    }
 
 
     /**

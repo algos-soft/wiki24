@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.wiki;
 
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -12,6 +13,7 @@ import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
+import it.algos.wiki24.backend.boot.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
@@ -207,6 +209,10 @@ public abstract class WikiBackend extends CrudBackend {
      */
     @Override
     protected void fixPreferenze() {
+        if (VaadVar.prefList == null || VaadVar.prefList.size() < WPref.values().length) {
+            VaadBoot.start();
+            Wiki24Boot.start();
+        }
         super.fixPreferenze();
 
         this.unitaMisuraDownload = AETypeTime.nonUsata;
@@ -345,8 +351,8 @@ public abstract class WikiBackend extends CrudBackend {
 
         testoPaginaAll = wikiApiService.legge(sorgenteDownload);
         if (textService.isValid(tagIniSorgente) && textService.isValid(tagEndSorgente)) {
-            testoCore=wikiUtility.estraeTestoModulo(testoPaginaAll);
-//            testoCore = textService.estraeLast(testoPaginaAll, tagIniSorgente, tagEndSorgente);
+            testoCore = wikiUtility.estraeTestoModulo(testoPaginaAll);
+            //            testoCore = textService.estraeLast(testoPaginaAll, tagIniSorgente, tagEndSorgente);
         }
         else {
             testoCore = wikiUtility.estraeTestoModulo(testoPaginaAll);

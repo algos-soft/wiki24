@@ -7,6 +7,7 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
+import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -47,9 +48,28 @@ public class ListaCognomi extends Lista {
     public ListaCognomi(String cognome) {
         this.nomeLista = cognome;
         super.typeLista = AETypeLista.cognomi;
+        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
     }// end of constructor
 
+    /**
+     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
+     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
+     */
+    @PostConstruct
+    private void postConstruct() {
+        this.nomeLista = textService.primaMaiuscola(nomeLista);
+    }
+
+    public ListaCognomi typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
+        super.typeLinkParagrafi = typeLinkParagrafi;
+        return this;
+    }
 
     /**
      * Ordina la mappa <br>

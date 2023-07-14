@@ -25,7 +25,6 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NomeDoppioBackendTest extends WikiBackendTest {
 
-    @InjectMocks
     private NomeDoppioBackend backend;
 
     private List<NomeDoppio> listaBeans;

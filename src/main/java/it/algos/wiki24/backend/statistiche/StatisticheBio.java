@@ -354,20 +354,20 @@ public class StatisticheBio extends Statistiche {
         return VUOTA;
     }
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload() {
-        super.prepara();
-        return super.upload(PATH_STATISTICHE);
-    }
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult uploadTest() {
-        super.prepara();
-        return super.upload(UPLOAD_TITLE_DEBUG + STATISTICHE);
-    }
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult upload() {
+//        super.prepara();
+//        return super.upload(PATH_STATISTICHE);
+//    }
+//
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult uploadTest() {
+//        super.prepara();
+//        return super.upload(UPLOAD_TITLE_DEBUG + STATISTICHE);
+//    }
 
 }

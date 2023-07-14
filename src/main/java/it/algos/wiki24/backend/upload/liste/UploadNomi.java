@@ -71,9 +71,12 @@ public class UploadNomi extends Upload {
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
         super.typeLink = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
-        //        super.crudBackend = nomeBackend;
     }
 
+    public UploadNomi test() {
+        this.uploadTest = true;
+        return this;
+    }
 
     public UploadNomi typeLink(AETypeLink typeLink) {
         super.typeLink = typeLink;
@@ -115,9 +118,6 @@ public class UploadNomi extends Upload {
         return this;
     }
 
-    public UploadNomi test() {
-        return test(true);
-    }
 
     public UploadNomi test(boolean uploadTest) {
         if (!isSottopagina) {

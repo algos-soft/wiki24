@@ -221,9 +221,6 @@ public class GiornoWikiBackend extends WikiBackend {
             return WResult.errato();
         }
 
-        message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, Giorno.class.getSimpleName(), tempo, unitaMisuraElaborazione);
-        logService.debug(new WrapLog().message(message));
-
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (GiornoWiki giornoWiki : findAllSortCorrente()) {

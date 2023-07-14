@@ -534,8 +534,16 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapCognomi(final Bio bio) {
-        return null;
+    public WrapLista getWrapCognomi(final AETypeLink typeLinkParagrafi, final Bio bio) {
+        String paragrafo;
+        String paragrafoLink;
+
+        paragrafo = genereBackend.getPluraleParagrafo(bio);
+        paragrafoLink = VUOTA;
+        String sottoParagrafo = bio.ordinamento.substring(0, 1);
+        String didascalia = this.lista(bio);
+
+        return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
     }
 
 
@@ -555,7 +563,7 @@ public class DidascaliaService extends WAbstractService {
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
             case nomi -> this.getWrapNomi(typeLinkParagrafi, bio);
-            case cognomi -> this.getWrapCognomi(bio);
+            case cognomi -> this.getWrapCognomi(typeLinkParagrafi, bio);
             case listaBreve -> null;
             case listaEstesa -> null;
             default -> null;

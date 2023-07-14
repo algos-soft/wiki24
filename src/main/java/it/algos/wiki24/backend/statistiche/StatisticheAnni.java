@@ -279,20 +279,20 @@ public class StatisticheAnni extends Statistiche {
     }
 
 
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult upload() {
-        super.prepara();
-        return super.upload(PATH_ANNI);
-    }
-
-    /**
-     * Esegue la scrittura della pagina <br>
-     */
-    public WResult uploadTest() {
-        super.prepara();
-        return super.upload(UPLOAD_TITLE_DEBUG + ANNI);
-    }
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult upload() {
+//        super.prepara();
+//        return super.upload(PATH_ANNI);
+//    }
+//
+//    /**
+//     * Esegue la scrittura della pagina <br>
+//     */
+//    public WResult uploadTest() {
+//        super.prepara();
+//        return super.upload(UPLOAD_TITLE_DEBUG + ANNI);
+//    }
 
 }

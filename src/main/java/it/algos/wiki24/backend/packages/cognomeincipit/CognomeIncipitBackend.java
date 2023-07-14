@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.cognomecategoria.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.moduloProgettoAncheBot.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -153,7 +154,8 @@ public class CognomeIncipitBackend extends WikiBackend {
 
     @Override
     public List<CognomeIncipit> findAll() {
-        return super.findAll();
+        List<CognomeIncipit> lista = super.findAll();
+        return lista.stream().sorted(Comparator.comparing(cognomeIncipit -> ((CognomeIncipit) cognomeIncipit).cognome)).collect(Collectors.toList());
     }
 
     @Override
@@ -194,6 +196,7 @@ public class CognomeIncipitBackend extends WikiBackend {
 
         return mappa;
     }
+
 
     @Override
     public AResult resetDownload() {
@@ -278,6 +281,22 @@ public class CognomeIncipitBackend extends WikiBackend {
         //        }
 
         return super.fixElabora(result);
+    }
+
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    @Override
+    public WResult uploadModulo() {
+        WResult result = appContext.getBean(UploadModuloCognomiIncipit.class).esegue();
+
+        if (result.isModificata()) {
+            message = String.format("Upload e modifica della pagina [%s]", super.sorgenteDownload);
+            logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+        }
+
+        return result;
     }
 
 }// end of crud backend class

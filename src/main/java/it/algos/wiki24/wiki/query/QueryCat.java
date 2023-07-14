@@ -58,6 +58,7 @@ public class QueryCat extends AQuery {
         queryProp = AETypeQueryProp.ids;
         return this;
     }
+
     public QueryCat filtro() {
         filtroNomeCat = true;
         return this;
@@ -149,8 +150,11 @@ public class QueryCat extends AQuery {
         String wikiTitoloConCATIniziale = wikiTitoloGrezzoPaginaCategoria;
 
         if (botLogin == null || botLogin.getCookies() == null) {
-            message = "Il botLogin non ha cookies validi";
-            logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+            appContext.getBean(QueryLogin.class).urlRequest();
+            if (botLogin == null || botLogin.getCookies() == null) {
+                message = "Il botLogin non ha cookies validi";
+                logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
+            }
         }
 
         if (wikiTitoloGrezzoPaginaCategoria == null) {

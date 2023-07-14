@@ -1,10 +1,12 @@
 package it.algos.base;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.cognomecategoria.*;
 import it.algos.wiki24.backend.packages.cognomeincipit.*;
 import it.algos.wiki24.backend.packages.giorno.*;
@@ -83,6 +85,9 @@ public abstract class WikiBackendTest extends BackendTest {
 
     @Autowired
     protected CognomeIncipitBackend cognomeIncipitBackend;
+
+    @Autowired
+    protected CognomeBackend cognomeBackend;
 
     protected WResult wResult;
 

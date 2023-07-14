@@ -187,9 +187,9 @@ public class AttPluraleView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        WResult result = appContext.getBean(StatisticheAttivita.class).upload();
-        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
-        super.uploadStatistiche();
+//        WResult result = appContext.getBean(StatisticheAttivita.class).upload();
+//        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
+//        super.uploadStatistiche();
     }
 
     /**

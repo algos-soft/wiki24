@@ -25,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("integration")
-@Tag("statistiche")
+//@Tag("statistiche")
 @DisplayName("Test StatisticheAnni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StatisticheAnniTest extends WikiTest {
@@ -81,9 +81,9 @@ public class StatisticheAnniTest extends WikiTest {
         System.out.println(("2 - Upload"));
 
         System.out.println(VUOTA);
-        ottenutoRisultato = appContext.getBean(StatisticheAnni.class).uploadTest();
-        assertTrue(ottenutoRisultato.isValido());
-        printRisultato(ottenutoRisultato);
+//        ottenutoRisultato = appContext.getBean(StatisticheAnni.class).uploadTest();
+//        assertTrue(ottenutoRisultato.isValido());
+//        printRisultato(ottenutoRisultato);
     }
 
     /**

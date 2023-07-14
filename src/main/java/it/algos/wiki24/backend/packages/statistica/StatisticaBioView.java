@@ -112,8 +112,8 @@ public class StatisticaBioView extends WikiView {
      * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     public void uploadStatistiche() {
-        appContext.getBean(StatisticheBio.class).upload();
-        super.uploadStatistiche();
+//        appContext.getBean(StatisticheBio.class).upload();
+//        super.uploadStatistiche();
     }
 
 

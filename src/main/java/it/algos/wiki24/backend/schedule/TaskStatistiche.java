@@ -34,17 +34,32 @@ public class TaskStatistiche extends VaadTask {
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
         if (super.execute()) {
 
-            //--Le statistiche dei giorni comprendono anche una preliminare elaborazione
-            appContext.getBean(StatisticheGiorni.class).upload();
+            //--Statistiche generali delle biografie
+//            appContext.getBean(StatisticheBio.class).upload();
 
-            //--Le statistiche degli anni comprendono anche una preliminare elaborazione
-            appContext.getBean(StatisticheAnni.class).upload();
+            //--La statistica dei giorni comprende anche una preliminare elaborazione
+//            appContext.getBean(StatisticheGiorni.class).upload();
 
-            //--Le statistiche delle attività comprendono anche una preliminare elaborazione
-            appContext.getBean(StatisticheAttivita.class).upload();
+            //--La statistica degli anni comprende anche una preliminare elaborazione
+//            appContext.getBean(StatisticheAnni.class).upload();
 
-            //--Le statistiche delle nazionalità comprendono anche una preliminare elaborazione
-            appContext.getBean(StatisticheNazionalita.class).upload();
+            //--La statistica delle attività comprende anche una preliminare elaborazione
+//            appContext.getBean(StatisticheAttivita.class).upload();
+
+            //--La statistica delle nazionalità comprende anche una preliminare elaborazione
+//            appContext.getBean(StatisticheNazionalita.class).upload();
+
+            //--La statistica delle liste di nomi comprende anche una preliminare elaborazione
+            appContext.getBean(StatisticheListeNomi.class).esegue();
+
+            //--La statistica dei nomi comprende anche una preliminare elaborazione
+            appContext.getBean(StatisticheNomi.class).esegue();
+
+            //--La statistica delle liste di cognomi comprende anche una preliminare elaborazione
+            appContext.getBean(StatisticheListeCognomi.class).esegue();
+
+            //--La statistica dei cognomi comprende anche una preliminare elaborazione
+            appContext.getBean(StatisticheListeCognomi.class).esegue();
 
             super.loggerTask();
         }

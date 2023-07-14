@@ -32,7 +32,7 @@ import javax.validation.constraints.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "cognome", keyPropertyName = "cognome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "cognome", keyPropertyName = "cognome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Cognome extends AEntity {
 
 
@@ -42,14 +42,20 @@ public class Cognome extends AEntity {
     @AIField(type = AETypeField.integer, header = "bio", caption = "Numero di biografie che utilizzano lo stesso cognome", widthEM = 6)
     public int numBio;
 
+    @AIField(type = AETypeField.anchor)
+    public String paginaVoce;
+
     @AIField(type = AETypeField.text, widthEM = 18)
     public String paginaLista;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "distinto", widthEM = 7)
-    public boolean distinto;
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
+    public boolean categoria;
 
-    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, header = "modulo", widthEM = 7)
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
     public boolean modulo;
+
+    @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.yesNo, widthEM = 7)
+    public boolean mongo;
 
     @AIField(type = AETypeField.booleano, typeBool = AETypeBoolCol.checkIcon, headerIcon = VaadinIcon.TRENDING_UP)
     public boolean superaSoglia;

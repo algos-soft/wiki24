@@ -50,7 +50,7 @@ public class StatisticheNomi extends Statistiche {
         this.creaLista();
         this.creaMappa();
 
-        return upload();
+        return esegueUpload();
     }
 
 

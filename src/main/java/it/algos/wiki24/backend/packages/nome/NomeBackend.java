@@ -203,9 +203,6 @@ public class NomeBackend extends WikiBackend {
                 .filter(nome -> nome.numBio > soglia)
                 .sorted(Comparator.comparing(Nome::getNome, collator))
                 .collect(Collectors.toList());
-
-        //        List<Nome> listaAll = findAllSortKey();
-        //        return listaAll != null ? listaAll.stream().filter(nome -> nome.numBio > soglia).collect(Collectors.toList()) : null;
     }
 
     public List<String> findAllForKeyByNumBio() {
@@ -233,7 +230,7 @@ public class NomeBackend extends WikiBackend {
         //--Cancella tutte le entities della collezione
         deleteAll();
 
-        //--Nomi 'categorie'. Ricavati dalla 3 categorie su wiki
+        //--Nomi 'categorie'. Ricavati dalle 3 categorie su wiki
         result = addNomiCategoria(result);
 
         //--Nome 'doppi' Ricavati da apposita lista di progetto
@@ -354,8 +351,6 @@ public class NomeBackend extends WikiBackend {
 
 
     /**
-     * Integra con i valori dal modulo incipit nomi
-     *
      * @return lista dei valori
      */
     public AResult estraeNomiDistinti(AResult result) {
@@ -365,6 +360,12 @@ public class NomeBackend extends WikiBackend {
         int sogliaMongo = WPref.sogliaMongoNomi.getInt();
         List<AEntity> lista = new ArrayList<>();
         boolean debug = Pref.debug.is();
+
+        if (listaNomiMongo == null) {
+            message = "listaNomiMongo is null";
+            logService.warn(new WrapLog().message(message));
+            return result.errorMessage(message);
+        }
 
         for (String mongo : listaNomiMongo) {
             if (isExistByKey(mongo)) {
@@ -380,7 +381,7 @@ public class NomeBackend extends WikiBackend {
                 }
                 else {
                     if (debug) {
-                        message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity su mongo", numBio, mongo);
+                        message = String.format("Le %d occorrenze di %s non sono sufficienti per creare una entity di %s su mongo", numBio, mongo, Nome.class.getSimpleName());
                         logService.info(new WrapLog().message(message));
                     }
                 }
