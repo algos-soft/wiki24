@@ -27,7 +27,7 @@ public class TaskStatistiche extends VaadTask {
 
     public TaskStatistiche() {
         super.descrizioneTask = WPref.usaTaskStatistiche.getDescrizione();
-        super.typeSchedule = AESchedule.minuto;
+        super.typeSchedule = Wiki24Var.typeSchedule.getStatistiche();
         super.flagAttivazione = WPref.usaTaskStatistiche;
         super.flagPrevisione = WPref.statistichePrevisto;
     }
