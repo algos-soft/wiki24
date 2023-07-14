@@ -236,7 +236,7 @@ public class GiornoWikiBackend extends WikiBackend {
 
     public Map elaboraValidi() {
         Map<String, Integer> mappa = new HashMap<>();
-        List<String> nati = mongoService.projectionString(Bio.class, "giornoNato");
+        List<String> nati = mongoService.projectionString(Bio.class, "giornoNato",null);
         List<String> morti = mongoService.projectionString(Bio.class, "giornoMorto");
         int vociBiografiche = mongoService.count(Bio.class);
         Long natiSenzaParametro; //senza parametro
