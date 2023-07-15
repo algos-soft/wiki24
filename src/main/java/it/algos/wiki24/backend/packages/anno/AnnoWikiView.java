@@ -292,9 +292,7 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-        //        WResult result = appContext.getBean(StatisticheAnni.class).upload();
-        //        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
-        //        super.uploadStatistiche();
+        appContext.getBean(StatisticheAnni.class).esegue();
     }
 
 
