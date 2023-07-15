@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.anno;
 
 import com.vaadin.flow.component.checkbox.*;
+import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -9,7 +10,11 @@ import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.components.*;
+import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
@@ -44,9 +49,15 @@ public class AnnoWikiView extends WikiView {
     //--per eventuali metodi specifici
     private AnnoWikiBackend backend;
 
+
+    @Autowired
+    public SecoloBackend secoloBackend;
+
+
+    private ComboBox comboSecolo;
+
     //--per eventuali metodi specifici
     private AnnoWikiDialog dialog;
-
 
     /**
      * Costruttore @Autowired (facoltativo) <br>
@@ -70,16 +81,16 @@ public class AnnoWikiView extends WikiView {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
-        super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "natiOk", "mortiOk");
+        super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "pageNati", "pageMorti", "natiOk", "mortiOk");
+        super.formPropertyNamesList = Arrays.asList("ordine", "nome", "bioNati", "bioMorti", "pageNati", "pageMorti", "natiOk", "mortiOk");
 
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
 
         super.usaBottoneReset = true;
         super.usaReset = true;
-        super.usaBottoneElabora = true;
         super.usaBottoneDownload = false;
+        super.usaBottoneElabora = true;
         super.usaBottoneStatistiche = false;
         super.usaBottoneUploadStatistiche = true;
         super.usaBottoneNew = false;
@@ -107,14 +118,9 @@ public class AnnoWikiView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        Anchor anchor1 = new Anchor(PATH_WIKI + "Categoria:Liste di nati per anno", "Nati");
-        anchor1.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor2 = new Anchor(PATH_WIKI + "Categoria:Liste di morti per anno", "Morti");
-        anchor2.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
-
-        Anchor anchor3 = new Anchor(PATH_WIKI + PATH_STATISTICHE_ANNI, STATISTICHE);
-        anchor3.getElement().getStyle().set(AEFontWeight.HTML, AEFontWeight.bold.getTag());
+        Anchor anchor1 = WAnchor.build("Categoria:Liste di nati per anno", "Cat. Nati");
+        Anchor anchor2 = WAnchor.build("Categoria:Liste di morti per anno", "Cat. Morti");
+        Anchor anchor3 = WAnchor.build(PATH_STATISTICHE_ANNI, STATISTICHE);
         alertPlaceHolder.add(new Span(anchor1, new Label(SEP), anchor2, new Label(SEP), anchor3));
 
         message = String.format("Tabella degli anni recuperati dalla tabella 'Anno' di %s", VaadVar.frameworkVaadin24);
@@ -134,21 +140,48 @@ public class AnnoWikiView extends WikiView {
 
     }
 
+
+    /**
+     * Componenti aggiuntivi oltre quelli base <br>
+     * Tipicamente bottoni di selezione/filtro <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
     @Override
-    protected void fixTopLayout() {
-        super.fixTopLayout();
-        this.fixBottoniTopSpecificiAnni();
+    protected void fixBottoniTopSpecifici() {
+        super.fixBottoniTopSpecifici();
+
+        comboSecolo = new ComboBox<>();
+        comboSecolo.setPlaceholder("Secolo");
+        comboSecolo.getElement().setProperty("title", "Filtro di selezione");
+        comboSecolo.setClearButtonVisible(true);
+        comboSecolo.setItems(secoloBackend.findAllSortCorrente());
+        comboSecolo.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(comboSecolo);
+
     }
 
-    protected void fixBottoniTopSpecificiAnni() {
-        boxPagineDaCancellare = new Checkbox();
-        boxPagineDaCancellare.setLabel("Da cancellare");
-        boxPagineDaCancellare.addValueChangeListener(event -> sincroCancellare());
-        HorizontalLayout layout5 = new HorizontalLayout(boxPagineDaCancellare);
-        layout5.setAlignItems(Alignment.CENTER);
-        topPlaceHolder2.add(layout5);
+    /**
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
+     */
+    protected List<AEntity> sincroFiltri() {
+        List<AnnoWiki> items = (List) super.sincroFiltri();
+        if (items == null) {
+            return null;
+        }
 
-        this.add(topPlaceHolder2);
+        if (comboSecolo != null && comboSecolo.getValue() != null) {
+            if (comboSecolo.getValue() instanceof Secolo secolo) {
+                items = items.stream().filter(anno -> anno.secolo.nome.equals(secolo.nome)).toList();
+            }
+        }
+
+        if (items != null) {
+            grid.setItems((List) items);
+            elementiFiltrati = items.size();
+            sicroBottomLayout();
+        }
+
+        return (List) items;
     }
 
 
@@ -157,8 +190,8 @@ public class AnnoWikiView extends WikiView {
      * Crea le colonne normali indicate in this.colonne <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    @Override
-    protected void addColumnsOneByOne() {
+    //    @Override
+    protected void addColumnsOneByOne2() {
         super.addColumnsOneByOne();
 
         Grid.Column paginaNati = grid.addColumn(new ComponentRenderer<>(entity -> {
@@ -259,9 +292,9 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void uploadStatistiche() {
-//        WResult result = appContext.getBean(StatisticheAnni.class).upload();
-//        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
-//        super.uploadStatistiche();
+        //        WResult result = appContext.getBean(StatisticheAnni.class).upload();
+        //        logger.info(new WrapLog().message(result.getValidMessage()).type(AETypeLog.upload).usaDb());
+        //        super.uploadStatistiche();
     }
 
 

@@ -255,17 +255,18 @@ public class AnnoWikiBackend extends WikiBackend {
     public WResult elabora() {
         WResult result = super.elabora();
         long inizio = System.currentTimeMillis();
-        int cont = 0;
-        int blocco = 303;
-        String size;
-        String time;
-        int tot = count();
-        int bioNati ;
-        int bioMorti ;
+        List<Secolo> secoli = secoloBackend.findAllSortKey();
+        //        int cont = 0;
+        //        int blocco = 303;
+        //        String size;
+        //        String time;
+        //        int tot = count();
+        int bioNati;
+        int bioMorti;
         String wikiTitleNati;
         String wikiTitleMorti;
-        boolean esistePaginaNati ;
-        boolean esistePaginaMorti ;
+        boolean esistePaginaNati;
+        boolean esistePaginaMorti;
         boolean natiOk;
         boolean mortiOk;
         String message;
@@ -281,50 +282,56 @@ public class AnnoWikiBackend extends WikiBackend {
 
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
-        for (AnnoWiki annoWiki : findAllSortCorrenteReverse()) {
-            bioNati = bioBackend.countAnnoNato(annoWiki);
-            bioMorti = bioBackend.countAnnoMorto(annoWiki);
+        for (Secolo secolo : secoli) {
+            for (AnnoWiki annoWiki : this.findAllBySecolo(secolo)) {
+                bioNati = bioBackend.countAnnoNato(annoWiki);
+                bioMorti = bioBackend.countAnnoMorto(annoWiki);
 
-            annoWiki.bioNati = bioNati;
-            annoWiki.bioMorti = bioMorti;
+                annoWiki.bioNati = bioNati;
+                annoWiki.bioMorti = bioMorti;
 
-            if (WPref.controllaPagine.is()) {
-                wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
-                wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
+                if (WPref.controllaPagine.is()) {
+                    wikiTitleNati = wikiUtility.wikiTitleNatiAnno(annoWiki);
+                    wikiTitleMorti = wikiUtility.wikiTitleMortiAnno(annoWiki);
 
-                esistePaginaNati = queryService.isEsiste(wikiTitleNati);
-                esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
+                    esistePaginaNati = queryService.isEsiste(wikiTitleNati);
+                    esistePaginaMorti = queryService.isEsiste(wikiTitleMorti);
 
-                annoWiki.esistePaginaNati = esistePaginaNati;
-                annoWiki.esistePaginaMorti = esistePaginaMorti;
+                    annoWiki.esistePaginaNati = esistePaginaNati;
+                    annoWiki.esistePaginaMorti = esistePaginaMorti;
 
-                if (esistePaginaNati) {
-                    natiOk = bioNati > 0;
+                    if (esistePaginaNati) {
+                        natiOk = bioNati > 0;
+                    }
+                    else {
+                        natiOk = bioNati == 0;
+                    }
+                    if (esistePaginaMorti) {
+                        mortiOk = bioMorti > 0;
+                    }
+                    else {
+                        mortiOk = bioMorti == 0;
+                    }
+
+                    annoWiki.natiOk = natiOk;
+                    annoWiki.mortiOk = mortiOk;
                 }
-                else {
-                    natiOk = bioNati == 0;
-                }
-                if (esistePaginaMorti) {
-                    mortiOk = bioMorti > 0;
-                }
-                else {
-                    mortiOk = bioMorti == 0;
-                }
 
-                annoWiki.natiOk = natiOk;
-                annoWiki.mortiOk = mortiOk;
+                update(annoWiki);
+
+                //                if (Pref.debug.is()) {
+                //                    cont++;
+                //                    if (mathService.multiploEsatto(blocco, cont)) {
+                //                        size = textService.format(cont);
+                //                        time = dateService.deltaText(inizio);
+                //                        message = String.format("Finora controllata l'esistenza di %s/%s anni, in %s", size, tot, time);
+                //                        logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
+                //                    }
+                //                }
             }
-
-            update(annoWiki);
-
             if (Pref.debug.is()) {
-                cont++;
-                if (mathService.multiploEsatto(blocco, cont)) {
-                    size = textService.format(cont);
-                    time = dateService.deltaText(inizio);
-                    message = String.format("Finora controllata l'esistenza di %s/%s anni, in %s", size, tot, time);
-                    logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
-                }
+                message = String.format("Elaborati gli anni del %s, in %s", secolo.nome, dateService.deltaText(inizio));
+                logService.info(new WrapLog().message(message).type(AETypeLog.elabora));
             }
         }
 
@@ -333,8 +340,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
     public Map elaboraValidi() {
         Map<String, Integer> mappa = new HashMap<>();
-        List<String> nati = mongoService.projectionString(Bio.class, "annoNato");
-        List<String> morti = mongoService.projectionString(Bio.class, "annoMorto");
+        List<Bio> biografie = bioBackend.findAll();
         int vociBiografiche = mongoService.count(Bio.class);
         Long natiSenzaParametro; //senza parametro
         Long natiParametroVuoto; //parametro vuoto
@@ -342,16 +348,15 @@ public class AnnoWikiBackend extends WikiBackend {
         Long mortiSenzaParametro; //senza parametro
         Long mortiParametroVuoto; //parametro vuoto
         Long mortiValoreEsistente; //qualsiasi valore
-        List<String> mortiLinkati;
         int checkSum;
 
-        natiSenzaParametro = nati.stream().filter(anno -> anno == null).count();
-        natiParametroVuoto = nati.stream().filter(anno -> anno != null && anno.length() == 0).count();
-        natiValoreEsistente = nati.stream().filter(anno -> anno != null && anno.length() > 0).count();
+        natiSenzaParametro = biografie.stream().filter(bio -> bio.annoNato == null).count();
+        natiParametroVuoto = biografie.stream().filter(bio -> bio.annoNato != null && bio.annoNato.length() == 0).count();
+        natiValoreEsistente = biografie.stream().filter(bio -> bio.annoNato != null && bio.annoNato.length() > 0).count();
 
-        mortiSenzaParametro = morti.stream().filter(anno -> anno == null).count();
-        mortiParametroVuoto = morti.stream().filter(anno -> anno != null && anno.length() == 0).count();
-        mortiValoreEsistente = morti.stream().filter(anno -> anno != null && anno.length() > 0).count();
+        mortiSenzaParametro = biografie.stream().filter(bio -> bio.annoMorto == null).count();
+        mortiParametroVuoto = biografie.stream().filter(bio -> bio.annoMorto != null && bio.annoMorto.length() == 0).count();
+        mortiValoreEsistente = biografie.stream().filter(bio -> bio.annoMorto != null && bio.annoMorto.length() > 0).count();
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {

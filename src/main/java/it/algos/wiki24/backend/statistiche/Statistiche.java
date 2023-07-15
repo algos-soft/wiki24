@@ -34,9 +34,15 @@ import java.util.*;
  */
 public abstract class Statistiche {
 
-    public static final String VALIDO = "Nel [[template:Bio|template Bio]] della voce biografica deve esserci un valore '''valido''' per il parametro";
+    public static final String MANCA = "Nel [[template:Bio|template Bio]] della voce biografica '''manca''' completamente il parametro ";
 
-    public static final String VALIDO_CORRISPONDENTE = VALIDO + SPAZIO + "corrispondente";
+    public static final String VUOTO = "Nel [[template:Bio|template Bio]] della voce biografica manca il '''valore''' del parametro ";
+
+    public static final String VALIDO = "Nel [[template:Bio|template Bio]] della voce biografica deve esserci un valore '''valido''' ed univoco per il parametro ";
+
+    public static final String DEVE = "Il [[template:Bio|template Bio]] della voce biografica deve avere un valore valido al parametro ";
+
+    public static final String VALIDO_CORRISPONDENTE = VALIDO + "corrispondente";
 
     public static final String NOTA_VALIDO = "valido";
 
@@ -47,6 +53,22 @@ public abstract class Statistiche {
     protected WPref durataStatistica;
 
     protected AETypeSummary typeSummary;
+
+    protected String tagNato;
+
+    protected String tagMorto;
+
+    protected String mancaNato = MANCA;
+
+    protected String mancaMorto = MANCA;
+
+    protected String vuotoNato = VUOTO;
+
+    protected String vuotoMorto = VUOTO;
+
+    protected String validoNato = VALIDO;
+
+    protected String validoMorto = VALIDO;
 
     /**
      * Istanza di una interfaccia <br>
@@ -171,6 +193,7 @@ public abstract class Statistiche {
     public String wikiTitleUpload;
 
     public String wikiTitleTest;
+    protected   Map<String, Integer> mappaValidi;
 
     @PostConstruct
     protected void postConstruct() {
@@ -193,6 +216,19 @@ public abstract class Statistiche {
         this.typeSummary = AETypeSummary.bioBot;
         this.typeToc = AETypeToc.forceToc;
         this.inizio = System.currentTimeMillis();
+
+        this.fixNomeParametri();
+    }
+
+    protected void fixNomeParametri() {
+        this.mancaNato = textService.isValid(tagNato) ? mancaNato + tagNato : mancaNato;
+        this.mancaMorto = textService.isValid(tagMorto) ? mancaMorto + tagMorto : mancaMorto;
+
+        this.vuotoNato = textService.isValid(tagNato) ? vuotoNato + tagNato : vuotoNato;
+        this.vuotoMorto = textService.isValid(tagMorto) ? vuotoMorto + tagMorto : vuotoMorto;
+
+        this.validoNato = textService.isValid(tagNato) ? validoNato + tagNato : validoNato;
+        this.validoMorto = textService.isValid(tagMorto) ? validoMorto + tagMorto : validoMorto;
     }
 
 

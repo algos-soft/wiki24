@@ -7,7 +7,6 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -24,18 +23,6 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatisticheGiorni extends Statistiche {
 
-    public static final String VALIDO_NASCITA = VALIDO + SPAZIO + "'''giornoMeseNascita'''";
-
-    public static final String VALIDO_MORTE = VALIDO + SPAZIO + "'''giornoMeseMorte'''";
-
-    //    /**
-    //     * Costruttore base con parametri <br>
-    //     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-    //     * Uso: appContext.getBean(StatisticheGiorni.class) <br>
-    //     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-    //     */
-    //    public StatisticheGiorni() {
-    //    }// end of constructor
 
     /**
      * Preferenze usate da questa 'view' <br>
@@ -53,6 +40,13 @@ public class StatisticheGiorni extends Statistiche {
         super.durataStatistica = WPref.statisticaGiorniTime;
         super.typeTime = AETypeTime.minuti;
         super.infoTime = "dei giorni";
+    }
+
+    protected void fixNomeParametri() {
+        super.tagNato = "giornoMeseNascita";
+        super.tagMorto = "giornoMeseMorte";
+
+        super.fixNomeParametri();
     }
 
 
@@ -164,22 +158,19 @@ public class StatisticheGiorni extends Statistiche {
         buffer.append(CAPO_ASTERISCO);
         message = "'''Manca'''";
         buffer.append(message);
-        message = "Manca sia il parametro 'giornoMeseNascita' che il relativo valore";
-        buffer.append(textService.setRef(message));
+        buffer.append(textService.setRef(mancaNato));
         message = String.format(" il parametro in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = "Il parametro è '''vuoto'''";
         buffer.append(message);
-        message = "Esiste il parametro 'giornoMeseNascita'' ma manca il relativo valore";
-        buffer.append(textService.setRef(message));
+        buffer.append(textService.setRef(vuotoNato));
         message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), natiVuotoPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = "Esiste un valore '''valido'''";
         buffer.append(message);
-        message = "Esiste un valore valido e univoco per il parametro 'giornoMeseNascita'";
-        buffer.append(textService.setRef(message));
+        buffer.append(textService.setRef(validoNato));
         message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), natiValidoPer);
         buffer.append(message);
 
@@ -211,23 +202,20 @@ public class StatisticheGiorni extends Statistiche {
         buffer.append(CAPO_ASTERISCO);
         message = "'''Manca'''";
         buffer.append(message);
-        message = "Manca sia il parametro 'giornoMeseMorte' che il relativo valore";
-        buffer.append(textService.setRef(message));
-        message = String.format(" il parametro in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), mortiSenzaPer);
+        buffer.append(textService.setRef(mancaMorto));
+        message = String.format(" il parametro in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO)), mortiSenzaPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = "Il parametro è '''vuoto'''";
         buffer.append(message);
-        message = "Esiste il parametro 'giornoMeseMorte'' ma manca il relativo valore";
-        buffer.append(textService.setRef(message));
-        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), mortiVuotoPer);
+        buffer.append(textService.setRef(vuotoMorto));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO)), mortiVuotoPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
         message = "Esiste un valore '''valido'''";
         buffer.append(message);
-        message = "Esiste un valore valido e univoco per il parametro 'giornoMeseMorte'";
-        buffer.append(textService.setRef(message));
-        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), mortiValidoPer);
+        buffer.append(textService.setRef(validoMorto));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE)), mortiValidoPer);
         buffer.append(message);
 
         return buffer.toString();
@@ -268,22 +256,20 @@ public class StatisticheGiorni extends Statistiche {
         buffer.append(CAPO);
         buffer.append(color);
         buffer.append("Nati");
-        message = "Il [[template:Bio|template Bio]] della voce biografica deve avere un valore valido al parametro '''giornoMeseNascita'''";
-        buffer.append(textService.setRef(message));
+        buffer.append(textService.setRef(DEVE + tagNato));
         buffer.append(CAPO);
         buffer.append(color);
         buffer.append("Morti");
-        message = "Il [[template:Bio|template Bio]] della voce biografica deve avere un valore valido al parametro '''giornoMeseMorte'''";
-        buffer.append(textService.setRef(message));
+        buffer.append(textService.setRef(DEVE + tagMorto));
         buffer.append(CAPO);
         buffer.append(color);
         buffer.append("% nati ");
-        message = String.format("Percentuale dei nati in questo giorno, rispetto al totale (%s) dei nati nell'intero anno", natiTxt);
+        message = String.format("Percentuale dei nati in questo giorno, rispetto al totale valido (%s) dei nati", natiTxt);
         buffer.append(textService.setRef(message));
         buffer.append(CAPO);
         buffer.append(color);
         buffer.append("% morti ");
-        message = String.format("Percentuale dei nati in questo giorno, rispetto al totale (%s) dei morti nell'intero anno", mortiTxt);
+        message = String.format("Percentuale dei nati in questo giorno, rispetto al totale valido (%s) dei morti", mortiTxt);
         buffer.append(textService.setRef(message));
         buffer.append(CAPO);
 
@@ -325,22 +311,5 @@ public class StatisticheGiorni extends Statistiche {
 
         return buffer.toString();
     }
-
-    //    /**
-    //     * Esegue la scrittura della pagina <br>
-    //     */
-    //    public WResult upload() {
-    //        super.prepara();
-    //        return super.upload(PATH_GIORNI);
-    //    }
-
-    //    /**
-    //     * Esegue la scrittura della pagina <br>
-    //     */
-    //    public WResult uploadTest() {
-    //        super.prepara();
-    //        return super.upload(UPLOAD_TITLE_DEBUG + GIORNI);
-    //    }
-
 
 }

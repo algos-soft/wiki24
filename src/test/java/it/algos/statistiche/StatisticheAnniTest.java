@@ -24,9 +24,8 @@ import org.springframework.test.context.junit.jupiter.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
-//@Tag("statistiche")
-@DisplayName("Test StatisticheAnni")
+@Tag("statistiche")
+@DisplayName("Statistiche Anni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StatisticheAnniTest extends WikiTest {
 
@@ -76,14 +75,30 @@ public class StatisticheAnniTest extends WikiTest {
 
     @Test
     @Order(2)
-    @DisplayName("2 - Upload")
-    void upload2() {
-        System.out.println(("2 - Upload"));
-
+    @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
+    void costruttoreBean() {
+        System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
         System.out.println(VUOTA);
-//        ottenutoRisultato = appContext.getBean(StatisticheAnni.class).uploadTest();
-//        assertTrue(ottenutoRisultato.isValido());
-//        printRisultato(ottenutoRisultato);
+
+        istanza = appContext.getBean(StatisticheAnni.class);
+        assertNotNull(istanza);
+        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
+        System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
+        System.out.println(String.format("Le classi [Statistica] (ed alte) implementano il Design Pattern 'Builder'"));
+        System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - Upload con metodo .test() ed .esegue()")
+    void esegueConTest() {
+        System.out.println(("3 - Upload con metodo .test() ed .esegue()"));
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(StatisticheAnni.class).test().esegue();
+        assertNotNull(ottenutoRisultato);
+        assertTrue(ottenutoRisultato.isValido());
+        printRisultato(ottenutoRisultato);
     }
 
     /**

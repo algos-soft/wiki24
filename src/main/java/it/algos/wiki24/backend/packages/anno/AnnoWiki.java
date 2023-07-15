@@ -54,10 +54,10 @@ public class AnnoWiki extends AEntity {
     @AIField(type = AETypeField.integer, header = "morti", caption = "Numero di biografie che utilizzano i morti in questo anno", widthEM = 6)
     public int bioMorti;
 
-    @AIField(type = AETypeField.text, widthEM = 10, header = "nati", caption = "Giorno/anno di nascita")
+    @AIField(type = AETypeField.anchor, widthEM = 10, header = "nati", caption = "Giorno/anno di nascita")
     public String pageNati;
 
-    @AIField(type = AETypeField.text, widthEM = 10, header = "morti", caption = "Giorno/anno di morte")
+    @AIField(type = AETypeField.anchor, widthEM = 10, header = "morti", caption = "Giorno/anno di morte")
     public String pageMorti;
 
     @AIField(type = AETypeField.booleano)

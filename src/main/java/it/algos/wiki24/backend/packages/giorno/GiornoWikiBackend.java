@@ -213,8 +213,6 @@ public class GiornoWikiBackend extends WikiBackend {
     @Override
     public WResult elabora() {
         WResult result = super.elabora();
-        String message;
-        int tempo = WPref.elaboraGiorniTime.getInt();
 
         //--Check di validità del database mongoDB
         if (checkValiditaDatabase().isErrato()) {
@@ -244,7 +242,6 @@ public class GiornoWikiBackend extends WikiBackend {
         Long mortiSenzaParametro; //senza parametro
         Long mortiParametroVuoto; //parametro vuoto
         Long mortiValoreEsistente; //qualsiasi valore
-        List<String> mortiLinkati;
         int checkSum;
 
          natiSenzaParametro = biografie.stream().filter(bio -> bio.giornoNato == null).count();
