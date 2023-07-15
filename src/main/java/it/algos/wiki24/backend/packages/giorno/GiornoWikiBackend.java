@@ -236,8 +236,7 @@ public class GiornoWikiBackend extends WikiBackend {
 
     public Map elaboraValidi() {
         Map<String, Integer> mappa = new HashMap<>();
-        List<String> nati = mongoService.projectionString(Bio.class, "giornoNato",null);
-        List<String> morti = mongoService.projectionString(Bio.class, "giornoMorto");
+        List<Bio> biografie = bioBackend.findAll();
         int vociBiografiche = mongoService.count(Bio.class);
         Long natiSenzaParametro; //senza parametro
         Long natiParametroVuoto; //parametro vuoto
@@ -248,13 +247,13 @@ public class GiornoWikiBackend extends WikiBackend {
         List<String> mortiLinkati;
         int checkSum;
 
-        natiSenzaParametro = nati.stream().filter(giorno -> giorno == null).count();
-        natiParametroVuoto = nati.stream().filter(giorno -> giorno != null && giorno.length() == 0).count();
-        natiValoreEsistente = nati.stream().filter(giorno -> giorno != null && giorno.length() > 0).count();
+         natiSenzaParametro = biografie.stream().filter(bio -> bio.giornoNato == null).count();
+         natiParametroVuoto = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() == 0).count();
+         natiValoreEsistente = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() > 0).count();
 
-        mortiSenzaParametro = morti.stream().filter(giorno -> giorno == null).count();
-        mortiParametroVuoto = morti.stream().filter(giorno -> giorno != null && giorno.length() == 0).count();
-        mortiValoreEsistente = morti.stream().filter(giorno -> giorno != null && giorno.length() > 0).count();
+        mortiSenzaParametro = biografie.stream().filter(bio -> bio.giornoMorto == null).count();
+        mortiParametroVuoto = biografie.stream().filter(bio -> bio.giornoMorto != null && bio.giornoMorto.length() == 0).count();
+        mortiValoreEsistente = biografie.stream().filter(bio -> bio.giornoMorto != null && bio.giornoMorto.length() > 0).count();
 
         checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
         if (checkSum != vociBiografiche) {
