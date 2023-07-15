@@ -77,7 +77,7 @@ public class StatisticheGiorni extends Statistiche {
      * Prima esegue una Elaborazione <br>
      */
     protected void elabora() {
-//        giornoWikiBackend.elabora();
+        giornoWikiBackend.elabora();
     }
 
     /**
@@ -162,7 +162,7 @@ public class StatisticheGiorni extends Statistiche {
         message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message ="'''Manca'''";
+        message = "'''Manca'''";
         buffer.append(message);
         message = "Manca sia il parametro 'giornoMeseNascita' che il relativo valore";
         buffer.append(textService.setRef(message));
@@ -209,7 +209,7 @@ public class StatisticheGiorni extends Statistiche {
         message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message ="'''Manca'''";
+        message = "'''Manca'''";
         buffer.append(message);
         message = "Manca sia il parametro 'giornoMeseMorte' che il relativo valore";
         buffer.append(textService.setRef(message));
