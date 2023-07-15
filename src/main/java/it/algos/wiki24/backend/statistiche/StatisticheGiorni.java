@@ -77,7 +77,7 @@ public class StatisticheGiorni extends Statistiche {
      * Prima esegue una Elaborazione <br>
      */
     protected void elabora() {
-        giornoWikiBackend.elabora();
+//        giornoWikiBackend.elabora();
     }
 
     /**
@@ -162,13 +162,25 @@ public class StatisticheGiorni extends Statistiche {
         message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
+        message ="'''Manca'''";
+        buffer.append(message);
+        message = "Manca sia il parametro 'giornoMeseNascita' che il relativo valore";
+        buffer.append(textService.setRef(message));
+        message = String.format(" il parametro in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), natiSenzaPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), natiVuotoPer);
+        message = "Il parametro è '''vuoto'''";
+        buffer.append(message);
+        message = "Esiste il parametro 'giornoMeseNascita'' ma manca il relativo valore";
+        buffer.append(textService.setRef(message));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), natiVuotoPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), natiValidoPer);
+        message = "Esiste un valore '''valido'''";
+        buffer.append(message);
+        message = "Esiste un valore valido e univoco per il parametro 'giornoMeseNascita'";
+        buffer.append(textService.setRef(message));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), natiValidoPer);
         buffer.append(message);
 
         return buffer.toString();
@@ -193,17 +205,29 @@ public class StatisticheGiorni extends Statistiche {
         buffer.append(wikiUtility.setParagrafo("Morte"));
         message = String.format("Nelle '''%s''' voci biografiche esistenti, il giorno di morte", numVoci);
         buffer.append(message);
-        buffer.append(textService.getRef(NOTA_VALIDO));
+        buffer.append(textService.setRef(VALIDO_CORRISPONDENTE, NOTA_VALIDO));
         message = " risulta:";
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Manca il parametro in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_SENZA_PARAMETRO)), mortiSenzaPer);
+        message ="'''Manca'''";
+        buffer.append(message);
+        message = "Manca sia il parametro 'giornoMeseMorte' che il relativo valore";
+        buffer.append(textService.setRef(message));
+        message = String.format(" il parametro in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_SENZA_PARAMETRO)), mortiSenzaPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Il parametro è vuoto in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_PARAMETRO_VUOTO)), mortiVuotoPer);
+        message = "Il parametro è '''vuoto'''";
+        buffer.append(message);
+        message = "Esiste il parametro 'giornoMeseMorte'' ma manca il relativo valore";
+        buffer.append(textService.setRef(message));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_PARAMETRO_VUOTO)), mortiVuotoPer);
         buffer.append(message);
         buffer.append(CAPO_ASTERISCO);
-        message = String.format("Esiste un valore valido in %s voci (%s del totale)", textService.format(mappa.get(KEY_MAP_MORTI_VALORE_ESISTENTE)), mortiValidoPer);
+        message = "Esiste un valore '''valido'''";
+        buffer.append(message);
+        message = "Esiste un valore valido e univoco per il parametro 'giornoMeseMorte'";
+        buffer.append(textService.setRef(message));
+        message = String.format(" in %s voci ('''%s''' del totale)", textService.format(mappa.get(KEY_MAP_NATI_VALORE_ESISTENTE)), mortiValidoPer);
         buffer.append(message);
 
         return buffer.toString();
