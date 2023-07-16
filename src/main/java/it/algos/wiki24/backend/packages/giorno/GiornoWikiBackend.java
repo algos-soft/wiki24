@@ -17,6 +17,7 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.math.*;
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -219,6 +220,17 @@ public class GiornoWikiBackend extends WikiBackend {
             return WResult.errato();
         }
 
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //visto che l'elaborazione impiega più di parecchio tempo
+        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+        LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+        lastElaborazione = lastElaborazione.plusHours(1);
+        if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            this.lastElaborazione.setValue(elaborazioneAttuale);
+            return result;
+        }
+
         //--Per ogni anno calcola quante biografie lo usano (nei 2 parametri)
         //--Memorizza e registra il dato nella entityBean
         for (GiornoWiki giornoWiki : findAllSortCorrente()) {
@@ -244,9 +256,9 @@ public class GiornoWikiBackend extends WikiBackend {
         Long mortiValoreEsistente; //qualsiasi valore
         int checkSum;
 
-         natiSenzaParametro = biografie.stream().filter(bio -> bio.giornoNato == null).count();
-         natiParametroVuoto = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() == 0).count();
-         natiValoreEsistente = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() > 0).count();
+        natiSenzaParametro = biografie.stream().filter(bio -> bio.giornoNato == null).count();
+        natiParametroVuoto = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() == 0).count();
+        natiValoreEsistente = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() > 0).count();
 
         mortiSenzaParametro = biografie.stream().filter(bio -> bio.giornoMorto == null).count();
         mortiParametroVuoto = biografie.stream().filter(bio -> bio.giornoMorto != null && bio.giornoMorto.length() == 0).count();

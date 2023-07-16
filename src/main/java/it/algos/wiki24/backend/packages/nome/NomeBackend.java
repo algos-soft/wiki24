@@ -410,7 +410,7 @@ public class NomeBackend extends WikiBackend {
         int sogliaWiki = WPref.sogliaWikiNomi.getInt();
 
         //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
-        //visto che l'elaborazione impiega più di 3 minuti
+        //visto che l'elaborazione impiega più di parecchio tempo
         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
         LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
 

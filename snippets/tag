@@ -1,0 +1,9 @@
+         //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+         //visto che l'elaborazione impiega più di 3 minuti
+         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+         LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+          lastElaborazione = lastElaborazione.plusHours(1);
+          if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+              return result;
+          }

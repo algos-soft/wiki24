@@ -70,7 +70,7 @@ public class StatisticheAnni extends Statistiche {
      * Elabora i dati
      */
     protected void elabora() {
-//        annoWikiBackend.elabora();
+        annoWikiBackend.elabora();
         //        Map mappa = annoWikiBackend.elaboraValidi();
     }
 

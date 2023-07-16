@@ -18,6 +18,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -275,6 +276,17 @@ public class AnnoWikiBackend extends WikiBackend {
         //--Check di validità del database mongoDB
         if (checkValiditaDatabase().isErrato()) {
             return WResult.errato();
+        }
+
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //visto che l'elaborazione impiega più di parecchio tempo
+        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+        LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+        lastElaborazione = lastElaborazione.plusHours(1);
+        if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            this.lastElaborazione.setValue(elaborazioneAttuale);
+            return result;
         }
 
         message = String.format("Inizio %s() di %s. Tempo previsto: circa %d %s.", METHOD_NAME_ELABORA, Anno.class.getSimpleName(), tempo, unitaMisuraElaborazione);
