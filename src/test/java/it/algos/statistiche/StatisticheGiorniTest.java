@@ -45,7 +45,7 @@ public class StatisticheGiorniTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = StatisticheGiorni.class;
     }
 
 
@@ -71,20 +71,22 @@ public class StatisticheGiorniTest extends WikiTest {
         istanza = new StatisticheGiorni();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+        System.out.println("Questa classe NON accetta parametri nel costruttore");
     }
 
     @Test
     @Order(2)
     @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
-    void costruttoreBean() {
+    void getBean() {
         System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
         System.out.println(VUOTA);
 
         istanza = appContext.getBean(StatisticheGiorni.class);
         assertNotNull(istanza);
         System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
+        System.out.println("Questa classe NON accetta parametri nel costruttore");
         System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
-        System.out.println(String.format("Le classi [Statistica] (ed alte) implementano il Design Pattern 'Builder'"));
+        System.out.println(String.format("Le classi [Statistica] (ed altre) implementano il Design Pattern 'Builder'"));
         System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
     }
 
@@ -97,23 +99,13 @@ public class StatisticheGiorniTest extends WikiTest {
 
         ottenutoRisultato = appContext.getBean(StatisticheGiorni.class).test().esegue();
         assertNotNull(ottenutoRisultato);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class).test().esegue()", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("È indispensabile invocare il metodo .esegue(), dopo aver eventualmente modificato qualche variabile"));
+        System.out.println(VUOTA);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);
     }
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
-    }
 
 }

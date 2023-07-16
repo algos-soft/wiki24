@@ -226,7 +226,7 @@ public class GiornoWikiBackend extends WikiBackend {
         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
         LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
 
-        lastElaborazione = lastElaborazione.plusHours(2);
+        lastElaborazione = lastElaborazione.plusHours(WPref.oreValiditaElaborazione.getInt());
         if (elaborazioneAttuale.isBefore(lastElaborazione)) {
             this.lastElaborazione.setValue(elaborazioneAttuale);
             return result;

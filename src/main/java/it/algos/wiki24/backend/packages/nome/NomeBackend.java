@@ -240,7 +240,7 @@ public class NomeBackend extends WikiBackend {
         result = addNomiModulo(result);
 
         //--Nomi 'semplici'. Ricavati dalla collection Bio sul server mongo.
-        result = estraeNomiDistinti(result);
+//        result = estraeNomiDistinti(result);
 
         result.fine();
         result.valido(true).eseguito();
@@ -414,7 +414,7 @@ public class NomeBackend extends WikiBackend {
         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
         LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
 
-        lastElaborazione = lastElaborazione.plusHours(1);
+        lastElaborazione = lastElaborazione.plusHours(WPref.oreValiditaElaborazione.getInt());
         if (elaborazioneAttuale.isBefore(lastElaborazione)) {
             this.lastElaborazione.setValue(elaborazioneAttuale);
             return result;

@@ -41,31 +41,6 @@ public class StatisticheListeNomi extends Statistiche {
     }
 
 
-    /**
-     * Recupera la lista
-     */
-    @Override
-    protected void creaLista() {
-        int soglia = 30;
-        lista = nomeBackend.findAllByNumBio(soglia);
-    }
-
-
-    /**
-     * Costruisce la mappa <br>
-     */
-    @Override
-    protected void creaMappa() {
-        super.creaMappa();
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
-        boolean supera;
-
-        for (Nome nome : (List<Nome>) lista) {
-            supera = nome.numBio > sogliaWiki;
-            mappa.put(nome.nome, MappaStatistiche.nome(nome.nome, nome.numBio, nome.paginaVoce, nome.paginaLista, supera));
-        }
-    }
-
     @Override
     protected String incipit() {
         StringBuffer buffer = new StringBuffer();
@@ -100,6 +75,31 @@ public class StatisticheListeNomi extends Statistiche {
         return buffer.toString();
     }
 
+
+    /**
+     * Recupera la lista
+     */
+    @Override
+    protected void creaLista() {
+        int soglia = 30;
+        lista = nomeBackend.findAllByNumBio(soglia);
+    }
+
+
+    /**
+     * Costruisce la mappa <br>
+     */
+    @Override
+    protected void creaMappa() {
+        super.creaMappa();
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+        boolean supera;
+
+        for (Nome nome : (List<Nome>) lista) {
+            supera = nome.numBio > sogliaWiki;
+            mappa.put(nome.nome, MappaStatistiche.nome(nome.nome, nome.numBio, nome.paginaVoce, nome.paginaLista, supera));
+        }
+    }
 
     protected String inizioTabella() {
         String testo = VUOTA;

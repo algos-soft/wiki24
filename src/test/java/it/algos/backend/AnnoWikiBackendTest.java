@@ -5,7 +5,9 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.anno.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
@@ -166,10 +168,10 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
 
 
     @Test
-    @Order(54)
-    @DisplayName("54 - findAllBySecolo (entity)")
+    @Order(56)
+    @DisplayName("56 - findAllBySecolo (entity)")
     void findAllBySecolo() {
-        System.out.println("54 - findAllBySecolo (entity)");
+        System.out.println("56 - findAllBySecolo (entity)");
 
         for (Secolo sorgente : secoloBackend.findAllSortCorrente()) {
             listaBeans = backend.findAllBySecolo(sorgente);
@@ -259,6 +261,109 @@ public class AnnoWikiBackendTest extends WikiBackendTest {
     @Order(75)
     @DisplayName("75 - findAllDistinctByPlurali (solo Attività e Nazionalità)")
     protected void findAllDistinctByPlurali() {
+    }
+
+
+
+
+    @Test
+    @Order(81)
+    @DisplayName("81 - natiSenzaParametro")
+    protected void natiSenzaParametro() {
+        System.out.println("81 - natiSenzaParametro");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.natiSenzaParametro();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie senza parametro %s", textService.format(ottenutoIntero), "giornoNato"));
+    }
+
+
+    @Test
+    @Order(82)
+    @DisplayName("82 - natiParametroVuoto")
+    protected void natiParametroVuoto() {
+        System.out.println("81 - natiParametroVuoto");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.natiParametroVuoto();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie col parametro %s vuoto", textService.format(ottenutoIntero), "giornoNato"));
+    }
+
+
+    @Test
+    @Order(83)
+    @DisplayName("83 - natiValoreEsistente")
+    protected void natiValoreEsistente() {
+        System.out.println("83 - natiValoreEsistente");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.natiValoreEsistente();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie col parametro %s esistente (non è detto che sia valido)", textService.format(ottenutoIntero), "giornoNato"));
+    }
+
+
+    @Test
+    @Order(84)
+    @DisplayName("84 - mortiSenzaParametro")
+    protected void mortiSenzaParametro() {
+        System.out.println("84 - mortiSenzaParametro");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.mortiSenzaParametro();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie senza parametro %s", textService.format(ottenutoIntero), "giornoMorto"));
+    }
+
+
+    @Test
+    @Order(85)
+    @DisplayName("85 - mortiParametroVuoto")
+    protected void mortiParametroVuoto() {
+        System.out.println("85 - mortiParametroVuoto");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.mortiParametroVuoto();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie col parametro %s vuoto", textService.format(ottenutoIntero), "giornoMorto"));
+    }
+
+
+    @Test
+    @Order(86)
+    @DisplayName("86 - mortiValoreEsistente")
+    protected void mortiValoreEsistente() {
+        System.out.println("86 - mortiValoreEsistente");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+
+        ottenutoIntero = backend.mortiValoreEsistente();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        System.out.println(String.format("Ci sono %s biografie col parametro %s esistente (non è detto che sia valido)", textService.format(ottenutoIntero), "giornoMorto"));
+    }
+
+
+    @Test
+    @Order(87)
+    @DisplayName("87 - elaboraValidi")
+    protected void elaboraValidi() {
+        System.out.println("87 - elaboraValidi");
+        System.out.println(VUOTA);
+        WResult result = WResult.build();
+        Map<String, Integer> mappaNumeri;
+
+        mappaNumeri = backend.elaboraValidi();
+        logService.debug(new WrapLog().message(String.format("Tempo %s%s", FORWARD, result.delta())));
+        assertNotNull(mappaNumeri);
+        System.out.println(VUOTA);
+        print(mappaNumeri);
     }
 
     @Test

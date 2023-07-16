@@ -40,6 +40,19 @@ public class StatisticheNomi extends Statistiche {
         super.typeTime = AETypeTime.minuti;
     }
 
+    @Override
+    protected String incipit() {
+        StringBuffer buffer = new StringBuffer();
+
+        String totListe = textService.format(nomeBackend.countBySopraSoglia());
+        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
+
+        buffer.append(wikiUtility.setParagrafo("Nomi"));
+        buffer.append(String.format("Elenco dei '''%s''' nomi che superano le '''%s''' occorrenze nelle voci biografiche", totListe, sogliaWiki));
+
+        return buffer.toString();
+
+    }
 
     /**
      * Recupera la lista
@@ -67,21 +80,6 @@ public class StatisticheNomi extends Statistiche {
     }
 
 
-    @Override
-    protected String incipit() {
-        StringBuffer buffer = new StringBuffer();
-
-        String totListe = textService.format(nomeBackend.countBySopraSoglia());
-        int sogliaWiki = WPref.sogliaWikiNomi.getInt();
-
-        buffer.append(wikiUtility.setParagrafo("Nomi"));
-        buffer.append(String.format("Elenco dei '''%s''' nomi che superano le '''%s''' occorrenze nelle voci biografiche", totListe, sogliaWiki));
-
-        return buffer.toString();
-
-    }
-
-
     protected String body() {
         StringBuffer buffer = new StringBuffer();
         MappaStatistiche mappaSingola;
@@ -105,104 +103,5 @@ public class StatisticheNomi extends Statistiche {
         return buffer.toString();
     }
 
-    //    protected String inizioTabella() {
-    //        String testo = VUOTA;
-    //
-    //        testo += CAPO;
-    //        testo += "{|class=\"wikitable sortable\" style=\"background-color:#EFEFEF; text-align: left;\"";
-    //        testo += CAPO;
-    //
-    //        return testo;
-    //    }
-
-    //    @Override
-    //    protected String colonne() {
-    //        StringBuffer buffer = new StringBuffer();
-    //        String color = "! style=\"background-color:#CCC;text-align: left;\"; |";
-    //
-    //        buffer.append(color);
-    //        buffer.append("#");
-    //        buffer.append(CAPO);
-    //
-    //        buffer.append(color);
-    //        buffer.append("Nome");
-    //        buffer.append(CAPO);
-    //
-    //        buffer.append(color);
-    //        buffer.append("Pagina");
-    //        buffer.append(CAPO);
-    //
-    //        buffer.append(color);
-    //        buffer.append("Lista");
-    //        buffer.append(CAPO);
-    //
-    //        buffer.append(color);
-    //        buffer.append("Voci");
-    //        buffer.append(CAPO);
-    //
-    //        return buffer.toString();
-    //    }
-
-    //    protected String riga(int numRiga, MappaStatistiche mappa) {
-    //        StringBuffer buffer = new StringBuffer();
-    //        String tagDex = "style=\"text-align: right;\" |";
-    //        String iniTag = "|-";
-    //        String doppioTag = " || ";
-    //        String pipe = "|";
-    //        String nomePersona;
-    //        String paginaVoce;
-    //        String paginaLista = VUOTA;
-    //
-    //        buffer.append(iniTag);
-    //        buffer.append(CAPO);
-    //        buffer.append(pipe);
-    //
-    //        //progressivo
-    //        buffer.append(numRiga);
-    //        buffer.append(doppioTag);
-    //
-    //        //nome
-    //        nomePersona = mappa.getChiave();
-    //        if (mappa.isSuperaSoglia()) {
-    //            nomePersona = textService.setBold(nomePersona);
-    //        }
-    //        buffer.append(nomePersona);
-    //        buffer.append(doppioTag);
-    //
-    //        //pagina
-    //        paginaVoce = mappa.getPaginaVoce();
-    //        buffer.append(textService.setDoppieQuadre(paginaVoce));
-    //        buffer.append(doppioTag);
-    //
-    //        if (mappa.isSuperaSoglia()) {
-    //            paginaLista = mappa.getPaginaLista();
-    //            paginaLista = textService.setDoppieQuadre(paginaLista);
-    //        }
-    //        buffer.append(paginaLista);
-    //        buffer.append(doppioTag);
-    //
-    //        //voci
-    //        buffer.append(tagDex);
-    //        buffer.append(mappa.getNumNomi());
-    //        buffer.append(CAPO);
-    //
-    //        return buffer.toString();
-    //    }
-
-    //    /**
-    //     * Esegue la scrittura della pagina <br>
-    //     */
-    //    public WResult upload() {
-    //        super.prepara();
-    //        return super.upload(TAG_ANTROPONIMI + TAG_LISTA_NOMI);
-    //    }
-    //
-    //    /**
-    //     * Esegue la scrittura della pagina <br>
-    //     */
-    //    public WResult uploadTest() {
-    //        super.prepara();
-    //        return super.upload(UPLOAD_TITLE_DEBUG + TAG_LISTA_NOMI);
-    //    }
 
 }

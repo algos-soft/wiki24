@@ -140,7 +140,7 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
      */
     @EventListener(ContextRefreshedEvent.class)
     public void onContextRefreshEvent() {
-        //        this.allResetOnlyEmpty();
+//        this.allResetOnlyEmpty();
     }
 
     public void allResetOnlyEmpty() {

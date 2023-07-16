@@ -229,6 +229,7 @@ public enum WPref implements AIGenPref {
     usaNumVociNazionalita("usaNumVociNazionalita", AETypePref.bool, false, "Numero di voci nei paragrafi di Nazionalità'", false),
     usaNumVociNomi("usaNumVociNomi", AETypePref.bool, true, "Numero di voci nei paragrafi di Nomi'", false),
     usaNumVociCognomi("usaNumVociCognomi", AETypePref.bool, true, "Numero di voci nei paragrafi di Cognomi'", false),
+    oreValiditaElaborazione("oreValiditaElaborazione", AETypePref.integer, 1, "Ore di validità di una elaborazione prima di rieseguirla."),
     ;
 
     //--codice di riferimento.
