@@ -14,6 +14,7 @@ import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.math.*;
@@ -220,12 +221,12 @@ public class GiornoWikiBackend extends WikiBackend {
             return WResult.errato();
         }
 
-        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (2 ora)
         //visto che l'elaborazione impiega più di parecchio tempo
         LocalDateTime elaborazioneAttuale = LocalDateTime.now();
         LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
 
-        lastElaborazione = lastElaborazione.plusHours(1);
+        lastElaborazione = lastElaborazione.plusHours(2);
         if (elaborazioneAttuale.isBefore(lastElaborazione)) {
             this.lastElaborazione.setValue(elaborazioneAttuale);
             return result;
@@ -246,42 +247,84 @@ public class GiornoWikiBackend extends WikiBackend {
 
     public Map elaboraValidi() {
         Map<String, Integer> mappa = new HashMap<>();
-        List<Bio> biografie = bioBackend.findAll();
         int vociBiografiche = mongoService.count(Bio.class);
-        Long natiSenzaParametro; //senza parametro
-        Long natiParametroVuoto; //parametro vuoto
-        Long natiValoreEsistente; //qualsiasi valore
-        Long mortiSenzaParametro; //senza parametro
-        Long mortiParametroVuoto; //parametro vuoto
-        Long mortiValoreEsistente; //qualsiasi valore
+        int natiSenzaParametro = natiSenzaParametro();
+        int natiParametroVuoto = natiParametroVuoto();
+        int natiValoreEsistente = natiValoreEsistente();
+        int mortiSenzaParametro = mortiSenzaParametro();
+        int mortiParametroVuoto = mortiParametroVuoto();
+        int mortiValoreEsistente = mortiValoreEsistente();
         int checkSum;
 
-        natiSenzaParametro = biografie.stream().filter(bio -> bio.giornoNato == null).count();
-        natiParametroVuoto = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() == 0).count();
-        natiValoreEsistente = biografie.stream().filter(bio -> bio.giornoNato != null && bio.giornoNato.length() > 0).count();
-
-        mortiSenzaParametro = biografie.stream().filter(bio -> bio.giornoMorto == null).count();
-        mortiParametroVuoto = biografie.stream().filter(bio -> bio.giornoMorto != null && bio.giornoMorto.length() == 0).count();
-        mortiValoreEsistente = biografie.stream().filter(bio -> bio.giornoMorto != null && bio.giornoMorto.length() > 0).count();
-
-        checkSum = natiSenzaParametro.intValue() + natiParametroVuoto.intValue() + natiValoreEsistente.intValue();
+        checkSum = natiSenzaParametro + natiParametroVuoto + natiValoreEsistente + mortiSenzaParametro + mortiParametroVuoto + mortiValoreEsistente;
         if (checkSum != vociBiografiche) {
-            logService.info(WrapLog.build().message("Somma giorno di nascita errata"));
-        }
-        checkSum = mortiSenzaParametro.intValue() + mortiParametroVuoto.intValue() + mortiValoreEsistente.intValue();
-        if (checkSum != vociBiografiche) {
-            logService.info(WrapLog.build().message("Somma giorno di morte errata"));
+            logService.info(WrapLog.build().message("Somma dei giorni di nascita e morte errata"));
         }
 
-        mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro.intValue());
-        mappa.put(KEY_MAP_NATI_PARAMETRO_VUOTO, natiParametroVuoto.intValue());
-        mappa.put(KEY_MAP_NATI_VALORE_ESISTENTE, natiValoreEsistente.intValue());
+        mappa.put(KEY_MAP_NATI_SENZA_PARAMETRO, natiSenzaParametro);
+        mappa.put(KEY_MAP_NATI_PARAMETRO_VUOTO, natiParametroVuoto);
+        mappa.put(KEY_MAP_NATI_VALORE_ESISTENTE, natiValoreEsistente);
 
-        mappa.put(KEY_MAP_MORTI_SENZA_PARAMETRO, mortiSenzaParametro.intValue());
-        mappa.put(KEY_MAP_MORTI_PARAMETRO_VUOTO, mortiParametroVuoto.intValue());
-        mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente.intValue());
+        mappa.put(KEY_MAP_MORTI_SENZA_PARAMETRO, mortiSenzaParametro);
+        mappa.put(KEY_MAP_MORTI_PARAMETRO_VUOTO, mortiParametroVuoto);
+        mappa.put(KEY_MAP_MORTI_VALORE_ESISTENTE, mortiValoreEsistente);
 
         return mappa;
+    }
+
+    public int natiSenzaParametro() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoNato").isNull());
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+    public int natiParametroVuoto() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoNato").is(VUOTA));
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+    public int natiValoreEsistente() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoNato").regex(".+"));
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+
+    public int mortiSenzaParametro() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoMorto").isNull());
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+    public int mortiParametroVuoto() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoMorto").is(VUOTA));
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+    public int mortiValoreEsistente() {
+        Long lungo;
+        Query query = new Query();
+        query.addCriteria(Criteria.where("giornoMorto").regex(".+"));
+        lungo = mongoService.mongoOp.count(query, Bio.class);
+
+        return lungo > 0 ? lungo.intValue() : 0;
     }
 
 

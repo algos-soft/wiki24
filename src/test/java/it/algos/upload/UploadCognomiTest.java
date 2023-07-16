@@ -6,6 +6,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.upload.liste.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +16,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
+
+import java.util.*;
 
 /**
  * Project wiki24
@@ -48,6 +51,7 @@ public class UploadCognomiTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazz = UploadCognomi.class;
         super.setUpAll();
         assertNull(istanza);
     }
@@ -65,45 +69,26 @@ public class UploadCognomiTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
 
-        istanza = new UploadCognomi();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-
-        System.out.println(VUOTA);
-        System.out.println("L'istanza è stata costruita SENZA usare SpringBoot.");
-        System.out.println("NON passa da @PostConstruct().");
-        System.out.println("@Autowired NON funziona.");
-        assertNotNull(istanza);
-        assertNull(istanza.wikiTitleUpload);
-        assertNull(istanza.wikiBackend);
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("2 - getBean base senza parametri")
-    void getBean() {
-        System.out.println(("2 - getBean base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = appContext.getBean(UploadCognomi.class);
-
-        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-
-        System.out.println(VUOTA);
-        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
-        System.out.println("PASSA da @PostConstruct().");
-        System.out.println("@Autowired dovrebbe funzionare.");
-        assertNotNull(istanza);
-        assertNotNull(istanza.wikiTitleUpload);
-        assertNotNull(istanza.wikiBackend);
-    }
+//    @Test
+//    @Order(2)
+//    @DisplayName("2 - getBean base senza parametri")
+//    void getBean() {
+//        System.out.println(("2 - getBean base senza parametri"));
+//        System.out.println(VUOTA);
+//
+//        istanza = appContext.getBean(UploadCognomi.class);
+//
+//        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+//
+//        System.out.println(VUOTA);
+//        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
+//        System.out.println("PASSA da @PostConstruct().");
+//        System.out.println("@Autowired dovrebbe funzionare.");
+//        assertNotNull(istanza);
+//        assertNotNull(istanza.wikiTitleUpload);
+//        assertNotNull(istanza.wikiBackend);
+//    }
 
     @Test
     @Order(3)
@@ -116,7 +101,7 @@ public class UploadCognomiTest extends WikiTest {
         ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
-        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Test del cognome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni"));
         System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
@@ -131,12 +116,38 @@ public class UploadCognomiTest extends WikiTest {
         System.out.println("4 - Upload test di un cognome con sottoPagina");
         System.out.println(VUOTA);
 
-        sorgente = "Thomas";
+        sorgente = "Brown";
         ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
-        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Test del cognome %s", sorgente));
         System.out.println(String.format("Lista con sottoPagina"));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(11)
+    @DisplayName("11 - Upload test di una sottopagina da sola")
+    void uploadOnlySottoPagina() {
+        System.out.println("11 - Upload test di una sottopagina da sola");
+        System.out.println(VUOTA);
+
+        sorgente = "Brown";
+        sorgente2 = "Giocatori di football americano";
+        sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
+        List<WrapLista> lista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
+
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente3).sottoPagina(lista).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del cognome %s", sorgente));
+        System.out.println(String.format("Solo sottopagina - Probabilmente %d elementi", ottenutoIntero));
         System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
 

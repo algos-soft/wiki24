@@ -22,7 +22,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("production")
-@Tag("upload")
+//@Tag("upload")
 @DisplayName("Attività upload")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadAttivitaTest extends WikiTest {

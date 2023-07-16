@@ -33,6 +33,7 @@ public class StatisticheGiorni extends Statistiche {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.currentWikiBackend = giornoWikiBackend;
         super.wikiTitleUpload = PATH_BIOGRAFIE + "Giorni";
         super.typeSummary = AETypeSummary.statBio;
         super.typeToc = AETypeToc.noToc;
@@ -65,14 +66,6 @@ public class StatisticheGiorni extends Statistiche {
         return buffer.toString();
     }
 
-
-    /**
-     * Elabora i dati
-     * Prima esegue una Elaborazione <br>
-     */
-    protected void elabora() {
-        giornoWikiBackend.elabora();
-    }
 
     /**
      * Recupera la lista

@@ -27,12 +27,11 @@ import java.util.*;
 public class StatisticheListeNomi extends Statistiche {
 
 
-
-
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.currentWikiBackend = nomeBackend;
         super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
         super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_LISTA_NOMI;
         super.typeToc = AETypeToc.noToc;
@@ -41,34 +40,6 @@ public class StatisticheListeNomi extends Statistiche {
         super.typeTime = AETypeTime.minuti;
     }
 
-    public StatisticheListeNomi test() {
-        super.wikiTitleUpload = super.wikiTitleTest;
-        this.uploadTest = true;
-        return this;
-    }
-
-    public WResult esegue() {
-        this.elabora();
-        this.creaLista();
-        this.creaMappa();
-
-        return esegueUpload();
-    }
-
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
-        //visto che l'elaborazione impiega più di 3 minuti
-        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
-        LocalDateTime lastElaborazione = (LocalDateTime) nomeBackend.lastElaborazione.get();
-
-        lastElaborazione = lastElaborazione.plusHours(1);
-        if (elaborazioneAttuale.isAfter(lastElaborazione)) {
-            nomeBackend.elabora();
-        }
-    }
 
     /**
      * Recupera la lista

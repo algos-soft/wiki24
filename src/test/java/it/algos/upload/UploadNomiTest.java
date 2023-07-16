@@ -57,8 +57,9 @@ public class UploadNomiTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
+        super.clazz = UploadNomi.class;
         assertNull(istanza);
+        super.setUpAll();
     }
 
 
@@ -75,46 +76,6 @@ public class UploadNomiTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = new UploadNomi();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-
-        System.out.println(VUOTA);
-        System.out.println("L'istanza è stata costruita SENZA usare SpringBoot.");
-        System.out.println("NON passa da @PostConstruct().");
-        System.out.println("@Autowired NON funziona.");
-        assertNotNull(istanza);
-        assertNull(istanza.wikiTitleUpload);
-        assertNull(istanza.wikiBackend);
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("2 - getBean base senza parametri")
-    void getBean() {
-        System.out.println(("2 - getBean base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = appContext.getBean(UploadNomi.class);
-
-        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-
-        System.out.println(VUOTA);
-        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
-        System.out.println("PASSA da @PostConstruct().");
-        System.out.println("@Autowired dovrebbe funzionare.");
-        assertNotNull(istanza);
-        assertNotNull(istanza.wikiTitleUpload);
-        assertNotNull(istanza.wikiBackend);
-    }
-
-    //    @Test
     @Order(3)
     @DisplayName("3 - Upload test di un nome con noToc")
     void uploadNoToc() {
@@ -262,7 +223,7 @@ public class UploadNomiTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
-//    @Test
+    //    @Test
     @Order(10)
     @DisplayName("10 - Upload test di un nome standard")
     void upload() {
@@ -284,7 +245,7 @@ public class UploadNomiTest extends WikiTest {
     }
 
 
-    //    @Test
+    @Test
     @Order(11)
     @DisplayName("11 - Upload test di una sottopagina da sola")
     void uploadOnlySottoPagina() {
@@ -381,7 +342,6 @@ public class UploadNomiTest extends WikiTest {
         System.out.println(VUOTA);
         printRisultato(ottenutoRisultato);
     }
-
 
 
     @Test

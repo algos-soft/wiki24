@@ -20,6 +20,7 @@ import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
@@ -77,11 +78,11 @@ public abstract class WikiTest extends AlgosTest {
     @Autowired
     public BioBackend bioBackend;
 
-//    @Autowired
-//    public AttivitaBackend attivitaBackend;
-//
-//    @Autowired
-//    public NazionalitaBackend nazionalitaBackend;
+    //    @Autowired
+    //    public AttivitaBackend attivitaBackend;
+    //
+    //    @Autowired
+    //    public NazionalitaBackend nazionalitaBackend;
 
     @Autowired
     public BotLogin botLogin;
@@ -208,6 +209,7 @@ public abstract class WikiTest extends AlgosTest {
 
     protected LinkedHashMap<String, List<WrapLista>> mappaWrap;
 
+    protected Class clazz;
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -692,7 +694,6 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-
     //--cognome
     //--flag diacritico
     protected static Stream<Arguments> DIACRITICI() {
@@ -809,6 +810,30 @@ public abstract class WikiTest extends AlgosTest {
         pageId = 0L;
     }
 
+    @Test
+    @Order(1)
+    @DisplayName("1 - Costruttore base senza parametri")
+    void costruttoreBase() {
+        System.out.println(("1 - Costruttore base senza parametri"));
+        System.out.println(VUOTA);
+
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("new %s() NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - getBean base senza parametri")
+    void getBean() {
+        System.out.println(("2 - getBean base senza parametri"));
+        System.out.println(VUOTA);
+
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+    }
 
     protected void printRisultato(WResult result) {
         List lista = result.getLista();
@@ -1174,20 +1199,25 @@ public abstract class WikiTest extends AlgosTest {
             System.out.print(SEP);
             if (textService.isValid(wrap.titoloParagrafoLink)) {
                 System.out.print(wrap.titoloParagrafoLink);
-                System.out.print(SEP);
             }
             else {
                 System.out.print("null");
-                System.out.print(SEP);
             }
+            System.out.print(SEP);
             if (textService.isValid(wrap.ordinamento)) {
                 System.out.print(wrap.ordinamento);
-                System.out.print(SEP);
             }
+            else {
+                System.out.print("null");
+            }
+            System.out.print(SEP);
             if (textService.isValid(wrap.titoloSottoParagrafo)) {
                 System.out.print(wrap.titoloSottoParagrafo);
-                System.out.print(SEP);
             }
+            else {
+                System.out.print("null");
+            }
+            System.out.print(SEP);
             System.out.println(wrap.didascaliaBreve);
         }
         System.out.println(VUOTA);

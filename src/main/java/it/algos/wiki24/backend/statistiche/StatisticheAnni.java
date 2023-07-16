@@ -35,6 +35,7 @@ public class StatisticheAnni extends Statistiche {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.currentWikiBackend = annoWikiBackend;
         super.wikiTitleUpload = PATH_BIOGRAFIE + "Anni";
         super.typeSummary = AETypeSummary.statBio;
         super.typeToc = AETypeToc.noToc;
@@ -66,13 +67,6 @@ public class StatisticheAnni extends Statistiche {
         return buffer.toString();
     }
 
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        annoWikiBackend.elabora();
-        //        Map mappa = annoWikiBackend.elaboraValidi();
-    }
 
     /**
      * Recupera la lista

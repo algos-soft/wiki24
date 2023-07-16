@@ -25,47 +25,17 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class StatisticheListeCognomi extends Statistiche {
 
+
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.currentWikiBackend = cognomeBackend;
         super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_LISTA_COGNOMI;
         super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_LISTA_COGNOMI;
         super.typeToc = AETypeToc.noToc;
         super.lastStatistica = WPref.statisticaNomi;
         super.durataStatistica = WPref.statisticaNomiTime;
         super.typeTime = AETypeTime.minuti;
-    }
-
-
-    public StatisticheListeCognomi test() {
-        super.wikiTitleUpload = super.wikiTitleTest;
-        this.uploadTest = true;
-        return this;
-    }
-
-
-    public WResult esegue() {
-        this.elabora();
-        this.creaLista();
-        this.creaMappa();
-
-        return esegueUpload();
-    }
-
-
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
-        //visto che l'elaborazione impiega più di 3 minuti
-        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
-        LocalDateTime lastElaborazione = (LocalDateTime) cognomeBackend.lastElaborazione.get();
-
-        lastElaborazione = lastElaborazione.plusHours(1);
-        if (elaborazioneAttuale.isAfter(lastElaborazione)) {
-            cognomeBackend.elabora();
-        }
     }
 
 
@@ -93,7 +63,6 @@ public class StatisticheListeCognomi extends Statistiche {
             mappa.put(cognome.cognome, MappaStatistiche.nome(cognome.cognome, cognome.numBio, cognome.paginaVoce, cognome.paginaLista, supera));
         }
     }
-
 
 
     @Override

@@ -31,6 +31,7 @@ public class StatisticheNomi extends Statistiche {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.currentWikiBackend = nomeBackend;
         super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_NOMI;
         super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_NOMI;
         super.typeToc = AETypeToc.noToc;
@@ -39,35 +40,6 @@ public class StatisticheNomi extends Statistiche {
         super.typeTime = AETypeTime.minuti;
     }
 
-    public StatisticheNomi test() {
-        super.wikiTitleUpload = super.wikiTitleTest;
-        this.uploadTest = true;
-        return this;
-    }
-
-    public WResult esegue() {
-        this.elabora();
-        this.creaLista();
-        this.creaMappa();
-
-        return esegueUpload();
-    }
-
-
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
-        //visto che l'elaborazione impiega più di 3 minuti
-        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
-        LocalDateTime lastElaborazione = (LocalDateTime) nomeBackend.lastElaborazione.get();
-
-        lastElaborazione = lastElaborazione.plusHours(1);
-        if (elaborazioneAttuale.isAfter(lastElaborazione)) {
-            nomeBackend.elabora();
-        }
-    }
 
     /**
      * Recupera la lista
@@ -126,7 +98,7 @@ public class StatisticheNomi extends Statistiche {
             buffer.append(PIPE);
             buffer.append(mappaSingola.getChiave());
             buffer.append(DOPPIE_QUADRE_END);
-            buffer.append(String.format(" '''(%s)'''",mappaSingola.getNumNomi()));
+            buffer.append(String.format(" '''(%s)'''", mappaSingola.getNumNomi()));
         }
         buffer.append("{{Div col end}}");
 

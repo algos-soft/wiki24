@@ -14,6 +14,7 @@ import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nome.*;
+import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
@@ -164,6 +165,8 @@ public abstract class Statistiche {
     @Autowired
     public CognomeBackend cognomeBackend;
 
+    protected WikiBackend currentWikiBackend;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -171,6 +174,9 @@ public abstract class Statistiche {
      */
     @Autowired
     public MongoService mongoService;
+
+    @Autowired
+    public LogService logService;
 
     protected int totNati = 0;
 
@@ -193,19 +199,14 @@ public abstract class Statistiche {
     public String wikiTitleUpload;
 
     public String wikiTitleTest;
-    protected   Map<String, Integer> mappaValidi;
+
+    protected Map<String, Integer> mappaValidi;
 
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
     }
 
-    //    protected void prepara() {
-    //        this.fixPreferenze();
-    //        this.elabora();
-    //        this.creaLista();
-    //        this.creaMappa();
-    //    }
 
     /**
      * Preferenze usate da questa 'view' <br>
@@ -239,9 +240,16 @@ public abstract class Statistiche {
     }
 
     public WResult esegue() {
+        WResult result = WResult.build();
+
         this.elabora();
+        logService.debug(new WrapLog().message(String.format("Elaborazione%s%s", FORWARD, result.delta())));
+
         this.creaLista();
+        logService.debug(new WrapLog().message(String.format("Creazione lista%s%s", FORWARD, result.delta())));
+
         this.creaMappa();
+        logService.debug(new WrapLog().message(String.format("Creazione mappa%s%s", FORWARD, result.delta())));
 
         return esegueUpload();
     }
@@ -251,6 +259,9 @@ public abstract class Statistiche {
      * Prima esegue una (eventuale) elaborazione <br>
      */
     protected void elabora() {
+        if (currentWikiBackend != null) {
+            currentWikiBackend.elabora();
+        }
     }
 
     /**
@@ -272,22 +283,34 @@ public abstract class Statistiche {
     }
 
     protected WResult esegueUpload(String wikiTitle) {
-        WResult result;
+        WResult result = WResult.build();
+
         StringBuffer buffer = new StringBuffer();
+        logService.debug(new WrapLog().message(String.format("InizioUpload %s%s", FORWARD, result.delta())));
 
         buffer.append(avviso());
         buffer.append(CAPO);
+        logService.debug(new WrapLog().message(String.format("avviso %s%s", FORWARD, result.delta())));
         buffer.append(includeIni());
+        logService.debug(new WrapLog().message(String.format("includeIni %s%s", FORWARD, result.delta())));
         buffer.append(fixToc());
+        logService.debug(new WrapLog().message(String.format("fixToc %s%s", FORWARD, result.delta())));
         buffer.append(tmpStatBio());
+        logService.debug(new WrapLog().message(String.format("tmpStatBio %s%s", FORWARD, result.delta())));
         buffer.append(includeEnd());
+        logService.debug(new WrapLog().message(String.format("includeEnd %s%s", FORWARD, result.delta())));
         buffer.append(incipit());
+        logService.debug(new WrapLog().message(String.format("incipit %s%s", FORWARD, result.delta())));
         buffer.append(bodyAnte());
+        logService.debug(new WrapLog().message(String.format("Ante%s%s", FORWARD, result.delta())));
         buffer.append(body());
+        logService.debug(new WrapLog().message(String.format("Post%s%s", FORWARD, result.delta())));
         buffer.append(bodyPost());
         buffer.append(note());
         buffer.append(correlate());
         buffer.append(categorie());
+        logService.debug(new WrapLog().message(String.format("Buffer%s%s", FORWARD, result.delta())));
+
         result = registra(wikiTitle, buffer.toString());
 
         return fixInfo(result);

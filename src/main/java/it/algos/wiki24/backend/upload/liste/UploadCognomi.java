@@ -41,90 +41,28 @@ public class UploadCognomi extends Upload {
 
 
     /**
-     * Costruttore base senza parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     */
-    public UploadCognomi() {
-        super();
-    }// end of constructor
-
-    /**
      * Costruttore base con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
      * Uso: appContext.getBean(UploadAttivita.class).upload(nomeAttivitaPlurale) <br>
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public UploadCognomi(String cognome) {
-        super(cognome);
+    public UploadCognomi(String nomeLista) {
+        super(nomeLista);
     }// end of constructor
 
 
-    @PostConstruct
-    protected void postConstruct() {
+    @Override
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
         super.wikiBackend = cognomeBackend;
-
-        super.postConstruct();
-
         super.wikiTitleUpload = wikiUtility.wikiTitleCognomi(nomeLista);
         super.summary = "[[Utente:Biobot/cognomiBio|cognomiBio]]";
         super.typeLista = AETypeLista.cognomi;
         super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
         super.typeLink = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
-    }
-
-    public UploadCognomi test() {
-        return test(true);
-    }
-
-    public UploadCognomi typeLink(AETypeLink typeLink) {
-        super.typeLink = typeLink;
-        super.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
-        return this;
-    }
-
-    public UploadCognomi noToc() {
-        super.typeToc = AETypeToc.noToc;
-        return this;
-    }
-
-    public UploadCognomi forceToc() {
-        super.typeToc = AETypeToc.forceToc;
-        return this;
-    }
-
-    public UploadCognomi siNumVoci() {
-        super.usaNumeriTitoloParagrafi = true;
-        return this;
-    }
-
-    public UploadCognomi noNumVoci() {
-        super.usaNumeriTitoloParagrafi = false;
-        return this;
-    }
-
-    public UploadCognomi sottoPagina(LinkedHashMap<String, List<WrapLista>> mappa) {
-        super.wikiTitleUpload = nomeLista;
-        super.mappaWrap = mappa;
-        super.isSottopagina = true;
-        return this;
-    }
-
-    public UploadCognomi sottoPagina(List<WrapLista> lista) {
-        super.wikiTitleUpload = nomeLista;
-        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
-        super.isSottopagina = true;
-        return this;
-    }
-
-    public UploadCognomi test(boolean uploadTest) {
-        if (!isSottopagina) {
-            super.wikiTitleUpload = uploadTest ? UPLOAD_TITLE_DEBUG + nomeLista : nomeLista;
-        }
-
-        super.uploadTest = uploadTest;
-        return this;
     }
 
 

@@ -442,14 +442,15 @@ public class CognomeBackend extends WikiBackend {
      */
     public WResult elabora() {
         WResult result = super.elabora();
-        int tot = 0;
-        int cont = 0;
-        List<String> cognomi = bioBackend.findAllCognomiDistinti();
-        //--Soglia minima per creare una entity nella collezione Cognomi sul mongoDB
         int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
-        //--Soglia minima per creare una pagina sul server wiki
         int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
-
+//        int tot = 0;
+//        int cont = 0;
+//        List<String> cognomi = bioBackend.findAllCognomiDistinti();
+//        //--Soglia minima per creare una entity nella collezione Cognomi sul mongoDB
+//        int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
+//        //--Soglia minima per creare una pagina sul server wiki
+//        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
 
         //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
         //visto che l'elaborazione impiega più di parecchio tempo
@@ -462,17 +463,23 @@ public class CognomeBackend extends WikiBackend {
             return result;
         }
 
-        //--Cancella tutte le entities della collezione
-        deleteAll();
+        resetDownload();
 
-        for (String cognomeTxt : cognomi) {
-            if (saveCognome(cognomeTxt, sogliaMongo)) {
-                cont++;
+        for (Cognome cognome : findAll()) {
+            cognome.numBio = bioBackend.countCognome(cognome.cognome);
+            cognome.superaSoglia = cognome.numBio > sogliaWiki;
+            if (cognome.numBio > sogliaMongo) {
+                cognome.paginaLista = PATH_NOMI + cognome.cognome;
             }
+            if (cognome.superaSoglia) {
+                cognome.esisteLista = queryService.isEsiste(cognome.paginaLista);
+            }
+            update(cognome);
         }
+        return super.fixElabora(result);
 
-        logService.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
-        return super.fixElaboraMinuti(result, result.getInizio(), "cognomi");
+//        logService.info(new WrapLog().message(String.format("Ci sono %d cognomi distinti", tot)));
+//        return super.fixElaboraMinuti(result, result.getInizio(), "cognomi");
         //        logger.info("Creazione di " + text.format(cont) + " cognomi su un totale di " + text.format(tot) + " cognomi distinti. Tempo impiegato: " + date.deltaText(inizio));
     }
 

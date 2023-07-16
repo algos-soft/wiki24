@@ -537,10 +537,13 @@ public class DidascaliaService extends WAbstractService {
     public WrapLista getWrapCognomi(final AETypeLink typeLinkParagrafi, final Bio bio) {
         String paragrafo;
         String paragrafoLink;
+        String sottoParagrafo=VUOTA;
 
         paragrafo = genereBackend.getPluraleParagrafo(bio);
         paragrafoLink = VUOTA;
-        String sottoParagrafo = bio.ordinamento.substring(0, 1);
+        if (textService.isValid(bio.nome)) {
+            sottoParagrafo = bio.nome.substring(0, 1);
+        }
         String didascalia = this.lista(bio);
 
         return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);

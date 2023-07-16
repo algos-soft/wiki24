@@ -247,8 +247,8 @@ public abstract class Upload {
      * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public Upload(String nome) {
-        this.nomeLista = nome;
+    public Upload(String nomeLista) {
+        this.nomeLista = nomeLista;
     }// end of constructor
 
     @PostConstruct
@@ -273,6 +273,59 @@ public abstract class Upload {
             this.durataUpload = wikiBackend.durataUpload;
             this.nextUpload = wikiBackend.nextUpload;
         }
+    }
+
+    public Upload test() {
+        return test(true);
+    }
+
+    public Upload typeLink(AETypeLink typeLink) {
+        this.typeLink = typeLink;
+        this.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
+        return this;
+    }
+
+    public Upload noToc() {
+        this.typeToc = AETypeToc.noToc;
+        return this;
+    }
+
+    public Upload forceToc() {
+        this.typeToc = AETypeToc.forceToc;
+        return this;
+    }
+
+    public Upload siNumVoci() {
+        this.usaNumeriTitoloParagrafi = true;
+        return this;
+    }
+
+    public Upload noNumVoci() {
+        this.usaNumeriTitoloParagrafi = false;
+        return this;
+    }
+
+    public Upload sottoPagina(LinkedHashMap<String, List<WrapLista>> mappa) {
+        this.wikiTitleUpload = nomeLista;
+        this.mappaWrap = mappa;
+        this.isSottopagina = true;
+        return this;
+    }
+
+    public Upload sottoPagina(List<WrapLista> lista) {
+        this.wikiTitleUpload = nomeLista;
+        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        this.isSottopagina = true;
+        return this;
+    }
+
+    public Upload test(boolean uploadTest) {
+        if (!isSottopagina) {
+            this.wikiTitleUpload = uploadTest ? UPLOAD_TITLE_DEBUG + nomeLista : nomeLista;
+        }
+
+        this.uploadTest = uploadTest;
+        return this;
     }
 
 

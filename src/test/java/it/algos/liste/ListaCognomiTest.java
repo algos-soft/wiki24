@@ -3,6 +3,7 @@ package it.algos.liste;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import org.junit.jupiter.api.*;
@@ -127,6 +128,36 @@ public class ListaCognomiTest extends WikiTest {
         }
         else {
             message = "La listBio è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(4)
+    @DisplayName("4 - Lista wrapLista di vari cognomi con typeLinkParagrafi=linkLista")
+        //--cognome
+    void listaWrapDidascalie(final String cognome) {
+        System.out.println("4 - Lista wrapLista di vari cognomi con typeLinkParagrafi=linkLista");
+        sorgente = cognome;
+        int size;
+
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkLista).listaWrap();
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+        }
+        else {
+            message = "La lista è nulla";
             System.out.println(message);
         }
     }
