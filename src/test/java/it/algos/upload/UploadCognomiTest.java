@@ -107,9 +107,9 @@ public class UploadCognomiTest extends WikiTest {
 
     @Test
     @Order(3)
-    @DisplayName("3 - Upload test di un nome con noToc")
+    @DisplayName("3 - Upload test di un cognome con noToc")
     void uploadNoToc() {
-        System.out.println("3 - Upload test di un nome con noToc");
+        System.out.println("3 - Upload test di un cognome con noToc");
         System.out.println(VUOTA);
 
         sorgente = "Abbott";
@@ -118,6 +118,25 @@ public class UploadCognomiTest extends WikiTest {
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni"));
+        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
+
+        System.out.println(VUOTA);
+        printRisultato(ottenutoRisultato);
+    }
+    @Test
+    @Order(4)
+    @DisplayName("4 - Upload test di un cognome con sottoPagina")
+    void uploadSottoPagina() {
+        System.out.println("4 - Upload test di un cognome con sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "Thomas";
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(String.format("Test del nome %s", sorgente));
+        System.out.println(String.format("Lista con sottoPagina"));
         System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
 

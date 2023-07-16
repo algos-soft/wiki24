@@ -416,6 +416,7 @@ public class NomeBackend extends WikiBackend {
 
         lastElaborazione = lastElaborazione.plusHours(1);
         if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            this.lastElaborazione.setValue(elaborazioneAttuale);
             return result;
         }
 

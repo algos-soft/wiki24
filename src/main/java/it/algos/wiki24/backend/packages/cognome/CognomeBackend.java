@@ -19,6 +19,7 @@ import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.text.*;
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -448,6 +449,18 @@ public class CognomeBackend extends WikiBackend {
         int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
         //--Soglia minima per creare una pagina sul server wiki
         int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
+
+
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //visto che l'elaborazione impiega più di parecchio tempo
+        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+        LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+        lastElaborazione = lastElaborazione.plusHours(1);
+        if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            this.lastElaborazione.setValue(elaborazioneAttuale);
+            return result;
+        }
 
         //--Cancella tutte le entities della collezione
         deleteAll();
