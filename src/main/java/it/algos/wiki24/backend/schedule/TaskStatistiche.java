@@ -63,7 +63,7 @@ public class TaskStatistiche extends VaadTask {
             appContext.getBean(StatisticheListeCognomi.class).esegue();
 
             //--La statistica dei cognomi comprende anche una preliminare elaborazione
-            appContext.getBean(StatisticheListeCognomi.class).esegue();
+//            appContext.getBean(StatisticheCognomi.class).esegue();
 
             super.loggerTask();
         }
