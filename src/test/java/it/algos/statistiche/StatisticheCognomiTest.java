@@ -18,8 +18,8 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Thu, 13-Jul-2023
- * Time: 19:28
+ * Date: Sun, 16-Jul-2023
+ * Time: 20:43
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -28,15 +28,15 @@ import com.vaadin.flow.component.textfield.TextField;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("statistiche")
-@DisplayName("Statistiche Liste Cognomi")
+@DisplayName("StatisticheCognomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StatisticheListeCognomiTest extends AlgosTest {
+public class StatisticheCognomiTest extends AlgosTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private StatisticheListeCognomi istanza;
+    private StatisticheCognomi istanza;
 
 
     /**
@@ -47,7 +47,7 @@ public class StatisticheListeCognomiTest extends AlgosTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        super.clazz = StatisticheListeCognomi.class;
+        super.clazz = StatisticheCognomi.class;
     }
 
 
@@ -70,7 +70,7 @@ public class StatisticheListeCognomiTest extends AlgosTest {
         System.out.println(("1 - Costruttore base senza parametri (non fa nulla)"));
         System.out.println(VUOTA);
 
-        istanza = new StatisticheListeCognomi();
+        istanza = new StatisticheCognomi();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
         System.out.println("Questa classe NON accetta parametri nel costruttore");
@@ -83,7 +83,7 @@ public class StatisticheListeCognomiTest extends AlgosTest {
         System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
         System.out.println(VUOTA);
 
-        istanza = appContext.getBean(StatisticheListeCognomi.class);
+        istanza = appContext.getBean(StatisticheCognomi.class);
         assertNotNull(istanza);
         System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
         System.out.println("Questa classe NON accetta parametri nel costruttore");
@@ -99,7 +99,7 @@ public class StatisticheListeCognomiTest extends AlgosTest {
         System.out.println(("3 - Upload con metodo .test() ed .esegue()"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(StatisticheListeCognomi.class).test().esegue();
+        ottenutoRisultato = appContext.getBean(StatisticheCognomi.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         System.out.println(VUOTA);
         System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class).test().esegue()", clazz != null ? clazz.getSimpleName() : VUOTA));
@@ -110,4 +110,3 @@ public class StatisticheListeCognomiTest extends AlgosTest {
     }
 
 }
-

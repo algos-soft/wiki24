@@ -141,6 +141,8 @@ public enum WPref implements AIGenPref {
     //    downloadNomi("downloadNomi", AETypePref.localdatetime, "Download di Progetto:Antroponimi/Nomi doppi.", ROOT_DATA_TIME),
 
     elaboraCognomiTime("elaboraCognomiTime", AETypePref.integer, 0, "Durata elaborazione dei cognomi."),
+    statisticaCognomi("statisticaCognomi", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per i cognomi."),
+    statisticaCognomiTime("statisticaCognomiTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per i cognomi."),
 
     statisticaAttPlurale("statisticaAttPlurale", AETypePref.localdatetime, ROOT_DATA_TIME, "Creazione della pagina di statistiche per le attività plurali."),
     statisticaAttPluraleTime("statisticaAttPluraleTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per le attività plurali."),

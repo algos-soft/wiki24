@@ -40,11 +40,11 @@ public class TaskStatistiche extends VaadTask {
             //            appContext.getBean(StatisticheBio.class).upload();
 
             //--La statistica dei giorni comprende anche una preliminare elaborazione
-            //--La statistica dei giorni comprende anche il messaggio di log sul db
+            //--La statistica comprende anche il messaggio di log sul db
             appContext.getBean(StatisticheGiorni.class).esegue();
 
             //--La statistica degli anni comprende anche una preliminare elaborazione
-            //--La statistica degli anni comprende anche il messaggio di log sul db
+            //--La statistica comprende anche il messaggio di log sul db
             appContext.getBean(StatisticheAnni.class).esegue();
 
             //--La statistica delle attività comprende anche una preliminare elaborazione
@@ -54,16 +54,20 @@ public class TaskStatistiche extends VaadTask {
             //            appContext.getBean(StatisticheNazionalita.class).upload();
 
             //--La statistica delle liste di nomi comprende anche una preliminare elaborazione
+            //--La statistica comprende anche il messaggio di log sul db
             appContext.getBean(StatisticheListeNomi.class).esegue();
 
             //--La statistica dei nomi comprende anche una preliminare elaborazione
+            //--La statistica comprende anche il messaggio di log sul db
             appContext.getBean(StatisticheNomi.class).esegue();
 
             //--La statistica delle liste di cognomi comprende anche una preliminare elaborazione
+            //--La statistica comprende anche il messaggio di log sul db
             appContext.getBean(StatisticheListeCognomi.class).esegue();
 
             //--La statistica dei cognomi comprende anche una preliminare elaborazione
-//            appContext.getBean(StatisticheCognomi.class).esegue();
+            //--La statistica comprende anche il messaggio di log sul db
+            appContext.getBean(StatisticheCognomi.class).esegue();
 
             super.loggerTask();
         }

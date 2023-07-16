@@ -33,36 +33,12 @@ public class StatisticheListeCognomi extends Statistiche {
         super.wikiTitleUpload = TAG_ANTROPONIMI + TAG_LISTA_COGNOMI;
         super.wikiTitleTest = UPLOAD_TITLE_DEBUG + TAG_LISTA_COGNOMI;
         super.typeToc = AETypeToc.noToc;
-        super.lastStatistica = WPref.statisticaNomi;
-        super.durataStatistica = WPref.statisticaNomiTime;
+        super.lastStatistica = WPref.statisticaCognomi;
+        super.durataStatistica = WPref.statisticaCognomiTime;
         super.typeTime = AETypeTime.minuti;
     }
 
 
-    /**
-     * Recupera la lista
-     */
-    @Override
-    protected void creaLista() {
-        int soglia = 30;
-        lista = cognomeBackend.findAllByNumBio(soglia);
-    }
-
-
-    /**
-     * Costruisce la mappa <br>
-     */
-    @Override
-    protected void creaMappa() {
-        super.creaMappa();
-        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
-        boolean supera;
-
-        for (Cognome cognome : (List<Cognome>) lista) {
-            supera = cognome.numBio > sogliaWiki;
-            mappa.put(cognome.cognome, MappaStatistiche.nome(cognome.cognome, cognome.numBio, cognome.paginaVoce, cognome.paginaLista, supera));
-        }
-    }
 
 
     @Override
@@ -97,6 +73,32 @@ public class StatisticheListeCognomi extends Statistiche {
         buffer.append(message);
 
         return buffer.toString();
+    }
+
+
+    /**
+     * Recupera la lista
+     */
+    @Override
+    protected void creaLista() {
+        int soglia = 30;
+        lista = cognomeBackend.findAllByNumBio(soglia);
+    }
+
+
+    /**
+     * Costruisce la mappa <br>
+     */
+    @Override
+    protected void creaMappa() {
+        super.creaMappa();
+        int sogliaWiki = WPref.sogliaWikiCognomi.getInt();
+        boolean supera;
+
+        for (Cognome cognome : (List<Cognome>) lista) {
+            supera = cognome.numBio > sogliaWiki;
+            mappa.put(cognome.cognome, MappaStatistiche.nome(cognome.cognome, cognome.numBio, cognome.paginaVoce, cognome.paginaLista, supera));
+        }
     }
 
     protected String inizioTabella() {
