@@ -31,7 +31,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Tag("statistiche")
 @DisplayName("Statistiche Liste Nomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StatisticheListeNomiTest extends AlgosTest {
+public class StatisticheListeNomiTest extends WikiTest {
 
 
     /**

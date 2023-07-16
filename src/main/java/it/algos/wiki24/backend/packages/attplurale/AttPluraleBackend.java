@@ -16,6 +16,7 @@ import it.algos.wiki24.wiki.query.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -341,6 +342,17 @@ public class AttPluraleBackend extends WikiBackend {
      */
     public WResult elabora() {
         WResult result = super.elabora();
+
+        //check temporale per elaborare la collection SOLO se non è già stata elaborata di recente (1 ora)
+        //visto che l'elaborazione impiega più di parecchio tempo
+        LocalDateTime elaborazioneAttuale = LocalDateTime.now();
+        LocalDateTime lastElaborazione = (LocalDateTime) this.lastElaborazione.get();
+
+        lastElaborazione = lastElaborazione.plusHours(WPref.oreValiditaElaborazione.getInt());
+        if (elaborazioneAttuale.isBefore(lastElaborazione)) {
+            this.lastElaborazione.setValue(elaborazioneAttuale);
+            return result;
+        }
 
         for (AttPlurale attivita : findAll()) {
             attivita.numBio = 0;

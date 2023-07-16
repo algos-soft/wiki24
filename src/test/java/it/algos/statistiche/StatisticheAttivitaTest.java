@@ -28,10 +28,10 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("statistiche")
+@Tag("statistiche")
 @DisplayName("Statistiche Attivita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class StatisticheAttivitaTest extends AlgosTest {
+public class StatisticheAttivitaTest extends WikiTest {
 
 
     /**
@@ -48,7 +48,7 @@ public class StatisticheAttivitaTest extends AlgosTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = StatisticheAttivita.class;
     }
 
 
@@ -66,42 +66,48 @@ public class StatisticheAttivitaTest extends AlgosTest {
 
     @Test
     @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
+    @DisplayName("1 - Costruttore base senza parametri (non fa nulla)")
     void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
+        System.out.println(("1 - Costruttore base senza parametri (non fa nulla)"));
         System.out.println(VUOTA);
 
         istanza = new StatisticheAttivita();
         assertNotNull(istanza);
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+        System.out.println("Questa classe NON accetta parametri nel costruttore");
     }
 
     @Test
     @Order(2)
-    @DisplayName("2 - Upload test statistiche (non le pagine di attività)")
-    void uploadTest() {
-        System.out.println(("2 - Upload test statistiche (non le pagine di attività)"));
-
+    @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
+    void getBean() {
+        System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
         System.out.println(VUOTA);
-//        ottenutoRisultato = appContext.getBean(StatisticheAttivita.class).uploadTest();
-//        assertTrue(ottenutoRisultato.isValido());
-//        ottenutoRisultato.setMappa(null);
-//        printRisultato(ottenutoRisultato);
+
+        istanza = appContext.getBean(StatisticheAttivita.class);
+        assertNotNull(istanza);
+        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
+        System.out.println("Questa classe NON accetta parametri nel costruttore");
+        System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
+        System.out.println(String.format("Le classi [Statistica] (ed altre) implementano il Design Pattern 'Builder'"));
+        System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
     }
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
+    @Test
+    @Order(3)
+    @DisplayName("3 - Upload con metodo .test() ed .esegue()")
+    void esegueConTest() {
+        System.out.println(("3 - Upload con metodo .test() ed .esegue()"));
+        System.out.println(VUOTA);
 
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+        ottenutoRisultato = appContext.getBean(StatisticheAttivita.class).test().esegue();
+        assertNotNull(ottenutoRisultato);
+        System.out.println(VUOTA);
+        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class).test().esegue()", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("È indispensabile invocare il metodo .esegue(), dopo aver eventualmente modificato qualche variabile"));
+        System.out.println(VUOTA);
+        assertTrue(ottenutoRisultato.isValido());
+        printRisultato(ottenutoRisultato);
     }
 
 }

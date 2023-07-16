@@ -33,16 +33,6 @@ public class StatisticheNazionalita extends Statistiche {
 
 
     /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(StatisticheNazionalita.class) <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-     */
-    public StatisticheNazionalita() {
-    }// end of constructor
-
-
-    /**
      * Preferenze usate da questa 'view' <br>
      * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
@@ -50,19 +40,16 @@ public class StatisticheNazionalita extends Statistiche {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.currentWikiBackend = attPluraleBackend;
+        super.wikiTitleUpload = PATH_BIOGRAFIE + "Nazionalità";
+        super.typeSummary = AETypeSummary.statBio;
         super.typeToc = AETypeToc.forceToc;
         super.lastStatistica = WPref.statisticaNazPlurale;
         super.durataStatistica = WPref.statisticaNazPluraleTime;
         super.typeTime = AETypeTime.minuti;
     }
 
-
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        nazPluraleBackend.elabora();
-    }
 
     /**
      * Recupera la lista
@@ -391,24 +378,20 @@ public class StatisticheNazionalita extends Statistiche {
         return buffer.toString();
     }
 
+    //    /**
+    //     * Esegue la scrittura della pagina <br>
+    //     */
+    //    public WResult upload() {
+    //        super.prepara();
+    //        return super.upload(PATH_NAZIONALITA);
+    //    }
 
-
-
-//    /**
-//     * Esegue la scrittura della pagina <br>
-//     */
-//    public WResult upload() {
-//        super.prepara();
-//        return super.upload(PATH_NAZIONALITA);
-//    }
-
-
-//    /**
-//     * Esegue la scrittura della pagina <br>
-//     */
-//    public WResult uploadTest() {
-//        super.prepara();
-//        return super.upload(UPLOAD_TITLE_DEBUG + PATH_NAZIONALITA);
-//    }
+    //    /**
+    //     * Esegue la scrittura della pagina <br>
+    //     */
+    //    public WResult uploadTest() {
+    //        super.prepara();
+    //        return super.upload(UPLOAD_TITLE_DEBUG + PATH_NAZIONALITA);
+    //    }
 
 }

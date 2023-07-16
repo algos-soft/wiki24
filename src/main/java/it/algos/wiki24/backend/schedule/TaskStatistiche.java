@@ -48,10 +48,12 @@ public class TaskStatistiche extends VaadTask {
             appContext.getBean(StatisticheAnni.class).esegue();
 
             //--La statistica delle attività comprende anche una preliminare elaborazione
-            //            appContext.getBean(StatisticheAttivita.class).upload();
+            //--La statistica comprende anche il messaggio di log sul db
+            appContext.getBean(StatisticheAttivita.class).esegue();
 
             //--La statistica delle nazionalità comprende anche una preliminare elaborazione
-            //            appContext.getBean(StatisticheNazionalita.class).upload();
+            //--La statistica comprende anche il messaggio di log sul db
+            appContext.getBean(StatisticheNazionalita.class).esegue();
 
             //--La statistica delle liste di nomi comprende anche una preliminare elaborazione
             //--La statistica comprende anche il messaggio di log sul db

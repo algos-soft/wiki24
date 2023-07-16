@@ -20,6 +20,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.schedule.*;
+import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -251,6 +252,18 @@ public class CognomeView extends WikiView {
             result = backend.uploadPagina(cognome.cognome);
             reload();
         }
+    }
+
+
+    /**
+     * Esegue un azione di upload delle statistiche, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     * Prima esegue una Elaborazione <br>
+     */
+    @Override
+    public void uploadStatistiche() {
+        appContext.getBean(StatisticheListeCognomi.class).esegue();
+        appContext.getBean(StatisticheCognomi.class).esegue();
     }
 
     /**

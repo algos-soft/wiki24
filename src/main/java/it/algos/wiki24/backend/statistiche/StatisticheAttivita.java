@@ -33,14 +33,6 @@ public class StatisticheAttivita extends Statistiche {
 
     private int attivitaTotali;
 
-    /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(UploadStatisticheAttivita.class, upload()) <br>
-     * Non rimanda al costruttore della superclasse. <br>
-     */
-    public StatisticheAttivita() {
-    }// end of constructor
 
 
     /**
@@ -50,6 +42,10 @@ public class StatisticheAttivita extends Statistiche {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.currentWikiBackend = attPluraleBackend;
+        super.wikiTitleUpload = PATH_BIOGRAFIE + "Attività";
+        super.typeSummary = AETypeSummary.statBio;
         super.typeToc = AETypeToc.forceToc;
         super.lastStatistica = WPref.statisticaAttPlurale;
         super.durataStatistica = WPref.statisticaAttPluraleTime;
@@ -68,12 +64,6 @@ public class StatisticheAttivita extends Statistiche {
         return buffer.toString();
     }
 
-    /**
-     * Elabora i dati
-     */
-    protected void elabora() {
-        attPluraleBackend.elabora();
-    }
 
     /**
      * Recupera la lista
@@ -119,11 +109,11 @@ public class StatisticheAttivita extends Statistiche {
             numAttivitaTotali = numAttivitaUno + numAttivitaDue + numAttivitaTre;
             numVoci = WPref.usaTreAttivita.is() ? numAttivitaTotali : numAttivitaUno;
             superaSoglia = numVoci >= soglia;
-            if (superaSoglia != attivita.superaSoglia) {
-                attivita.superaSoglia = superaSoglia;
-                attPluraleBackend.save(attivita);
-                logger.info(new WrapLog().message(String.format("Aggiornato il flag '%s' di %s. Adesso è %s", "superaSoglia", attivita.nome, superaSoglia)));
-            }
+//            if (superaSoglia != attivita.superaSoglia) {
+//                attivita.superaSoglia = superaSoglia;
+//                attPluraleBackend.save(attivita);
+//                logger.info(new WrapLog().message(String.format("Aggiornato il flag '%s' di %s. Adesso è %s", "superaSoglia", attivita.nome, superaSoglia)));
+//            }
 
             if (WPref.controllaPagine.is()) {
 //                if (numVoci < 50 && attivita.isEsisteLista()) {
