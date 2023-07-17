@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
@@ -45,6 +46,10 @@ import java.util.stream.*;
 public abstract class WikiTest extends AlgosTest {
 
     public static int MAX = 175;
+    protected static final String OBBLIGATORIO = "(obbligatorio - ancora da regolare)";
+
+    protected static final String FACOLTATIVO = "(facoltativo - potrebbe non interessare per questa classe)";
+
 
     /**
      * Istanza di una interfaccia <br>
@@ -1194,6 +1199,10 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     protected void printSub(List<WrapLista> listWrapLista) {
+        if (listWrapLista == null) {
+            return;
+        }
+
         for (WrapLista wrap : listWrapLista) {
             System.out.print(wrap.titoloParagrafo);
             System.out.print(SEP);
@@ -1317,6 +1326,20 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.println(key);
             }
         }
+    }
+
+
+    protected void printLista(Lista listaEntityBean) {
+        if (listaEntityBean==null) {
+            return;
+        }
+
+        System.out.println(String.format("%s%s%s", "nomeLista", FORWARD, listaEntityBean.nomeLista));
+        System.out.println(String.format("%s%s%s", "typeLista", FORWARD, listaEntityBean.typeLista != null ? listaEntityBean.typeLista : OBBLIGATORIO));
+        System.out.println(String.format("%s%s%s", "typeLinkParagrafi", FORWARD, listaEntityBean.typeLinkParagrafi));
+        System.out.println(String.format("%s%s%s", "typeLinkCrono", FORWARD, listaEntityBean.typeLinkCrono));
+        System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
+        System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
     }
 
 }

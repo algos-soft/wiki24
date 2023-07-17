@@ -62,7 +62,7 @@ public class ListaCognomi extends Lista {
      * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
      */
     @PostConstruct
-    private void postConstruct() {
+    protected void postConstruct() {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
     }
 

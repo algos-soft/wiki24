@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.liste;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.service.*;
@@ -15,6 +16,7 @@ import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 
+import javax.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -144,7 +146,7 @@ public abstract class Lista {
 
 
     //--property
-    protected List<String> listaNomiSingoli;
+    public List<String> listaNomiSingoli;
 
     /**
      * Lista ordinata (per cognome) delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
@@ -212,24 +214,87 @@ public abstract class Lista {
 
     public static Function<WrapDidascalia, String> funGiornoMorto = wrap -> wrap.getGiornoMorto() != null ? wrap.getGiornoMorto() : VUOTA;
 
-    protected String nomeLista;
+    public String nomeLista;
 
-    protected String titoloParagrafo;
+    public String titoloParagrafo;
 
-    protected AETypeLista typeLista;
+    public AETypeLista typeLista;
 
-    protected AETypeLink typeLinkParagrafi;
+    public AETypeLink typeLinkParagrafi;
+
+    public AETypeLink typeLinkCrono;
+
+    public String paragrafoAltre = VUOTA;
+
+    public Lista() {
+    }// end of constructor
+
+    /**
+     * Costruttore base <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * Uso: getBean(ListaGiorni.class, nomeGiorno) <br>
+     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     */
+    public Lista(String nomeLista) {
+        this.nomeLista = nomeLista;
+    }// end of constructor
 
 
-    protected String paragrafoAltre = VUOTA;
+    @PostConstruct
+    protected void postConstruct() {
+        this.fixPreferenze();
+    }
 
+
+    /**
+     * Preferenze usate da questa classe <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+    }
+
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista typeLista(AETypeLista typeLista) {
+        this.typeLista = typeLista;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
+        this.typeLinkParagrafi = typeLinkParagrafi;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista typeLinkCrono(AETypeLink typeLinkCrono) {
+        this.typeLinkCrono = typeLinkCrono;
+        return this;
+    }
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
      */
     public List<Bio> listaBio() {
+        String message;
+
         if (textService.isEmpty(nomeLista)) {
-            logger.info(new WrapLog().message("Manca il nomeLista"));
+            message = String.format("Un'istanza della classe [%s] SENZA parametri non funziona e non può essere utilizzata.", this.getClass().getSimpleName());
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
+
+        if (typeLista == null) {
+            message = String.format("Manca il '%s' della classe [%s] e il metodo '%s' NON può funzionare.", "typeLista", this.getClass().getSimpleName(), "listaBio");
+            logger.warn(new WrapLog().message(message));
             return null;
         }
 
@@ -262,8 +327,17 @@ public abstract class Lista {
         }
 
         if (listaBio != null && listaBio.size() > 0) {
+            if (typeLinkParagrafi == null) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca typeLinkParagrafi")));
+                return null;
+            }
+            if (typeLinkCrono == null) {
+                logger.error(new WrapLog().exception(new AlgosException("Manca typeLinkCrono")));
+                return null;
+            }
+
             for (Bio bio : listaBio) {
-                wrap = didascaliaService.getWrap(typeLista, typeLinkParagrafi, bio);
+                wrap = didascaliaService.getWrap(bio, typeLista, typeLinkParagrafi, typeLinkCrono);
                 if (wrap != null) {
                     listaWrap.add(wrap);
                 }
@@ -307,6 +381,25 @@ public abstract class Lista {
         return mappaWrap;
     }
 
+    public List<WrapLista> getWrapLista(String keyParagrafo) {
+        if (mappaWrap == null) {
+            mappaWrap();
+        }
+
+        return getWrapLista(mappaWrap, keyParagrafo);
+    }
+
+    public List<WrapLista> getWrapLista(LinkedHashMap<String, List<WrapLista>> mappa, String keyParagrafo) {
+        List<WrapLista> listaWrap = null;
+
+        if (mappa != null) {
+            if (mappa.containsKey(textService.primaMaiuscola(keyParagrafo))) {
+                listaWrap = mappa.get(textService.primaMaiuscola(keyParagrafo));
+            }
+        }
+
+        return listaWrap;
+    }
 
     /**
      * Ordina la mappa <br>

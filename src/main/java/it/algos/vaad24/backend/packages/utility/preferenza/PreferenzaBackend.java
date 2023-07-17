@@ -10,6 +10,8 @@ import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.annotation.*;
+import org.springframework.data.mongodb.core.query.*;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.repository.*;
 import org.springframework.stereotype.*;
 
@@ -59,7 +61,12 @@ public class PreferenzaBackend extends CrudBackend {
 
 
     public Preferenza findByKey(final String keyCode) {
-        return repository.findFirstByCode(keyCode);
+        if (repository != null) {
+            return repository.findFirstByCode(keyCode);
+        }
+        else {
+            return null;
+        }
     }
 
 

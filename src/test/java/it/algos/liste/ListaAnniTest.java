@@ -70,7 +70,7 @@ public class ListaAnniTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = ListaAnni.class;
     }
 
 
@@ -87,25 +87,42 @@ public class ListaAnniTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new ListaAnni();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
+    @Order(3)
+    @DisplayName("3 - listaBioSenzaParametroNelCostruttore")
+    void listaBioSenzaParametroNelCostruttore() {
+        System.out.println(("3 - listaBioSenzaParametroNelCostruttore"));
         System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+
+        appContext.getBean(ListaAnni.class).listaBio();
+
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
+        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
     }
 
+    @Test
+    @Order(4)
+    @DisplayName("4 - listaBioSenzaTypeLista")
+    void listaBioSenzaTypeLista() {
+        System.out.println(("4 - listaBioSenzaTypeLista"));
+        System.out.println(VUOTA);
+
+        sorgente = "1467";
+        appContext.getBean(ListaAnni.class, sorgente).listaBio();
+
+        System.out.println(String.format("Occorre '%s' di questa classe e il metodo '%s' NON può funzionare.", "typeLista", "listaBio"));
+        System.out.println(String.format("Seguendo il Pattern Builder, occorre prima regolare il parametro '%s'.", "typeLista"));
+    }
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(3)
-    @DisplayName("3 - Lista bio di vari anni")
+    @Order(13)
+    @DisplayName("13 - Lista bio di vari anni con switch")
         //--nome anno
         //--typeLista
     void listaBio(final String nomeAnno, final AETypeLista type) {
-        System.out.println("3 - Lista bio di vari anni");
+        System.out.println("13 - Lista bio di vari anni con switch");
         sorgente = nomeAnno;
 
         if (!valido(nomeAnno, type)) {
@@ -113,8 +130,8 @@ public class ListaAnniTest extends WikiTest {
         }
 
         listBio = switch (type) {
-            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).listaBio();
-            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).listaBio();
+            case annoNascita -> appContext.getBean(ListaAnni.class, sorgente).nascita().listaBio();
+            case annoMorte -> appContext.getBean(ListaAnni.class, sorgente).morte().listaBio();
             default -> null;
         };
 
@@ -136,32 +153,55 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(4)
-    @DisplayName("4 - Lista wrapLista di vari anni")
+    @Order(14)
+    @DisplayName("14 - Lista bio di vari giorni con type")
         //--nome anno
         //--typeLista
-    void listaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("4 - Lista wrapLista di vari anni");
+    void listaBioType(final String nomeAnno, final AETypeLista type) {
+        System.out.println("14 - Lista bio di vari giorni con type");
         sorgente = nomeAnno;
-        int size;
 
         if (!valido(nomeAnno, type)) {
             return;
         }
 
-        listWrapLista = switch (type) {
-            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).listaWrap();
-            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).listaWrap();
-            default -> null;
-        };
+        listBio = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).listaBio();
+
+        if (listBio != null && listBio.size() > 0) {
+            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printBio(type, listBio);
+        }
+        else {
+            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeAnno);
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(15)
+    @DisplayName("15 - Lista wrapLista di vari anni")
+        //--nome anno
+        //--typeLista
+    void listaWrap(final String nomeAnno, final AETypeLista type) {
+        System.out.println("15 - Lista wrapLista di vari anni");
+        sorgente = nomeAnno;
+
+        if (!valido(nomeAnno, type)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).listaWrap();
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
-            size = listWrapLista.size();
-            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", listWrapLista.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
             printWrapLista(listWrapLista);
-            printWrapLista(listWrapLista.subList(size - 5, size));
+            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
         }
         else {
             message = "La lista è nulla";
@@ -172,12 +212,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(5)
-    @DisplayName("5 - Key della mappa wrapLista di vari anni")
+    @Order(16)
+    @DisplayName("16 - Key della mappa wrapLista di vari anni")
         //--nome anno
         //--typeLista
     void mappaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("5 - Key della mappa wrapLista di vari anni");
+        System.out.println("16 - Key della mappa wrapLista di vari anni");
         sorgente = nomeAnno;
         int numVoci;
 
@@ -185,15 +225,11 @@ public class ListaAnniTest extends WikiTest {
             return;
         }
 
-        mappaWrap = switch (type) {
-            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).mappaWrap();
-            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).mappaWrap();
-            default -> null;
-        };
+        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getCivile(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", mappaWrap.size(), type.getCivile(), sorgente);
             System.out.println(message);
             printMappaWrapKeyOrder(mappaWrap);
         }
@@ -206,12 +242,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(6)
-    @DisplayName("6 - Mappa wrapLista di vari anni")
+    @Order(17)
+    @DisplayName("17 - Mappa wrapLista di vari anni")
         //--nome anno
         //--typeLista
     void mappaWrap2(final String nomeAnno, final AETypeLista type) {
-        System.out.println("6 - Mappa wrapLista di vari anni");
+        System.out.println("17 - Mappa wrapLista di vari anni");
         sorgente = nomeAnno;
         int numVoci;
 
@@ -219,15 +255,11 @@ public class ListaAnniTest extends WikiTest {
             return;
         }
 
-        mappaWrap = switch (type) {
-            case annoNascita -> appContext.getBean(ListaAnni.class).nascita(sorgente).mappaWrap();
-            case annoMorte -> appContext.getBean(ListaAnni.class).morte(sorgente).mappaWrap();
-            default -> null;
-        };
+        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getGiornoAnno(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", mappaWrap.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
             printMappaWrap(mappaWrap);
@@ -238,6 +270,32 @@ public class ListaAnniTest extends WikiTest {
         }
     }
 
+
+
+
+    @Test
+    @Order(21)
+    @DisplayName("21 - Paragrafo singolo")
+    void costruttoresBase() {
+        System.out.println(("21 - Paragrafo singolo"));
+        System.out.println(VUOTA);
+
+        sorgente = "1576";
+        sorgente2 = "settembre";
+
+        listWrapLista = appContext.getBean(ListaAnni.class, sorgente).nascita().getWrapLista(sorgente2);
+        printSub(listWrapLista);
+    }
+
+
+
+
+    protected void printBio(AETypeLista type, List<Bio> listaBio) {
+        switch (type) {
+            case annoNascita -> printBioListaAnniNato(listaBio);
+            case annoMorte -> printBioListaAnniMorto(listaBio);
+        }
+    }
 
     protected void printBioListaAnniNato(List<Bio> listaBio) {
         String message;

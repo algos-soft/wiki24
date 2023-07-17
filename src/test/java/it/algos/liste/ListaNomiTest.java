@@ -3,21 +3,13 @@ package it.algos.liste;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import static it.algos.vaad24.backend.wrapper.AResult.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.packages.giorno.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.stream.*;
 
@@ -34,7 +26,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("liste")
+//@Tag("liste")
 @DisplayName("ListaNomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaNomiTest extends WikiTest {
@@ -64,7 +56,7 @@ public class ListaNomiTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = ListaNomi.class;
     }
 
 
@@ -81,37 +73,28 @@ public class ListaNomiTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
+    @Order(3)
+    @DisplayName("3 - listaBioSenzaParametroNelCostruttore")
+    void listaBioSenzaParametroNelCostruttore() {
+        System.out.println(("3 - listaBioSenzaParametroNelCostruttore"));
         System.out.println(VUOTA);
 
-        istanza = new ListaNomi();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
+        appContext.getBean(ListaNomi.class).listaBio();
 
-    @Test
-    @Order(2)
-    @DisplayName("2 - getBean base senza parametri")
-    void getBean() {
-        System.out.println(("2 - getBean base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = appContext.getBean(ListaNomi.class);
-        assertNotNull(istanza);
-        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
+        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(3)
-    @DisplayName("3 - Lista bio di vari nomi")
+    @Order(13)
+    @DisplayName("13 - Lista bio di vari nomi")
         //--nome
     void listaBio(final String nome) {
-        System.out.println("3- Lista bio di vari nomi");
+        System.out.println("13- Lista bio di vari nomi");
         sorgente = nome;
 
         if (textService.isEmpty(nome)) {
@@ -135,11 +118,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(4)
-    @DisplayName("4 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista")
+    @Order(14)
+    @DisplayName("14 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista")
         //--nome
     void listaWrapDidascalie(final String nome) {
-        System.out.println("4 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista");
+        System.out.println("14 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkLista");
         sorgente = nome;
         int size;
 
@@ -165,11 +148,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(5)
-    @DisplayName("5 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce")
+    @Order(15)
+    @DisplayName("15 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce")
         //--nome
     void listaWrapDidascalie2(final String nome) {
-        System.out.println("5 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce");
+        System.out.println("15 - Lista wrapLista di vari nomi con typeLinkParagrafi=linkVoce");
         sorgente = nome;
         int size;
 
@@ -196,11 +179,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(6)
-    @DisplayName("6 - Lista wrapLista di vari nomi con linkCrono=nessunLink")
+    @Order(16)
+    @DisplayName("16 - Lista wrapLista di vari nomi con linkCrono=nessunLink")
         //--nome
     void listaWrapDidascalie3(final String nome) {
-        System.out.println("6 - Lista wrapLista di vari nomi con linkCrono=nessunLink");
+        System.out.println("16 - Lista wrapLista di vari nomi con linkCrono=nessunLink");
         sorgente = nome;
         int size;
 
@@ -229,11 +212,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(7)
-    @DisplayName("7 - Lista wrapLista di vari nomi con linkCrono=linkVoce")
+    @Order(17)
+    @DisplayName("17 - Lista wrapLista di vari nomi con linkCrono=linkVoce")
         //--nome
     void listaWrapDidascalie4(final String nome) {
-        System.out.println("7 - Lista wrapLista di vari nomi con linkCrono=linkVoce");
+        System.out.println("17 - Lista wrapLista di vari nomi con linkCrono=linkVoce");
         sorgente = nome;
         int size;
 
@@ -262,11 +245,11 @@ public class ListaNomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "NOMI")
-    @Order(8)
-    @DisplayName("8 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink")
+    @Order(18)
+    @DisplayName("18 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink")
         //--nome
     void listaWrapDidascalie5(final String nome) {
-        System.out.println("8 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink");
+        System.out.println("18 - Lista wrapLista di default linkCrono=linkLista e typeLinkParagrafi=nessunLink");
         sorgente = nome;
         int size;
 

@@ -29,7 +29,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("liste")
+//@Tag("liste")
 @DisplayName("ListaNazionalita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaNazionalitaTest extends WikiTest {

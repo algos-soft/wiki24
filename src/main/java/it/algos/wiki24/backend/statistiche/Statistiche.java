@@ -209,7 +209,7 @@ public abstract class Statistiche {
 
 
     /**
-     * Preferenze usate da questa 'view' <br>
+     * Preferenze usate da questa classe <br>
      * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
@@ -233,6 +233,9 @@ public abstract class Statistiche {
     }
 
 
+    /**
+     * Pattern Builder <br>
+     */
     public Statistiche test() {
         this.uploadTest = true;
         this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + this.getClass().getSimpleName();

@@ -117,10 +117,10 @@ public abstract class UploadGiorniAnni extends Upload {
                 default -> {}
             }
             mappaWrap = switch (typeLista) {
-                case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(nomeLista).mappaWrap();
-                case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(nomeLista).mappaWrap();
-                case annoNascita -> appContext.getBean(ListaAnni.class).nascita(nomeLista).mappaWrap();
-                case annoMorte -> appContext.getBean(ListaAnni.class).morte(nomeLista).mappaWrap();
+//                case giornoNascita -> appContext.getBean(ListaGiorni.class).nascita(nomeLista).mappaWrap();
+//                case giornoMorte -> appContext.getBean(ListaGiorni.class).morte(nomeLista).mappaWrap();
+//                case annoNascita -> appContext.getBean(ListaAnni.class).nascita(nomeLista).mappaWrap();
+//                case annoMorte -> appContext.getBean(ListaAnni.class).morte(nomeLista).mappaWrap();
                 default -> null;
             };
 

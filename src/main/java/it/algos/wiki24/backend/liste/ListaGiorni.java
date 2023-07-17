@@ -37,27 +37,47 @@ public class ListaGiorni extends Lista {
     public SecoloBackend secoloBackend;
 
     /**
-     * Costruttore base senza parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaGiorni.class).nascita/morte(nomeGiorno).mappaWrap() <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune properties. <br>
-     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     * Constructor not @Autowired. <br>
+     * Non utilizzato e non necessario <br>
+     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
+     * Se c'è un SOLO costruttore questo diventa automaticamente @Autowired e IntelliJ Idea 'segna' in rosso i
+     * parametri <br>
+     * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
      */
     public ListaGiorni() {
+    }// end of constructor not @Autowired and not used
+
+    /**
+     * Costruttore base <br>
+     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+     * Uso: getBean(ListaGiorni.class, nomeGiorno) <br>
+     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     */
+    public ListaGiorni(String nomeLista) {
+        super(nomeLista);
+    }// end of constructor not @Autowired and used
+
+
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        this.typeLinkParagrafi = (AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
-    }// end of constructor
-
-
-    public ListaGiorni nascita(final String nomeGiorno) {
-        this.nomeLista = nomeGiorno;
-        super.typeLista = AETypeLista.giornoNascita;
-        return this;
     }
 
-    public ListaGiorni morte(final String nomeGiorno) {
-        this.nomeLista = nomeGiorno;
-        super.typeLista = AETypeLista.giornoMorte;
-        return this;
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaGiorni nascita() {
+        return (ListaGiorni) super.typeLista(AETypeLista.giornoNascita);
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaGiorni morte() {
+        return (ListaGiorni) super.typeLista(AETypeLista.giornoMorte);
     }
 
 

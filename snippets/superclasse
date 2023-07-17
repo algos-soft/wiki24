@@ -1,0 +1,14 @@
+    @PostConstruct
+    protected void postConstruct() {
+        this.fixPreferenze();
+    }
+
+    /**
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        this.typeSummary = AETypeSummary.bioBot;
+        this.typeToc = AETypeToc.forceToc;
+        this.inizio = System.currentTimeMillis();
+    }
