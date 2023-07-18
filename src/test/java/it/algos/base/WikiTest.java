@@ -1,5 +1,7 @@
 package it.algos.base;
 
+import com.mongodb.*;
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
@@ -21,6 +23,7 @@ import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.bson.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
@@ -1341,5 +1344,10 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
         System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
     }
+
+
+
+
+
 
 }

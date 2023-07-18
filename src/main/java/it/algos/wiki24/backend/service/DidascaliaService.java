@@ -577,11 +577,11 @@ public class DidascaliaService extends WAbstractService {
     }
 
     public String giornoNatoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkGiornoNatoCoda(bio, typeLinkParagrafi, false);
+        return wikiUtility.giornoNatoCoda(bio, typeLinkParagrafi, false);
     }
 
     public String giornoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkGiornoNatoCoda(bio, typeLinkParagrafi, true);
+        return wikiUtility.giornoNatoCoda(bio, typeLinkParagrafi, true);
     }
 
 
@@ -590,11 +590,11 @@ public class DidascaliaService extends WAbstractService {
     }
 
     public String giornoMortoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkGiornoMortoCoda(bio, typeLinkParagrafi, false);
+        return wikiUtility.giornoMortoCoda(bio, typeLinkParagrafi, false);
     }
 
     public String giornoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkGiornoMortoCoda(bio, typeLinkParagrafi, true);
+        return wikiUtility.giornoMortoCoda(bio, typeLinkParagrafi, true);
     }
 
 
@@ -603,11 +603,11 @@ public class DidascaliaService extends WAbstractService {
     }
 
     public String annoNatoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkAnnoNatoCoda(bio, typeLinkParagrafi, false);
+        return wikiUtility.annoNatoCoda(bio, typeLinkParagrafi, false);
     }
 
     public String annoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkAnnoNatoCoda(bio, typeLinkParagrafi, true);
+        return wikiUtility.annoNatoCoda(bio, typeLinkParagrafi, true);
     }
 
 
@@ -616,11 +616,11 @@ public class DidascaliaService extends WAbstractService {
     }
 
     public String annoMortoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkAnnoMortoCoda(bio, typeLinkParagrafi, false);
+        return wikiUtility.annoMortoCoda(bio, typeLinkParagrafi, false);
     }
 
     public String annoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.linkAnnoMortoCoda(bio, typeLinkParagrafi, true);
+        return wikiUtility.annoMortoCoda(bio, typeLinkParagrafi, true);
     }
 
     public String luogoNato(final Bio bio) {

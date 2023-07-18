@@ -399,9 +399,19 @@ public class WikiUtility extends WAbstractService {
         };
     }
 
-    public String linkGiornoNatoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
+
+
+    public String giornoNatoCoda(final Bio bio,  AETypeLink typeLinkCrono, boolean flagParentesi) {
         String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
-        String giornoNatoLinkato = giornoNatoTesta(bio, typeLink);
+        String giornoNatoLinkato;
+
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+         giornoNatoLinkato = giornoNatoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(giornoNatoLinkato)) {
             giornoNatoLinkato = textService.isValid(tagNato) ? tagNato + giornoNatoLinkato : giornoNatoLinkato;
@@ -435,7 +445,7 @@ public class WikiUtility extends WAbstractService {
         };
     }
 
-    public String linkGiornoMortoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
+    public String giornoMortoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
         String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
         String giornoMortoLinkato = giornoMortoTesta(bio, typeLink);
 
@@ -481,7 +491,7 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
-    public String linkAnnoNatoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
+    public String annoNatoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
         String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
         String annoNatoLinkato = annoNatoTesta(bio, typeLink);
 
@@ -528,7 +538,7 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-    public String linkAnnoMortoCoda(final Bio bio, AETypeLink typeLinkParagrafi, boolean flagParentesi) {
+    public String annoMortoCoda(final Bio bio, AETypeLink typeLinkParagrafi, boolean flagParentesi) {
         String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
         String annoMortoLinkato = annoMortoTesta(bio, typeLinkParagrafi);
 

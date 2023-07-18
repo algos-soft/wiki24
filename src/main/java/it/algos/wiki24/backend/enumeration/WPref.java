@@ -355,6 +355,7 @@ public enum WPref implements AIGenPref {
 
     @Override
     public boolean is() {
+        boolean usa= preferenceService.is(type, keyCode);
         return preferenceService.is(type, keyCode);
     }
 
