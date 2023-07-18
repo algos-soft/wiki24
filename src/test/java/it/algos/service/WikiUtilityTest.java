@@ -325,7 +325,7 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("161 - annoNatoCoda")
         //--biografia
     void annoNatoCoda(final Bio bio) {
-        ottenuto = service.annoNatoCoda(bio, null, false);
+        ottenuto = service.annoNatoCoda(bio, null,false);
         ottenuto2 = service.annoNatoCoda(bio, AETypeLink.linkVoce, false);
         ottenuto3 = service.annoNatoCoda(bio, AETypeLink.nessunLink, false);
 

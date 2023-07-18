@@ -400,8 +400,7 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-
-    public String giornoNatoCoda(final Bio bio,  AETypeLink typeLinkCrono, boolean flagParentesi) {
+    public String giornoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
         String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
         String giornoNatoLinkato;
 
@@ -411,7 +410,7 @@ public class WikiUtility extends WAbstractService {
         if (typeLinkCrono == null) {
             typeLinkCrono = AETypeLink.linkLista;
         }
-         giornoNatoLinkato = giornoNatoTesta(bio, typeLinkCrono);
+        giornoNatoLinkato = giornoNatoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(giornoNatoLinkato)) {
             giornoNatoLinkato = textService.isValid(tagNato) ? tagNato + giornoNatoLinkato : giornoNatoLinkato;
@@ -423,7 +422,7 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-    public String giornoMortoTesta(final Bio bio,  AETypeLink typeLinkCrono) {
+    public String giornoMortoTesta(final Bio bio, AETypeLink typeLinkCrono) {
         String giornoMorto = bio.giornoMorto;
         if (textService.isEmpty(giornoMorto)) {
             return VUOTA;
@@ -445,9 +444,17 @@ public class WikiUtility extends WAbstractService {
         };
     }
 
-    public String giornoMortoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
+    public String giornoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
         String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
-        String giornoMortoLinkato = giornoMortoTesta(bio, typeLink);
+        String giornoMortoLinkato;
+
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+        giornoMortoLinkato = giornoMortoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(giornoMortoLinkato)) {
             giornoMortoLinkato = textService.isValid(tagMorto) ? tagMorto + SPAZIO_NON_BREAKING + giornoMortoLinkato : giornoMortoLinkato;
@@ -491,9 +498,25 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
-    public String annoNatoCoda(final Bio bio, final AETypeLink typeLink, boolean flagParentesi) {
+    public String annoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
+        String annoNato = bio.annoNato;
+
         String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
-        String annoNatoLinkato = annoNatoTesta(bio, typeLink);
+        String annoNatoLinkato;
+
+        if (textService.isEmpty(annoNato)) {
+            return VUOTA;
+        }
+        if (bio.annoNatoOrd < ANTE_CRISTO_MAX) {
+            return annoNato;
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+         annoNatoLinkato = annoNatoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(annoNatoLinkato)) {
             annoNatoLinkato = textService.isValid(tagNato) ? tagNato + annoNatoLinkato : annoNatoLinkato;
@@ -538,9 +561,25 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-    public String annoMortoCoda(final Bio bio, AETypeLink typeLinkParagrafi, boolean flagParentesi) {
+    public String annoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
+        String annoMorto = bio.annoMorto;
+
         String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
-        String annoMortoLinkato = annoMortoTesta(bio, typeLinkParagrafi);
+        String annoMortoLinkato;
+
+        if (textService.isEmpty(annoMorto)) {
+            return VUOTA;
+        }
+        if (bio.annoMortoOrd < ANTE_CRISTO_MAX) {
+            return annoMorto;
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+         annoMortoLinkato = annoMortoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(annoMortoLinkato)) {
             annoMortoLinkato = textService.isValid(tagMorto) ? tagMorto + SPAZIO_NON_BREAKING + annoMortoLinkato : annoMortoLinkato;
