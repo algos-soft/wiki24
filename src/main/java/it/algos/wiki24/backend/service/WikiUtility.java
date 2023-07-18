@@ -400,8 +400,8 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-    public String giornoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
-        String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
+    public String giornoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
+        String tagNato = usaIcona ? WPref.simboloNato.getStr() : VUOTA;
         String giornoNatoLinkato;
 
         if (typeLinkCrono == null) {
@@ -414,7 +414,7 @@ public class WikiUtility extends WAbstractService {
 
         if (textService.isValid(giornoNatoLinkato)) {
             giornoNatoLinkato = textService.isValid(tagNato) ? tagNato + giornoNatoLinkato : giornoNatoLinkato;
-            return flagParentesi ? textService.setTonde(giornoNatoLinkato) : giornoNatoLinkato;
+            return usaParentesi ? textService.setTonde(giornoNatoLinkato) : giornoNatoLinkato;
         }
         else {
             return VUOTA;
@@ -444,8 +444,8 @@ public class WikiUtility extends WAbstractService {
         };
     }
 
-    public String giornoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
-        String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
+    public String giornoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
+        String tagMorto = usaIcona ? WPref.simboloMorto.getStr() : VUOTA;
         String giornoMortoLinkato;
 
         if (typeLinkCrono == null) {
@@ -458,7 +458,7 @@ public class WikiUtility extends WAbstractService {
 
         if (textService.isValid(giornoMortoLinkato)) {
             giornoMortoLinkato = textService.isValid(tagMorto) ? tagMorto + SPAZIO_NON_BREAKING + giornoMortoLinkato : giornoMortoLinkato;
-            return flagParentesi ? textService.setTonde(giornoMortoLinkato) : giornoMortoLinkato;
+            return usaParentesi ? textService.setTonde(giornoMortoLinkato) : giornoMortoLinkato;
         }
         else {
             return VUOTA;
@@ -498,10 +498,10 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
-    public String annoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
+    public String annoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
         String annoNato = bio.annoNato;
 
-        String tagNato = WPref.usaSimboliCrono.is() ? WPref.simboloNato.getStr() : VUOTA;
+        String tagNato = usaIcona ? WPref.simboloNato.getStr() : VUOTA;
         String annoNatoLinkato;
 
         if (textService.isEmpty(annoNato)) {
@@ -520,7 +520,7 @@ public class WikiUtility extends WAbstractService {
 
         if (textService.isValid(annoNatoLinkato)) {
             annoNatoLinkato = textService.isValid(tagNato) ? tagNato + annoNatoLinkato : annoNatoLinkato;
-            return flagParentesi ? textService.setTonde(annoNatoLinkato) : annoNatoLinkato;
+            return usaParentesi ? textService.setTonde(annoNatoLinkato) : annoNatoLinkato;
         }
         else {
             return VUOTA;
@@ -561,10 +561,10 @@ public class WikiUtility extends WAbstractService {
     }
 
 
-    public String annoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean flagParentesi) {
+    public String annoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
         String annoMorto = bio.annoMorto;
 
-        String tagMorto = WPref.usaSimboliCrono.is() ? WPref.simboloMorto.getStr() : VUOTA;
+        String tagMorto = usaIcona ? WPref.simboloMorto.getStr() : VUOTA;
         String annoMortoLinkato;
 
         if (textService.isEmpty(annoMorto)) {
@@ -583,7 +583,7 @@ public class WikiUtility extends WAbstractService {
 
         if (textService.isValid(annoMortoLinkato)) {
             annoMortoLinkato = textService.isValid(tagMorto) ? tagMorto + SPAZIO_NON_BREAKING + annoMortoLinkato : annoMortoLinkato;
-            return flagParentesi ? textService.setTonde(annoMortoLinkato) : annoMortoLinkato;
+            return usaParentesi ? textService.setTonde(annoMortoLinkato) : annoMortoLinkato;
         }
         else {
             return VUOTA;

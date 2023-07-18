@@ -572,55 +572,55 @@ public class DidascaliaService extends WAbstractService {
         };
     }
 
-    public String giornoNato(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoNatoTesta(bio, typeLinkParagrafi);
+    public String giornoNato(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoNatoTesta(bio, typeLinkCrono);
     }
 
-    public String giornoNatoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoNatoCoda(bio, typeLinkParagrafi, false);
+    public String giornoNatoSimbolo(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoNatoCoda(bio, typeLinkCrono, true, false);
     }
 
-    public String giornoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoNatoCoda(bio, typeLinkParagrafi, true);
-    }
-
-
-    public String giornoMorto(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoMortoTesta(bio, typeLinkParagrafi);
-    }
-
-    public String giornoMortoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoMortoCoda(bio, typeLinkParagrafi, false);
-    }
-
-    public String giornoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.giornoMortoCoda(bio, typeLinkParagrafi, true);
+    public String giornoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoNatoCoda(bio, typeLinkCrono, true, true);
     }
 
 
-    public String annoNato(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
+    public String giornoMorto(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoMortoTesta(bio, typeLinkCrono);
     }
 
-    public String annoNatoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoNatoCoda(bio, typeLinkParagrafi, false);
+    public String giornoMortoSimbolo(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoMortoCoda(bio, typeLinkCrono, true, false);
     }
 
-    public String annoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoNatoCoda(bio, typeLinkParagrafi, true);
+    public String giornoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.giornoMortoCoda(bio, typeLinkCrono, true, true);
     }
 
 
-    public String annoMorto(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
+    public String annoNato(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoNatoTesta(bio, typeLinkCrono);
     }
 
-    public String annoMortoSimbolo(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoMortoCoda(bio, typeLinkParagrafi, false);
+    public String annoNatoSimbolo(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoNatoCoda(bio, typeLinkCrono, true, false);
     }
 
-    public String annoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return wikiUtility.annoMortoCoda(bio, typeLinkParagrafi, true);
+    public String annoNatoSimboloParentesi(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoNatoCoda(bio, typeLinkCrono, true, true);
+    }
+
+
+    public String annoMorto(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoMortoTesta(bio, typeLinkCrono);
+    }
+
+    public String annoMortoSimbolo(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoMortoCoda(bio, typeLinkCrono, true, false);
+    }
+
+    public String annoMortoSimboloParentesi(final Bio bio, AETypeLink typeLinkCrono) {
+        return wikiUtility.annoMortoCoda(bio, typeLinkCrono, true, true);
     }
 
     public String luogoNato(final Bio bio) {

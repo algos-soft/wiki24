@@ -72,11 +72,30 @@ public class WikiUtilityTest extends WikiTest {
     @Mock
     private MongoOperations mongoOp;
 
-    private String ottenuto4;
+    private String senza1;
 
-    private String ottenuto5;
+    private String senza2;
 
-    private String ottenuto6;
+    private String senza3;
+
+    private String senza4;
+
+    private String senza5;
+
+    private String senza6;
+
+    private String con1;
+
+    private String con2;
+
+    private String con3;
+
+    private String con4;
+
+    private String con5;
+
+    private String con6;
+
 
     //--biografie
     private Stream<Bio> biografie() {
@@ -259,30 +278,29 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("141 - giornoNatoCoda")
         //--biografia
     void giornoNatoCoda(final Bio bio) {
-        ottenuto = service.giornoNatoCoda(bio, null, false);
-        ottenuto2 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, false);
-        ottenuto3 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, false);
+        senza1 = service.giornoNatoCoda(bio, null, false,false);
+        senza2 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, false,false);
+        senza3 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, false,false);
 
-        ottenuto4 = service.giornoNatoCoda(bio, null, true);
-        ottenuto5 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, true);
-        ottenuto6 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, true);
+        senza4 = service.giornoNatoCoda(bio, null, false,true);
+        senza5 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, false,true);
+        senza6 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, false,true);
+
+        con1 = service.giornoNatoCoda(bio, null, true,false);
+        con2 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, true,false);
+        con3 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, true,false);
+
+        con4 = service.giornoNatoCoda(bio, null, true,true);
+        con5 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, true,true);
+        con6 = service.giornoNatoCoda(bio, AETypeLink.nessunLink, true,true);
 
         System.out.println(VUOTA);
-        System.out.println(("141 - giornoNatoCoda 6 possibilità"));
+        System.out.println(("141 - giornoNatoCoda 12 possibilità"));
         System.out.println(VUOTA);
 
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println("Senza parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto2));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto3));
-
-        System.out.println(VUOTA);
-        System.out.println("Con parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto4));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto5));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto6));
+        icone(senza1, senza2, senza3, senza4, senza5, senza6, con1, con2, con3, con4, con5, con6);
     }
 
 
@@ -292,30 +310,29 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("151 - giornoMortoCoda")
         //--biografia
     void giornoMortoCoda(final Bio bio) {
-        ottenuto = service.giornoMortoCoda(bio, null, false);
-        ottenuto2 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, false);
-        ottenuto3 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, false);
+        senza1 = service.giornoMortoCoda(bio, null, false,false);
+        senza2 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, false,false);
+        senza3 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, false,false);
 
-        ottenuto4 = service.giornoMortoCoda(bio, null, true);
-        ottenuto5 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, true);
-        ottenuto6 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, true);
+        senza4 = service.giornoMortoCoda(bio, null, false,true);
+        senza5 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, false,true);
+        senza6 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, false,true);
+
+        con1 = service.giornoMortoCoda(bio, null, true,false);
+        con2 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, true,false);
+        con3 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, true,false);
+
+        con4 = service.giornoMortoCoda(bio, null, true,true);
+        con5 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, true,true);
+        con6 = service.giornoMortoCoda(bio, AETypeLink.nessunLink, true,true);
 
         System.out.println(VUOTA);
-        System.out.println(("151 - giornoMortoCoda 6 possibilità"));
+        System.out.println(("151 - giornoMortoCoda 12 possibilità"));
         System.out.println(VUOTA);
 
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println("Senza parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto2));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto3));
-
-        System.out.println(VUOTA);
-        System.out.println("Con parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto4));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto5));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto6));
+        icone(senza1, senza2, senza3, senza4, senza5, senza6, con1, con2, con3, con4, con5, con6);
     }
 
 
@@ -325,30 +342,29 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("161 - annoNatoCoda")
         //--biografia
     void annoNatoCoda(final Bio bio) {
-        ottenuto = service.annoNatoCoda(bio, null,false);
-        ottenuto2 = service.annoNatoCoda(bio, AETypeLink.linkVoce, false);
-        ottenuto3 = service.annoNatoCoda(bio, AETypeLink.nessunLink, false);
+        senza1 = service.annoNatoCoda(bio, null, false,false);
+        senza2 = service.annoNatoCoda(bio, AETypeLink.linkVoce, false,false);
+        senza3 = service.annoNatoCoda(bio, AETypeLink.nessunLink, false,false);
 
-        ottenuto4 = service.annoNatoCoda(bio, null, true);
-        ottenuto5 = service.annoNatoCoda(bio, AETypeLink.linkVoce, true);
-        ottenuto6 = service.annoNatoCoda(bio, AETypeLink.nessunLink, true);
+        senza4 = service.annoNatoCoda(bio, null, false,true);
+        senza5 = service.annoNatoCoda(bio, AETypeLink.linkVoce, false,true);
+        senza6 = service.annoNatoCoda(bio, AETypeLink.nessunLink, false,true);
+
+        con1 = service.annoNatoCoda(bio, null, true,false);
+        con2 = service.annoNatoCoda(bio, AETypeLink.linkVoce, true,false);
+        con3 = service.annoNatoCoda(bio, AETypeLink.nessunLink, true,false);
+
+        con4 = service.annoNatoCoda(bio, null, true,true);
+        con5 = service.annoNatoCoda(bio, AETypeLink.linkVoce, true,true);
+        con6 = service.annoNatoCoda(bio, AETypeLink.nessunLink, true,true);
 
         System.out.println(VUOTA);
-        System.out.println(("161 - annoNatoCoda 6 possibilità"));
+        System.out.println(("161 - annoNatoCoda 12 possibilità"));
         System.out.println(VUOTA);
 
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println("Senza parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto2));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto3));
-
-        System.out.println(VUOTA);
-        System.out.println("Con parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto4));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto5));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto6));
+        icone(senza1, senza2, senza3, senza4, senza5, senza6, con1, con2, con3, con4, con5, con6);
     }
 
 
@@ -358,30 +374,29 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("171 - annoMortoCoda")
         //--biografia
     void annoMortoCoda(final Bio bio) {
-        ottenuto = service.annoMortoCoda(bio, null, false);
-        ottenuto2 = service.annoMortoCoda(bio, AETypeLink.linkVoce, false);
-        ottenuto3 = service.annoMortoCoda(bio, AETypeLink.nessunLink, false);
+        senza1 = service.annoMortoCoda(bio, null, false,false);
+        senza2 = service.annoMortoCoda(bio, AETypeLink.linkVoce, false,false);
+        senza3 = service.annoMortoCoda(bio, AETypeLink.nessunLink, false,false);
 
-        ottenuto4 = service.annoMortoCoda(bio, null, true);
-        ottenuto5 = service.annoMortoCoda(bio, AETypeLink.linkVoce, true);
-        ottenuto6 = service.annoMortoCoda(bio, AETypeLink.nessunLink, true);
+        senza4 = service.annoMortoCoda(bio, null, false,true);
+        senza5 = service.annoMortoCoda(bio, AETypeLink.linkVoce, false,true);
+        senza6 = service.annoMortoCoda(bio, AETypeLink.nessunLink, false,true);
+
+        con1 = service.annoMortoCoda(bio, null, true,false);
+        con2 = service.annoMortoCoda(bio, AETypeLink.linkVoce, true,false);
+        con3 = service.annoMortoCoda(bio, AETypeLink.nessunLink, true,false);
+
+        con4 = service.annoMortoCoda(bio, null, true,true);
+        con5 = service.annoMortoCoda(bio, AETypeLink.linkVoce, true,true);
+        con6 = service.annoMortoCoda(bio, AETypeLink.nessunLink, true,true);
 
         System.out.println(VUOTA);
-        System.out.println(("171 - annoMortoCoda 6 possibilità"));
+        System.out.println(("171 - annoMortoCoda 12 possibilità"));
         System.out.println(VUOTA);
 
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println("Senza parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto2));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto3));
-
-        System.out.println(VUOTA);
-        System.out.println("Con parentesi");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, ottenuto4));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, ottenuto5));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, ottenuto6));
+        icone(senza1, senza2, senza3, senza4, senza5, senza6, con1, con2, con3, con4, con5, con6);
     }
 
 
@@ -434,6 +449,34 @@ public class WikiUtilityTest extends WikiTest {
         System.out.print(SEP);
         System.out.print(bio.nazionalita);
         System.out.println(VUOTA);
+    }
+
+
+    protected void icone(String senza1, String senza2, String senza3, String senza4, String senza5, String senza6, String con1, String con2, String con3, String con4, String con5, String con6) {
+
+        System.out.println(VUOTA);
+        System.out.println("Senza icona e senza parentesi");
+        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, senza1));
+        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, senza2));
+        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, senza3));
+
+        System.out.println(VUOTA);
+        System.out.println("Senza icona e con parentesi");
+        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, senza4));
+        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, senza5));
+        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, senza6));
+
+        System.out.println(VUOTA);
+        System.out.println("Con icona e senza parentesi");
+        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, con1));
+        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, con2));
+        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, con3));
+
+        System.out.println(VUOTA);
+        System.out.println("Con icona e con parentesi");
+        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, con4));
+        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, con5));
+        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, con6));
     }
 
 }
