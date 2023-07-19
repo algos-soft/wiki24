@@ -49,6 +49,7 @@ import java.util.stream.*;
 public abstract class WikiTest extends AlgosTest {
 
     public static int MAX = 175;
+
     protected static final String OBBLIGATORIO = "(obbligatorio - ancora da regolare)";
 
     protected static final String FACOLTATIVO = "(facoltativo - potrebbe non interessare per questa classe)";
@@ -218,6 +219,8 @@ public abstract class WikiTest extends AlgosTest {
     protected LinkedHashMap<String, List<WrapLista>> mappaWrap;
 
     protected Class clazz;
+
+    protected WrapLista wrapLista;
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -816,6 +819,7 @@ public abstract class WikiTest extends AlgosTest {
         mappaLista = null;
         typeUser = null;
         pageId = 0L;
+        wrapLista = null;
     }
 
     @Test
@@ -1333,7 +1337,7 @@ public abstract class WikiTest extends AlgosTest {
 
 
     protected void printLista(Lista listaEntityBean) {
-        if (listaEntityBean==null) {
+        if (listaEntityBean == null) {
             return;
         }
 
@@ -1344,10 +1348,6 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
         System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
     }
-
-
-
-
 
 
 }

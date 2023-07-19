@@ -11,7 +11,7 @@ import java.util.*;
  * Date: Sun, 10-Jul-2022
  * Time: 08:34
  */
-public enum AETypeGenere  {
+public enum AETypeGenere {
     maschile, femminile, entrambi, nessuno;
 
 
@@ -19,4 +19,12 @@ public enum AETypeGenere  {
         return Arrays.stream(values()).toList();
     }
 
+    public static AETypeGenere getType(String nome) {
+        return getAllEnums()
+                .stream()
+                .filter(type -> type.name().equals(nome))
+                .findAny()
+                .orElse(null);
     }
+
+}

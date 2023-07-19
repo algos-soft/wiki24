@@ -511,14 +511,30 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapNomi(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public WrapLista getWrapNomi(final Bio bio) {
+        return getWrapNomi(bio, null, true);
+    }
+
+    public WrapLista getWrapNomi(final Bio bio,  AETypeLink typeLinkParagrafi, boolean usaIcona) {
         String paragrafo;
         String paragrafoLink;
 
         paragrafo = genereBackend.getPluraleParagrafo(bio);
-        paragrafoLink = VUOTA;
+
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
+        }
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = AETypeLink.nessunLink;
+        }
+        paragrafoLink = switch (typeLinkParagrafi) {
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case nessunLink -> VUOTA;
+        };
+
         String sottoParagrafo = bio.ordinamento.substring(0, 1);
-        String didascalia = this.lista(bio, null);//@todo ERRORE
+        String didascalia = this.lista(bio);
 
         return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
     }
@@ -564,7 +580,7 @@ public class DidascaliaService extends WAbstractService {
             case annoMorte -> this.getWrapAnnoMorto(bio, typeLinkParagrafi);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
-            case nomi -> this.getWrapNomi(bio, typeLinkParagrafi);
+            case nomi -> this.getWrapNomi(bio, typeLinkParagrafi,true);
             case cognomi -> this.getWrapCognomi(bio, typeLinkParagrafi);
             case listaBreve -> null;
             case listaEstesa -> null;
@@ -633,9 +649,22 @@ public class DidascaliaService extends WAbstractService {
         return textService.isValid(luogoNato) ? textService.setDoppieQuadre(luogoNato) : VUOTA;
     }
 
-    public String luogoNatoAnno(final Bio bio, AETypeLink typeLinkParagrafi) {
+    public String luogoNatoAnno(final Bio bio) {
+        return luogoNatoAnno(bio, null, WPref.usaSimboliCrono.is());
+    }
+
+    public String luogoNatoAnno(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         String luogoNato = luogoNato(bio);
-        String annoNato = annoNatoSimbolo(bio, typeLinkParagrafi);
+        String annoNato;
+
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+        //         annoNato = annoNatoSimbolo(bio, typeLinkCrono);
+        annoNato = wikiUtility.annoNatoCoda(bio, typeLinkCrono, usaIcona, false);
 
         if (textService.isValid(luogoNato) && textService.isValid(annoNato)) {
             return luogoNato + VIRGOLA_SPAZIO + annoNato;
@@ -663,9 +692,23 @@ public class DidascaliaService extends WAbstractService {
         return textService.isValid(luogoMorto) ? textService.setDoppieQuadre(luogoMorto) : VUOTA;
     }
 
-    public String luogoMortoAnno(final Bio bio, AETypeLink typeLinkParagrafi) {
+
+    public String luogoMortoAnno(final Bio bio) {
+        return luogoMortoAnno(bio, null, WPref.usaSimboliCrono.is());
+    }
+
+    public String luogoMortoAnno(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         String luogoMorto = luogoMorto(bio);
-        String annoMorto = annoMortoSimbolo(bio, typeLinkParagrafi);
+        String annoMorto;
+
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+        //         annoMorto = annoMortoSimbolo(bio, typeLinkCrono);
+        annoMorto = wikiUtility.annoMortoCoda(bio, typeLinkCrono, usaIcona, false);
 
         if (textService.isValid(luogoMorto) && textService.isValid(annoMorto)) {
             return luogoMorto + VIRGOLA_SPAZIO + annoMorto;
@@ -682,9 +725,22 @@ public class DidascaliaService extends WAbstractService {
         return VUOTA;
     }
 
-    public String luogoNatoMorto(final Bio bio, AETypeLink typeLinkParagrafi) {
-        String luogoNatoAnno = luogoNatoAnno(bio, typeLinkParagrafi);
-        String luogoMortoAnno = luogoMortoAnno(bio, typeLinkParagrafi);
+    public String luogoNatoMorto(final Bio bio) {
+        return luogoNatoMorto(bio, null, WPref.usaSimboliCrono.is());
+    }
+
+    public String luogoNatoMorto(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
+        String luogoNatoAnno;
+        String luogoMortoAnno;
+
+        if (typeLinkCrono == null) {
+            typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+        }
+        if (typeLinkCrono == null) {
+            typeLinkCrono = AETypeLink.linkLista;
+        }
+        luogoNatoAnno = luogoNatoAnno(bio, typeLinkCrono, usaIcona);
+        luogoMortoAnno = luogoMortoAnno(bio, typeLinkCrono, usaIcona);
 
         if (textService.isValid(luogoNatoAnno) && textService.isValid(luogoMortoAnno)) {
             return textService.setTonde(luogoNatoAnno + SEP + luogoMortoAnno);
@@ -709,8 +765,21 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String lista(final Bio bio, AETypeLink typeLinkParagrafi) {
-        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkParagrafi);
+    public String lista(final Bio bio) {
+        return lista(bio, null);
+    }
+
+    public String lista(final Bio bio, boolean usaIcona) {
+        return lista(bio, null, usaIcona);
+    }
+
+
+    public String lista(final Bio bio, AETypeLink typeLinkCrono) {
+        return lista(bio, typeLinkCrono, true);
+    }
+
+    public String lista(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
+        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkCrono, usaIcona);
     }
 
     /**
@@ -722,7 +791,7 @@ public class DidascaliaService extends WAbstractService {
      * @return didascalia completa
      */
     public String lista(final AETypeLink typeLinkCrono, final Bio bio, AETypeLink typeLinkParagrafi) {
-        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkParagrafi);
+        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkParagrafi, true);
     }
 
 }

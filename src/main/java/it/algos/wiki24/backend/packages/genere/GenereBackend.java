@@ -1,5 +1,7 @@
 package it.algos.wiki24.backend.packages.genere;
 
+import com.mongodb.*;
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
@@ -9,6 +11,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import org.bson.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.repository.*;
@@ -87,6 +90,17 @@ public class GenereBackend extends WikiBackend {
         return newEntity(VUOTA, null, VUOTA, VUOTA);
     }
 
+    public Genere newEntity(final Document doc) {
+        Genere genere = new Genere();
+
+        genere.singolare = doc.getString("singolare");
+        genere.type = AETypeGenere.getType(doc.getString("type"));
+        genere.pluraleMaschile = doc.getString("pluraleMaschile");
+        genere.pluraleFemminile = doc.getString("pluraleFemminile");
+
+        return genere;
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -124,7 +138,13 @@ public class GenereBackend extends WikiBackend {
 
     @Override
     public Genere findByProperty(final String propertyName, final Object propertyValue) {
-        return (Genere) super.findByProperty(propertyName, propertyValue);
+        Genere genere = (Genere) super.findByProperty(propertyName, propertyValue);
+
+        if (genere == null) {
+            genere = creaGenere(propertyName, propertyValue);
+        }
+
+        return genere;
     }
 
     @Override
@@ -432,5 +452,20 @@ public class GenereBackend extends WikiBackend {
         return pluraleFemminile;
     }
 
+    protected Genere creaGenere(String keyCode, Object propertyValue) {
+        Genere beanGenere = null;
+        MongoCollection<Document> collection;
+        MongoDatabase client = mongoService.getDB("wiki24");
+        collection = client.getCollection("genere");
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put(keyCode, propertyValue);
+        Document doc = collection.find(whereQuery).first();
+
+        if (doc != null) {
+            beanGenere = this.newEntity(doc);
+        }
+
+        return beanGenere;
+    }
 
 }// end of crud backend class

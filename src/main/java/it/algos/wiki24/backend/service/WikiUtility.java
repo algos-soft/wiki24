@@ -376,6 +376,9 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
+    public String giornoNatoTesta(final Bio bio) {
+        return giornoNatoTesta(bio, null);
+    }
 
     public String giornoNatoTesta(final Bio bio, AETypeLink typeLinkCrono) {
         String giornoNato = bio.giornoNato;
@@ -399,6 +402,9 @@ public class WikiUtility extends WAbstractService {
         };
     }
 
+    public String giornoNatoCoda(final Bio bio) {
+        return giornoNatoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+    }
 
     public String giornoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
         String tagNato = usaIcona ? WPref.simboloNato.getStr() : VUOTA;
@@ -421,6 +427,9 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
+    public String giornoMortoTesta(final Bio bio) {
+        return giornoMortoTesta(bio, null);
+    }
 
     public String giornoMortoTesta(final Bio bio, AETypeLink typeLinkCrono) {
         String giornoMorto = bio.giornoMorto;
@@ -442,6 +451,9 @@ public class WikiUtility extends WAbstractService {
             }
             case nessunLink -> giornoMorto;
         };
+    }
+    public String giornoMortoCoda(final Bio bio) {
+        return giornoMortoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
     }
 
     public String giornoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
@@ -465,6 +477,9 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
+    public String annoNatoTesta(final Bio bio) {
+        return annoNatoTesta(bio, null);
+    }
 
     public String annoNatoTesta(final Bio bio, AETypeLink typeLinkCrono) {
         String annoNato = bio.annoNato;
@@ -497,6 +512,9 @@ public class WikiUtility extends WAbstractService {
             return VUOTA;
         }
     }
+    public String annoNatoCoda(final Bio bio) {
+        return annoNatoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+    }
 
     public String annoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
         String annoNato = bio.annoNato;
@@ -527,6 +545,9 @@ public class WikiUtility extends WAbstractService {
         }
     }
 
+    public String annoMortoTesta(final Bio bio) {
+        return annoMortoTesta(bio, null);
+    }
 
     public String annoMortoTesta(final Bio bio, AETypeLink typeLinkCrono) {
         String annoMorto = bio.annoMorto;
@@ -558,6 +579,9 @@ public class WikiUtility extends WAbstractService {
             logService.warn(new WrapLog().message(String.format("In linkAnnoMortoTesta manca il typeLink per la bio %s", bio.wikiTitle)));
             return VUOTA;
         }
+    }
+    public String annoMortoCoda(final Bio bio) {
+        return annoMortoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
     }
 
 

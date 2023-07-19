@@ -67,7 +67,6 @@ public class PreferenzaBackend extends CrudBackend {
         }
         else {
             return creaPreferenza(keyCode);
-            //        return null;
         }
     }
 
@@ -175,6 +174,11 @@ public class PreferenzaBackend extends CrudBackend {
         AETypePref typePref = AETypePref.getType(doc.getString("type"));
         byte[] bytes = typePref.objectToBytes(doc.get("value"));
 
+
+        //        Object objValue = doc.get("value");
+//        Object bytesValue = typePref.objectToBytes(objValue);
+////        typePref.objectToBytes(doc.get("value"));
+
         preferenza.code = doc.getString("code");
         preferenza.type = typePref;
         preferenza.value = bytes;
@@ -186,6 +190,19 @@ public class PreferenzaBackend extends CrudBackend {
         preferenza.descrizione = doc.getString("descrizione");
         preferenza.descrizioneEstesa = doc.getString("descrizioneEstesa");
         preferenza.enumClazzName = doc.getString("enumClazzName");
+
+        //                .code(doc.getString("code"))
+        ////                .type(doc.get("type"))
+        ////                .value(doc.get("value"))
+        //                .vaad23(doc.getBoolean("vaad23"))
+        //                .usaCompany(doc.getBoolean("usaCompany"))
+        //                .needRiavvio(doc.getBoolean("needRiavvio"))
+        //                .visibileAdmin(doc.getBoolean("visibileAdmin"))
+        //                .dinamica(doc.getBoolean("dinamica"))
+        //                .descrizione(doc.getString("descrizione"))
+        //                .descrizioneEstesa(doc.getString("descrizioneEstesa"))
+        ////                .enumClazzName(doc.get("enumClazzName"))
+        //                .build();
 
         return preferenza;
     }
