@@ -321,19 +321,20 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografia
     void luogoNatoAnno(final Bio bio) {
         ottenuto = service.luogoNatoAnno(bio);
-        senza1 = service.luogoNatoAnno(bio, AETypeLink.linkLista, false);
-        senza2 = service.luogoNatoAnno(bio, AETypeLink.linkVoce, false);
-        senza3 = service.luogoNatoAnno(bio, AETypeLink.nessunLink, false);
 
         con1 = service.luogoNatoAnno(bio, AETypeLink.linkLista, true);
         con2 = service.luogoNatoAnno(bio, AETypeLink.linkVoce, true);
         con3 = service.luogoNatoAnno(bio, AETypeLink.nessunLink, true);
 
+        senza1 = service.luogoNatoAnno(bio, AETypeLink.linkLista, false);
+        senza2 = service.luogoNatoAnno(bio, AETypeLink.linkVoce, false);
+        senza3 = service.luogoNatoAnno(bio, AETypeLink.nessunLink, false);
+
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
         System.out.println(("41 - luogoNatoAnno 7 possibilità"));
-        icona(ottenuto, senza1, senza2, senza3, con1, con2, con3);
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
     }
 
 
@@ -347,19 +348,20 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
 
         ottenuto = service.luogoMortoAnno(bio);
-        senza1 = service.luogoMortoAnno(bio, AETypeLink.linkLista, false);
-        senza2 = service.luogoMortoAnno(bio, AETypeLink.linkVoce, false);
-        senza3 = service.luogoMortoAnno(bio, AETypeLink.nessunLink, false);
 
         con1 = service.luogoMortoAnno(bio, AETypeLink.linkLista, true);
         con2 = service.luogoMortoAnno(bio, AETypeLink.linkVoce, true);
         con3 = service.luogoMortoAnno(bio, AETypeLink.nessunLink, true);
 
+        senza1 = service.luogoMortoAnno(bio, AETypeLink.linkLista, false);
+        senza2 = service.luogoMortoAnno(bio, AETypeLink.linkVoce, false);
+        senza3 = service.luogoMortoAnno(bio, AETypeLink.nessunLink, false);
+
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
         System.out.println(("51 - luogoMortoAnno 7 possibilità"));
-        icona(ottenuto, senza1, senza2, senza3, con1, con2, con3);
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
     }
 
 
@@ -393,13 +395,14 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografia
     void lista(final Bio bio) {
         ottenuto = service.lista(bio);
-        senza1 = service.lista(bio, AETypeLink.linkLista, false);
-        senza2 = service.lista(bio, AETypeLink.linkVoce, false);
-        senza3 = service.lista(bio, AETypeLink.nessunLink, false);
 
         con1 = service.lista(bio, AETypeLink.linkLista, true);
         con2 = service.lista(bio, AETypeLink.linkVoce, true);
         con3 = service.lista(bio, AETypeLink.nessunLink, true);
+
+        senza1 = service.lista(bio, AETypeLink.linkLista, false);
+        senza2 = service.lista(bio, AETypeLink.linkVoce, false);
+        senza3 = service.lista(bio, AETypeLink.nessunLink, false);
 
         ottenuto2 = service.lista(bio, true);
         assertEquals(ottenuto, ottenuto2);
@@ -413,7 +416,7 @@ public class DidascaliaServiceTest extends WikiTest {
         printBio(bio);
         System.out.println(VUOTA);
         System.out.println(("71 - lista 7 possibilità"));
-        icona(ottenuto, senza1, senza2, senza3, con1, con2, con3);
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
     }
 
 
@@ -478,11 +481,17 @@ public class DidascaliaServiceTest extends WikiTest {
     }
 
 
-    protected void icona(String standard, String senza1, String senza2, String senza3, String con1, String con2, String con3) {
+    protected void icona(String standard, String con1, String con2, String con3, String senza1, String senza2, String senza3) {
 
         System.out.println(VUOTA);
-        System.out.println("Standard (base)");
-        System.out.println(String.format("%s%s%s", "WPref.linkCrono - WPref.usaSimboliCrono - senzaParentesi", FORWARD, standard));
+        System.out.println(String.format( "WPref.linkCrono - WPref.usaSimboliCrono - senzaParentesi"));
+        System.out.println(String.format("%s%s%s", "Standard (base): Con icona e linkLista", FORWARD, standard));
+
+        System.out.println(VUOTA);
+        System.out.println("Con icona");
+        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, con1));
+        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, con2));
+        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, con3));
 
         System.out.println(VUOTA);
         System.out.println("Senza icona");
@@ -490,11 +499,6 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, senza2));
         System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, senza3));
 
-        System.out.println(VUOTA);
-        System.out.println("Con icona");
-        System.out.println(String.format("%s%s%s", "linkLista (base)", FORWARD, con1));
-        System.out.println(String.format("%s%s%s", "linkVoce", FORWARD, con2));
-        System.out.println(String.format("%s%s%s", "nessunLink", FORWARD, con3));
     }
 
 
@@ -502,7 +506,7 @@ public class DidascaliaServiceTest extends WikiTest {
 
         System.out.println(String.format("Usa: %s%s", "WPref.linkParagrafiNomi - WPref.linkCrono - WPref.usaSimboliCrono - conParentesi", FORWARD));
         System.out.println(VUOTA);
-        System.out.println(String.format("%s%s%s%s", "Standard (base): Con icona", SEP, "linkLista", FORWARD));
+        System.out.println(String.format("%s%s%s", "Standard (base): Con icona e linkLista", FORWARD));
         printWrap(standard);
 
         System.out.println(VUOTA);
