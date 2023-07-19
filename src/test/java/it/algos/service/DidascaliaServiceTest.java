@@ -7,6 +7,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
@@ -38,7 +39,19 @@ import java.util.stream.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DidascaliaServiceTest extends WikiTest {
 
+    private static String CON = "con parentesi";
+
+    private static String CON_ICONA = "Con icona";
+
+    private static String SENZA = "senza parentesi";
+
+    private static String SENZA_ICONA = "Senza icona";
+
     private Bio bioBean;
+
+    private static String tagNato;
+
+    private static String tagMorto;
 
     /**
      * Classe principale di riferimento <br>
@@ -115,17 +128,42 @@ public class DidascaliaServiceTest extends WikiTest {
 
     private WrapLista wrapLista;
 
-    private WrapLista wrapListaSenza1;
+    private WrapLista wrapCon1;
 
-    private WrapLista wrapListaSenza2;
+    private WrapLista wrapCon2;
 
-    private WrapLista wrapListaSenza3;
+    private WrapLista wrapCon3;
 
-    private WrapLista wrapListaCon1;
+    private WrapLista wrapCon4;
 
-    private WrapLista wrapListaCon2;
+    private WrapLista wrapCon5;
 
-    private WrapLista wrapListaCon3;
+    private WrapLista wrapCon6;
+
+    private WrapLista wrapCon7;
+
+    private WrapLista wrapCon8;
+
+    private WrapLista wrapCon9;
+
+    private WrapLista wrapSenza1;
+
+    private WrapLista wrapSenza2;
+
+    private WrapLista wrapSenza3;
+
+    private WrapLista wrapSenza4;
+
+    private WrapLista wrapSenza5;
+
+    private WrapLista wrapSenza6;
+
+    private WrapLista wrapSenza7;
+
+    private WrapLista wrapSenza8;
+
+    private WrapLista wrapSenza9;
+
 
     //--biografie
     private Stream<Bio> biografie() {
@@ -198,6 +236,11 @@ public class DidascaliaServiceTest extends WikiTest {
 
         bioBean = creaBio("Luigi Giura");
         assertNotNull(bioBean);
+
+        tagNato = WPref.simboloNato.getStr();
+        assertTrue(textService.isValid(tagNato));
+        tagMorto = WPref.simboloMorto.getStr();
+        assertTrue(textService.isValid(tagMorto));
     }
 
 
@@ -222,12 +265,24 @@ public class DidascaliaServiceTest extends WikiTest {
         this.con5 = VUOTA;
         this.con6 = VUOTA;
         this.wrapLista = null;
-        this.wrapListaCon1 = null;
-        this.wrapListaCon2 = null;
-        this.wrapListaCon3 = null;
-        this.wrapListaSenza1 = null;
-        this.wrapListaSenza2 = null;
-        this.wrapListaSenza3 = null;
+        this.wrapCon1 = null;
+        this.wrapCon2 = null;
+        this.wrapCon3 = null;
+        this.wrapCon4 = null;
+        this.wrapCon5 = null;
+        this.wrapCon6 = null;
+        this.wrapCon7 = null;
+        this.wrapCon8 = null;
+        this.wrapCon9 = null;
+        this.wrapSenza1 = null;
+        this.wrapSenza2 = null;
+        this.wrapSenza3 = null;
+        this.wrapSenza4 = null;
+        this.wrapSenza5 = null;
+        this.wrapSenza6 = null;
+        this.wrapSenza7 = null;
+        this.wrapSenza8 = null;
+        this.wrapSenza9 = null;
     }
 
     @Test
@@ -333,8 +388,8 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(("41 - luogoNatoAnno 7 possibilità"));
-        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
+        System.out.println(String.format("41 - luogoNatoAnno di %s, 7 possibilità", bio.wikiTitle));
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, SENZA);
     }
 
 
@@ -360,8 +415,8 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(("51 - luogoMortoAnno 7 possibilità"));
-        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
+        System.out.println(String.format("51 - luogoMortoAnno di %s, 7 possibilità", bio.wikiTitle));
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, SENZA);
     }
 
 
@@ -372,19 +427,20 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografia
     void luogoNatoMorto(final Bio bio) {
         ottenuto = service.luogoNatoMorto(bio);
-        senza1 = service.luogoNatoMorto(bio, AETypeLink.linkLista, false);
-        senza2 = service.luogoNatoMorto(bio, AETypeLink.linkVoce, false);
-        senza3 = service.luogoNatoMorto(bio, AETypeLink.nessunLink, false);
 
         con1 = service.luogoNatoMorto(bio, AETypeLink.linkLista, true);
         con2 = service.luogoNatoMorto(bio, AETypeLink.linkVoce, true);
         con3 = service.luogoNatoMorto(bio, AETypeLink.nessunLink, true);
 
+        senza1 = service.luogoNatoMorto(bio, AETypeLink.linkLista, false);
+        senza2 = service.luogoNatoMorto(bio, AETypeLink.linkVoce, false);
+        senza3 = service.luogoNatoMorto(bio, AETypeLink.nessunLink, false);
+
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(("61 - luogoNatoMorto 7 possibilità"));
-        icona(ottenuto, senza1, senza2, senza3, con1, con2, con3);
+        System.out.println(String.format("61 - luogoNatoMorto di %s, 7 possibilità", bio.wikiTitle));
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, CON);
     }
 
 
@@ -415,8 +471,8 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(("71 - lista 7 possibilità"));
-        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3);
+        System.out.println(String.format("71 - lista di %s, 7 possibilità", bio.wikiTitle));
+        icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, CON);
     }
 
 
@@ -427,22 +483,123 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografia
     void getWrapNomi(final Bio bio) {
         wrapLista = service.getWrapNomi(bio);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
 
-        wrapListaCon1 = service.getWrapNomi(bio, AETypeLink.linkLista, true);
-        wrapListaCon2 = service.getWrapNomi(bio, AETypeLink.linkVoce, true);
-        wrapListaCon3 = service.getWrapNomi(bio, AETypeLink.nessunLink, true);
+        wrapCon1 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.linkLista, true);
+        assertTrue(checkIcona(wrapCon1, true));
+        assertTrue(checkParagrafo(wrapCon1, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapCon1, AETypeLink.linkLista));
 
-        wrapListaSenza1 = service.getWrapNomi(bio, AETypeLink.linkLista, false);
-        wrapListaSenza2 = service.getWrapNomi(bio, AETypeLink.linkVoce, false);
-        wrapListaSenza3 = service.getWrapNomi(bio, AETypeLink.nessunLink, false);
+        wrapCon2 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.linkVoce, true);
+        assertTrue(checkIcona(wrapCon2, true));
+        assertTrue(checkParagrafo(wrapCon2, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapCon2, AETypeLink.linkVoce));
+
+        wrapCon3 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.nessunLink, true);
+        assertTrue(checkIcona(wrapCon3, true));
+        assertTrue(checkParagrafo(wrapCon3, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapCon3, AETypeLink.nessunLink));
+
+        wrapCon4 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.linkLista, true);
+        assertTrue(checkIcona(wrapCon4, true));
+        assertTrue(checkParagrafo(wrapCon4, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapCon4, AETypeLink.linkLista));
+
+        wrapCon5 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.linkVoce, true);
+        assertTrue(checkIcona(wrapCon5, true));
+        assertTrue(checkParagrafo(wrapCon5, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapCon5, AETypeLink.linkVoce));
+
+        wrapCon6 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.nessunLink, true);
+        assertTrue(checkIcona(wrapCon6, true));
+        assertTrue(checkParagrafo(wrapCon6, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapCon6, AETypeLink.nessunLink));
+
+        wrapCon7 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.linkLista, true);
+        assertTrue(checkIcona(wrapCon7, true));
+        assertTrue(checkParagrafo(wrapCon7, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapCon7, AETypeLink.linkLista));
+
+        wrapCon8 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.linkVoce, true);
+        assertTrue(checkIcona(wrapCon8, true));
+        assertTrue(checkParagrafo(wrapCon8, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkVoce));
+
+        wrapCon9 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.nessunLink, true);
+        assertTrue(checkIcona(wrapCon9, true));
+        assertTrue(checkParagrafo(wrapCon9, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapCon8, AETypeLink.nessunLink));
+
+        wrapSenza1 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.linkLista, false);
+        assertTrue(checkIcona(wrapSenza1, false));
+        assertTrue(checkParagrafo(wrapCon1, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapSenza1, AETypeLink.linkLista));
+
+        wrapSenza2 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.linkVoce, false);
+        assertTrue(checkIcona(wrapSenza2, false));
+        assertTrue(checkParagrafo(wrapSenza2, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapSenza2, AETypeLink.linkVoce));
+
+        wrapSenza3 = service.getWrapNomi(bio, AETypeLink.linkLista, AETypeLink.nessunLink, false);
+        assertTrue(checkIcona(wrapSenza3, false));
+        assertTrue(checkParagrafo(wrapSenza3, AETypeLink.linkLista));
+        assertTrue(checkCrono(wrapSenza3, AETypeLink.nessunLink));
+
+        wrapSenza4 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.linkLista, false);
+        assertTrue(checkIcona(wrapSenza4, false));
+        assertTrue(checkParagrafo(wrapSenza4, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapSenza4, AETypeLink.linkLista));
+
+        wrapSenza5 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.linkVoce, false);
+        assertTrue(checkIcona(wrapSenza5, false));
+        assertTrue(checkParagrafo(wrapSenza5, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapSenza5, AETypeLink.linkVoce));
+
+        wrapSenza6 = service.getWrapNomi(bio, AETypeLink.linkVoce, AETypeLink.nessunLink, false);
+        assertTrue(checkIcona(wrapSenza6, false));
+        assertTrue(checkParagrafo(wrapSenza6, AETypeLink.linkVoce));
+        assertTrue(checkCrono(wrapSenza6, AETypeLink.nessunLink));
+
+        wrapSenza7 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.linkLista, false);
+        assertTrue(checkIcona(wrapSenza7, false));
+        assertTrue(checkParagrafo(wrapSenza7, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapSenza7, AETypeLink.linkLista));
+
+        wrapSenza8 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.linkVoce, false);
+        assertTrue(checkIcona(wrapSenza8, false));
+        assertTrue(checkParagrafo(wrapSenza8, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapSenza8, AETypeLink.linkVoce));
+
+        wrapSenza9 = service.getWrapNomi(bio, AETypeLink.nessunLink, AETypeLink.nessunLink, false);
+        assertTrue(checkIcona(wrapSenza9, false));
+        assertTrue(checkParagrafo(wrapSenza9, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapSenza9, AETypeLink.nessunLink));
 
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("81 - getWrapNomi di %s 7 possibilità", bio.wikiTitle));
-        printWrap(wrapLista, wrapListaSenza1, wrapListaSenza2, wrapListaSenza3, wrapListaCon1, wrapListaCon2, wrapListaCon3);
+        System.out.println(String.format("81 - getWrapNomi di %s, 19 possibilità", bio.wikiTitle));
+        printWrap(wrapLista, wrapCon1, wrapCon2, wrapCon3, wrapCon4, wrapCon5, wrapCon6, wrapCon7, wrapCon8, wrapCon9, wrapSenza1, wrapSenza2, wrapSenza3, wrapSenza4, wrapSenza5, wrapSenza6, wrapSenza7, wrapSenza8, wrapSenza9);
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(91)
+    @DisplayName("91 - getWrap")
+        //--biografie
+    void getWrap(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.nomi);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("91 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_NOMI + bio.nome));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
 
     protected Bio creaBio(String wikiTitle) {
         Bio beanBio = null;
@@ -481,10 +638,10 @@ public class DidascaliaServiceTest extends WikiTest {
     }
 
 
-    protected void icona(String standard, String con1, String con2, String con3, String senza1, String senza2, String senza3) {
+    protected void icona(String standard, String con1, String con2, String con3, String senza1, String senza2, String senza3, String parentesi) {
 
         System.out.println(VUOTA);
-        System.out.println(String.format( "WPref.linkCrono - WPref.usaSimboliCrono - senzaParentesi"));
+        System.out.println(String.format("WPref.usaSimboliCrono - WPref.linkCrono - %s", parentesi));
         System.out.println(String.format("%s%s%s", "Standard (base): Con icona e linkLista", FORWARD, standard));
 
         System.out.println(VUOTA);
@@ -502,28 +659,55 @@ public class DidascaliaServiceTest extends WikiTest {
     }
 
 
-    protected void printWrap(WrapLista standard, WrapLista senza1, WrapLista senza2, WrapLista senza3, WrapLista con1, WrapLista con2, WrapLista con3) {
+    protected void printWrap(WrapLista standard, WrapLista con1, WrapLista con2, WrapLista con3, WrapLista con4, WrapLista con5, WrapLista con6, WrapLista con7, WrapLista con8, WrapLista con9, WrapLista senza1, WrapLista senza2, WrapLista senza3, WrapLista senza4, WrapLista senza5, WrapLista senza6, WrapLista senza7, WrapLista senza8, WrapLista senza9) {
 
-        System.out.println(String.format("Usa: %s%s", "WPref.linkParagrafiNomi - WPref.linkCrono - WPref.usaSimboliCrono - conParentesi", FORWARD));
         System.out.println(VUOTA);
-        System.out.println(String.format("%s%s%s", "Standard (base): Con icona e linkLista", FORWARD));
+        System.out.println(String.format("WPref.usaSimboliCrono - WPref.linkParagrafiNomi - WPref.linkCrono"));
+        System.out.println(String.format("%s%s", "Standard (base): Con icona e nessunLink (paragrafi) e linkLista (crono)", FORWARD));
         printWrap(standard);
 
-        System.out.println(VUOTA);
-        System.out.println(String.format("%s%s%s%s", "Con icona", SEP, "linkLista (base)", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkLista", FORWARD));
         printWrap(con1);
-        System.out.println(String.format("%s%s%s%s", "Con icona", SEP, "linkVoce", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkVoce", FORWARD));
         printWrap(con2);
-        System.out.println(String.format("%s%s%s%s", "Con icona", SEP, "nessunLink", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=nessunLink", FORWARD));
         printWrap(con3);
 
-        System.out.println(VUOTA);
-        System.out.println(String.format("%s%s%s%s", "Senza icona", SEP, "linkLista (base)", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkLista", FORWARD));
+        printWrap(con4);
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkVoce", FORWARD));
+        printWrap(con5);
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=nessunLink", FORWARD));
+        printWrap(con6);
+
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkLista", FORWARD));
+        printWrap(con7);
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkVoce", FORWARD));
+        printWrap(con8);
+        System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=nessunLink", FORWARD));
+        printWrap(con9);
+
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkLista", FORWARD));
         printWrap(senza1);
-        System.out.println(String.format("%s%s%s%s", "Senza icona", SEP, "linkVoce", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkVoce", FORWARD));
         printWrap(senza2);
-        System.out.println(String.format("%s%s%s%s", "Senza icona", SEP, "nessunLink", FORWARD));
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=nessunLink", FORWARD));
         printWrap(senza3);
+
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkLista", FORWARD));
+        printWrap(senza4);
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkVoce", FORWARD));
+        printWrap(senza5);
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=nessunLink", FORWARD));
+        printWrap(senza6);
+
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkLista", FORWARD));
+        printWrap(senza7);
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkVoce", FORWARD));
+        printWrap(senza8);
+        System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=nessunLink", FORWARD));
+        printWrap(senza9);
+
     }
 
     protected void printWrap(WrapLista wrap) {
@@ -538,6 +722,47 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(String.format("Breve: %s", textService.isValid(wrap.didascaliaBreve) ? wrap.didascaliaBreve : VUOTA));
         System.out.println(String.format("Lunga: %s", textService.isValid(wrap.didascaliaLunga) ? wrap.didascaliaLunga : VUOTA));
         System.out.println(VUOTA);
+    }
+
+    protected boolean checkIcona(WrapLista wrap, boolean previsto) {
+        boolean status = false;
+        String target = wrap.didascaliaBreve;
+
+        if (textService.isValid(target)) {
+            status = target.contains(tagNato) || target.contains(tagMorto);
+        }
+
+        return status == previsto;
+    }
+
+    protected boolean checkParagrafo(WrapLista wrap, AETypeLink typeLinkParagrafi) {
+        String target = wrap.titoloParagrafoLink;
+
+        return switch (typeLinkParagrafi) {
+            case linkLista -> textService.isValid(target) && target.contains(DUE_PUNTI);
+            case linkVoce -> textService.isValid(target) && target.contains(DOPPIE_QUADRE_INI) && target.contains(DOPPIE_QUADRE_END);
+            case nessunLink -> textService.isEmpty(target);
+        };
+    }
+
+    protected boolean checkCrono(WrapLista wrap, AETypeLink typeLinkCrono) {
+        String target = wrap.didascaliaBreve;
+        if (textService.isEmpty(target)) {
+            return false;
+        }
+        boolean esisteNato;
+        boolean esisteMorto;
+
+        boolean status = switch (typeLinkCrono) {
+            case linkLista -> textService.isValid(target) && (target.contains(service.NATI) || target.contains(service.MORTI));
+            case linkVoce -> textService.isValid(target) && target.contains(DOPPIE_QUADRE_INI) && target.contains(DOPPIE_QUADRE_END);
+            case nessunLink -> {
+                esisteNato = textService.isValid(target) && target.contains(service.NATI);
+                esisteMorto = textService.isValid(target) && target.contains(service.MORTI);
+                yield !(esisteNato || esisteNato);
+            }
+        };
+        return status;
     }
 
 }
