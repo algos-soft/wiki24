@@ -33,8 +33,8 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("liste")
-@DisplayName("ListaCognomi")
+@Tag("liste")
+@DisplayName("Lista Cognomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaCognomiTest extends WikiTest {
 
@@ -48,12 +48,13 @@ public class ListaCognomiTest extends WikiTest {
     protected static Stream<Arguments> COGNOMI() {
         return Stream.of(
                 Arguments.of(VUOTA),
-                Arguments.of("Abba"),
-                Arguments.of("Abbott"),
+                Arguments.of("Adam"),
+                Arguments.of("Battaglia"),
                 Arguments.of("Camweron"),
                 Arguments.of("Cameron"),
                 Arguments.of("cameron"),
-                Arguments.of("Rossi")
+                Arguments.of("Capri"),
+                Arguments.of("Gomez")
         );
     }
 
@@ -65,7 +66,7 @@ public class ListaCognomiTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = ListaNomi.class;
     }
 
 
@@ -82,43 +83,32 @@ public class ListaCognomiTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
+    @Order(3)
+    @DisplayName("3 - listaBioSenzaParametroNelCostruttore")
+    void listaBioSenzaParametroNelCostruttore() {
+        System.out.println(("3 - listaBioSenzaParametroNelCostruttore"));
         System.out.println(VUOTA);
 
-        istanza = new ListaCognomi();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
+        appContext.getBean(ListaNomi.class).listaBio();
 
-    @Test
-    @Order(2)
-    @DisplayName("2 - getBean base senza parametri")
-    void getBean() {
-        System.out.println(("2 - getBean base senza parametri"));
-        System.out.println(VUOTA);
-
-        istanza = appContext.getBean(ListaCognomi.class);
-        assertNotNull(istanza);
-        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
+        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
     }
 
     @ParameterizedTest
     @MethodSource(value = "COGNOMI")
-    @Order(3)
-    @DisplayName("3 - Lista bio di vari cognomi")
-        //--nome
+    @Order(13)
+    @DisplayName("13 - Lista bio di vari cognomi")
+        //--cognome
     void listaBio(final String cognome) {
-        System.out.println("3- Lista bio di vari cognomi");
         sorgente = cognome;
-
         if (textService.isEmpty(cognome)) {
             return;
         }
-
         listBio =  appContext.getBean(ListaCognomi.class,sorgente).listaBio();
+        System.out.println("13- Lista bio di vari cognomi");
 
         if (listBio != null && listBio.size() > 0) {
             message = String.format("Ci sono %d biografie che implementano il cognome %s", listBio.size(), sorgente);
@@ -135,22 +125,44 @@ public class ListaCognomiTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "COGNOMI")
-    @Order(4)
-    @DisplayName("4 - Lista wrapLista di vari cognomi con typeLinkParagrafi=linkLista")
+    @Order(20)
+    @DisplayName("20 - WrapLista STANDARD con linkParagrafi=nessunLink")
         //--cognome
     void listaWrapDidascalie(final String cognome) {
-        System.out.println("4 - Lista wrapLista di vari cognomi con typeLinkParagrafi=linkLista");
         sorgente = cognome;
-        int size;
-
         if (textService.isEmpty(cognome)) {
             return;
         }
-
-        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkLista).listaWrap();
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).listaWrap();
+        System.out.println("20 - WrapLista STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
-            size = listWrapLista.size();
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+            printWrapLista(listWrapLista);
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(21)
+    @DisplayName("21 - WrapLista ALTERNATIVA con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true")
+        //--cognome
+    void listaWrapDidascalie2(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).typeLinkParagrafi(AETypeLink.nessunLink).listaWrap();
+        System.out.println("21 - WrapLista ALTERNATIVA con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
             message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
@@ -162,19 +174,140 @@ public class ListaCognomiTest extends WikiTest {
         }
     }
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(22)
+    @DisplayName("22 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkLista e usaIcona=true")
+        //--cognome
+    void listaWrapDidascalie3(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkVoce).listaWrap();
+        System.out.println("22 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkLista e usaIcona=true");
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
     }
 
 
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(23)
+    @DisplayName("23- WrapLista ALTERNATIVA con linkParagrafi=linkLista e linkCrono=linkLista e usaIcona=true")
+        //--cognome
+    void listaWrapDidascalie4(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkLista).listaWrap();
+        System.out.println("23 - WrapLista ALTERNATIVA con linkParagrafi=linkLista e linkCrono=linkLista e usaIcona=true");
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(24)
+    @DisplayName("24- WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false")
+        //--cognome
+    void listaWrapDidascalie6(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        listWrapLista = appContext
+                .getBean(ListaCognomi.class, sorgente)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+        System.out.println("24 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", listWrapLista.size(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapLista(listWrapLista);
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(60)
+    @DisplayName("60 - Key della MappaWrap")
+        //--cognome
+    void mappaWrap(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
+        System.out.println("60 - Key della MappaWrap di vari nomi");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
+            System.out.println(message);
+            printMappaWrapKeyOrder(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI")
+    @Order(70)
+    @DisplayName("70 - MappaWrap STANDARD")
+        //--cognome
+    void mappaWrapDidascalie(final String cognome) {
+        sorgente = cognome;
+        if (textService.isEmpty(cognome)) {
+            return;
+        }
+        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
+        System.out.println("70 - MappaWrap STANDARD");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il cognome %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printMappaWrap(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
     }
 
 }

@@ -226,6 +226,8 @@ public abstract class Lista {
 
     public String paragrafoAltre = VUOTA;
 
+    public boolean usaIcona;
+
     public Lista() {
     }// end of constructor
 
@@ -252,6 +254,7 @@ public abstract class Lista {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        this.usaIcona = WPref.usaSimboliCrono.is();
         this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
     }
 
@@ -277,6 +280,22 @@ public abstract class Lista {
      */
     public Lista typeLinkCrono(AETypeLink typeLinkCrono) {
         this.typeLinkCrono = typeLinkCrono;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista icona(boolean usaIcona) {
+        this.usaIcona = usaIcona;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista icona() {
+        this.icona(true);
         return this;
     }
 
@@ -337,7 +356,7 @@ public abstract class Lista {
             }
 
             for (Bio bio : listaBio) {
-                wrap = didascaliaService.getWrap(bio, typeLista, typeLinkParagrafi, typeLinkCrono);
+                wrap = didascaliaService.getWrap(bio, typeLista, typeLinkParagrafi, typeLinkCrono, usaIcona);
                 if (wrap != null) {
                     listaWrap.add(wrap);
                 }

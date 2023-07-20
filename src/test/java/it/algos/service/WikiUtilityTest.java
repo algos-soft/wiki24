@@ -4,6 +4,7 @@ import com.mongodb.*;
 import com.mongodb.client.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.context.*;
 import org.springframework.data.mongodb.core.*;
 
 import java.util.stream.*;
@@ -144,6 +146,9 @@ public class WikiUtilityTest extends WikiTest {
         preferenceService.preferenzaBackend = preferenzaBackend;
         preferenzaBackend.mongoService = mongoService;
 
+        for (AIGenPref pref : Pref.values()) {
+            pref.setPreferenceService(preferenceService);
+        }
         for (AIGenPref pref : WPref.values()) {
             pref.setPreferenceService(preferenceService);
         }

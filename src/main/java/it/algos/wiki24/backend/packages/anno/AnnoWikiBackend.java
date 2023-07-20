@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.anno;
 
 import com.mongodb.*;
+import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -11,8 +12,10 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.genere.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
@@ -66,6 +69,29 @@ public class AnnoWikiBackend extends WikiBackend {
         return newEntity(VUOTA);
     }
 
+
+    public AnnoWiki newEntity(final Document doc) {
+        AnnoWiki annoWiki = new AnnoWiki();
+
+        DBRef dbRef= (DBRef)doc.get("secolo");
+        dbRef.getId()
+                Secolo secolo=
+        annoWiki.ordine = doc.getInteger("ordine");
+        annoWiki.nome = doc.getString("nome");
+//        annoWiki.secolo = ;
+        annoWiki.bioNati = doc.getInteger("bioNati");
+        annoWiki.bioMorti = doc.getInteger("bioMorti");
+        annoWiki.pageNati = doc.getString("pageNati");
+        annoWiki.pageMorti = doc.getString("pageMorti");
+        annoWiki.esistePaginaNati = doc.getBoolean("esistePaginaNati");
+        annoWiki.esistePaginaMorti = doc.getBoolean("esistePaginaMorti");
+        annoWiki.natiOk = doc.getBoolean("natiOk");
+        annoWiki.mortiOk = doc.getBoolean("mortiOk");
+        annoWiki.ordineSecolo = doc.getInteger("ordineSecolo");
+        //
+        return annoWiki;
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -101,7 +127,13 @@ public class AnnoWikiBackend extends WikiBackend {
 
     @Override
     public AnnoWiki findByKey(final String keyValue) {
-        return (AnnoWiki) super.findByKey(keyValue);
+        AnnoWiki anno = (AnnoWiki) super.findByKey(keyValue);
+
+        if (anno == null) {
+            anno = creaAnno(keyValue);
+        }
+
+        return anno;
     }
 
     @Override
@@ -373,6 +405,7 @@ public class AnnoWikiBackend extends WikiBackend {
 
         return mappa;
     }
+
     public int natiSenzaParametro() {
         Long lungo;
         Query query = new Query();
@@ -426,6 +459,22 @@ public class AnnoWikiBackend extends WikiBackend {
         lungo = mongoService.mongoOp.count(query, Bio.class);
 
         return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+    protected AnnoWiki creaAnno(String keyCode) {
+        AnnoWiki beanAnno = null;
+        MongoCollection<Document> collection;
+        MongoDatabase client = mongoService.getDB("wiki24");
+        collection = client.getCollection("annoWiki");
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put(FIELD_NAME_NOME, keyCode);
+        Document doc = collection.find(whereQuery).first();
+
+        if (doc != null) {
+            beanAnno = this.newEntity(doc);
+        }
+
+        return beanAnno;
     }
 
 

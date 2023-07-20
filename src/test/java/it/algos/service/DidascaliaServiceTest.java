@@ -4,11 +4,14 @@ import com.mongodb.*;
 import com.mongodb.client.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.genere.*;
@@ -83,6 +86,12 @@ public class DidascaliaServiceTest extends WikiTest {
 
     @InjectMocks
     private AttSingolareBackend attSingolareBackend;
+
+    @InjectMocks
+    private AnnoBackend annoBackend;
+
+    @InjectMocks
+    private AnnoWikiBackend annoWikiBackend;
 
     @InjectMocks
     private AnnotationService annotationService;
@@ -168,7 +177,7 @@ public class DidascaliaServiceTest extends WikiTest {
     //--biografie
     private Stream<Bio> biografie() {
         return Stream.of(
-                creaBio("Ray Felix"),
+                creaBio("Johann Schweikhard von Kronberg"),
                 creaBio("Roberto Rullo"),
                 creaBio("Stanley Adams (attore)"),
                 creaBio("Jameson Adams"),
@@ -203,6 +212,8 @@ public class DidascaliaServiceTest extends WikiTest {
         MockitoAnnotations.openMocks(attSingolareBackend);
         MockitoAnnotations.openMocks(annotationService);
         MockitoAnnotations.openMocks(reflectionService);
+        MockitoAnnotations.openMocks(annoBackend);
+        MockitoAnnotations.openMocks(annoWikiBackend);
 
         service.textService = textService;
         service.wikiUtility = wikiUtility;
@@ -213,6 +224,8 @@ public class DidascaliaServiceTest extends WikiTest {
         wikiUtility.textService = textService;
         wikiUtility.logService = logService;
         wikiUtility.regexService = regexService;
+        wikiUtility.annoBackend = annoBackend;
+        wikiUtility.annoWikiBackend = annoWikiBackend;
         logService.textService = textService;
         preferenceService.preferenzaBackend = preferenzaBackend;
         preferenzaBackend.mongoService = mongoService;
@@ -229,7 +242,18 @@ public class DidascaliaServiceTest extends WikiTest {
         attSingolareBackend.textService = textService;
         attSingolareBackend.mongoService = mongoService;
         preferenceService.textService = textService;
+        annoBackend.annotationService = annotationService;
+        annoBackend.reflectionService = reflectionService;
+        annoBackend.textService = textService;
+        annoBackend.mongoService = mongoService;
+        annoWikiBackend.annotationService = annotationService;
+        annoWikiBackend.reflectionService = reflectionService;
+        annoWikiBackend.textService = textService;
+        annoWikiBackend.mongoService = mongoService;
 
+        for (AIGenPref pref : Pref.values()) {
+            pref.setPreferenceService(preferenceService);
+        }
         for (AIGenPref pref : WPref.values()) {
             pref.setPreferenceService(preferenceService);
         }
@@ -388,7 +412,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("41 - luogoNatoAnno di %s, 7 possibilità", bio.wikiTitle));
+        System.out.println(String.format("41 - luogoNatoAnno di '%s', 7 possibilità", bio.wikiTitle));
         icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, SENZA);
     }
 
@@ -415,7 +439,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("51 - luogoMortoAnno di %s, 7 possibilità", bio.wikiTitle));
+        System.out.println(String.format("51 - luogoMortoAnno di '%s', 7 possibilità", bio.wikiTitle));
         icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, SENZA);
     }
 
@@ -439,7 +463,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("61 - luogoNatoMorto di %s, 7 possibilità", bio.wikiTitle));
+        System.out.println(String.format("61 - luogoNatoMorto di '%s', 7 possibilità", bio.wikiTitle));
         icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, CON);
     }
 
@@ -471,15 +495,70 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("71 - lista di %s, 7 possibilità", bio.wikiTitle));
+        System.out.println(String.format("71 - lista di '%s', 7 possibilità", bio.wikiTitle));
         icona(ottenuto, con1, con2, con3, senza1, senza2, senza3, CON);
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "biografie")
-    @Order(81)
-    @DisplayName("81 - getWrapNomi")
+    @Order(120)
+    @DisplayName("120 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapGiornoNato(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.giornoNascita);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("120 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("120 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoNascita, bio.giornoNato)));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(160)
+    @DisplayName("160 - getWrap per nomi STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapxNomi(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.nomi);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("160 - getWrap per nomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("120 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_NOMI + bio.nome));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(170)
+    @DisplayName("170 - getWrap per cognomi STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapxCognomi(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.cognomi);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("170 - getWrap per cognomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("121 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_COGNOMI + bio.cognome));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(180)
+    @DisplayName("180 - getWrapNomi (con alternative)")
         //--biografia
     void getWrapNomi(final Bio bio) {
         wrapLista = service.getWrapNomi(bio);
@@ -580,25 +659,8 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         printBio(bio);
         System.out.println(VUOTA);
-        System.out.println(String.format("81 - getWrapNomi di %s, 19 possibilità", bio.wikiTitle));
+        System.out.println(String.format("180 - getWrapNomi di %s, 19 possibilità", bio.wikiTitle));
         printWrap(wrapLista, wrapCon1, wrapCon2, wrapCon3, wrapCon4, wrapCon5, wrapCon6, wrapCon7, wrapCon8, wrapCon9, wrapSenza1, wrapSenza2, wrapSenza3, wrapSenza4, wrapSenza5, wrapSenza6, wrapSenza7, wrapSenza8, wrapSenza9);
-    }
-
-    @ParameterizedTest
-    @MethodSource(value = "biografie")
-    @Order(91)
-    @DisplayName("91 - getWrap")
-        //--biografie
-    void getWrap(final Bio bio) {
-        wrapLista = service.getWrap(bio, AETypeLista.nomi);
-        assertTrue(checkIcona(wrapLista, true));
-        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
-        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("91 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_NOMI + bio.nome));
-        System.out.println(VUOTA);
-        printWrap(wrapLista);
     }
 
     protected Bio creaBio(String wikiTitle) {
@@ -719,14 +781,17 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
         System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
         System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
-        System.out.println(String.format("Breve: %s", textService.isValid(wrap.didascaliaBreve) ? wrap.didascaliaBreve : VUOTA));
-        System.out.println(String.format("Lunga: %s", textService.isValid(wrap.didascaliaLunga) ? wrap.didascaliaLunga : VUOTA));
+        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.didascaliaBreve : VUOTA));
+        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
+        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
+        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annonato) ? wrap.annonato : VUOTA));
+        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
         System.out.println(VUOTA);
     }
 
     protected boolean checkIcona(WrapLista wrap, boolean previsto) {
         boolean status = false;
-        String target = wrap.didascaliaBreve;
+        String target = wrap.lista;
 
         if (textService.isValid(target)) {
             status = target.contains(tagNato) || target.contains(tagMorto);
@@ -746,21 +811,20 @@ public class DidascaliaServiceTest extends WikiTest {
     }
 
     protected boolean checkCrono(WrapLista wrap, AETypeLink typeLinkCrono) {
-        String target = wrap.didascaliaBreve;
+        String target = wrap.lista;
         if (textService.isEmpty(target)) {
             return false;
         }
-        boolean esisteNato;
-        boolean esisteMorto;
+        boolean esisteNato = textService.isValid(target) && target.contains(service.NATI);
+        boolean esisteMorto = textService.isValid(target) && target.contains(service.MORTI);
+        boolean mancaNato = !esisteNato;
+        boolean mancaMorto = !esisteMorto;
+        boolean noneEsisteCrono = mancaNato && mancaMorto;
 
         boolean status = switch (typeLinkCrono) {
             case linkLista -> textService.isValid(target) && (target.contains(service.NATI) || target.contains(service.MORTI));
             case linkVoce -> textService.isValid(target) && target.contains(DOPPIE_QUADRE_INI) && target.contains(DOPPIE_QUADRE_END);
-            case nessunLink -> {
-                esisteNato = textService.isValid(target) && target.contains(service.NATI);
-                esisteMorto = textService.isValid(target) && target.contains(service.MORTI);
-                yield !(esisteNato || esisteNato);
-            }
+            case nessunLink -> noneEsisteCrono;
         };
         return status;
     }

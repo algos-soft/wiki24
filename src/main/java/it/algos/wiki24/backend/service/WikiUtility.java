@@ -48,6 +48,9 @@ public class WikiUtility extends WAbstractService {
     @Autowired
     public AnnoBackend annoBackend;
 
+    @Autowired
+    public AnnoWikiBackend annoWikiBackend;
+
     public String fixTitolo(String titoloGrezzo) {
         return fixTitolo(VUOTA, titoloGrezzo, 0);
     }
@@ -300,8 +303,8 @@ public class WikiUtility extends WAbstractService {
     }
 
     public String fixSecoloNato(final Bio bio) {
-        Anno anno = annoBackend.findByKey(bio.annoNato);
-        return anno != null ? anno.getSecolo().nome : VUOTA;
+        AnnoWiki anno = annoWikiBackend.findByKey(bio.annoNato);
+        return anno != null ? anno.getSecolo() != null ? anno.getSecolo().nome : VUOTA : VUOTA;
     }
 
     public String fixSecoloMorto(final Bio bio) {
@@ -403,7 +406,7 @@ public class WikiUtility extends WAbstractService {
     }
 
     public String giornoNatoCoda(final Bio bio) {
-        return giornoNatoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+        return giornoNatoCoda(bio, null, WPref.usaSimboliCrono.is(), false);
     }
 
     public String giornoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
@@ -452,8 +455,9 @@ public class WikiUtility extends WAbstractService {
             case nessunLink -> giornoMorto;
         };
     }
+
     public String giornoMortoCoda(final Bio bio) {
-        return giornoMortoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+        return giornoMortoCoda(bio, null, WPref.usaSimboliCrono.is(), false);
     }
 
     public String giornoMortoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
@@ -512,8 +516,9 @@ public class WikiUtility extends WAbstractService {
             return VUOTA;
         }
     }
+
     public String annoNatoCoda(final Bio bio) {
-        return annoNatoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+        return annoNatoCoda(bio, null, WPref.usaSimboliCrono.is(), false);
     }
 
     public String annoNatoCoda(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, boolean usaParentesi) {
@@ -534,7 +539,7 @@ public class WikiUtility extends WAbstractService {
         if (typeLinkCrono == null) {
             typeLinkCrono = AETypeLink.linkLista;
         }
-         annoNatoLinkato = annoNatoTesta(bio, typeLinkCrono);
+        annoNatoLinkato = annoNatoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(annoNatoLinkato)) {
             annoNatoLinkato = textService.isValid(tagNato) ? tagNato + annoNatoLinkato : annoNatoLinkato;
@@ -580,8 +585,9 @@ public class WikiUtility extends WAbstractService {
             return VUOTA;
         }
     }
+
     public String annoMortoCoda(final Bio bio) {
-        return annoMortoCoda(bio,null,WPref.usaSimboliCrono.is(),false);
+        return annoMortoCoda(bio, null, WPref.usaSimboliCrono.is(), false);
     }
 
 
@@ -603,7 +609,7 @@ public class WikiUtility extends WAbstractService {
         if (typeLinkCrono == null) {
             typeLinkCrono = AETypeLink.linkLista;
         }
-         annoMortoLinkato = annoMortoTesta(bio, typeLinkCrono);
+        annoMortoLinkato = annoMortoTesta(bio, typeLinkCrono);
 
         if (textService.isValid(annoMortoLinkato)) {
             annoMortoLinkato = textService.isValid(tagMorto) ? tagMorto + SPAZIO_NON_BREAKING + annoMortoLinkato : annoMortoLinkato;

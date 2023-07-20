@@ -182,7 +182,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String didascaliaGiornoNato(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public String didascaliaGiornoNato(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(getWikiTitle(bio));
@@ -192,6 +192,8 @@ public class DidascaliaService extends WAbstractService {
         }
         buffer.append(SPAZIO);
         buffer.append(annoMortoSimboloParentesi(bio, typeLinkParagrafi));
+
+        //        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkParagrafi, true);
 
         return buffer.toString().trim();
     }
@@ -295,25 +297,47 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapGiornoNato(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public WrapLista getWrapGiornoNato(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
         String paragrafo = wikiUtility.fixSecoloNato(bio);
-        String paragrafoLink;
+        String paragrafoLink = VUOTA;
+        String ordinamento = VUOTA;
+
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = AETypeLink.nessunLink;
+        }
 
         paragrafoLink = switch (typeLinkParagrafi) {
             case linkVoce -> textService.setDoppieQuadre(paragrafo);
-            case nessunLink -> paragrafo;
-            default -> paragrafo;
+            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case nessunLink -> VUOTA;
         };
 
         if (textService.isEmpty(paragrafo)) {
             paragrafo = TAG_LISTA_NO_ANNO;
-            paragrafoLink = paragrafo;
         }
 
         String sottoParagrafo = wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
-        String didascalia = this.didascaliaGiornoNato(bio, typeLinkParagrafi);
+        String didascalia = this.didascaliaGiornoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
+        //        String didascalia = this.didascaliaGiornoNato(bio, typeLinkParagrafi);
 
-        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia);
+        String didascalia2 = this.didascaliaGiornoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
+        String didascalia3 = this.didascaliaGiornoMorto(bio, typeLinkParagrafi);
+        String didascalia4 = this.didascaliaAnnoNato(bio, typeLinkParagrafi);
+        String didascalia5 = this.didascaliaAnnoMorto(bio, typeLinkParagrafi);
+        String didascalia6 = this.lista(bio, typeLinkCrono, usaIcona);
+
+        return new WrapLista(
+                AETypeLista.giornoNascita,
+                paragrafo,
+                paragrafoLink,
+                sottoParagrafo,
+                ordinamento,
+                lista(bio, typeLinkCrono, usaIcona),
+                didascaliaGiornoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona),
+                didascaliaGiornoMorto(bio, typeLinkParagrafi),
+                didascaliaAnnoNato(bio, typeLinkParagrafi),
+                didascaliaAnnoMorto(bio, typeLinkParagrafi)
+        );
     }
 
 
@@ -345,7 +369,7 @@ public class DidascaliaService extends WAbstractService {
         String sottoParagrafo = wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
         String didascalia = this.didascaliaGiornoMorto(bio, typeLinkParagrafi);
 
-        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia);
+        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia, "");
     }
 
     /**
@@ -376,7 +400,7 @@ public class DidascaliaService extends WAbstractService {
         String sottoParagrafo = wikiUtility.giornoNatoTesta(bio, typeLinkParagrafi);
         String didascalia = this.didascaliaAnnoNato(bio, typeLinkParagrafi);
 
-        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia);
+        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia, "");
     }
 
     /**
@@ -407,7 +431,7 @@ public class DidascaliaService extends WAbstractService {
         String sottoParagrafo = wikiUtility.giornoMortoTesta(bio, typeLinkParagrafi);
         String didascalia = this.didascaliaAnnoMorto(bio, typeLinkParagrafi);
 
-        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia);
+        return new WrapLista(paragrafo, paragrafoLink, sottoParagrafo, didascalia, "");
     }
 
     /**
@@ -518,6 +542,7 @@ public class DidascaliaService extends WAbstractService {
     public WrapLista getWrapNomi(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
         String paragrafo;
         String paragrafoLink;
+        String sottoParagrafo = VUOTA;
 
         paragrafo = genereBackend.getPluraleParagrafo(bio);
 
@@ -527,13 +552,20 @@ public class DidascaliaService extends WAbstractService {
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
         }
+
         paragrafoLink = switch (typeLinkParagrafi) {
             case linkVoce -> textService.setDoppieQuadre(paragrafo);
             case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
             case nessunLink -> VUOTA;
         };
 
-        String sottoParagrafo = bio.ordinamento.substring(0, 1);
+        if (textService.isValid(bio.nome)) {
+            sottoParagrafo = bio.nome.substring(0, 1);
+        }
+        else {
+            sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+        }
+
         String didascalia = this.lista(bio, typeLinkCrono, usaIcona);
 
         return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
@@ -549,17 +581,34 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrapCognomi(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public WrapLista getWrapCognomi(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
         String paragrafo;
         String paragrafoLink;
         String sottoParagrafo = VUOTA;
 
         paragrafo = genereBackend.getPluraleParagrafo(bio);
-        paragrafoLink = VUOTA;
-        if (textService.isValid(bio.nome)) {
-            sottoParagrafo = bio.nome.substring(0, 1);
+
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         }
-        String didascalia = this.lista(bio, null);//@todo ERRORE
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = AETypeLink.nessunLink;
+        }
+
+        paragrafoLink = switch (typeLinkParagrafi) {
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case nessunLink -> VUOTA;
+        };
+
+        if (textService.isValid(bio.cognome)) {
+            sottoParagrafo = bio.cognome.substring(0, 1);
+        }
+        else {
+            sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+        }
+
+        String didascalia = this.lista(bio, typeLinkCrono, usaIcona);
 
         return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
     }
@@ -590,6 +639,9 @@ public class DidascaliaService extends WAbstractService {
         return getWrap(bio, typeLista, typeLinkParagrafi, null);
     }
 
+    public WrapLista getWrap(final Bio bio, final AETypeLista typeLista, final AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono) {
+        return getWrap(bio, typeLista, typeLinkParagrafi, typeLinkCrono, true);
+    }
 
     /**
      * Costruisce una wrapLista <br>
@@ -598,19 +650,19 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return wrapLista
      */
-    public WrapLista getWrap(final Bio bio, final AETypeLista typeLista, final AETypeLink typeLinkParagrafi,  AETypeLink typeLinkCrono) {
+    public WrapLista getWrap(final Bio bio, final AETypeLista typeLista, final AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
         if (typeLinkCrono == null) {
             typeLinkCrono = AETypeLink.linkLista;
         }
         return switch (typeLista) {
-            case giornoNascita -> this.getWrapGiornoNato(bio, typeLinkParagrafi);
+            case giornoNascita -> this.getWrapGiornoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case giornoMorte -> this.getWrapGiornoMorto(bio, typeLinkParagrafi);
             case annoNascita -> this.getWrapAnnoNato(bio, typeLinkParagrafi);
             case annoMorte -> this.getWrapAnnoMorto(bio, typeLinkParagrafi);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
-            case nomi -> this.getWrapNomi(bio, typeLinkParagrafi, typeLinkCrono, true);
-            case cognomi -> this.getWrapCognomi(bio, typeLinkParagrafi);
+            case nomi -> this.getWrapNomi(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
+            case cognomi -> this.getWrapCognomi(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case listaBreve -> null;
             case listaEstesa -> null;
             default -> null;
