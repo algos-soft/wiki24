@@ -7,6 +7,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,7 @@ import java.util.stream.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("liste")
-@DisplayName("ListaGiorni")
+@DisplayName("Lista Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaGiorniTest extends WikiTest {
 
@@ -57,6 +58,7 @@ public class ListaGiorniTest extends WikiTest {
                 Arguments.of("34 febbraio", AETypeLista.giornoMorte),
                 //                Arguments.of("23 marzo", AETypeLista.giornoNascita),
                 //                Arguments.of("1º gennaio", AETypeLista.giornoMorte),
+                Arguments.of("29 febbraio", AETypeLista.giornoNascita),
                 Arguments.of("29 febbraio", AETypeLista.giornoMorte)
         );
     }
@@ -147,11 +149,11 @@ public class ListaGiorniTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
     @Order(13)
-    @DisplayName("13 - Lista bio di vari giorni con switch")
+    @DisplayName("13 - Lista bio con switch")
         //--nome giorno
         //--typeLista
     void listaBio(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("13 - Lista bio di vari giorni con switch");
+        System.out.println("13 - Lista bio con switch");
         sorgente = nomeGiorno;
 
         if (!valido(nomeGiorno, type)) {
@@ -183,11 +185,11 @@ public class ListaGiorniTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
     @Order(14)
-    @DisplayName("14 - Lista bio di vari giorni con type")
+    @DisplayName("14 - Lista bio con type")
         //--nome giorno
         //--typeLista
     void listaBioType(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("14 - Lista bio di vari giorni con type");
+        System.out.println("14 - Lista bio con type");
         sorgente = nomeGiorno;
 
         if (!valido(nomeGiorno, type)) {
@@ -211,12 +213,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(15)
-    @DisplayName("15 - Lista wrapLista di vari giorni")
+    @Order(20)
+    @DisplayName("20 - Lista wrapLista")
         //--nome giorno
         //--typeLista
     void listaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("15 - Lista wrapLista di vari giorni");
+        System.out.println("20 - Lista wrapLista");
         sorgente = nomeGiorno;
 
         if (!valido(nomeGiorno, type)) {
@@ -229,8 +231,42 @@ public class ListaGiorniTest extends WikiTest {
             message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
-            printWrapLista(listWrapLista);
-            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
+            for (WrapLista wrap : listWrapLista.subList(0,5)) {
+                super.printWrap(wrap,this.textService);
+            }
+
+            //            printWrapLista(listWrapLista);
+            //            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_LISTA")
+    @Order(30)
+    @DisplayName("30 - Lista didascalie")
+        //--nome giorno
+        //--typeLista
+    void listaDidascalie(final String nomeGiorno, final AETypeLista type) {
+        System.out.println("30 - Lista didascalie");
+        sorgente = nomeGiorno;
+
+        if (!valido(nomeGiorno, type)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).listaWrap();
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (WrapLista wrap : listWrapLista) {
+                System.out.println(wrap.didascalia);
+            }
         }
         else {
             message = "La lista è nulla";
@@ -239,14 +275,15 @@ public class ListaGiorniTest extends WikiTest {
     }
 
 
+
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(16)
-    @DisplayName("16 - Key della mappa wrapLista di vari giorni")
+    @Order(40)
+    @DisplayName("40 - Key della mappa wrapLista di vari giorni")
         //--nome giorno
         //--typeLista
-    void mappaWrap(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("16 - Key della mappa wrapLista di vari giorni");
+    void mappaWrapKey(final String nomeGiorno, final AETypeLista type) {
+        System.out.println("40 - Key della mappa wrapLista di vari giorni");
         sorgente = nomeGiorno;
         int numVoci;
 
@@ -271,12 +308,12 @@ public class ListaGiorniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(17)
-    @DisplayName("17 - Mappa wrapLista di vari giorni")
+    @Order(41)
+    @DisplayName("41 - Mappa wrapLista (paragrafi e righe)")
         //--nome giorno
         //--typeLista
-    void mappaWrap2(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("17 - Mappa wrapLista di vari giorni");
+    void mappaWrap(final String nomeGiorno, final AETypeLista type) {
+        System.out.println("41 - Mappa wrapLista (paragrafi e righe)");
         sorgente = nomeGiorno;
         int numVoci;
 
@@ -288,10 +325,10 @@ public class ListaGiorniTest extends WikiTest {
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getGiornoAnno(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
-            printMappaWrap(mappaWrap);
+            printMappaDidascalie(mappaWrap);
         }
         else {
             message = "La mappa è nulla";
@@ -299,38 +336,38 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
+//    @Test
+//    @Order(21)
+//    @DisplayName("21 - linkCrono -> nessunLink")
+//    void nessunLink() {
+//        System.out.println(("21 - linkCrono -> nessunLink"));
+//        System.out.println(VUOTA);
+//        AETypeLink typeLinkCrono = AETypeLink.nessunLink;
+//
+//        sorgente = "29 febbraio";
+//        listWrapLista = appContext
+//                .getBean(ListaGiorni.class, sorgente)
+//                .typeLista(AETypeLista.giornoMorte)
+//                .typeLinkCrono(typeLinkCrono)
+//                .listaWrap();
+//
+//        if (listWrapLista != null && listWrapLista.size() > 0) {
+//            message = String.format("Ci sono %d wrapLista che implementano il giorno %s con %s", listWrapLista.size(), sorgente, typeLinkCrono);
+//            System.out.println(message);
+//            System.out.println(VUOTA);
+//            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
+//        }
+//        else {
+//            message = "La lista è nulla";
+//            System.out.println(message);
+//        }
+//    }
+
     @Test
-    @Order(21)
-    @DisplayName("21 - linkCrono -> nessunLink")
-    void nessunLink() {
-        System.out.println(("21 - linkCrono -> nessunLink"));
-        System.out.println(VUOTA);
-        AETypeLink typeLinkCrono = AETypeLink.nessunLink;
-
-        sorgente = "29 febbraio";
-        listWrapLista = appContext
-                .getBean(ListaGiorni.class, sorgente)
-                .typeLista(AETypeLista.giornoMorte)
-                .typeLinkCrono(typeLinkCrono)
-                .listaWrap();
-
-        if (listWrapLista != null && listWrapLista.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano il giorno %s con %s", listWrapLista.size(), sorgente, typeLinkCrono);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
-        }
-        else {
-            message = "La lista è nulla";
-            System.out.println(message);
-        }
-    }
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - linkCrono -> linkVoce")
+    @Order(61)
+    @DisplayName("61 - linkCrono -> linkVoce")
     void linkVoce() {
-        System.out.println(("22 - linkCrono -> linkVoce"));
+        System.out.println(("61 - linkCrono -> linkVoce"));
         System.out.println(VUOTA);
         AETypeLink typeLinkCrono = AETypeLink.linkVoce;
 
@@ -354,10 +391,10 @@ public class ListaGiorniTest extends WikiTest {
     }
 
     @Test
-    @Order(23)
-    @DisplayName("23 - linkCrono -> linkLista")
+    @Order(62)
+    @DisplayName("62 - linkCrono -> linkLista")
     void linkLista() {
-        System.out.println(("23 - linkCrono -> linkLista"));
+        System.out.println(("62 - linkCrono -> linkLista"));
         System.out.println(VUOTA);
         AETypeLink typeLinkCrono = AETypeLink.linkLista;
 
@@ -381,10 +418,10 @@ public class ListaGiorniTest extends WikiTest {
     }
 
     @Test
-    @Order(31)
-    @DisplayName("31 - Paragrafo singolo")
+    @Order(91)
+    @DisplayName("91 - Paragrafo singolo")
     void costruttoresBase() {
-        System.out.println(("31 - Paragrafo singolo"));
+        System.out.println(("91 - Paragrafo singolo"));
         System.out.println(VUOTA);
 
         sorgente = "4 gennaio";

@@ -182,7 +182,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String didascaliaGiornoNato(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
+    public String didascaliaGiornoNato(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(getWikiTitle(bio));
@@ -191,9 +191,7 @@ public class DidascaliaService extends WAbstractService {
             buffer.append(attivitaNazionalita(bio));
         }
         buffer.append(SPAZIO);
-        buffer.append(annoMortoSimboloParentesi(bio, typeLinkParagrafi));
-
-        //        return nomeCognome(bio) + VIRGOLA_SPAZIO + attivitaNazionalita(bio) + SPAZIO + luogoNatoMorto(bio, typeLinkParagrafi, true);
+        buffer.append(wikiUtility.annoMortoCoda(bio, typeLinkCrono, usaIcona, true));
 
         return buffer.toString().trim();
     }
@@ -208,7 +206,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String didascaliaGiornoMorto(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public String didascaliaGiornoMorto(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(getWikiTitle(bio));
@@ -217,7 +215,7 @@ public class DidascaliaService extends WAbstractService {
             buffer.append(attivitaNazionalita(bio));
         }
         buffer.append(SPAZIO);
-        buffer.append(annoNatoSimboloParentesi(bio, typeLinkParagrafi));
+        buffer.append(wikiUtility.annoNatoCoda(bio, typeLinkCrono, usaIcona, true));
 
         return buffer.toString();
     }
@@ -233,7 +231,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String didascaliaAnnoNato(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public String didascaliaAnnoNato(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(getWikiTitle(bio));
@@ -242,7 +240,7 @@ public class DidascaliaService extends WAbstractService {
             buffer.append(attivitaNazionalita(bio));
         }
         buffer.append(SPAZIO);
-        buffer.append(annoMortoSimboloParentesi(bio, typeLinkParagrafi));
+        buffer.append(wikiUtility.annoMortoCoda(bio, typeLinkCrono, usaIcona, true));
 
         return buffer.toString();
     }
@@ -254,7 +252,7 @@ public class DidascaliaService extends WAbstractService {
      *
      * @return didascalia completa
      */
-    public String didascaliaAnnoMorto(final Bio bio, final AETypeLink typeLinkParagrafi) {
+    public String didascaliaAnnoMorto(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
         boolean nonBreaking = Pref.usaNonBreaking.is();
 
@@ -263,8 +261,8 @@ public class DidascaliaService extends WAbstractService {
             buffer.append(VIRGOLA_SPAZIO);
             buffer.append(attivitaNazionalita(bio));
         }
-        buffer.append(nonBreaking ? Pref.nonBreaking.getStr() : SPAZIO);
-        buffer.append(annoNatoSimboloParentesi(bio, typeLinkParagrafi));
+        //        buffer.append(nonBreaking ? Pref.nonBreaking.getStr() : SPAZIO);
+        buffer.append(wikiUtility.annoNatoCoda(bio, typeLinkCrono, usaIcona, true));
 
         return buffer.toString();
     }
@@ -324,7 +322,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.giornoNascita,
@@ -373,7 +370,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.giornoMorte,
@@ -421,7 +417,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.annoNascita,
@@ -469,7 +464,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.annoMorte,
@@ -513,7 +507,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         if (typeLinkParagrafi == null) {
-            typeLinkParagrafi= (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj() ;
+            typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         }
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
@@ -528,7 +522,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.attivitaPlurale,
@@ -573,7 +566,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         if (typeLinkParagrafi == null) {
-            typeLinkParagrafi= (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj() ;
+            typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         }
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
@@ -588,7 +581,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.nazionalitaPlurale,
@@ -627,7 +619,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.nomi,
@@ -677,7 +668,6 @@ public class DidascaliaService extends WAbstractService {
 
         return getWrap(
                 bio,
-                typeLinkParagrafi,
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.cognomi,
@@ -687,8 +677,6 @@ public class DidascaliaService extends WAbstractService {
                 ordinamento
         );
     }
-
-
 
 
     public WrapLista getWrapNomi(final Bio bio) {
@@ -950,13 +938,13 @@ public class DidascaliaService extends WAbstractService {
     }
 
 
-    public WrapLista getWrap(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona, AETypeLista typeLista, String paragrafo, String paragrafoLink, String sottoParagrafo, String ordinamento) {
+    public WrapLista getWrap(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona, AETypeLista typeLista, String paragrafo, String paragrafoLink, String sottoParagrafo, String ordinamento) {
 
         String lista = this.lista(bio, typeLinkCrono, usaIcona);
-        String didascalia1 = this.didascaliaGiornoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
-        String didascalia2 = this.didascaliaGiornoMorto(bio, typeLinkParagrafi);
-        String didascalia3 = this.didascaliaAnnoNato(bio, typeLinkParagrafi);
-        String didascalia4 = this.didascaliaAnnoMorto(bio, typeLinkParagrafi);
+        String giornoNato = this.didascaliaGiornoNato(bio, typeLinkCrono, usaIcona);
+        String giornoMorto = this.didascaliaGiornoMorto(bio, typeLinkCrono, usaIcona);
+        String annoNato = this.didascaliaAnnoNato(bio, typeLinkCrono, usaIcona);
+        String annoMorto = this.didascaliaAnnoMorto(bio, typeLinkCrono, usaIcona);
 
         return new WrapLista(
                 typeLista,
@@ -965,10 +953,10 @@ public class DidascaliaService extends WAbstractService {
                 sottoParagrafo,
                 ordinamento,
                 lista,
-                didascalia1,
-                didascalia2,
-                didascalia3,
-                didascalia4
+                giornoNato,
+                giornoMorto,
+                annoNato,
+                annoMorto
         );
     }
 

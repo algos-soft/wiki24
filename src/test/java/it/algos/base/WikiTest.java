@@ -1277,6 +1277,26 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
+    protected void printMappaDidascalie(LinkedHashMap<String, List<WrapLista>> mappaWrap) {
+        List<WrapLista> lista;
+
+        if (mappaWrap != null) {
+            message = String.format("Faccio vedere una mappa delle didascalie con i relativi paragrafi");
+            System.out.println(VUOTA);
+            for (String paragrafo : mappaWrap.keySet()) {
+                System.out.print("==");
+                System.out.print(paragrafo);
+                System.out.print("==");
+                System.out.print(CAPO);
+                lista = mappaWrap.get(paragrafo);
+
+                for (WrapLista wrap : lista) {
+                    System.out.println(wrap.didascalia);
+                }
+            }
+        }
+    }
+
     protected void printBio(Bio bio) {
         System.out.println(String.format("wikiTitle: %s", bio.wikiTitle));
         System.out.println(String.format("pageId: %s", bio.pageId));
@@ -1347,6 +1367,24 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("%s%s%s", "typeLinkCrono", FORWARD, listaEntityBean.typeLinkCrono));
         System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
         System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
+    }
+
+    protected void printWrap(WrapLista wrap, TextService textService) {
+        if (wrap == null) {
+            return;
+        }
+
+        System.out.println(String.format("Titolo paragrafo: %s", textService.isValid(wrap.titoloParagrafo) ? wrap.titoloParagrafo : VUOTA));
+        System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
+        System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
+        System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
+        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : VUOTA));
+        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
+        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
+        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : VUOTA));
+        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
+        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : VUOTA));
+        System.out.println(VUOTA);
     }
 
 

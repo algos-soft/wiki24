@@ -582,7 +582,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("121 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("121 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoNascita, bio.giornoNato)));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -601,7 +601,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("122 - getWrap per giornoMorto STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("122 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoMorte, bio.giornoMorto)));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -620,7 +620,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("123 - getWrap per annoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("123 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.annoNascita, bio.annoNato)));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -639,7 +639,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("124 - getWrap per annoMorto STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("124 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.annoMorte, bio.annoMorto)));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -660,7 +660,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("130 - getWrap per attività con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("130 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_ATTIVITA + SLASH + message));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -681,7 +681,7 @@ public class DidascaliaServiceTest extends WikiTest {
         message = nazionalita != null ? textService.primaMaiuscola(nazionalita.plurale) : VUOTA;
         System.out.println(String.format("140 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_NAZIONALITA + SLASH + message));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
     @ParameterizedTest
@@ -699,7 +699,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("160 - getWrap per nomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("160 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_NOMI + bio.nome));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
     @ParameterizedTest
@@ -717,7 +717,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println("170 - getWrap per cognomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("170 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_COGNOMI + bio.cognome));
         System.out.println(VUOTA);
-        printWrap(wrapLista);
+        printWrap(wrapLista,this.textService);
     }
 
 
@@ -892,69 +892,69 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
         System.out.println(String.format("WPref.usaSimboliCrono - WPref.linkParagrafiNomi - WPref.linkCrono"));
         System.out.println(String.format("%s%s", "Standard (base): Con icona e nessunLink (paragrafi) e linkLista (crono)", FORWARD));
-        printWrap(standard);
+        printWrap(standard,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(con1);
+        printWrap(con1,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(con2);
+        printWrap(con2,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(con3);
+        printWrap(con3,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(con4);
+        printWrap(con4,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(con5);
+        printWrap(con5,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(con6);
+        printWrap(con6,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(con7);
+        printWrap(con7,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(con8);
+        printWrap(con8,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", CON_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(con9);
+        printWrap(con9,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(senza1);
+        printWrap(senza1,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(senza2);
+        printWrap(senza2,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkLista", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(senza3);
+        printWrap(senza3,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(senza4);
+        printWrap(senza4,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(senza5);
+        printWrap(senza5,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=linkVoce", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(senza6);
+        printWrap(senza6,this.textService);
 
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkLista", FORWARD));
-        printWrap(senza7);
+        printWrap(senza7,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=linkVoce", FORWARD));
-        printWrap(senza8);
+        printWrap(senza8,this.textService);
         System.out.println(String.format("%s%s%s%s%s%s", SENZA_ICONA, SEP, "linkParagrafi=nessunLink", SEP, "linkCrono=nessunLink", FORWARD));
-        printWrap(senza9);
+        printWrap(senza9,this.textService);
 
     }
 
-    protected void printWrap(WrapLista wrap) {
-        if (wrap == null) {
-            return;
-        }
-
-        System.out.println(String.format("Titolo paragrafo: %s", textService.isValid(wrap.titoloParagrafo) ? wrap.titoloParagrafo : VUOTA));
-        System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
-        System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
-        System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
-        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : VUOTA));
-        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
-        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
-        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : VUOTA));
-        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
-        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : VUOTA));
-        System.out.println(VUOTA);
-    }
+//    protected void printWrap(WrapLista wrap) {
+//        if (wrap == null) {
+//            return;
+//        }
+//
+//        System.out.println(String.format("Titolo paragrafo: %s", textService.isValid(wrap.titoloParagrafo) ? wrap.titoloParagrafo : VUOTA));
+//        System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
+//        System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
+//        System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
+//        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : VUOTA));
+//        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
+//        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
+//        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : VUOTA));
+//        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
+//        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : VUOTA));
+//        System.out.println(VUOTA);
+//    }
 
     protected boolean checkIcona(WrapLista wrap, boolean previsto) {
         boolean status = false;
