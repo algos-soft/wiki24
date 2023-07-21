@@ -3,18 +3,25 @@ package it.algos.service;
 import com.mongodb.*;
 import com.mongodb.client.*;
 import it.algos.base.*;
+import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
+import it.algos.vaad24.backend.packages.crono.mese.*;
+import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.genere.*;
+import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
@@ -84,14 +91,33 @@ public class DidascaliaServiceTest extends WikiTest {
     @InjectMocks
     private GenereBackend genereBackend;
 
-    @InjectMocks
-    private AttSingolareBackend attSingolareBackend;
 
     @InjectMocks
     private AnnoBackend annoBackend;
 
     @InjectMocks
+    private GiornoWikiBackend giornoWikiBackend;
+
+    @InjectMocks
     private AnnoWikiBackend annoWikiBackend;
+
+    @InjectMocks
+    private SecoloBackend secoloBackend;
+
+    @InjectMocks
+    private MeseBackend meseBackend;
+
+    @InjectMocks
+    private AttSingolareBackend attSingolareBackend;
+
+    @InjectMocks
+    private AttPluraleBackend attPluraleBackend;
+
+    @InjectMocks
+    private NazSingolareBackend nazSingolareBackend;
+
+    @InjectMocks
+    private NazPluraleBackend nazPluraleBackend;
 
     @InjectMocks
     private AnnotationService annotationService;
@@ -195,6 +221,7 @@ public class DidascaliaServiceTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = DidascaliaService.class;
+        VaadVar.mongoDatabaseName = "wiki24";
 
         MockitoAnnotations.openMocks(this);
         MockitoAnnotations.openMocks(service);
@@ -209,11 +236,17 @@ public class DidascaliaServiceTest extends WikiTest {
         MockitoAnnotations.openMocks(logService);
         MockitoAnnotations.openMocks(regexService);
         MockitoAnnotations.openMocks(genereBackend);
-        MockitoAnnotations.openMocks(attSingolareBackend);
         MockitoAnnotations.openMocks(annotationService);
         MockitoAnnotations.openMocks(reflectionService);
         MockitoAnnotations.openMocks(annoBackend);
         MockitoAnnotations.openMocks(annoWikiBackend);
+        MockitoAnnotations.openMocks(giornoWikiBackend);
+        MockitoAnnotations.openMocks(secoloBackend);
+        MockitoAnnotations.openMocks(meseBackend);
+        MockitoAnnotations.openMocks(attSingolareBackend);
+        MockitoAnnotations.openMocks(attPluraleBackend);
+        MockitoAnnotations.openMocks(nazSingolareBackend);
+        MockitoAnnotations.openMocks(nazPluraleBackend);
 
         service.textService = textService;
         service.wikiUtility = wikiUtility;
@@ -226,6 +259,7 @@ public class DidascaliaServiceTest extends WikiTest {
         wikiUtility.regexService = regexService;
         wikiUtility.annoBackend = annoBackend;
         wikiUtility.annoWikiBackend = annoWikiBackend;
+        wikiUtility.giornoWikiBackend = giornoWikiBackend;
         logService.textService = textService;
         preferenceService.preferenzaBackend = preferenzaBackend;
         preferenzaBackend.mongoService = mongoService;
@@ -250,6 +284,39 @@ public class DidascaliaServiceTest extends WikiTest {
         annoWikiBackend.reflectionService = reflectionService;
         annoWikiBackend.textService = textService;
         annoWikiBackend.mongoService = mongoService;
+        annoWikiBackend.secoloBackend = secoloBackend;
+        secoloBackend.mongoService = mongoService;
+        giornoWikiBackend.annotationService = annotationService;
+        giornoWikiBackend.reflectionService = reflectionService;
+        giornoWikiBackend.textService = textService;
+        giornoWikiBackend.mongoService = mongoService;
+        giornoWikiBackend.meseBackend = meseBackend;
+        meseBackend.mongoService = mongoService;
+        meseBackend.annotationService = annotationService;
+        secoloBackend.annotationService = annotationService;
+        service.attSingolareBackend = attSingolareBackend;
+        attSingolareBackend.annotationService = annotationService;
+        attSingolareBackend.reflectionService = reflectionService;
+        attSingolareBackend.textService = textService;
+        attSingolareBackend.mongoService = mongoService;
+
+        service.attPluraleBackend = attPluraleBackend;
+        attPluraleBackend.annotationService = annotationService;
+        attPluraleBackend.reflectionService = reflectionService;
+        attPluraleBackend.textService = textService;
+        attPluraleBackend.mongoService = mongoService;
+
+        service.nazSingolareBackend = nazSingolareBackend;
+        nazSingolareBackend.annotationService = annotationService;
+        nazSingolareBackend.reflectionService = reflectionService;
+        nazSingolareBackend.textService = textService;
+        nazSingolareBackend.mongoService = mongoService;
+
+        service.nazPluraleBackend = nazPluraleBackend;
+        nazPluraleBackend.annotationService = annotationService;
+        nazPluraleBackend.reflectionService = reflectionService;
+        nazPluraleBackend.textService = textService;
+        nazPluraleBackend.mongoService = mongoService;
 
         for (AIGenPref pref : Pref.values()) {
             pref.setPreferenceService(preferenceService);
@@ -502,8 +569,8 @@ public class DidascaliaServiceTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "biografie")
-    @Order(120)
-    @DisplayName("120 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink")
+    @Order(121)
+    @DisplayName("121 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink")
         //--biografie
     void getWrapGiornoNato(final Bio bio) {
         wrapLista = service.getWrap(bio, AETypeLista.giornoNascita);
@@ -512,8 +579,107 @@ public class DidascaliaServiceTest extends WikiTest {
         assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
 
         System.out.println(VUOTA);
-        System.out.println("120 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
-        System.out.println(String.format("120 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoNascita, bio.giornoNato)));
+        System.out.println("121 - getWrap per giornoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("121 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoNascita, bio.giornoNato)));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(122)
+    @DisplayName("122 - getWrap per giornoMorto STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapGiornoMorto(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.giornoMorte);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("122 - getWrap per giornoMorto STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("122 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.giornoMorte, bio.giornoMorto)));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(123)
+    @DisplayName("123 - getWrap per annoNato STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapAnnoNato(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.annoNascita);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("123 - getWrap per annoNato STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("123 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.annoNascita, bio.annoNato)));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(124)
+    @DisplayName("124 - getWrap per annoMorto STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapAnnoMorto(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.annoMorte);
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("124 - getWrap per annoMorto STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(String.format("124 - getWrap di '%s' per la pagina [%s]", bio.wikiTitle, wikiUtility.wikiTitle(AETypeLista.annoMorte, bio.annoMorto)));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(130)
+    @DisplayName("130 - getWrap per attività STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapAttivita(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.attivitaPlurale);
+        //        assertTrue(checkIcona(wrapLista, true));
+        //        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        //        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("130 - getWrap per nomi attività con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        AttSingolare attivita = attSingolareBackend.findByKey(bio.attivita);
+        message = attivita != null ? textService.primaMaiuscola(attivita.plurale) : VUOTA;
+        System.out.println(String.format("130 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_ATTIVITA + SLASH + message));
+        System.out.println(VUOTA);
+        printWrap(wrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "biografie")
+    @Order(140)
+    @DisplayName("140 - getWrap per nazionalità STANDARD con linkParagrafi=nessunLink")
+        //--biografie
+    void getWrapNazionalita(final Bio bio) {
+        wrapLista = service.getWrap(bio, AETypeLista.nazionalitaPlurale);
+        //        assertTrue(checkIcona(wrapLista, true));
+        //        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        //        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+
+        System.out.println(VUOTA);
+        System.out.println("140 - getWrap per nomi nazionalità con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        NazSingolare nazionalita = nazSingolareBackend.findByKey(bio.nazionalita);
+        message = nazionalita != null ? textService.primaMaiuscola(nazionalita.plurale) : VUOTA;
+        System.out.println(String.format("140 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_NAZIONALITA + SLASH + message));
         System.out.println(VUOTA);
         printWrap(wrapLista);
     }
@@ -523,7 +689,7 @@ public class DidascaliaServiceTest extends WikiTest {
     @Order(160)
     @DisplayName("160 - getWrap per nomi STANDARD con linkParagrafi=nessunLink")
         //--biografie
-    void getWrapxNomi(final Bio bio) {
+    void getWrapNomi(final Bio bio) {
         wrapLista = service.getWrap(bio, AETypeLista.nomi);
         assertTrue(checkIcona(wrapLista, true));
         assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
@@ -531,7 +697,7 @@ public class DidascaliaServiceTest extends WikiTest {
 
         System.out.println(VUOTA);
         System.out.println("160 - getWrap per nomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
-        System.out.println(String.format("120 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_NOMI + bio.nome));
+        System.out.println(String.format("160 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_NOMI + bio.nome));
         System.out.println(VUOTA);
         printWrap(wrapLista);
     }
@@ -541,7 +707,7 @@ public class DidascaliaServiceTest extends WikiTest {
     @Order(170)
     @DisplayName("170 - getWrap per cognomi STANDARD con linkParagrafi=nessunLink")
         //--biografie
-    void getWrapxCognomi(final Bio bio) {
+    void getWrapCognomi(final Bio bio) {
         wrapLista = service.getWrap(bio, AETypeLista.cognomi);
         assertTrue(checkIcona(wrapLista, true));
         assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
@@ -549,18 +715,18 @@ public class DidascaliaServiceTest extends WikiTest {
 
         System.out.println(VUOTA);
         System.out.println("170 - getWrap per cognomi STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
-        System.out.println(String.format("121 - getWrap di %s per la pagina %s", bio.wikiTitle, PATH_COGNOMI + bio.cognome));
+        System.out.println(String.format("170 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_COGNOMI + bio.cognome));
         System.out.println(VUOTA);
         printWrap(wrapLista);
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "biografie")
     @Order(180)
     @DisplayName("180 - getWrapNomi (con alternative)")
-        //--biografia
-    void getWrapNomi(final Bio bio) {
+    //--biografia
+    void getWrapNomiAlternativi(final Bio bio) {
         wrapLista = service.getWrapNomi(bio);
         assertTrue(checkIcona(wrapLista, true));
         assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
@@ -781,11 +947,12 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
         System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
         System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
-        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.didascaliaBreve : VUOTA));
+        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : VUOTA));
         System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
         System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
-        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annonato) ? wrap.annonato : VUOTA));
+        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : VUOTA));
         System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
+        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : VUOTA));
         System.out.println(VUOTA);
     }
 

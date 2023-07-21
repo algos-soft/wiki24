@@ -13,6 +13,7 @@ import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -84,6 +85,24 @@ public class NazPluraleBackend extends WikiBackend {
         return newEntity(keyPropertyValue, listaSingolari, VUOTA, VUOTA);
     }
 
+
+    public NazPlurale newEntity(final Document doc) {
+        NazPlurale nazPlurale = new NazPlurale();
+
+        Object alfa= doc.getString("listaSingolari");
+        List<NazSingolare> listaSingolari=null;
+
+        nazPlurale.nome = doc.getString("nome");
+        nazPlurale.paginaLista = doc.getString("paginaLista");
+        nazPlurale.linkNazione = doc.getString("linkNazione");
+        nazPlurale.numBio = doc.getInteger("numBio");
+        nazPlurale.numSingolari = doc.getInteger("numSingolari");
+        nazPlurale.superaSoglia = doc.getBoolean("superaSoglia");
+        nazPlurale.esisteLista = doc.getBoolean("esisteLista");
+
+        return nazPlurale;
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -120,7 +139,13 @@ public class NazPluraleBackend extends WikiBackend {
 
     @Override
     public NazPlurale findByKey(final String keyValue) {
-        return (NazPlurale) super.findByKey(keyValue);
+        NazPlurale nazPlurale = (NazPlurale) super.findByKey(keyValue);
+
+        if (nazPlurale == null) {
+            nazPlurale = findDocumentByKey(keyValue);
+        }
+
+        return nazPlurale;
     }
 
     @Override
@@ -427,6 +452,29 @@ public class NazPluraleBackend extends WikiBackend {
     public WResult uploadModulo() {
         WResult result = appContext.getBean(UploadModuloLinkNazionalita.class).uploadOrdinatoSenzaModifiche();
         return super.fixRiordinaModulo(result);
+    }
+
+
+    public NazPlurale findDocumentById(String keyCode) {
+        NazPlurale beanNazPlurale = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanNazPlurale = this.newEntity(doc);
+        }
+
+        return beanNazPlurale;
+    }
+
+    public NazPlurale findDocumentByKey(String keyCode) {
+        NazPlurale beanNazPlurale = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanNazPlurale = this.newEntity(doc);
+        }
+
+        return beanNazPlurale;
     }
 
 }// end of crud backend class

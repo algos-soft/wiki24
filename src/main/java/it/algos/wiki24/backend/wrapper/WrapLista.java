@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.wrapper;
 
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import static it.algos.wiki24.backend.statistiche.Statistiche.*;
 
 /**
  * Project wiki23
@@ -30,15 +31,14 @@ public class WrapLista {
 
     public String giornoMorto;
 
-    public String annonato;
+    public String annoNato;
 
     public String annoMorto;
 
     @Deprecated
     public String didascaliaBreve;
 
-    @Deprecated
-    public String didascaliaLunga;
+    public String didascalia;
 
     public WrapLista(String titoloParagrafo, String titoloParagrafoLink, String titoloSottoParagrafo, String didascaliaBreve, String didascaliaBreveOld) {
         this.titoloParagrafo = titoloParagrafo;
@@ -46,25 +46,37 @@ public class WrapLista {
         this.titoloSottoParagrafo = titoloSottoParagrafo;
         this.didascaliaBreve = didascaliaBreve;
         if (titoloSottoParagrafo != null && titoloSottoParagrafo.length() > 0) {
-            this.didascaliaLunga = titoloSottoParagrafo + SEP + didascaliaBreve;
+            this.didascalia = titoloSottoParagrafo + SEP + didascaliaBreve;
         }
         else {
-            this.didascaliaLunga = didascaliaBreve;
+            this.didascalia = didascaliaBreve;
         }
     }
 
 
-    public WrapLista(AETypeLista typeLista, String titoloParagrafo, String titoloParagrafoLink, String ordinamento, String titoloSottoParagrafo, String lista, String giornoNato, String giornoMorto, String annonato, String annoMorto) {
+    public WrapLista(AETypeLista typeLista, String titoloParagrafo, String titoloParagrafoLink, String titoloSottoParagrafo, String ordinamento, String lista, String giornoNato, String giornoMorto, String annoNato, String annoMorto) {
         this.typeLista = typeLista;
         this.titoloParagrafo = titoloParagrafo;
         this.titoloParagrafoLink = titoloParagrafoLink;
-        this.ordinamento = ordinamento;
         this.titoloSottoParagrafo = titoloSottoParagrafo;
+        this.ordinamento = ordinamento;
         this.lista = lista;
         this.giornoNato = giornoNato;
         this.giornoMorto = giornoMorto;
-        this.annonato = annonato;
+        this.annoNato = annoNato;
         this.annoMorto = annoMorto;
+
+        this.didascalia = switch (typeLista) {
+            case giornoNascita -> giornoNato;
+            case giornoMorte -> giornoMorto;
+            case annoNascita -> annoNato;
+            case annoMorte -> annoMorto;
+            default -> VUOTO;
+        };
+
+        if (ordinamento != null && ordinamento.length() > 0) {
+            this.didascalia = ordinamento + SEP + didascalia;
+        }
     }
 
 }

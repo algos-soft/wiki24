@@ -13,6 +13,7 @@ import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -88,6 +89,22 @@ public class AttPluraleBackend extends WikiBackend {
         return newEntity(keyPropertyValue, listaSingolari, VUOTA, VUOTA);
     }
 
+    public AttPlurale newEntity(final Document doc) {
+        AttPlurale attPlurale = new AttPlurale();
+
+        Object alfa= doc.getString("listaSingolari");
+        List<AttSingolare> listaSingolari=null;
+
+        attPlurale.nome = doc.getString("nome");
+        attPlurale.paginaLista = doc.getString("paginaLista");
+        attPlurale.linkAttivita = doc.getString("linkAttivita");
+        attPlurale.numBio = doc.getInteger("numBio");
+        attPlurale.numSingolari = doc.getInteger("numSingolari");
+        attPlurale.superaSoglia = doc.getBoolean("superaSoglia");
+        attPlurale.esisteLista = doc.getBoolean("esisteLista");
+
+        return attPlurale;
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -125,7 +142,13 @@ public class AttPluraleBackend extends WikiBackend {
 
     @Override
     public AttPlurale findByKey(final String keyValue) {
-        return (AttPlurale) super.findByKey(keyValue);
+        AttPlurale attPlurale = (AttPlurale) super.findByKey(keyValue);
+
+        if (attPlurale == null) {
+            attPlurale = findDocumentByKey(keyValue);
+        }
+
+        return attPlurale;
     }
 
     @Override
@@ -419,6 +442,29 @@ public class AttPluraleBackend extends WikiBackend {
         }
 
         return result;
+    }
+
+
+    public AttPlurale findDocumentById(String keyCode) {
+        AttPlurale beanAttPlurale = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanAttPlurale = this.newEntity(doc);
+        }
+
+        return beanAttPlurale;
+    }
+
+    public AttPlurale findDocumentByKey(String keyCode) {
+        AttPlurale beanAttPlurale = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanAttPlurale = this.newEntity(doc);
+        }
+
+        return beanAttPlurale;
     }
 
 }// end of crud backend class

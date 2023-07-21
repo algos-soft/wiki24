@@ -349,7 +349,7 @@ public abstract class UploadGiorniAnni extends Upload {
 
                 if (listaSub.size() == 1) {
                     buffer.append(ASTERISCO);
-                    buffer.append(listaSub.get(0).didascaliaLunga);
+                    buffer.append(listaSub.get(0).didascalia);
                     buffer.append(CAPO);
                 }
                 else {

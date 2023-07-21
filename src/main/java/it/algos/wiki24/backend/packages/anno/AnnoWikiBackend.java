@@ -72,13 +72,14 @@ public class AnnoWikiBackend extends WikiBackend {
 
     public AnnoWiki newEntity(final Document doc) {
         AnnoWiki annoWiki = new AnnoWiki();
+        Secolo secolo;
 
-        DBRef dbRef= (DBRef)doc.get("secolo");
-        dbRef.getId()
-                Secolo secolo=
+        DBRef dbRef = (DBRef) doc.get("secolo");
+        secolo = secoloBackend.findDocumentById((String) dbRef.getId());
+
         annoWiki.ordine = doc.getInteger("ordine");
         annoWiki.nome = doc.getString("nome");
-//        annoWiki.secolo = ;
+        annoWiki.secolo = secolo;
         annoWiki.bioNati = doc.getInteger("bioNati");
         annoWiki.bioMorti = doc.getInteger("bioMorti");
         annoWiki.pageNati = doc.getString("pageNati");
@@ -88,7 +89,7 @@ public class AnnoWikiBackend extends WikiBackend {
         annoWiki.natiOk = doc.getBoolean("natiOk");
         annoWiki.mortiOk = doc.getBoolean("mortiOk");
         annoWiki.ordineSecolo = doc.getInteger("ordineSecolo");
-        //
+
         return annoWiki;
     }
 
@@ -130,7 +131,7 @@ public class AnnoWikiBackend extends WikiBackend {
         AnnoWiki anno = (AnnoWiki) super.findByKey(keyValue);
 
         if (anno == null) {
-            anno = creaAnno(keyValue);
+            anno = this.findDocumentByKey(keyValue);
         }
 
         return anno;
@@ -461,14 +462,10 @@ public class AnnoWikiBackend extends WikiBackend {
         return lungo > 0 ? lungo.intValue() : 0;
     }
 
-    protected AnnoWiki creaAnno(String keyCode) {
+
+    public AnnoWiki findDocumentById(String keyCode) {
         AnnoWiki beanAnno = null;
-        MongoCollection<Document> collection;
-        MongoDatabase client = mongoService.getDB("wiki24");
-        collection = client.getCollection("annoWiki");
-        BasicDBObject whereQuery = new BasicDBObject();
-        whereQuery.put(FIELD_NAME_NOME, keyCode);
-        Document doc = collection.find(whereQuery).first();
+        Document doc = super.getDocumentById(keyCode);
 
         if (doc != null) {
             beanAnno = this.newEntity(doc);
@@ -477,5 +474,15 @@ public class AnnoWikiBackend extends WikiBackend {
         return beanAnno;
     }
 
+    public AnnoWiki findDocumentByKey(String keyCode) {
+        AnnoWiki beanAnno = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanAnno = this.newEntity(doc);
+        }
+
+        return beanAnno;
+    }
 
 }// end of crud backend class

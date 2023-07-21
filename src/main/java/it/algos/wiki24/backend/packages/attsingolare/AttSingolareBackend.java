@@ -12,6 +12,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -70,6 +71,17 @@ public class AttSingolareBackend extends WikiBackend {
         return newEntity(keyPropertyValue, VUOTA, false);
     }
 
+    public AttSingolare newEntity(final Document doc) {
+        AttSingolare attSingolare = new AttSingolare();
+
+        attSingolare.nome = doc.getString("nome");
+        attSingolare.plurale = doc.getString("plurale");
+        attSingolare.ex = doc.getBoolean("ex");
+        attSingolare.numBio = doc.getInteger("numBio");
+
+        return attSingolare;
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -100,7 +112,13 @@ public class AttSingolareBackend extends WikiBackend {
 
     @Override
     public AttSingolare findByKey(final String keyValue) {
-        return (AttSingolare) super.findByKey(keyValue);
+        AttSingolare attSingolare = (AttSingolare) super.findByKey(keyValue);
+
+        if (attSingolare == null) {
+            attSingolare = findDocumentByKey(keyValue);
+        }
+
+        return attSingolare;
     }
 
     @Override
@@ -353,6 +371,29 @@ public class AttSingolareBackend extends WikiBackend {
         }
 
         return super.fixElabora(result);
+    }
+
+
+    public AttSingolare findDocumentById(String keyCode) {
+        AttSingolare beanAttivitaSingolare = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanAttivitaSingolare = this.newEntity(doc);
+        }
+
+        return beanAttivitaSingolare;
+    }
+
+    public AttSingolare findDocumentByKey(String keyCode) {
+        AttSingolare beanAttivitaSingolare = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanAttivitaSingolare = this.newEntity(doc);
+        }
+
+        return beanAttivitaSingolare;
     }
 
 }// end of crud backend class

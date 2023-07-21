@@ -481,7 +481,7 @@ public abstract class Lista {
                     listaDidascalie = new ArrayList<>();
                     for (WrapLista wrap : listaWrap) {
                         didascalia = switch (typeLista) {
-                            case giornoNascita, giornoMorte, annoNascita, annoMorte -> wrap.didascaliaLunga;
+                            case giornoNascita, giornoMorte, annoNascita, annoMorte -> wrap.didascalia;
                             case nazionalitaSingolare, nazionalitaPlurale -> wrap.didascaliaBreve;
                             default -> VUOTA;
                         };

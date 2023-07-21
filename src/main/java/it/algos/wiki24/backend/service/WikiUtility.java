@@ -9,6 +9,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.apache.commons.lang3.*;
 import org.springframework.beans.factory.annotation.*;
@@ -308,18 +309,18 @@ public class WikiUtility extends WAbstractService {
     }
 
     public String fixSecoloMorto(final Bio bio) {
-        Anno anno = annoBackend.findByKey(bio.annoMorto);
-        return anno != null ? anno.getSecolo().nome : VUOTA;
+        AnnoWiki anno = annoWikiBackend.findByKey(bio.annoMorto);
+        return anno != null ? anno.getSecolo() != null ? anno.getSecolo().nome : VUOTA : VUOTA;
     }
 
     public String fixMeseNato(final Bio bio) {
-        Giorno giorno = giornoBackend.findByKey(bio.giornoNato);
-        return giorno != null ? textService.primaMaiuscola(giorno.getMese().nome) : VUOTA;
+        GiornoWiki giorno = giornoWikiBackend.findByKey(bio.giornoNato);
+        return giorno != null ? giorno.getMese() != null ? giorno.getMese().nome : VUOTA : VUOTA;
     }
 
     public String fixMeseMorto(final Bio bio) {
-        Giorno giorno = giornoBackend.findByKey(bio.giornoMorto);
-        return giorno != null ? textService.primaMaiuscola(giorno.getMese().nome) : VUOTA;
+        GiornoWiki giorno = giornoWikiBackend.findByKey(bio.giornoMorto);
+        return giorno != null ? giorno.getMese() != null ? giorno.getMese().nome : VUOTA : VUOTA;
     }
 
     /**

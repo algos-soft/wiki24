@@ -11,6 +11,7 @@ import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.moduloProgettoSoloAdmin.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
@@ -68,6 +69,16 @@ public class NazSingolareBackend extends WikiBackend {
         return newEntity(keyPropertyValue, VUOTA);
     }
 
+    public NazSingolare newEntity(final Document doc) {
+        NazSingolare nazSingolare = new NazSingolare();
+
+        nazSingolare.nome = doc.getString("nome");
+        nazSingolare.plurale = doc.getString("plurale");
+        nazSingolare.numBio = doc.getInteger("numBio");
+
+        return nazSingolare;
+    }
+
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      * Usa il @Builder di Lombok <br>
@@ -97,7 +108,13 @@ public class NazSingolareBackend extends WikiBackend {
 
     @Override
     public NazSingolare findByKey(final String keyValue) {
-        return (NazSingolare) super.findByKey(keyValue);
+        NazSingolare nazSingolare = (NazSingolare) super.findByKey(keyValue);
+
+        if (nazSingolare == null) {
+            nazSingolare = findDocumentByKey(keyValue);
+        }
+
+        return nazSingolare;
     }
 
     @Override
@@ -276,5 +293,26 @@ public class NazSingolareBackend extends WikiBackend {
         return super.fixElabora(result);
     }
 
+    public NazSingolare findDocumentById(String keyCode) {
+        NazSingolare beanNazSingolare = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanNazSingolare = this.newEntity(doc);
+        }
+
+        return beanNazSingolare;
+    }
+
+    public NazSingolare findDocumentByKey(String keyCode) {
+        NazSingolare beanNazSingolare = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanNazSingolare = this.newEntity(doc);
+        }
+
+        return beanNazSingolare;
+    }
 
 }// end of crud backend class

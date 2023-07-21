@@ -13,6 +13,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -64,6 +65,28 @@ public class GiornoWikiBackend extends WikiBackend {
         return newEntity(VUOTA);
     }
 
+    public GiornoWiki newEntity(final Document doc) {
+        GiornoWiki annoWiki = new GiornoWiki();
+        Mese mese;
+
+        DBRef dbRef = (DBRef) doc.get("mese");
+        mese = meseBackend.findDocumentById((String) dbRef.getId());
+
+        annoWiki.ordine = doc.getInteger("ordine");
+        annoWiki.nome = doc.getString("nome");
+        annoWiki.mese = mese;
+        annoWiki.bioNati = doc.getInteger("bioNati");
+        annoWiki.bioMorti = doc.getInteger("bioMorti");
+        annoWiki.pageNati = doc.getString("pageNati");
+        annoWiki.pageMorti = doc.getString("pageMorti");
+        annoWiki.esistePaginaNati = doc.getBoolean("esistePaginaNati");
+        annoWiki.esistePaginaMorti = doc.getBoolean("esistePaginaMorti");
+        annoWiki.natiOk = doc.getBoolean("natiOk");
+        annoWiki.mortiOk = doc.getBoolean("mortiOk");
+
+        return annoWiki;
+    }
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -98,7 +121,13 @@ public class GiornoWikiBackend extends WikiBackend {
 
     @Override
     public GiornoWiki findByKey(final String keyValue) {
-        return (GiornoWiki) super.findByKey(keyValue);
+        GiornoWiki giorno = (GiornoWiki) super.findByKey(keyValue);
+
+        if (giorno == null) {
+            giorno = findDocumentByKey(keyValue);
+        }
+
+        return giorno;
     }
 
     @Override
@@ -325,6 +354,29 @@ public class GiornoWikiBackend extends WikiBackend {
         lungo = mongoService.mongoOp.count(query, Bio.class);
 
         return lungo > 0 ? lungo.intValue() : 0;
+    }
+
+
+    public GiornoWiki findDocumentById(String keyCode) {
+        GiornoWiki beanGiorno = null;
+        Document doc = super.getDocumentById(keyCode);
+
+        if (doc != null) {
+            beanGiorno = this.newEntity(doc);
+        }
+
+        return beanGiorno;
+    }
+
+    public GiornoWiki findDocumentByKey(String keyCode) {
+        GiornoWiki beanGiorno = null;
+        Document doc = super.getDocumentByKey(keyCode);
+
+        if (doc != null) {
+            beanGiorno = this.newEntity(doc);
+        }
+
+        return beanGiorno;
     }
 
 
