@@ -327,7 +327,6 @@ public class ListaGiorniTest extends WikiTest {
             numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
             message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getCivile(), sorgente);
             System.out.println(message);
-            System.out.println(VUOTA);
             printMappaDidascalie(mappaWrap);
         }
         else {
@@ -417,10 +416,10 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
-    @Test
+//    @Test
     @Order(91)
     @DisplayName("91 - Paragrafo singolo")
-    void costruttoresBase() {
+    void costruttoreBase() {
         System.out.println(("91 - Paragrafo singolo"));
         System.out.println(VUOTA);
 

@@ -1282,6 +1282,7 @@ public abstract class WikiTest extends AlgosTest {
 
         if (mappaWrap != null) {
             message = String.format("Faccio vedere una mappa delle didascalie con i relativi paragrafi");
+            System.out.println(message);
             System.out.println(VUOTA);
             for (String paragrafo : mappaWrap.keySet()) {
                 System.out.print("==");
@@ -1293,6 +1294,7 @@ public abstract class WikiTest extends AlgosTest {
                 for (WrapLista wrap : lista) {
                     System.out.println(wrap.didascalia);
                 }
+                System.out.println(VUOTA);
             }
         }
     }
