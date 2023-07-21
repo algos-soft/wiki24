@@ -71,7 +71,7 @@ public class WrapLista {
             case giornoMorte -> giornoMorto;
             case annoNascita -> annoNato;
             case annoMorte -> annoMorto;
-            default -> VUOTO;
+            default -> lista;
         };
 
         if (ordinamento != null && ordinamento.length() > 0) {

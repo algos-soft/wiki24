@@ -304,6 +304,9 @@ public class DidascaliaService extends WAbstractService {
         String ordinamento = annoNato(bio, typeLinkCrono);
 
         if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
+        }
+        if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
         }
 
@@ -350,6 +353,9 @@ public class DidascaliaService extends WAbstractService {
         String ordinamento = annoMorto(bio, typeLinkCrono);
 
         if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
+        }
+        if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
         }
 
@@ -395,6 +401,9 @@ public class DidascaliaService extends WAbstractService {
         String ordinamento = giornoNato(bio, typeLinkCrono);
 
         if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
+        }
+        if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
         }
 
@@ -439,6 +448,9 @@ public class DidascaliaService extends WAbstractService {
         String sottoParagrafo;
         String ordinamento = giornoMorto(bio, typeLinkCrono);
 
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
+        }
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = AETypeLink.nessunLink;
         }
@@ -490,22 +502,27 @@ public class DidascaliaService extends WAbstractService {
             nazPlurale = nazPluraleBackend.findByKey(nazSingolare.plurale);
             if (nazPlurale != null) {
                 paragrafo = textService.primaMaiuscola(nazPlurale.nome);
-                paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
-                    case linkVoce -> textService.setDoppieQuadre(paragrafo);
-                    case linkLista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case nessunLink -> paragrafo;
-                };
             }
             else {
                 paragrafo = textService.primaMaiuscola(nazSingolare.nome);
-                paragrafoLink = paragrafo;
-                logService.warn(new WrapLog().message(String.format("Manca l'attività plurale di %s", nazSingolare)));
+                logService.warn(new WrapLog().message(String.format("Manca la nazionalità plurale di %s", nazSingolare.nome)));
             }
         }
         else {
             paragrafo = TAG_LISTA_NO_NAZIONALITA;
-            paragrafoLink = TAG_LISTA_NO_NAZIONALITA;
         }
+
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi= (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj() ;
+        }
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = AETypeLink.nessunLink;
+        }
+        paragrafoLink = switch ((AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj()) {
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case linkLista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
+            case nessunLink -> VUOTA;
+        };
 
         sottoParagrafo = bio.ordinamento.substring(0, 1);
 
@@ -515,6 +532,66 @@ public class DidascaliaService extends WAbstractService {
                 typeLinkCrono,
                 usaIcona,
                 AETypeLista.attivitaPlurale,
+                paragrafo,
+                paragrafoLink,
+                sottoParagrafo,
+                ordinamento
+        );
+    }
+
+
+    /**
+     * Costruisce una wrapLista specializzata per le righe delle pagine 'Nazionalità' <br>
+     * Contiene il paragrafo 'attivita'
+     * Contiene il sotto-paragrafo 'primoCarattere'
+     * Contiene la didascalia con 'wikiTitle', 'attività/nazionalità', 'luogo e anno di nascita', 'luogo e anno di morte'
+     *
+     * @param bio completa
+     *
+     * @return wrapLista
+     */
+    public WrapLista getWrapNazionalita(final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
+        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
+        AttPlurale attPlurale;
+        String paragrafo;
+        String paragrafoLink;
+        String sottoParagrafo;
+        String ordinamento = VUOTA;
+
+        if (attSingolare != null) {
+            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
+            if (attPlurale != null) {
+                paragrafo = textService.primaMaiuscola(attPlurale.nome);
+            }
+            else {
+                paragrafo = textService.primaMaiuscola(attSingolare.nome);
+                logService.warn(new WrapLog().message(String.format("Manca l'attività plurale di %s", attSingolare.nome)));
+            }
+        }
+        else {
+            paragrafo = TAG_LISTA_NO_ATTIVITA;
+        }
+
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi= (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj() ;
+        }
+        if (typeLinkParagrafi == null) {
+            typeLinkParagrafi = AETypeLink.nessunLink;
+        }
+        paragrafoLink = switch ((AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj()) {
+            case linkVoce -> textService.setDoppieQuadre(paragrafo);
+            case linkLista -> textService.setDoppieQuadre(PATH_NAZIONALITA + SLASH + paragrafo + PIPE + paragrafo);
+            case nessunLink -> VUOTA;
+        };
+
+        sottoParagrafo = bio.ordinamento.substring(0, 1);
+
+        return getWrap(
+                bio,
+                typeLinkParagrafi,
+                typeLinkCrono,
+                usaIcona,
+                AETypeLista.nazionalitaPlurale,
                 paragrafo,
                 paragrafoLink,
                 sottoParagrafo,
@@ -612,51 +689,6 @@ public class DidascaliaService extends WAbstractService {
     }
 
 
-    /**
-     * Costruisce una wrapLista specializzata per le righe delle pagine 'Nazionalità' <br>
-     * Contiene il paragrafo 'attivita'
-     * Contiene il sotto-paragrafo 'primoCarattere'
-     * Contiene la didascalia con 'wikiTitle', 'attività/nazionalità', 'luogo e anno di nascita', 'luogo e anno di morte'
-     *
-     * @param bio completa
-     *
-     * @return wrapLista
-     */
-    public WrapLista getWrapNazionalita(final Bio bio) {
-        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
-        AttPlurale attPlurale;
-        String paragrafo;
-        String paragrafoLink;
-        String message;
-
-        if (attSingolare != null) {
-            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
-            if (attPlurale != null) {
-                paragrafo = textService.primaMaiuscola(attPlurale.nome);
-                paragrafoLink = switch ((AETypeLink) WPref.linkAttNaz.getEnumCurrentObj()) {
-                    case linkVoce -> textService.setDoppieQuadre(paragrafo);
-                    case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
-                    case nessunLink -> paragrafo;
-                };
-            }
-            else {
-                paragrafo = textService.primaMaiuscola(attSingolare.nome);
-                paragrafoLink = paragrafo;
-                message = String.format("Manca la nazionalità plurale di %s", attSingolare);
-                System.out.println(message);
-                logService.warn(new WrapLog().message(message));
-            }
-        }
-        else {
-            paragrafo = TAG_LISTA_NO_ATTIVITA;
-            paragrafoLink = TAG_LISTA_NO_ATTIVITA;
-        }
-
-        String sottoParagrafo = bio.ordinamento.substring(0, 1);
-        String didascalia = this.lista(bio, null);//@todo ERRORE
-
-        return new WrapLista(paragrafo, paragrafoLink, bio.ordinamento, sottoParagrafo, didascalia);
-    }
 
 
     public WrapLista getWrapNomi(final Bio bio) {
@@ -702,7 +734,7 @@ public class DidascaliaService extends WAbstractService {
             case annoNascita -> this.getWrapAnnoNato(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case annoMorte -> this.getWrapAnnoMorto(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case attivitaSingolare, attivitaPlurale -> this.getWrapAttivita(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
-            case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio);
+            case nazionalitaSingolare, nazionalitaPlurale -> this.getWrapNazionalita(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case nomi -> this.getWrapNomi(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case cognomi -> this.getWrapCognomi(bio, typeLinkParagrafi, typeLinkCrono, usaIcona);
             case listaBreve -> null;

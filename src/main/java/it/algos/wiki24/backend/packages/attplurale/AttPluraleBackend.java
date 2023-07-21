@@ -92,10 +92,8 @@ public class AttPluraleBackend extends WikiBackend {
     public AttPlurale newEntity(final Document doc) {
         AttPlurale attPlurale = new AttPlurale();
 
-        Object alfa= doc.getString("listaSingolari");
-        List<AttSingolare> listaSingolari=null;
-
         attPlurale.nome = doc.getString("nome");
+        attPlurale.listaSingolari = (List<AttSingolare>) doc.get("listaSingolari");
         attPlurale.paginaLista = doc.getString("paginaLista");
         attPlurale.linkAttivita = doc.getString("linkAttivita");
         attPlurale.numBio = doc.getInteger("numBio");

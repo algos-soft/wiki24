@@ -61,7 +61,7 @@ public class ListaGiorni extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        this.typeLinkParagrafi = (AETypeLink) WPref.linkGiorniAnni.getEnumCurrentObj();
+        this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
     }
 

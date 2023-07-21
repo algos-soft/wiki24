@@ -89,10 +89,8 @@ public class NazPluraleBackend extends WikiBackend {
     public NazPlurale newEntity(final Document doc) {
         NazPlurale nazPlurale = new NazPlurale();
 
-        Object alfa= doc.getString("listaSingolari");
-        List<NazSingolare> listaSingolari=null;
-
         nazPlurale.nome = doc.getString("nome");
+        nazPlurale.listaSingolari = (List<NazSingolare>) doc.get("listaSingolari");
         nazPlurale.paginaLista = doc.getString("paginaLista");
         nazPlurale.linkNazione = doc.getString("linkNazione");
         nazPlurale.numBio = doc.getInteger("numBio");

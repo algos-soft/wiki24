@@ -650,14 +650,14 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografie
     void getWrapAttivita(final Bio bio) {
         wrapLista = service.getWrap(bio, AETypeLista.attivitaPlurale);
-        //        assertTrue(checkIcona(wrapLista, true));
-        //        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
-        //        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
 
-        System.out.println(VUOTA);
-        System.out.println("130 - getWrap per nomi attività con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         AttSingolare attivita = attSingolareBackend.findByKey(bio.attivita);
         message = attivita != null ? textService.primaMaiuscola(attivita.plurale) : VUOTA;
+        System.out.println(VUOTA);
+        System.out.println("130 - getWrap per attività con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         System.out.println(String.format("130 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_ATTIVITA + SLASH + message));
         System.out.println(VUOTA);
         printWrap(wrapLista);
@@ -671,12 +671,12 @@ public class DidascaliaServiceTest extends WikiTest {
         //--biografie
     void getWrapNazionalita(final Bio bio) {
         wrapLista = service.getWrap(bio, AETypeLista.nazionalitaPlurale);
-        //        assertTrue(checkIcona(wrapLista, true));
-        //        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
-        //        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
+        assertTrue(checkIcona(wrapLista, true));
+        assertTrue(checkParagrafo(wrapLista, AETypeLink.nessunLink));
+        assertTrue(checkCrono(wrapLista, AETypeLink.linkLista));
 
         System.out.println(VUOTA);
-        System.out.println("140 - getWrap per nomi nazionalità con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println("140 - getWrap per nazionalità con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
         NazSingolare nazionalita = nazSingolareBackend.findByKey(bio.nazionalita);
         message = nazionalita != null ? textService.primaMaiuscola(nazionalita.plurale) : VUOTA;
         System.out.println(String.format("140 - getWrap di '%s' per la pagina (eventuale) [%s]", bio.wikiTitle, PATH_NAZIONALITA + SLASH + message));

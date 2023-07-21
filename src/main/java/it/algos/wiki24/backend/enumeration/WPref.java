@@ -188,8 +188,8 @@ public enum WPref implements AIGenPref {
     usaSimboliCrono("usaSimboliCrono", AETypePref.bool, true, "Uso dei simboli crono per nati e morti", false),
 
     linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.linkLista, "[AETypeLink] a giorni/anni nelle didascalie"),
-    linkAttNaz("linkAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
-    linkGiorniAnni("linkGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
+    linkParametriAttNaz("linkParametriAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
+    linkParagrafiGiorniAnni("linkParagrafiGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
     linkParagrafiNomi("linkParagrafiNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
     linkParagrafiCognomi("linkParagrafiCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
 
