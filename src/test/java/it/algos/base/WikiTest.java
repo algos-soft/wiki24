@@ -832,19 +832,19 @@ public abstract class WikiTest extends AlgosTest {
     @DisplayName("1 - Costruttore base con/senza parametri")
     void costruttoreBase() {
         if (this.costruttoreNecessitaAlmenoUnParametro) {
-            System.out.println(("1 - Costruttore base senza parametri"));
-            System.out.println(VUOTA);
-
-            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
-            System.out.println("Questa classe NON accetta parametri nel costruttore");
-        }
-        else {
             System.out.println(("1 - Costruttore base con ALMENO un parametro"));
             System.out.println(VUOTA);
 
             System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
             System.out.println(String.format("new %s() NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
             System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+        }
+        else {
+            System.out.println(("1 - Costruttore base senza parametri"));
+            System.out.println(VUOTA);
+
+            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
+            System.out.println("Questa classe NON accetta parametri nel costruttore");
         }
     }
 
@@ -857,6 +857,7 @@ public abstract class WikiTest extends AlgosTest {
 
         if (this.costruttoreNecessitaAlmenoUnParametro) {
             System.out.println(("2 - appContext.getBean con ALMENO un parametro"));
+            System.out.println(VUOTA);
             System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
             System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
             System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");

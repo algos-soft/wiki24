@@ -36,10 +36,10 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("liste")
+//@Tag("liste")
 @DisplayName("Lista Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaGiorniTest extends WikiTest {
+public class ListaGiorniTest extends ListeTest {
 
 
     /**
@@ -136,12 +136,12 @@ public class ListaGiorniTest extends WikiTest {
     void beanStandardCompleta() {
         System.out.println(String.format("6 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
         System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'","typeLista"));
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "typeLista"));
         System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
         System.out.println(VUOTA);
 
         sorgente = "4 marzo";
-        istanza =  (ListaGiorni)appContext.getBean(ListaGiorni.class, sorgente).typeLista(AETypeLista.giornoMorte);
+        istanza = (ListaGiorni) appContext.getBean(ListaGiorni.class, sorgente).typeLista(AETypeLista.giornoMorte);
         assertNotNull(istanza);
         printLista(istanza);
     }
@@ -152,7 +152,7 @@ public class ListaGiorniTest extends WikiTest {
     void beanStandardCompleta2() {
         System.out.println(String.format("7 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
         System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'","nascita"));
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "nascita"));
         System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
         System.out.println(VUOTA);
 
@@ -168,7 +168,7 @@ public class ListaGiorniTest extends WikiTest {
     void beanStandardCompleta3() {
         System.out.println(String.format("8 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
         System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'","morte"));
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "morte"));
         System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
         System.out.println(VUOTA);
 
@@ -178,139 +178,210 @@ public class ListaGiorniTest extends WikiTest {
         printLista(istanza);
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
-    @Order(13)
-    @DisplayName("13 - Lista bio con switch")
-        //--nome giorno
-        //--typeLista
-    void listaBio(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("13 - Lista bio con switch");
-        sorgente = nomeGiorno;
-
-        if (!valido(nomeGiorno, type)) {
-            return;
-        }
-
-        listBio = switch (type) {
-            case giornoNascita -> appContext.getBean(ListaGiorni.class, sorgente).nascita().listaBio();
-            case giornoMorte -> appContext.getBean(ListaGiorni.class, sorgente).morte().listaBio();
-            default -> null;
-        };
-
-        if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            switch (type) {
-                case giornoNascita -> printBioListaGiorniNato(listBio);
-                case giornoMorte -> printBioListaGiorniMorto(listBio);
-            }
-        }
-        else {
-            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeGiorno);
-            System.out.println(message);
-        }
-    }
-
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
-    @Order(14)
-    @DisplayName("14 - Lista bio con type")
+    @Order(10)
+    @DisplayName("10 - Lista bio BASE")
         //--nome giorno
         //--typeLista
-    void listaBioType(final String nomeGiorno, final AETypeLista type) {
-        System.out.println("14 - Lista bio con type");
-        sorgente = nomeGiorno;
-
-        if (!valido(nomeGiorno, type)) {
+    void listaBio(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        listBio = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).listaBio();
-
-        if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            printBio(type, listBio);
-        }
-        else {
-            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeGiorno);
-            System.out.println(message);
-        }
+        listBio = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(type).listaBio();
+        super.fixListaBio(nomeLista, listBio);
     }
-
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_LISTA")
     @Order(20)
-    @DisplayName("20 - Lista wrapLista")
+    @DisplayName("20 - WrapLista STANDARD")
         //--nome giorno
         //--typeLista
-    void listaWrap(final String nomeGiorno, final AETypeLista type) {
-        sorgente = nomeGiorno;
-        if (!valido(nomeGiorno, type)) {
+    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
-        listWrapLista = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).listaWrap();
-        System.out.println("20 - WrapLista STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
 
-        if (listWrapLista != null && listWrapLista.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano la lista %s", listWrapLista.size(), sorgente);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            for (WrapLista wrap : listWrapLista.subList(0,5)) {
-                super.printWrap(wrap,this.textService);
-            }
-        }
-        else {
-            message = "La lista è nulla";
-            System.out.println(message);
-        }
+        listWrapLista = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(type).listaWrap();
+        super.fixWrapLista(nomeLista, listWrapLista);
     }
 
 
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_LISTA")
+    @Order(30)
+    @DisplayName("30 - Didascalie STANDARD")
+        //--nome giorno
+        //--typeLista
+    void listaDidascalie(final String nomeLista, final AETypeLista type) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(type).listaWrap();
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
+    }
 
 
-//    @ParameterizedTest
-//    @MethodSource(value = "GIORNI_LISTA")
-//    @Order(40)
-//    @DisplayName("40 - Key della mappa wrapLista di vari giorni")
-//        //--nome giorno
-//        //--typeLista
-//    void mappaWrapKey(final String nomeGiorno, final AETypeLista type) {
-//        System.out.println("40 - Key della mappa wrapLista di vari giorni");
-//        sorgente = nomeGiorno;
-//        int numVoci;
-//
-//        if (!valido(nomeGiorno, type)) {
-//            return;
-//        }
-//
-//        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
-//
-//        if (mappaWrap != null && mappaWrap.size() > 0) {
-//            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-//            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getCivile(), sorgente);
-//            System.out.println(message);
-//            printMappaWrapKeyOrder(mappaWrap);
-//        }
-//        else {
-//            message = "La mappa è nulla";
-//            System.out.println(message);
-//        }
-//    }
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_LISTA")
+    @Order(40)
+    @DisplayName("40 - Key della mappaWrap STANDARD")
+        //--nome giorno
+        //--typeLista
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(type).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_LISTA")
+    @Order(50)
+    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
+        //--nome giorno
+        //--typeLista
+    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLista(type).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
+    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(13)
+    //    @DisplayName("13 - Lista bio con switch")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void listaBio(final String nomeGiorno, final AETypeLista type) {
+    //        System.out.println("13 - Lista bio con switch");
+    //        sorgente = nomeGiorno;
+    //
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //
+    //        listBio = switch (type) {
+    //            case giornoNascita -> appContext.getBean(ListaGiorni.class, sorgente).nascita().listaBio();
+    //            case giornoMorte -> appContext.getBean(ListaGiorni.class, sorgente).morte().listaBio();
+    //            default -> null;
+    //        };
+    //
+    //        if (listBio != null && listBio.size() > 0) {
+    //            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
+    //            System.out.println(message);
+    //            System.out.println(VUOTA);
+    //            switch (type) {
+    //                case giornoNascita -> printBioListaGiorniNato(listBio);
+    //                case giornoMorte -> printBioListaGiorniMorto(listBio);
+    //            }
+    //        }
+    //        else {
+    //            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeGiorno);
+    //            System.out.println(message);
+    //        }
+    //    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(14)
+    //    @DisplayName("14 - Lista bio con type")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void listaBioType(final String nomeGiorno, final AETypeLista type) {
+    //        System.out.println("14 - Lista bio con type");
+    //        sorgente = nomeGiorno;
+    //
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //
+    //        listBio = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).listaBio();
+    //
+    //        if (listBio != null && listBio.size() > 0) {
+    //            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
+    //            System.out.println(message);
+    //            System.out.println(VUOTA);
+    //            printBio(type, listBio);
+    //        }
+    //        else {
+    //            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeGiorno);
+    //            System.out.println(message);
+    //        }
+    //    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(20)
+    //    @DisplayName("20 - Lista wrapLista")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void listaWrap(final String nomeGiorno, final AETypeLista type) {
+    //        sorgente = nomeGiorno;
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //        listWrapLista = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).listaWrap();
+    //        System.out.println("20 - WrapLista STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+    //
+    //        if (listWrapLista != null && listWrapLista.size() > 0) {
+    //            message = String.format("Ci sono %d wrapLista che implementano la lista %s", listWrapLista.size(), sorgente);
+    //            System.out.println(message);
+    //            System.out.println(VUOTA);
+    //            for (WrapLista wrap : listWrapLista.subList(0,5)) {
+    //                super.printWrap(wrap,this.textService);
+    //            }
+    //        }
+    //        else {
+    //            message = "La lista è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(40)
+    //    @DisplayName("40 - Key della mappa wrapLista di vari giorni")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void mappaWrapKey(final String nomeGiorno, final AETypeLista type) {
+    //        System.out.println("40 - Key della mappa wrapLista di vari giorni");
+    //        sorgente = nomeGiorno;
+    //        int numVoci;
+    //
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //
+    //        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+    //            message = String.format("Ci sono %d wrapLista che implementano il giorno di %s %s", numVoci, type.getCivile(), sorgente);
+    //            System.out.println(message);
+    //            printMappaWrapKeyOrder(mappaWrap);
+    //        }
+    //        else {
+    //            message = "La mappa è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
 
-
-
-//    @Test
-    @Order(41)
-    @DisplayName("41 - linkCrono -> linkVoce")
+    //    @Test
+    @Order(141)
+    @DisplayName("141 - linkCrono -> linkVoce")
     void linkVoce() {
-        System.out.println(("41 - linkCrono -> linkVoce"));
+        System.out.println(("141 - linkCrono -> linkVoce"));
         System.out.println(VUOTA);
         AETypeLink typeLinkCrono = AETypeLink.linkVoce;
 
@@ -333,11 +404,11 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
-//    @Test
-    @Order(42)
-    @DisplayName("42 - linkCrono -> linkLista")
+    //    @Test
+    @Order(142)
+    @DisplayName("142 - linkCrono -> linkLista")
     void linkLista() {
-        System.out.println(("42 - linkCrono -> linkLista"));
+        System.out.println(("142 - linkCrono -> linkLista"));
         System.out.println(VUOTA);
         AETypeLink typeLinkCrono = AETypeLink.linkLista;
 
@@ -360,82 +431,79 @@ public class ListaGiorniTest extends WikiTest {
         }
     }
 
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(50)
+    //    @DisplayName("50 - Lista didascalie")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void listaDidascalie(final String nomeGiorno, final AETypeLista type) {
+    //        sorgente = nomeGiorno;
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
+    //        System.out.println("50 - Lista didascalie");
+    //
+    //        if (listWrapLista != null && listWrapLista.size() > 0) {
+    //            System.out.println(VUOTA);
+    //            for (WrapLista wrap : listWrapLista) {
+    //                System.out.println(wrap.didascalia);
+    //            }
+    //        }
+    //        else {
+    //            message = "La lista è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(60)
+    //    @DisplayName("60 - Key della mappa wrapLista")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void mappaWrap(final String nomeGiorno, final AETypeLista type) {
+    //        sorgente = nomeGiorno;
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
+    //        System.out.println("60 - Key della mappa wrapLista");
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
+    //            System.out.println(message);
+    //            printMappaWrapKeyOrder(mappaWrap);
+    //        }
+    //        else {
+    //            message = "La mappa è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
-    @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
-    @Order(50)
-    @DisplayName("50 - Lista didascalie")
-        //--nome giorno
-        //--typeLista
-    void listaDidascalie(final String nomeGiorno, final AETypeLista type) {
-        sorgente = nomeGiorno;
-        if (!valido(nomeGiorno, type)) {
-            return;
-        }
-        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
-        System.out.println("50 - Lista didascalie");
-
-        if (listWrapLista != null && listWrapLista.size() > 0) {
-            System.out.println(VUOTA);
-            for (WrapLista wrap : listWrapLista) {
-                System.out.println(wrap.didascalia);
-            }
-        }
-        else {
-            message = "La lista è nulla";
-            System.out.println(message);
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
-    @Order(60)
-    @DisplayName("60 - Key della mappa wrapLista")
-        //--nome giorno
-        //--typeLista
-    void mappaWrap(final String nomeGiorno, final AETypeLista type) {
-        sorgente = nomeGiorno;
-        if (!valido(nomeGiorno, type)) {
-            return;
-        }
-        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
-        System.out.println("60 - Key della mappa wrapLista");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
-            System.out.println(message);
-            printMappaWrapKeyOrder(mappaWrap);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
-        }
-    }
-
-    @ParameterizedTest
-    @MethodSource(value = "GIORNI_LISTA")
-    @Order(70)
-    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
-        //--nome giorno
-        //--typeLista
-    void mappaWrapDidascalie(final String nomeGiorno, final AETypeLista type) {
-        sorgente = nomeGiorno;
-        if (!valido(nomeGiorno, type)) {
-            return;
-        }
-        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
-        System.out.println("70 - Mappa STANDARD wrapLista (paragrafi e righe)");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            printMappaDidascalie(mappaWrap);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
-        }
-    }
-
+    //    @ParameterizedTest
+    //    @MethodSource(value = "GIORNI_LISTA")
+    //    @Order(70)
+    //    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
+    //        //--nome giorno
+    //        //--typeLista
+    //    void mappaWrapDidascalie(final String nomeGiorno, final AETypeLista type) {
+    //        sorgente = nomeGiorno;
+    //        if (!valido(nomeGiorno, type)) {
+    //            return;
+    //        }
+    //        mappaWrap = appContext.getBean(ListaGiorni.class, sorgente).typeLista(type).mappaWrap();
+    //        System.out.println("70 - Mappa STANDARD wrapLista (paragrafi e righe)");
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            printMappaDidascalie(mappaWrap);
+    //        }
+    //        else {
+    //            message = "La mappa è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
 
     //    @Test

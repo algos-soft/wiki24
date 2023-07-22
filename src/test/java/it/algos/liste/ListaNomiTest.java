@@ -80,16 +80,10 @@ public class ListaNomiTest extends ListeTest {
     @Order(5)
     @DisplayName("5 - listaBioSenzaParametroNelCostruttore")
     void listaBioSenzaParametroNelCostruttore() {
-        System.out.println(("5 - listaBioSenzaParametroNelCostruttore"));
-        System.out.println(VUOTA);
-
         try {
             appContext.getBean(ListaNomi.class).listaBio();
         } catch (Exception unErrore) {
-            System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
-            System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
+            super.fixSenzaParametroNelCostruttore();
         }
     }
 
@@ -97,19 +91,12 @@ public class ListaNomiTest extends ListeTest {
     @Test
     @Order(6)
     @DisplayName("6 - Istanza costruita col parametro obbligatorio")
-    void beanStandardIncompleta() {
-        System.out.println(String.format("6 - Istanza costruita col parametro obbligatorio", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("Il Pattern Builder NON richiede regolazioni aggiuntive");
-        System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
-        System.out.println("Non ci sono parametri essenziali per il Pattern Builder");
-        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-        System.out.println(VUOTA);
-
+    void beanStandardCompleta() {
         sorgente = "lorenzo";
         istanza = appContext.getBean(ListaNomi.class, sorgente);
-        assertNotNull(istanza);
-        assertTrue(istanza.isValida());
 
+        super.fixBeanStandardCompleta(istanza);
+        assertTrue(istanza.isValida());
         printLista(istanza);
     }
 
@@ -117,15 +104,11 @@ public class ListaNomiTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - listaBioSenzaTypeLista")
     void listaBioSenzaTypeLista() {
-        System.out.println(("7 - listaBioSenzaTypeLista"));
-        System.out.println(VUOTA);
-
         sorgente = "lorenzo";
         appContext.getBean(ListaNomi.class, sorgente).listaBio();
 
-        System.out.println(String.format("Questa classe funziona anche SENZA '%s' perché è già inserito in fixPreferenze().", "typeLista"));
+        super.fixListaBioSenzaTypeLista();
     }
-
 
 
     @ParameterizedTest
@@ -133,14 +116,13 @@ public class ListaNomiTest extends ListeTest {
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
         //--nome
-    void listaBio(final String nome) {
-        sorgente = nome;
-        if (textService.isEmpty(nome)) {
+    void listaBio(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
             return;
         }
 
-        listBio = appContext.getBean(ListaNomi.class, sorgente).listaBio();
-        super.fixListaBio(sorgente, listBio);
+        listBio = appContext.getBean(ListaNomi.class, nomeLista).listaBio();
+        super.fixListaBio(nomeLista, listBio);
     }
 
     @ParameterizedTest
@@ -148,12 +130,13 @@ public class ListaNomiTest extends ListeTest {
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
         //--nome
-    void listaWrapDidascalie(final String sorgente) {
-        if (textService.isEmpty(sorgente)) {
+    void listaWrapDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
             return;
         }
-        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
-        super.fixWrapLista(sorgente, listWrapLista);
+
+        listWrapLista = appContext.getBean(ListaNomi.class, nomeLista).listaWrap();
+        super.fixWrapLista(nomeLista, listWrapLista);
     }
 
 
@@ -162,13 +145,13 @@ public class ListaNomiTest extends ListeTest {
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
         //--nome
-    void listaDidascalie(final String nome) {
-        sorgente = nome;
-        if (textService.isEmpty(nome)) {
+    void listaDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
             return;
         }
-        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
-        super.fixWrapListaDidascalie(sorgente, listWrapLista);
+
+        listWrapLista = appContext.getBean(ListaNomi.class, nomeLista).listaWrap();
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
     }
 
 
@@ -177,13 +160,13 @@ public class ListaNomiTest extends ListeTest {
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
         //--nome
-    void mappaWrap(final String nome) {
-        sorgente = nome;
-        if (textService.isEmpty(nome)) {
+    void mappaWrap(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
             return;
         }
-        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
-        super.fixMappaWrapKey(sorgente, mappaWrap);
+
+        mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
     @ParameterizedTest
@@ -191,13 +174,13 @@ public class ListaNomiTest extends ListeTest {
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
         //--nome
-    void mappaWrapDidascalie(final String nome) {
-        sorgente = nome;
-        if (textService.isEmpty(nome)) {
+    void mappaWrapDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
             return;
         }
-        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
-        super.fixMappaWrapDidascalie(sorgente, mappaWrap);
+
+        mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
     //    @ParameterizedTest

@@ -69,7 +69,7 @@ public class ListaNazionalitaTest extends WikiTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new ListaNazionalita();
+//        istanza = new ListaNazionalita();
         assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);

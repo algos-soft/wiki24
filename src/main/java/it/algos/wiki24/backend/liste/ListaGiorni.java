@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -37,25 +38,14 @@ public class ListaGiorni extends Lista {
     public SecoloBackend secoloBackend;
 
     /**
-     * Constructor not @Autowired. <br>
-     * Non utilizzato e non necessario <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Se c'è un SOLO costruttore questo diventa automaticamente @Autowired e IntelliJ Idea 'segna' in rosso i
-     * parametri <br>
-     * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
-     */
-    public ListaGiorni() {
-        super("nomeLista");
-    }// end of constructor not @Autowired and not used
-
-    /**
-     * Costruttore base <br>
+     * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaGiorni.class, nomeLista) <br>
+     * Uso: getBean(ListaNomi.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaGiorni(String nomeLista) {
         super(nomeLista);
+        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
 
@@ -66,6 +56,16 @@ public class ListaGiorni extends Lista {
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaGiorni typeLista(AETypeLista typeLista) {
+        return switch (typeLista) {
+            case giornoNascita -> nascita();
+            case giornoMorte -> morte();
+            default -> null;
+        };
+    }
 
     /**
      * Pattern Builder <br>

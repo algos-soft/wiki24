@@ -29,16 +29,16 @@ public class ListaNazionalita extends Lista {
 
 
     /**
-     * Costruttore base senza parametri <br>
+     * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(ListaNazionalita.class).plurale(nomeNazionalità).mappaWrap() <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune properties. <br>
+     * Uso: getBean(ListaNomi.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public ListaNazionalita() {
-        super("nomeLista");
-        super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-    }// end of constructor
+    public ListaNazionalita(String nomeLista) {
+        super(nomeLista);
+        super.isIstanzaValidaPatternBuilder = true;
+    }// end of constructor not @Autowired and used
+
 
 
     public ListaNazionalita nazionalita(final NazSingolare nazionalitaSingolare) {
@@ -50,6 +50,16 @@ public class ListaNazionalita extends Lista {
         this.nomeLista = nazionalitaPlurale.nome;
         super.typeLista = AETypeLista.nazionalitaPlurale;
         return this;
+    }
+
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.nomeLista = textService.primaMaiuscola(nomeLista);
+        super.titoloPagina = wikiUtility.wikiTitleNomi(nomeLista);
+        super.typeLista = AETypeLista.nomi;
+        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
+        super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
     }
 
     public ListaNazionalita singolare(final String nomeNazionalitaSingolare) {

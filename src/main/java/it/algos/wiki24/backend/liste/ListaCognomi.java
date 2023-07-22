@@ -29,27 +29,15 @@ public class ListaCognomi extends Lista {
 
 
     /**
-     * Constructor not @Autowired. <br>
-     * Non utilizzato e non necessario <br>
-     * In the newest Spring release, it’s constructor does not need to be annotated with @Autowired annotation <br>
-     * Se c'è un SOLO costruttore questo diventa automaticamente @Autowired e IntelliJ Idea 'segna' in rosso i
-     * parametri <br>
-     * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
-     */
-    public ListaCognomi() {
-        super("nomeLista");
-    }// end of constructor not @Autowired and not used
-
-    /**
-     * Costruttore base <br>
+     * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaGiorni.class, nomeGiorno) <br>
+     * Uso: getBean(ListaNomi.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaCognomi(String nomeLista) {
         super(nomeLista);
+        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
-
 
 
     protected void fixPreferenze() {
@@ -61,8 +49,6 @@ public class ListaCognomi extends Lista {
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
     }
-
-
 
 
     /**
