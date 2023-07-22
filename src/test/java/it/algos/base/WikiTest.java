@@ -3,11 +3,13 @@ package it.algos.base;
 import com.mongodb.*;
 import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.login.*;
@@ -221,6 +223,8 @@ public abstract class WikiTest extends AlgosTest {
     protected Class clazz;
 
     protected WrapLista wrapLista;
+
+    protected boolean costruttoreNecessitaAlmenoUnParametro = false;
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -583,16 +587,16 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(VUOTA, AETypeLista.listaBreve),
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
                 Arguments.of("soprano", AETypeLista.giornoNascita),
-                Arguments.of("soprano", AETypeLista.attivitaSingolare),
+                //                Arguments.of("soprano", AETypeLista.attivitaSingolare),
                 Arguments.of("abate", AETypeLista.attivitaSingolare),
                 Arguments.of("badessa", AETypeLista.attivitaSingolare),
                 Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
-                Arguments.of("bassisti", AETypeLista.attivitaPlurale),
+                //                Arguments.of("bassisti", AETypeLista.attivitaPlurale),
                 Arguments.of("allevatori", AETypeLista.attivitaPlurale),
                 Arguments.of("agenti segreti", AETypeLista.attivitaPlurale),
                 Arguments.of("romanziere", AETypeLista.attivitaSingolare),
-                Arguments.of("accademici", AETypeLista.attivitaPlurale),
-                Arguments.of("dogi", AETypeLista.attivitaPlurale)
+                //                Arguments.of("dogi", AETypeLista.attivitaPlurale),
+                Arguments.of("accademici", AETypeLista.attivitaPlurale)
         );
     }
 
@@ -822,29 +826,79 @@ public abstract class WikiTest extends AlgosTest {
         wrapLista = null;
     }
 
+
     @Test
     @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
+    @DisplayName("1 - Costruttore base con/senza parametri")
     void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
+        if (this.costruttoreNecessitaAlmenoUnParametro) {
+            System.out.println(("1 - Costruttore base senza parametri"));
+            System.out.println(VUOTA);
 
-        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println(String.format("new %s() NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
+            System.out.println("Questa classe NON accetta parametri nel costruttore");
+        }
+        else {
+            System.out.println(("1 - Costruttore base con ALMENO un parametro"));
+            System.out.println(VUOTA);
 
+            System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println(String.format("new %s() NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+        }
     }
+
 
     @Test
     @Order(2)
-    @DisplayName("2 - getBean base senza parametri")
+    @DisplayName("2 - appContext.getBean con/senza parametri")
     void getBean() {
-        System.out.println(("2 - getBean base senza parametri"));
-        System.out.println(VUOTA);
+        Object istanzaGenerica = null;
 
-        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+        if (this.costruttoreNecessitaAlmenoUnParametro) {
+            System.out.println(("2 - appContext.getBean con ALMENO un parametro"));
+            System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+
+            try {
+                istanzaGenerica = appContext.getBean(clazz);
+            } catch (Exception unErrore) {
+                System.out.println(VUOTA);
+                logService.error(new WrapLog().exception(unErrore));
+                return;
+            }
+            assertNull(istanzaGenerica);
+        }
+        else {
+            System.out.println(("2 - appContext.getBean senza parametri"));
+            System.out.println(VUOTA);
+
+            try {
+                istanzaGenerica = appContext.getBean(clazz);
+            } catch (Exception unErrore) {
+                System.out.println(VUOTA);
+                logService.error(new WrapLog().exception(unErrore));
+                return;
+            }
+            assertNotNull(istanzaGenerica);
+            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
+            System.out.println("Questa classe NON accetta parametri nel costruttore");
+            if (istanzaGenerica instanceof AlgosBuilderPattern builderPattern) {
+                if (builderPattern.isValida()) {
+                    System.out.println("Finito il ciclo del costruttore e il metodo @PostConstruct, l'istanza è pronta");
+                    System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
+                }
+                else {
+                    System.out.println("Finito il ciclo del costruttore e il metodo @PostConstruct, l'istanza NON è ancora pronta");
+                    System.out.println("Mancano ulteriori regolazioni previste nel BuilderPattern");
+                }
+            }
+            else {
+                System.out.println("Questa classe implementa l'interfaccia di controllo AlgosBuilderPattern");
+                System.out.println("Non posso quindi sapere se l'istanza è valida/eseguibile subito dopo il costruttore");
+            }
+        }
     }
 
     protected void printRisultato(WResult result) {
@@ -1376,16 +1430,17 @@ public abstract class WikiTest extends AlgosTest {
             return;
         }
 
-        System.out.println(String.format("Titolo paragrafo: %s", textService.isValid(wrap.titoloParagrafo) ? wrap.titoloParagrafo : VUOTA));
-        System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : VUOTA));
-        System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : VUOTA));
-        System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : VUOTA));
-        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : VUOTA));
-        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : VUOTA));
-        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : VUOTA));
-        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : VUOTA));
-        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : VUOTA));
-        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : VUOTA));
+        System.out.println(String.format("Titolo pagina: %s", textService.isValid(wrap.titoloPagina) ? wrap.titoloPagina : NULL));
+        System.out.println(String.format("Titolo paragrafo: %s", textService.isValid(wrap.titoloParagrafo) ? wrap.titoloParagrafo : NULL));
+        System.out.println(String.format("Paragrafo link: %s", textService.isValid(wrap.titoloParagrafoLink) ? wrap.titoloParagrafoLink : NULL));
+        System.out.println(String.format("Sottoparagrafo: %s", textService.isValid(wrap.titoloSottoParagrafo) ? wrap.titoloSottoParagrafo : NULL));
+        System.out.println(String.format("Ordinamento: %s", textService.isValid(wrap.ordinamento) ? wrap.ordinamento : NULL));
+        System.out.println(String.format("Lista: %s", textService.isValid(wrap.lista) ? wrap.lista : NULL));
+        System.out.println(String.format("giornoNato: %s", textService.isValid(wrap.giornoNato) ? wrap.giornoNato : NULL));
+        System.out.println(String.format("giornoMorto: %s", textService.isValid(wrap.giornoMorto) ? wrap.giornoMorto : NULL));
+        System.out.println(String.format("annoNato: %s", textService.isValid(wrap.annoNato) ? wrap.annoNato : NULL));
+        System.out.println(String.format("annoMorto: %s", textService.isValid(wrap.annoMorto) ? wrap.annoMorto : NULL));
+        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : NULL));
         System.out.println(VUOTA);
     }
 

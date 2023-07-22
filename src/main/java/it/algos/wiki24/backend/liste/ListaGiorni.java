@@ -45,12 +45,13 @@ public class ListaGiorni extends Lista {
      * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
      */
     public ListaGiorni() {
+        super("nomeLista");
     }// end of constructor not @Autowired and not used
 
     /**
      * Costruttore base <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaGiorni.class, nomeGiorno) <br>
+     * Uso: getBean(ListaGiorni.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaGiorni(String nomeLista) {
@@ -70,6 +71,7 @@ public class ListaGiorni extends Lista {
      * Pattern Builder <br>
      */
     public ListaGiorni nascita() {
+        super.titoloPagina = wikiUtility.wikiTitleNatiGiorno(nomeLista);
         return (ListaGiorni) super.typeLista(AETypeLista.giornoNascita);
     }
 
@@ -77,6 +79,7 @@ public class ListaGiorni extends Lista {
      * Pattern Builder <br>
      */
     public ListaGiorni morte() {
+        super.titoloPagina = wikiUtility.wikiTitleMortiGiorno(nomeLista);
         return (ListaGiorni) super.typeLista(AETypeLista.giornoMorte);
     }
 

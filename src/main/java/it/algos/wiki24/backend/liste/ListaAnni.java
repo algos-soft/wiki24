@@ -36,6 +36,7 @@ public class ListaAnni extends Lista {
      * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
      */
     public ListaAnni() {
+        super("nomeLista");
     }// end of constructor not @Autowired and not used
 
 
@@ -55,6 +56,7 @@ public class ListaAnni extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_GIORNO;
     }
 
@@ -62,6 +64,7 @@ public class ListaAnni extends Lista {
      * Pattern Builder <br>
      */
     public ListaAnni nascita() {
+        super.titoloPagina = wikiUtility.wikiTitleNatiAnno(nomeLista);
         return (ListaAnni) super.typeLista(AETypeLista.annoNascita);
     }
 
@@ -69,6 +72,7 @@ public class ListaAnni extends Lista {
      * Pattern Builder <br>
      */
     public ListaAnni morte() {
+        super.titoloPagina = wikiUtility.wikiTitleMortiAnno(nomeLista);
         return (ListaAnni) super.typeLista(AETypeLista.annoMorte);
     }
 

@@ -31,6 +31,7 @@ public abstract class ListaAttivitaNazionalita extends Lista {
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaAttivitaNazionalita() {
+        super("nomeLista");
     }// end of constructor
 
 

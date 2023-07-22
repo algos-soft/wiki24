@@ -15,7 +15,9 @@ import static it.algos.wiki24.backend.statistiche.Statistiche.*;
  */
 public class WrapLista {
 
-    AETypeLista typeLista;
+    public String titoloPagina;
+
+    public AETypeLista typeLista;
 
     public String titoloParagrafo;
 
@@ -54,7 +56,8 @@ public class WrapLista {
     }
 
 
-    public WrapLista(AETypeLista typeLista, String titoloParagrafo, String titoloParagrafoLink, String titoloSottoParagrafo, String ordinamento, String lista, String giornoNato, String giornoMorto, String annoNato, String annoMorto) {
+    public WrapLista(String titoloPagina, AETypeLista typeLista, String titoloParagrafo, String titoloParagrafoLink, String titoloSottoParagrafo, String ordinamento, String lista, String giornoNato, String giornoMorto, String annoNato, String annoMorto) {
+        this.titoloPagina = titoloPagina;
         this.typeLista = typeLista;
         this.titoloParagrafo = titoloParagrafo;
         this.titoloParagrafoLink = titoloParagrafoLink;

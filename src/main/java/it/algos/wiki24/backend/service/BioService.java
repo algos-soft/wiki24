@@ -828,6 +828,7 @@ public class BioService extends WAbstractService {
         List<AttSingolare> listaAttivitaSingolari = attPlurale != null ? attPlurale.listaSingolari : null;
 
         if (listaAttivitaSingolari == null) {
+            logService.error(new WrapLog().exception(AlgosException.crea(null)));
             return null;
         }
 
@@ -917,8 +918,8 @@ public class BioService extends WAbstractService {
                 case giornoMorte -> bioService.fetchGiornoMorto(nomeLista);
                 case annoNascita -> bioService.fetchAnnoNato(nomeLista);
                 case annoMorte -> bioService.fetchAnnoMorto(nomeLista);
-                case attivitaSingolare -> bioService.fetchAttivitaSingolare(nomeLista);
-                case attivitaPlurale -> bioService.fetchAttivitaPlurale(nomeLista);
+                case attivitaSingolare -> bioService.fetchAttivitaSingolare(textService.primaMinuscola(nomeLista));
+                case attivitaPlurale -> bioService.fetchAttivitaPlurale(textService.primaMinuscola(nomeLista));
                 case nazionalitaSingolare -> bioService.fetchNazionalitaSingolare(nomeLista);
                 case nazionalitaPlurale -> bioService.fetchNazionalitaPlurale(nomeLista);
                 case nomi -> bioService.fetchNomi(nomeLista);

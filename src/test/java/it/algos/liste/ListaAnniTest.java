@@ -7,6 +7,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -101,11 +102,26 @@ public class ListaAnniTest extends WikiTest {
         System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
     }
 
+
     @Test
     @Order(4)
-    @DisplayName("4 - listaBioSenzaTypeLista")
+    @DisplayName("4 - Istanza incompleta coi valori standard")
+    void beanStandardIncompleta() {
+        System.out.println(String.format("4 - istanza (incompleta) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("Mancano alcuni parametri indispensabili per il Pattern Builder");
+        System.out.println(VUOTA);
+
+        sorgente = "1467";
+        istanza = appContext.getBean(ListaAnni.class, sorgente);
+        assertNotNull(istanza);
+        printLista(istanza);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("5 - listaBioSenzaTypeLista")
     void listaBioSenzaTypeLista() {
-        System.out.println(("4 - listaBioSenzaTypeLista"));
+        System.out.println(("5 - listaBioSenzaTypeLista"));
         System.out.println(VUOTA);
 
         sorgente = "1467";
@@ -115,14 +131,64 @@ public class ListaAnniTest extends WikiTest {
         System.out.println(String.format("Seguendo il Pattern Builder, occorre prima regolare il parametro '%s'.", "typeLista"));
     }
 
+
+    @Test
+    @Order(6)
+    @DisplayName("6 - Istanza completa coi valori standard")
+    void beanStandardCompleta() {
+        System.out.println(String.format("6 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "typeLista"));
+        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
+        System.out.println(VUOTA);
+
+        sorgente = "1467";
+        istanza = (ListaAnni) appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.annoNascita);
+        assertNotNull(istanza);
+        printLista(istanza);
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("7 - Istanza completa coi valori standard")
+    void beanStandardCompleta2() {
+        System.out.println(String.format("7 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "nascita"));
+        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
+        System.out.println(VUOTA);
+
+        sorgente = "1467";
+        istanza = (ListaAnni) appContext.getBean(ListaAnni.class, sorgente).nascita();
+        assertNotNull(istanza);
+        printLista(istanza);
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("8 - Istanza completa coi valori standard")
+    void beanStandardCompleta3() {
+        System.out.println(String.format("8 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
+        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
+        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "morte"));
+        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
+        System.out.println(VUOTA);
+
+        sorgente = "1467";
+        istanza = (ListaAnni) appContext.getBean(ListaAnni.class, sorgente).morte();
+        assertNotNull(istanza);
+        printLista(istanza);
+    }
+
+
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
     @Order(13)
-    @DisplayName("13 - Lista bio di vari anni con switch")
+    @DisplayName("13 - Lista bio con switch")
         //--nome anno
         //--typeLista
     void listaBio(final String nomeAnno, final AETypeLista type) {
-        System.out.println("13 - Lista bio di vari anni con switch");
+        System.out.println("13 - Lista bio con switch");
         sorgente = nomeAnno;
 
         if (!valido(nomeAnno, type)) {
@@ -154,11 +220,11 @@ public class ListaAnniTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
     @Order(14)
-    @DisplayName("14 - Lista bio di vari giorni con type")
+    @DisplayName("14 - Lista bio con type")
         //--nome anno
         //--typeLista
     void listaBioType(final String nomeAnno, final AETypeLista type) {
-        System.out.println("14 - Lista bio di vari giorni con type");
+        System.out.println("14 - Lista bio con type");
         sorgente = nomeAnno;
 
         if (!valido(nomeAnno, type)) {
@@ -182,12 +248,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(15)
-    @DisplayName("15 - Lista wrapLista di vari anni")
+    @Order(20)
+    @DisplayName("20 - Lista wrapLista")
         //--nome anno
         //--typeLista
     void listaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("15 - Lista wrapLista di vari anni");
+        System.out.println("20 - Lista wrapLista");
         sorgente = nomeAnno;
 
         if (!valido(nomeAnno, type)) {
@@ -197,11 +263,12 @@ public class ListaAnniTest extends WikiTest {
         listWrapLista = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).listaWrap();
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", listWrapLista.size(), type.getCivile(), sorgente);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
             System.out.println(message);
             System.out.println(VUOTA);
-            printWrapLista(listWrapLista);
-            printWrapLista(listWrapLista.subList(listWrapLista.size() - 5, listWrapLista.size()));
+            for (WrapLista wrap : listWrapLista.subList(0, 5)) {
+                super.printWrap(wrap, this.textService);
+            }
         }
         else {
             message = "La lista è nulla";
@@ -212,12 +279,12 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(16)
-    @DisplayName("16 - Key della mappa wrapLista di vari anni")
+    @Order(40)
+    @DisplayName("40 - Key della mappa wrapLista di vari anni")
         //--nome anno
         //--typeLista
-    void mappaWrap(final String nomeAnno, final AETypeLista type) {
-        System.out.println("16 - Key della mappa wrapLista di vari anni");
+    void mappaWrap5(final String nomeAnno, final AETypeLista type) {
+        System.out.println("40 - Key della mappa wrapLista di vari anni");
         sorgente = nomeAnno;
         int numVoci;
 
@@ -242,10 +309,40 @@ public class ListaAnniTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
-    @Order(17)
-    @DisplayName("17 - Mappa wrapLista di vari anni")
+    @Order(41)
+    @DisplayName("41 - Mappa wrapLista (paragrafi e righe)")
         //--nome anno
         //--typeLista
+    void mappaWrap3(final String nomeAnno, final AETypeLista type) {
+        System.out.println("41 - Mappa wrapLista (paragrafi e righe)");
+        sorgente = nomeAnno;
+        int numVoci;
+
+        if (!valido(nomeAnno, type)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getCivile(), sorgente);
+            System.out.println(message);
+            printMappaDidascalie(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    //    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(17)
+    @DisplayName("17 - Mappa wrapLista di vari anni")
+    //--nome anno
+    //--typeLista
     void mappaWrap2(final String nomeAnno, final AETypeLista type) {
         System.out.println("17 - Mappa wrapLista di vari anni");
         sorgente = nomeAnno;
@@ -270,14 +367,88 @@ public class ListaAnniTest extends WikiTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(50)
+    @DisplayName("50 - Lista didascalie")
+        //--nome anno
+        //--typeLista
+    void listaDidascalie(final String nomeAnno, final AETypeLista type) {
+        sorgente = nomeAnno;
+        if (!valido(nomeAnno, type)) {
+            return;
+        }
+        listWrapLista = appContext.getBean(ListaAnni.class, sorgente).listaWrap();
+        System.out.println("50 - Lista didascalie");
 
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            System.out.println(VUOTA);
+            for (WrapLista wrap : listWrapLista) {
+                System.out.println(wrap.didascalia);
+            }
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(60)
+    @DisplayName("60 - Key della mappa wrapLista")
+        //--nome anno
+        //--typeLista
+    void mappaWrap(final String nomeAnno, final AETypeLista type) {
+        sorgente = nomeAnno;
+        if (!valido(nomeAnno, type)) {
+            return;
+        }
+        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
+        System.out.println("60 - Key della mappa wrapLista");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
+            System.out.println(message);
+            printMappaWrapKeyOrder(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(70)
+    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
+        //--nome anno
+        //--typeLista
+    void mappaWrapDidascalie(final String nomeAnno, final AETypeLista type) {
+        sorgente = nomeAnno;
+        if (!valido(nomeAnno, type)) {
+            return;
+        }
+        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
+        System.out.println("70 - Mappa STANDARD wrapLista (paragrafi e righe)");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            printMappaDidascalie(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
 
 
     @Test
-    @Order(21)
-    @DisplayName("21 - Paragrafo singolo")
-    void costruttoresBase() {
-        System.out.println(("21 - Paragrafo singolo"));
+    @Order(91)
+    @DisplayName("91 - Paragrafo singolo")
+    void costruttoreBase() {
+        System.out.println(("91 - Paragrafo singolo"));
         System.out.println(VUOTA);
 
         sorgente = "1576";
@@ -286,8 +457,6 @@ public class ListaAnniTest extends WikiTest {
         listWrapLista = appContext.getBean(ListaAnni.class, sorgente).nascita().getWrapLista(sorgente2);
         printSub(listWrapLista);
     }
-
-
 
 
     protected void printBio(AETypeLista type, List<Bio> listaBio) {

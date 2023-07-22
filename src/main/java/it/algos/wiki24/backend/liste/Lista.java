@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.liste;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.service.*;
@@ -10,6 +11,7 @@ import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.service.*;
@@ -35,7 +37,7 @@ import java.util.function.*;
  * Liste di attività e nazionalità (in Progetto:Biografie) <br>
  * Sovrascritta nelle sottoclassi concrete <br>
  */
-public abstract class Lista {
+public abstract class Lista implements AlgosBuilderPattern {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -85,6 +87,9 @@ public abstract class Lista {
      */
     @Autowired
     public AttPluraleBackend attPluraleBackend;
+
+    @Autowired
+    public AttSingolareBackend attSingolareBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -216,7 +221,7 @@ public abstract class Lista {
 
     public String nomeLista;
 
-    public String titoloParagrafo;
+    public String titoloPagina;
 
     public AETypeLista typeLista;
 
@@ -228,8 +233,14 @@ public abstract class Lista {
 
     public boolean usaIcona;
 
-    public Lista() {
-    }// end of constructor
+    protected boolean isIstanzaValidaPatternBuilder = false;
+
+    protected boolean accettaCostruttoreSenzaParametri = false;
+
+    protected boolean costruttoreNecessitaUnParametro = false;
+
+    protected boolean costruttoreNonAccettaParametri = false;
+
 
     /**
      * Costruttore base <br>
@@ -299,6 +310,11 @@ public abstract class Lista {
         return this;
     }
 
+    @Override
+    public boolean isValida() {
+        return isIstanzaValidaPatternBuilder;
+    }
+
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
      */
@@ -356,7 +372,8 @@ public abstract class Lista {
             }
 
             for (Bio bio : listaBio) {
-                wrap = didascaliaService.getWrap(bio, typeLista, typeLinkParagrafi, typeLinkCrono, usaIcona);
+                wrap = didascaliaService.getWrap(titoloPagina, bio, typeLista, typeLinkParagrafi, typeLinkCrono, usaIcona);
+
                 if (wrap != null) {
                     listaWrap.add(wrap);
                 }

@@ -20,6 +20,7 @@ public abstract class ListaGiorniAnni extends Lista {
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaGiorniAnni() {
+        super("nomeLista");
     }// end of constructor
 
 

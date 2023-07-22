@@ -69,10 +69,10 @@ public abstract class UploadAttivitaNazionalita extends Upload {
             };
 
             mappaWrap = switch (typeLista) {
-                case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(nomeLista).mappaWrap();
-                case attivitaPlurale -> appContext.getBean(ListaAttivita.class).plurale(nomeLista).mappaWrap();
-                case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(nomeLista).mappaWrap();
-                case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(nomeLista).mappaWrap();
+//                case attivitaSingolare -> appContext.getBean(ListaAttivita.class).singolare(nomeLista).mappaWrap();
+//                case attivitaPlurale -> appContext.getBean(ListaAttivita.class).plurale(nomeLista).mappaWrap();
+//                case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(nomeLista).mappaWrap();
+//                case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(nomeLista).mappaWrap();
                 default -> null;
             };
 

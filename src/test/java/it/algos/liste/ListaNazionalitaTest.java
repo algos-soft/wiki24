@@ -154,7 +154,7 @@ public class ListaNazionalitaTest extends WikiTest {
     @DisplayName("5 - Key della mappa wrapLista di varie nazionalità")
         //--nome nazionalità
         //--typeLista
-    void mappaWrap(final String nomeNazionalita, final AETypeLista type) {
+    void mappaWrap33(final String nomeNazionalita, final AETypeLista type) {
         System.out.println("5 - Key della mappa wrapLista di varie nazionalità");
         sorgente = nomeNazionalita;
         int numVoci;
@@ -183,34 +183,96 @@ public class ListaNazionalitaTest extends WikiTest {
     }
 
 
+//    @ParameterizedTest
+//    @MethodSource(value = "NAZIONALITA")
+//    @Order(6)
+//    @DisplayName("6 - Mappa wrapLista di varie nazionalità")
+//        //--nome nazionalità
+//        //--typeLista
+//    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
+//        System.out.println("6 - Mappa wrapLista di varie nazionalità");
+//        sorgente = nomeNazionalita;
+//        int numVoci;
+//
+//        if (!valido(nomeNazionalita, type)) {
+//            return;
+//        }
+//
+//        mappaWrap = switch (type) {
+//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
+//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
+//            default -> null;
+//        };
+//
+//        if (mappaWrap != null && mappaWrap.size() > 0) {
+//            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
+//            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", numVoci, sorgente, type.getTagLower());
+//            System.out.println(message);
+//            this.printNazionalitaSingole(type, sorgente);
+//            System.out.println(VUOTA);
+//            printMappaWrap(mappaWrap);
+//        }
+//        else {
+//            message = "La mappa è nulla";
+//            System.out.println(message);
+//        }
+//    }
+
+
+
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
-    @Order(6)
-    @DisplayName("6 - Mappa wrapLista di varie nazionalità")
-        //--nome nazionalità
+    @Order(50)
+    @DisplayName("50 - Lista didascalie")
+        //--nome nazionalita
         //--typeLista
-    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("6 - Mappa wrapLista di varie nazionalità");
+    void listaDidascalie(final String nomeNazionalita, final AETypeLista type) {
         sorgente = nomeNazionalita;
-        int numVoci;
-
         if (!valido(nomeNazionalita, type)) {
             return;
         }
-
-        mappaWrap = switch (type) {
-            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
-            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
+        listWrapLista = switch (type) {
+//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().listaWrap();
+//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).listaWrap();
             default -> null;
         };
+        System.out.println("50 - Lista didascalie");
+
+        if (listWrapLista != null && listWrapLista.size() > 0) {
+            System.out.println(VUOTA);
+            for (WrapLista wrap : listWrapLista) {
+                System.out.println(wrap.didascalia);
+            }
+        }
+        else {
+            message = "La lista è nulla";
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(60)
+    @DisplayName("60 - Key della mappa wrapLista")
+        //--nome nazionalita
+        //--typeLista
+    void mappaWrap(final String nomeNazionalita, final AETypeLista type) {
+        sorgente = nomeNazionalita;
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+        mappaWrap = switch (type) {
+//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().mappaWrap();
+//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).mappaWrap();
+            default -> null;
+        };
+        System.out.println("60 - Key della mappa wrapLista");
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
-            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", numVoci, sorgente, type.getTagLower());
+            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
             System.out.println(message);
-            this.printNazionalitaSingole(type, sorgente);
-            System.out.println(VUOTA);
-            printMappaWrap(mappaWrap);
+            printMappaWrapKeyOrder(mappaWrap);
         }
         else {
             message = "La mappa è nulla";
@@ -218,6 +280,33 @@ public class ListaNazionalitaTest extends WikiTest {
         }
     }
 
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(70)
+    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
+        //--nome nazionalita
+        //--typeLista
+    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
+        sorgente = nomeNazionalita;
+        if (!valido(nomeNazionalita, type)) {
+            return;
+        }
+        mappaWrap = switch (type) {
+//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().mappaWrap();
+//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).mappaWrap();
+            default -> null;
+        };
+        System.out.println("70 - MappaWrap STANDARD");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            printMappaDidascalie(mappaWrap);
+        }
+        else {
+            message = "La mappa è nulla";
+            System.out.println(message);
+        }
+    }
 
     private boolean valido(final String nomeNazionalita, final AETypeLista type) {
         if (textService.isEmpty(nomeNazionalita)) {

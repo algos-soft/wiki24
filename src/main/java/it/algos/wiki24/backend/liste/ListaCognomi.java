@@ -37,6 +37,7 @@ public class ListaCognomi extends Lista {
      * Per evitare il bug in compilazione, aggiungo un costruttore senza parametri da NON utilizzare <br>
      */
     public ListaCognomi() {
+        super("nomeLista");
     }// end of constructor not @Autowired and not used
 
     /**
@@ -55,6 +56,7 @@ public class ListaCognomi extends Lista {
         super.fixPreferenze();
 
         super.nomeLista = textService.primaMaiuscola(nomeLista);
+        super.titoloPagina = wikiUtility.wikiTitleCognomi(nomeLista);
         super.typeLista = AETypeLista.cognomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
@@ -62,38 +64,6 @@ public class ListaCognomi extends Lista {
 
 
 
-//    /**
-//     * Costruttore base senza parametri <br>
-//     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-//     * Uso: getBean(ListaGiorni.class).nascita/morte(nomeGiorno).mappaWrap() <br>
-//     * Non rimanda al costruttore della superclasse. Regola qui solo alcune properties. <br>
-//     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
-//     */
-//    public ListaCognomi(String cognome) {
-//        this.nomeLista = cognome;
-//        super.typeLista = AETypeLista.cognomi;
-//        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
-//        super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-//    }// end of constructor
-
-//    /**
-//     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
-//     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
-//     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
-//     * <p>
-//     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
-//     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
-//     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
-//     */
-//    @PostConstruct
-//    protected void postConstruct() {
-//        this.nomeLista = textService.primaMaiuscola(nomeLista);
-//    }
-
-//    public ListaCognomi typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
-//        super.typeLinkParagrafi = typeLinkParagrafi;
-//        return this;
-//    }
 
     /**
      * Ordina la mappa <br>
