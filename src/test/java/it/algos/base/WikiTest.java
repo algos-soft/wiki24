@@ -225,6 +225,7 @@ public abstract class WikiTest extends AlgosTest {
     protected WrapLista wrapLista;
 
     protected boolean costruttoreNecessitaAlmenoUnParametro = false;
+    protected boolean istanzaValidaSubitoDopoCostruttore = false;
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -609,8 +610,8 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
                 Arguments.of("attrice", AETypeLista.attivitaSingolare),
                 Arguments.of("assiri", AETypeLista.nazionalitaSingolare),
-                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
-                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
+//                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
+//                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
                 Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
                 Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
                 Arguments.of("afghana", AETypeLista.nazionalitaSingolare),

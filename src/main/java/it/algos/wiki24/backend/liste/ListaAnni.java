@@ -35,7 +35,6 @@ public class ListaAnni extends Lista {
      */
     public ListaAnni(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
 
@@ -44,6 +43,18 @@ public class ListaAnni extends Lista {
 
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_GIORNO;
+        super.isIstanzaValidaPatternBuilder = false;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaAnni typeLista(AETypeLista typeLista) {
+        return switch (typeLista) {
+            case annoNascita -> nascita();
+            case annoMorte -> morte();
+            default -> this;
+        };
     }
 
     /**

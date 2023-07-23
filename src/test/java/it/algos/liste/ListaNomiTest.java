@@ -61,6 +61,7 @@ public class ListaNomiTest extends ListeTest {
         super.setUpAll();
         super.clazz = ListaNomi.class;
         super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
 
@@ -95,8 +96,8 @@ public class ListaNomiTest extends ListeTest {
         sorgente = "lorenzo";
         istanza = appContext.getBean(ListaNomi.class, sorgente);
 
-        super.fixBeanStandardCompleta(istanza);
-        assertTrue(istanza.isValida());
+        super.fixBeanStandard(istanza);
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
         printLista(istanza);
     }
 
@@ -115,7 +116,6 @@ public class ListaNomiTest extends ListeTest {
     @MethodSource(value = "NOMI")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
-        //--nome
     void listaBio(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -129,7 +129,6 @@ public class ListaNomiTest extends ListeTest {
     @MethodSource(value = "NOMI")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-        //--nome
     void listaWrapDidascalie(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -144,7 +143,6 @@ public class ListaNomiTest extends ListeTest {
     @MethodSource(value = "NOMI")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
-        //--nome
     void listaDidascalie(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -159,7 +157,6 @@ public class ListaNomiTest extends ListeTest {
     @MethodSource(value = "NOMI")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-        //--nome
     void mappaWrap(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -173,7 +170,6 @@ public class ListaNomiTest extends ListeTest {
     @MethodSource(value = "NOMI")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-        //--nome
     void mappaWrapDidascalie(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;

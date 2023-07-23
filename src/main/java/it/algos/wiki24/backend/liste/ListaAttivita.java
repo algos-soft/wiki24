@@ -42,7 +42,6 @@ public class ListaAttivita extends Lista {
      */
     public ListaAttivita(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
     /**
@@ -75,11 +74,13 @@ public class ListaAttivita extends Lista {
         super.typeLista = AETypeLista.attivitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_NAZIONALITA;
+        super.isIstanzaValidaPatternBuilder = true;
 
         if (typeLista == AETypeLista.attivitaPlurale) {
             AttPlurale attivitaPlurale = attPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));
             listaNomiSingoli = attivitaPlurale != null ? attivitaPlurale.listaSingolari.stream().map(att -> att.nome).collect(Collectors.toList()) : null;
         }
+
     }
 
 

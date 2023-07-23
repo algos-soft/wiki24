@@ -36,9 +36,7 @@ public class ListaNazionalita extends Lista {
      */
     public ListaNazionalita(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
-
 
 
     public ListaNazionalita nazionalita(final NazSingolare nazionalitaSingolare) {
@@ -46,21 +44,13 @@ public class ListaNazionalita extends Lista {
         super.typeLista = AETypeLista.nazionalitaSingolare;
         return this;
     }
+
     public ListaNazionalita nazionalita(final NazPlurale nazionalitaPlurale) {
         this.nomeLista = nazionalitaPlurale.nome;
         super.typeLista = AETypeLista.nazionalitaPlurale;
         return this;
     }
 
-    protected void fixPreferenze() {
-        super.fixPreferenze();
-
-        super.nomeLista = textService.primaMaiuscola(nomeLista);
-        super.titoloPagina = wikiUtility.wikiTitleNomi(nomeLista);
-        super.typeLista = AETypeLista.nomi;
-        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
-        super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-    }
 
     public ListaNazionalita singolare(final String nomeNazionalitaSingolare) {
         this.nomeLista = nomeNazionalitaSingolare;
@@ -74,6 +64,32 @@ public class ListaNazionalita extends Lista {
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNazionalita singolare() {
+        super.typeLista = AETypeLista.attivitaSingolare;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNazionalita plurale() {
+        super.typeLista = AETypeLista.attivitaPlurale;
+        return this;
+    }
+
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        super.nomeLista = textService.primaMaiuscola(nomeLista);
+        super.titoloPagina = wikiUtility.wikiTitleNazionalita(nomeLista);
+        super.typeLista = AETypeLista.nazionalitaPlurale;
+        super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
+        super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
+        super.isIstanzaValidaPatternBuilder = true;
+    }
 
     /**
      * Ordina la mappa <br>

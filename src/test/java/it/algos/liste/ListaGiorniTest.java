@@ -36,7 +36,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("liste")
+@Tag("liste")
 @DisplayName("Lista Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaGiorniTest extends ListeTest {
@@ -55,8 +55,9 @@ public class ListaGiorniTest extends ListeTest {
                 Arguments.of(VUOTA, AETypeLista.giornoNascita),
                 Arguments.of(VUOTA, AETypeLista.giornoMorte),
                 Arguments.of("1857", AETypeLista.giornoNascita),
+                Arguments.of("8 aprile", AETypeLista.attivitaPlurale),
                 Arguments.of("34 febbraio", AETypeLista.giornoMorte),
-                //                Arguments.of("23 marzo", AETypeLista.giornoNascita),
+                Arguments.of("23 marzo", AETypeLista.annoMorte),
                 //                Arguments.of("1º gennaio", AETypeLista.giornoMorte),
                 Arguments.of("29 febbraio", AETypeLista.giornoNascita),
                 Arguments.of("29 febbraio", AETypeLista.giornoMorte)
@@ -72,6 +73,8 @@ public class ListaGiorniTest extends ListeTest {
     protected void setUpAll() {
         super.setUpAll();
         super.clazz = ListaGiorni.class;
+        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = false;
     }
 
 
@@ -86,96 +89,39 @@ public class ListaGiorniTest extends ListeTest {
         istanza = null;
     }
 
-    @Test
-    @Order(3)
-    @DisplayName("3 - listaBioSenzaParametroNelCostruttore")
-    void listaBioSenzaParametroNelCostruttore() {
-        System.out.println(("3 - listaBioSenzaParametroNelCostruttore"));
-        System.out.println(VUOTA);
-
-        appContext.getBean(ListaGiorni.class).listaBio();
-
-        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
-        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo %s se l'istanza non è correttamente istanziata.", "listaBio"));
-    }
-
-
-    @Test
-    @Order(4)
-    @DisplayName("4 - Istanza incompleta coi valori standard")
-    void beanStandardIncompleta() {
-        System.out.println(String.format("4 - istanza (incompleta) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("Mancano alcuni parametri indispensabili per il Pattern Builder");
-        System.out.println(VUOTA);
-
-        sorgente = "14 marzo";
-        istanza = appContext.getBean(ListaGiorni.class, sorgente);
-        assertNotNull(istanza);
-        printLista(istanza);
-    }
 
     @Test
     @Order(5)
-    @DisplayName("5 - listaBioSenzaTypeLista")
-    void listaBioSenzaTypeLista() {
-        System.out.println(("5 - listaBioSenzaTypeLista"));
-        System.out.println(VUOTA);
-
-        sorgente = "14 marzo";
-        appContext.getBean(ListaGiorni.class, sorgente).listaBio();
-
-        System.out.println(String.format("Occorre '%s' di questa classe altrimenti il metodo '%s' NON può funzionare.", "typeLista", "listaBio"));
-        System.out.println(String.format("Seguendo il Pattern Builder, occorre prima regolare il parametro '%s'.", "typeLista"));
+    @DisplayName("5 - listaBioSenzaParametroNelCostruttore")
+    void listaBioSenzaParametroNelCostruttore() {
+        try {
+            appContext.getBean(ListaGiorni.class).listaBio();
+        } catch (Exception unErrore) {
+            super.fixSenzaParametroNelCostruttore();
+        }
     }
+
 
     @Test
     @Order(6)
-    @DisplayName("6 - Istanza completa coi valori standard")
+    @DisplayName("6 - Istanza costruita col parametro obbligatorio")
     void beanStandardCompleta() {
-        System.out.println(String.format("6 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "typeLista"));
-        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-        System.out.println(VUOTA);
+        sorgente = "14 marzo";
+        istanza = appContext.getBean(ListaGiorni.class, sorgente);
 
-        sorgente = "4 marzo";
-        istanza = (ListaGiorni) appContext.getBean(ListaGiorni.class, sorgente).typeLista(AETypeLista.giornoMorte);
-        assertNotNull(istanza);
+        super.fixBeanStandard(istanza);
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
         printLista(istanza);
     }
 
     @Test
     @Order(7)
-    @DisplayName("7 - Istanza completa coi valori standard")
-    void beanStandardCompleta2() {
-        System.out.println(String.format("7 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "nascita"));
-        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-        System.out.println(VUOTA);
+    @DisplayName("7 - listaBioSenzaTypeLista")
+    void listaBioSenzaTypeLista() {
+        sorgente = "14 marzo";
+        appContext.getBean(ListaGiorni.class, sorgente).listaBio();
 
-        sorgente = "4 marzo";
-        istanza = (ListaGiorni) appContext.getBean(ListaGiorni.class, sorgente).nascita();
-        assertNotNull(istanza);
-        printLista(istanza);
-    }
-
-    @Test
-    @Order(8)
-    @DisplayName("8 - Istanza completa coi valori standard")
-    void beanStandardCompleta3() {
-        System.out.println(String.format("8 - istanza (completa) di [%s] coi valori standard", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("Sono stati regolari i parametri indispensabili per il Pattern Builder");
-        System.out.println(String.format("In particolare è stato regolato il pattern '%s'", "morte"));
-        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-        System.out.println(VUOTA);
-
-        sorgente = "4 marzo";
-        istanza = (ListaGiorni) appContext.getBean(ListaGiorni.class, sorgente).morte();
-        assertNotNull(istanza);
-        printLista(istanza);
+        super.fixListaBioSenzaTypeLista();
     }
 
 
@@ -183,8 +129,6 @@ public class ListaGiorniTest extends ListeTest {
     @MethodSource(value = "GIORNI_LISTA")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
-        //--nome giorno
-        //--typeLista
     void listaBio(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
@@ -198,8 +142,6 @@ public class ListaGiorniTest extends ListeTest {
     @MethodSource(value = "GIORNI_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-        //--nome giorno
-        //--typeLista
     void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
@@ -214,8 +156,6 @@ public class ListaGiorniTest extends ListeTest {
     @MethodSource(value = "GIORNI_LISTA")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
-        //--nome giorno
-        //--typeLista
     void listaDidascalie(final String nomeLista, final AETypeLista type) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -230,8 +170,6 @@ public class ListaGiorniTest extends ListeTest {
     @MethodSource(value = "GIORNI_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-        //--nome giorno
-        //--typeLista
     void mappaWrap(final String nomeLista, final AETypeLista type) {
         if (textService.isEmpty(nomeLista)) {
             return;
@@ -245,8 +183,6 @@ public class ListaGiorniTest extends ListeTest {
     @MethodSource(value = "GIORNI_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-        //--nome giorno
-        //--typeLista
     void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
         if (textService.isEmpty(nomeLista)) {
             return;

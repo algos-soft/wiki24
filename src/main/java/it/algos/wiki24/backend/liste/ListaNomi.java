@@ -32,7 +32,6 @@ public class ListaNomi extends Lista {
      */
     public ListaNomi(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
 
@@ -44,6 +43,7 @@ public class ListaNomi extends Lista {
         super.typeLista = AETypeLista.nomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
+        super.isIstanzaValidaPatternBuilder = true;
     }
 
 

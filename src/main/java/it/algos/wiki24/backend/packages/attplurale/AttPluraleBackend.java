@@ -140,10 +140,10 @@ public class AttPluraleBackend extends WikiBackend {
 
     @Override
     public AttPlurale findByKey(final String keyValue) {
-        AttPlurale attPlurale = (AttPlurale) super.findByKey(keyValue);
+        AttPlurale attPlurale = (AttPlurale) super.findByKey(textService.primaMinuscola(keyValue));
 
         if (attPlurale == null) {
-            attPlurale = findDocumentByKey(keyValue);
+            attPlurale = findDocumentByKey(textService.primaMinuscola(keyValue));
         }
 
         return attPlurale;

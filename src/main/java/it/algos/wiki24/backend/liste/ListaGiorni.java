@@ -45,7 +45,6 @@ public class ListaGiorni extends Lista {
      */
     public ListaGiorni(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
 
@@ -54,6 +53,7 @@ public class ListaGiorni extends Lista {
 
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
+        super.isIstanzaValidaPatternBuilder = false;
     }
 
     /**
@@ -63,7 +63,7 @@ public class ListaGiorni extends Lista {
         return switch (typeLista) {
             case giornoNascita -> nascita();
             case giornoMorte -> morte();
-            default -> null;
+            default -> this;
         };
     }
 

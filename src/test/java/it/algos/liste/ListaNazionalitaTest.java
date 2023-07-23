@@ -29,10 +29,10 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("liste")
+@Tag("liste")
 @DisplayName("Lista Nazionalita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaNazionalitaTest extends WikiTest {
+public class ListaNazionalitaTest extends ListeTest {
 
 
     /**
@@ -49,7 +49,9 @@ public class ListaNazionalitaTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
-        assertNull(istanza);
+        super.clazz = ListaNazionalita.class;
+        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = false;
     }
 
 
@@ -66,247 +68,106 @@ public class ListaNazionalitaTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-//        istanza = new ListaNazionalita();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
-
-
-    @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA")
-    @Order(3)
-    @DisplayName("3 - Lista bio di varie nazionalità")
-        //--nome nazionalità
-        //--typeLista
-    void listaBio(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("3 - Lista bio di varie nazionalità plurali");
-        sorgente = nomeNazionalita;
-
-        if (!valido(nomeNazionalita, type)) {
-            return;
-        }
-
-        listBio = switch (type) {
-            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).listaBio();
-            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaBio();
-            default -> null;
-        };
-
-        if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano la nazionalità %s %s", listBio.size(), sorgente, type.getTagLower());
-            System.out.println(message);
-            this.printNazionalitaSingole(type, sorgente);
-            System.out.println(VUOTA);
-            printBioLista(listBio);
-        }
-        else {
-            message = "La listBio è nulla";
-            System.out.println(message);
-        }
-    }
-
-
-    @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA")
-    @Order(4)
-    @DisplayName("4 - Lista wrapLista di varie nazionalità")
-        //--nome nazionalità
-        //--typeLista
-    void listaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("4 - Lista wrapLista di varie nazionalità");
-        sorgente = nomeNazionalita;
-        int size;
-
-        if (!valido(nomeNazionalita, type)) {
-            return;
-        }
-
-        listWrapLista = switch (type) {
-            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).listaWrap();
-            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).listaWrap();
-            default -> null;
-        };
-
-        if (listWrapLista != null && listWrapLista.size() > 0) {
-            size = listWrapLista.size();
-            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", listWrapLista.size(), sorgente, type.getTagLower());
-            System.out.println(message);
-            this.printNazionalitaSingole(type, sorgente);
-            System.out.println(VUOTA);
-            printWrapLista(listWrapLista);
-            printWrapLista(listWrapLista.subList(size - 5, size));
-        }
-        else {
-            message = "La lista è nulla";
-            System.out.println(message);
-        }
-    }
-
-
-    @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA")
     @Order(5)
-    @DisplayName("5 - Key della mappa wrapLista di varie nazionalità")
-        //--nome nazionalità
-        //--typeLista
-    void mappaWrap33(final String nomeNazionalita, final AETypeLista type) {
-        System.out.println("5 - Key della mappa wrapLista di varie nazionalità");
-        sorgente = nomeNazionalita;
-        int numVoci;
-
-        if (!valido(nomeNazionalita, type)) {
-            return;
-        }
-
-        mappaWrap = switch (type) {
-            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
-            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
-            default -> null;
-        };
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-            message = String.format("Ci sono %d wrapLista che implementano la nazionalità di %s %s", numVoci, type.getCivile(), sorgente);
-            System.out.println(message);
-            this.printNazionalitaSingole(type, sorgente);
-            printMappaWrapKeyOrder(mappaWrap);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
+    @DisplayName("5 - listaBioSenzaParametroNelCostruttore")
+    void listaBioSenzaParametroNelCostruttore() {
+        try {
+            appContext.getBean(ListaNazionalita.class).listaBio();
+        } catch (Exception unErrore) {
+            super.fixSenzaParametroNelCostruttore();
         }
     }
 
 
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(6)
-//    @DisplayName("6 - Mappa wrapLista di varie nazionalità")
-//        //--nome nazionalità
-//        //--typeLista
-//    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-//        System.out.println("6 - Mappa wrapLista di varie nazionalità");
-//        sorgente = nomeNazionalita;
-//        int numVoci;
-//
-//        if (!valido(nomeNazionalita, type)) {
-//            return;
-//        }
-//
-//        mappaWrap = switch (type) {
-//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class).singolare(sorgente).mappaWrap();
-//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class).plurale(sorgente).mappaWrap();
-//            default -> null;
-//        };
-//
-//        if (mappaWrap != null && mappaWrap.size() > 0) {
-//            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-//            message = String.format("Ci sono %d wrapLista che implementano la nazionalità %s %s", numVoci, sorgente, type.getTagLower());
-//            System.out.println(message);
-//            this.printNazionalitaSingole(type, sorgente);
-//            System.out.println(VUOTA);
-//            printMappaWrap(mappaWrap);
-//        }
-//        else {
-//            message = "La mappa è nulla";
-//            System.out.println(message);
-//        }
-//    }
+    @Test
+    @Order(6)
+    @DisplayName("6 - Istanza costruita col parametro obbligatorio")
+    void beanStandardCompleta() {
+        sorgente = "assiri";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente);
+
+        super.fixBeanStandard(istanza);
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
+        printLista(istanza);
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("7 - listaBioSenzaTypeLista")
+    void listaBioSenzaTypeLista() {
+        sorgente = "assiri";
+        appContext.getBean(ListaNazionalita.class, sorgente).listaBio();
+
+        super.fixListaBioSenzaTypeLista();
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(10)
+    @DisplayName("10 - Lista bio BASE")
+    void listaBio(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listBio = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaBio();
+        super.fixListaBio(nomeLista, listBio);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(20)
+    @DisplayName("20 - WrapLista STANDARD")
+    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaWrap();
+        super.fixWrapLista(nomeLista, listWrapLista);
+    }
 
 
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(30)
+    @DisplayName("30 - Didascalie STANDARD")
+    void listaDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaWrap();
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA")
+    @Order(40)
+    @DisplayName("40 - Key della mappaWrap STANDARD")
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "NAZIONALITA")
     @Order(50)
-    @DisplayName("50 - Lista didascalie")
-        //--nome nazionalita
-        //--typeLista
-    void listaDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        sorgente = nomeNazionalita;
-        if (!valido(nomeNazionalita, type)) {
+    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
+    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
-        listWrapLista = switch (type) {
-//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().listaWrap();
-//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).listaWrap();
-            default -> null;
-        };
-        System.out.println("50 - Lista didascalie");
 
-        if (listWrapLista != null && listWrapLista.size() > 0) {
-            System.out.println(VUOTA);
-            for (WrapLista wrap : listWrapLista) {
-                System.out.println(wrap.didascalia);
-            }
-        }
-        else {
-            message = "La lista è nulla";
-            System.out.println(message);
-        }
+        mappaWrap = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
-
-    @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA")
-    @Order(60)
-    @DisplayName("60 - Key della mappa wrapLista")
-        //--nome nazionalita
-        //--typeLista
-    void mappaWrap(final String nomeNazionalita, final AETypeLista type) {
-        sorgente = nomeNazionalita;
-        if (!valido(nomeNazionalita, type)) {
-            return;
-        }
-        mappaWrap = switch (type) {
-//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().mappaWrap();
-//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).mappaWrap();
-            default -> null;
-        };
-        System.out.println("60 - Key della mappa wrapLista");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
-            System.out.println(message);
-            printMappaWrapKeyOrder(mappaWrap);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
-        }
-    }
-
-
-    @ParameterizedTest
-    @MethodSource(value = "NAZIONALITA")
-    @Order(70)
-    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
-        //--nome nazionalita
-        //--typeLista
-    void mappaWrapDidascalie(final String nomeNazionalita, final AETypeLista type) {
-        sorgente = nomeNazionalita;
-        if (!valido(nomeNazionalita, type)) {
-            return;
-        }
-        mappaWrap = switch (type) {
-//            case nazionalitaSingolare -> appContext.getBean(ListaNazionalita.class,sorgente).singolare().mappaWrap();
-//            case nazionalitaPlurale -> appContext.getBean(ListaNazionalita.class,sorgente).mappaWrap();
-            default -> null;
-        };
-        System.out.println("70 - MappaWrap STANDARD");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            printMappaDidascalie(mappaWrap);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
-        }
-    }
 
     private boolean valido(final String nomeNazionalita, final AETypeLista type) {
         if (textService.isEmpty(nomeNazionalita)) {

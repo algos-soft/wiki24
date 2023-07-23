@@ -36,7 +36,6 @@ public class ListaCognomi extends Lista {
      */
     public ListaCognomi(String nomeLista) {
         super(nomeLista);
-        super.isIstanzaValidaPatternBuilder = true;
     }// end of constructor not @Autowired and used
 
 
@@ -48,6 +47,7 @@ public class ListaCognomi extends Lista {
         super.typeLista = AETypeLista.cognomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
+        super.isIstanzaValidaPatternBuilder = true;
     }
 
 

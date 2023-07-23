@@ -68,6 +68,7 @@ public class ListaCognomiTest extends ListeTest {
         super.setUpAll();
         super.clazz = ListaCognomi.class;
         super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
 
@@ -97,13 +98,13 @@ public class ListaCognomiTest extends ListeTest {
 
     @Test
     @Order(6)
-    @DisplayName("6 - Istanza costruita col parametro obbligatorio")
+    @DisplayName("6 - Istanza (valida) costruita col parametro obbligatorio")
     void beanStandardCompleta() {
         sorgente = "Gomez";
         istanza = appContext.getBean(ListaCognomi.class, sorgente);
 
-        super.fixBeanStandardCompleta(istanza);
-        assertTrue(istanza.isValida());
+        super.fixBeanStandard(istanza);
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
         printLista(istanza);
     }
 
@@ -122,7 +123,6 @@ public class ListaCognomiTest extends ListeTest {
     @MethodSource(value = "COGNOMI")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
-        //--nome
     void listaBio(final String sorgente) {
         if (textService.isEmpty(sorgente)) {
             return;
@@ -137,7 +137,6 @@ public class ListaCognomiTest extends ListeTest {
     @MethodSource(value = "COGNOMI")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-        //--cognome
     void listaWrapDidascalie(final String sorgente) {
         if (textService.isEmpty(sorgente)) {
             return;
@@ -151,7 +150,6 @@ public class ListaCognomiTest extends ListeTest {
     @MethodSource(value = "COGNOMI")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
-        //--cognome
     void listaDidascalie(final String sorgente) {
         if (textService.isEmpty(sorgente)) {
             return;
@@ -165,7 +163,6 @@ public class ListaCognomiTest extends ListeTest {
     @MethodSource(value = "COGNOMI")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-        //--cognome
     void mappaWrap(final String sorgente) {
         if (textService.isEmpty(sorgente)) {
             return;
@@ -178,7 +175,6 @@ public class ListaCognomiTest extends ListeTest {
     @MethodSource(value = "COGNOMI")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-        //--cognome
     void mappaWrapDidascalie(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;

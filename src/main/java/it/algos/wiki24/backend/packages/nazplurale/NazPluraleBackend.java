@@ -137,10 +137,10 @@ public class NazPluraleBackend extends WikiBackend {
 
     @Override
     public NazPlurale findByKey(final String keyValue) {
-        NazPlurale nazPlurale = (NazPlurale) super.findByKey(keyValue);
+        NazPlurale nazPlurale = (NazPlurale) super.findByKey(textService.primaMinuscola(keyValue));
 
         if (nazPlurale == null) {
-            nazPlurale = findDocumentByKey(keyValue);
+            nazPlurale = findDocumentByKey(textService.primaMinuscola(keyValue));
         }
 
         return nazPlurale;

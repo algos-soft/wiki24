@@ -39,16 +39,29 @@ public abstract class ListeTest extends WikiTest {
     }
 
 
-    protected void fixBeanStandardCompleta(final Object istanza) {
-        System.out.println(String.format("6 - Istanza costruita col parametro obbligatorio", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println(VUOTA);
-        System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
-        System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
-        System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-        System.out.println(VUOTA);
+    protected void fixBeanStandard(final Object istanza) {
+        if (super.istanzaValidaSubitoDopoCostruttore) {
+            System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println(VUOTA);
+            System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
+            System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
+            System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
+            System.out.println(VUOTA);
 
-        assertNotNull(istanza);
+            assertNotNull(istanza);
+        }
+        else {
+            System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazz != null ? clazz.getSimpleName() : VUOTA));
+            System.out.println(VUOTA);
+            System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
+            System.out.println("L'istanza NON è valida, perché occorrono ulteriori regolazioni del BuilderPattern");
+            System.out.println(String.format("Ad esempio la regolazione di %s","typeLista"));
+            System.out.println(VUOTA);
+
+            assertNotNull(istanza);
+        }
     }
+
 
     protected void fixListaBioSenzaTypeLista() {
         System.out.println(("7 - listaBioSenzaTypeLista"));
