@@ -46,8 +46,8 @@ public class StatisticheNazionalitaTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheNazionalita.class;
+        super.setUpAll();
     }
 
 

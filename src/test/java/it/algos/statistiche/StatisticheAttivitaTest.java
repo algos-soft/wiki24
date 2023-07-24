@@ -47,8 +47,8 @@ public class StatisticheAttivitaTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheAttivita.class;
+        super.setUpAll();
     }
 
 

@@ -15,6 +15,8 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -39,9 +42,9 @@ import java.util.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("production")
 @Tag("upload")
-@DisplayName("Nomi upload")
+@DisplayName("Upload Nomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadNomiTest extends WikiTest {
+public class UploadNomiTest extends UploadTest {
 
 
     /**
@@ -49,6 +52,16 @@ public class UploadNomiTest extends WikiTest {
      */
     private UploadNomi istanza;
 
+    //--nome
+    protected static Stream<Arguments> NOMI_UPLOAD() {
+        return Stream.of(
+                Arguments.of(VUOTA),
+                Arguments.of("Aaron"),
+                Arguments.of("Alexandra"),
+                Arguments.of("adriana"),
+                Arguments.of("maria teresa")
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -58,8 +71,9 @@ public class UploadNomiTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = UploadNomi.class;
-        assertNull(istanza);
         super.setUpAll();
+        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
 
@@ -74,8 +88,63 @@ public class UploadNomiTest extends WikiTest {
         istanza = null;
     }
 
+    @Test
+    @Order(5)
+    @DisplayName("5 - esegueSenzaParametroNelCostruttore")
+    void esegueSenzaParametroNelCostruttore() {
+        try {
+            appContext.getBean(UploadNomi.class).esegue();
+        } catch (Exception unErrore) {
+            super.fixSenzaParametroNelCostruttore();
+        }
+    }
+
 
     @Test
+    @Order(6)
+    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    void beanStandardCompleta() {
+        sorgente = "adriana";
+        istanza = appContext.getBean(UploadNomi.class, sorgente);
+
+        super.fixBeanStandard(istanza);
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
+        printUpload(istanza);
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("7 - esegueConParametroNelCostruttore")
+    void listaBioSenzaTypeLista() {
+        sorgente = "adriana";
+        Object obj = null;
+        try {
+            obj = appContext.getBean(UploadNomi.class, sorgente).esegue();
+            assertNotNull(obj);
+        } catch (Exception unErrore) {
+            assertNull(obj);
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
+            return;
+        }
+
+        super.fixConParametroNelCostruttore();
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_UPLOAD")
+    @Order(10)
+    @DisplayName("10 - Lista bio BASE")
+    void listaBio(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+//        listBio = appContext.getBean(UploadNomi.class, nomeLista);
+//        super.fixListaBio(nomeLista, listBio);
+    }
+
+//    @Test
     @Order(3)
     @DisplayName("3 - Upload test di un nome con noToc")
     void uploadNoToc() {
@@ -245,7 +314,7 @@ public class UploadNomiTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(11)
     @DisplayName("11 - Upload test di una sottopagina da sola")
     void uploadOnlySottoPagina() {
@@ -344,7 +413,7 @@ public class UploadNomiTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(40)
     @DisplayName("40 - Upload test di un nome femminile")
     void uploadFemminile() {

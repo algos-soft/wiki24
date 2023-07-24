@@ -43,8 +43,8 @@ public class StatisticheAnniTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheAnni.class;
+        super.setUpAll();
     }
 
 

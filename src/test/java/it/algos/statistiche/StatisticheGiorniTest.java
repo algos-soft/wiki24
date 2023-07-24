@@ -44,8 +44,8 @@ public class StatisticheGiorniTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheGiorni.class;
+        super.setUpAll();
     }
 
 

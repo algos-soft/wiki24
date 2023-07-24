@@ -170,9 +170,9 @@ public abstract class Upload {
     @Autowired
     public LogService logService;
 
-    protected AETypeLista typeLista;
+    public AETypeLista typeLista;
 
-    protected Lista lista;
+    public Lista lista;
 
     protected String nomeSottoPagina;
 
@@ -193,7 +193,7 @@ public abstract class Upload {
 
     protected String titoloLinkVediAnche;
 
-    protected String nomeLista;
+    public String nomeLista;
 
     protected String attNazUpper;
 
@@ -205,9 +205,9 @@ public abstract class Upload {
 
     protected String subAttivitaNazionalita;
 
-    protected boolean uploadTest = false;
+    public boolean uploadTest = true;
 
-    protected String summary;
+    public String summary;
 
     protected WPref lastUpload;
 
@@ -217,21 +217,25 @@ public abstract class Upload {
 
     protected boolean usaParagrafi;
 
-    protected boolean usaNumeriTitoloParagrafi;
+    public boolean usaNumeriTitoloParagrafi;
 
     public String wikiTitleUpload;
 
     public String wikiTitleModulo;
 
+    public AETypeLink typeLinkCrono;
 
-    protected AETypeToc typeToc;
+    public AETypeToc typeToc;
+
+    public boolean usaIcona;
 
     protected AETypeTime unitaMisuraUpload;
 
     protected WResult result;
 
-    protected AETypeLink typeLink;
+    public AETypeLink typeLinkParagrafi;
 
+    protected boolean isIstanzaValidaPatternBuilder = false;
 
     /**
      * Costruttore base senza parametri <br>
@@ -256,7 +260,9 @@ public abstract class Upload {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
         this.typeLista = AETypeLista.nessunaLista;
         this.typeToc = AETypeToc.forceToc;
+        this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         this.usaNumeriTitoloParagrafi = true;
+        this.usaIcona = WPref.usaSimboliCrono.is();
         this.isSottopagina = false;
 
         this.fixPreferenze();
@@ -280,7 +286,7 @@ public abstract class Upload {
     }
 
     public Upload typeLink(AETypeLink typeLink) {
-        this.typeLink = typeLink;
+        this.typeLinkParagrafi = typeLink;
         this.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
         return this;
     }
@@ -550,10 +556,12 @@ public abstract class Upload {
         }
 
         if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
-            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
+            //            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
+            return result;
         }
         else {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            //            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            return result;
         }
     }
 

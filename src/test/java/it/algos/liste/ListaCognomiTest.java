@@ -3,6 +3,8 @@ package it.algos.liste;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.giorno.*;
@@ -65,8 +67,8 @@ public class ListaCognomiTest extends ListeTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = ListaCognomi.class;
+        super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
     }
@@ -85,37 +87,19 @@ public class ListaCognomiTest extends ListeTest {
 
 
     @Test
-    @Order(5)
-    @DisplayName("5 - listaBioSenzaParametroNelCostruttore")
-    void listaBioSenzaParametroNelCostruttore() {
-        try {
-            appContext.getBean(ListaCognomi.class).listaBio();
-        } catch (Exception unErrore) {
-            super.fixSenzaParametroNelCostruttore();
-        }
-    }
-
-
-    @Test
     @Order(6)
-    @DisplayName("6 - Istanza (valida) costruita col parametro obbligatorio")
+    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
         sorgente = "Gomez";
-        istanza = appContext.getBean(ListaCognomi.class, sorgente);
-
-        super.fixBeanStandard(istanza);
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printLista(istanza);
+        super.fixBeanStandard(sorgente);
     }
 
     @Test
     @Order(7)
-    @DisplayName("7 - listaBioSenzaTypeLista")
-    void listaBioSenzaTypeLista() {
+    @DisplayName("7 - esegueConParametroNelCostruttore")
+    void esegueConParametroNelCostruttore() {
         sorgente = "Gomez";
-        appContext.getBean(ListaCognomi.class, sorgente).listaBio();
-
-        super.fixListaBioSenzaTypeLista();
+        super.fixConParametroNelCostruttore(sorgente);
     }
 
 
@@ -154,7 +138,7 @@ public class ListaCognomiTest extends ListeTest {
         if (textService.isEmpty(sorgente)) {
             return;
         }
-        listWrapLista = appContext.getBean(ListaNomi.class, sorgente).listaWrap();
+        listWrapLista = appContext.getBean(ListaCognomi.class, sorgente).listaWrap();
         super.fixWrapListaDidascalie(sorgente, listWrapLista);
     }
 
@@ -167,7 +151,7 @@ public class ListaCognomiTest extends ListeTest {
         if (textService.isEmpty(sorgente)) {
             return;
         }
-        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
+        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
         super.fixMappaWrapKey(sorgente, mappaWrap);
     }
 
@@ -179,7 +163,7 @@ public class ListaCognomiTest extends ListeTest {
         if (textService.isEmpty(nomeLista)) {
             return;
         }
-        mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+        mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).mappaWrap();
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 

@@ -46,8 +46,8 @@ public class StatisticheCognomiTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheCognomi.class;
+        super.setUpAll();
     }
 
 

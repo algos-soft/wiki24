@@ -3,6 +3,9 @@ package it.algos.liste;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.wrapper.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -28,47 +31,65 @@ public abstract class ListeTest extends WikiTest {
     }
 
 
-    protected void fixSenzaParametroNelCostruttore() {
-        System.out.println(("5 - listaBioSenzaParametroNelCostruttore"));
-        System.out.println(VUOTA);
-
-        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-        System.out.println("È obbligatorio il 'nomeLista' nel costruttore.");
-        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo '%s' se l'istanza non è correttamente istanziata.", "listaBio"));
-    }
-
-
-    protected void fixBeanStandard(final Object istanza) {
-        if (super.istanzaValidaSubitoDopoCostruttore) {
-            System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println(VUOTA);
-            System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
-            System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
-            System.out.println("Pronta per listaBio(), listaWrap() e mappaWrap()");
-            System.out.println(VUOTA);
-
-            assertNotNull(istanza);
-        }
-        else {
-            System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println(VUOTA);
-            System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
-            System.out.println("L'istanza NON è valida, perché occorrono ulteriori regolazioni del BuilderPattern");
-            System.out.println(String.format("Ad esempio la regolazione di %s","typeLista"));
-            System.out.println(VUOTA);
-
-            assertNotNull(istanza);
+    @Test
+    @Order(5)
+    @DisplayName("5 - esegueSenzaParametroNelCostruttore")
+    void esegueSenzaParametroNelCostruttore() {
+        try {
+            ((Lista) appContext.getBean(clazz)).listaBio();
+        } catch (Exception unErrore) {
+            super.fixSenzaParametroNelCostruttore("nomeLista", "listaBio() o listaWrap() o mappaWrap()");
         }
     }
 
+    protected void fixConParametroNelCostruttore(String sorgente) {
+        long inizio = System.currentTimeMillis();
+        List<Bio> listaBio = null;
+        Lista istanza = null;
+        boolean istanzaEffettivamenteValida;
+        boolean listaBioCreata = false;
 
-    protected void fixListaBioSenzaTypeLista() {
-        System.out.println(("7 - listaBioSenzaTypeLista"));
+        try {
+            istanza = (Lista) appContext.getBean(clazz, sorgente);
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
+        }
+        assertNotNull(istanza);
+
+        istanzaEffettivamenteValida = istanza.isValida();
+        assertEquals(istanzaValidaSubitoDopoCostruttore, istanzaEffettivamenteValida);
+
+        if (istanzaEffettivamenteValida) {
+            try {
+                listaBio = istanza.listaBio();
+                assertNotNull(listaBio);
+                listaBioCreata = true;
+            } catch (Exception unErrore) {
+                assertNull(listaBio);
+                logService.error(new WrapLog().exception(new AlgosException(unErrore)));
+            }
+        }
+
+        super.fixConParametroNelCostruttore("nomeLista", "listaBio", "nascita() o morte()", istanzaEffettivamenteValida, inizio);
+
         System.out.println(VUOTA);
-        System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s'", clazz != null ? clazz.getSimpleName() : VUOTA, "nomeLista"));
-        System.out.println(String.format("Questa classe funziona anche SENZA '%s' perché è già inserito in fixPreferenze().", "typeLista"));
-        System.out.println("L'invocazione del metodo listaBio() è accettabile");
+        System.out.println("Debug");
+        System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+        System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanzaValidaSubitoDopoCostruttore));
+        System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, istanzaEffettivamenteValida));
+        System.out.println(String.format("listaBioCreata%s%s", FORWARD, listaBioCreata));
+    }
+
+    protected void fixBeanStandard(final String sorgente) {
+        Lista istanza = (Lista) appContext.getBean(clazz, sorgente);
+        super.fixBeanStandard(istanza, "nomeLista", "listaBio(), listaWrap() e mappaWrap()", "typeLista");
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
+        printLista(istanza);
+    }
+
+
+    protected void fixConParametroNelCostruttore() {
+        super.fixConParametroNelCostruttore("nomeLista", "listaBio", "nascita() o morte()");
     }
 
     protected void fixListaBio(final String sorgente, final List<Bio> listBio) {
@@ -158,6 +179,29 @@ public abstract class ListeTest extends WikiTest {
             message = "La mappaWrap è nulla";
             System.out.println(message);
         }
+    }
+
+    protected void printLista(Lista listaEntityBean) {
+        if (listaEntityBean == null) {
+            return;
+        }
+        message = String.format("Valori STANDARD per un'istanza di [%s], creata con il solo '%s'", listaEntityBean.getClass().getSimpleName(), "nomeLista");
+        if (listaEntityBean.isValida()) {
+            message += String.format("%sPronta per essere utilizzata.", SEP);
+        }
+        else {
+            message += String.format("%sNon ancora utilizzabile.", SEP);
+        }
+        System.out.println(message);
+        System.out.println(VUOTA);
+
+        System.out.println(String.format("%s%s%s", "nomeLista: [fissato col costruttore]", FORWARD, listaEntityBean.nomeLista));
+        System.out.println(String.format("%s%s%s", "typeLista: [regolato in fixPreferenze()]", FORWARD, listaEntityBean.typeLista != null ? listaEntityBean.typeLista : OBBLIGATORIO));
+        System.out.println(String.format("%s%s%s", "typeLinkParagrafi: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, listaEntityBean.typeLinkParagrafi));
+        System.out.println(String.format("%s%s%s", "typeLinkCrono: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, listaEntityBean.typeLinkCrono));
+        System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
+        System.out.println(String.format("%s%s%s", "usaIcona: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, listaEntityBean.usaIcona));
+        System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
     }
 
 }

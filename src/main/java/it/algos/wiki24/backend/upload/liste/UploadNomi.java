@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.upload.liste;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -29,7 +30,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadNomi extends Upload {
+public class UploadNomi extends UploadListe  {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -43,7 +44,7 @@ public class UploadNomi extends Upload {
     /**
      * Costruttore base con parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(UploadNomi.class, nome).esegue() <br>
+     * Uso: appContext.getBean(UploadNomi.class, nomeLista).esegue() <br>
      * La superclasse usa il metodo @PostConstruct postConstruct() per proseguire dopo l'init del costruttore <br>
      */
     public UploadNomi(String nomeLista) {
@@ -60,10 +61,15 @@ public class UploadNomi extends Upload {
         super.summary = "[[Utente:Biobot/nomiBio|nomiBio]]";
         super.typeLista = AETypeLista.nomi;
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
-        super.typeLink = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
+        super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
+        super.isIstanzaValidaPatternBuilder = true;
     }
 
+    @Override
+    public boolean isValida() {
+        return isIstanzaValidaPatternBuilder;
+    }
 
 
     @Override
@@ -75,8 +81,16 @@ public class UploadNomi extends Upload {
     @Override
     protected void fixMappaWrap() {
         if (!isSottopagina) {
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLinkParagrafi(typeLink).mappaWrap();
+            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLinkParagrafi(typeLinkParagrafi).mappaWrap();
         }
+
+
+        mappaWrap = appContext
+                .getBean(ListaNomi.class, nomeLista)
+                .typeLinkParagrafi(typeLinkParagrafi)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
     }
 
     @Override

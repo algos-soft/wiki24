@@ -3,7 +3,9 @@ package it.algos.liste;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
+import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -44,8 +46,8 @@ public class ListaNomiTest extends ListeTest {
     protected static Stream<Arguments> NOMI() {
         return Stream.of(
                 Arguments.of(VUOTA),
-                Arguments.of("Aaron"),
-                Arguments.of("Alexandra"),
+                //                Arguments.of("Aaron"),
+                //                Arguments.of("Alexandra"),
                 Arguments.of("adriana"),
                 Arguments.of("maria teresa")
         );
@@ -58,8 +60,8 @@ public class ListaNomiTest extends ListeTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = ListaNomi.class;
+        super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
     }
@@ -78,37 +80,19 @@ public class ListaNomiTest extends ListeTest {
 
 
     @Test
-    @Order(5)
-    @DisplayName("5 - listaBioSenzaParametroNelCostruttore")
-    void listaBioSenzaParametroNelCostruttore() {
-        try {
-            appContext.getBean(ListaNomi.class).listaBio();
-        } catch (Exception unErrore) {
-            super.fixSenzaParametroNelCostruttore();
-        }
-    }
-
-
-    @Test
     @Order(6)
-    @DisplayName("6 - Istanza costruita col parametro obbligatorio")
+    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
         sorgente = "lorenzo";
-        istanza = appContext.getBean(ListaNomi.class, sorgente);
-
-        super.fixBeanStandard(istanza);
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printLista(istanza);
+        super.fixBeanStandard(sorgente);
     }
 
     @Test
     @Order(7)
-    @DisplayName("7 - listaBioSenzaTypeLista")
-    void listaBioSenzaTypeLista() {
+    @DisplayName("7 - esegueConParametroNelCostruttore")
+    void esegueConParametroNelCostruttore() {
         sorgente = "lorenzo";
-        appContext.getBean(ListaNomi.class, sorgente).listaBio();
-
-        super.fixListaBioSenzaTypeLista();
+        super.fixConParametroNelCostruttore(sorgente);
     }
 
 

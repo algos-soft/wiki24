@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.statistiche;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -33,7 +34,7 @@ import java.util.*;
  * Date: Fri, 01-Jul-2022
  * Time: 10:34
  */
-public abstract class Statistiche {
+public abstract class Statistiche implements AlgosBuilderPattern {
 
     public static final String MANCA = "Nel [[template:Bio|template Bio]] della voce biografica '''manca''' completamente il parametro ";
 
@@ -202,6 +203,8 @@ public abstract class Statistiche {
 
     protected Map<String, Integer> mappaValidi;
 
+    protected boolean isIstanzaValidaPatternBuilder = false;
+
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
@@ -240,6 +243,11 @@ public abstract class Statistiche {
         this.uploadTest = true;
         this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + this.getClass().getSimpleName();
         return this;
+    }
+
+    @Override
+    public boolean isValida() {
+        return isIstanzaValidaPatternBuilder;
     }
 
     public WResult esegue() {

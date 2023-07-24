@@ -98,6 +98,9 @@ public abstract class WikiTest extends AlgosTest {
     @Autowired
     public BotLogin botLogin;
 
+    @Autowired
+    public DateService dateService;
+
     protected CrudBackend crudBackend;
 
     protected WikiBackend wikiBackend;
@@ -222,9 +225,12 @@ public abstract class WikiTest extends AlgosTest {
 
     protected Class clazz;
 
+    protected String clazzName;
+
     protected WrapLista wrapLista;
 
     protected boolean costruttoreNecessitaAlmenoUnParametro = false;
+
     protected boolean istanzaValidaSubitoDopoCostruttore = false;
 
     //--nome della pagina
@@ -610,8 +616,8 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
                 Arguments.of("attrice", AETypeLista.attivitaSingolare),
                 Arguments.of("assiri", AETypeLista.nazionalitaSingolare),
-//                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
-//                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
+                //                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
+                //                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
                 Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
                 Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
                 Arguments.of("afghana", AETypeLista.nazionalitaSingolare),
@@ -780,6 +786,8 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(cognomeBackend);
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoWikiBackend);
+
+        clazzName = clazz != null ? clazz.getSimpleName() : NULL;
     }
 
     //    /**
@@ -833,18 +841,23 @@ public abstract class WikiTest extends AlgosTest {
     @DisplayName("1 - Costruttore base con/senza parametri")
     void costruttoreBase() {
         if (this.costruttoreNecessitaAlmenoUnParametro) {
-            System.out.println(("1 - Costruttore base con ALMENO un parametro"));
+            System.out.println(String.format("1 - Costruttore base new %s(xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
 
-            System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println(String.format("new %s() NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
+            System.out.println(String.format("new %s() NON funziona (dà errore)", clazzName));
+            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
         }
         else {
-            System.out.println(("1 - Costruttore base senza parametri"));
+            System.out.println(String.format("1 - Costruttore base new %s() SENZA parametri", clazzName));
             System.out.println(VUOTA);
 
-            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
+            System.out.println(String.format("La classe [%s] prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("new %s() funziona", clazzName));
+            System.out.println(String.format("new %s(xxx) NON funziona", clazzName));
+            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazzName));
             System.out.println("Questa classe NON accetta parametri nel costruttore");
         }
     }
@@ -857,49 +870,133 @@ public abstract class WikiTest extends AlgosTest {
         Object istanzaGenerica = null;
 
         if (this.costruttoreNecessitaAlmenoUnParametro) {
-            System.out.println(("2 - appContext.getBean con ALMENO un parametro"));
+            System.out.println(String.format("2 - appContext.getBean(%s.class, xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
-            System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazz != null ? clazz.getSimpleName() : VUOTA));
-            System.out.println("È obbligatorio almeno 1 parametro per il funzionamento.");
+
+            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
+            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
+            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
+            System.out.println(VUOTA);
 
             try {
                 istanzaGenerica = appContext.getBean(clazz);
             } catch (Exception unErrore) {
-                System.out.println(VUOTA);
                 logService.error(new WrapLog().exception(unErrore));
                 return;
             }
             assertNull(istanzaGenerica);
         }
         else {
-            System.out.println(("2 - appContext.getBean senza parametri"));
+            System.out.println(String.format("2 - appContext.getBean(%s.class) SENZA parametri", clazzName));
+            System.out.println(VUOTA);
+
+            System.out.println(String.format("La classe [%s] prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("appContext.getBean(%s.class) funziona", clazzName));
+            System.out.println(String.format("appContext.getBean(%s.class, xxx) NON funziona", clazzName));
+            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazzName));
+            System.out.println("Questa classe NON accetta parametri nel costruttore");
             System.out.println(VUOTA);
 
             try {
                 istanzaGenerica = appContext.getBean(clazz);
             } catch (Exception unErrore) {
-                System.out.println(VUOTA);
                 logService.error(new WrapLog().exception(unErrore));
                 return;
             }
             assertNotNull(istanzaGenerica);
-            System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazz.getSimpleName()));
-            System.out.println("Questa classe NON accetta parametri nel costruttore");
+
             if (istanzaGenerica instanceof AlgosBuilderPattern builderPattern) {
+                System.out.println(String.format("Questa classe (e altre) implementa il Design Pattern 'Builder'"));
+                System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
                 if (builderPattern.isValida()) {
                     System.out.println("Finito il ciclo del costruttore e il metodo @PostConstruct, l'istanza è pronta");
                     System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
                 }
                 else {
-                    System.out.println("Finito il ciclo del costruttore e il metodo @PostConstruct, l'istanza NON è ancora pronta");
-                    System.out.println("Mancano ulteriori regolazioni previste nel BuilderPattern");
+                    System.out.println("Dopo il ciclo del costruttore init() ed il metodo @PostConstruct(), l'istanza NON è ancora pronta");
+                    System.out.println("Mancano ulteriori regolazioni previste nel BuilderPattern per essere operativa");
                 }
             }
             else {
-                System.out.println("Questa classe implementa l'interfaccia di controllo AlgosBuilderPattern");
+                System.out.println("Questa classe NON implementa l'interfaccia di controllo AlgosBuilderPattern");
                 System.out.println("Non posso quindi sapere se l'istanza è valida/eseguibile subito dopo il costruttore");
             }
+        }
+    }
+
+    protected void fixSenzaParametroNelCostruttore(String nomeParametro, String nomeMetodo) {
+        System.out.println(String.format("5 - Costruttore senza parametro", nomeMetodo));
+        System.out.println(VUOTA);
+
+        System.out.println(String.format("Tentativo di invocare il metodo '%s'", nomeMetodo));
+        System.out.println(String.format("Istanza di [%s] costruita SENZA parametro", clazzName));
+        System.out.println(String.format("Non è possibile creare un'istanza della classe [%s] SENZA parametri", clazzName));
+        System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
+        System.out.println(String.format("È obbligatorio il '%s' nel costruttore.", nomeParametro));
+        System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo '%s' se l'istanza non è correttamente istanziata.", nomeMetodo));
+    }
+
+
+    protected void fixBeanStandard(final Object istanza, String nomeParametro, String metodiEseguibili, String metodoDaRegolare) {
+        System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazzName));
+        System.out.println(VUOTA);
+        System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro", clazzName, nomeParametro));
+
+        if (this.istanzaValidaSubitoDopoCostruttore) {
+            System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
+            System.out.println(String.format("Non fa nulla ma è pronta per '%s' o altri metodi", metodiEseguibili));
+            System.out.println(VUOTA);
+
+            assertNotNull(istanza);
+        }
+        else {
+            System.out.println("L'istanza NON è utilizzabile");
+            System.out.println("L'istanza NON è valida, perché occorrono ulteriori regolazioni del BuilderPattern");
+            System.out.println(String.format("Ad esempio la regolazione di %s", metodoDaRegolare));
+            System.out.println(VUOTA);
+
+            assertNotNull(istanza);
+        }
+    }
+
+    protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare) {
+        String tempo = "27 secondi";
+        System.out.println(String.format("7 - Costruttore con parametro", metodoDaEseguire));
+        System.out.println(VUOTA);
+        System.out.println(String.format("L'istanza della classe [%s] è stata creata col parametro '%s'", clazzName, nomeParametro));
+
+        if (this.istanzaValidaSubitoDopoCostruttore) {
+            System.out.println(String.format("Questa classe funziona anche SENZA ulteriori regolazioni già inserite in fixPreferenze()."));
+            System.out.println(String.format("L'invocazione del metodo '%s'' è stata eseguita con successo in %s", metodoDaEseguire, tempo));
+        }
+        else {
+            System.out.println(String.format("Questa classe funziona SOLO dopo la regolazione di '%s'.", metodiDaRegolare));
+            System.out.println(String.format("L'invocazione del metodo '%s'' NON è ammessa", metodoDaEseguire));
+        }
+    }
+
+    protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare, boolean valida, long inizio) {
+        String tempo = dateService.deltaTextEsatto(inizio);
+
+        System.out.println(String.format("7 - Costruttore con parametro", metodoDaEseguire));
+        System.out.println(VUOTA);
+        System.out.println(String.format("L'istanza della classe [%s] è stata creata col parametro '%s'", clazzName, nomeParametro));
+
+        if (this.istanzaValidaSubitoDopoCostruttore) {
+            System.out.println(String.format("Questa classe funziona anche SENZA ulteriori regolazioni già inserite in fixPreferenze()."));
+            if (valida) {
+                System.out.println(String.format("L'invocazione del metodo '%s'' è stata eseguita con successo in %s", metodoDaEseguire, tempo));
+            }
+            else {
+                System.out.println(String.format("L'invocazione del metodo '%s'' NON ha funzionato (mentre invece avrebbe dovuto)", metodoDaEseguire));
+                assertTrue(false);
+            }
+        }
+        else {
+            System.out.println(String.format("Questa classe funziona SOLO dopo la regolazione di '%s'.", metodiDaRegolare));
+            System.out.println(String.format("Il metodo '%s'' NON è stato invocato", metodoDaEseguire));
         }
     }
 
@@ -1413,19 +1510,6 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
-
-    protected void printLista(Lista listaEntityBean) {
-        if (listaEntityBean == null) {
-            return;
-        }
-
-        System.out.println(String.format("%s%s%s", "nomeLista", FORWARD, listaEntityBean.nomeLista));
-        System.out.println(String.format("%s%s%s", "typeLista", FORWARD, listaEntityBean.typeLista != null ? listaEntityBean.typeLista : OBBLIGATORIO));
-        System.out.println(String.format("%s%s%s", "typeLinkParagrafi", FORWARD, listaEntityBean.typeLinkParagrafi));
-        System.out.println(String.format("%s%s%s", "typeLinkCrono", FORWARD, listaEntityBean.typeLinkCrono));
-        System.out.println(String.format("%s%s%s", "paragrafoAltre", FORWARD, listaEntityBean.paragrafoAltre));
-        System.out.println(String.format("%s%s%s", "listaNomiSingoli", FORWARD, listaEntityBean.listaNomiSingoli != null ? listaEntityBean.listaNomiSingoli : FACOLTATIVO));
-    }
 
     protected void printWrap(WrapLista wrap, TextService textService) {
         if (wrap == null) {

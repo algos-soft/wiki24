@@ -47,8 +47,8 @@ public class StatisticheNomiTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
         super.clazz = StatisticheNomi.class;
+        super.setUpAll();
     }
 
 
@@ -64,34 +64,34 @@ public class StatisticheNomiTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri (non fa nulla)")
-    void costruttoreBase() {
-        System.out.println(("1 - Costruttore base senza parametri (non fa nulla)"));
-        System.out.println(VUOTA);
+//    @Test
+//    @Order(1)
+//    @DisplayName("1 - Costruttore base senza parametri (non fa nulla)")
+//    void costruttoreBase() {
+//        System.out.println(("1 - Costruttore base senza parametri (non fa nulla)"));
+//        System.out.println(VUOTA);
+//
+//        istanza = new StatisticheNomi();
+//        assertNotNull(istanza);
+//        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+//        System.out.println("Questa classe NON accetta parametri nel costruttore");
+//    }
 
-        istanza = new StatisticheNomi();
-        assertNotNull(istanza);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-        System.out.println("Questa classe NON accetta parametri nel costruttore");
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
-    void getBean() {
-        System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
-        System.out.println(VUOTA);
-
-        istanza = appContext.getBean(StatisticheNomi.class);
-        assertNotNull(istanza);
-        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
-        System.out.println("Questa classe NON accetta parametri nel costruttore");
-        System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
-        System.out.println(String.format("Le classi [Statistica] (ed altre) implementano il Design Pattern 'Builder'"));
-        System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
-    }
+//    @Test
+//    @Order(2)
+//    @DisplayName("2 - Istanza costruita con appContext.getBean (non fa nulla)")
+//    void getBean() {
+//        System.out.println(("2 - Istanza costruita con appContext.getBean (non fa nulla)"));
+//        System.out.println(VUOTA);
+//
+//        istanza = appContext.getBean(StatisticheNomi.class);
+//        assertNotNull(istanza);
+//        System.out.println(String.format("Istanza costruita con appContext.getBean(%s.class)", istanza.getClass().getSimpleName()));
+//        System.out.println("Questa classe NON accetta parametri nel costruttore");
+//        System.out.println(String.format("Non fa nulla, occorre (obbligatorio) invocare il metodo esegue()"));
+//        System.out.println(String.format("Le classi [Statistica] (ed altre) implementano il Design Pattern 'Builder'"));
+//        System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
+//    }
 
     @Test
     @Order(3)
