@@ -74,7 +74,7 @@ public class ListaAttivita extends Lista {
         super.typeLista = AETypeLista.attivitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_NAZIONALITA;
-        super.isIstanzaValidaPatternBuilder = false;
+        super.istanzaValida = false;
 
         if (typeLista == AETypeLista.attivitaPlurale) {
             AttPlurale attivitaPlurale = attPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));

@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.upload;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.service.*;
@@ -43,7 +44,7 @@ import java.util.*;
  * Necessita del login come bot <br>
  * Sovrascritta nelle sottoclassi concrete <br>
  */
-public abstract class Upload {
+public abstract class Upload implements AlgosBuilderPattern {
 
     protected static final String INFO_PAGINA_ATTIVITA = "Questa pagina di una singola '''attività''' è stata creata perché le relative voci biografiche superano le '''" + WPref.sogliaAttNazWiki.getInt() + "''' unità.";
 
@@ -334,8 +335,13 @@ public abstract class Upload {
         return this;
     }
 
+    @Override
+    public boolean isValida() {
+        return isIstanzaValidaPatternBuilder;
+    }
 
-    protected void fixMappaWrap() {
+    public boolean fixMappaWrap() {
+        return false;
     }
 
     public WResult esegue() {

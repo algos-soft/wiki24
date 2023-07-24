@@ -33,9 +33,9 @@ import java.util.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("upload")
-@DisplayName("Cognomi upload")
+@DisplayName("Upload Cognomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadCognomiTest extends WikiTest {
+public class UploadCognomiTest extends UploadTest {
 
 
     /**
@@ -53,7 +53,8 @@ public class UploadCognomiTest extends WikiTest {
     protected void setUpAll() {
         super.clazz = UploadCognomi.class;
         super.setUpAll();
-        assertNull(istanza);
+        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
 
@@ -69,105 +70,20 @@ public class UploadCognomiTest extends WikiTest {
     }
 
 
-
-//    @Test
-//    @Order(2)
-//    @DisplayName("2 - getBean base senza parametri")
-//    void getBean() {
-//        System.out.println(("2 - getBean base senza parametri"));
-//        System.out.println(VUOTA);
-//
-//        istanza = appContext.getBean(UploadCognomi.class);
-//
-//        System.out.println(String.format("getBean base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-//
-//        System.out.println(VUOTA);
-//        System.out.println("L'istanza è stata costruita USANDO SpringBoot.");
-//        System.out.println("PASSA da @PostConstruct().");
-//        System.out.println("@Autowired dovrebbe funzionare.");
-//        assertNotNull(istanza);
-//        assertNotNull(istanza.wikiTitleUpload);
-//        assertNotNull(istanza.wikiBackend);
-//    }
+    @Test
+    @Order(6)
+    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    void beanStandardCompleta() {
+        sorgente = "adriana";
+        super.fixBeanStandard(sorgente);
+    }
 
     @Test
-    @Order(3)
-    @DisplayName("3 - Upload test di un cognome con noToc")
-    void uploadNoToc() {
-        System.out.println("3 - Upload test di un cognome con noToc");
-        System.out.println(VUOTA);
-
-        sorgente = "Abbott";
-        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(String.format("Test del cognome %s", sorgente));
-        System.out.println(String.format("Lista di piccole dimensioni"));
-        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
-
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
-    }
-    @Test
-    @Order(4)
-    @DisplayName("4 - Upload test di un cognome con sottoPagina")
-    void uploadSottoPagina() {
-        System.out.println("4 - Upload test di un cognome con sottoPagina");
-        System.out.println(VUOTA);
-
-        sorgente = "Brown";
-        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().esegue();
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(String.format("Test del cognome %s", sorgente));
-        System.out.println(String.format("Lista con sottoPagina"));
-        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
-
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
-    }
-
-
-    @Test
-    @Order(11)
-    @DisplayName("11 - Upload test di una sottopagina da sola")
-    void uploadOnlySottoPagina() {
-        System.out.println("11 - Upload test di una sottopagina da sola");
-        System.out.println(VUOTA);
-
-        sorgente = "Brown";
-        sorgente2 = "Giocatori di football americano";
-        sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
-        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
-        List<WrapLista> lista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
-
-        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente3).sottoPagina(lista).test().esegue();
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(String.format("Test del cognome %s", sorgente));
-        System.out.println(String.format("Solo sottopagina - Probabilmente %d elementi", ottenutoIntero));
-        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
-
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
-    }
-
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+    @Order(7)
+    @DisplayName("7 - esegueConParametroNelCostruttore")
+    void listaBioSenzaTypeLista() {
+        sorgente = "adriana";
+        super.fixConParametroNelCostruttore(sorgente);
     }
 
 }

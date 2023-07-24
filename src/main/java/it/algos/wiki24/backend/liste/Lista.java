@@ -14,6 +14,7 @@ import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
+import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -149,6 +150,9 @@ public abstract class Lista implements AlgosBuilderPattern {
     @Autowired
     public AnnoBackend annoBackend;
 
+    @Autowired
+    public NomeBackend nomeBackend;
+
 
     //--property
     public List<String> listaNomiSingoli;
@@ -233,13 +237,16 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     public boolean usaIcona;
 
-    protected boolean isIstanzaValidaPatternBuilder = false;
+    protected boolean costruttoreValido = false;
+
+    protected boolean istanzaValida = false;
 
     protected boolean accettaCostruttoreSenzaParametri = false;
 
-    protected boolean costruttoreNecessitaUnParametro = false;
-
-    protected boolean costruttoreNonAccettaParametri = false;
+    protected CrudBackend backend;
+    //    protected boolean costruttoreNecessitaUnParametro = false;
+    //
+    //    protected boolean costruttoreNonAccettaParametri = false;
 
 
     /**
@@ -256,6 +263,7 @@ public abstract class Lista implements AlgosBuilderPattern {
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
+        this.checkValiditaCostruttore();
     }
 
 
@@ -267,6 +275,10 @@ public abstract class Lista implements AlgosBuilderPattern {
     protected void fixPreferenze() {
         this.usaIcona = WPref.usaSimboliCrono.is();
         this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
+    }
+
+    protected void checkValiditaCostruttore() {
+        this.costruttoreValido = backend != null ? backend.isExistByKey(nomeLista) : false;
     }
 
 
@@ -312,7 +324,11 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     @Override
     public boolean isValida() {
-        return isIstanzaValidaPatternBuilder;
+        return this.istanzaValida;
+    }
+
+    public boolean isCostruttoreValido() {
+        return this.costruttoreValido;
     }
 
     /**

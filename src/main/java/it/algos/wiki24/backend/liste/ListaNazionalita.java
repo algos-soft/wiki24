@@ -88,7 +88,7 @@ public class ListaNazionalita extends Lista {
         super.typeLista = AETypeLista.nazionalitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.isIstanzaValidaPatternBuilder = false;
+        super.istanzaValida = false;
     }
 
     /**

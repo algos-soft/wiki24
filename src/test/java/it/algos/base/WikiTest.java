@@ -927,7 +927,7 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     protected void fixSenzaParametroNelCostruttore(String nomeParametro, String nomeMetodo) {
-        System.out.println(String.format("5 - Costruttore senza parametro", nomeMetodo));
+        System.out.println(String.format("6 - Costruttore senza parametro", nomeMetodo));
         System.out.println(VUOTA);
 
         System.out.println(String.format("Tentativo di invocare il metodo '%s'", nomeMetodo));
@@ -940,7 +940,7 @@ public abstract class WikiTest extends AlgosTest {
 
 
     protected void fixBeanStandard(final Object istanza, String nomeParametro, String metodiEseguibili, String metodoDaRegolare) {
-        System.out.println(String.format("6 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazzName));
+        System.out.println(String.format("7 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazzName));
         System.out.println(VUOTA);
         System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro", clazzName, nomeParametro));
 
@@ -959,6 +959,12 @@ public abstract class WikiTest extends AlgosTest {
 
             assertNotNull(istanza);
         }
+    }
+
+    protected void fixBeanStandard(final Object istanza, String nomeParametro, String valore) {
+        System.out.println(String.format("7 - Istanza NON valida costruita col parametro '%s' nel costruttore'", nomeParametro));
+        System.out.println(VUOTA);
+        System.out.println(String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName));
     }
 
     protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare) {
@@ -980,7 +986,7 @@ public abstract class WikiTest extends AlgosTest {
     protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare, boolean valida, long inizio) {
         String tempo = dateService.deltaTextEsatto(inizio);
 
-        System.out.println(String.format("7 - Costruttore con parametro", metodoDaEseguire));
+        System.out.println(String.format("8 - Costruttore con parametro", metodoDaEseguire));
         System.out.println(VUOTA);
         System.out.println(String.format("L'istanza della classe [%s] è stata creata col parametro '%s'", clazzName, nomeParametro));
 

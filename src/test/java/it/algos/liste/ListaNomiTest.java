@@ -8,6 +8,7 @@ import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 
@@ -61,6 +62,7 @@ public class ListaNomiTest extends ListeTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaNomi.class;
+        super.backendClazzName= NomeBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -80,16 +82,16 @@ public class ListaNomiTest extends ListeTest {
 
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "lorenzo";
+        sorgente = "pipponebelloxyz";
         super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(7)
-    @DisplayName("7 - esegueConParametroNelCostruttore")
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
     void esegueConParametroNelCostruttore() {
         sorgente = "lorenzo";
         super.fixConParametroNelCostruttore(sorgente);

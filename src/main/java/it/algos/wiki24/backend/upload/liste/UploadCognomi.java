@@ -70,10 +70,12 @@ public class UploadCognomi extends Upload {
 
 
     @Override
-    protected void fixMappaWrap() {
+    public boolean fixMappaWrap() {
         if (!isSottopagina) {
             mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).typeLinkParagrafi(typeLinkParagrafi).mappaWrap();
         }
+
+        return false;
     }
 
 

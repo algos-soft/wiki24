@@ -30,7 +30,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadNomi extends UploadListe  {
+public class UploadNomi extends UploadListe {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -79,11 +79,14 @@ public class UploadNomi extends UploadListe  {
 
 
     @Override
-    protected void fixMappaWrap() {
+    public boolean fixMappaWrap() {
+        if (!isIstanzaValidaPatternBuilder) {
+            return false;
+        }
+
         if (!isSottopagina) {
             mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLinkParagrafi(typeLinkParagrafi).mappaWrap();
         }
-
 
         mappaWrap = appContext
                 .getBean(ListaNomi.class, nomeLista)
@@ -91,6 +94,8 @@ public class UploadNomi extends UploadListe  {
                 .typeLinkCrono(AETypeLink.linkVoce)
                 .icona(false)
                 .mappaWrap();
+
+        return true;
     }
 
     @Override

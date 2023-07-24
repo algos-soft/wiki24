@@ -40,7 +40,6 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("production")
 @Tag("upload")
 @DisplayName("Upload Nomi")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -88,28 +87,13 @@ public class UploadNomiTest extends UploadTest {
         istanza = null;
     }
 
-    @Test
-    @Order(5)
-    @DisplayName("5 - esegueSenzaParametroNelCostruttore")
-    void esegueSenzaParametroNelCostruttore() {
-        try {
-            appContext.getBean(UploadNomi.class).esegue();
-        } catch (Exception unErrore) {
-            super.fixSenzaParametroNelCostruttore();
-        }
-    }
-
 
     @Test
     @Order(6)
     @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
         sorgente = "adriana";
-        istanza = appContext.getBean(UploadNomi.class, sorgente);
-
-        super.fixBeanStandard(istanza);
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printUpload(istanza);
+        super.fixBeanStandard(sorgente);
     }
 
     @Test
@@ -117,17 +101,7 @@ public class UploadNomiTest extends UploadTest {
     @DisplayName("7 - esegueConParametroNelCostruttore")
     void listaBioSenzaTypeLista() {
         sorgente = "adriana";
-        Object obj = null;
-        try {
-            obj = appContext.getBean(UploadNomi.class, sorgente).esegue();
-            assertNotNull(obj);
-        } catch (Exception unErrore) {
-            assertNull(obj);
-            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
-            return;
-        }
-
-        super.fixConParametroNelCostruttore();
+        super.fixConParametroNelCostruttore(sorgente);
     }
 
 

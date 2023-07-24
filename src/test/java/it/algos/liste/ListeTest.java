@@ -26,6 +26,15 @@ public abstract class ListeTest extends WikiTest {
 
     protected static int MAX = 5;
 
+    protected static String PARAMETRO = "nomeLista";
+
+    protected static String CHECK = "checkValidita()";
+
+    protected static String FUNZIONE = "isExistByKey";
+
+    protected String backendClazzName;
+
+
     protected void setUpAll() {
         super.setUpAll();
     }
@@ -33,7 +42,43 @@ public abstract class ListeTest extends WikiTest {
 
     @Test
     @Order(5)
-    @DisplayName("5 - esegueSenzaParametroNelCostruttore")
+    @DisplayName("5 - checkParametroNelCostruttore")
+    void checkParametroNelCostruttore() {
+        sorgente = "nonEsiste";
+
+        System.out.println(String.format("5 - checkParametroNelCostruttore"));
+        System.out.println(VUOTA);
+        System.out.println(String.format("La classe [%s] controlla la validità del parametro '%s' usato nel costruttore", clazzName, PARAMETRO));
+        System.out.println(String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, CHECK));
+        System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, FUNZIONE, sorgente));
+
+        fixCheckParametroNelCostruttore(sorgente);
+    }
+
+
+    void fixCheckParametroNelCostruttore(String valore) {
+        Lista istanza = null;
+        boolean isCostruttoreValido;
+
+        try {
+            istanza = (Lista) appContext.getBean(clazz, valore);
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
+        }
+        assertNotNull(istanza);
+        isCostruttoreValido = istanza.isCostruttoreValido();
+
+        if (isCostruttoreValido) {
+            System.out.println(String.format("Istanza valida col valore accettabile [%s] del parametro '%s'", valore, PARAMETRO));
+        }
+        else {
+            System.out.println(String.format("Istanza NON valida perché il valore [%s] del parametro '%s' non è previsto", valore, PARAMETRO));
+        }
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("6 - esegueSenzaParametroNelCostruttore")
     void esegueSenzaParametroNelCostruttore() {
         try {
             ((Lista) appContext.getBean(clazz)).listaBio();
@@ -42,12 +87,25 @@ public abstract class ListeTest extends WikiTest {
         }
     }
 
+    protected void fixBeanStandard(final String sorgente) {
+        Lista istanza = (Lista) appContext.getBean(clazz, sorgente);
+        if (istanza.isCostruttoreValido()) {
+            super.fixBeanStandard(istanza, "nomeLista", "listaBio(), listaWrap() e mappaWrap()", "typeLista");
+        }
+        else {
+            super.fixBeanStandard(istanza,"nomeLista",  sorgente);
+        }
+
+        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
+        printLista(istanza);
+    }
+
     protected void fixConParametroNelCostruttore(String sorgente) {
         long inizio = System.currentTimeMillis();
         List<Bio> listaBio = null;
         Lista istanza = null;
         boolean istanzaEffettivamenteValida;
-        boolean listaBioCreata = false;
+        boolean metodoEseguito = false;
 
         try {
             istanza = (Lista) appContext.getBean(clazz, sorgente);
@@ -63,7 +121,7 @@ public abstract class ListeTest extends WikiTest {
             try {
                 listaBio = istanza.listaBio();
                 assertNotNull(listaBio);
-                listaBioCreata = true;
+                metodoEseguito = true;
             } catch (Exception unErrore) {
                 assertNull(listaBio);
                 logService.error(new WrapLog().exception(new AlgosException(unErrore)));
@@ -77,14 +135,7 @@ public abstract class ListeTest extends WikiTest {
         System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
         System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanzaValidaSubitoDopoCostruttore));
         System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, istanzaEffettivamenteValida));
-        System.out.println(String.format("listaBioCreata%s%s", FORWARD, listaBioCreata));
-    }
-
-    protected void fixBeanStandard(final String sorgente) {
-        Lista istanza = (Lista) appContext.getBean(clazz, sorgente);
-        super.fixBeanStandard(istanza, "nomeLista", "listaBio(), listaWrap() e mappaWrap()", "typeLista");
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printLista(istanza);
+        System.out.println(String.format("metodoEseguito%s%s", FORWARD, metodoEseguito));
     }
 
 
@@ -186,11 +237,11 @@ public abstract class ListeTest extends WikiTest {
             return;
         }
         message = String.format("Valori STANDARD per un'istanza di [%s], creata con il solo '%s'", listaEntityBean.getClass().getSimpleName(), "nomeLista");
-        if (listaEntityBean.isValida()) {
+        if (listaEntityBean.isCostruttoreValido()) {
             message += String.format("%sPronta per essere utilizzata.", SEP);
         }
         else {
-            message += String.format("%sNon ancora utilizzabile.", SEP);
+            message += String.format("%sNon utilizzabile.", SEP);
         }
         System.out.println(message);
         System.out.println(VUOTA);

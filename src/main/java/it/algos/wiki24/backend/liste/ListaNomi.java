@@ -6,8 +6,6 @@ import it.algos.wiki24.backend.enumeration.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
-import javax.annotation.*;
-
 /**
  * Project wiki24
  * Created by Algos
@@ -38,12 +36,13 @@ public class ListaNomi extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.backend = super.nomeBackend;
         super.nomeLista = textService.primaMaiuscola(nomeLista);
         super.titoloPagina = wikiUtility.wikiTitleNomi(nomeLista);
         super.typeLista = AETypeLista.nomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.isIstanzaValidaPatternBuilder = true;
+        super.istanzaValida = true;
     }
 
 

@@ -1,7 +1,6 @@
 package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -53,7 +52,7 @@ public class ListaGiorni extends Lista {
 
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
-        super.isIstanzaValidaPatternBuilder = false;
+        super.istanzaValida = false;
     }
 
     /**

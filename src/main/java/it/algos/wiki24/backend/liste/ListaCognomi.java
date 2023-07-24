@@ -7,7 +7,6 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
-import javax.annotation.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -47,7 +46,7 @@ public class ListaCognomi extends Lista {
         super.typeLista = AETypeLista.cognomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.isIstanzaValidaPatternBuilder = true;
+        super.istanzaValida = true;
     }
 
 

@@ -43,7 +43,7 @@ public class ListaAnni extends Lista {
 
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_GIORNO;
-        super.isIstanzaValidaPatternBuilder = false;
+        super.istanzaValida = false;
     }
 
     /**
