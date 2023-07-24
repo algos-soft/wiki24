@@ -32,8 +32,6 @@ public abstract class ListeTest extends WikiTest {
 
     protected static String FUNZIONE = "isExistByKey";
 
-    protected String backendClazzName;
-
 
     protected void setUpAll() {
         super.setUpAll();
@@ -93,7 +91,7 @@ public abstract class ListeTest extends WikiTest {
             super.fixBeanStandard(istanza, "nomeLista", "listaBio(), listaWrap() e mappaWrap()", "typeLista");
         }
         else {
-            super.fixBeanStandard(istanza,"nomeLista",  sorgente);
+            super.fixBeanStandardNo("nomeLista", "nomeLista", CHECK, FUNZIONE, sorgente);
         }
 
         assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
@@ -131,7 +129,7 @@ public abstract class ListeTest extends WikiTest {
         super.fixConParametroNelCostruttore("nomeLista", "listaBio", "nascita() o morte()", istanzaEffettivamenteValida, inizio);
 
         System.out.println(VUOTA);
-        System.out.println("Debug");
+        System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
         System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
         System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanzaValidaSubitoDopoCostruttore));
         System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, istanzaEffettivamenteValida));
@@ -237,7 +235,7 @@ public abstract class ListeTest extends WikiTest {
             return;
         }
         message = String.format("Valori STANDARD per un'istanza di [%s], creata con il solo '%s'", listaEntityBean.getClass().getSimpleName(), "nomeLista");
-        if (listaEntityBean.isCostruttoreValido()) {
+        if (listaEntityBean.isValida()) {
             message += String.format("%sPronta per essere utilizzata.", SEP);
         }
         else {
@@ -246,7 +244,7 @@ public abstract class ListeTest extends WikiTest {
         System.out.println(message);
         System.out.println(VUOTA);
 
-        System.out.println(String.format("%s%s%s", "nomeLista: [fissato col costruttore]", FORWARD, listaEntityBean.nomeLista));
+        System.out.println(String.format("%s%s%s", "nomeLista: [fissato nel costruttore]", FORWARD, listaEntityBean.nomeLista));
         System.out.println(String.format("%s%s%s", "typeLista: [regolato in fixPreferenze()]", FORWARD, listaEntityBean.typeLista != null ? listaEntityBean.typeLista : OBBLIGATORIO));
         System.out.println(String.format("%s%s%s", "typeLinkParagrafi: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, listaEntityBean.typeLinkParagrafi));
         System.out.println(String.format("%s%s%s", "typeLinkCrono: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, listaEntityBean.typeLinkCrono));

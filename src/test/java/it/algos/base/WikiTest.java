@@ -228,6 +228,7 @@ public abstract class WikiTest extends AlgosTest {
     protected String clazzName;
 
     protected WrapLista wrapLista;
+    protected String backendClazzName;
 
     protected boolean costruttoreNecessitaAlmenoUnParametro = false;
 
@@ -587,46 +588,8 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    //--nome attività
-    //--typeLista
-    protected static Stream<Arguments> ATTIVITA() {
-        return Stream.of(
-                Arguments.of(VUOTA, AETypeLista.listaBreve),
-                Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
-                Arguments.of("soprano", AETypeLista.giornoNascita),
-                //                Arguments.of("soprano", AETypeLista.attivitaSingolare),
-                Arguments.of("abate", AETypeLista.attivitaSingolare),
-                Arguments.of("badessa", AETypeLista.attivitaSingolare),
-                Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
-                //                Arguments.of("bassisti", AETypeLista.attivitaPlurale),
-                Arguments.of("allevatori", AETypeLista.attivitaPlurale),
-                Arguments.of("agenti segreti", AETypeLista.attivitaPlurale),
-                Arguments.of("romanziere", AETypeLista.attivitaSingolare),
-                //                Arguments.of("dogi", AETypeLista.attivitaPlurale),
-                Arguments.of("accademici", AETypeLista.attivitaPlurale)
-        );
-    }
 
 
-    //--nome nazionalità
-    //--typeLista
-    protected static Stream<Arguments> NAZIONALITA() {
-        return Stream.of(
-                Arguments.of(VUOTA, AETypeLista.listaBreve),
-                Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
-                Arguments.of("attrice", AETypeLista.attivitaSingolare),
-                Arguments.of("assiri", AETypeLista.nazionalitaSingolare),
-                //                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
-                //                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
-                Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghana", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghani", AETypeLista.nazionalitaPlurale),
-                Arguments.of("mongoli", AETypeLista.nazionalitaSingolare),
-                Arguments.of("assiri", AETypeLista.nazionalitaPlurale),
-                Arguments.of("capoverdiani", AETypeLista.nazionalitaPlurale)
-        );
-    }
 
     //--nome singolarePlurale
     //--esiste
@@ -883,7 +846,7 @@ public abstract class WikiTest extends AlgosTest {
             try {
                 istanzaGenerica = appContext.getBean(clazz);
             } catch (Exception unErrore) {
-                logService.error(new WrapLog().exception(unErrore));
+                logService.warn(new WrapLog().exception(unErrore));
                 return;
             }
             assertNull(istanzaGenerica);
@@ -961,10 +924,13 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
-    protected void fixBeanStandard(final Object istanza, String nomeParametro, String valore) {
+    protected void fixBeanStandardNo(String nomeParametro, String valore, String check, String funzione,String sorgente) {
         System.out.println(String.format("7 - Istanza NON valida costruita col parametro '%s' nel costruttore'", nomeParametro));
         System.out.println(VUOTA);
         System.out.println(String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName));
+
+        System.out.println(String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, check));
+        System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, funzione, sorgente));
     }
 
     protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare) {

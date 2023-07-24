@@ -41,6 +41,7 @@ public class ListaCognomi extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.backend = super.cognomeBackend;
         super.nomeLista = textService.primaMaiuscola(nomeLista);
         super.titoloPagina = wikiUtility.wikiTitleCognomi(nomeLista);
         super.typeLista = AETypeLista.cognomi;

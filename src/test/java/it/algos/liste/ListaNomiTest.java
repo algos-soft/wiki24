@@ -44,7 +44,7 @@ public class ListaNomiTest extends ListeTest {
     private ListaNomi istanza;
 
     //--nome
-    protected static Stream<Arguments> NOMI() {
+    protected static Stream<Arguments> NOMI_LISTA() {
         return Stream.of(
                 Arguments.of(VUOTA),
                 //                Arguments.of("Aaron"),
@@ -62,7 +62,7 @@ public class ListaNomiTest extends ListeTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaNomi.class;
-        super.backendClazzName= NomeBackend.class.getSimpleName();
+        super.backendClazzName = NomeBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -85,7 +85,7 @@ public class ListaNomiTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "pipponebelloxyz";
+        sorgente = "mario";
         super.fixBeanStandard(sorgente);
     }
 
@@ -99,7 +99,7 @@ public class ListaNomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
     void listaBio(final String nomeLista) {
@@ -112,7 +112,7 @@ public class ListaNomiTest extends ListeTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
     void listaWrapDidascalie(final String nomeLista) {
@@ -126,7 +126,7 @@ public class ListaNomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
     void listaDidascalie(final String nomeLista) {
@@ -140,7 +140,7 @@ public class ListaNomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
     void mappaWrap(final String nomeLista) {
@@ -153,7 +153,7 @@ public class ListaNomiTest extends ListeTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
     void mappaWrapDidascalie(final String nomeLista) {
@@ -166,7 +166,7 @@ public class ListaNomiTest extends ListeTest {
     }
 
     //    @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(121)
     @DisplayName("121 - WrapLista ALTERNATIVA con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true")
     //--nome
@@ -193,7 +193,7 @@ public class ListaNomiTest extends ListeTest {
     }
 
     //    @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(122)
     @DisplayName("122 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkLista e usaIcona=true")
     //--nome
@@ -221,7 +221,7 @@ public class ListaNomiTest extends ListeTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(123)
     @DisplayName("123- WrapLista ALTERNATIVA con linkParagrafi=linkLista e linkCrono=linkLista e usaIcona=true")
     //--nome
@@ -249,7 +249,7 @@ public class ListaNomiTest extends ListeTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "NOMI")
+    @MethodSource(value = "NOMI_LISTA")
     @Order(124)
     @DisplayName("124- WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false")
     //--nome

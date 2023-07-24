@@ -13,6 +13,8 @@ import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.packages.cognome.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.service.*;
@@ -92,6 +94,9 @@ public abstract class Lista implements AlgosBuilderPattern {
     @Autowired
     public AttSingolareBackend attSingolareBackend;
 
+    @Autowired
+    public LogService logService;
+
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
@@ -133,6 +138,8 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+    @Autowired
+    public GiornoWikiBackend giornoWikiBackend;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -152,6 +159,8 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     @Autowired
     public NomeBackend nomeBackend;
+    @Autowired
+    public CognomeBackend cognomeBackend;
 
 
     //--property
@@ -278,7 +287,14 @@ public abstract class Lista implements AlgosBuilderPattern {
     }
 
     protected void checkValiditaCostruttore() {
-        this.costruttoreValido = backend != null ? backend.isExistByKey(nomeLista) : false;
+        if (backend != null) {
+            this.costruttoreValido = backend.isExistByKey(nomeLista);
+        }
+        else {
+            String message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
+            logService.error(new WrapLog().message(message));
+            this.costruttoreValido = false;
+        }
     }
 
 

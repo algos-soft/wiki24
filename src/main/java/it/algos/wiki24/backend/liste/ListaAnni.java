@@ -41,6 +41,7 @@ public class ListaAnni extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.backend = super.annoWikiBackend;
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_GIORNO;
         super.istanzaValida = false;

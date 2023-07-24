@@ -7,6 +7,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -48,7 +49,7 @@ public class ListaCognomiTest extends ListeTest {
     private ListaCognomi istanza;
 
     //--cognome
-    protected static Stream<Arguments> COGNOMI() {
+    protected static Stream<Arguments> COGNOMI_LISTA() {
         return Stream.of(
                 Arguments.of(VUOTA),
                 Arguments.of("Battaglia"),
@@ -68,6 +69,7 @@ public class ListaCognomiTest extends ListeTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaCognomi.class;
+        super.backendClazzName = CognomeBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -87,24 +89,24 @@ public class ListaCognomiTest extends ListeTest {
 
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "Gomez";
+        sorgente = "Brambilla";
         super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(7)
-    @DisplayName("7 - esegueConParametroNelCostruttore")
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
     void esegueConParametroNelCostruttore() {
-        sorgente = "Gomez";
+        sorgente = "Rossi";
         super.fixConParametroNelCostruttore(sorgente);
     }
 
 
     @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
     void listaBio(final String sorgente) {
@@ -118,7 +120,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
     void listaWrapDidascalie(final String sorgente) {
@@ -131,7 +133,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
     void listaDidascalie(final String sorgente) {
@@ -144,7 +146,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
     void mappaWrap(final String sorgente) {
@@ -156,7 +158,7 @@ public class ListaCognomiTest extends ListeTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
     void mappaWrapDidascalie(final String nomeLista) {
@@ -169,7 +171,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(121)
     @DisplayName("121 - WrapLista ALTERNATIVA con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true")
     //--cognome
@@ -196,7 +198,7 @@ public class ListaCognomiTest extends ListeTest {
     }
 
     //    @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(122)
     @DisplayName("122 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkLista e usaIcona=true")
     //--cognome
@@ -224,7 +226,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(123)
     @DisplayName("123- WrapLista ALTERNATIVA con linkParagrafi=linkLista e linkCrono=linkLista e usaIcona=true")
     //--cognome
@@ -252,7 +254,7 @@ public class ListaCognomiTest extends ListeTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "COGNOMI")
+    @MethodSource(value = "COGNOMI_LISTA")
     @Order(124)
     @DisplayName("124- WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false")
     //--cognome

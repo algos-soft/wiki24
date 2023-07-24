@@ -30,7 +30,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("liste")
+//@Tag("liste")
 @DisplayName("Lista Attivita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaAttivitaTest extends ListeTest {
@@ -40,6 +40,25 @@ public class ListaAttivitaTest extends ListeTest {
      */
     private ListaAttivita istanza;
 
+    //--nome attività
+    //--typeLista
+    protected static Stream<Arguments> ATTIVITA_LISTA() {
+        return Stream.of(
+                Arguments.of(VUOTA, AETypeLista.listaBreve),
+                Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
+                Arguments.of("soprano", AETypeLista.giornoNascita),
+                //                Arguments.of("soprano", AETypeLista.attivitaSingolare),
+                Arguments.of("abate", AETypeLista.attivitaSingolare),
+                Arguments.of("badessa", AETypeLista.attivitaSingolare),
+                Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
+                //                Arguments.of("bassisti", AETypeLista.attivitaPlurale),
+                Arguments.of("allevatori", AETypeLista.attivitaPlurale),
+                Arguments.of("agenti segreti", AETypeLista.attivitaPlurale),
+                Arguments.of("romanziere", AETypeLista.attivitaSingolare),
+                //                Arguments.of("dogi", AETypeLista.attivitaPlurale),
+                Arguments.of("accademici", AETypeLista.attivitaPlurale)
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -49,6 +68,7 @@ public class ListaAttivitaTest extends ListeTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaAttivita.class;
+        super.backendClazzName = AttPluraleBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
@@ -68,57 +88,24 @@ public class ListaAttivitaTest extends ListeTest {
 
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
         sorgente = "accademici";
         super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(7)
-    @DisplayName("7 - esegueConParametroNelCostruttore")
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
     void esegueConParametroNelCostruttore() {
-        sorgente = "accademici";
+        sorgente = "scrittori";
         super.fixConParametroNelCostruttore(sorgente);
     }
 
 
-    //    @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
-    @Order(113)
-    @DisplayName("113 - Lista bio")
-    //--nome attivita
-    //--typeLista
-    void listaBio2(final String nomeAttivita, final AETypeLista type) {
-        sorgente = nomeAttivita;
-        if (textService.isEmpty(nomeAttivita)) {
-            return;
-        }
-
-        listBio = switch (type) {
-            case attivitaSingolare -> appContext.getBean(ListaAttivita.class, sorgente).singolare().listaBio();
-            case attivitaPlurale -> appContext.getBean(ListaAttivita.class, sorgente).listaBio();
-            default -> null;
-        };
-        System.out.println("113- Lista bio");
-
-        if (listBio != null && listBio.size() > 0) {
-            message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), type.getTagLower(), sorgente);
-            System.out.println(message);
-            this.printAttivitaSingole(type, sorgente);
-            System.out.println(VUOTA);
-            printBioLista(listBio);
-        }
-        else {
-            message = "La listBio è nulla";
-            System.out.println(message);
-        }
-    }
-
-
     @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
+    @MethodSource(value = "ATTIVITA_LISTA")
     @Order(10)
     @DisplayName("10 - Lista bio BASE")
     void listaBio(final String nomeLista, final AETypeLista type) {
@@ -131,7 +118,7 @@ public class ListaAttivitaTest extends ListeTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
+    @MethodSource(value = "ATTIVITA_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
     void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
@@ -145,7 +132,7 @@ public class ListaAttivitaTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
+    @MethodSource(value = "ATTIVITA_LISTA")
     @Order(30)
     @DisplayName("30 - Didascalie STANDARD")
     void listaDidascalie(final String nomeLista, final AETypeLista type) {
@@ -159,7 +146,7 @@ public class ListaAttivitaTest extends ListeTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
+    @MethodSource(value = "ATTIVITA_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
     void mappaWrap(final String nomeLista, final AETypeLista type) {
@@ -172,7 +159,7 @@ public class ListaAttivitaTest extends ListeTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "ATTIVITA")
+    @MethodSource(value = "ATTIVITA_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
     void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
@@ -185,51 +172,85 @@ public class ListaAttivitaTest extends ListeTest {
     }
 
 
-    //    @Test
-    @Order(117)
-    @DisplayName("117 - nobiliTedeschi")
-    void nobiliTedeschi() {
-        System.out.println("117 - nobiliTedeschi");
-        sorgente = "nobili";
-        sorgente2 = "Tedeschi";
-        int numVoci;
-        List<WrapLista> listaSotto;
 
-        //        mappaWrap = appContext.getBean(ListaAttivita.class).plurale(sorgente).mappaWrap();
 
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            listWrapLista = mappaWrap.get(sorgente2);
-            numVoci = listWrapLista.size();
-            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s", numVoci, sorgente, sorgente2);
-            System.out.println(message);
-
-            //            listaSotto = new ArrayList<>();
-            //
-            //            for (WrapLista wrap : listWrapLista) {
-            //                stringa;
-            //            }
-
-            sorgente3 = "C";
-            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
-            numVoci = listaSotto.size();
-            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printSub(listaSotto);
-
-            sorgente3 = "E";
-            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
-            numVoci = listaSotto.size();
-            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
-            System.out.println(VUOTA);
-            System.out.println(message);
-            printSub(listaSotto);
-        }
-        else {
-            message = "La mappa è nulla";
-            System.out.println(message);
-        }
-    }
+//    //    @ParameterizedTest
+//    @MethodSource(value = "ATTIVITA")
+//    @Order(113)
+//    @DisplayName("113 - Lista bio")
+//    //--nome attivita
+//    //--typeLista
+//    void listaBio2(final String nomeAttivita, final AETypeLista type) {
+//        sorgente = nomeAttivita;
+//        if (textService.isEmpty(nomeAttivita)) {
+//            return;
+//        }
+//
+//        listBio = switch (type) {
+//            case attivitaSingolare -> appContext.getBean(ListaAttivita.class, sorgente).singolare().listaBio();
+//            case attivitaPlurale -> appContext.getBean(ListaAttivita.class, sorgente).listaBio();
+//            default -> null;
+//        };
+//        System.out.println("113- Lista bio");
+//
+//        if (listBio != null && listBio.size() > 0) {
+//            message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), type.getTagLower(), sorgente);
+//            System.out.println(message);
+//            this.printAttivitaSingole(type, sorgente);
+//            System.out.println(VUOTA);
+//            printBioLista(listBio);
+//        }
+//        else {
+//            message = "La listBio è nulla";
+//            System.out.println(message);
+//        }
+//    }
+//
+//    //    @Test
+//    @Order(117)
+//    @DisplayName("117 - nobiliTedeschi")
+//    void nobiliTedeschi() {
+//        System.out.println("117 - nobiliTedeschi");
+//        sorgente = "nobili";
+//        sorgente2 = "Tedeschi";
+//        int numVoci;
+//        List<WrapLista> listaSotto;
+//
+//        //        mappaWrap = appContext.getBean(ListaAttivita.class).plurale(sorgente).mappaWrap();
+//
+//        if (mappaWrap != null && mappaWrap.size() > 0) {
+//            listWrapLista = mappaWrap.get(sorgente2);
+//            numVoci = listWrapLista.size();
+//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s", numVoci, sorgente, sorgente2);
+//            System.out.println(message);
+//
+//            //            listaSotto = new ArrayList<>();
+//            //
+//            //            for (WrapLista wrap : listWrapLista) {
+//            //                stringa;
+//            //            }
+//
+//            sorgente3 = "C";
+//            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
+//            numVoci = listaSotto.size();
+//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printSub(listaSotto);
+//
+//            sorgente3 = "E";
+//            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
+//            numVoci = listaSotto.size();
+//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
+//            System.out.println(VUOTA);
+//            System.out.println(message);
+//            printSub(listaSotto);
+//        }
+//        else {
+//            message = "La mappa è nulla";
+//            System.out.println(message);
+//        }
+//    }
 
 
     private boolean valido(final String nomeAttivita, final AETypeLista type) {

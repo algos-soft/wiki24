@@ -108,7 +108,7 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(message);
         System.out.println(VUOTA);
 
-        System.out.println(String.format("%s%s%s", "nomeLista: [fissato col costruttore]", FORWARD, uploadEntityBean.nomeLista));
+        System.out.println(String.format("%s%s%s", "nomeLista: [fissato nel costruttore]", FORWARD, uploadEntityBean.nomeLista));
         System.out.println(String.format("%s%s%s", "wikiTitleUpload: [creato in automatico]", FORWARD, uploadEntityBean.wikiTitleUpload));
         System.out.println(String.format("%s%s%s", "summary: [regolato in fixPreferenze()]", FORWARD, uploadEntityBean.summary));
         System.out.println(String.format("%s%s%s", "typeLista: [regolato in fixPreferenze()]", FORWARD, uploadEntityBean.typeLista));
