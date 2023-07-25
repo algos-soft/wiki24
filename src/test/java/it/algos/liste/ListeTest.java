@@ -86,12 +86,17 @@ public abstract class ListeTest extends WikiTest {
     }
 
     protected void fixBeanStandard(final String sorgente) {
+        String nomeParametro = "nomeLista";
+        String metodiEseguibili = "listaBio(), listaWrap() e mappaWrap()";
+        String metodoDaRegolare = "typeLista()";
+        String metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), nascita(), morte()";
+
         Lista istanza = (Lista) appContext.getBean(clazz, sorgente);
         if (istanza.isCostruttoreValido()) {
-            super.fixBeanStandard(istanza, "nomeLista", "listaBio(), listaWrap() e mappaWrap()", "typeLista");
+            super.fixBeanStandard(istanza, nomeParametro, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
         }
         else {
-            super.fixBeanStandardNo("nomeLista", "nomeLista", CHECK, FUNZIONE, sorgente);
+            super.fixBeanStandardNo(nomeParametro, nomeParametro, CHECK, FUNZIONE, sorgente, metodiBuilderPattern);
         }
 
         assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
@@ -138,7 +143,10 @@ public abstract class ListeTest extends WikiTest {
 
 
     protected void fixConParametroNelCostruttore() {
-        super.fixConParametroNelCostruttore("nomeLista", "listaBio", "nascita() o morte()");
+        String nomeParametro = "nomeLista";
+        String metodiDaEseguire = "listaBio()";
+        String metodoDaRegolare = "nascita() o morte()";
+        super.fixConParametroNelCostruttore(nomeParametro, "listaBio", metodoDaRegolare);
     }
 
     protected void fixListaBio(final String sorgente, final List<Bio> listBio) {

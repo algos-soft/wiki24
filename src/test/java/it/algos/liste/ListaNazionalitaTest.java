@@ -33,7 +33,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("liste")
+@Tag("liste")
 @DisplayName("Lista Nazionalita")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaNazionalitaTest extends ListeTest {

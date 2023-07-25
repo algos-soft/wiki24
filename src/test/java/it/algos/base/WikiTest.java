@@ -228,6 +228,7 @@ public abstract class WikiTest extends AlgosTest {
     protected String clazzName;
 
     protected WrapLista wrapLista;
+
     protected String backendClazzName;
 
     protected boolean costruttoreNecessitaAlmenoUnParametro = false;
@@ -588,9 +589,6 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-
-
-
     //--nome singolarePlurale
     //--esiste
     protected static Stream<Arguments> ATTIVITA_TRUE() {
@@ -902,7 +900,7 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    protected void fixBeanStandard(final Object istanza, String nomeParametro, String metodiEseguibili, String metodoDaRegolare) {
+    protected void fixBeanStandard(final Object istanza, String nomeParametro, String metodiEseguibili, String metodoDaRegolare, String metodiBuilderPattern) {
         System.out.println(String.format("7 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazzName));
         System.out.println(VUOTA);
         System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro", clazzName, nomeParametro));
@@ -910,6 +908,7 @@ public abstract class WikiTest extends AlgosTest {
         if (this.istanzaValidaSubitoDopoCostruttore) {
             System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
             System.out.println(String.format("Non fa nulla ma è pronta per '%s' o altri metodi", metodiEseguibili));
+            System.out.println(String.format("BuilderPattern%s%s", FORWARD, metodiBuilderPattern));
             System.out.println(VUOTA);
 
             assertNotNull(istanza);
@@ -918,13 +917,14 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println("L'istanza NON è utilizzabile");
             System.out.println("L'istanza NON è valida, perché occorrono ulteriori regolazioni del BuilderPattern");
             System.out.println(String.format("Ad esempio la regolazione di %s", metodoDaRegolare));
+            System.out.println(String.format("BuilderPattern%s%s", FORWARD, metodiBuilderPattern));
             System.out.println(VUOTA);
 
             assertNotNull(istanza);
         }
     }
 
-    protected void fixBeanStandardNo(String nomeParametro, String valore, String check, String funzione,String sorgente) {
+    protected void fixBeanStandardNo(String nomeParametro, String valore, String check, String funzione, String sorgente, String metodiBuilderPattern) {
         System.out.println(String.format("7 - Istanza NON valida costruita col parametro '%s' nel costruttore'", nomeParametro));
         System.out.println(VUOTA);
         System.out.println(String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName));

@@ -46,8 +46,13 @@ public abstract class UploadTest extends WikiTest {
 
 
     protected void fixBeanStandard(final String sorgente) {
+        String nomeParametro = "nomeLista";
+        String metodiEseguibili = "esegue()";
+        String metodoDaRegolare = "test()";
+        String metodiBuilderPattern = "typeLink(), typeLinkCrono(), noToc(), forceToc(), siNumVoci(), noNumVoci(), sottoPagina(), test()";
+
         Upload istanza = (Upload) appContext.getBean(clazz, sorgente);
-        super.fixBeanStandard(istanza, "nomeLista", "esegue()", "test()");
+        super.fixBeanStandard(istanza, nomeParametro, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
         assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
         printUpload(istanza);
     }
