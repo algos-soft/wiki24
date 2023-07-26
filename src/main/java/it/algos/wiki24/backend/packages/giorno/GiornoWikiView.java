@@ -233,7 +233,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void testPaginaNati() {
-        appContext.getBean(UploadGiorni.class).nascita().test().upload(getNomeGiorno());
+        appContext.getBean(UploadGiorni.class, getNomeGiorno()).nascita().test().upload();
         reload();
     }
 
@@ -244,7 +244,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void testPaginaMorti() {
-        appContext.getBean(UploadGiorni.class).morte().test().upload(getNomeGiorno());
+        appContext.getBean(UploadGiorni.class, getNomeGiorno()).morte().test().upload();
         reload();
     }
 
@@ -296,7 +296,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void uploadPaginaNati() {
-        WResult result = appContext.getBean(UploadGiorni.class).nascita().upload(getNomeGiorno());
+        WResult result = appContext.getBean(UploadGiorni.class,getNomeGiorno()).nascita().upload();
         reload();
     }
 
@@ -305,7 +305,7 @@ public class GiornoWikiView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void uploadPaginaMorti() {
-        WResult result = appContext.getBean(UploadGiorni.class).morte().upload(getNomeGiorno());
+        WResult result = appContext.getBean(UploadGiorni.class,getNomeGiorno()).morte().upload();
         reload();
     }
 

@@ -206,7 +206,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected String subAttivitaNazionalita;
 
-    public boolean uploadTest = true;
+    public boolean uploadTest;
 
     public String summary;
 
@@ -236,7 +236,13 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public AETypeLink typeLinkParagrafi;
 
-    protected boolean isIstanzaValidaPatternBuilder = false;
+    public String headerText;
+
+    public String bodyText;
+
+    public String uploadText;
+
+    protected boolean isIstanzaValidaPatternBuilder;
 
     /**
      * Costruttore base senza parametri <br>
@@ -265,6 +271,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         this.usaNumeriTitoloParagrafi = true;
         this.usaIcona = WPref.usaSimboliCrono.is();
         this.isSottopagina = false;
+        this.uploadTest = false;
 
         this.fixPreferenze();
         this.fixPreferenzeBackend();
@@ -282,36 +289,66 @@ public abstract class Upload implements AlgosBuilderPattern {
         }
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload test() {
-        return test(true);
-    }
-
-    public Upload typeLink(AETypeLink typeLink) {
-        this.typeLinkParagrafi = typeLink;
-        this.usaNumeriTitoloParagrafi = typeLink != AETypeLink.nessunLink;
+        this.uploadTest = true;
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload test(boolean uploadTest) {
+        this.uploadTest = uploadTest;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
+        this.typeLinkParagrafi = typeLinkParagrafi;
+        this.usaNumeriTitoloParagrafi = typeLinkParagrafi != AETypeLink.nessunLink;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
     public Upload noToc() {
         this.typeToc = AETypeToc.noToc;
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload forceToc() {
         this.typeToc = AETypeToc.forceToc;
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload siNumVoci() {
         this.usaNumeriTitoloParagrafi = true;
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload noNumVoci() {
         this.usaNumeriTitoloParagrafi = false;
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload sottoPagina(LinkedHashMap<String, List<WrapLista>> mappa) {
         this.wikiTitleUpload = nomeLista;
         this.mappaWrap = mappa;
@@ -319,6 +356,9 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload sottoPagina(List<WrapLista> lista) {
         this.wikiTitleUpload = nomeLista;
         mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
@@ -326,14 +366,45 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this;
     }
 
-    public Upload test(boolean uploadTest) {
-        if (!isSottopagina) {
-            this.wikiTitleUpload = uploadTest ? UPLOAD_TITLE_DEBUG + nomeLista : nomeLista;
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload esegue() {
+        StringBuffer buffer = new StringBuffer();
+        if (textService.isValid(uploadText)) {
+            return this;
+        }
+        this.fixMappaWrap();
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            buffer.append(creaHader());
+            buffer.append(creaBodyLayer());
+            buffer.append(creaBottom(buffer.toString().trim()));
+
+            this.uploadText = buffer.toString().trim();
         }
 
-        this.uploadTest = uploadTest;
         return this;
     }
+
+    public WResult upload() {
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
+        }
+        if (textService.isEmpty(uploadText)) {
+            return WResult.errato();
+        }
+
+        return registra(uploadText);
+    }
+
+    public LinkedHashMap<String, List<WrapLista>> mappaWrap() {
+        if (mappaWrap == null || mappaWrap.size() > 0) {
+            this.fixMappaWrap();
+        }
+        return mappaWrap;
+    }
+
 
     @Override
     public boolean isValida() {
@@ -344,18 +415,21 @@ public abstract class Upload implements AlgosBuilderPattern {
         return false;
     }
 
-    public WResult esegue() {
-        StringBuffer buffer = new StringBuffer();
-        this.fixMappaWrap();
-
-        buffer.append(creaHader());
-        buffer.append(creaBody());
-        buffer.append(creaBottom(buffer.toString().trim()));
-
-        return registra(buffer.toString().trim());
+    public String testoHeader() {
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
+        }
+        return headerText;
     }
 
-    protected String creaHader() {
+    public String testoBody() {
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
+        }
+        return bodyText;
+    }
+
+    public String creaHader() {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(avviso());
@@ -363,7 +437,8 @@ public abstract class Upload implements AlgosBuilderPattern {
         buffer.append(incipit());
         buffer.append(CAPO);
 
-        return buffer.toString();
+        this.headerText = buffer.toString();
+        return headerText;
     }
 
     protected String avviso() {
@@ -431,23 +506,17 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
 
-    protected String creaBody() {
+    protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(testoBody());
+        buffer.append(creaBody());
         buffer.append(CAPO);
-        return buffer.toString();
+
+        this.bodyText = buffer.toString();
+        return bodyText;
     }
 
-    public String testoBody() {
-        if (mappaWrap != null) {
-            return testoBody(mappaWrap);
-        }
-        else {
-            return VUOTA;
-        }
-    }
 
-    public String testoBody(Map<String, List<WrapLista>> mappa) {
+    public String creaBody() {
         return VUOTA;
     }
 
@@ -540,6 +609,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         WResult result = WResult.crea();
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
+        String sottoPagina;
 
         //        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
         //            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
@@ -554,20 +624,31 @@ public abstract class Upload implements AlgosBuilderPattern {
         }
 
         if (uploadTest) {
+            if (isSottopagina) {
+                sottoPagina = nomeLista;
+                if (sottoPagina.contains(SPAZIO)) {
+                    sottoPagina = sottoPagina.substring(sottoPagina.lastIndexOf(SPAZIO), sottoPagina.length());
+                }
+                if (!sottoPagina.contains(UPLOAD_TITLE_DEBUG)) {
+                    this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + sottoPagina;
+                }
+            }
+            else {
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(nomeLista);
+            }
+
             result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-            //            if (result.isValido() && !result.isModificata()) {
-            //                result.typeResult(AETypeResult.uploadValido);
-            //            }
+            if (result.isValido() && !result.isModificata()) {
+                result.typeResult(AETypeResult.uploadValido);
+            }
             return result;
         }
 
         if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
-            //            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
-            return result;
+            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
         }
         else {
-            //            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-            return result;
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
         }
     }
 
@@ -662,6 +743,10 @@ public abstract class Upload implements AlgosBuilderPattern {
      */
     public WResult uploadAll() {
         return null;
+    }
+
+    public LinkedHashMap<String, List<WrapLista>> getMappaWrap() {
+        return mappaWrap;
     }
 
 }

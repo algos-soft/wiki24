@@ -288,7 +288,8 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     protected void checkValiditaCostruttore() {
         if (backend != null) {
-            this.costruttoreValido = backend.isExistByKey(nomeLista);
+            this.costruttoreValido = backend.isExistByKey(textService.primaMaiuscola(nomeLista))||backend.isExistByKey(textService.primaMinuscola(nomeLista));
+            this.costruttoreValido = backend.isExistByKey(textService.primaMaiuscola(nomeLista))||backend.isExistByKey(textService.primaMinuscola(nomeLista));
         }
         else {
             String message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());

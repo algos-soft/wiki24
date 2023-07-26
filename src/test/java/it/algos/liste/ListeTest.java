@@ -32,6 +32,8 @@ public abstract class ListeTest extends WikiTest {
 
     protected static String FUNZIONE = "isExistByKey";
 
+    protected String metodoDefault;
+
 
     protected void setUpAll() {
         super.setUpAll();
@@ -42,7 +44,7 @@ public abstract class ListeTest extends WikiTest {
     @Order(5)
     @DisplayName("5 - checkParametroNelCostruttore")
     void checkParametroNelCostruttore() {
-        sorgente = "nonEsiste";
+        sorgente = "...nonEsiste...";
 
         System.out.println(String.format("5 - checkParametroNelCostruttore"));
         System.out.println(VUOTA);
@@ -70,7 +72,8 @@ public abstract class ListeTest extends WikiTest {
             System.out.println(String.format("Istanza valida col valore accettabile [%s] del parametro '%s'", valore, PARAMETRO));
         }
         else {
-            System.out.println(String.format("Istanza NON valida perché il valore [%s] del parametro '%s' non è previsto", valore, PARAMETRO));
+            message = String.format("Istanza NON valida perché il valore [%s] del parametro '%s' non è previsto", valore, PARAMETRO);
+            logService.warn(new WrapLog().message(message));
         }
     }
 
@@ -86,21 +89,22 @@ public abstract class ListeTest extends WikiTest {
     }
 
     protected void fixBeanStandard(final String sorgente) {
+        Lista istanza = null;
         String nomeParametro = "nomeLista";
         String metodiEseguibili = "listaBio(), listaWrap() e mappaWrap()";
         String metodoDaRegolare = "typeLista()";
         String metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), nascita(), morte()";
 
-        Lista istanza = (Lista) appContext.getBean(clazz, sorgente);
+        istanza = (Lista) appContext.getBean(clazz, sorgente);
         if (istanza.isCostruttoreValido()) {
-            super.fixBeanStandard(istanza, nomeParametro, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
+            super.fixBeanStandard(istanza, sorgente, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
+            printLista(istanza);
         }
         else {
-            super.fixBeanStandardNo(nomeParametro, nomeParametro, CHECK, FUNZIONE, sorgente, metodiBuilderPattern);
+            super.fixBeanStandardNo(nomeParametro, sorgente, CHECK, FUNZIONE, sorgente, metodiBuilderPattern);
         }
 
         assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printLista(istanza);
     }
 
     protected void fixConParametroNelCostruttore(String sorgente) {
@@ -141,6 +145,66 @@ public abstract class ListeTest extends WikiTest {
         System.out.println(String.format("metodoEseguito%s%s", FORWARD, metodoEseguito));
     }
 
+    protected void debug(Lista istanza, String metodoEseguito) {
+        if (istanza == null) {
+            return;
+        }
+        assertNotNull(istanza);
+
+        if (!istanza.isCostruttoreValido()) {
+            message = String.format("Il valore '%s' non è accettabile per un'istanza di classe [%s]", istanza.nomeLista, clazzName);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+        System.out.println(VUOTA);
+
+        if (istanza.isValida()) {
+            if (istanzaValidaSubitoDopoCostruttore) {
+                if (textService.isEmpty(metodoEseguito)) {
+                    System.out.println(String.format("L'istanza è immediatamente eseguibile dopo il costruttore anche senza nessun metodo BuilderPattern"));
+                    System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                    System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                    System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, "(default) " + metodoDefault));
+                }
+                else {
+                    System.out.println(String.format("L'stanza era eseguibile anche senza il metodo '%s'", metodoEseguito));
+                    System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                    System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                    System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+                }
+            }
+            else {
+                assertTrue(istanza.isValida());
+                System.out.println(String.format("La chiamata del metodo '%s' rende utilizzabile l'istanza", metodoEseguito));
+                System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+            }
+        }
+        else {
+            assertFalse(istanza.isValida());
+            if (textService.isEmpty(metodoEseguito)) {
+                metodoEseguito = "(nessuno)";
+                message = String.format("Senza chiamare nessun metodo builderPattern, l'istanza NON è utilizzabile");
+            }
+            else {
+                message = String.format("Il metodo builderPattern '%s' NON è congruo e l'istanza NON è utilizzabile", metodoEseguito);
+            }
+            logService.warn(new WrapLog().message(message));
+
+            System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+            System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+            System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+            System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, false));
+            System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+        }
+    }
 
     protected void fixConParametroNelCostruttore() {
         String nomeParametro = "nomeLista";
@@ -165,8 +229,12 @@ public abstract class ListeTest extends WikiTest {
     }
 
     protected void fixWrapLista(final String sorgente, final List<WrapLista> listWrapLista) {
+        fixWrapLista(sorgente, listWrapLista, "20 - WrapLista STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+    }
+
+    protected void fixWrapLista(final String sorgente, final List<WrapLista> listWrapLista, String incipit) {
         System.out.println(VUOTA);
-        System.out.println("20 - WrapLista STANDARD con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(incipit);
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             message = String.format("Ci sono %d wrapLista che implementano la lista %s", listWrapLista.size(), sorgente);
@@ -185,10 +253,13 @@ public abstract class ListeTest extends WikiTest {
         }
     }
 
-
     protected void fixWrapListaDidascalie(final String sorgente, final List<WrapLista> listWrapLista) {
+        fixWrapListaDidascalie(sorgente, listWrapLista, "30 - Lista STANDARD didascalie con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+    }
+
+    protected void fixWrapListaDidascalie(final String sorgente, final List<WrapLista> listWrapLista, String incipit) {
         System.out.println(VUOTA);
-        System.out.println("30 - Lista STANDARD didascalie con linkParagrafi=nessunLink e linkCrono=linkLista e usaIcona=true");
+        System.out.println(incipit);
 
         if (listWrapLista != null && listWrapLista.size() > 0) {
             message = String.format("Ci sono %d didascalie che implementano la lista %s", listWrapLista.size(), sorgente);
@@ -207,36 +278,35 @@ public abstract class ListeTest extends WikiTest {
         }
     }
 
+    //    void fixMappaWrapKey(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
+    //        System.out.println(VUOTA);
+    //        System.out.println("40 - Key della mappaWrap");
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            message = String.format("La mappaWrap della lista %s ha %d chiavi (paragrafi) per %d didascalie", sorgente, mappaWrap.size(), wikiUtility.getSizeAllWrap(mappaWrap));
+    //            System.out.println(message);
+    //            printMappaWrapKeyOrder(mappaWrap);
+    //        }
+    //        else {
+    //            message = "La mappaWrap è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
-    void fixMappaWrapKey(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
-        System.out.println(VUOTA);
-        System.out.println("40 - Key della mappaWrap");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            message = String.format("La mappaWrap della lista %s ha %d chiavi (paragrafi) per %d didascalie", sorgente, mappaWrap.size(), wikiUtility.getSizeAllWrap(mappaWrap));
-            System.out.println(message);
-            printMappaWrapKeyOrder(mappaWrap);
-        }
-        else {
-            message = "La mappaWrap è nulla";
-            System.out.println(message);
-        }
-    }
-
-    void fixMappaWrapDidascalie(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
-        System.out.println(VUOTA);
-        System.out.println("50 - Mappa STANDARD wrapLista (paragrafi e righe)");
-
-        if (mappaWrap != null && mappaWrap.size() > 0) {
-            message = String.format("La mappaWrap della lista %s ha %d didascalie", sorgente, wikiUtility.getSizeAllWrap(mappaWrap));
-            System.out.println(message);
-            printMappaDidascalie(mappaWrap);
-        }
-        else {
-            message = "La mappaWrap è nulla";
-            System.out.println(message);
-        }
-    }
+    //    void fixMappaWrapDidascalie(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
+    //        System.out.println(VUOTA);
+    //        System.out.println("50 - Mappa STANDARD wrapLista (paragrafi e righe)");
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            message = String.format("La mappaWrap della lista %s ha %d didascalie", sorgente, wikiUtility.getSizeAllWrap(mappaWrap));
+    //            System.out.println(message);
+    //            printMappaDidascalie(mappaWrap);
+    //        }
+    //        else {
+    //            message = "La mappaWrap è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
     protected void printLista(Lista listaEntityBean) {
         if (listaEntityBean == null) {

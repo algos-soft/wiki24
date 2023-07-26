@@ -60,6 +60,7 @@ public class UploadCognomi extends Upload {
         super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
+        super.isIstanzaValidaPatternBuilder = true;
     }
 
 
@@ -71,16 +72,27 @@ public class UploadCognomi extends Upload {
 
     @Override
     public boolean fixMappaWrap() {
-        if (!isSottopagina) {
-            mappaWrap = appContext.getBean(ListaCognomi.class, nomeLista).typeLinkParagrafi(typeLinkParagrafi).mappaWrap();
+        if (!isIstanzaValidaPatternBuilder) {
+            return false;
         }
 
-        return false;
+        if (!isSottopagina) {
+            if (mappaWrap == null) {
+                mappaWrap = appContext
+                        .getBean(ListaCognomi.class, nomeLista)
+                        .typeLinkParagrafi(typeLinkParagrafi)
+                        .typeLinkCrono(typeLinkCrono)
+                        .icona(usaIcona)
+                        .mappaWrap();
+            }
+        }
+
+        return true;
     }
 
 
     @Override
-    public String testoBody(Map<String, List<WrapLista>> mappa) {
+    public String creaBody() {
         StringBuffer buffer = new StringBuffer();
         List<WrapLista> lista;
         int numVoci;
@@ -92,8 +104,8 @@ public class UploadCognomi extends Upload {
         String vedi;
         String sottoPagina;
 
-        for (String keyParagrafo : mappa.keySet()) {
-            lista = mappa.get(keyParagrafo);
+        for (String keyParagrafo : mappaWrap.keySet()) {
+            lista = mappaWrap.get(keyParagrafo);
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (isSottopagina) {
@@ -107,14 +119,14 @@ public class UploadCognomi extends Upload {
                 sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                appContext.getBean(UploadNomi.class, sottoPagina).sottoPagina(lista).test(uploadTest).esegue();
+                appContext.getBean(UploadCognomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
             }
             else {
                 usaDiv = usaDivBase ? lista.size() > maxDiv : false;
                 buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
                 for (WrapLista wrap : lista) {
                     buffer.append(ASTERISCO);
-                    buffer.append(wrap.didascaliaBreve);
+                    buffer.append(wrap.lista);
                     buffer.append(CAPO);
                 }
                 buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);

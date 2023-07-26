@@ -245,12 +245,36 @@ public class CognomeView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void uploadPagina() {
-        WResult result;
-        Cognome cognome = getCognomeCorrente();
+        WResult result = WResult.crea();
+        Cognome cognome = (Cognome) super.getBeanSelected();
 
         if (cognome != null) {
-            result = backend.uploadPagina(cognome.cognome);
-            reload();
+            if (cognome.numBio > WPref.sogliaWikiCognomi.getInt()) {
+                result = appContext.getBean(UploadCognomi.class, cognome.cognome).upload();
+
+            }
+            else {
+                message = String.format("Il cognome '%s' non raggiunge il numero di voci biografiche. Necessario=%d", cognome.cognome, WPref.sogliaWikiCognomi.getInt());
+                Avviso.message(message).primary().open();
+            }
+        }
+
+        if (result.isValido()) {
+            if (result.isModificata()) {
+                message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_NOMI, cognome.cognome);
+                Avviso.message(message).success().open();
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+            }
+            else {
+                message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_NOMI, cognome.cognome);
+                Avviso.message(message).primary().open();
+                logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+            }
+        }
+        else {
+            message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_NOMI, cognome.cognome);
+            Avviso.message(message).error().open();
+            logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
         }
     }
 
@@ -268,22 +292,15 @@ public class CognomeView extends WikiView {
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
-     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     @Override
     public void uploadAll() {
-        appContext.getBean(UploadCognomi.class).uploadAll();
+        long inizio = System.currentTimeMillis();
+        WResult result = backend.uploadAll();
+        super.fixUpload(inizio, "dei cognomi");
+        reload();
     }
 
-    public Cognome getCognomeCorrente() {
-        Cognome cognome = null;
-
-        Optional entityBean = grid.getSelectedItems().stream().findFirst();
-        if (entityBean.isPresent()) {
-            cognome = (Cognome) entityBean.get();
-        }
-
-        return cognome;
-    }
 
 }// end of crud @Route view class

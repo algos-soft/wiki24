@@ -206,6 +206,7 @@ public class DidascaliaServiceTest extends WikiTest {
                 creaBio("Johann Schweikhard von Kronberg"),
                 creaBio("Roberto Rullo"),
                 creaBio("Stanley Adams (attore)"),
+                creaBio("Daniel Williams"),
                 creaBio("Jameson Adams"),
                 creaBio("Marianna Saltini"),
                 creaBio("Giuseppe Marchetti"),

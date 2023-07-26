@@ -46,13 +46,14 @@ public class UploadProgettoNomiDoppi extends UploadProgetto {
     /**
      * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>
      */
-    public WResult esegue() {
+    public Upload esegue() {
         String testoPaginaAll = super.leggeTestoPagina();
         String testoCoreOld = backend.getCore();
         String testoCoreNew = this.fixTestoModulo();
         String newText = textService.sostituisce(testoPaginaAll, testoCoreOld, testoCoreNew);
 
-        return registra(newText);
+        return null;
+//        return registra(newText);
 //        return wikiApiService.scrive(wikiTitleUpload, newText, summary).typeResult(AETypeResult.uploadValido);
     }
 

@@ -309,12 +309,12 @@ public class ArrayService extends AbstractService {
      *
      * @return mappa ordinata, null se mappaDisordinata è null
      */
-    public Map sort(final Map mappaDisordinata) {
+    public LinkedHashMap sort(final Map mappaDisordinata) {
         LinkedHashMap mappaOrdinata = new LinkedHashMap();
         Object[] listaChiavi;
 
         if (!isAllValid(mappaDisordinata)) {
-            return mappaDisordinata;
+            return (LinkedHashMap) mappaDisordinata;
         }
 
         listaChiavi = mappaDisordinata.keySet().toArray();
@@ -357,7 +357,7 @@ public class ArrayService extends AbstractService {
         }
 
         for (Object value : listaValues) {
-            listaKeys=getSet(mappaDisordinata, value);
+            listaKeys = getSet(mappaDisordinata, value);
             for (Object key : listaKeys) {
                 mappaOrdinata.put(key, value);
             }

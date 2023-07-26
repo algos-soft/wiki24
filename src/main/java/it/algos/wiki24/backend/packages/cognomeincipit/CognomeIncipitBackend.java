@@ -289,7 +289,8 @@ public class CognomeIncipitBackend extends WikiBackend {
      */
     @Override
     public WResult uploadModulo() {
-        WResult result = appContext.getBean(UploadModuloCognomiIncipit.class).esegue();
+        WResult result = new WResult();
+//        WResult result = appContext.getBean(UploadModuloCognomiIncipit.class).esegue();
 
         if (result.isModificata()) {
             message = String.format("Upload e modifica della pagina [%s]", super.sorgenteDownload);

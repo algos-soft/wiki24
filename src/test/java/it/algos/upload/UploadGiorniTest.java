@@ -5,11 +5,15 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -24,16 +28,26 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("uploadcrono")
-@DisplayName("Giorni upload")
+@Tag("upload")
+@DisplayName("Upload Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadGiorniTest extends WikiTest {
+public class UploadGiorniTest extends UploadTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
     private UploadGiorni istanza;
+
+    //--nome
+    protected static Stream<Arguments> GIORNI_UPLOAD() {
+        return Stream.of(
+                Arguments.of("43 marzo"),
+                Arguments.of("23 febbraio"),
+                Arguments.of("19 dicembra"),
+                Arguments.of("4gennaio")
+        );
+    }
 
 
     /**
@@ -43,8 +57,11 @@ public class UploadGiorniTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazz = UploadGiorni.class;
+        super.backendClazzName = GiornoWikiBackend.class.getSimpleName();
         super.setUpAll();
-        assertNull(istanza);
+        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.istanzaValidaSubitoDopoCostruttore = false;
     }
 
     /**
@@ -58,78 +75,20 @@ public class UploadGiorniTest extends WikiTest {
         istanza = null;
     }
 
-
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new UploadGiorni();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
+    void beanStandardCompleta() {
+        sorgente = "9 giugno";
+        super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(2)
-    @DisplayName("2 - Upload test di un giorno di nascita")
-    void uploadNascita() {
-        System.out.println("2 - Upload test di un giorno di nascita");
-        sorgente = "24 aprile";
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
-        printRisultato(ottenutoRisultato);
-    }
-
-
-    @Test
-    @Order(3)
-    @DisplayName("3 - Upload test di un giorno di morte")
-    void uploadMorte() {
-        System.out.println("3 - Upload test di un giorno di morte");
-        sorgente = "24 aprile";
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class).test().morte().upload(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
-        printRisultato(ottenutoRisultato);
-    }
-
-
-//    @Test
-    @Order(4)
-    @DisplayName("4 - Costruttore col giorno di nascita")
-    void uploadCostruttoreNascita() {
-        System.out.println(" - Costruttore col giorno di nascita");
-        sorgente = "24 aprile";
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class, sorgente).nascita().test().esegue();
-        assertNotNull(ottenutoRisultato);
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Upload della pagina di test su %s", UPLOAD_TITLE_DEBUG + sorgente));
-        printRisultato(ottenutoRisultato);
-    }
-
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
+    void esegueConParametroNelCostruttore() {
+        sorgente = "24 agosto";
+        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
     }
 
 }

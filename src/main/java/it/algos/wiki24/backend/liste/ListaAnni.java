@@ -51,6 +51,7 @@ public class ListaAnni extends Lista {
      * Pattern Builder <br>
      */
     public ListaAnni typeLista(AETypeLista typeLista) {
+        super.istanzaValida = false;
         return switch (typeLista) {
             case annoNascita -> nascita();
             case annoMorte -> morte();
@@ -63,6 +64,7 @@ public class ListaAnni extends Lista {
      */
     public ListaAnni nascita() {
         super.titoloPagina = wikiUtility.wikiTitleNatiAnno(nomeLista);
+        super.istanzaValida = true;
         return (ListaAnni) super.typeLista(AETypeLista.annoNascita);
     }
 
@@ -71,6 +73,7 @@ public class ListaAnni extends Lista {
      */
     public ListaAnni morte() {
         super.titoloPagina = wikiUtility.wikiTitleMortiAnno(nomeLista);
+        super.istanzaValida = true;
         return (ListaAnni) super.typeLista(AETypeLista.annoMorte);
     }
 

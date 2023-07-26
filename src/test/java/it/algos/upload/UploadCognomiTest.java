@@ -5,11 +5,14 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -18,6 +21,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -43,6 +47,15 @@ public class UploadCognomiTest extends UploadTest {
      */
     private UploadCognomi istanza;
 
+    //--cognome
+    protected static Stream<Arguments> COGNOMI_UPLOAD() {
+        return Stream.of(
+                Arguments.of(VUOTA),
+                Arguments.of("Mazzoni"),
+                Arguments.of("Piazza"),
+                Arguments.of("Gómez")
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -52,6 +65,7 @@ public class UploadCognomiTest extends UploadTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = UploadCognomi.class;
+        super.backendClazzName = CognomeBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -71,19 +85,117 @@ public class UploadCognomiTest extends UploadTest {
 
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "adriana";
+        sorgente = "Mazzoni";
         super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(7)
-    @DisplayName("7 - esegueConParametroNelCostruttore")
-    void listaBioSenzaTypeLista() {
-        sorgente = "adriana";
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
+    void esegueConParametroNelCostruttore() {
+        sorgente = "Piazza";
         super.fixConParametroNelCostruttore(sorgente);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Order(40)
+    @DisplayName("40 - Key della mappaWrap STANDARD")
+    void mappaWrap(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadCognomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Order(50)
+    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
+    void mappaWrapDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadCognomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Order(60)
+    @DisplayName("60 - Testo header")
+    void testoHeader(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(UploadCognomi.class, nomeLista).esegue().testoHeader();
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Order(70)
+    @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
+    void testoBody(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(UploadCognomi.class, nomeLista).testoBody();
+        System.out.println(ottenuto);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Order(80)
+    @DisplayName("80 - Esegue upload test STANDARD")
+    void esegue(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, nomeLista).test().upload();
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(330)
+    @DisplayName("330 - Esegue upload sottoPagina")
+    void listaDidascalieSottoPagina() {
+        System.out.println("330 - Esegue upload sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "Williams";
+        sorgente2 = "calciatori";
+
+        mappaWrap = appContext.getBean(UploadCognomi.class, sorgente).mappaWrap();
+        sorgente = textService.primaMaiuscola(sorgente);
+        sorgente2 = textService.primaMaiuscola(sorgente2);
+        sorgente3 = UPLOAD_TITLE_DEBUG + sorgente + SLASH + sorgente2;
+        listWrapLista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
+        assertNotNull(listWrapLista);
+
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente3).test().sottoPagina(listWrapLista).upload();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test del cognome '%s' con attività '%s'", sorgente, sorgente2));
+        System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
+        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente3)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente3));
+
+        System.out.println(VUOTA);
+        //        super.fixWrapListaDidascalie(sorgente3, listWrapLista);
     }
 
 }

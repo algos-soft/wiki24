@@ -42,15 +42,15 @@ public class UploadModuloCognomiIncipit extends UploadModulo {
     }
 
 
-    @Override
-    public WResult esegue() {
-        String testoPagina = leggeTestoPagina();
-        String testoModuloOld = leggeTestoModulo();
-        String testoModuloNew = fixTestoModulo(leggeMappaMongo());
-        String newText = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
-
-        return registra(newText);
-    }
+//    @Override
+//    public WResult esegue() {
+//        String testoPagina = leggeTestoPagina();
+//        String testoModuloOld = leggeTestoModulo();
+//        String testoModuloNew = fixTestoModulo(leggeMappaMongo());
+//        String newText = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
+//
+//        return registra(newText);
+//    }
 
 }
 

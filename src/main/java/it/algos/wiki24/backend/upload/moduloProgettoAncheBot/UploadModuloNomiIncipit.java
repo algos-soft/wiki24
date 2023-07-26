@@ -43,13 +43,14 @@ public class UploadModuloNomiIncipit extends UploadModulo {
 
 
     @Override
-    public WResult esegue() {
+    public Upload esegue() {
         String testoPagina = leggeTestoPagina();
         String testoModuloOld = leggeTestoModulo();
         String testoModuloNew = fixTestoModulo(leggeMappaMongo());
         String newText = textService.sostituisce(testoPagina, testoModuloOld, testoModuloNew);
 
-        return registra(newText);
+//        return registra(newText);
+        return null;
     }
 
 }

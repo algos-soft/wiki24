@@ -734,11 +734,9 @@ public class WikiUtility extends WAbstractService {
                 lista.add(wrap);
                 mappaAlfabetica.put(key, lista);
             }
-
-            int a = 87;
         }
 
-        return mappaAlfabetica;
+        return  arrayService.sort(mappaAlfabetica);
     }
 
     public WrapDueStringhe creaWrapUguale(final String riga) {

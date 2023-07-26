@@ -47,7 +47,7 @@ public class UploadModuloIncipitNomiOld extends UploadProgetto {
     /**
      * Esegue la scrittura della pagina di test ordinata dopo le modifiche apportate <br>
      */
-    public WResult esegue() {
+    public Upload esegue() {
         String testoPaginaAll = super.leggeTestoPagina();
         String testoCoreOld = backend.getCore();
         String testoCoreNew = this.fixTestoModulo();

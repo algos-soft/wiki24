@@ -1,15 +1,13 @@
 package it.algos.upload;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -18,11 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
 import java.util.stream.*;
@@ -55,9 +48,10 @@ public class UploadNomiTest extends UploadTest {
     protected static Stream<Arguments> NOMI_UPLOAD() {
         return Stream.of(
                 Arguments.of(VUOTA),
-                Arguments.of("Aaron"),
-                Arguments.of("Alexandra"),
-                Arguments.of("adriana"),
+                Arguments.of("Silvana"),
+                //                Arguments.of("Akira"),
+                //                Arguments.of("Alexandra"),
+                Arguments.of("Tomas"),
                 Arguments.of("maria teresa")
         );
     }
@@ -70,6 +64,7 @@ public class UploadNomiTest extends UploadTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = UploadNomi.class;
+        super.backendClazzName = NomeBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -89,36 +84,158 @@ public class UploadNomiTest extends UploadTest {
 
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "adriana";
+        sorgente = "akira";
         super.fixBeanStandard(sorgente);
     }
 
     @Test
-    @Order(7)
-    @DisplayName("7 - esegueConParametroNelCostruttore")
-    void listaBioSenzaTypeLista() {
-        sorgente = "adriana";
+    @Order(8)
+    @DisplayName("8 - esegueConParametroNelCostruttore")
+    void esegueConParametroNelCostruttore() {
+        sorgente = "tiziano";
         super.fixConParametroNelCostruttore(sorgente);
+    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "NOMI_UPLOAD")
+    //    @Order(20)
+    //    @DisplayName("20 - WrapLista STANDARD")
+    //    void listaWrapDidascalie(final String nomeLista) {
+    //        if (textService.isEmpty(nomeLista)) {
+    //            return;
+    //        }
+    //
+    //        //        listWrapLista = appContext.getBean(UploadNomi.class, nomeLista).listaWrap();
+    //        //        super.fixWrapLista(nomeLista, listWrapLista);
+    //    }
+
+    //    @ParameterizedTest
+    //    @MethodSource(value = "NOMI_UPLOAD")
+    //    @Order(30)
+    //    @DisplayName("30 - Didascalie STANDARD")
+    //    void listaDidascalie(final String nomeLista) {
+    //        if (textService.isEmpty(nomeLista)) {
+    //            return;
+    //        }
+    //
+    //        //        listWrapLista = appContext.getBean(UploadNomi.class, nomeLista).listaWrap();
+    //        //        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
+    //    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_UPLOAD")
+    @Order(40)
+    @DisplayName("40 - Key della mappaWrap STANDARD")
+    void mappaWrap(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadNomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_UPLOAD")
+    @Order(50)
+    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
+    void mappaWrapDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadNomi.class, nomeLista).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_UPLOAD")
+    @Order(60)
+    @DisplayName("60 - Testo header")
+    void testoHeader(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(UploadNomi.class, nomeLista).esegue().testoHeader();
+        System.out.println(ottenuto);
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "NOMI_UPLOAD")
-    @Order(10)
-    @DisplayName("10 - Lista bio BASE")
-    void listaBio(final String nomeLista) {
+    @Order(70)
+    @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
+    void testoBody(final String nomeLista) {
         if (textService.isEmpty(nomeLista)) {
             return;
         }
 
-//        listBio = appContext.getBean(UploadNomi.class, nomeLista);
-//        super.fixListaBio(nomeLista, listBio);
+        ottenuto = appContext.getBean(UploadNomi.class, nomeLista).testoBody();
+        System.out.println(ottenuto);
     }
 
-//    @Test
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_UPLOAD")
+    @Order(80)
+    @DisplayName("80 - Esegue upload test STANDARD")
+    void esegue(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+        System.out.println("80 - Esegue upload test STANDARD");
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, nomeLista).test().upload();
+        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(330)
+    @DisplayName("330 - Esegue upload sottoPagina")
+    void esegueSottoPaginaIsolata() {
+        System.out.println("330 - Esegue upload sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "adam";
+        sorgente2 = "calciatori";
+
+        mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
+        sorgente = textService.primaMaiuscola(sorgente);
+        sorgente2 = textService.primaMaiuscola(sorgente2);
+        sorgente3 = UPLOAD_TITLE_DEBUG + sorgente + SLASH + sorgente2;
+        listWrapLista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
+        assertNotNull(listWrapLista);
+
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).test().sottoPagina(listWrapLista).upload();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test del nome '%s' con attività '%s'", sorgente, sorgente2));
+        System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
+        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente3)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente3));
+
+        System.out.println(VUOTA);
+    }
+
+    @Test
+    @Order(340)
+    @DisplayName("340 - Esegue upload pagina con sottoPagina")
+    void eseguePaginaConSottoPagina() {
+        System.out.println("80 - Esegue upload pagina con sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "diego";
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().upload();
+        printRisultato(ottenutoRisultato);
+    }
+
+    //    @Test
     @Order(3)
     @DisplayName("3 - Upload test di un nome con noToc")
     void uploadNoToc() {
@@ -127,7 +244,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "Adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noToc().test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noToc().test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -148,7 +265,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).forceToc().test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -169,7 +286,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noNumVoci().test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).noNumVoci().test().esegue();
 
         System.out.println(String.format("Test del nome %s", sorgente));
         System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
@@ -190,7 +307,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).siNumVoci().test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).siNumVoci().test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -212,7 +329,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLink(AETypeLink.linkLista).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkLista).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -234,7 +351,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLink(AETypeLink.linkVoce).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).typeLinkParagrafi(AETypeLink.linkVoce).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -254,7 +371,7 @@ public class UploadNomiTest extends UploadTest {
         System.out.println(VUOTA);
 
         sorgente = "questoNomeNonEsiste";
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         assertFalse(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -275,7 +392,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adalberto";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -288,7 +405,7 @@ public class UploadNomiTest extends UploadTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(11)
     @DisplayName("11 - Upload test di una sottopagina da sola")
     void uploadOnlySottoPagina() {
@@ -301,7 +418,7 @@ public class UploadNomiTest extends UploadTest {
         mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
         List<WrapLista> lista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
 
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).sottoPagina(lista).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).sottoPagina(lista).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -322,7 +439,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adam";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -346,7 +463,7 @@ public class UploadNomiTest extends UploadTest {
 
         AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         WPref.linkCrono.setValue(AETypeLink.nessunLink);
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         WPref.linkCrono.setValue(typeLinkCronoOld);
 
         assertTrue(ottenutoRisultato.isValido());
@@ -372,7 +489,7 @@ public class UploadNomiTest extends UploadTest {
 
         AETypeLink typeLinkCronoOld = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         WPref.linkCrono.setValue(AETypeLink.linkVoce);
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         WPref.linkCrono.setValue(typeLinkCronoOld);
 
         assertTrue(ottenutoRisultato.isValido());
@@ -387,7 +504,7 @@ public class UploadNomiTest extends UploadTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(40)
     @DisplayName("40 - Upload test di un nome femminile")
     void uploadFemminile() {
@@ -396,7 +513,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "adriana";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));
@@ -419,7 +536,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "giovanni";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
+        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(String.format("Test del nome %s", sorgente));

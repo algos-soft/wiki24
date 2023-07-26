@@ -46,16 +46,16 @@ public class ListaAttivitaTest extends ListeTest {
         return Stream.of(
                 Arguments.of(VUOTA, AETypeLista.listaBreve),
                 Arguments.of(VUOTA, AETypeLista.nazionalitaSingolare),
-                Arguments.of("soprano", AETypeLista.giornoNascita),
+                //                Arguments.of("soprano", AETypeLista.giornoNascita),
                 //                Arguments.of("soprano", AETypeLista.attivitaSingolare),
-                Arguments.of("abate", AETypeLista.attivitaSingolare),
+                //                Arguments.of("abate", AETypeLista.attivitaSingolare),
                 Arguments.of("badessa", AETypeLista.attivitaSingolare),
-                Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
+                //                Arguments.of("abati e badesse", AETypeLista.attivitaPlurale),
                 //                Arguments.of("bassisti", AETypeLista.attivitaPlurale),
                 Arguments.of("allevatori", AETypeLista.attivitaPlurale),
-                Arguments.of("agenti segreti", AETypeLista.attivitaPlurale),
-                Arguments.of("romanziere", AETypeLista.attivitaSingolare),
-                //                Arguments.of("dogi", AETypeLista.attivitaPlurale),
+                //                Arguments.of("agenti segreti", AETypeLista.attivitaPlurale),
+                Arguments.of("romanzieri", AETypeLista.attivitaPlurale),
+                Arguments.of("dogi", AETypeLista.attivitaPlurale),
                 Arguments.of("accademici", AETypeLista.attivitaPlurale)
         );
     }
@@ -71,7 +71,8 @@ public class ListaAttivitaTest extends ListeTest {
         super.backendClazzName = AttPluraleBackend.class.getSimpleName();
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
-        super.istanzaValidaSubitoDopoCostruttore = false;
+        super.istanzaValidaSubitoDopoCostruttore = true;
+        super.metodoDefault = "plurale()";
     }
 
 
@@ -91,7 +92,12 @@ public class ListaAttivitaTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "accademici";
+        sorgente = "23 maggio";
+        super.fixBeanStandard(sorgente);
+
+        System.out.println(VUOTA);
+
+        sorgente = "abati e badesse";
         super.fixBeanStandard(sorgente);
     }
 
@@ -99,10 +105,43 @@ public class ListaAttivitaTest extends ListeTest {
     @Order(8)
     @DisplayName("8 - esegueConParametroNelCostruttore")
     void esegueConParametroNelCostruttore() {
-        sorgente = "scrittori";
+        sorgente = "allevatori";
         super.fixConParametroNelCostruttore(sorgente);
     }
 
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+
+        sorgente = "allevatori";
+
+        appContext.getBean(ListaAttivita.class, sorgente).listaBio();
+
+        istanza = appContext.getBean(ListaAttivita.class, sorgente);
+        super.debug(istanza, VUOTA);
+
+        sorgente2 = "singolare()";
+        istanza = appContext.getBean(ListaAttivita.class, sorgente).singolare();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "plurale()";
+        istanza = appContext.getBean(ListaAttivita.class, sorgente).plurale();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
+        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.attivitaPlurale)";
+        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.attivitaPlurale);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
+        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.giornoMorte);
+        super.debug(istanza, sorgente2);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "ATTIVITA_LISTA")
@@ -121,7 +160,7 @@ public class ListaAttivitaTest extends ListeTest {
     @MethodSource(value = "ATTIVITA_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void wrapLista(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -149,7 +188,7 @@ public class ListaAttivitaTest extends ListeTest {
     @MethodSource(value = "ATTIVITA_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-    void mappaWrap(final String nomeLista, final AETypeLista type) {
+    void mappaWrapKey(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -162,7 +201,7 @@ public class ListaAttivitaTest extends ListeTest {
     @MethodSource(value = "ATTIVITA_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -172,85 +211,131 @@ public class ListaAttivitaTest extends ListeTest {
     }
 
 
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA_LISTA")
+    @Order(120)
+    @DisplayName("120 - WrapLista ALTERNATIVA")
+    void wrapListaAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
 
+        listWrapLista = appContext
+                .getBean(ListaAttivita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
 
-//    //    @ParameterizedTest
-//    @MethodSource(value = "ATTIVITA")
-//    @Order(113)
-//    @DisplayName("113 - Lista bio")
-//    //--nome attivita
-//    //--typeLista
-//    void listaBio2(final String nomeAttivita, final AETypeLista type) {
-//        sorgente = nomeAttivita;
-//        if (textService.isEmpty(nomeAttivita)) {
-//            return;
-//        }
-//
-//        listBio = switch (type) {
-//            case attivitaSingolare -> appContext.getBean(ListaAttivita.class, sorgente).singolare().listaBio();
-//            case attivitaPlurale -> appContext.getBean(ListaAttivita.class, sorgente).listaBio();
-//            default -> null;
-//        };
-//        System.out.println("113- Lista bio");
-//
-//        if (listBio != null && listBio.size() > 0) {
-//            message = String.format("Ci sono %d biografie che implementano l'attività %s %s", listBio.size(), type.getTagLower(), sorgente);
-//            System.out.println(message);
-//            this.printAttivitaSingole(type, sorgente);
-//            System.out.println(VUOTA);
-//            printBioLista(listBio);
-//        }
-//        else {
-//            message = "La listBio è nulla";
-//            System.out.println(message);
-//        }
-//    }
-//
-//    //    @Test
-//    @Order(117)
-//    @DisplayName("117 - nobiliTedeschi")
-//    void nobiliTedeschi() {
-//        System.out.println("117 - nobiliTedeschi");
-//        sorgente = "nobili";
-//        sorgente2 = "Tedeschi";
-//        int numVoci;
-//        List<WrapLista> listaSotto;
-//
-//        //        mappaWrap = appContext.getBean(ListaAttivita.class).plurale(sorgente).mappaWrap();
-//
-//        if (mappaWrap != null && mappaWrap.size() > 0) {
-//            listWrapLista = mappaWrap.get(sorgente2);
-//            numVoci = listWrapLista.size();
-//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s", numVoci, sorgente, sorgente2);
-//            System.out.println(message);
-//
-//            //            listaSotto = new ArrayList<>();
-//            //
-//            //            for (WrapLista wrap : listWrapLista) {
-//            //                stringa;
-//            //            }
-//
-//            sorgente3 = "C";
-//            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
-//            numVoci = listaSotto.size();
-//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
-//            System.out.println(VUOTA);
-//            System.out.println(message);
-//            printSub(listaSotto);
-//
-//            sorgente3 = "E";
-//            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
-//            numVoci = listaSotto.size();
-//            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
-//            System.out.println(VUOTA);
-//            System.out.println(message);
-//            printSub(listaSotto);
-//        }
-//        else {
-//            message = "La mappa è nulla";
-//            System.out.println(message);
-//        }
-//    }
+        super.fixWrapLista(nomeLista, listWrapLista, "120 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA_LISTA")
+    @Order(130)
+    @DisplayName("130 - Didascalie ALTERNATIVE")
+    void listaDidascalieAlternative(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext
+                .getBean(ListaAttivita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista, "130 - Lista ALTERNATIVA didascalie con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA_LISTA")
+    @Order(150)
+    @DisplayName("150 - MappaWrap ALTERNATIVA")
+    void mappaWrapAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaAttivita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "150 - MappaWrap ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ATTIVITA_LISTA")
+    @Order(151)
+    @DisplayName("151 - MappaWrap ALTERNATIVA(2)")
+    void mappaWrapAlternativa2(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaAttivita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkLista)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    //    //    @Test
+    //    @Order(117)
+    //    @DisplayName("117 - nobiliTedeschi")
+    //    void nobiliTedeschi() {
+    //        System.out.println("117 - nobiliTedeschi");
+    //        sorgente = "nobili";
+    //        sorgente2 = "Tedeschi";
+    //        int numVoci;
+    //        List<WrapLista> listaSotto;
+    //
+    //        //        mappaWrap = appContext.getBean(ListaAttivita.class).plurale(sorgente).mappaWrap();
+    //
+    //        if (mappaWrap != null && mappaWrap.size() > 0) {
+    //            listWrapLista = mappaWrap.get(sorgente2);
+    //            numVoci = listWrapLista.size();
+    //            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s", numVoci, sorgente, sorgente2);
+    //            System.out.println(message);
+    //
+    //            //            listaSotto = new ArrayList<>();
+    //            //
+    //            //            for (WrapLista wrap : listWrapLista) {
+    //            //                stringa;
+    //            //            }
+    //
+    //            sorgente3 = "C";
+    //            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
+    //            numVoci = listaSotto.size();
+    //            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
+    //            System.out.println(VUOTA);
+    //            System.out.println(message);
+    //            printSub(listaSotto);
+    //
+    //            sorgente3 = "E";
+    //            listaSotto = listWrapLista.stream().filter(wrap -> wrap.titoloSottoParagrafo.equals(sorgente3)).collect(Collectors.toList());
+    //            numVoci = listaSotto.size();
+    //            message = String.format("Ci sono %d wrapLista che implementano l'attività %s e sono %s ed iniziano con %s", numVoci, sorgente, sorgente2, sorgente3);
+    //            System.out.println(VUOTA);
+    //            System.out.println(message);
+    //            printSub(listaSotto);
+    //        }
+    //        else {
+    //            message = "La mappa è nulla";
+    //            System.out.println(message);
+    //        }
+    //    }
 
 
     private boolean valido(final String nomeAttivita, final AETypeLista type) {

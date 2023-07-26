@@ -64,8 +64,9 @@ public abstract class UploadModulo extends Upload {
         return wikiBackend.findMappa();
     }
 
-    public WResult esegue() {
-        return this.uploadOrdinatoSenzaModifiche();
+    public Upload esegue() {
+         this.uploadOrdinatoSenzaModifiche();
+        return null;
     }
 
     /**

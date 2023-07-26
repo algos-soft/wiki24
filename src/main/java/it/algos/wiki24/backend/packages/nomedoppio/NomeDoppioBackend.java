@@ -197,7 +197,8 @@ public class NomeDoppioBackend extends WikiBackend {
      */
     @Override
     public WResult uploadModulo() {
-        WResult result = appContext.getBean(UploadProgettoNomiDoppi.class).esegue();
+        WResult result = new WResult();
+//        WResult result = appContext.getBean(UploadProgettoNomiDoppi.class).esegue();
 
         if (result.isModificata()) {
             message = String.format("Upload e modifica della pagina [%s]", super.sorgenteDownload);

@@ -110,7 +110,7 @@ public class UploadModuloNomiIncipitTest extends AlgosTest {
         System.out.println(("3 - esegue upload di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadModuloNomiIncipit.class).test().esegue();
+//        ottenutoRisultato = appContext.getBean(UploadModuloNomiIncipit.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);

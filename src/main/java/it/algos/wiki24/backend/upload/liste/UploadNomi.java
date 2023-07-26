@@ -85,21 +85,21 @@ public class UploadNomi extends UploadListe {
         }
 
         if (!isSottopagina) {
-            mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).typeLinkParagrafi(typeLinkParagrafi).mappaWrap();
+            if (mappaWrap == null) {
+                mappaWrap = appContext
+                        .getBean(ListaNomi.class, nomeLista)
+                        .typeLinkParagrafi(typeLinkParagrafi)
+                        .typeLinkCrono(typeLinkCrono)
+                        .icona(usaIcona)
+                        .mappaWrap();
+            }
         }
-
-        mappaWrap = appContext
-                .getBean(ListaNomi.class, nomeLista)
-                .typeLinkParagrafi(typeLinkParagrafi)
-                .typeLinkCrono(AETypeLink.linkVoce)
-                .icona(false)
-                .mappaWrap();
 
         return true;
     }
 
     @Override
-    public String testoBody(Map<String, List<WrapLista>> mappa) {
+    public String creaBody() {
         StringBuffer buffer = new StringBuffer();
         List<WrapLista> lista;
         int numVoci;
@@ -111,8 +111,8 @@ public class UploadNomi extends UploadListe {
         String vedi;
         String sottoPagina;
 
-        for (String keyParagrafo : mappa.keySet()) {
-            lista = mappa.get(keyParagrafo);
+        for (String keyParagrafo : mappaWrap.keySet()) {
+            lista = mappaWrap.get(keyParagrafo);
             numVoci = lista.size();
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (isSottopagina) {
@@ -126,14 +126,14 @@ public class UploadNomi extends UploadListe {
                 sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                appContext.getBean(UploadNomi.class, sottoPagina).sottoPagina(lista).test(uploadTest).esegue();
+                appContext.getBean(UploadNomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
             }
             else {
                 usaDiv = usaDivBase ? lista.size() > maxDiv : false;
                 buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
                 for (WrapLista wrap : lista) {
                     buffer.append(ASTERISCO);
-                    buffer.append(wrap.didascaliaBreve);
+                    buffer.append(wrap.lista);
                     buffer.append(CAPO);
                 }
                 buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);
@@ -164,62 +164,6 @@ public class UploadNomi extends UploadListe {
         buffer.append(String.format("*[[Categoria:Liste di persone per nome|%s]]", cat));
 
         return buffer.toString();
-    }
-
-    /**
-     * Esegue la scrittura di tutte le pagine <br>
-     */
-    public WResult uploadAll() {
-        WResult result = null;
-        long inizio = System.currentTimeMillis();
-        String message;
-        int pagineCreate = 0;
-        int pagineModificate = 0;
-        int pagineEsistenti = 0;
-        int pagineControllate = 0;
-
-        List<String> listaNomi = nomeBackend.findAllForKeyByNumBio();
-        for (String nome : listaNomi) {
-            result = appContext.getBean(UploadNomi.class, nome).esegue();
-
-            switch (result.getTypeResult()) {
-                case queryWriteCreata -> pagineCreate++;
-                case queryWriteModificata -> pagineModificate++;
-                case queryWriteEsistente -> pagineEsistenti++;
-                default -> pagineControllate++;
-            }
-
-            if (Pref.debug.is()) {
-                if (result.isValido()) {
-                    if (result.isModificata()) {
-                        message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_NOMI, nome);
-                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
-                    }
-                    else {
-                        message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_NOMI, nome);
-                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
-                    }
-                }
-                else {
-                    message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_NOMI, nome);
-                    logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
-                }
-            }
-        }
-        result.fine();
-
-        logService.info(new WrapLog().message(String.format("Create %d", pagineCreate)).type(AETypeLog.upload));
-        logService.info(new WrapLog().message(String.format("Modificate %d", pagineModificate)).type(AETypeLog.upload));
-        logService.info(new WrapLog().message(String.format("Esistenti %d", pagineEsistenti)).type(AETypeLog.upload));
-        logService.info(new WrapLog().message(String.format("Controllate %d", pagineControllate)).type(AETypeLog.upload));
-
-        message = String.format("Upload di %d pagine di nomi con numBio>%d.", listaNomi.size(), WPref.sogliaWikiNomi.getInt());
-        message += String.format(" Nuove=%s - Modificate=%s - Esistenti=%s - Controllate=%s.", pagineCreate, pagineModificate, pagineEsistenti, pagineControllate);
-        message += String.format(" %s", AETypeTime.minuti.message(result));
-        logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
-
-        fixUploadMinuti(inizio);
-        return result;
     }
 
 

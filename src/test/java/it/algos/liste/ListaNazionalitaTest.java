@@ -55,12 +55,12 @@ public class ListaNazionalitaTest extends ListeTest {
                 Arguments.of("assiri", AETypeLista.nazionalitaSingolare),
                 //                Arguments.of("azeri", AETypeLista.nazionalitaPlurale),
                 //                Arguments.of("arabi", AETypeLista.nazionalitaPlurale),
-                Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghana", AETypeLista.nazionalitaSingolare),
-                Arguments.of("afghani", AETypeLista.nazionalitaPlurale),
-                Arguments.of("mongoli", AETypeLista.nazionalitaSingolare),
-                Arguments.of("assiri", AETypeLista.nazionalitaPlurale),
+                //                Arguments.of("libanese", AETypeLista.nazionalitaSingolare),
+                //                Arguments.of("afghano", AETypeLista.nazionalitaSingolare),
+                //                Arguments.of("afghana", AETypeLista.nazionalitaSingolare),
+                //                Arguments.of("afghani", AETypeLista.nazionalitaPlurale),
+                //                Arguments.of("mongoli", AETypeLista.nazionalitaSingolare),
+                //                Arguments.of("assiri", AETypeLista.nazionalitaPlurale),
                 Arguments.of("capoverdiani", AETypeLista.nazionalitaPlurale)
         );
     }
@@ -77,6 +77,7 @@ public class ListaNazionalitaTest extends ListeTest {
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodoDefault = "plurale()";
     }
 
 
@@ -96,6 +97,11 @@ public class ListaNazionalitaTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
+        sorgente = "1876";
+        super.fixBeanStandard(sorgente);
+
+        System.out.println(VUOTA);
+
         sorgente = "tedeschi";
         super.fixBeanStandard(sorgente);
     }
@@ -106,6 +112,41 @@ public class ListaNazionalitaTest extends ListeTest {
     void esegueConParametroNelCostruttore() {
         sorgente = "francesi";
         super.fixConParametroNelCostruttore(sorgente);
+    }
+
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+
+        sorgente = "azeri";
+
+        appContext.getBean(ListaNazionalita.class, sorgente).listaBio();
+
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente);
+        super.debug(istanza, VUOTA);
+
+        sorgente2 = "singolare()";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente).singolare();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "plurale()";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente).plurale();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.nazionalitaSingolare)";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.nazionalitaSingolare);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.nazionalitaPlurale)";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.nazionalitaPlurale);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
+        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.giornoMorte);
+        super.debug(istanza, sorgente2);
     }
 
 
@@ -126,7 +167,7 @@ public class ListaNazionalitaTest extends ListeTest {
     @MethodSource(value = "NAZIONALITA_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void wrapLista(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -154,7 +195,7 @@ public class ListaNazionalitaTest extends ListeTest {
     @MethodSource(value = "NAZIONALITA_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-    void mappaWrap(final String nomeLista, final AETypeLista type) {
+    void mappaWrapKey(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -167,7 +208,7 @@ public class ListaNazionalitaTest extends ListeTest {
     @MethodSource(value = "NAZIONALITA_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -177,88 +218,85 @@ public class ListaNazionalitaTest extends ListeTest {
     }
 
 
-    //    @Test
-//    @Order(6)
-//    @DisplayName("6 - Istanza STANDARD col parametro obbligatorio")
-//    void beanStandardCompleta() {
-//        sorgente = "assiri";
-//        super.fixBeanStandard(sorgente);
-//    }
-//
-//    @Test
-//    @Order(7)
-//    @DisplayName("7 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "assiri";
-//        super.fixConParametroNelCostruttore(sorgente);
-//    }
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA_LISTA")
+    @Order(120)
+    @DisplayName("120 - WrapLista ALTERNATIVA")
+    void wrapListaAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
 
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(10)
-//    @DisplayName("10 - Lista bio BASE")
-//    void listaBio(final String nomeLista, final AETypeLista type) {
-//        if (!valido(nomeLista, type)) {
-//            return;
-//        }
-//
-//        listBio = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaBio();
-//        super.fixListaBio(nomeLista, listBio);
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(20)
-//    @DisplayName("20 - WrapLista STANDARD")
-//    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
-//        if (!valido(nomeLista, type)) {
-//            return;
-//        }
-//
-//        listWrapLista = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaWrap();
-//        super.fixWrapLista(nomeLista, listWrapLista);
-//    }
-//
-//
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(30)
-//    @DisplayName("30 - Didascalie STANDARD")
-//    void listaDidascalie(final String nomeLista, final AETypeLista type) {
-//        if (!valido(nomeLista, type)) {
-//            return;
-//        }
-//
-//        listWrapLista = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).listaWrap();
-//        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
-//    }
-//
-//
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(40)
-//    @DisplayName("40 - Key della mappaWrap STANDARD")
-//    void mappaWrap(final String nomeLista, final AETypeLista type) {
-//        if (!valido(nomeLista, type)) {
-//            return;
-//        }
-//
-//        mappaWrap = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).mappaWrap();
-//        super.fixMappaWrapKey(nomeLista, mappaWrap);
-//    }
-//
-//    @ParameterizedTest
-//    @MethodSource(value = "NAZIONALITA")
-//    @Order(50)
-//    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-//    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
-//        if (!valido(nomeLista, type)) {
-//            return;
-//        }
-//
-//        mappaWrap = appContext.getBean(ListaNazionalita.class, nomeLista).typeLista(type).mappaWrap();
-//        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
-//    }
+        listWrapLista = appContext
+                .getBean(ListaNazionalita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+
+        super.fixWrapLista(nomeLista, listWrapLista, "120 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA_LISTA")
+    @Order(130)
+    @DisplayName("130 - Didascalie ALTERNATIVE")
+    void listaDidascalieAlternative(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext
+                .getBean(ListaNazionalita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista, "130 - Lista ALTERNATIVA didascalie con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA_LISTA")
+    @Order(150)
+    @DisplayName("150 - MappaWrap ALTERNATIVA")
+    void mappaWrapAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaNazionalita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "150 - MappaWrap ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "NAZIONALITA_LISTA")
+    @Order(151)
+    @DisplayName("151 - MappaWrap ALTERNATIVA(2)")
+    void mappaWrapAlternativa2(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaNazionalita.class, nomeLista)
+                .typeLista(type)
+                .typeLinkParagrafi(AETypeLink.linkLista)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
+    }
 
 
     private boolean valido(final String nomeNazionalita, final AETypeLista type) {

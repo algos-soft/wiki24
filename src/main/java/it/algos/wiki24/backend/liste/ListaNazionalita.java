@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki23
@@ -51,45 +52,53 @@ public class ListaNazionalita extends Lista {
         return this;
     }
 
-
-    public ListaNazionalita singolare(final String nomeNazionalitaSingolare) {
-        this.nomeLista = nomeNazionalitaSingolare;
-        super.typeLista = AETypeLista.nazionalitaSingolare;
-        return this;
-    }
-
-    public ListaNazionalita plurale(final String nomeNazionalitaPlurale) {
-        this.nomeLista = nomeNazionalitaPlurale;
-        super.typeLista = AETypeLista.nazionalitaPlurale;
-        return this;
-    }
-
-    /**
-     * Pattern Builder <br>
-     */
-    public ListaNazionalita singolare() {
-        super.typeLista = AETypeLista.attivitaSingolare;
-        return this;
-    }
-
-    /**
-     * Pattern Builder <br>
-     */
-    public ListaNazionalita plurale() {
-        super.typeLista = AETypeLista.attivitaPlurale;
-        return this;
-    }
-
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.backend = super.nazPluraleBackend;
         super.nomeLista = textService.primaMaiuscola(nomeLista);
         super.titoloPagina = wikiUtility.wikiTitleNazionalita(nomeLista);
         super.typeLista = AETypeLista.nazionalitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
         super.istanzaValida = false;
+
+        if (typeLista == AETypeLista.nazionalitaPlurale) {
+            NazPlurale nazionalitaPlurale = nazPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));
+            listaNomiSingoli = nazionalitaPlurale != null ? nazionalitaPlurale.listaSingolari.stream().map(naz -> naz.nome).collect(Collectors.toList()) : null;
+        }
     }
+
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNazionalita typeLista(AETypeLista typeLista) {
+        super.istanzaValida = false;
+        return switch (typeLista) {
+            case nazionalitaSingolare -> singolare();
+            case nazionalitaPlurale -> plurale();
+            default -> this;
+        };
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNazionalita singolare() {
+        super.istanzaValida = true;
+        return (ListaNazionalita) super.typeLista(AETypeLista.nazionalitaSingolare);
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNazionalita plurale() {
+        super.istanzaValida = true;
+        return (ListaNazionalita) super.typeLista(AETypeLista.nazionalitaPlurale);
+    }
+
+
 
     /**
      * Ordina la mappa <br>

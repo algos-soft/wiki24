@@ -833,6 +833,7 @@ public abstract class WikiTest extends AlgosTest {
         if (this.costruttoreNecessitaAlmenoUnParametro) {
             System.out.println(String.format("2 - appContext.getBean(%s.class, xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
+            System.out.println("Errore previsto (nel test). Tipo warning.");
 
             System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
             System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
@@ -897,18 +898,20 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
         System.out.println(String.format("È obbligatorio il '%s' nel costruttore.", nomeParametro));
         System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo '%s' se l'istanza non è correttamente istanziata.", nomeMetodo));
+        message = String.format("Istanza di [%s] costruita SENZA parametro", clazzName);
+        logService.warn(new WrapLog().message(message));
     }
 
 
-    protected void fixBeanStandard(final Object istanza, String nomeParametro, String metodiEseguibili, String metodoDaRegolare, String metodiBuilderPattern) {
-        System.out.println(String.format("7 - Istanza valida costruita col parametro obbligatorio SENZA altre regolazioni", clazzName));
+    protected void fixBeanStandard(final Object istanza, String valore, String metodiEseguibili, String metodoDaRegolare, String metodiBuilderPattern) {
+        System.out.println(String.format("7 - Istanza valida della classe [%s] costruita col parametro SENZA altre regolazioni", clazzName));
         System.out.println(VUOTA);
-        System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro", clazzName, nomeParametro));
+        System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro nel costruttore", clazzName, valore));
 
         if (this.istanzaValidaSubitoDopoCostruttore) {
             System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
-            System.out.println(String.format("Non fa nulla ma è pronta per '%s' o altri metodi", metodiEseguibili));
             System.out.println(String.format("BuilderPattern%s%s", FORWARD, metodiBuilderPattern));
+            System.out.println(String.format("Non fa nulla ma è pronta per '%s' o altri metodi", metodiEseguibili));
             System.out.println(VUOTA);
 
             assertNotNull(istanza);
@@ -925,12 +928,13 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     protected void fixBeanStandardNo(String nomeParametro, String valore, String check, String funzione, String sorgente, String metodiBuilderPattern) {
-        System.out.println(String.format("7 - Istanza NON valida costruita col parametro '%s' nel costruttore'", nomeParametro));
+        System.out.println(String.format("7 - Istanza NON valida costruita col parametro '%s' nel costruttore della classe [%s]", valore,clazzName));
         System.out.println(VUOTA);
-        System.out.println(String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName));
 
         System.out.println(String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, check));
         System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, funzione, sorgente));
+        message = String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName);
+        logService.warn(new WrapLog().message(message));
     }
 
     protected void fixConParametroNelCostruttore(String nomeParametro, String metodoDaEseguire, String metodiDaRegolare) {
@@ -972,7 +976,46 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
+    protected void fixMappaWrapKey(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
+        System.out.println(VUOTA);
+        System.out.println("40 - Key della mappaWrap");
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            message = String.format("La mappaWrap della lista %s ha %d chiavi (paragrafi) per %d didascalie", sorgente, mappaWrap.size(), wikiUtility.getSizeAllWrap(mappaWrap));
+            System.out.println(message);
+            printMappaWrapKeyOrder(mappaWrap);
+        }
+        else {
+            message = "La mappaWrap è nulla";
+            System.out.println(message);
+        }
+    }
+
+    protected void fixMappaWrapDidascalie(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap) {
+        fixMappaWrapDidascalie(sorgente, mappaWrap, "50 - Mappa STANDARD wrapLista (paragrafi e righe)");
+    }
+
+    protected void fixMappaWrapDidascalie(final String sorgente, final LinkedHashMap<String, List<WrapLista>> mappaWrap, String incipit) {
+        System.out.println(VUOTA);
+        System.out.println(incipit);
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            message = String.format("La mappaWrap della lista %s ha %d didascalie", sorgente, wikiUtility.getSizeAllWrap(mappaWrap));
+            System.out.println(message);
+            printMappaDidascalie(mappaWrap);
+        }
+        else {
+            message = "La mappaWrap è nulla";
+            System.out.println(message);
+        }
+    }
+
+
     protected void printRisultato(WResult result) {
+        if (result == null) {
+            return;
+        }
+
         List lista = result.getLista();
         lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
         String newText = result.getNewtext();
@@ -1404,17 +1447,23 @@ public abstract class WikiTest extends AlgosTest {
 
     protected void printMappaDidascalie(LinkedHashMap<String, List<WrapLista>> mappaWrap) {
         List<WrapLista> lista;
+        String titoloParagrafo = VUOTA;
+        WrapLista wrapZero;
 
         if (mappaWrap != null) {
             message = String.format("Faccio vedere una mappa delle didascalie con i relativi paragrafi");
             System.out.println(message);
             System.out.println(VUOTA);
             for (String paragrafo : mappaWrap.keySet()) {
+                lista = mappaWrap.get(paragrafo);
+                wrapZero = lista.get(0) != null ? lista.get(0) : null;
+                if (wrapZero != null) {
+                    titoloParagrafo = textService.isValid(wrapZero.titoloParagrafoLink) ? wrapZero.titoloParagrafoLink : wrapZero.titoloParagrafo;
+                }
                 System.out.print("==");
-                System.out.print(paragrafo);
+                System.out.print(titoloParagrafo);
                 System.out.print("==");
                 System.out.print(CAPO);
-                lista = mappaWrap.get(paragrafo);
 
                 for (WrapLista wrap : lista) {
                     System.out.println(wrap.didascalia);

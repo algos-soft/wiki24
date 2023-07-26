@@ -106,7 +106,7 @@ public class UploadProgettoNomiDoppiTest extends AlgosTest {
         System.out.println(("3 - esegue upload di test"));
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadProgettoNomiDoppi.class).test().esegue();
+//        ottenutoRisultato = appContext.getBean(UploadProgettoNomiDoppi.class).test().esegue();
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);

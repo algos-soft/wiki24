@@ -648,10 +648,10 @@ public class WikiUtilityView extends UtilityView {
         logger.info(new WrapLog().message("Utility: test di upload dei Giorni.").type(AETypeLog.utility));
 
         sorgente = "23 aprile";
-        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
+//        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
 
         sorgente = "8 dicembre";
-        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoMorte).upload(sorgente);
+//        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoMorte).upload(sorgente);
 
         super.fineDebug();
     }

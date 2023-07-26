@@ -58,6 +58,10 @@ public abstract class UploadTest extends WikiTest {
     }
 
     protected void fixConParametroNelCostruttore(String sorgente) {
+        this.fixConParametroNelCostruttore(sorgente, "test()");
+    }
+
+    protected void fixConParametroNelCostruttore(String sorgente, String metodiDaRegolare) {
         long inizio = System.currentTimeMillis();
         WResult result = null;
         Upload istanza = null;
@@ -84,7 +88,7 @@ public abstract class UploadTest extends WikiTest {
             }
         }
 
-        super.fixConParametroNelCostruttore("nomeLista", "fixMappaWrap()", "test()", istanzaEffettivamenteValida, inizio);
+        super.fixConParametroNelCostruttore("nomeLista", "fixMappaWrap()", metodiDaRegolare, istanzaEffettivamenteValida, inizio);
 
         System.out.println(VUOTA);
         System.out.println("Debug");
@@ -94,9 +98,6 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(String.format("metodoEseguito%s%s", FORWARD, metodoEseguito));
     }
 
-//    protected void fixConParametroNelCostruttore() {
-//        super.fixConParametroNelCostruttore("nomeLista", "esegue()","test()");
-//    }
 
     protected void printUpload(Upload uploadEntityBean) {
         if (uploadEntityBean == null) {
@@ -122,7 +123,7 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(String.format("%s%s%s", "usaNumeriTitoloParagrafi: [standard da preferenze ma regolabile in fixPreferenze()]", FORWARD, uploadEntityBean.usaNumeriTitoloParagrafi));
         System.out.println(String.format("%s%s%s", "typeLinkCrono: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.typeLinkCrono));
         System.out.println(String.format("%s%s%s", "usaIcona: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.usaIcona));
-        System.out.println(String.format("%s%s%s", "uploadTest: [di default=true (per sicurezza) ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.uploadTest));
+        System.out.println(String.format("%s%s%s", "uploadTest: [di default=false (ATTENZIONE) ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.uploadTest));
         System.out.println(VUOTA);
     }
 

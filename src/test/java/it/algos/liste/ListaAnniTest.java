@@ -97,6 +97,11 @@ public class ListaAnniTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
+        sorgente = "4 marzo";
+        super.fixBeanStandard(sorgente);
+
+        System.out.println(VUOTA);
+
         sorgente = "1967";
         super.fixBeanStandard(sorgente);
     }
@@ -109,6 +114,41 @@ public class ListaAnniTest extends ListeTest {
         super.fixConParametroNelCostruttore(sorgente);
     }
 
+
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+
+        sorgente = "560";
+
+        appContext.getBean(ListaAnni.class, sorgente).listaBio();
+
+        istanza = appContext.getBean(ListaAnni.class, sorgente);
+        super.debug(istanza, VUOTA);
+
+        sorgente2 = "nascita()";
+        istanza = appContext.getBean(ListaAnni.class, sorgente).nascita();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "morte()";
+        istanza = appContext.getBean(ListaAnni.class, sorgente).morte();
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.annoNascita)";
+        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.annoNascita);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.annoMorte)";
+        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.annoMorte);
+        super.debug(istanza, sorgente2);
+
+        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
+        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
+        super.debug(istanza, sorgente2);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_LISTA")
@@ -127,7 +167,7 @@ public class ListaAnniTest extends ListeTest {
     @MethodSource(value = "ANNI_LISTA")
     @Order(20)
     @DisplayName("20 - WrapLista STANDARD")
-    void listaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void wrapLista(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -155,7 +195,7 @@ public class ListaAnniTest extends ListeTest {
     @MethodSource(value = "ANNI_LISTA")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-    void mappaWrap(final String nomeLista, final AETypeLista type) {
+    void mappaWrapKey(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -168,7 +208,7 @@ public class ListaAnniTest extends ListeTest {
     @MethodSource(value = "ANNI_LISTA")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
         if (!valido(nomeLista, type)) {
             return;
         }
@@ -177,263 +217,100 @@ public class ListaAnniTest extends ListeTest {
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(13)
-    //    @DisplayName("13 - Lista bio con switch")
-    //        //--nome anno
-    //        //--typeLista
-    //    void listaBio(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("13 - Lista bio con switch");
-    //        sorgente = nomeAnno;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        listBio = switch (type) {
-    //            case annoNascita -> appContext.getBean(ListaAnni.class, sorgente).nascita().listaBio();
-    //            case annoMorte -> appContext.getBean(ListaAnni.class, sorgente).morte().listaBio();
-    //            default -> null;
-    //        };
-    //
-    //        if (listBio != null && listBio.size() > 0) {
-    //            message = String.format("Ci sono %d biografie che implementano l'anno di %s %s", listBio.size(), type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            System.out.println(VUOTA);
-    //            switch (type) {
-    //                case annoNascita -> printBioListaAnniNato(listBio);
-    //                case annoMorte -> printBioListaAnniMorto(listBio);
-    //            }
-    //        }
-    //        else {
-    //            message = String.format("Non esiste la listBio per le persone %s l'anno [%s]", type.getTagF(), nomeAnno);
-    //            System.out.println(message);
-    //        }
-    //    }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(14)
-    //    @DisplayName("14 - Lista bio con type")
-    //        //--nome anno
-    //        //--typeLista
-    //    void listaBioType(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("14 - Lista bio con type");
-    //        sorgente = nomeAnno;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        listBio = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).listaBio();
-    //
-    //        if (listBio != null && listBio.size() > 0) {
-    //            message = String.format("Ci sono %d biografie che implementano il giorno di %s %s", listBio.size(), type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            System.out.println(VUOTA);
-    //            printBio(type, listBio);
-    //        }
-    //        else {
-    //            message = String.format("Non esiste la listBio per le persone %s il giorno [%s]", type.getTagF(), nomeAnno);
-    //            System.out.println(message);
-    //        }
-    //    }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(20)
-    //    @DisplayName("20 - Lista wrapLista")
-    //        //--nome anno
-    //        //--typeLista
-    //    void listaWrap(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("20 - Lista wrapLista");
-    //        sorgente = nomeAnno;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        listWrapLista = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).listaWrap();
-    //
-    //        if (listWrapLista != null && listWrapLista.size() > 0) {
-    //            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", listWrapLista.size(), type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            System.out.println(VUOTA);
-    //            for (WrapLista wrap : listWrapLista.subList(0, 5)) {
-    //                super.printWrap(wrap, this.textService);
-    //            }
-    //        }
-    //        else {
-    //            message = "La lista è nulla";
-    //            System.out.println(message);
-    //        }
-    //    }
-    //
-    //
-    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(40)
-    //    @DisplayName("40 - Key della mappa wrapLista di vari anni")
-    //        //--nome anno
-    //        //--typeLista
-    //    void mappaWrap5(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("40 - Key della mappa wrapLista di vari anni");
-    //        sorgente = nomeAnno;
-    //        int numVoci;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
-    //
-    //        if (mappaWrap != null && mappaWrap.size() > 0) {
-    //            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-    //            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", mappaWrap.size(), type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            printMappaWrapKeyOrder(mappaWrap);
-    //        }
-    //        else {
-    //            message = "La mappa è nulla";
-    //            System.out.println(message);
-    //        }
-    //    }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(41)
-    //    @DisplayName("41 - Mappa wrapLista (paragrafi e righe)")
-    //        //--nome anno
-    //        //--typeLista
-    //    void mappaWrap3(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("41 - Mappa wrapLista (paragrafi e righe)");
-    //        sorgente = nomeAnno;
-    //        int numVoci;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
-    //
-    //        if (mappaWrap != null && mappaWrap.size() > 0) {
-    //            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-    //            message = String.format("Ci sono %d wrapLista che implementano l'anno di %s %s", numVoci, type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            printMappaDidascalie(mappaWrap);
-    //        }
-    //        else {
-    //            message = "La mappa è nulla";
-    //            System.out.println(message);
-    //        }
-    //    }
 
-    //    //    @ParameterizedTest
-    //    @MethodSource(value = "ANNI_LISTA")
-    //    @Order(117)
-    //    @DisplayName("117 - Mappa wrapLista di vari anni")
-    //    //--nome anno
-    //    //--typeLista
-    //    void mappaWrap2(final String nomeAnno, final AETypeLista type) {
-    //        System.out.println("117 - Mappa wrapLista di vari anni");
-    //        sorgente = nomeAnno;
-    //        int numVoci;
-    //
-    //        if (!valido(nomeAnno, type)) {
-    //            return;
-    //        }
-    //
-    //        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
-    //
-    //        if (mappaWrap != null && mappaWrap.size() > 0) {
-    //            numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
-    //            message = String.format("Ci sono %d wrapLista che implementano l'anno %s %s", mappaWrap.size(), type.getCivile(), sorgente);
-    //            System.out.println(message);
-    //            System.out.println(VUOTA);
-    //            printMappaWrap(mappaWrap);
-    //        }
-    //        else {
-    //            message = "La mappa è nulla";
-    //            System.out.println(message);
-    //        }
-    //    }
-    //
-    //    //    @ParameterizedTest
-    //    //    @MethodSource(value = "ANNI_LISTA")
-    //    //    @Order(50)
-    //    //    @DisplayName("50 - Lista didascalie")
-    //    //        //--nome anno
-    //    //        //--typeLista
-    //    //    void listaDidascalie(final String nomeAnno, final AETypeLista type) {
-    //    //        sorgente = nomeAnno;
-    //    //        if (!valido(nomeAnno, type)) {
-    //    //            return;
-    //    //        }
-    //    //        listWrapLista = appContext.getBean(ListaAnni.class, sorgente).listaWrap();
-    //    //        System.out.println("50 - Lista didascalie");
-    //    //
-    //    //        if (listWrapLista != null && listWrapLista.size() > 0) {
-    //    //            System.out.println(VUOTA);
-    //    //            for (WrapLista wrap : listWrapLista) {
-    //    //                System.out.println(wrap.didascalia);
-    //    //            }
-    //    //        }
-    //    //        else {
-    //    //            message = "La lista è nulla";
-    //    //            System.out.println(message);
-    //    //        }
-    //    //    }
-    //
-    //    //    @ParameterizedTest
-    //    //    @MethodSource(value = "ANNI_LISTA")
-    //    //    @Order(60)
-    //    //    @DisplayName("60 - Key della mappa wrapLista")
-    //    //        //--nome anno
-    //    //        //--typeLista
-    //    //    void mappaWrap(final String nomeAnno, final AETypeLista type) {
-    //    //        sorgente = nomeAnno;
-    //    //        if (!valido(nomeAnno, type)) {
-    //    //            return;
-    //    //        }
-    //    //        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
-    //    //        System.out.println("60 - Key della mappa wrapLista");
-    //    //
-    //    //        if (mappaWrap != null && mappaWrap.size() > 0) {
-    //    //            message = String.format("Ci sono %d wrapLista che implementano la lista %s", wikiUtility.getSizeAllWrap(mappaWrap), sorgente);
-    //    //            System.out.println(message);
-    //    //            printMappaWrapKeyOrder(mappaWrap);
-    //    //        }
-    //    //        else {
-    //    //            message = "La mappa è nulla";
-    //    //            System.out.println(message);
-    //    //        }
-    //    //    }
-    //
-    //    //    @ParameterizedTest
-    //    //    @MethodSource(value = "ANNI_LISTA")
-    //    //    @Order(70)
-    //    //    @DisplayName("70 - Mappa STANDARD wrapLista (paragrafi e righe)")
-    //    //        //--nome anno
-    //    //        //--typeLista
-    //    //    void mappaWrapDidascalie(final String nomeAnno, final AETypeLista type) {
-    //    //        sorgente = nomeAnno;
-    //    //        if (!valido(nomeAnno, type)) {
-    //    //            return;
-    //    //        }
-    //    //        mappaWrap = appContext.getBean(ListaAnni.class, sorgente).typeLista(type).mappaWrap();
-    //    //        System.out.println("70 - Mappa STANDARD wrapLista (paragrafi e righe)");
-    //    //
-    //    //        if (mappaWrap != null && mappaWrap.size() > 0) {
-    //    //            printMappaDidascalie(mappaWrap);
-    //    //        }
-    //    //        else {
-    //    //            message = "La mappa è nulla";
-    //    //            System.out.println(message);
-    //    //        }
-    //    //    }
-    //
-    //
+
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(120)
+    @DisplayName("120 - WrapLista ALTERNATIVA")
+    void wrapListaAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext
+                .getBean(ListaAnni.class, nomeLista)
+                .typeLista(AETypeLista.annoNascita)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+
+        super.fixWrapLista(nomeLista, listWrapLista, "120 - WrapLista ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(130)
+    @DisplayName("130 - Didascalie ALTERNATIVE")
+    void listaDidascalieAlternative(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        listWrapLista = appContext
+                .getBean(ListaAnni.class, nomeLista)
+                .typeLista(AETypeLista.annoNascita)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .listaWrap();
+
+        super.fixWrapListaDidascalie(nomeLista, listWrapLista, "130 - Lista ALTERNATIVA didascalie con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(150)
+    @DisplayName("150 - MappaWrap ALTERNATIVA")
+    void mappaWrapAlternativa(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaAnni.class, nomeLista)
+                .typeLista(AETypeLista.annoNascita)
+                .typeLinkParagrafi(AETypeLink.linkVoce)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "150 - MappaWrap ALTERNATIVA con linkParagrafi=linkVoce e linkCrono=linkVoce e usaIcona=false");
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_LISTA")
+    @Order(151)
+    @DisplayName("151 - MappaWrap ALTERNATIVA(2)")
+    void mappaWrapAlternativa2(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        mappaWrap = appContext
+                .getBean(ListaAnni.class, nomeLista)
+                .typeLista(AETypeLista.annoNascita)
+                .typeLinkParagrafi(AETypeLink.linkLista)
+                .typeLinkCrono(AETypeLink.linkVoce)
+                .icona(false)
+                .mappaWrap();
+
+        fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
+    }
+
+
+
+
+
+
+
+
     //    @Test
     //    @Order(91)
     //    @DisplayName("91 - Paragrafo singolo")

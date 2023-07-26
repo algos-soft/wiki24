@@ -43,7 +43,7 @@ public abstract class UploadProgetto extends Upload {
         return null;
     }
 
-    public WResult esegue() {
+    public Upload esegue() {
         return null;
     }
 

@@ -12,6 +12,7 @@ import it.algos.wiki24.backend.packages.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomeincipit.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.statistiche.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
@@ -448,6 +449,61 @@ public class NomeBackend extends WikiBackend {
         result = appContext.getBean(StatisticheListeNomi.class).esegue();
 
         logger.info(new WrapLog().message(result.getMessage()).type(AETypeLog.upload).usaDb());
+        return result;
+    }
+
+
+    /**
+     * Esegue la scrittura di tutte le pagine <br>
+     */
+    public WResult uploadAll() {
+        WResult result = null;
+        String message;
+        int pagineCreate = 0;
+        int pagineModificate = 0;
+        int pagineEsistenti = 0;
+        int pagineControllate = 0;
+
+        List<String> listaNomi = this.findAllForKeyByNumBio();
+        for (String nome : listaNomi) {
+            result = appContext.getBean(UploadNomi.class, nome).upload();
+
+            switch (result.getTypeResult()) {
+                case queryWriteCreata -> pagineCreate++;
+                case queryWriteModificata -> pagineModificate++;
+                case queryWriteEsistente -> pagineEsistenti++;
+                default -> pagineControllate++;
+            }
+
+            if (Pref.debug.is()) {
+                if (result.isValido()) {
+                    if (result.isModificata()) {
+                        message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_NOMI, nome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                    else {
+                        message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_NOMI, nome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                }
+                else {
+                    message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_NOMI, nome);
+                    logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
+                }
+            }
+        }
+        result.fine();
+
+        logService.info(new WrapLog().message(String.format("Create %d", pagineCreate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Modificate %d", pagineModificate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Esistenti %d", pagineEsistenti)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Controllate %d", pagineControllate)).type(AETypeLog.upload));
+
+        message = String.format("Upload di %d pagine di nomi con numBio>%d.", listaNomi.size(), WPref.sogliaWikiNomi.getInt());
+        message += String.format(" Nuove=%s - Modificate=%s - Esistenti=%s - Controllate=%s.", pagineCreate, pagineModificate, pagineEsistenti, pagineControllate);
+        message += String.format(" %s", AETypeTime.minuti.message(result));
+        logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+
         return result;
     }
 

@@ -151,6 +151,7 @@ public class BioBackend extends WikiBackend {
         return Bio.builder()
                 .pageId(doc.getLong("pageId"))
                 .wikiTitle(doc.getString("wikiTitle"))
+                .tmplBio(doc.getString("tmplBio"))
                 .elaborato(doc.getBoolean("elaborato"))
                 .nome(doc.getString("nome"))
                 .cognome(doc.getString("cognome"))

@@ -69,12 +69,13 @@ public class ListaAttivita extends Lista {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.backend = super.attPluraleBackend;
         super.nomeLista = textService.primaMaiuscola(nomeLista);
         super.titoloPagina = wikiUtility.wikiTitleAttivita(nomeLista);
         super.typeLista = AETypeLista.attivitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_NAZIONALITA;
-        super.istanzaValida = false;
+        super.istanzaValida = true;
 
         if (typeLista == AETypeLista.attivitaPlurale) {
             AttPlurale attivitaPlurale = attPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));
@@ -83,21 +84,32 @@ public class ListaAttivita extends Lista {
 
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaAttivita typeLista(AETypeLista typeLista) {
+        super.istanzaValida = false;
+        return switch (typeLista) {
+            case attivitaSingolare -> singolare();
+            case attivitaPlurale -> plurale();
+            default -> this;
+        };
+    }
 
     /**
      * Pattern Builder <br>
      */
     public ListaAttivita singolare() {
-        super.typeLista = AETypeLista.attivitaSingolare;
-        return this;
+        super.istanzaValida = true;
+        return (ListaAttivita) super.typeLista(AETypeLista.attivitaSingolare);
     }
 
     /**
      * Pattern Builder <br>
      */
     public ListaAttivita plurale() {
-        super.typeLista = AETypeLista.attivitaPlurale;
-        return this;
+        super.istanzaValida = true;
+        return (ListaAttivita) super.typeLista(AETypeLista.attivitaPlurale);
     }
 
     /**

@@ -309,8 +309,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         paragrafoLink = switch (typeLinkParagrafi) {
-            case linkVoce -> textService.setDoppieQuadre(paragrafo);
-            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case linkVoce, linkLista -> textService.setDoppieQuadre(paragrafo);
             case nessunLink -> VUOTA;
         };
 
@@ -358,8 +357,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         paragrafoLink = switch (typeLinkParagrafi) {
-            case linkVoce -> textService.setDoppieQuadre(paragrafo);
-            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case linkVoce, linkLista -> textService.setDoppieQuadre(paragrafo);
             case nessunLink -> VUOTA;
         };
 
@@ -406,8 +404,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         paragrafoLink = switch (typeLinkParagrafi) {
-            case linkVoce -> textService.setDoppieQuadre(paragrafo);
-            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case linkVoce, linkLista -> textService.setDoppieQuadre(paragrafo);
             case nessunLink -> VUOTA;
         };
 
@@ -454,8 +451,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         paragrafoLink = switch (typeLinkParagrafi) {
-            case linkVoce -> textService.setDoppieQuadre(paragrafo);
-            case linkLista -> textService.setDoppieQuadre(PATH_ATTIVITA + SLASH + paragrafo + PIPE + paragrafo);
+            case linkVoce, linkLista -> textService.setDoppieQuadre(paragrafo);
             case nessunLink -> VUOTA;
         };
 
@@ -549,27 +545,27 @@ public class DidascaliaService extends WAbstractService {
      * @return wrapLista
      */
     public WrapLista getWrapNazionalita(String titoloPagina, final Bio bio, AETypeLink typeLinkParagrafi, AETypeLink typeLinkCrono, boolean usaIcona) {
-//        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
-//        AttPlurale attPlurale;
+        //        AttSingolare attSingolare = attSingolareBackend.findByKey(bio.attivita);
+        //        AttPlurale attPlurale;
         String paragrafo = genereBackend.getPluraleParagrafo(bio);
         String paragrafoLink;
         String sottoParagrafo;
         String ordinamento = VUOTA;
 
-//        if (attSingolare != null) {
-//            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
-//            if (attPlurale != null) {
-//                paragrafo = textService.primaMaiuscola(attPlurale.nome);
-//            }
-//            else {
-//                paragrafo = textService.primaMaiuscola(attSingolare.nome);
-//                logService.warn(new WrapLog().message(String.format("Manca l'attività plurale di %s", attSingolare.nome)));
-//            }
-//        }
-//        else {
-//            paragrafo = TAG_LISTA_NO_ATTIVITA;
-//        }
-//
+        //        if (attSingolare != null) {
+        //            attPlurale = attPluraleBackend.findByKey(attSingolare.plurale);
+        //            if (attPlurale != null) {
+        //                paragrafo = textService.primaMaiuscola(attPlurale.nome);
+        //            }
+        //            else {
+        //                paragrafo = textService.primaMaiuscola(attSingolare.nome);
+        //                logService.warn(new WrapLog().message(String.format("Manca l'attività plurale di %s", attSingolare.nome)));
+        //            }
+        //        }
+        //        else {
+        //            paragrafo = TAG_LISTA_NO_ATTIVITA;
+        //        }
+        //
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         }
@@ -606,6 +602,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
         String sottoParagrafo;
         String ordinamento = VUOTA;
+        Map<String, String> mappa;
+        String cognomeGrezzo;
 
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
@@ -620,11 +618,18 @@ public class DidascaliaService extends WAbstractService {
             case nessunLink -> VUOTA;
         };
 
-        if (textService.isValid(bio.nome)) {
-            sottoParagrafo = bio.nome.substring(0, 1);
+        if (textService.isValid(bio.cognome)) {
+            sottoParagrafo = bio.cognome.substring(0, 1);
         }
         else {
-            sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+            mappa = bioService.estraeMappa(bio);
+            cognomeGrezzo = mappa != null ? mappa.get("Cognome") : VUOTA;
+            if (textService.isValid(cognomeGrezzo)) {
+                sottoParagrafo = cognomeGrezzo.substring(0, 1);
+            }
+            else {
+                sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+            }
         }
 
         return getWrap(
@@ -659,6 +664,8 @@ public class DidascaliaService extends WAbstractService {
         String paragrafoLink;
         String sottoParagrafo;
         String ordinamento = VUOTA;
+        Map<String, String> mappa;
+        String nomeGrezzo;
 
         if (typeLinkParagrafi == null) {
             typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
@@ -673,11 +680,18 @@ public class DidascaliaService extends WAbstractService {
             case nessunLink -> VUOTA;
         };
 
-        if (textService.isValid(bio.cognome)) {
-            sottoParagrafo = bio.cognome.substring(0, 1);
+        if (textService.isValid(bio.nome)) {
+            sottoParagrafo = bio.nome.substring(0, 1);
         }
         else {
-            sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+            mappa = bioService.estraeMappa(bio);
+            nomeGrezzo = mappa != null ? mappa.get("Nome") : VUOTA;
+            if (textService.isValid(nomeGrezzo)) {
+                sottoParagrafo = nomeGrezzo.substring(0, 1);
+            }
+            else {
+                sottoParagrafo = textService.isValid(bio.ordinamento) ? bio.ordinamento.substring(0, 1) : VUOTA;
+            }
         }
 
         return getWrap(

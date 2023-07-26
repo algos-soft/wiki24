@@ -21,16 +21,16 @@ public  abstract class UploadListe extends Upload implements AlgosBuilderPattern
         super(nomeLista);
     }// end of constructor
 
-    public WResult esegue() {
-        if (false) {
-//            return super.esegue();
-            return null;
-
-        }
-        else {
-//            return super.esegue();
-            return null;
-        }
-    }
+//    public WResult esegue() {
+//        if (false) {
+////            return super.esegue();
+//            return null;
+//
+//        }
+//        else {
+////            return super.esegue();
+//            return null;
+//        }
+//    }
 
 }

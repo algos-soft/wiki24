@@ -219,8 +219,6 @@ public class NomeView extends WikiView {
     }
 
 
-
-
     /**
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
@@ -295,7 +293,8 @@ public class NomeView extends WikiView {
 
         if (nome != null) {
             if (nome.numBio > WPref.sogliaWikiNomi.getInt()) {
-                result = appContext.getBean(UploadNomi.class, nome.nome).esegue();
+                result = appContext.getBean(UploadNomi.class, nome.nome).upload();
+
             }
             else {
                 message = String.format("Il nome '%s' non raggiunge il numero di voci biografiche. Necessario=%d", nome.nome, WPref.sogliaWikiNomi.getInt());
@@ -320,7 +319,6 @@ public class NomeView extends WikiView {
             Avviso.message(message).error().open();
             logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
         }
-
     }
 
     /**
@@ -340,7 +338,9 @@ public class NomeView extends WikiView {
      */
     @Override
     public void uploadAll() {
-        appContext.getBean(UploadNomi.class).uploadAll();
+        long inizio = System.currentTimeMillis();
+        WResult result = backend.uploadAll();
+        super.fixUpload(inizio, "dei nomi");
         reload();
     }
 

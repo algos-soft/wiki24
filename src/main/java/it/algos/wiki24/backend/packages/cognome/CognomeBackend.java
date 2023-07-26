@@ -287,6 +287,11 @@ public class CognomeBackend extends WikiBackend {
         return lungo > 0 ? lungo.intValue() : 0;
     }
 
+    public List<String> findAllForKeyByNumBio() {
+        int soglia = WPref.sogliaWikiNomi.getInt();
+        List<Cognome> listaAll = findAllSortKey();
+        return listaAll != null ? listaAll.stream().filter(cognome -> cognome.numBio > soglia).map(cognome -> cognome.cognome).collect(Collectors.toList()) : null;
+    }
 
     /**
      * ResetOnlyEmpty -> Download. <br>
@@ -498,10 +503,57 @@ public class CognomeBackend extends WikiBackend {
     }
 
     /**
-     * Scrive una pagina definitiva sul server wiki <br>
+     * Esegue la scrittura di tutte le pagine <br>
      */
-    public WResult uploadPagina(String cognomeTxt) {
-        return appContext.getBean(UploadCognomi.class, cognomeTxt).esegue();
+    public WResult uploadAll() {
+        WResult result = null;
+        String message;
+        int pagineCreate = 0;
+        int pagineModificate = 0;
+        int pagineEsistenti = 0;
+        int pagineControllate = 0;
+
+        List<String> listaCognomi = this.findAllForKeyByNumBio();
+        for (String cognome : listaCognomi) {
+            result = appContext.getBean(UploadCognomi.class, cognome).upload();
+
+            switch (result.getTypeResult()) {
+                case queryWriteCreata -> pagineCreate++;
+                case queryWriteModificata -> pagineModificate++;
+                case queryWriteEsistente -> pagineEsistenti++;
+                default -> pagineControllate++;
+            }
+
+            if (Pref.debug.is()) {
+                if (result.isValido()) {
+                    if (result.isModificata()) {
+                        message = String.format("Upload della singola pagina%s [%s%s]", FORWARD, PATH_COGNOMI, cognome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                    else {
+                        message = String.format("La pagina: [%s%s] esisteva già e non è stata modificata", PATH_COGNOMI, cognome);
+                        logService.info(new WrapLog().message(message).type(AETypeLog.upload));
+                    }
+                }
+                else {
+                    message = String.format("Non sono riuscito a caricare su wiki la pagina: [%s%s]", PATH_COGNOMI, cognome);
+                    logService.error(new WrapLog().message(result.getErrorMessage()).type(AETypeLog.upload).usaDb());
+                }
+            }
+        }
+        result.fine();
+
+        logService.info(new WrapLog().message(String.format("Create %d", pagineCreate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Modificate %d", pagineModificate)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Esistenti %d", pagineEsistenti)).type(AETypeLog.upload));
+        logService.info(new WrapLog().message(String.format("Controllate %d", pagineControllate)).type(AETypeLog.upload));
+
+        message = String.format("Upload di %d pagine di cognomi con numBio>%d.", listaCognomi.size(), WPref.sogliaWikiCognomi.getInt());
+        message += String.format(" Nuove=%s - Modificate=%s - Esistenti=%s - Controllate=%s.", pagineCreate, pagineModificate, pagineEsistenti, pagineControllate);
+        message += String.format(" %s", AETypeTime.minuti.message(result));
+        logService.info(new WrapLog().message(message).type(AETypeLog.upload).usaDb());
+
+        return result;
     }
 
 }// end of crud backend class
