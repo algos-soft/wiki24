@@ -264,19 +264,13 @@ public class ListaCognomiTest extends ListeTest {
         System.out.println(VUOTA);
 
         sorgente = "Williams";
-        sorgente2 = "calciatori";
-        sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+        sorgente2 = "Calciatori";
+
         mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
-        listWrapLista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
-        assertNotNull(listWrapLista);
+        listWrapLista = mappaWrap.get(sorgente2);
 
-        System.out.println(VUOTA);
-        System.out.println(String.format("Test del cognome '%s' con attività '%s'", sorgente, sorgente2));
-        System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
-        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente + SLASH + sorgente2)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente + SLASH + sorgente2)));
-
-        System.out.println(VUOTA);
+        sorgente3 = sorgente + SLASH + sorgente2;
+        this.printSotto(sorgente, sorgente2, wikiUtility.wikiTitleCognomi(sorgente3), listWrapLista);
         super.fixWrapLista(sorgente3, listWrapLista);
     }
 
@@ -288,20 +282,27 @@ public class ListaCognomiTest extends ListeTest {
         System.out.println(VUOTA);
 
         sorgente = "Williams";
-        sorgente2 = "calciatori";
-        sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+        sorgente2 = "Calciatori";
+
         mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
-        listWrapLista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
+        listWrapLista = mappaWrap.get(sorgente2);
+
+        sorgente3 = sorgente + SLASH + sorgente2;
+        this.printSotto(sorgente, sorgente2, wikiUtility.wikiTitleCognomi(sorgente3), listWrapLista);
+        super.fixWrapListaDidascalie(sorgente3, listWrapLista);
+    }
+    void printSotto(String sorgente, String sorgente2, String sottoTitolo, List<WrapLista> listWrapLista) {
+        String sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+
         assertNotNull(listWrapLista);
 
         System.out.println(VUOTA);
         System.out.println(String.format("Test del cognome '%s' con attività '%s'", sorgente, sorgente2));
         System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
-        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente + SLASH + sorgente2)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente + SLASH + sorgente2)));
+        System.out.println(String.format("Titolo della sottopagina: %s", sottoTitolo));
+        System.out.println(String.format("Pagina di test: %s", sorgente3));
 
         System.out.println(VUOTA);
-        super.fixWrapListaDidascalie(sorgente3, listWrapLista);
     }
 
 

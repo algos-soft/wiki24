@@ -5,6 +5,7 @@ import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.*;
@@ -298,6 +299,59 @@ public class ListaNazionalitaTest extends ListeTest {
         fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
     }
 
+
+
+    @Test
+    @Order(220)
+    @DisplayName("220 - WrapLista di sottoPagina")
+    void listaWrapSottoPagina() {
+        System.out.println("220 - WrapLista di sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "Vescovi anglicani";
+        sorgente2 = "Britannici";
+
+        mappaWrap = appContext.getBean(ListaNazionalita.class, sorgente).mappaWrap();
+        listWrapLista = mappaWrap.get(sorgente2);
+
+        sorgente3 = sorgente + SLASH + sorgente2;
+        this.printSotto(sorgente, sorgente2, wikiUtility.wikiTitleNazionalita(sorgente3), listWrapLista);
+        super.fixWrapLista(sorgente3, listWrapLista);
+    }
+
+    @Test
+    @Order(230)
+    @DisplayName("230 - Didascalie sottoPagina")
+    void listaDidascalieSottoPagina() {
+        System.out.println("230 - Didascalie sottoPagina");
+        System.out.println(VUOTA);
+
+        sorgente = "Vescovi anglicani";
+        sorgente2 = "Britannici";
+
+        mappaWrap = appContext.getBean(ListaNazionalita.class, sorgente).mappaWrap();
+        listWrapLista = mappaWrap.get(sorgente2);
+
+        sorgente3 = sorgente + SLASH + sorgente2;
+        this.printSotto(sorgente, sorgente2, wikiUtility.wikiTitleNazionalita(sorgente3), listWrapLista);
+        super.fixWrapListaDidascalie(sorgente3, listWrapLista);
+    }
+
+
+
+    void printSotto(String sorgente, String sorgente2, String sottoTitolo, List<WrapLista> listWrapLista) {
+        String sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
+
+        assertNotNull(listWrapLista);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test della nazionalità '%s' con attività '%s'", sorgente, sorgente2));
+        System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
+        System.out.println(String.format("Titolo della sottopagina: %s", sottoTitolo));
+        System.out.println(String.format("Pagina di test: %s", sorgente3));
+
+        System.out.println(VUOTA);
+    }
 
     private boolean valido(final String nomeNazionalita, final AETypeLista type) {
         if (textService.isEmpty(nomeNazionalita)) {
