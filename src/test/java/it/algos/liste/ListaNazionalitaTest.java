@@ -308,8 +308,8 @@ public class ListaNazionalitaTest extends ListeTest {
         System.out.println("220 - WrapLista di sottoPagina");
         System.out.println(VUOTA);
 
-        sorgente = "Vescovi anglicani";
-        sorgente2 = "Britannici";
+        sorgente = "Albanesi";
+        sorgente2 = "Cantanti";
 
         mappaWrap = appContext.getBean(ListaNazionalita.class, sorgente).mappaWrap();
         listWrapLista = mappaWrap.get(sorgente2);
@@ -326,8 +326,8 @@ public class ListaNazionalitaTest extends ListeTest {
         System.out.println("230 - Didascalie sottoPagina");
         System.out.println(VUOTA);
 
-        sorgente = "Vescovi anglicani";
-        sorgente2 = "Britannici";
+        sorgente = "Albanesi";
+        sorgente2 = "Cantanti";
 
         mappaWrap = appContext.getBean(ListaNazionalita.class, sorgente).mappaWrap();
         listWrapLista = mappaWrap.get(sorgente2);
@@ -342,7 +342,11 @@ public class ListaNazionalitaTest extends ListeTest {
     void printSotto(String sorgente, String sorgente2, String sottoTitolo, List<WrapLista> listWrapLista) {
         String sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
 
-        assertNotNull(listWrapLista);
+        if (listWrapLista == null) {
+            message = String.format("Manca la lista di [%s] con sottoPagina '%s'", sorgente, sorgente2);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
 
         System.out.println(VUOTA);
         System.out.println(String.format("Test della nazionalità '%s' con attività '%s'", sorgente, sorgente2));

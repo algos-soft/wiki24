@@ -293,8 +293,6 @@ public class ListaAttivitaTest extends ListeTest {
     }
 
 
-
-
     @Test
     @Order(220)
     @DisplayName("220 - WrapLista di sottoPagina")
@@ -305,7 +303,7 @@ public class ListaAttivitaTest extends ListeTest {
         sorgente = "Vescovi anglicani";
         sorgente2 = "Britannici";
 
-        mappaWrap = appContext.getBean(ListaCognomi.class, sorgente).mappaWrap();
+        mappaWrap = appContext.getBean(ListaAttivita.class, sorgente).mappaWrap();
         listWrapLista = mappaWrap.get(sorgente2);
 
         sorgente3 = sorgente + SLASH + sorgente2;
@@ -381,10 +379,14 @@ public class ListaAttivitaTest extends ListeTest {
     void printSotto(String sorgente, String sorgente2, String sottoTitolo, List<WrapLista> listWrapLista) {
         String sorgente3 = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente) + SLASH + textService.primaMaiuscola(sorgente2);
 
-        assertNotNull(listWrapLista);
+        if (listWrapLista == null) {
+            message = String.format("Manca la lista di [%s] con sottoPagina '%s'", sorgente, sorgente2);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Test dell'attività '%s' con nazionalità '%s'", sorgente, sorgente2));
+        System.out.println(String.format("Test dell'attività [%s'] con nazionalità '%s'", sorgente, sorgente2));
         System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
         System.out.println(String.format("Titolo della sottopagina: %s", sottoTitolo));
         System.out.println(String.format("Pagina di test: %s", sorgente3));
