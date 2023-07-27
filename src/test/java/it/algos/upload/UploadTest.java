@@ -11,15 +11,6 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
-import java.util.*;
-
 /**
  * Project wiki24
  * Created by Algos
@@ -29,33 +20,49 @@ import java.util.*;
  */
 public abstract class UploadTest extends WikiTest {
 
-
     protected static int MAX = 5;
 
+    protected static String PARAMETRO = "nomeLista";
+
+    protected static String CHECK = "checkValidita()";
+
+    protected static String FUNZIONE = "isExistByKey";
+
+    protected void setUpAll() {
+        super.setUpAll();
+
+        nomeParametro = "nomeLista";
+        metodiEseguibili = "esegue(), upload()";
+        metodoDaRegolare = "typeLista(), test()";
+        metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), noToc(), forceToc(), siNumVoci(), noNumVoci(), sottoPagina(), test()";
+    }
 
     @Test
     @Order(5)
-    @DisplayName("5 - esegueSenzaParametroNelCostruttore")
-    void esegueSenzaParametroNelCostruttore() {
-        try {
-            ((Upload) appContext.getBean(clazz)).esegue();
-        } catch (Exception unErrore) {
-            super.fixSenzaParametroNelCostruttore("nomeLista", "esegue");
-        }
+    @DisplayName("5 - senzaParametroNelCostruttore")
+    void senzaParametroNelCostruttore() {
+        //--prova a costruire un'istanza SENZA parametri e controlla che vada in errore se è obbligatorio avere un parametro
+        super.fixSenzaParametroNelCostruttore();
+    }
+
+    @Test
+    @Order(6)
+    @DisplayName("6 - checkParametroNelCostruttore")
+    void checkParametroNelCostruttore() {
+        //--costruisce un'istanza con un parametro farlocco
+        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
 
-    protected void fixBeanStandard(final String sorgente) {
-        String nomeParametro = "nomeLista";
-        String metodiEseguibili = "esegue()";
-        String metodoDaRegolare = "test()";
-        String metodiBuilderPattern = "typeLink(), typeLinkCrono(), noToc(), forceToc(), siNumVoci(), noNumVoci(), sottoPagina(), test()";
-
-        Upload istanza = (Upload) appContext.getBean(clazz, sorgente);
-        super.fixBeanStandard(istanza, nomeParametro, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
-        printUpload(istanza);
+    protected void fixBeanStandard(final String valore) {
+        //--7 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName
+        //--costruisce un'istanza col parametro 'valore'
+        super.fixBeanStandard(nomeParametro, valore, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
+//        this.debug(valore, "forse", "pippoz", true, false);
+//        System.out.println(VUOTA);
+        System.out.println(VUOTA);
     }
+
 
     protected void fixConParametroNelCostruttore(String sorgente) {
         this.fixConParametroNelCostruttore(sorgente, "test()");

@@ -63,12 +63,12 @@ public class UploadNomi extends UploadListe {
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
-        super.isIstanzaValidaPatternBuilder = true;
+        super.istanzaValida = true;
     }
 
     @Override
     public boolean isValida() {
-        return isIstanzaValidaPatternBuilder;
+        return istanzaValida;
     }
 
 
@@ -80,7 +80,7 @@ public class UploadNomi extends UploadListe {
 
     @Override
     public boolean fixMappaWrap() {
-        if (!isIstanzaValidaPatternBuilder) {
+        if (!istanzaValida) {
             return false;
         }
 

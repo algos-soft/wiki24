@@ -75,9 +75,11 @@ public class ListaGiorniTest extends ListeTest {
     protected void setUpAll() {
         super.clazz = ListaGiorni.class;
         super.backendClazzName = GiornoWikiBackend.class.getSimpleName();
+        super.collectionName = "giornoWiki";
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 
@@ -97,10 +99,9 @@ public class ListaGiorniTest extends ListeTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "1876";
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+        sorgente = "calciatori";
         super.fixBeanStandard(sorgente);
-
-        System.out.println(VUOTA);
 
         sorgente = "14 marzo";
         super.fixBeanStandard(sorgente);

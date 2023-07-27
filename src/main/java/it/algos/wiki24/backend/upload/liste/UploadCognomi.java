@@ -60,7 +60,7 @@ public class UploadCognomi extends Upload {
         super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
-        super.isIstanzaValidaPatternBuilder = true;
+        super.istanzaValida = true;
     }
 
 
@@ -72,7 +72,7 @@ public class UploadCognomi extends Upload {
 
     @Override
     public boolean fixMappaWrap() {
-        if (!isIstanzaValidaPatternBuilder) {
+        if (!istanzaValida) {
             return false;
         }
 

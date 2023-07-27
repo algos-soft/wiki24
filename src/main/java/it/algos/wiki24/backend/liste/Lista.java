@@ -40,7 +40,7 @@ import java.util.function.*;
  * Liste di attività e nazionalità (in Progetto:Biografie) <br>
  * Sovrascritta nelle sottoclassi concrete <br>
  */
-public abstract class Lista implements AlgosBuilderPattern {
+public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPattern {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -138,6 +138,7 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     @Autowired
     public AnnoWikiBackend annoWikiBackend;
+
     @Autowired
     public GiornoWikiBackend giornoWikiBackend;
 
@@ -159,6 +160,7 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     @Autowired
     public NomeBackend nomeBackend;
+
     @Autowired
     public CognomeBackend cognomeBackend;
 
@@ -288,8 +290,7 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     protected void checkValiditaCostruttore() {
         if (backend != null) {
-            this.costruttoreValido = backend.isExistByKey(textService.primaMaiuscola(nomeLista))||backend.isExistByKey(textService.primaMinuscola(nomeLista));
-            this.costruttoreValido = backend.isExistByKey(textService.primaMaiuscola(nomeLista))||backend.isExistByKey(textService.primaMinuscola(nomeLista));
+            this.costruttoreValido = backend.isExistByKey(textService.primaMaiuscola(nomeLista)) || backend.isExistByKey(textService.primaMinuscola(nomeLista));
         }
         else {
             String message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
@@ -493,21 +494,6 @@ public abstract class Lista implements AlgosBuilderPattern {
         return mappa;
     }
 
-    //    /**
-    //     * Mappa ordinata di tutti le didascalie che hanno una valore valido per la pagina specifica <br>
-    //     * Le didascalie usano SPAZIO_NON_BREAKING al posto di SPAZIO (se previsto) <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public LinkedHashMap<String, List<String>> mappaDidascalia() {
-    //        mappaDidascalia = new LinkedHashMap<>();
-    //
-    //        if (mappaWrap == null || mappaWrap.size() > 0) {
-    //            this.mappaWrap();
-    //        }
-    //
-    //        return mappaDidascalia;
-    //    }
-
     /**
      * Mappa ordinata di tutti le didascalie che hanno una valore valido per la pagina specifica <br>
      * Le didascalie usano SPAZIO_NON_BREAKING al posto di SPAZIO (se previsto) <br>
@@ -561,256 +547,6 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
         return WResult.errato();
     }
-
-    //    /**
-    //     * Costruisce una lista dei wrapper per gestire i dati necessari ad una didascalia <br>
-    //     * La sottoclasse specifica esegue l'ordinamento <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public List<WrapDidascalia> listaWrapDidascalie() {
-    //        this.listaBio();
-    //
-    //        if (listaBio != null) {
-    //            listaWrapDidascalie = new ArrayList<>();
-    //            for (Bio bio : listaBio) {
-    //                listaWrapDidascalie.add(creaWrapDidascalia(bio));
-    //            }
-    //        }
-    //
-    //        return listaWrapDidascalie;
-    //    }
-
-    //    /**
-    //     * Mappa ordinata dei wrapper (WrapDidascalia) per gestire i dati necessari ad una didascalia <br>
-    //     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public LinkedHashMap<String, LinkedHashMap<String, List<WrapDidascalia>>> mappaWrapDidascalie() {
-    //        this.listaWrapDidascalie();
-    //        mappaWrapDidascalie = new LinkedHashMap<>();
-    //        return mappaWrapDidascalie;
-    //    }
-
-    //    /**
-    //     * Mappa ordinata delle didascalie che hanno una valore valido per la pagina specifica <br>
-    //     * La mappa è composta da una chiave (ordinata) che corrisponde al titolo del paragrafo <br>
-    //     * Ogni valore della mappa è costituito da una lista di didascalie per ogni paragrafo <br>
-    //     * La visualizzazione dei paragrafi può anche essere esclusa, ma questi sono comunque presenti <br>
-    //     */
-    //    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaDidascalie() {
-    //        this.mappaWrapDidascalie();
-    //        mappaDidascalieOld = new LinkedHashMap<>();
-    //        LinkedHashMap<String, List<WrapDidascalia>> mappaWrap;
-    //        List<WrapDidascalia> listaWrap;
-    //        List<String> listaDidascalia;
-    //        String didascalia;
-    //
-    //        for (String key1 : mappaWrapDidascalie.keySet()) {
-    //            mappaWrap = mappaWrapDidascalie.get(key1);
-    //            mappaDidascalieOld.put(key1, new LinkedHashMap<>());
-    //
-    //            for (String key2 : mappaWrap.keySet()) {
-    //                listaWrap = mappaWrap.get(key2);
-    //                listaDidascalia = new ArrayList<>();
-    //                for (WrapDidascalia wrap : listaWrap) {
-    //                    didascalia = switch (typeLista) {
-    //                        case giornoNascita -> didascaliaService.getDidascaliaAnnoNato(wrap.getBio());
-    //                        case giornoMorte -> didascaliaService.getDidascaliaAnnoMorto(wrap.getBio());
-    //                        case annoNascita -> didascaliaService.getDidascaliaGiornoNato(wrap.getBio());
-    //                        case annoMorte -> didascaliaService.getDidascaliaGiornoMorto(wrap.getBio());
-    //                        case listaBreve -> didascaliaService.getDidascaliaLista(wrap.getBio());
-    //                        default -> VUOTA;
-    //                    };
-    //                    listaDidascalia.add(didascalia);
-    //                }
-    //                mappaDidascalieOld.get(key1).put(key2, listaDidascalia);
-    //            }
-    //        }
-    //
-    //        return mappaDidascalieOld;
-    //    }
-
-    //    /**
-    //     * Mappa dei paragrafi delle didascalie che hanno una valore valido per la pagina specifica <br>
-    //     * La mappa è composta da una chiave (ordinata) che è il titolo visibile del paragrafo <br>
-    //     * Ogni valore della mappa è costituito da una lista di didascalie per ogni paragrafo <br>
-    //     * La visualizzazione dei paragrafi può anche essere esclusa, ma questi sono comunque presenti <br>
-    //     */
-    //    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafi() {
-    //        this.mappaDidascalie();
-    //        mappaParagrafi = new LinkedHashMap<>();
-    //        LinkedHashMap<String, List<String>> mappaSub;
-    //        String paragrafo;
-    //
-    //        for (String key : mappaDidascalieOld.keySet()) {
-    //            paragrafo = key;
-    //            mappaSub = mappaDidascalieOld.get(key);
-    //            paragrafo = fixTitolo(titoloParagrafo, paragrafo);
-    //
-    //            mappaParagrafi.put(paragrafo, mappaSub);
-    //        }
-    //
-    //        return mappaParagrafi;
-    //    }
-    //
-    //    public String fixTitolo(String wikiTitleBase, String paragrafo) {
-    //        return wikiUtility.fixTitolo(titoloParagrafo, paragrafo);
-    //    }
-    //
-    //
-    //    /**
-    //     * Mappa dei paragrafi delle didascalie che hanno una valore valido per la pagina specifica <br>
-    //     * La mappa è composta da una chiave (ordinata) che è il titolo visibile del paragrafo <br>
-    //     * Nel titolo visibile del paragrafo viene riportato il numero di voci biografiche presenti <br>
-    //     * Ogni valore della mappa è costituito da una lista di didascalie per ogni paragrafo <br>
-    //     * La visualizzazione dei paragrafi può anche essere esclusa, ma questi sono comunque presenti <br>
-    //     */
-    //    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafiDimensionati() {
-    //        this.mappaDidascalie();
-    //        mappaParagrafiDimensionati = new LinkedHashMap<>();
-    //        LinkedHashMap<String, List<String>> mappaSub;
-    //        String paragrafoDimensionato;
-    //        int size;
-    //
-    //        for (String key : mappaDidascalieOld.keySet()) {
-    //            paragrafoDimensionato = key;
-    //            mappaSub = mappaDidascalieOld.get(key);
-    //            size = wikiUtility.getSize(mappaSub);
-    //            paragrafoDimensionato = wikiUtility.fixTitolo(titoloParagrafo, paragrafoDimensionato, size);
-    //
-    //            mappaParagrafiDimensionati.put(paragrafoDimensionato, mappaSub);
-    //        }
-    //
-    //        return mappaParagrafiDimensionati;
-    //    }
-    //
-    //
-    //    protected WrapDidascalia creaWrapDidascalia(Bio bio) {
-    //        WrapDidascalia wrap = new WrapDidascalia();
-    //        AnnoWiki anno;
-    //
-    //        wrap.setAttivitaSingola(bio.attivita);
-    //        if (textService.isValid(bio.attivita)) {
-    //            wrap.setAttivitaParagrafo(attivitaBackend.findFirstBySingolare(bio.attivita).paragrafo);
-    //        }
-    //
-    //        wrap.setNazionalitaSingola(bio.nazionalita);
-    //        if (textService.isValid(bio.nazionalita)) {
-    //            wrap.setNazionalitaParagrafo(nazionalitaBackend.findFirstBySingolare(bio.nazionalita).plurale);
-    //        }
-    //
-    //        wrap.setGiornoNato(bio.giornoNato);
-    //        if (textService.isValid(bio.giornoNato)) {
-    //            wrap.setMeseParagrafoNato(fixMese(bio.giornoNato));
-    //        }
-    //        wrap.setGiornoMorto(bio.giornoMorto);
-    //        if (textService.isValid(bio.giornoMorto)) {
-    //            wrap.setMeseParagrafoMorto(fixMese(bio.giornoMorto));
-    //        }
-    //
-    //        wrap.setAnnoNato(bio.annoNato);
-    //        if (textService.isValid(bio.annoNato)) {
-    //            wrap.setSecoloParagrafoNato(fixSecolo(bio.annoNato));
-    //        }
-    //        wrap.setAnnoMorto(bio.annoMorto);
-    //        if (textService.isValid(bio.annoMorto)) {
-    //            wrap.setSecoloParagrafoMorto(fixSecolo(bio.annoMorto));
-    //        }
-    //
-    //        wrap.setWikiTitle(bio.wikiTitle);
-    //        wrap.setNome(bio.nome);
-    //        wrap.setCognome(bio.cognome);
-    //        wrap.setPrimoCarattere(bio.ordinamento.substring(0, 1));
-    //
-    //        wrap.setBio(bio); //@todo meglio eliminarlo
-    //        return wrap;
-    //    }
-    //
-    //
-    //    public LinkedHashMap<String, List<WrapDidascalia>> creaMappaCarattere(List<WrapDidascalia> listaWrapNonOrdinata) {
-    //        LinkedHashMap<String, List<WrapDidascalia>> mappa = new LinkedHashMap<>();
-    //        List lista;
-    //        String primoCarattere;
-    //
-    //        if (listaWrapNonOrdinata != null) {
-    //            for (WrapDidascalia wrap : listaWrapNonOrdinata) {
-    //                primoCarattere = wrap.getPrimoCarattere();
-    //                if (mappa.containsKey(primoCarattere)) {
-    //                    lista = mappa.get(primoCarattere);
-    //                }
-    //                else {
-    //                    lista = new ArrayList();
-    //                }
-    //                lista.add(wrap);
-    //                mappa.put(primoCarattere, lista);
-    //            }
-    //        }
-    //
-    //        for (String key : mappa.keySet()) {
-    //            lista = mappa.get(key);
-    //            lista = sortByCognome(lista);
-    //            mappa.put(key, lista);
-    //        }
-    //
-    //        return mappa;
-    //    }
-    //
-    //    public List<WrapDidascalia> sortByCognome(List<WrapDidascalia> listaWrapNonOrdinata) {
-    //        List<WrapDidascalia> sortedList = new ArrayList<>();
-    //        List<WrapDidascalia> listaConCognomeOrdinata = new ArrayList<>(); ;
-    //        List<WrapDidascalia> listaSenzaCognomeOrdinata = new ArrayList<>(); ;
-    //
-    //        listaConCognomeOrdinata = listaWrapNonOrdinata
-    //                .stream()
-    //                .filter(wrap -> wrap.getCognome() != null)
-    //                .sorted(Comparator.comparing(funCognome))
-    //                .collect(Collectors.toList());
-    //
-    //        listaSenzaCognomeOrdinata = listaWrapNonOrdinata
-    //                .stream()
-    //                .filter(wrap -> wrap.getCognome() == null)
-    //                .sorted(Comparator.comparing(funWikiTitle))
-    //                .collect(Collectors.toList());
-    //
-    //        sortedList.addAll(listaConCognomeOrdinata);
-    //        sortedList.addAll(listaSenzaCognomeOrdinata);
-    //        return sortedList;
-    //    }
-    //
-    //    public String fixMese(final String giornoWiki) {
-    //        Giorno giorno = giornoBackend.findByNome(giornoWiki);
-    //        return giorno != null ? giorno.getMese().nome : VUOTA;
-    //    }
-    //
-    //    public String fixSecolo(final String annoWiki) {
-    //        Anno anno = annoBackend.findByNome(annoWiki);
-    //        return anno != null ? anno.getSecolo().nome : VUOTA;
-    //    }
-    //
-    //    /**
-    //     * Ordina la mappa secondo la chiave
-    //     *
-    //     * @param mappaDisordinata in ingresso
-    //     *
-    //     * @return mappa ordinata, null se mappaDisordinata è null
-    //     */
-    //    public LinkedHashMap sort(final LinkedHashMap<String, List<WrapLista>> mappaDisordinata) {
-    //        LinkedHashMap mappaOrdinata = new LinkedHashMap();
-    //        Object[] listaChiavi;
-    //
-    //        listaChiavi = mappaDisordinata.keySet().toArray();
-    //
-    //        try {
-    //            Arrays.sort(listaChiavi);
-    //        } catch (Exception unErrore) {
-    //            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-    //        }
-    //
-    //        for (Object chiave : listaChiavi) {
-    //            mappaOrdinata.put(chiave, mappaDisordinata.get(chiave));
-    //        }
-    //
-    //        return mappaOrdinata;
-    //    }
 
 
 }

@@ -242,7 +242,9 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public String uploadText;
 
-    protected boolean isIstanzaValidaPatternBuilder;
+    protected boolean costruttoreValido = false;
+
+    protected boolean istanzaValida = false;
 
     /**
      * Costruttore base senza parametri <br>
@@ -275,6 +277,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
         this.fixPreferenze();
         this.fixPreferenzeBackend();
+        this.checkValiditaCostruttore();
     }
 
     protected void fixPreferenze() {
@@ -286,6 +289,17 @@ public abstract class Upload implements AlgosBuilderPattern {
             this.lastUpload = wikiBackend.lastUpload;
             this.durataUpload = wikiBackend.durataUpload;
             this.nextUpload = wikiBackend.nextUpload;
+        }
+    }
+
+    protected void checkValiditaCostruttore() {
+        if (wikiBackend != null) {
+            this.costruttoreValido = wikiBackend.isExistByKey(textService.primaMaiuscola(nomeLista))||wikiBackend.isExistByKey(textService.primaMinuscola(nomeLista));
+        }
+        else {
+            String message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
+            logService.error(new WrapLog().message(message));
+            this.costruttoreValido = false;
         }
     }
 
@@ -366,6 +380,15 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this;
     }
 
+    @Override
+    public boolean isValida() {
+        return this.istanzaValida;
+    }
+
+    public boolean isCostruttoreValido() {
+        return this.costruttoreValido;
+    }
+
     /**
      * Pattern Builder <br>
      */
@@ -406,10 +429,6 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
 
-    @Override
-    public boolean isValida() {
-        return isIstanzaValidaPatternBuilder;
-    }
 
     public boolean fixMappaWrap() {
         return false;

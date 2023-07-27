@@ -75,6 +75,7 @@ public class ListaAnniTest extends ListeTest {
     protected void setUpAll() {
         super.clazz = ListaAnni.class;
         super.backendClazzName = AnnoWikiBackend.class.getSimpleName();
+        super.collectionName = "annoWiki";
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
@@ -99,8 +100,6 @@ public class ListaAnniTest extends ListeTest {
     void beanStandardCompleta() {
         sorgente = "4 marzo";
         super.fixBeanStandard(sorgente);
-
-        System.out.println(VUOTA);
 
         sorgente = "1967";
         super.fixBeanStandard(sorgente);

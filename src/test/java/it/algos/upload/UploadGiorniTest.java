@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
@@ -89,6 +90,60 @@ public class UploadGiorniTest extends UploadTest {
     void esegueConParametroNelCostruttore() {
         sorgente = "24 agosto";
         super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(40)
+    @DisplayName("40 - Key della mappaWrap STANDARD")
+    void mappaWrap(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).mappaWrap();
+        super.fixMappaWrapKey(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(50)
+    @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
+    void mappaWrapDidascalie(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).mappaWrap();
+        super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(60)
+    @DisplayName("60 - Testo header")
+    void testoHeader(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).esegue().testoHeader();
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(70)
+    @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
+    void testoBody(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).testoBody();
+        System.out.println(ottenuto);
     }
 
 }

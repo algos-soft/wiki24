@@ -3,6 +3,7 @@ package it.algos.liste;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.liste.*;
@@ -37,77 +38,40 @@ public abstract class ListeTest extends WikiTest {
 
     protected void setUpAll() {
         super.setUpAll();
+
+        nomeParametro = "nomeLista";
+        metodiEseguibili = "listaBio(), listaWrap() e mappaWrap()";
+        metodoDaRegolare = "typeLista()";
+        metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona()";
     }
 
 
     @Test
     @Order(5)
-    @DisplayName("5 - checkParametroNelCostruttore")
-    void checkParametroNelCostruttore() {
-        sorgente = "...nonEsiste...";
-
-        System.out.println(String.format("5 - checkParametroNelCostruttore"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("La classe [%s] controlla la validità del parametro '%s' usato nel costruttore", clazzName, PARAMETRO));
-        System.out.println(String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, CHECK));
-        System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, FUNZIONE, sorgente));
-
-        fixCheckParametroNelCostruttore(sorgente);
-    }
-
-
-    void fixCheckParametroNelCostruttore(String valore) {
-        Lista istanza = null;
-        boolean isCostruttoreValido;
-
-        try {
-            istanza = (Lista) appContext.getBean(clazz, valore);
-        } catch (Exception unErrore) {
-            logService.error(new WrapLog().exception(new AlgosException(unErrore)));
-        }
-        assertNotNull(istanza);
-        isCostruttoreValido = istanza.isCostruttoreValido();
-
-        if (isCostruttoreValido) {
-            System.out.println(String.format("Istanza valida col valore accettabile [%s] del parametro '%s'", valore, PARAMETRO));
-        }
-        else {
-            message = String.format("Istanza NON valida perché il valore [%s] del parametro '%s' non è previsto", valore, PARAMETRO);
-            logService.warn(new WrapLog().message(message));
-        }
+    @DisplayName("5 - senzaParametroNelCostruttore")
+    void senzaParametroNelCostruttore() {
+        //--prova a costruire un'istanza SENZA parametri e controlla che vada in errore se è obbligatorio avere un parametro
+        super.fixSenzaParametroNelCostruttore();
     }
 
     @Test
     @Order(6)
-    @DisplayName("6 - esegueSenzaParametroNelCostruttore")
-    void esegueSenzaParametroNelCostruttore() {
-        try {
-            ((Lista) appContext.getBean(clazz)).listaBio();
-        } catch (Exception unErrore) {
-            super.fixSenzaParametroNelCostruttore("nomeLista", "listaBio() o listaWrap() o mappaWrap()");
-        }
+    @DisplayName("6 - checkParametroNelCostruttore")
+    void checkParametroNelCostruttore() {
+        //--costruisce un'istanza con un parametro farlocco
+        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    protected void fixBeanStandard(final String sorgente) {
-        Lista istanza = null;
-        String nomeParametro = "nomeLista";
-        String metodiEseguibili = "listaBio(), listaWrap() e mappaWrap()";
-        String metodoDaRegolare = "typeLista()";
-        String metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), nascita(), morte()";
 
-        istanza = (Lista) appContext.getBean(clazz, sorgente);
-        if (istanza.isCostruttoreValido()) {
-            super.fixBeanStandard(istanza, sorgente, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
-            printLista(istanza);
-        }
-        else {
-            super.fixBeanStandardNo(nomeParametro, sorgente, CHECK, FUNZIONE, sorgente, metodiBuilderPattern);
-        }
-
-        assertEquals(super.istanzaValidaSubitoDopoCostruttore, istanza.isValida());
+    protected void fixBeanStandard(final String valore) {
+        //--7 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName
+        //--costruisce un'istanza col parametro 'valore'
+        super.fixBeanStandard(nomeParametro, valore, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
+//        this.debug( valore,"forse","pippoz",true,false);
     }
 
     protected void fixConParametroNelCostruttore(String sorgente) {
+        //--8 - Costruttore con parametro
         long inizio = System.currentTimeMillis();
         List<Bio> listaBio = null;
         Lista istanza = null;
@@ -206,6 +170,8 @@ public abstract class ListeTest extends WikiTest {
         }
     }
 
+
+    @Deprecated
     protected void fixConParametroNelCostruttore() {
         String nomeParametro = "nomeLista";
         String metodiDaEseguire = "listaBio()";

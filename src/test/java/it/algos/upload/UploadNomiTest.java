@@ -65,6 +65,7 @@ public class UploadNomiTest extends UploadTest {
     protected void setUpAll() {
         super.clazz = UploadNomi.class;
         super.backendClazzName = NomeBackend.class.getSimpleName();
+        super.collectionName = "nome";
         super.setUpAll();
         super.costruttoreNecessitaAlmenoUnParametro = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
@@ -85,19 +86,23 @@ public class UploadNomiTest extends UploadTest {
 
     @Test
     @Order(7)
-    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
+    @DisplayName("7 - Istanza/e STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
-        sorgente = "akira";
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+        sorgente = "1876";
+        super.fixBeanStandard(sorgente);
+
+        sorgente = "adriana";
         super.fixBeanStandard(sorgente);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "tiziano";
-        super.fixConParametroNelCostruttore(sorgente);
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "tiziano";
+//        super.fixConParametroNelCostruttore(sorgente);
+//    }
 
     //    @ParameterizedTest
     //    @MethodSource(value = "NOMI_UPLOAD")

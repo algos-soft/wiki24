@@ -55,7 +55,7 @@ public class UploadGiorni extends Upload {
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
-        super.isIstanzaValidaPatternBuilder = false;
+        super.istanzaValida = false;
     }
 
     /**
