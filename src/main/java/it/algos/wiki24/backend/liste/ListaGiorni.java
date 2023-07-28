@@ -53,14 +53,14 @@ public class ListaGiorni extends Lista {
         super.backend = super.giornoWikiBackend;
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ANNO;
-        super.istanzaValida = false;
+        super.patternCompleto = false;
     }
 
     /**
      * Pattern Builder <br>
      */
     public ListaGiorni typeLista(AETypeLista typeLista) {
-        super.istanzaValida = false;
+        super.patternCompleto = false;
         return switch (typeLista) {
             case giornoNascita -> nascita();
             case giornoMorte -> morte();
@@ -68,12 +68,14 @@ public class ListaGiorni extends Lista {
         };
     }
 
+
+
     /**
      * Pattern Builder <br>
      */
     public ListaGiorni nascita() {
         super.titoloPagina = wikiUtility.wikiTitleNatiGiorno(nomeLista);
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaGiorni) super.typeLista(AETypeLista.giornoNascita);
     }
 
@@ -82,7 +84,7 @@ public class ListaGiorni extends Lista {
      */
     public ListaGiorni morte() {
         super.titoloPagina = wikiUtility.wikiTitleMortiGiorno(nomeLista);
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaGiorni) super.typeLista(AETypeLista.giornoMorte);
     }
 

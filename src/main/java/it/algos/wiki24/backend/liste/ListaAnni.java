@@ -44,14 +44,14 @@ public class ListaAnni extends Lista {
         super.backend = super.annoWikiBackend;
         this.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiGiorniAnni.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_GIORNO;
-        super.istanzaValida = false;
+        super.patternCompleto = false;
     }
 
     /**
      * Pattern Builder <br>
      */
     public ListaAnni typeLista(AETypeLista typeLista) {
-        super.istanzaValida = false;
+        super.patternCompleto = false;
         return switch (typeLista) {
             case annoNascita -> nascita();
             case annoMorte -> morte();
@@ -64,7 +64,7 @@ public class ListaAnni extends Lista {
      */
     public ListaAnni nascita() {
         super.titoloPagina = wikiUtility.wikiTitleNatiAnno(nomeLista);
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaAnni) super.typeLista(AETypeLista.annoNascita);
     }
 
@@ -73,7 +73,7 @@ public class ListaAnni extends Lista {
      */
     public ListaAnni morte() {
         super.titoloPagina = wikiUtility.wikiTitleMortiAnno(nomeLista);
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaAnni) super.typeLista(AETypeLista.annoMorte);
     }
 

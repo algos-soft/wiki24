@@ -1,11 +1,7 @@
 package it.algos.liste;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.logic.*;
-import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
@@ -67,9 +63,9 @@ public class ListaNomiTest extends ListeTest {
         super.backendClazzName = NomeBackend.class.getSimpleName();
         super.collectionName = "nome";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = true;
-        super.metodoDaRegolare = "(nessuno))";
+        super.metodiDaRegolare = "(nessuno)";
     }
 
 
@@ -95,6 +91,17 @@ public class ListaNomiTest extends ListeTest {
 
         sorgente = "adriana";
         super.fixBeanStandard(sorgente);
+    }
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        super.fixBuilderPatternIniziale();
+
+        sorgente = "amalia";
+        istanza = appContext.getBean(ListaNomi.class, sorgente);
+        super.fixBuilderPatternListe(istanza, AETypeLista.nomi);
     }
 
 

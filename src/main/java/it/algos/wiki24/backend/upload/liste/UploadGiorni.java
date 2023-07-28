@@ -6,7 +6,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -27,7 +27,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadGiorni extends Upload {
+public class UploadGiorni extends UploadListe {
 
     @Autowired
     public MeseBackend meseBackend;
@@ -55,33 +55,37 @@ public class UploadGiorni extends Upload {
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
-        super.istanzaValida = false;
+        super.patternCompleto = false;
     }
 
     /**
      * Pattern Builder <br>
      */
     public UploadGiorni typeLista(AETypeLista typeLista) {
-        this.typeLista = typeLista;
-        return this;
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case giornoNascita -> nascita();
+            case giornoMorte -> morte();
+            default -> this;
+        };
     }
 
     /**
      * Pattern Builder <br>
      */
     public UploadGiorni nascita() {
-        this.typeLista = AETypeLista.giornoNascita;
         super.wikiTitleUpload = wikiUtility.wikiTitleNatiGiorno(nomeLista);
-        return this;
+        super.patternCompleto = true;
+        return (UploadGiorni) super.typeLista(AETypeLista.giornoNascita);
     }
 
     /**
      * Pattern Builder <br>
      */
     public UploadGiorni morte() {
-        this.typeLista = AETypeLista.giornoMorte;
         super.wikiTitleUpload = wikiUtility.wikiTitleMortiGiorno(nomeLista);
-        return this;
+        super.patternCompleto = true;
+        return (UploadGiorni) super.typeLista(AETypeLista.giornoMorte);
     }
 
     /**
@@ -90,6 +94,29 @@ public class UploadGiorni extends Upload {
     public UploadGiorni test() {
         this.uploadTest = true;
         return this;
+    }
+
+
+
+    @Override
+    public boolean fixMappaWrap() {
+        if (!patternCompleto) {
+            return false;
+        }
+
+        if (!isSottopagina) {
+            if (mappaWrap == null) {
+                mappaWrap = appContext
+                        .getBean(ListaGiorni.class, nomeLista)
+                        .typeLista(typeLista)
+                        .typeLinkParagrafi(typeLinkParagrafi)
+                        .typeLinkCrono(typeLinkCrono)
+                        .icona(usaIcona)
+                        .mappaWrap();
+            }
+        }
+
+        return true;
     }
 
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {

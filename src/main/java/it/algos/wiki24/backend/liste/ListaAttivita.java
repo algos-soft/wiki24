@@ -75,7 +75,7 @@ public class ListaAttivita extends Lista {
         super.typeLista = AETypeLista.attivitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_NAZIONALITA;
-        super.istanzaValida = true;
+        super.patternCompleto = true;
 
         if (typeLista == AETypeLista.attivitaPlurale) {
             AttPlurale attivitaPlurale = attPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));
@@ -88,7 +88,7 @@ public class ListaAttivita extends Lista {
      * Pattern Builder <br>
      */
     public ListaAttivita typeLista(AETypeLista typeLista) {
-        super.istanzaValida = false;
+        super.patternCompleto = false;
         return switch (typeLista) {
             case attivitaSingolare -> singolare();
             case attivitaPlurale -> plurale();
@@ -100,7 +100,7 @@ public class ListaAttivita extends Lista {
      * Pattern Builder <br>
      */
     public ListaAttivita singolare() {
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaAttivita) super.typeLista(AETypeLista.attivitaSingolare);
     }
 
@@ -108,7 +108,7 @@ public class ListaAttivita extends Lista {
      * Pattern Builder <br>
      */
     public ListaAttivita plurale() {
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaAttivita) super.typeLista(AETypeLista.attivitaPlurale);
     }
 

@@ -1,23 +1,17 @@
 package it.algos.liste;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.test.context.junit.jupiter.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -70,10 +64,12 @@ public class ListaAttivitaTest extends ListeTest {
     protected void setUpAll() {
         super.clazz = ListaAttivita.class;
         super.backendClazzName = AttPluraleBackend.class.getSimpleName();
+        super.collectionName = "attplurale";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodoDefault = "plurale()";
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 
@@ -114,34 +110,11 @@ public class ListaAttivitaTest extends ListeTest {
     @Order(9)
     @DisplayName("9 - builderPattern")
     void builderPattern() {
-        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+        fixBuilderPatternIniziale();
 
         sorgente = "allevatori";
-
-        appContext.getBean(ListaAttivita.class, sorgente).listaBio();
-
         istanza = appContext.getBean(ListaAttivita.class, sorgente);
-        super.debug(istanza, VUOTA);
-
-        sorgente2 = "singolare()";
-        istanza = appContext.getBean(ListaAttivita.class, sorgente).singolare();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "plurale()";
-        istanza = appContext.getBean(ListaAttivita.class, sorgente).plurale();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
-        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.attivitaPlurale)";
-        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.attivitaPlurale);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
-        istanza = appContext.getBean(ListaAttivita.class, sorgente).typeLista(AETypeLista.giornoMorte);
-        super.debug(istanza, sorgente2);
+        super.fixBuilderPatternListe(istanza, AETypeLista.attivitaPlurale);
     }
 
     @ParameterizedTest

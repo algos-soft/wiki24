@@ -203,7 +203,7 @@ public abstract class Statistiche implements AlgosBuilderPattern {
 
     protected Map<String, Integer> mappaValidi;
 
-    protected boolean isIstanzaValidaPatternBuilder = false;
+    protected boolean patternCompleto = false;
 
     @PostConstruct
     protected void postConstruct() {
@@ -246,9 +246,14 @@ public abstract class Statistiche implements AlgosBuilderPattern {
     }
 
     @Override
-    public boolean isValida() {
-        return isIstanzaValidaPatternBuilder;
+    public boolean isCostruttoreValido() {
+        return true;
     }
+    @Override
+    public boolean isPatternCompleto() {
+        return this.patternCompleto;
+    }
+
 
     public WResult esegue() {
         WResult result = WResult.build();

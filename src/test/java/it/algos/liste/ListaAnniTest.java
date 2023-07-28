@@ -1,27 +1,16 @@
 package it.algos.liste;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.bio.*;
-import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
 import java.util.stream.*;
@@ -77,8 +66,10 @@ public class ListaAnniTest extends ListeTest {
         super.backendClazzName = AnnoWikiBackend.class.getSimpleName();
         super.collectionName = "annoWiki";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiBuilderPattern += ", nascita(), morte()";
+        super.metodiDaRegolare += ", nascita(), morte()";
     }
 
 
@@ -119,34 +110,11 @@ public class ListaAnniTest extends ListeTest {
     @Order(9)
     @DisplayName("9 - builderPattern")
     void builderPattern() {
-        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+        fixBuilderPatternIniziale();
 
         sorgente = "560";
-
-        appContext.getBean(ListaAnni.class, sorgente).listaBio();
-
         istanza = appContext.getBean(ListaAnni.class, sorgente);
-        super.debug(istanza, VUOTA);
-
-        sorgente2 = "nascita()";
-        istanza = appContext.getBean(ListaAnni.class, sorgente).nascita();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "morte()";
-        istanza = appContext.getBean(ListaAnni.class, sorgente).morte();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.annoNascita)";
-        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.annoNascita);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.annoMorte)";
-        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.annoMorte);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
-        istanza = appContext.getBean(ListaAnni.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
-        super.debug(istanza, sorgente2);
+        super.fixBuilderPatternListe(istanza, AETypeLista.annoMorte);
     }
 
     @ParameterizedTest

@@ -1,18 +1,14 @@
 package it.algos.liste;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -75,10 +71,12 @@ public class ListaNazionalitaTest extends ListeTest {
     protected void setUpAll() {
         super.clazz = ListaNazionalita.class;
         super.backendClazzName = NazPluraleBackend.class.getSimpleName();
+        super.collectionName = "nazplurale";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
-        super.istanzaValidaSubitoDopoCostruttore = false;
+        super.ammessoCostruttoreVuoto = true;
+        super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodoDefault = "plurale()";
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 
@@ -107,47 +105,24 @@ public class ListaNazionalitaTest extends ListeTest {
         super.fixBeanStandard(sorgente);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "francesi";
-        super.fixConParametroNelCostruttore(sorgente);
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "francesi";
+//        super.fixConParametroNelCostruttore(sorgente);
+//    }
 
 
     @Test
     @Order(9)
     @DisplayName("9 - builderPattern")
     void builderPattern() {
-        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+        fixBuilderPatternIniziale();
 
         sorgente = "azeri";
-
-        appContext.getBean(ListaNazionalita.class, sorgente).listaBio();
-
         istanza = appContext.getBean(ListaNazionalita.class, sorgente);
-        super.debug(istanza, VUOTA);
-
-        sorgente2 = "singolare()";
-        istanza = appContext.getBean(ListaNazionalita.class, sorgente).singolare();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "plurale()";
-        istanza = appContext.getBean(ListaNazionalita.class, sorgente).plurale();
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.nazionalitaSingolare)";
-        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.nazionalitaSingolare);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.nazionalitaPlurale)";
-        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.nazionalitaPlurale);
-        super.debug(istanza, sorgente2);
-
-        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
-        istanza = appContext.getBean(ListaNazionalita.class, sorgente).typeLista(AETypeLista.giornoMorte);
-        super.debug(istanza, sorgente2);
+        super.fixBuilderPatternListe(istanza, AETypeLista.nazionalitaPlurale);
     }
 
 

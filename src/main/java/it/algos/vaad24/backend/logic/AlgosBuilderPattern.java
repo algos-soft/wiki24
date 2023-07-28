@@ -8,7 +8,8 @@ package it.algos.vaad24.backend.logic;
  * Time: 15:10
  */
 public interface AlgosBuilderPattern {
+    public boolean isCostruttoreValido();
 
-    public boolean isValida();
+    public boolean isPatternCompleto();
 
 }

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Date: Sun, 23-Jul-2023
  * Time: 19:53
  */
-public  abstract class UploadListe extends Upload implements AlgosCheckCostruttore, AlgosBuilderPattern {
+public  abstract class UploadListe extends Upload implements  AlgosBuilderPattern {
 
 
     public UploadListe(String nomeLista) {

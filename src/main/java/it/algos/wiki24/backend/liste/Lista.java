@@ -40,7 +40,7 @@ import java.util.function.*;
  * Liste di attività e nazionalità (in Progetto:Biografie) <br>
  * Sovrascritta nelle sottoclassi concrete <br>
  */
-public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPattern {
+public abstract class Lista implements  AlgosBuilderPattern {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -141,6 +141,9 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
 
     @Autowired
     public GiornoWikiBackend giornoWikiBackend;
+
+    @Autowired
+    public AnnotationService annotationService;
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -250,7 +253,9 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
 
     protected boolean costruttoreValido = false;
 
-    protected boolean istanzaValida = false;
+    protected boolean patternCompleto = false;
+
+    protected String collectionName;
 
     protected boolean accettaCostruttoreSenzaParametri = false;
 
@@ -284,6 +289,7 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
+        this.typeLista = AETypeLista.nessunaLista;
         this.usaIcona = WPref.usaSimboliCrono.is();
         this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
     }
@@ -297,6 +303,8 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
             logService.error(new WrapLog().message(message));
             this.costruttoreValido = false;
         }
+
+        this.collectionName = costruttoreValido ? annotationService.getCollectionName(backend.entityClazz) : VUOTA;
     }
 
 
@@ -340,13 +348,14 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         return this;
     }
 
-    @Override
-    public boolean isValida() {
-        return this.istanzaValida;
-    }
 
+    @Override
     public boolean isCostruttoreValido() {
         return this.costruttoreValido;
+    }
+    @Override
+    public boolean isPatternCompleto() {
+        return this.patternCompleto;
     }
 
     /**
@@ -356,13 +365,17 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         String message;
 
         if (textService.isEmpty(nomeLista)) {
+            System.out.println(VUOTA);
             message = String.format("Un'istanza della classe [%s] SENZA parametri non funziona e non può essere utilizzata.", this.getClass().getSimpleName());
             logger.warn(new WrapLog().message(message));
             return null;
         }
 
         if (typeLista == null) {
-            message = String.format("Manca il '%s' della classe [%s] e il metodo '%s' NON può funzionare.", "typeLista", this.getClass().getSimpleName(), "listaBio");
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "listaBio", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "listaBio");
             logger.warn(new WrapLog().message(message));
             return null;
         }
@@ -374,6 +387,19 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         }
 
         return listaBio;
+    }
+
+    public boolean listaBioTest() {
+        List<Bio> lista = listaBio();
+
+        if (lista != null && lista.size() > 0) {
+            this.patternCompleto = true;
+        }
+        else {
+            this.patternCompleto = false;
+        }
+
+        return patternCompleto;
     }
 
     /**
@@ -390,6 +416,16 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
     public List<WrapLista> listaWrap() {
         listaWrap = new ArrayList<>();
         WrapLista wrap;
+        String message;
+
+        if (typeLista == null) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "listaWrap", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "listaWrap");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
 
         if (listaBio == null || listaBio.size() == 0) {
             listaBio();
@@ -417,6 +453,18 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         return listaWrap;
     }
 
+    public boolean listaWrapTest() {
+        List<WrapLista> lista = listaWrap();
+
+        if (lista != null && lista.size() > 0) {
+            this.patternCompleto = true;
+        }
+        else {
+            this.patternCompleto = false;
+        }
+
+        return patternCompleto;
+    }
 
     /**
      * Mappa ordinata di tutti i wrapLista che hanno una valore valido per la pagina specifica <br>
@@ -426,6 +474,16 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         mappaWrap = new LinkedHashMap<>();
         String paragrafo;
         List<WrapLista> lista;
+        String message;
+
+        if (typeLista == null) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "mappaWrap", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "mappaWrap");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
 
         if (listaWrap == null || listaWrap.size() == 0) {
             this.listaWrap();
@@ -449,6 +507,20 @@ public abstract class Lista implements AlgosCheckCostruttore, AlgosBuilderPatter
         mappaWrap = sortMap(mappaWrap);
         mappaWrap = fixAltreInCoda(mappaWrap);
         return mappaWrap;
+    }
+
+
+    public boolean mappaWrapTest() {
+        LinkedHashMap<String, List<WrapLista>> mappaWrap = mappaWrap();
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            this.patternCompleto = true;
+        }
+        else {
+            this.patternCompleto = false;
+        }
+
+        return patternCompleto;
     }
 
     public List<WrapLista> getWrapLista(String keyParagrafo) {

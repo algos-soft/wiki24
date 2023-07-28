@@ -2,11 +2,10 @@ package it.algos.upload;
 
 import it.algos.*;
 import it.algos.base.*;
-import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.boot.test.context.*;
 
@@ -42,8 +41,13 @@ public class UploadAnniTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazz = UploadAnni.class;
+        super.backendClazzName = AnnoWikiBackend.class.getSimpleName();
+        super.collectionName = "annoWiki";
         super.setUpAll();
-        assertNull(istanza);
+        super.ammessoCostruttoreVuoto = true;
+        super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 
@@ -59,16 +63,16 @@ public class UploadAnniTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new UploadAnni();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
+//    @Test
+//    @Order(1)
+//    @DisplayName("1 - Costruttore base senza parametri")
+//    void costruttoreBase() {
+//        istanza = new UploadAnni();
+//        assertNotNull(istanza);
+//        System.out.println(("1 - Costruttore base senza parametri"));
+//        System.out.println(VUOTA);
+//        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
+//    }
 
     @Test
     @Order(2)

@@ -1,13 +1,10 @@
 package it.algos.upload;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.upload.liste.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,12 +12,6 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
-import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -66,8 +57,9 @@ public class UploadCognomiTest extends UploadTest {
     protected void setUpAll() {
         super.clazz = UploadCognomi.class;
         super.backendClazzName = CognomeBackend.class.getSimpleName();
+        super.collectionName = "cognome";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
@@ -88,17 +80,21 @@ public class UploadCognomiTest extends UploadTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+        sorgente = "4 aprile";
+        super.fixBeanStandard(sorgente);
+
         sorgente = "Mazzoni";
         super.fixBeanStandard(sorgente);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "Piazza";
-        super.fixConParametroNelCostruttore(sorgente);
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "Piazza";
+//        super.fixConParametroNelCostruttore(sorgente);
+//    }
 
 
     @ParameterizedTest

@@ -47,9 +47,22 @@ public class ListaCognomi extends Lista {
         super.typeLista = AETypeLista.cognomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.istanzaValida = true;
+        super.patternCompleto = true;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaCognomi typeLista(AETypeLista typeLista) {
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case cognomi -> {
+                super.patternCompleto = true;
+                yield (ListaCognomi) super.typeLista(typeLista);
+            }
+            default -> this;
+        };
+    }
 
     /**
      * Ordina la mappa <br>

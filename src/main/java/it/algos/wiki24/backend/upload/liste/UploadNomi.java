@@ -2,14 +2,9 @@ package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.logic.*;
-import it.algos.vaad24.backend.wrapper.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.nome.*;
-import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Scope;
@@ -63,12 +58,15 @@ public class UploadNomi extends UploadListe {
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
-        super.istanzaValida = true;
+        super.patternCompleto = true;
     }
 
-    @Override
-    public boolean isValida() {
-        return istanzaValida;
+
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadNomi typeLista(AETypeLista typeLista) {
+        return (UploadNomi) super.typeLista(typeLista);
     }
 
 
@@ -80,7 +78,7 @@ public class UploadNomi extends UploadListe {
 
     @Override
     public boolean fixMappaWrap() {
-        if (!istanzaValida) {
+        if (!patternCompleto) {
             return false;
         }
 

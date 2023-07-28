@@ -1,16 +1,11 @@
 package it.algos.liste;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,11 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
 import java.util.stream.*;
@@ -73,9 +63,11 @@ public class ListaCognomiTest extends ListeTest {
     protected void setUpAll() {
         super.clazz = ListaCognomi.class;
         super.backendClazzName = CognomeBackend.class.getSimpleName();
+        super.collectionName = "cognome";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
+        super.metodiDaRegolare = "(nessuno)";
     }
 
 
@@ -112,6 +104,16 @@ public class ListaCognomiTest extends ListeTest {
         super.fixConParametroNelCostruttore(sorgente);
     }
 
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        fixBuilderPatternIniziale();
+
+        sorgente = "Bartoli";
+        istanza = appContext.getBean(ListaCognomi.class, sorgente);
+        super.fixBuilderPatternListe(istanza, AETypeLista.cognomi);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "COGNOMI_LISTA")

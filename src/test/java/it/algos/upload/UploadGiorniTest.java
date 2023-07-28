@@ -1,14 +1,11 @@
 package it.algos.upload;
 
 import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -60,9 +57,11 @@ public class UploadGiorniTest extends UploadTest {
     protected void setUpAll() {
         super.clazz = UploadGiorni.class;
         super.backendClazzName = GiornoWikiBackend.class.getSimpleName();
+        super.collectionName = "giornoWiki";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
     /**
@@ -80,16 +79,69 @@ public class UploadGiorniTest extends UploadTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+        sorgente = "Mazzoni";
+        super.fixBeanStandard(sorgente);
+
         sorgente = "9 giugno";
         super.fixBeanStandard(sorgente);
     }
 
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "24 agosto";
+//        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
+//    }
+
+
     @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "24 agosto";
-        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+
+        sorgente = "10 novembre";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente);
+        super.debug(istanza, VUOTA);
+
+        sorgente = "11 novembre";
+        appContext.getBean(UploadGiorni.class, sorgente).mappaWrap();
+        super.debug(istanza, VUOTA);
+
+        sorgente = "12 novembre";
+        appContext.getBean(UploadGiorni.class, sorgente).esegue();
+        super.debug(istanza, VUOTA);
+
+        sorgente = "13 novembre";
+        appContext.getBean(UploadGiorni.class, sorgente).upload();
+        super.debug(istanza, VUOTA);
+
+        sorgente = "21 novembre";
+        sorgente2 = "nascita()";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente).nascita();
+        super.debug(istanza, sorgente2);
+
+        sorgente = "22 novembre";
+        sorgente2 = "morte()";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente).morte();
+        super.debug(istanza, sorgente2);
+
+        sorgente = "23 novembre";
+        sorgente2 = "typeLista(AETypeLista.giornoNascita)";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.giornoNascita);
+        super.debug(istanza, sorgente2);
+
+        sorgente = "24 novembre";
+        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.giornoMorte);
+        super.debug(istanza, sorgente2);
+
+        sorgente = "25 novembre";
+        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
+        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
+        super.debug(istanza, sorgente2);
     }
 
 
@@ -102,7 +154,7 @@ public class UploadGiorniTest extends UploadTest {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).mappaWrap();
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).morte().esegue().mappaWrap();
         super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
@@ -115,7 +167,7 @@ public class UploadGiorniTest extends UploadTest {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).mappaWrap();
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).morte().mappaWrap();
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
@@ -128,7 +180,7 @@ public class UploadGiorniTest extends UploadTest {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).esegue().testoHeader();
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).morte().testoHeader();
         System.out.println(ottenuto);
     }
 
@@ -142,7 +194,7 @@ public class UploadGiorniTest extends UploadTest {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).testoBody();
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).morte().testoBody();
         System.out.println(ottenuto);
     }
 

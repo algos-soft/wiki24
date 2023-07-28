@@ -15,7 +15,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * <p>
  * La lista è una mappa di WrapLista suddivisa in paragrafi, che contiene tutte le informazioni per scrivere le righe della pagina <br>
  * Usata fondamentalmente da UploadNomi con appContext.getBean(ListaNomi.class).mappaWrap() <br>
- * Il costruttore è senza parametri e serve solo per preparare l'istanza che viene ''attivata'' con mappaWrap() <br>
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -42,8 +41,22 @@ public class ListaNomi extends Lista {
         super.typeLista = AETypeLista.nomi;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.istanzaValida = true;
+        super.patternCompleto = true;
     }
 
+
+    /**
+     * Pattern Builder <br>
+     */
+    public ListaNomi typeLista(AETypeLista typeLista) {
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case nomi -> {
+                super.patternCompleto = true;
+                yield (ListaNomi) super.typeLista(typeLista);
+            }
+            default -> this;
+        };
+    }
 
 }

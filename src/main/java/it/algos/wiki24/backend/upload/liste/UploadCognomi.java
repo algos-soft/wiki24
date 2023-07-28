@@ -5,7 +5,6 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -26,7 +25,7 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadCognomi extends Upload {
+public class UploadCognomi extends UploadListe {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -60,7 +59,7 @@ public class UploadCognomi extends Upload {
         super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
-        super.istanzaValida = true;
+        super.patternCompleto = true;
     }
 
 
@@ -72,7 +71,7 @@ public class UploadCognomi extends Upload {
 
     @Override
     public boolean fixMappaWrap() {
-        if (!istanzaValida) {
+        if (!patternCompleto) {
             return false;
         }
 

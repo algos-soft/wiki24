@@ -171,6 +171,9 @@ public abstract class Upload implements AlgosBuilderPattern {
     @Autowired
     public LogService logService;
 
+    @Autowired
+    public AnnotationService annotationService;
+
     public AETypeLista typeLista;
 
     public Lista lista;
@@ -244,7 +247,9 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean costruttoreValido = false;
 
-    protected boolean istanzaValida = false;
+    protected boolean patternCompleto = false;
+
+    protected String collectionName;
 
     /**
      * Costruttore base senza parametri <br>
@@ -269,6 +274,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         this.nomeLista = textService.primaMaiuscola(nomeLista);
         this.typeLista = AETypeLista.nessunaLista;
         this.typeToc = AETypeToc.forceToc;
+        this.typeLinkParagrafi = AETypeLink.nessunLink;
         this.typeLinkCrono = (AETypeLink) WPref.linkCrono.getEnumCurrentObj();
         this.usaNumeriTitoloParagrafi = true;
         this.usaIcona = WPref.usaSimboliCrono.is();
@@ -294,13 +300,24 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected void checkValiditaCostruttore() {
         if (wikiBackend != null) {
-            this.costruttoreValido = wikiBackend.isExistByKey(textService.primaMaiuscola(nomeLista))||wikiBackend.isExistByKey(textService.primaMinuscola(nomeLista));
+            this.costruttoreValido = wikiBackend.isExistByKey(textService.primaMaiuscola(nomeLista)) || wikiBackend.isExistByKey(textService.primaMinuscola(nomeLista));
         }
         else {
             String message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
             logService.error(new WrapLog().message(message));
             this.costruttoreValido = false;
         }
+
+        this.collectionName = costruttoreValido ? annotationService.getCollectionName(wikiBackend.entityClazz) : VUOTA;
+    }
+
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload typeLista(AETypeLista typeLista) {
+        this.typeLista = typeLista;
+        return this;
     }
 
     /**
@@ -380,13 +397,15 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this;
     }
 
-    @Override
-    public boolean isValida() {
-        return this.istanzaValida;
-    }
 
+    @Override
     public boolean isCostruttoreValido() {
         return this.costruttoreValido;
+    }
+
+    @Override
+    public boolean isPatternCompleto() {
+        return this.patternCompleto;
     }
 
     /**
@@ -394,9 +413,20 @@ public abstract class Upload implements AlgosBuilderPattern {
      */
     public Upload esegue() {
         StringBuffer buffer = new StringBuffer();
+        String message;
         if (textService.isValid(uploadText)) {
             return this;
         }
+
+        if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "esegue", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "esegue");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
+
         this.fixMappaWrap();
 
         if (mappaWrap != null && mappaWrap.size() > 0) {
@@ -411,6 +441,16 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
     public WResult upload() {
+        String message;
+        if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "upload", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "upload");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
+
         if (textService.isEmpty(uploadText)) {
             this.esegue();
         }
@@ -422,12 +462,22 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
     public LinkedHashMap<String, List<WrapLista>> mappaWrap() {
+        String message;
+
+        if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "mappaWrap", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "mappaWrap");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
+
         if (mappaWrap == null || mappaWrap.size() > 0) {
             this.fixMappaWrap();
         }
         return mappaWrap;
     }
-
 
 
     public boolean fixMappaWrap() {

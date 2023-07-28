@@ -28,14 +28,17 @@ import java.util.*;
 public class UploadAnni extends UploadGiorniAnni {
 
 
-    /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-     */
-    public UploadAnni() {
-    }// end of constructor
+//    /**
+//     * Costruttore base con parametri <br>
+//     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+//     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
+//     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+//     */
+//    public UploadAnni() {
+//    }// end of constructor
+public UploadAnni(String nomeLista) {
+    super(nomeLista);
+}// end of constructor
 
     @Override
     protected void fixPreferenze() {

@@ -67,7 +67,7 @@ public class UploadNomiTest extends UploadTest {
         super.backendClazzName = NomeBackend.class.getSimpleName();
         super.collectionName = "nome";
         super.setUpAll();
-        super.costruttoreNecessitaAlmenoUnParametro = true;
+        super.ammessoCostruttoreVuoto = true;
         super.istanzaValidaSubitoDopoCostruttore = true;
     }
 
@@ -104,31 +104,16 @@ public class UploadNomiTest extends UploadTest {
 //        super.fixConParametroNelCostruttore(sorgente);
 //    }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "NOMI_UPLOAD")
-    //    @Order(20)
-    //    @DisplayName("20 - WrapLista STANDARD")
-    //    void listaWrapDidascalie(final String nomeLista) {
-    //        if (textService.isEmpty(nomeLista)) {
-    //            return;
-    //        }
-    //
-    //        //        listWrapLista = appContext.getBean(UploadNomi.class, nomeLista).listaWrap();
-    //        //        super.fixWrapLista(nomeLista, listWrapLista);
-    //    }
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        fixBuilderPatternIniziale();
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "NOMI_UPLOAD")
-    //    @Order(30)
-    //    @DisplayName("30 - Didascalie STANDARD")
-    //    void listaDidascalie(final String nomeLista) {
-    //        if (textService.isEmpty(nomeLista)) {
-    //            return;
-    //        }
-    //
-    //        //        listWrapLista = appContext.getBean(UploadNomi.class, nomeLista).listaWrap();
-    //        //        super.fixWrapListaDidascalie(nomeLista, listWrapLista);
-    //    }
+        sorgente = "amalia";
+        istanza = appContext.getBean(UploadNomi.class, sorgente);
+        super.fixBuilderPatternUpload(istanza, AETypeLista.nomi);
+    }
 
 
     @ParameterizedTest

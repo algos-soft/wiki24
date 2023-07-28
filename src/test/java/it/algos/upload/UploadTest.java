@@ -1,11 +1,10 @@
 package it.algos.upload;
 
-import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
-import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -28,12 +27,14 @@ public abstract class UploadTest extends WikiTest {
 
     protected static String FUNZIONE = "isExistByKey";
 
+    protected String metodoDefault;
+
     protected void setUpAll() {
         super.setUpAll();
 
         nomeParametro = "nomeLista";
         metodiEseguibili = "esegue(), upload()";
-        metodoDaRegolare = "typeLista(), test()";
+        metodiDaRegolare = "typeLista()";
         metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), noToc(), forceToc(), siNumVoci(), noNumVoci(), sottoPagina(), test()";
     }
 
@@ -57,9 +58,8 @@ public abstract class UploadTest extends WikiTest {
     protected void fixBeanStandard(final String valore) {
         //--7 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName
         //--costruisce un'istanza col parametro 'valore'
-        super.fixBeanStandard(nomeParametro, valore, metodiEseguibili, metodoDaRegolare, metodiBuilderPattern);
-//        this.debug(valore, "forse", "pippoz", true, false);
-//        System.out.println(VUOTA);
+        super.fixBeanStandard(nomeParametro, valore, metodiEseguibili, metodiDaRegolare, metodiBuilderPattern);
+        //        this.debug(valore, "forse", "pippoz", true, false);
         System.out.println(VUOTA);
     }
 
@@ -82,7 +82,7 @@ public abstract class UploadTest extends WikiTest {
         }
         assertNotNull(istanza);
 
-        istanzaEffettivamenteValida = istanza.isValida();
+        istanzaEffettivamenteValida = istanza.isCostruttoreValido();
         assertEquals(istanzaValidaSubitoDopoCostruttore, istanzaEffettivamenteValida);
 
         if (istanzaEffettivamenteValida) {
@@ -105,6 +105,199 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(String.format("metodoEseguito%s%s", FORWARD, metodoEseguito));
     }
 
+    protected void debug(Upload istanza, String metodoEseguito) {
+        if (istanza == null) {
+            return;
+        }
+        assertNotNull(istanza);
+
+        if (!istanza.isCostruttoreValido()) {
+            message = String.format("Il valore '%s' non è accettabile per un'istanza di classe [%s]", istanza.nomeLista, clazzName);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+        System.out.println(VUOTA);
+
+        if (istanza.isCostruttoreValido()) {
+            if (istanzaValidaSubitoDopoCostruttore) {
+                if (textService.isEmpty(metodoEseguito)) {
+                    System.out.println(String.format("L'istanza è immediatamente eseguibile dopo il costruttore anche senza nessun metodo BuilderPattern"));
+                    System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                    System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                    System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, "(default) " + metodoDefault));
+                }
+                else {
+                    System.out.println(String.format("L'stanza era eseguibile anche senza il metodo '%s'", metodoEseguito));
+                    System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                    System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                    System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+                }
+            }
+            else {
+                assertTrue(istanza.isCostruttoreValido());
+                System.out.println(String.format("La chiamata del metodo '%s' rende utilizzabile l'istanza", metodoEseguito));
+                System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+                System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+                System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, true));
+                System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+            }
+        }
+        else {
+            assertFalse(istanza.isCostruttoreValido());
+            if (textService.isEmpty(metodoEseguito)) {
+                metodoEseguito = "(nessuno)";
+                message = String.format("Senza chiamare nessun metodo builderPattern, l'istanza NON è utilizzabile");
+            }
+            else {
+                message = String.format("Il metodo builderPattern '%s' NON è congruo e l'istanza NON è utilizzabile", metodoEseguito);
+            }
+            logService.warn(new WrapLog().message(message));
+
+            System.out.println(String.format("Debug%s%s", FORWARD, sorgente));
+            System.out.println(String.format("Classe%s%s", FORWARD, clazz.getSimpleName()));
+            System.out.println(String.format("istanzaValidaSubitoDopoCostruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+            System.out.println(String.format("istanzaEffettivamenteValida%s%s", FORWARD, false));
+            System.out.println(String.format("metodo BuilderPattern Eseguito%s%s", FORWARD, metodoEseguito));
+        }
+    }
+
+
+    void fixBuilderPatternUpload(Upload istanza, AETypeLista typeListaDefault) {
+        fixBuilderPattern(istanza, sorgente, VUOTA);
+
+//        if (istanzaValidaSubitoDopoCostruttore) {
+//            assertTrue(istanza.listaBioTest());
+//            fixBuilderPattern(istanza, sorgente, "listaBio()");
+//
+//            assertTrue(istanza.listaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "listaWrap()");
+//
+//            assertTrue(istanza.mappaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "mappaWrap()");
+//        }
+//        else {
+//            assertFalse(istanza.listaBioTest());
+//            fixBuilderPattern(istanza, sorgente, "listaBio()");
+//
+//            assertFalse(istanza.listaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "listaWrap()");
+//
+//            assertFalse(istanza.mappaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "mappaWrap()");
+//
+//            istanza.typeLista(typeListaDefault);
+//
+//            assertTrue(istanza.listaBioTest());
+//            fixBuilderPattern(istanza, sorgente, "listaBio()");
+//
+//            assertTrue(istanza.listaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "listaWrap()");
+//
+//            assertTrue(istanza.mappaWrapTest());
+//            fixBuilderPattern(istanza, sorgente, "mappaWrap()");
+//        }
+//
+//        istanza.typeLista(AETypeLista.nomi);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.nomi)");
+//
+//        istanza.typeLista(AETypeLista.cognomi);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.cognomi)");
+//
+//        istanza.typeLista(AETypeLista.giornoNascita);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.giornoNascita)");
+//
+//        istanza.typeLista(AETypeLista.giornoMorte);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.giornoMorte)");
+//
+//        istanza.typeLista(AETypeLista.annoNascita);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.annoNascita)");
+//
+//        istanza.typeLista(AETypeLista.annoMorte);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.annoMorte)");
+//
+//        istanza.typeLista(AETypeLista.attivitaSingolare);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.attivitaSingolare)");
+//
+//        istanza.typeLista(AETypeLista.attivitaPlurale);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.attivitaPlurale)");
+//
+//        istanza.typeLista(AETypeLista.nazionalitaSingolare);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.nazionalitaSingolare)");
+//
+//        istanza.typeLista(AETypeLista.nazionalitaPlurale);
+//        fixBuilderPattern(istanza, sorgente, "typeLista(AETypeLista.nazionalitaPlurale)");
+    }
+
+//    void fixBuilderPattern(Object istanza, String keyValue, String nomeMetodo) {
+//        debug((Upload) istanza, keyValue, nomeMetodo);
+//        System.out.println(VUOTA);
+//    }
+
+
+    protected void debug(Upload istanza, String keyValue, String metodoEseguito) {
+        if (istanza == null) {
+            return;
+        }
+        assertNotNull(istanza);
+
+        if (!istanza.isCostruttoreValido()) {
+            message = String.format("Il valore '%s' non è accettabile per un'istanza di classe [%s]", istanza.nomeLista, clazzName);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+
+        if (istanza.isCostruttoreValido()) {
+            if (istanzaValidaSubitoDopoCostruttore) {
+                if (textService.isEmpty(metodoEseguito)) {
+                    //                    System.out.println(String.format("L'istanza è immediatamente eseguibile dopo il costruttore anche senza nessun metodo BuilderPattern"));
+                    System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                    System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                    System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoDefault));
+                }
+                else {
+                    System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                    System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                    System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+                    System.out.println(String.format("L'istanza era eseguibile anche senza il metodo '%s'", metodoEseguito));
+                }
+            }
+            else {
+                assertTrue(istanza.isCostruttoreValido());
+                System.out.println(String.format("La chiamata del metodo '%s' rende utilizzabile l'istanza", metodoEseguito));
+                System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+            }
+        }
+        else {
+            assertFalse(istanza.isCostruttoreValido());
+            if (textService.isEmpty(metodoEseguito)) {
+                metodoEseguito = "(nessuno)";
+                message = String.format("Senza chiamare nessun metodo builderPattern, l'istanza NON è utilizzabile");
+            }
+            else {
+                message = String.format("Il metodo builderPattern '%s' NON è congruo e l'istanza NON è utilizzabile", metodoEseguito);
+            }
+            logService.warn(new WrapLog().message(message));
+
+            System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+            System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+            System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+            System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, false));
+            System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+        }
+    }
 
     protected void printUpload(Upload uploadEntityBean) {
         if (uploadEntityBean == null) {
@@ -112,7 +305,7 @@ public abstract class UploadTest extends WikiTest {
         }
 
         message = String.format("Valori STANDARD per un'istanza di [%s], creata con il solo '%s'", uploadEntityBean.getClass().getSimpleName(), "nomeLista");
-        if (uploadEntityBean.isValida()) {
+        if (uploadEntityBean.isCostruttoreValido()) {
             message += String.format("%sPronta per essere utilizzata.", SEP);
         }
         else {

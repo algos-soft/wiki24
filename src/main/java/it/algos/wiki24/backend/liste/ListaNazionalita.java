@@ -61,7 +61,7 @@ public class ListaNazionalita extends Lista {
         super.typeLista = AETypeLista.nazionalitaPlurale;
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParametriAttNaz.getEnumCurrentObj();
         super.paragrafoAltre = TAG_LISTA_NO_ATTIVITA;
-        super.istanzaValida = false;
+        super.patternCompleto = false;
 
         if (typeLista == AETypeLista.nazionalitaPlurale) {
             NazPlurale nazionalitaPlurale = nazPluraleBackend.findByKey(textService.primaMinuscola(nomeLista));
@@ -74,7 +74,7 @@ public class ListaNazionalita extends Lista {
      * Pattern Builder <br>
      */
     public ListaNazionalita typeLista(AETypeLista typeLista) {
-        super.istanzaValida = false;
+        super.patternCompleto = false;
         return switch (typeLista) {
             case nazionalitaSingolare -> singolare();
             case nazionalitaPlurale -> plurale();
@@ -86,7 +86,7 @@ public class ListaNazionalita extends Lista {
      * Pattern Builder <br>
      */
     public ListaNazionalita singolare() {
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaNazionalita) super.typeLista(AETypeLista.nazionalitaSingolare);
     }
 
@@ -94,7 +94,7 @@ public class ListaNazionalita extends Lista {
      * Pattern Builder <br>
      */
     public ListaNazionalita plurale() {
-        super.istanzaValida = true;
+        super.patternCompleto = true;
         return (ListaNazionalita) super.typeLista(AETypeLista.nazionalitaPlurale);
     }
 

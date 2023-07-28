@@ -24,7 +24,7 @@ import java.util.*;
  * <p>
  * Superclasse astratta per le classi UploadGiorni e UploadAnni <br>
  */
-public abstract class UploadGiorniAnni extends Upload {
+public abstract class UploadGiorniAnni extends UploadListe {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -50,16 +50,26 @@ public abstract class UploadGiorniAnni extends Upload {
 
     protected boolean usaSottoGiorniAnni;
 
-    /**
-     * Costruttore base con parametri <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-     */
-    public UploadGiorniAnni() {
-        super.typeToc = AETypeToc.noToc;
-        this.uploadTest = false;
-        super.usaParagrafi = true;
+    public UploadGiorniAnni(String nomeLista) {
+        super(nomeLista);
     }// end of constructor
+
+    //    public UploadGiorniAnni() {
+//        super.typeToc = AETypeToc.noToc;
+//        this.uploadTest = false;
+//        super.usaParagrafi = true;
+//    }// end of constructor
+
+//    /**
+//     * Costruttore base con parametri <br>
+//     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+//     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+//     */
+//    public UploadGiorniAnni(String nomeLista) {
+//        super.typeToc = AETypeToc.noToc;
+//        this.uploadTest = false;
+//        super.usaParagrafi = true;
+//    }// end of constructor
 
 
     public UploadGiorniAnni nascita() {

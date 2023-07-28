@@ -1,7 +1,5 @@
 package it.algos.base;
 
-import com.mongodb.*;
-import com.mongodb.client.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
@@ -12,7 +10,6 @@ import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.packages.attplurale.*;
@@ -26,7 +23,6 @@ import it.algos.wiki24.backend.packages.pagina.*;
 import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.bson.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
@@ -58,9 +54,7 @@ public abstract class WikiTest extends AlgosTest {
     protected static final String FACOLTATIVO = "(facoltativo - potrebbe non interessare per questa classe)";
 
 
-    protected static final String tagCheck = "AlgosCheckCostruttore";
-
-    protected static final String tagPattern = "AlgosBuilderPattern";
+    protected static final String tagCheck = "AlgosBuilderPattern";
 
     /**
      * Istanza di una interfaccia <br>
@@ -238,7 +232,7 @@ public abstract class WikiTest extends AlgosTest {
 
     protected String collectionName;
 
-    protected boolean costruttoreNecessitaAlmenoUnParametro = false;
+    protected boolean ammessoCostruttoreVuoto = false;
 
     protected boolean istanzaValidaSubitoDopoCostruttore = false;
 
@@ -246,9 +240,11 @@ public abstract class WikiTest extends AlgosTest {
 
     protected String metodiEseguibili;
 
-    protected String metodoDaRegolare;
+    protected String metodiDaRegolare;
 
     protected String metodiBuilderPattern;
+
+    protected String metodoDefault;
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -811,12 +807,39 @@ public abstract class WikiTest extends AlgosTest {
         wrapLista = null;
     }
 
+    @Test
+    @Order(0)
+    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
+    void checkIniziale() {
+        System.out.println("0 - Check iniziale dei parametri necessari per il test");
+
+        if (clazz == null) {
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "clazz", this.getClass().getSimpleName());
+            logService.error(new WrapLog().message(message).type(AETypeLog.test));
+            assertTrue(false);
+            return;
+        }
+
+        if (textService.isEmpty(clazzName)) {
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "clazzName", this.getClass().getSimpleName());
+            logService.error(new WrapLog().message(message).type(AETypeLog.test));
+            assertTrue(false);
+            return;
+        }
+
+        if (textService.isEmpty(collectionName)) {
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "collectionName", this.getClass().getSimpleName());
+            logService.error(new WrapLog().message(message).type(AETypeLog.test));
+            assertTrue(false);
+            return;
+        }
+    }
 
     @Test
     @Order(1)
     @DisplayName("1 - Costruttore base con/senza parametri")
     void costruttoreBase() {
-        if (this.costruttoreNecessitaAlmenoUnParametro) {
+        if (this.ammessoCostruttoreVuoto) {
             System.out.println(String.format("1 - Costruttore base new %s(xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
 
@@ -845,7 +868,7 @@ public abstract class WikiTest extends AlgosTest {
     void getBean() {
         Object istanzaGenerica = null;
 
-        if (this.costruttoreNecessitaAlmenoUnParametro) {
+        if (this.ammessoCostruttoreVuoto) {
             System.out.println(String.format("2 - appContext.getBean(%s.class, xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
             System.out.println("Errore previsto (nel test). Tipo warning.");
@@ -880,7 +903,6 @@ public abstract class WikiTest extends AlgosTest {
                 istanzaGenerica = appContext.getBean(clazz);
             } catch (Exception unErrore) {
                 logService.error(new WrapLog().exception(unErrore));
-                assertTrue(false);
                 return;
             }
             assertNotNull(istanzaGenerica);
@@ -888,7 +910,7 @@ public abstract class WikiTest extends AlgosTest {
             if (istanzaGenerica instanceof AlgosBuilderPattern builderPattern) {
                 System.out.println(String.format("Questa classe (e altre) implementa il Design Pattern 'Builder'"));
                 System.out.println(String.format("Per permettere la costruzione 'modulare' dell'istanza con variabili come [test] e altre"));
-                if (builderPattern.isValida()) {
+                if (builderPattern.isPatternCompleto()) {
                     System.out.println("Finito il ciclo del costruttore e il metodo @PostConstruct, l'istanza è pronta");
                     System.out.println("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
                 }
@@ -905,47 +927,103 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
+    // 5 - senzaParametroNelCostruttore
     protected void fixSenzaParametroNelCostruttore() {
         System.out.println("5 - senzaParametroNelCostruttore");
-        System.out.println("Prova a costruire un'istanza SENZA parametri e controlla che vada in errore se è obbligatorio avere un parametro");
+        System.out.println("Prova a costruire un'istanza senza parametri");
         System.out.println(VUOTA);
-        String flag = "costruttoreNecessitaAlmenoUnParametro";
-
-        if (clazz == null) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe '%s'", "clazz", this.getClass().getSimpleName());
-            logService.error(new WrapLog().message(message).type(AETypeLog.test));
-            assertTrue(false);
-            return;
-        }
-        if (textService.isEmpty(collectionName)) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe '%s'", "collectionName", this.getClass().getSimpleName());
-            logService.error(new WrapLog().message(message).type(AETypeLog.test));
-            assertTrue(false);
-            return;
-        }
+        boolean istanzaCostruitaSenzaParametri = false;
 
         try {
             appContext.getBean(clazz);
+            istanzaCostruitaSenzaParametri = true;
         } catch (Exception unErrore) {
-            message = String.format("La classe [%s] prevede un parametro nel costruttore", clazzName);
-            logService.info(new WrapLog().message(message).type(AETypeLog.test));
+            istanzaCostruitaSenzaParametri = false;
+            //            message = String.format("La classe [%s] prevede un parametro nel costruttore", clazzName);
+            //            logService.info(new WrapLog().message(message).type(AETypeLog.test));
 
-            message = String.format("Istanza NON valida (come prevedibile) perché nel costruttore MANCA il parametro indispensabile");
-            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
-            return;
+            //            message = String.format("Istanza NON valida (come prevedibile) perché nel costruttore MANCA il parametro indispensabile");
+            //            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
         }
 
-        message = String.format("La classe [%s] prevede almeno un parametro nel costruttore", clazzName);
-        logService.info(new WrapLog().message(message).type(AETypeLog.test));
-        message = String.format("L'istanza della classe [%s] è stata costruita SENZA parametro (e senza errore)", clazzName);
-        logService.info(new WrapLog().message(message).type(AETypeLog.test));
-        message = String.format("Vuol dire che qualche regolazione del test non è adeguata o che esiste un costruttore senza parametri nella classe [%s]", clazzName);
-        logService.info(new WrapLog().message(message).type(AETypeLog.test));
-        message = String.format("Controllare i costruttori della classe [%s] (o delle superClassi)", clazzName);
-        logService.error(new WrapLog().message(message).type(AETypeLog.test));
-        message = String.format("Controllare il flag '%s' nel metodo setUpAll() del test", flag);
-        logService.error(new WrapLog().message(message).type(AETypeLog.test));
-        assertTrue(false);
+        if (ammessoCostruttoreVuoto) {
+            message = String.format("La classe [%s] prevede un costruttore senza parametri", clazzName);
+            logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+            if (istanzaCostruitaSenzaParametri) {
+                message = String.format("Sono riuscito a costruire un'istanza della classe [%s]", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Come previsto appContext.getBean(%s.class) funziona", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Il flag '%s' nel metodo setUpAll() di questa classe [%s] è corretto", "ammessoCostruttoreVuoto", this.getClass().getSimpleName());
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Nella classe [%s] o in una sua superclasse esiste un costruttore senza parametri", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Costruita come previsto un'istanza valida della classe [%s]", clazzName);
+                logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+                assertTrue(true);
+            }
+            else {
+                message = String.format("Non sono riuscito a costruire un'istanza della classe [%s]", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Contrariamente al previsto appContext.getBean(%s.class) NON funziona", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Potrebbe essere sbagliato il flag '%s' nel metodo setUpAll() di questa classe [%s]", "ammessoCostruttoreVuoto", this.getClass().getSimpleName());
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Potrebbe mancare il costruttore senza parametri nella classe [%s] o nelle sue superclassi", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Nella classe [%s] manca il costruttore senza parametri", clazzName);
+                logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+                assertTrue(false);
+            }
+        }
+        else {
+            message = String.format("La classe [%s] prevede un parametro (obbligatorio) nel costruttore", clazzName);
+            logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+            if (istanzaCostruitaSenzaParametri) {
+                message = String.format("Sono riuscito a costruire un'istanza della classe [%s] anche SENZA un parametro nel costruttore", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Contrariamente al previsto appContext.getBean(%s.class) funziona", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Potrebbe essere sbagliato il flag '%s' nel metodo setUpAll() di questa classe [%s]", "ammessoCostruttoreVuoto", this.getClass().getSimpleName());
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Potrebbe esserci un costruttore senza parametri nella classe [%s] o nelle sue superclassi", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("La classe [%s] ha un costruttore NON previsto", clazzName);
+                logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+                assertTrue(false);
+            }
+            else {
+                message = String.format("Non sono riuscito a costruire un'istanza della classe [%s] SENZA un parametro nel costruttore", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Come previsto appContext.getBean(%s.class) NON funziona", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Il flag '%s' nel metodo setUpAll() di questa classe [%s] di test è corretto", "ammessoCostruttoreVuoto", this.getClass().getSimpleName());
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("Nella classe [%s] non esiste un costruttore senza parametri", clazzName);
+                logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+                message = String.format("La classe [%s] ha solo costruttori coi parametri (come previsto)", clazzName);
+                logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+                assertTrue(true);
+            }
+        }
     }
 
 
@@ -964,7 +1042,7 @@ public abstract class WikiTest extends AlgosTest {
         }
         assertNotNull(istanza);
 
-        if (istanza instanceof AlgosCheckCostruttore istanzaCheck) {
+        if (istanza instanceof AlgosBuilderPattern istanzaCheck) {
             isCostruttoreValido = istanzaCheck.isCostruttoreValido();
         }
         else {
@@ -976,8 +1054,8 @@ public abstract class WikiTest extends AlgosTest {
             logService.info(new WrapLog().message(message).type(AETypeLog.test));
             message = String.format("L'istanza esiste ma non ci sono altre informazioni sulla fruibilità della stessa");
             logService.warn(new WrapLog().message(message).type(AETypeLog.test));
-            message = String.format("Considera la possibilità di implementare l'interfaccia %s per la classe [%s]", "AlgosCheckCostruttore", clazzName);
-            logService.info(new WrapLog().message(message).type(AETypeLog.test));
+            message = String.format("Considera la possibilità di implementare l'interfaccia %s per la classe [%s]", tagCheck, clazzName);
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
             return;
         }
 
@@ -1032,7 +1110,7 @@ public abstract class WikiTest extends AlgosTest {
         }
         assertNotNull(istanza);
 
-        if (istanza instanceof AlgosCheckCostruttore istanzaCheck) {
+        if (istanza instanceof AlgosBuilderPattern istanzaCheck) {
             isCostruttoreValido = istanzaCheck.isCostruttoreValido();
         }
         else {
@@ -1048,10 +1126,10 @@ public abstract class WikiTest extends AlgosTest {
         }
 
         if (istanza instanceof AlgosBuilderPattern istanzaBuildPattern) {
-            isBuildPatternValido = istanzaBuildPattern.isValida();
+            isBuildPatternValido = istanzaBuildPattern.isPatternCompleto();
         }
         else {
-            message = String.format("La classe [%s] NON implementa l'interfaccia %s", clazzName, tagPattern);
+            message = String.format("La classe [%s] NON implementa l'interfaccia %s", clazzName, tagCheck);
             logService.info(new WrapLog().message(message).type(AETypeLog.test));
             message = String.format("La classe [%s] NON controlla se esistono ulteriori regolazioni del BuilderPattern", clazzName);
             logService.info(new WrapLog().message(message).type(AETypeLog.test));
@@ -1080,7 +1158,7 @@ public abstract class WikiTest extends AlgosTest {
             return;
         }
 
-        message = String.format("La classe [%s] implementa l'interfaccia %s", clazzName, tagPattern);
+        message = String.format("La classe [%s] implementa l'interfaccia %s", clazzName, tagCheck);
         logService.info(new WrapLog().message(message).type(AETypeLog.test));
         if (isBuildPatternValido) {
             message = String.format("L'istanza è valida/eseguibile da subito, senza ulteriori regolazioni del BuilderPattern");
@@ -1093,14 +1171,13 @@ public abstract class WikiTest extends AlgosTest {
             //            this.debug("xxx",valore,"(nessuno)",true,true);
         }
         else {
-            message = "L'istanza NON è utilizzabile";
-            logService.info(new WrapLog().message(message).type(AETypeLog.test));
-            message = "L'istanza NON è valida, perché occorrono ulteriori regolazioni del BuilderPattern";
-            logService.info(new WrapLog().message(message).type(AETypeLog.test));
-            message = String.format("Ad esempio la regolazione di %s", metodoDaRegolare);
+            message = "L'istanza NON è utilizzabile, perché occorrono ulteriori regolazioni del BuilderPattern";
             logService.info(new WrapLog().message(message).type(AETypeLog.test));
             message = String.format("BuilderPattern%s%s", FORWARD, metodiBuilderPattern);
             logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+            message = String.format("Prova ad usare i metodi%s%s", FORWARD, metodiDaRegolare);
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
             System.out.println(VUOTA);
         }
     }
@@ -1163,6 +1240,47 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Seguendo il Pattern Builder, non si può chiamare il metodo '%s' se l'istanza non è correttamente istanziata.", nomeMetodo));
         message = String.format("Istanza di [%s] costruita SENZA parametro", clazzName);
         logService.warn(new WrapLog().message(message));
+    }
+
+
+    // 9 - Metodi builderPattern per validare l'istanza
+    protected void fixBuilderPatternIniziale() {
+        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+        System.out.println(VUOTA);
+
+        if (istanzaValidaSubitoDopoCostruttore) {
+            message = String.format("Una istanza di classe [%s] è immediatamente eseguibile dopo un costruttore (valido)", clazzName);
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+        }
+        else {
+            message = String.format("Anche con un costruttore valido, una istanza di classe [%s] NON è immediatamente eseguibile", clazzName);
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+        }
+
+        System.out.println(String.format("Istanza di classe [%s]", clazzName));
+        System.out.println(String.format("Istanza valida subito dopo il costruttore: %s", istanzaValidaSubitoDopoCostruttore));
+        System.out.println(String.format("Metodi BuilderPattern disponibili: %s", metodiBuilderPattern));
+        System.out.println(String.format("Metodo di default: %s", textService.isValid(metodoDefault) ? metodoDefault : NULL));
+        System.out.println(String.format("Metodi da regolare: %s", textService.isValid(metodiDaRegolare) ? metodiDaRegolare : NULL));
+        System.out.println(String.format("Metodi eseguibili: %s", textService.isValid(metodiEseguibili) ? metodiEseguibili : NULL));
+
+        if (istanzaValidaSubitoDopoCostruttore) {
+            message = String.format("Si possono invocare i metodi eseguibili", clazz.getSimpleName());
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+        }
+        else {
+            message = String.format("Occorre invocare uno dei metodi builderPattern da regolare");
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+        }
+
+        System.out.println(VUOTA);
+        System.out.println(VUOTA);
+    }
+
+
+    protected void fixBuilderPattern(Object istanza, String keyValue, String nomeMetodo) {
+        //        debug((Object) istanza, keyValue, nomeMetodo);
+        System.out.println(VUOTA);
     }
 
     @Deprecated
