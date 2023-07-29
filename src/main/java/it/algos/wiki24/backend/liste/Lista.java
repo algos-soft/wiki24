@@ -357,6 +357,10 @@ public abstract class Lista implements  AlgosBuilderPattern {
     public boolean isPatternCompleto() {
         return this.patternCompleto;
     }
+    @Override
+    public String getNome() {
+        return this.nomeLista;
+    }
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>

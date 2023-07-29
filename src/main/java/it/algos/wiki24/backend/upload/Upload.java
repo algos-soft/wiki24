@@ -250,6 +250,9 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected boolean patternCompleto = false;
 
     protected String collectionName;
+    protected  int sogliaSottopagina;
+    protected  int sogliaDiv;
+    protected  boolean usaDiv;
 
     /**
      * Costruttore base senza parametri <br>
@@ -288,6 +291,10 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected void fixPreferenze() {
         this.summary = "[[Utente:Biobot|bioBot]]";
+
+        this.sogliaSottopagina = WPref.sogliaSottoPagina.getInt();
+        this.sogliaDiv = WPref.sogliaDiv.getInt();
+        this.usaDiv = WPref.usaDivAttNaz.is();
     }
 
     protected void fixPreferenzeBackend() {
@@ -342,6 +349,15 @@ public abstract class Upload implements AlgosBuilderPattern {
     public Upload typeLinkParagrafi(AETypeLink typeLinkParagrafi) {
         this.typeLinkParagrafi = typeLinkParagrafi;
         this.usaNumeriTitoloParagrafi = typeLinkParagrafi != AETypeLink.nessunLink;
+        return this;
+    }
+
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload typeLinkCrono(AETypeLink typeLinkCrono) {
+        this.typeLinkCrono = typeLinkCrono;
         return this;
     }
 
@@ -408,6 +424,41 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this.patternCompleto;
     }
 
+    @Override
+    public String getNome() {
+        return this.nomeLista;
+    }
+
+    public LinkedHashMap<String, List<WrapLista>> mappaWrap() {
+        String message;
+
+        if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
+            System.out.println(VUOTA);
+            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "mappaWrap", collectionName, nomeLista);
+            logger.info(new WrapLog().message(message));
+            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "mappaWrap");
+            logger.warn(new WrapLog().message(message));
+            return null;
+        }
+
+        if (mappaWrap == null || mappaWrap.size() > 0) {
+            this.fixMappaWrap();
+        }
+        return mappaWrap;
+    }
+    public boolean mappaWrapTest() {
+        LinkedHashMap<String, List<WrapLista>> mappaWrap = mappaWrap();
+
+        if (mappaWrap != null && mappaWrap.size() > 0) {
+            this.patternCompleto = true;
+        }
+        else {
+            this.patternCompleto = false;
+        }
+
+        return patternCompleto;
+    }
+
     /**
      * Pattern Builder <br>
      */
@@ -461,23 +512,6 @@ public abstract class Upload implements AlgosBuilderPattern {
         return registra(uploadText);
     }
 
-    public LinkedHashMap<String, List<WrapLista>> mappaWrap() {
-        String message;
-
-        if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
-            System.out.println(VUOTA);
-            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "mappaWrap", collectionName, nomeLista);
-            logger.info(new WrapLog().message(message));
-            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "mappaWrap");
-            logger.warn(new WrapLog().message(message));
-            return null;
-        }
-
-        if (mappaWrap == null || mappaWrap.size() > 0) {
-            this.fixMappaWrap();
-        }
-        return mappaWrap;
-    }
 
 
     public boolean fixMappaWrap() {
@@ -586,7 +620,46 @@ public abstract class Upload implements AlgosBuilderPattern {
 
 
     public String creaBody() {
-        return VUOTA;
+        StringBuffer buffer = new StringBuffer();
+        List<WrapLista> lista;
+        int numVoci;
+        String titoloParagrafoLink;
+        String vedi;
+        String sottoPagina;
+
+        for (String keyParagrafo : mappaWrap.keySet()) {
+            lista = mappaWrap.get(keyParagrafo);
+            numVoci = lista.size();
+            titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
+            if (isSottopagina) {
+                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+            }
+            else {
+                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+            }
+
+            if (numVoci > sogliaSottopagina && !isSottopagina) {
+                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
+                vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
+                buffer.append(vedi + CAPO);
+                this.vediSottoPagina(sottoPagina,lista);
+            }
+            else {
+                usaDiv = usaDiv ? lista.size() > sogliaDiv : false;
+                buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
+                for (WrapLista wrap : lista) {
+                    buffer.append(ASTERISCO);
+                    buffer.append(wrap.lista);
+                    buffer.append(CAPO);
+                }
+                buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);
+            }
+        }
+
+        return buffer.toString().trim();
+    }
+    protected WResult vediSottoPagina(String sottoPagina,List<WrapLista> lista) {
+        return WResult.errato();
     }
 
     protected String creaBottom(String textDaEsaminare) {

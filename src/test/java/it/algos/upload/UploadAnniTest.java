@@ -45,8 +45,9 @@ public class UploadAnniTest extends WikiTest {
         super.backendClazzName = AnnoWikiBackend.class.getSimpleName();
         super.collectionName = "annoWiki";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiDaRegolare += ", nascita(), morte()";
         super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
@@ -63,49 +64,5 @@ public class UploadAnniTest extends WikiTest {
     }
 
 
-//    @Test
-//    @Order(1)
-//    @DisplayName("1 - Costruttore base senza parametri")
-//    void costruttoreBase() {
-//        istanza = new UploadAnni();
-//        assertNotNull(istanza);
-//        System.out.println(("1 - Costruttore base senza parametri"));
-//        System.out.println(VUOTA);
-//        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-//    }
-
-    @Test
-    @Order(2)
-    @DisplayName("2 - Upload test di un anno di nascita semplice (senza sottopagine)")
-    void upload() {
-        System.out.println("2 - Upload test di un anno di nascita semplice (senza sottopagine)");
-        sorgente = "1837";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
-    }
-
-    //    @Test
-    @Order(2)
-    @DisplayName("2 - Upload test di un anno di morte complesso (con sottopagine)")
-    void upload2() {
-        System.out.println("2 - Upload test di un anno di morte complesso (con sottopagine)");
-        sorgente = "2018";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoMorte).upload(sorgente);
-    }
-
-
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
-    }
 
 }

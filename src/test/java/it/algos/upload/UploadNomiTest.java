@@ -67,8 +67,9 @@ public class UploadNomiTest extends UploadTest {
         super.backendClazzName = NomeBackend.class.getSimpleName();
         super.collectionName = "nome";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
-        super.istanzaValidaSubitoDopoCostruttore = true;
+        super.ammessoCostruttoreVuoto = false;
+        super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiDaRegolare = "(nessuno)";
     }
 
 

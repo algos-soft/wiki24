@@ -255,6 +255,11 @@ public abstract class Statistiche implements AlgosBuilderPattern {
     }
 
 
+    @Override
+    public String getNome() {
+        return this.wikiTitleUpload;
+    }
+
     public WResult esegue() {
         WResult result = WResult.build();
 

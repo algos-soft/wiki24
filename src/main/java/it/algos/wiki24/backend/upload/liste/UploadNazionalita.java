@@ -56,14 +56,42 @@ public class UploadNazionalita extends UploadAttivitaNazionalita {
     }// end of constructor
 
 
-    public UploadNazionalita singolare() {
-        this.typeLista = AETypeLista.nazionalitaSingolare;
-        return this;
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadNazionalita typeLista(AETypeLista typeLista) {
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case nazionalitaSingolare -> singolare();
+            case nazionalitaPlurale -> plurale();
+            default -> this;
+        };
     }
 
+
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadNazionalita singolare() {
+        super.wikiTitleUpload = wikiUtility.wikiTitleNazionalita(nomeLista);
+        super.patternCompleto = true;
+        return (UploadNazionalita) super.typeLista(AETypeLista.nazionalitaSingolare);
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
     public UploadNazionalita plurale() {
-        this.typeLista = AETypeLista.nazionalitaPlurale;
-        return this;
+        super.wikiTitleUpload = wikiUtility.wikiTitleNazionalita(nomeLista);
+        super.patternCompleto = true;
+        return (UploadNazionalita) super.typeLista(AETypeLista.nazionalitaPlurale);
+    }
+    /**
+     * Pattern Builder <br>
+     */
+    @Override
+    public UploadNazionalita test() {
+        return (UploadNazionalita) super.test();
     }
 
     protected String incipit() {

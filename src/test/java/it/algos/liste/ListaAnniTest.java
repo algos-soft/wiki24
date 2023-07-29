@@ -66,10 +66,10 @@ public class ListaAnniTest extends ListeTest {
         super.backendClazzName = AnnoWikiBackend.class.getSimpleName();
         super.collectionName = "annoWiki";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = false;
-        super.metodiBuilderPattern += ", nascita(), morte()";
         super.metodiDaRegolare += ", nascita(), morte()";
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 

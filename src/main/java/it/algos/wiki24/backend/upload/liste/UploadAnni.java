@@ -28,17 +28,17 @@ import java.util.*;
 public class UploadAnni extends UploadGiorniAnni {
 
 
-//    /**
-//     * Costruttore base con parametri <br>
-//     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-//     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
-//     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
-//     */
-//    public UploadAnni() {
-//    }// end of constructor
-public UploadAnni(String nomeLista) {
-    super(nomeLista);
-}// end of constructor
+    //    /**
+    //     * Costruttore base con parametri <br>
+    //     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
+    //     * Uso: appContext.getBean(UploadAnni.class).nascita/morte().upload(nomeAnno) <br>
+    //     * Non rimanda al costruttore della superclasse. Regola qui solo alcune property. <br>
+    //     */
+    //    public UploadAnni() {
+    //    }// end of constructor
+    public UploadAnni(String nomeLista) {
+        super(nomeLista);
+    }// end of constructor
 
     @Override
     protected void fixPreferenze() {
@@ -53,24 +53,43 @@ public UploadAnni(String nomeLista) {
     }
 
 
-    public UploadAnni typeCrono(AETypeLista type) {
-        this.typeLista = type;
-        return this;
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadAnni typeLista(AETypeLista typeLista) {
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case annoNascita -> nascita();
+            case annoMorte -> morte();
+            default -> this;
+        };
     }
 
+
+    /**
+     * Pattern Builder <br>
+     */
     public UploadAnni nascita() {
-        this.typeLista = AETypeLista.annoNascita;
-        return this;
+        super.wikiTitleUpload = wikiUtility.wikiTitleNatiAnno(nomeLista);
+        super.patternCompleto = true;
+        return (UploadAnni) super.typeLista(AETypeLista.annoNascita);
     }
 
+    /**
+     * Pattern Builder <br>
+     */
     public UploadAnni morte() {
-        this.typeLista = AETypeLista.annoMorte;
-        return this;
+        super.wikiTitleUpload = wikiUtility.wikiTitleMortiAnno(nomeLista);
+        super.patternCompleto = true;
+        return (UploadAnni) super.typeLista(AETypeLista.annoMorte);
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    @Override
     public UploadAnni test() {
-        this.uploadTest = true;
-        return this;
+        return (UploadAnni) super.test();
     }
 
     /**
@@ -83,7 +102,7 @@ public UploadAnni(String nomeLista) {
     }
 
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {
-        UploadAnni anno = appContext.getBean(UploadAnni.class).typeCrono(typeLista);
+        UploadAnni anno = appContext.getBean(UploadAnni.class).typeLista(typeLista);
 
         if (uploadTest) {
             anno = anno.test();

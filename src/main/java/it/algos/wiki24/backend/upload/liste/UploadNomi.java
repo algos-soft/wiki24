@@ -59,6 +59,10 @@ public class UploadNomi extends UploadListe {
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiNomi.getEnumCurrentObj();
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
         super.patternCompleto = true;
+
+        super.sogliaSottopagina = WPref.sogliaSottoPagina.getInt();
+        super.sogliaDiv = WPref.sogliaDiv.getInt();
+        super.usaDiv = WPref.usaDivAttNaz.is();
     }
 
 
@@ -66,9 +70,23 @@ public class UploadNomi extends UploadListe {
      * Pattern Builder <br>
      */
     public UploadNomi typeLista(AETypeLista typeLista) {
-        return (UploadNomi) super.typeLista(typeLista);
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case nomi -> {
+                super.patternCompleto = true;
+                yield (UploadNomi) super.typeLista(typeLista);
+            }
+            default -> this;
+        };
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    @Override
+    public UploadNomi test() {
+        return (UploadNomi) super.test();
+    }
 
     @Override
     protected String incipit() {
@@ -96,50 +114,10 @@ public class UploadNomi extends UploadListe {
         return true;
     }
 
-    @Override
-    public String creaBody() {
-        StringBuffer buffer = new StringBuffer();
-        List<WrapLista> lista;
-        int numVoci;
-        int max = WPref.sogliaSottoPagina.getInt();
-        int maxDiv = WPref.sogliaDiv.getInt();
-        boolean usaDivBase = WPref.usaDivAttNaz.is();
-        boolean usaDiv;
-        String titoloParagrafoLink;
-        String vedi;
-        String sottoPagina;
-
-        for (String keyParagrafo : mappaWrap.keySet()) {
-            lista = mappaWrap.get(keyParagrafo);
-            numVoci = lista.size();
-            titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
-            if (isSottopagina) {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
-            }
-            else {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
-            }
-
-            if (numVoci > max && !isSottopagina) {
-                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
-                vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
-                buffer.append(vedi + CAPO);
-                appContext.getBean(UploadNomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
-            }
-            else {
-                usaDiv = usaDivBase ? lista.size() > maxDiv : false;
-                buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
-                for (WrapLista wrap : lista) {
-                    buffer.append(ASTERISCO);
-                    buffer.append(wrap.lista);
-                    buffer.append(CAPO);
-                }
-                buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);
-            }
-        }
-
-        return buffer.toString().trim();
+    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
+        return appContext.getBean(UploadNomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
     }
+
 
     protected String portale() {
         StringBuffer buffer = new StringBuffer();

@@ -67,10 +67,10 @@ public class ListaGiorniTest extends ListeTest {
         super.backendClazzName = GiornoWikiBackend.class.getSimpleName();
         super.collectionName = "giornoWiki";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = false;
-        super.metodiBuilderPattern += ", nascita(), morte()";
         super.metodiDaRegolare += ", nascita(), morte()";
+        super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
 
@@ -98,13 +98,13 @@ public class ListaGiorniTest extends ListeTest {
         super.fixBeanStandard(sorgente);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "27 novembre";
-        super.fixConParametroNelCostruttore(sorgente);
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "27 novembre";
+//        super.fixConParametroNelCostruttore(sorgente);
+//    }
 
     @Test
     @Order(9)

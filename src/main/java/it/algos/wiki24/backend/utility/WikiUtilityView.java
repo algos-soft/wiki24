@@ -662,10 +662,10 @@ public class WikiUtilityView extends UtilityView {
         logger.info(new WrapLog().message("Utility: test di upload degli Anni.").type(AETypeLog.utility));
 
         sorgente = "1875";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoNascita).upload(sorgente);
+        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoNascita).upload(sorgente);
 
         sorgente = "2018";
-        appContext.getBean(UploadAnni.class).test().typeCrono(AETypeLista.annoMorte).upload(sorgente);
+        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoMorte).upload(sorgente);
 
         super.fineDebug();
     }

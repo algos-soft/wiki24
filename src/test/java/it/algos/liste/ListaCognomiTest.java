@@ -65,7 +65,7 @@ public class ListaCognomiTest extends ListeTest {
         super.backendClazzName = CognomeBackend.class.getSimpleName();
         super.collectionName = "cognome";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodiDaRegolare = "(nessuno)";
     }

@@ -66,10 +66,11 @@ public class ListaAttivitaTest extends ListeTest {
         super.backendClazzName = AttPluraleBackend.class.getSimpleName();
         super.collectionName = "attplurale";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodoDefault = "plurale()";
-        super.metodiBuilderPattern += ", nascita(), morte()";
+        super.metodiDaRegolare += ", singolare(), plurale()";
+        super.metodiBuilderPattern += ", singolare(), plurale()";
     }
 
 

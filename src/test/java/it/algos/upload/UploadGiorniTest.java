@@ -41,7 +41,7 @@ public class UploadGiorniTest extends UploadTest {
     protected static Stream<Arguments> GIORNI_UPLOAD() {
         return Stream.of(
                 Arguments.of("43 marzo"),
-                Arguments.of("23 febbraio"),
+                Arguments.of("29 febbraio"),
                 Arguments.of("19 dicembra"),
                 Arguments.of("4gennaio")
         );
@@ -59,8 +59,9 @@ public class UploadGiorniTest extends UploadTest {
         super.backendClazzName = GiornoWikiBackend.class.getSimpleName();
         super.collectionName = "giornoWiki";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = false;
+        super.metodiDaRegolare += ", nascita(), morte()";
         super.metodiBuilderPattern += ", nascita(), morte()";
     }
 
@@ -87,61 +88,24 @@ public class UploadGiorniTest extends UploadTest {
         super.fixBeanStandard(sorgente);
     }
 
-//    @Test
-//    @Order(8)
-//    @DisplayName("8 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "24 agosto";
-//        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
-//    }
+    //    @Test
+    //    @Order(8)
+    //    @DisplayName("8 - esegueConParametroNelCostruttore")
+    //    void esegueConParametroNelCostruttore() {
+    //        sorgente = "24 agosto";
+    //        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
+    //    }
 
 
     @Test
     @Order(9)
     @DisplayName("9 - builderPattern")
     void builderPattern() {
-        System.out.println("9 - Metodi builderPattern per validare l'istanza");
+        fixBuilderPatternIniziale();
 
-        sorgente = "10 novembre";
+        sorgente = "29 febbraio";
         istanza = appContext.getBean(UploadGiorni.class, sorgente);
-        super.debug(istanza, VUOTA);
-
-        sorgente = "11 novembre";
-        appContext.getBean(UploadGiorni.class, sorgente).mappaWrap();
-        super.debug(istanza, VUOTA);
-
-        sorgente = "12 novembre";
-        appContext.getBean(UploadGiorni.class, sorgente).esegue();
-        super.debug(istanza, VUOTA);
-
-        sorgente = "13 novembre";
-        appContext.getBean(UploadGiorni.class, sorgente).upload();
-        super.debug(istanza, VUOTA);
-
-        sorgente = "21 novembre";
-        sorgente2 = "nascita()";
-        istanza = appContext.getBean(UploadGiorni.class, sorgente).nascita();
-        super.debug(istanza, sorgente2);
-
-        sorgente = "22 novembre";
-        sorgente2 = "morte()";
-        istanza = appContext.getBean(UploadGiorni.class, sorgente).morte();
-        super.debug(istanza, sorgente2);
-
-        sorgente = "23 novembre";
-        sorgente2 = "typeLista(AETypeLista.giornoNascita)";
-        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.giornoNascita);
-        super.debug(istanza, sorgente2);
-
-        sorgente = "24 novembre";
-        sorgente2 = "typeLista(AETypeLista.giornoMorte)";
-        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.giornoMorte);
-        super.debug(istanza, sorgente2);
-
-        sorgente = "25 novembre";
-        sorgente2 = "typeLista(AETypeLista.attivitaSingolare)";
-        istanza = appContext.getBean(UploadGiorni.class, sorgente).typeLista(AETypeLista.attivitaSingolare);
-        super.debug(istanza, sorgente2);
+        super.fixBuilderPatternUpload(istanza, AETypeLista.giornoMorte);
     }
 
 

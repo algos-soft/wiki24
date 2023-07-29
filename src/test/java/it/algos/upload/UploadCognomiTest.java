@@ -3,6 +3,7 @@ package it.algos.upload;
 import it.algos.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.cognome.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
@@ -59,8 +60,9 @@ public class UploadCognomiTest extends UploadTest {
         super.backendClazzName = CognomeBackend.class.getSimpleName();
         super.collectionName = "cognome";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = true;
+        super.metodiDaRegolare = "(nessuno)";
     }
 
 
@@ -96,6 +98,17 @@ public class UploadCognomiTest extends UploadTest {
 //        super.fixConParametroNelCostruttore(sorgente);
 //    }
 
+
+    @Test
+    @Order(9)
+    @DisplayName("9 - builderPattern")
+    void builderPattern() {
+        fixBuilderPatternIniziale();
+
+        sorgente = "Piazza";
+        istanza = appContext.getBean(UploadCognomi.class, sorgente);
+        super.fixBuilderPatternUpload(istanza, AETypeLista.cognomi);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "COGNOMI_UPLOAD")

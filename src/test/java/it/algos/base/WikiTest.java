@@ -226,6 +226,8 @@ public abstract class WikiTest extends AlgosTest {
 
     protected String clazzName;
 
+    protected String clazzTestName;
+
     protected WrapLista wrapLista;
 
     protected String backendClazzName;
@@ -760,6 +762,7 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(annoWikiBackend);
 
         clazzName = clazz != null ? clazz.getSimpleName() : NULL;
+        clazzTestName = this.getClass().getSimpleName();
     }
 
     //    /**
@@ -813,26 +816,44 @@ public abstract class WikiTest extends AlgosTest {
     void checkIniziale() {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");
 
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e prima di invocare super.setUpAll() ", clazzTestName));
+
         if (clazz == null) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "clazz", this.getClass().getSimpleName());
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazz", clazzTestName);
             logService.error(new WrapLog().message(message).type(AETypeLog.test));
             assertTrue(false);
             return;
         }
+        message = String.format("Il flag '%s' è previsto e regolato nel metodo setUpAll() della classe [%s]", "clazz", clazzName);
+        logService.info(new WrapLog().message(message).type(AETypeLog.test));
 
         if (textService.isEmpty(clazzName)) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "clazzName", this.getClass().getSimpleName());
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazzName", clazzTestName);
             logService.error(new WrapLog().message(message).type(AETypeLog.test));
             assertTrue(false);
             return;
         }
+        message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() della classe [%s]", "clazzName", clazzTestName, clazzTestName);
+        logService.info(new WrapLog().message(message).type(AETypeLog.test));
 
         if (textService.isEmpty(collectionName)) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() di questa classe [%s] di test", "collectionName", this.getClass().getSimpleName());
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "collectionName", clazzTestName);
             logService.error(new WrapLog().message(message).type(AETypeLog.test));
             assertTrue(false);
             return;
         }
+        message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() della classe [%s]", "collectionName", collectionName, clazzTestName);
+        logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e dopo aver invocato super.setUpAll() ", clazzTestName));
+
+        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
+        logService.info(new WrapLog().message(message).type(AETypeLog.test));
+
+        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "istanzaValidaSubitoDopoCostruttore", istanzaValidaSubitoDopoCostruttore, clazzTestName);
+        logService.info(new WrapLog().message(message).type(AETypeLog.test));
     }
 
     @Test
@@ -1278,8 +1299,82 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    protected void fixBuilderPattern(Object istanza, String keyValue, String nomeMetodo) {
-        //        debug((Object) istanza, keyValue, nomeMetodo);
+    protected void debug(Object istanzaGenerica, String keyValue, String metodoEseguito) {
+        AlgosBuilderPattern istanza = null;
+        if (istanzaGenerica == null) {
+            return;
+        }
+        assertNotNull(istanzaGenerica);
+
+        if (istanzaGenerica instanceof AlgosBuilderPattern) {
+            istanza = (AlgosBuilderPattern) istanzaGenerica;
+        }
+        else {
+            message = String.format("La classe [%s] non implementa l'interfaccia %s", clazzName, "AlgosBuilderPattern");
+            logService.error(new WrapLog().message(message).type(AETypeLog.test));
+            return;
+        }
+
+        if (!istanza.isCostruttoreValido()) {
+            message = String.format("Il valore '%s' non è accettabile per un'istanza di classe [%s]", istanza.getNome(), clazzName);
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+
+        if (istanza.isPatternCompleto()) {
+            if (istanzaValidaSubitoDopoCostruttore) {
+                if (textService.isEmpty(metodoEseguito)) {
+                    //                    System.out.println(String.format("L'istanza è immediatamente eseguibile dopo il costruttore anche senza nessun metodo BuilderPattern"));
+                    System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                    System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                    System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoDefault));
+                }
+                else {
+                    System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                    System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                    System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                    System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                    System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+                    System.out.println(String.format("L'istanza era eseguibile anche senza il metodo '%s'", metodoEseguito));
+                }
+            }
+            else {
+                assertTrue(istanza.isPatternCompleto());
+                System.out.println(String.format("La chiamata del metodo '%s' rende utilizzabile l'istanza", metodoEseguito));
+                System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+                System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+                System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+                System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, true));
+                System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+            }
+
+            if (textService.isEmpty(metodoEseguito)) {
+                message = String.format("L'istanza è utilizzabile subito dopo il costruttore senza bisogno di nessun metodo BuilderPattern");
+            }
+            else {
+                message = String.format("Il metodo builderPattern '%s' è eseguibile e l'istanza è utilizzabile", metodoEseguito);
+            }
+            logService.info(new WrapLog().message(message));
+        }
+        else {
+            assertFalse(istanza.isPatternCompleto());
+            System.out.println(String.format("Istanza di classe%s%s", FORWARD, clazz.getSimpleName()));
+            System.out.println(String.format("NomeLista%s%s", FORWARD, keyValue));
+            System.out.println(String.format("Istanza valida subito dopo il costruttore%s%s", FORWARD, istanza.isCostruttoreValido()));
+            System.out.println(String.format("Istanza effettivamente valida%s%s", FORWARD, false));
+            System.out.println(String.format("Metodo BuilderPattern eseguito%s%s", FORWARD, metodoEseguito));
+
+            if (textService.isEmpty(metodoEseguito)) {
+                message = String.format("Senza chiamare nessun metodo builderPattern, l'istanza NON è utilizzabile");
+            }
+            else {
+                message = String.format("Il metodo builderPattern '%s' NON è congruo e l'istanza NON è utilizzabile", metodoEseguito);
+            }
+            logService.warn(new WrapLog().message(message));
+        }
+
         System.out.println(VUOTA);
     }
 

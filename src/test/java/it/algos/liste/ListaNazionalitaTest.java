@@ -73,10 +73,11 @@ public class ListaNazionalitaTest extends ListeTest {
         super.backendClazzName = NazPluraleBackend.class.getSimpleName();
         super.collectionName = "nazplurale";
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = true;
+        super.ammessoCostruttoreVuoto = false;
         super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodoDefault = "plurale()";
-        super.metodiBuilderPattern += ", nascita(), morte()";
+        super.metodiDaRegolare += ", singolare(), plurale()";
+        super.metodiBuilderPattern += ", singolare(), plurale()";
     }
 
 

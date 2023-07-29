@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
@@ -48,7 +49,6 @@ public class UploadGiorni extends UploadListe {
 
         super.wikiBackend = giornoWikiBackend;
         super.summary = "[[Utente:Biobot/giorniBio|giorniBio]]";
-        //        super.wikiTitleUpload = wikiUtility.wikiTitleNatiGiorno(nomeLista);
         super.lastUpload = WPref.uploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
         super.nextUpload = WPref.uploadGiorniPrevisto;
@@ -58,9 +58,11 @@ public class UploadGiorni extends UploadListe {
         super.patternCompleto = false;
     }
 
+
     /**
      * Pattern Builder <br>
      */
+    @Override
     public UploadGiorni typeLista(AETypeLista typeLista) {
         super.patternCompleto = false;
         return switch (typeLista) {
@@ -69,6 +71,7 @@ public class UploadGiorni extends UploadListe {
             default -> this;
         };
     }
+
 
     /**
      * Pattern Builder <br>
@@ -88,14 +91,14 @@ public class UploadGiorni extends UploadListe {
         return (UploadGiorni) super.typeLista(AETypeLista.giornoMorte);
     }
 
+
     /**
      * Pattern Builder <br>
      */
+    @Override
     public UploadGiorni test() {
-        this.uploadTest = true;
-        return this;
+        return (UploadGiorni) super.test();
     }
-
 
 
     @Override
@@ -119,6 +122,11 @@ public class UploadGiorni extends UploadListe {
         return true;
     }
 
+
+    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
+        return appContext.getBean(UploadGiorni.class, sottoPagina).typeLista(typeLista).test(uploadTest).sottoPagina(lista).upload();
+    }
+
     public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {
         UploadGiorni giorno = appContext.getBean(UploadGiorni.class).typeLista(typeLista);
 
@@ -126,7 +134,7 @@ public class UploadGiorni extends UploadListe {
             giorno = giorno.test();
         }
 
-//        giorno.uploadSottoPagina(wikiTitle, parente, sottoPagina, ordineSottoPagina, lista);
+        //        giorno.uploadSottoPagina(wikiTitle, parente, sottoPagina, ordineSottoPagina, lista);
     }
 
     /**
@@ -174,7 +182,7 @@ public class UploadGiorni extends UploadListe {
             modificatiNati = 0;
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {
-                result = appContext.getBean(UploadGiorni.class,nomeGiorno).nascita().upload();
+                result = appContext.getBean(UploadGiorni.class, nomeGiorno).nascita().upload();
 
                 if (result.isValido() && result.isModificata()) {
                     modificatiNati++;
@@ -185,7 +193,7 @@ public class UploadGiorni extends UploadListe {
                     logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
                 }
 
-                result = appContext.getBean(UploadGiorni.class,nomeGiorno).morte().upload();
+                result = appContext.getBean(UploadGiorni.class, nomeGiorno).morte().upload();
                 if (result.isValido() && result.isModificata()) {
                     modificatiMorti++;
                 }
@@ -206,40 +214,40 @@ public class UploadGiorni extends UploadListe {
         return result;
     }
 
-//    @Override
-//    protected String categorie() {
-//        StringBuffer buffer = new StringBuffer();
-//        String message;
-//        String title = wikiUtility.wikiTitle(typeLista, nomeLista);
-//
-//        if (uploadTest) {
-//            buffer.append(CAPO);
-//            message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno, title);
-//            buffer.append(message);
-//        }
-//        else {
-//            buffer.append(CAPO);
-//            buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
-//            buffer.append(CAPO);
-//            buffer.append(String.format("*[[Categoria:%s| ]]", title));
-//        }
-//
-//        return buffer.toString();
-//    }
+    //    @Override
+    //    protected String categorie() {
+    //        StringBuffer buffer = new StringBuffer();
+    //        String message;
+    //        String title = wikiUtility.wikiTitle(typeLista, nomeLista);
+    //
+    //        if (uploadTest) {
+    //            buffer.append(CAPO);
+    //            message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno, title);
+    //            buffer.append(message);
+    //        }
+    //        else {
+    //            buffer.append(CAPO);
+    //            buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
+    //            buffer.append(CAPO);
+    //            buffer.append(String.format("*[[Categoria:%s| ]]", title));
+    //        }
+    //
+    //        return buffer.toString();
+    //    }
 
-//    @Override
-//    protected String categorieSotto() {
-//        StringBuffer buffer = new StringBuffer();
-//
-//        if (uploadTest) {
-//            return VUOTA;
-//        }
-//
-//        buffer.append(CAPO);
-//        buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
-//        buffer.append(CAPO);
-//
-//        return buffer.toString();
-//    }
+    //    @Override
+    //    protected String categorieSotto() {
+    //        StringBuffer buffer = new StringBuffer();
+    //
+    //        if (uploadTest) {
+    //            return VUOTA;
+    //        }
+    //
+    //        buffer.append(CAPO);
+    //        buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
+    //        buffer.append(CAPO);
+    //
+    //        return buffer.toString();
+    //    }
 
 }

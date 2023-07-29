@@ -63,6 +63,29 @@ public class UploadCognomi extends UploadListe {
     }
 
 
+
+    /**
+     * Pattern Builder <br>
+     */
+    @Override
+    public UploadCognomi typeLista(AETypeLista typeLista) {
+        super.patternCompleto = false;
+        return switch (typeLista) {
+            case cognomi -> {
+                super.patternCompleto = true;
+                yield (UploadCognomi) super.typeLista(typeLista);
+            }
+            default -> this;
+        };
+    }
+    /**
+     * Pattern Builder <br>
+     */
+    @Override
+    public UploadCognomi test() {
+        return (UploadCognomi) super.test();
+    }
+
     @Override
     protected String incipit() {
         return isSottopagina ? VUOTA : String.format("{{incipit cognomi|cognome=%s}}", nomeLista);

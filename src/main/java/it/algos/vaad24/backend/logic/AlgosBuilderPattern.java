@@ -11,5 +11,6 @@ public interface AlgosBuilderPattern {
     public boolean isCostruttoreValido();
 
     public boolean isPatternCompleto();
+    public String getNome();
 
 }
