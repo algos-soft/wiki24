@@ -32,6 +32,7 @@ import java.util.stream.*;
  * Time: 07:20
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("quickly")
 @Tag("service")
 @DisplayName("WikiUtility Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)

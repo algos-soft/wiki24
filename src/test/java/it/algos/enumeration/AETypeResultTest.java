@@ -24,7 +24,7 @@ import java.util.*;
 @Tag("enums")
 @DisplayName("Enumeration AETypeResult")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AETypeResultTest extends AlgosTest {
+public class AETypeResultTest extends WikiTest {
 
 
     private AETypeResult type;
@@ -43,7 +43,7 @@ public class AETypeResultTest extends AlgosTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
+//        super.setUpAll();
     }
 
 

@@ -2,14 +2,18 @@ package it.algos.service;
 
 import it.algos.*;
 import it.algos.base.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.*;
 
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.mongodb.core.*;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -26,18 +30,21 @@ import java.util.*;
  * Date: Sat, 11-Mar-2023
  * Time: 17:41
  */
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("quickly")
 @Tag("service")
 @DisplayName("Download Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DownloadServiceTest extends WikiTest {
 
+    @Mock
+    private MongoOperations mongoOp;
+
     /**
      * Classe principale di riferimento <br>
      * Gia 'costruita' nella superclasse <br>
      */
+    @InjectMocks
     private DownloadService service;
 
 
@@ -48,10 +55,42 @@ public class DownloadServiceTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.setUpAll();
+        super.clazz = WikiUtility.class;
 
-        //--reindirizzo l'istanza della superclasse
-        service = downloadService;
+        MockitoAnnotations.openMocks(this);
+        MockitoAnnotations.openMocks(service);
+//        MockitoAnnotations.openMocks(bioBackend);
+//        MockitoAnnotations.openMocks(mongoService);
+//        MockitoAnnotations.openMocks(mongoOp);
+//        MockitoAnnotations.openMocks(textService);
+//        MockitoAnnotations.openMocks(fileService);
+//        MockitoAnnotations.openMocks(wikiUtility);
+//        MockitoAnnotations.openMocks(preferenceService);
+//        MockitoAnnotations.openMocks(preferenzaBackend);
+//        MockitoAnnotations.openMocks(logService);
+//        MockitoAnnotations.openMocks(regexService);
+
+//        service.textService = textService;
+//        service.wikiUtility = wikiUtility;
+//        fileService.textService = textService;
+//        mongoService.textService = textService;
+//        mongoService.fileService = fileService;
+//        wikiUtility.textService = textService;
+//        wikiUtility.logService = logService;
+//        wikiUtility.regexService = regexService;
+//        logService.textService = textService;
+//        preferenceService.preferenzaBackend = preferenzaBackend;
+//        preferenzaBackend.mongoService = mongoService;
+
+//        for (AIGenPref pref : Pref.values()) {
+//            pref.setPreferenceService(preferenceService);
+//        }
+//        for (AIGenPref pref : WPref.values()) {
+//            pref.setPreferenceService(preferenceService);
+//        }
+
+        //--reindirizzo l'istanza
+//        service = downloadService;
     }
 
 

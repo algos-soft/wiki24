@@ -357,7 +357,7 @@ public class ArrayService extends AbstractService {
         }
 
         for (Object value : listaValues) {
-            listaKeys = getSet(mappaDisordinata, value);
+            listaKeys=getSet(mappaDisordinata, value);
             for (Object key : listaKeys) {
                 mappaOrdinata.put(key, value);
             }

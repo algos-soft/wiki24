@@ -348,22 +348,10 @@ public class DownloadService extends WAbstractService {
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         }
-        max = 500; //@todo PROVVISORIO
         for (int k = 0; k < listaPageIds.size(); k += max) {
             inizioSub = System.currentTimeMillis();
             subLista = addSub(listaPageIds.subList(k, Math.min(k + max, listaPageIds.size())), listaMongoIds);
 
-            //
-            long fineSub = System.currentTimeMillis();
-            logService.info(new WrapLog().message("Tempo old: " + (fineSub - inizioSub)).type(AETypeLog.bio));
-            inizioSub = System.currentTimeMillis();
-            List<Long> listaDebug;
-             listaDebug=listaPageIds.subList(k, Math.min(k + max, listaPageIds.size()));
-            List<Long> finalListaMongoIds = listaMongoIds;
-            listaMongoIds= listaDebug.stream().filter(pageIds-> finalListaMongoIds.contains((long)pageIds)).collect(Collectors.toList());
-             fineSub = System.currentTimeMillis();
-            logService.info(new WrapLog().message("Tempo new: " + (fineSub - inizioSub)).type(AETypeLog.bio));
-            //
             listaPageIdsDaCreare.addAll(subLista);
 
             if (Pref.debug.is()) {
