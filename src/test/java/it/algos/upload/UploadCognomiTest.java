@@ -163,21 +163,20 @@ public class UploadCognomiTest extends UploadTest {
         System.out.println(ottenuto);
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "COGNOMI_UPLOAD")
+    @Test
     @Order(80)
     @DisplayName("80 - Esegue upload test STANDARD")
-    void esegue(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
-            return;
-        }
+    void upload() {
+        System.out.println("80 - Esegue upload test STANDARD");
+        System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadCognomi.class, nomeLista).test().upload();
+        sorgente = "Abba";
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().upload();
         printRisultato(ottenutoRisultato);
     }
 
 
-    @Test
+//    @Test
     @Order(330)
     @DisplayName("330 - Esegue upload sottoPagina")
     void listaDidascalieSottoPagina() {

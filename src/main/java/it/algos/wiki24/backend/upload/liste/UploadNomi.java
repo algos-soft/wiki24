@@ -53,6 +53,7 @@ public class UploadNomi extends UploadListe {
 
         super.wikiBackend = nomeBackend;
         super.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+        super.collectionName = "nome";
         super.summary = "[[Utente:Biobot/nomiBio|nomiBio]]";
         super.typeLista = AETypeLista.nomi;
         super.typeToc = (AETypeToc) WPref.typeTocNomi.getEnumCurrentObj();

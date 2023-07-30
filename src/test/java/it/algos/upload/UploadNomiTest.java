@@ -68,7 +68,7 @@ public class UploadNomiTest extends UploadTest {
         super.collectionName = "nome";
         super.setUpAll();
         super.ammessoCostruttoreVuoto = false;
-        super.istanzaValidaSubitoDopoCostruttore = false;
+        super.istanzaValidaSubitoDopoCostruttore = true;
         super.metodiDaRegolare = "(nessuno)";
     }
 
@@ -97,13 +97,13 @@ public class UploadNomiTest extends UploadTest {
         super.fixBeanStandard(sorgente);
     }
 
-//    @Test
-//    @Order(8)
-//    @DisplayName("8 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "tiziano";
-//        super.fixConParametroNelCostruttore(sorgente);
-//    }
+    //    @Test
+    //    @Order(8)
+    //    @DisplayName("8 - esegueConParametroNelCostruttore")
+    //    void esegueConParametroNelCostruttore() {
+    //        sorgente = "tiziano";
+    //        super.fixConParametroNelCostruttore(sorgente);
+    //    }
 
     @Test
     @Order(9)
@@ -170,22 +170,37 @@ public class UploadNomiTest extends UploadTest {
         System.out.println(ottenuto);
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "NOMI_UPLOAD")
+    @Test
     @Order(80)
     @DisplayName("80 - Esegue upload test STANDARD")
-    void esegue(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
-            return;
-        }
+    void uploadTest() {
         System.out.println("80 - Esegue upload test STANDARD");
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, nomeLista).test().upload();
+        sorgente = "silvxxana";
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().upload();
         printRisultato(ottenutoRisultato);
+
+        sorgente = "silvana";
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().upload();
+        printUpload(ottenutoRisultato);
     }
 
+
     @Test
+    @Order(90)
+    @DisplayName("90 - Esegue upload REALE (attenzione)")
+    void uploadReale() {
+        System.out.println("90 - Esegue upload REALE (attenzione)");
+        System.out.println(VUOTA);
+
+        sorgente = "Silvana";
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).upload();
+        printUpload(ottenutoRisultato);
+    }
+
+
+    //    @Test
     @Order(330)
     @DisplayName("330 - Esegue upload sottoPagina")
     void esegueSottoPaginaIsolata() {
@@ -214,7 +229,7 @@ public class UploadNomiTest extends UploadTest {
         System.out.println(VUOTA);
     }
 
-    @Test
+    //    @Test
     @Order(340)
     @DisplayName("340 - Esegue upload pagina con sottoPagina")
     void eseguePaginaConSottoPagina() {
@@ -227,10 +242,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(3)
-    @DisplayName("3 - Upload test di un nome con noToc")
+    @Order(703)
+    @DisplayName("703 - Upload test di un nome con noToc")
     void uploadNoToc() {
-        System.out.println("3 - Upload test di un nome con noToc");
+        System.out.println("703 - Upload test di un nome con noToc");
         System.out.println(VUOTA);
 
         sorgente = "Adalberto";
@@ -248,10 +263,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(4)
-    @DisplayName("4 - Upload test di un nome con forceTOC")
+    @Order(704)
+    @DisplayName("704 - Upload test di un nome con forceTOC")
     void uploadForceToc() {
-        System.out.println("4 - Upload test di un nome con forceTOC");
+        System.out.println("704 - Upload test di un nome con forceTOC");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -269,10 +284,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(5)
-    @DisplayName("5 - Upload test di un nome senza numeri paragrafo")
+    @Order(705)
+    @DisplayName("705 - Upload test di un nome senza numeri paragrafo")
     void uploadNoNumVoci() {
-        System.out.println("5 - Upload test di un nome senza numeri paragrafo");
+        System.out.println("705 - Upload test di un nome senza numeri paragrafo");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -290,10 +305,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(6)
-    @DisplayName("6 - Upload test di un nome con numeri paragrafo")
+    @Order(706)
+    @DisplayName("706 - Upload test di un nome con numeri paragrafo")
     void uploadSiNumVoci() {
-        System.out.println("6 - Upload test di un nome con numeri paragrafo");
+        System.out.println("706 - Upload test di un nome con numeri paragrafo");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -312,10 +327,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //    @Test
-    @Order(7)
-    @DisplayName("7 - Upload test di un nome con con typeLink=linkLista")
+    @Order(707)
+    @DisplayName("707 - Upload test di un nome con con typeLink=linkLista")
     void uploadLinkLista() {
-        System.out.println("7 - Upload test di un nome con con typeLink=linkLista");
+        System.out.println("707 - Upload test di un nome con con typeLink=linkLista");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -334,10 +349,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //    @Test
-    @Order(8)
-    @DisplayName("8 - Upload test di un nome con typeLink=linkVoce")
+    @Order(708)
+    @DisplayName("708 - Upload test di un nome con typeLink=linkVoce")
     void uploadLinkVoce() {
-        System.out.println("8 - Upload test di un nome con typeLink=linkVoce");
+        System.out.println("708 - Upload test di un nome con typeLink=linkVoce");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -355,10 +370,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(9)
-    @DisplayName("9 - Upload test di un nome inesistente (senza voci)")
+    @Order(709)
+    @DisplayName("709 - Upload test di un nome inesistente (senza voci)")
     void uploadInesistente() {
-        System.out.println("9 - Upload test di un nome inesistente (senza voci)");
+        System.out.println("709 - Upload test di un nome inesistente (senza voci)");
         System.out.println(VUOTA);
 
         sorgente = "questoNomeNonEsiste";
@@ -374,33 +389,12 @@ public class UploadNomiTest extends UploadTest {
         printRisultato(ottenutoRisultato);
     }
 
-    //    @Test
-    @Order(10)
-    @DisplayName("10 - Upload test di un nome standard")
-    void upload() {
-        System.out.println("10 - Upload test di un nome standard");
-        System.out.println(VUOTA);
-
-        sorgente = "adalberto";
-        ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
-        //        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().esegue();
-        assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(String.format("Test del nome %s", sorgente));
-        System.out.println(String.format("Lista di piccole dimensioni - Probabilmente %d elementi", ottenutoIntero));
-        System.out.println(String.format("Titolo della voce: %s", wikiUtility.wikiTitleNomi(sorgente)));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(sorgente)));
-
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
-    }
-
 
     //    @Test
-    @Order(11)
-    @DisplayName("11 - Upload test di una sottopagina da sola")
+    @Order(811)
+    @DisplayName("811 - Upload test di una sottopagina da sola")
     void uploadOnlySottoPagina() {
-        System.out.println("11 - Upload test di una sottopagina da sola");
+        System.out.println("811 - Upload test di una sottopagina da sola");
         System.out.println(VUOTA);
 
         sorgente = "adam";
@@ -422,10 +416,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //    @Test
-    @Order(12)
-    @DisplayName("12 - Upload test di un nome con sottopagina")
+    @Order(812)
+    @DisplayName("812 - Upload test di un nome con sottopagina")
     void uploadSottoPagina() {
-        System.out.println("12 - Upload test di un nome con sottopagina");
+        System.out.println("812 - Upload test di un nome con sottopagina");
         System.out.println(VUOTA);
 
         sorgente = "adam";
@@ -444,10 +438,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //    @Test
-    @Order(31)
-    @DisplayName("31 - Upload test di un nome con linkCrono=nessunLink")
+    @Order(831)
+    @DisplayName("831 - Upload test di un nome con linkCrono=nessunLink")
     void uploadLink() {
-        System.out.println("31 - Upload test di un nome linkCrono=nessunLink");
+        System.out.println("831 - Upload test di un nome linkCrono=nessunLink");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -470,10 +464,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //        @Test
-    @Order(32)
-    @DisplayName("32 - Upload test di un nome con linkCrono=linkVoce")
+    @Order(832)
+    @DisplayName("832 - Upload test di un nome con linkCrono=linkVoce")
     void uploadVoce() {
-        System.out.println("32 - Upload test di un nome linkCrono=linkVoce");
+        System.out.println("832 - Upload test di un nome linkCrono=linkVoce");
         System.out.println(VUOTA);
 
         sorgente = "adalberto";
@@ -496,10 +490,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //    @Test
-    @Order(40)
-    @DisplayName("40 - Upload test di un nome femminile")
+    @Order(940)
+    @DisplayName("940 - Upload test di un nome femminile")
     void uploadFemminile() {
-        System.out.println("40 - Upload test di un nome femminile");
+        System.out.println("940 - Upload test di un nome femminile");
         System.out.println(VUOTA);
 
         sorgente = "adriana";
@@ -520,10 +514,10 @@ public class UploadNomiTest extends UploadTest {
     }
 
     //        @Test
-    @Order(50)
-    @DisplayName("50 - Upload test di un nome grosso con sottopagina")
+    @Order(950)
+    @DisplayName("950 - Upload test di un nome grosso con sottopagina")
     void uploadSotto() {
-        System.out.println("50 - Upload test di un nome grosso con sottopagina");
+        System.out.println("950 - Upload test di un nome grosso con sottopagina");
 
         sorgente = "giovanni";
         ottenutoIntero = appContext.getBean(ListaNomi.class, sorgente).getSize();
@@ -541,10 +535,10 @@ public class UploadNomiTest extends UploadTest {
 
 
     //    @Test
-    @Order(40)
-    @DisplayName("40 - Upload all")
+    @Order(9940)
+    @DisplayName("9940 - Upload all")
     void uploadAll() {
-        System.out.println("40 - Upload all");
+        System.out.println("9940 - Upload all");
 
         ottenutoRisultato = appContext.getBean(UploadNomi.class).uploadAll();
         assertTrue(ottenutoRisultato.isValido());
@@ -555,19 +549,5 @@ public class UploadNomiTest extends UploadTest {
         printRisultato(ottenutoRisultato);
     }
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
-    }
 
 }

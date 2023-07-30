@@ -810,10 +810,8 @@ public abstract class WikiTest extends AlgosTest {
         wrapLista = null;
     }
 
-    @Test
-    @Order(0)
-    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
-    void checkIniziale() {
+
+    protected void fixCheckIniziale() {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");
 
         System.out.println(VUOTA);
@@ -861,16 +859,6 @@ public abstract class WikiTest extends AlgosTest {
     @DisplayName("1 - Costruttore base con/senza parametri")
     void costruttoreBase() {
         if (this.ammessoCostruttoreVuoto) {
-            System.out.println(String.format("1 - Costruttore base new %s(xxx) con ALMENO un parametro", clazzName));
-            System.out.println(VUOTA);
-
-            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
-            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
-            System.out.println(String.format("new %s() NON funziona (dà errore)", clazzName));
-            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
-            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
-        }
-        else {
             System.out.println(String.format("1 - Costruttore base new %s() SENZA parametri", clazzName));
             System.out.println(VUOTA);
 
@@ -879,6 +867,18 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("new %s(xxx) NON funziona", clazzName));
             System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", clazzName));
             System.out.println("Questa classe NON accetta parametri nel costruttore");
+        }
+        else {
+            System.out.println(String.format("1 - Costruttore base new %s(xxx) con ALMENO un parametro", clazzName));
+            System.out.println(VUOTA);
+
+            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
+            System.out.println(String.format("new %s() NON funziona (dà errore)", clazzName));
+            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
+
+
         }
     }
 
@@ -890,26 +890,6 @@ public abstract class WikiTest extends AlgosTest {
         Object istanzaGenerica = null;
 
         if (this.ammessoCostruttoreVuoto) {
-            System.out.println(String.format("2 - appContext.getBean(%s.class, xxx) con ALMENO un parametro", clazzName));
-            System.out.println(VUOTA);
-            System.out.println("Errore previsto (nel test). Tipo warning.");
-
-            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
-            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
-            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
-            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
-            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
-            System.out.println(VUOTA);
-
-            try {
-                istanzaGenerica = appContext.getBean(clazz);
-            } catch (Exception unErrore) {
-                logService.warn(new WrapLog().exception(unErrore));
-                return;
-            }
-            assertNull(istanzaGenerica);
-        }
-        else {
             System.out.println(String.format("2 - appContext.getBean(%s.class) SENZA parametri", clazzName));
             System.out.println(VUOTA);
 
@@ -944,6 +924,26 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.println("Questa classe NON implementa l'interfaccia di controllo AlgosBuilderPattern");
                 System.out.println("Non posso quindi sapere se l'istanza è valida/eseguibile subito dopo il costruttore");
             }
+        }
+        else {
+            System.out.println(String.format("2 - appContext.getBean(%s.class, xxx) con ALMENO un parametro", clazzName));
+            System.out.println(VUOTA);
+            System.out.println("Errore previsto (nel test). Tipo warning.");
+
+            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
+            System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
+            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
+            System.out.println(VUOTA);
+
+            try {
+                istanzaGenerica = appContext.getBean(clazz);
+            } catch (Exception unErrore) {
+                logService.warn(new WrapLog().exception(unErrore));
+                return;
+            }
+            assertNull(istanzaGenerica);
         }
     }
 
@@ -1469,6 +1469,7 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Status: %s", result.isValido() ? "true" : "false"));
         System.out.println(String.format("Modificata: %s", result.isModificata() ? "true" : "false"));
         System.out.println(String.format("Query: %s", result.getQueryType()));
+        System.out.println(String.format("TypeResult: %s", result.getTypeResult()));
         System.out.println(String.format("Title: %s", result.getWikiTitle()));
         System.out.println(String.format("PageId: %s", result.getPageid()));
         System.out.println(String.format("Namespace: %s", result.getNameSpace()));

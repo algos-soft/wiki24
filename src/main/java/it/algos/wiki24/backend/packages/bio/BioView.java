@@ -227,7 +227,7 @@ public class BioView extends WikiView {
         })).setHeader("pagina").setKey("pagina").setFlexGrow(0).setWidth("18em");
 
         HeaderRow headerRow = grid.prependHeaderRow();
-//        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
+        //        Grid.Column ordine = grid.getColumnByKey(FIELD_KEY_ORDER);
         Grid.Column pageId = grid.getColumnByKey("pageId");
         Grid.Column wikiTitle = grid.getColumnByKey("wikiTitle");
         Grid.Column ordinamento = grid.getColumnByKey("ordinamento");
@@ -244,7 +244,7 @@ public class BioView extends WikiView {
         Grid.Column attivita3 = grid.getColumnByKey("attivita3");
         Grid.Column nazionalita = grid.getColumnByKey("nazionalita");
 
-        grid.setColumnOrder( pageId, pagina, elaborato, ordinamento, sesso, nome, cognome, giornoNato, annoNato, giornoMorto, annoMorto, attivita, attivita2, attivita3, nazionalita);
+        grid.setColumnOrder(pageId, pagina, elaborato, ordinamento, sesso, nome, cognome, giornoNato, annoNato, giornoMorto, annoMorto, attivita, attivita2, attivita3, nazionalita);
 
         headerRow.join(pageId, pagina, elaborato, ordinamento).setText("Wiki");
         headerRow.join(sesso, nome, cognome).setText("Anagrafica");
@@ -262,53 +262,53 @@ public class BioView extends WikiView {
         List<Bio> items = backend.findAll(sortOrder);
         logger.info(new WrapLog().exception(new AlgosException(String.format("Items %s", dateService.deltaText(inizio)))));
 
-        final String textWikiTitle = searchFieldWikiTitle != null ? searchFieldWikiTitle.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textWikiTitle)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.wikiTitle != null ? bio.wikiTitle.matches("^(?i)" + textWikiTitle + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textWikiTitle.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.wikiTitle == null)
-                        .toList();
-            }
-        }
+        //        final String textWikiTitle = searchFieldWikiTitle != null ? searchFieldWikiTitle.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textWikiTitle)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.wikiTitle != null ? bio.wikiTitle.matches("^(?i)" + textWikiTitle + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textWikiTitle.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.wikiTitle == null)
+        //                        .toList();
+        //            }
+        //        }
 
-        final String textSearchOrdine = searchFieldOrdinamento != null ? searchFieldOrdinamento.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchOrdine)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.ordinamento != null ? bio.ordinamento.matches("^(?i)" + textSearchOrdine + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchOrdine.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.ordinamento == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchOrdine = searchFieldOrdinamento != null ? searchFieldOrdinamento.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchOrdine)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.ordinamento != null ? bio.ordinamento.matches("^(?i)" + textSearchOrdine + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchOrdine.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.ordinamento == null)
+        //                        .toList();
+        //            }
+        //        }
 
-        final String textSearchNome = searchFieldNome != null ? searchFieldNome.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchNome)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.nome != null ? bio.nome.matches("^(?i)" + textSearchNome + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchNome.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.nome == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchNome = searchFieldNome != null ? searchFieldNome.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchNome)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.nome != null ? bio.nome.matches("^(?i)" + textSearchNome + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchNome.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.nome == null)
+        //                        .toList();
+        //            }
+        //        }
 
         final String textSearchCognome = searchFieldCognome != null ? searchFieldCognome.getValue() : VUOTA;
         if (textService.isValidNoSpace(textSearchCognome)) {
@@ -326,69 +326,69 @@ public class BioView extends WikiView {
             }
         }
 
-        final String textSearchNascita = searchFieldNascita != null ? searchFieldNascita.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchNascita)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.annoNato != null ? bio.annoNato.matches("^(?i)" + textSearchNascita + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchNascita.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.annoNato == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchNascita = searchFieldNascita != null ? searchFieldNascita.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchNascita)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.annoNato != null ? bio.annoNato.matches("^(?i)" + textSearchNascita + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchNascita.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.annoNato == null)
+        //                        .toList();
+        //            }
+        //        }
 
-        final String textSearchMorte = searchFieldMorte != null ? searchFieldMorte.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchMorte)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.annoMorto != null ? bio.annoMorto.matches("^(?i)" + textSearchMorte + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchMorte.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.annoMorto == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchMorte = searchFieldMorte != null ? searchFieldMorte.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchMorte)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.annoMorto != null ? bio.annoMorto.matches("^(?i)" + textSearchMorte + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchMorte.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.annoMorto == null)
+        //                        .toList();
+        //            }
+        //        }
 
-        final String textSearchAttivita = searchFieldAttivita != null ? searchFieldAttivita.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchAttivita)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.attivita != null ? bio.attivita.matches("^(?i)" + textSearchAttivita + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchAttivita.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.attivita == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchAttivita = searchFieldAttivita != null ? searchFieldAttivita.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchAttivita)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.attivita != null ? bio.attivita.matches("^(?i)" + textSearchAttivita + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchAttivita.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.attivita == null)
+        //                        .toList();
+        //            }
+        //        }
 
-        final String textSearchNazionalita = searchFieldNazionalita != null ? searchFieldNazionalita.getValue() : VUOTA;
-        if (textService.isValidNoSpace(textSearchNazionalita)) {
-            items = items
-                    .stream()
-                    .filter(bio -> bio.nazionalita != null ? bio.nazionalita.matches("^(?i)" + textSearchNazionalita + ".*$") : false)
-                    .toList();
-        }
-        else {
-            if (textSearchNazionalita.equals(SPAZIO)) {
-                items = items
-                        .stream()
-                        .filter(bio -> bio.nazionalita == null)
-                        .toList();
-            }
-        }
+        //        final String textSearchNazionalita = searchFieldNazionalita != null ? searchFieldNazionalita.getValue() : VUOTA;
+        //        if (textService.isValidNoSpace(textSearchNazionalita)) {
+        //            items = items
+        //                    .stream()
+        //                    .filter(bio -> bio.nazionalita != null ? bio.nazionalita.matches("^(?i)" + textSearchNazionalita + ".*$") : false)
+        //                    .toList();
+        //        }
+        //        else {
+        //            if (textSearchNazionalita.equals(SPAZIO)) {
+        //                items = items
+        //                        .stream()
+        //                        .filter(bio -> bio.nazionalita == null)
+        //                        .toList();
+        //            }
+        //        }
 
         if (items != null) {
             grid.setItems((List) items);
@@ -396,7 +396,7 @@ public class BioView extends WikiView {
             sicroBottomLayout();
         }
 
-        return (List)items;
+        return (List) items;
     }
 
 

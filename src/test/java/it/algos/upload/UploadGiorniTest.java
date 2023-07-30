@@ -26,7 +26,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("upload")
+//@Tag("upload")
 @DisplayName("Upload Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadGiorniTest extends UploadTest {
@@ -160,6 +160,22 @@ public class UploadGiorniTest extends UploadTest {
 
         ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).morte().testoBody();
         System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(80)
+    @DisplayName("80 - Esegue upload test STANDARD")
+    void esegue(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+        System.out.println("80 - Esegue upload test STANDARD");
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).test().upload();
+        printRisultato(ottenutoRisultato);
     }
 
 }

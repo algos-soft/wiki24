@@ -3,6 +3,8 @@ package it.algos.query;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
+import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -69,7 +71,7 @@ public class QueryWriteTest extends WikiTest {
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
     }
 
-//    @Test
+    //    @Test
     @Order(2)
     @DisplayName("2 - Request errata. Manca il wikiTitle")
     void errata2() {
@@ -82,7 +84,7 @@ public class QueryWriteTest extends WikiTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(3)
     @DisplayName("3 - Request errata. Manca il newText")
     void errata3() {
@@ -96,7 +98,7 @@ public class QueryWriteTest extends WikiTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(4)
     @DisplayName("4 - Request valida")
     void corretta() {
@@ -111,7 +113,7 @@ public class QueryWriteTest extends WikiTest {
         printWrapBio(ottenutoRisultato.getWrap());
     }
 
-//    @Test
+    //    @Test
     @Order(5)
     @DisplayName("5 - Request valida con summary")
     void summary() {
@@ -127,7 +129,7 @@ public class QueryWriteTest extends WikiTest {
         printWrapBio(ottenutoRisultato.getWrap());
     }
 
-//    @Test
+    //    @Test
     @Order(6)
     @DisplayName("6 - Request con controllo dati/tmpl iniziale")
     void limitata() {
@@ -164,7 +166,7 @@ public class QueryWriteTest extends WikiTest {
 
         System.out.println(VUOTA);
         System.out.println("Provo a scrivere il contenuto con una minima (xyz) modifica iniziale, senza nessun controllo. Scrive.");
-        ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, "xyz"+sorgente2);
+        ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, "xyz" + sorgente2);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         assertTrue(ottenutoRisultato.isModificata());
@@ -197,19 +199,17 @@ public class QueryWriteTest extends WikiTest {
         assertFalse(ottenutoRisultato.isModificata());
         printRisultato(ottenutoRisultato);
 
-
         System.out.println(VUOTA);
         System.out.println("Ripristino il contenuto nella parte iniziale. Rimetto senza (xyz).");
         System.out.println("Modifico il contenuto nella parte significativa. Scrive senza controllo.");
-        String sorgente2Old =  sorgente2;
-        String sorgente3Old =  sorgente2.substring(sorgente2.length() - 100);
+        String sorgente2Old = sorgente2;
+        String sorgente3Old = sorgente2.substring(sorgente2.length() - 100);
         sorgente2 = sorgente2.substring(0, sorgente2.length() - 25) + "x" + sorgente2.substring(sorgente2.length() - 25);
         ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, sorgente2);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
         assertTrue(ottenutoRisultato.isModificata());
         printRisultato(ottenutoRisultato);
-
 
         System.out.println(VUOTA);
         System.out.println("Provo a scrivere il contenuto, con check control. Testo significativo modificato. Scrive.");
@@ -220,6 +220,65 @@ public class QueryWriteTest extends WikiTest {
         printRisultato(ottenutoRisultato);
     }
 
+    @Test
+    @Order(11)
+    @DisplayName("11 - Upload")
+    void upload() {
+        WResult result = WResult.crea();
+
+        sorgente = "Utente:Biobot/Abba2";
+        sorgente2 = "Primo testo creazione";
+        ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, sorgente2);
+        if (ottenutoRisultato.isValido()) {
+            switch (ottenutoRisultato.getTypeResult()) {
+                case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
+                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
+                default -> {}
+            }
+        }
+        else {
+            result.typeResult(AETypeResult.uploadErrato);
+        }
+        printRisultato(result);
+        assertEquals(result.getTypeResult(), AETypeResult.uploadNuova);
+        System.out.println(VUOTA);
+        System.out.println(VUOTA);
+
+        sorgente2 = "Nuovo testo modificato";
+        ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, sorgente2);
+        if (ottenutoRisultato.isValido()) {
+            switch (ottenutoRisultato.getTypeResult()) {
+                case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
+                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
+                default -> {}
+            }
+        }
+        else {
+            result.typeResult(AETypeResult.uploadErrato);
+        }
+        printRisultato(result);
+        assertEquals(result.getTypeResult(), AETypeResult.uploadModificata);
+        System.out.println(VUOTA);
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, sorgente2);
+        if (ottenutoRisultato.isValido()) {
+            switch (ottenutoRisultato.getTypeResult()) {
+                case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
+                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
+                default -> {}
+            }
+        }
+        else {
+            result.typeResult(AETypeResult.uploadErrato);
+        }
+        printRisultato(result);
+        assertEquals(result.getTypeResult(), AETypeResult.uploadUguale);
+
+    }
 
 
     /**

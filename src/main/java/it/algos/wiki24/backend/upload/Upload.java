@@ -250,9 +250,12 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected boolean patternCompleto = false;
 
     protected String collectionName;
-    protected  int sogliaSottopagina;
-    protected  int sogliaDiv;
-    protected  boolean usaDiv;
+
+    protected int sogliaSottopagina;
+
+    protected int sogliaDiv;
+
+    protected boolean usaDiv;
 
     /**
      * Costruttore base senza parametri <br>
@@ -315,7 +318,7 @@ public abstract class Upload implements AlgosBuilderPattern {
             this.costruttoreValido = false;
         }
 
-        this.collectionName = costruttoreValido ? annotationService.getCollectionName(wikiBackend.entityClazz) : VUOTA;
+        this.collectionName = annotationService.getCollectionName(wikiBackend.entityClazz);
     }
 
 
@@ -446,6 +449,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         }
         return mappaWrap;
     }
+
     public boolean mappaWrapTest() {
         LinkedHashMap<String, List<WrapLista>> mappaWrap = mappaWrap();
 
@@ -493,12 +497,25 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public WResult upload() {
         String message;
+
         if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
             System.out.println(VUOTA);
             message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "upload", collectionName, nomeLista);
             logger.info(new WrapLog().message(message));
             message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "upload");
-            logger.warn(new WrapLog().message(message));
+            logger.error(new WrapLog().message(message));
+            return null;
+        }
+        if (!costruttoreValido) {
+            System.out.println(VUOTA);
+            message = String.format("Upload non effettuato perché il valore [%s.%s] della collection '%s' non esiste", collectionName, nomeLista, collectionName);
+            logger.error(new WrapLog().message(message));
+            return null;
+        }
+        if (!patternCompleto) {
+            System.out.println(VUOTA);
+            message = String.format("AlgosBuilderPattern per l'istanza [%s.%s] non completo. Non funziona il metodo '%s'", collectionName, nomeLista, "upload");
+            logger.error(new WrapLog().message(message));
             return null;
         }
 
@@ -511,7 +528,6 @@ public abstract class Upload implements AlgosBuilderPattern {
 
         return registra(uploadText);
     }
-
 
 
     public boolean fixMappaWrap() {
@@ -642,7 +658,7 @@ public abstract class Upload implements AlgosBuilderPattern {
                 sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                this.vediSottoPagina(sottoPagina,lista);
+                this.vediSottoPagina(sottoPagina, lista);
             }
             else {
                 usaDiv = usaDiv ? lista.size() > sogliaDiv : false;
@@ -658,7 +674,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
         return buffer.toString().trim();
     }
-    protected WResult vediSottoPagina(String sottoPagina,List<WrapLista> lista) {
+
+    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
         return WResult.errato();
     }
 
@@ -780,9 +797,19 @@ public abstract class Upload implements AlgosBuilderPattern {
             }
 
             result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-            if (result.isValido() && !result.isModificata()) {
-                result.typeResult(AETypeResult.uploadValido);
+            result.setTagCode(nomeLista);
+                if (result.isValido()) {
+                switch (result.getTypeResult()) {
+                    case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
+                    case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                    case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
+                    default -> {}
+                };
             }
+            else {
+                result.typeResult(AETypeResult.uploadErrato);
+            }
+
             return result;
         }
 

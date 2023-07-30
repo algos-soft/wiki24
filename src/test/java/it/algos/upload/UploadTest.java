@@ -2,6 +2,7 @@ package it.algos.upload;
 
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -36,6 +37,13 @@ public abstract class UploadTest extends WikiTest {
         metodiEseguibili = "esegue(), upload()";
         metodiDaRegolare = "typeLista()";
         metodiBuilderPattern = "typeLista(), typeLinkParagrafi(), typeLinkCrono(), icona(), noToc(), forceToc(), siNumVoci(), noNumVoci(), sottoPagina(), test()";
+    }
+
+    @Test
+    @Order(0)
+    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
+    void checkIniziale() {
+        super.fixCheckIniziale();
     }
 
     @Test
@@ -241,6 +249,20 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(String.format("%s%s%s", "usaIcona: [standard da preferenze ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.usaIcona));
         System.out.println(String.format("%s%s%s", "uploadTest: [di default=false (ATTENZIONE) ma regolabile coi metodi PatternBuilder]", FORWARD, uploadEntityBean.uploadTest));
         System.out.println(VUOTA);
+    }
+
+    void printUpload(WResult risultato) {
+        AETypeResult typeResult = risultato != null ? risultato.getTypeResult() : AETypeResult.indeterminato;
+
+        message = switch (typeResult) {
+            case uploadValido -> String.format("Upload sul server della pagina [%s] effettuato", risultato.getWikiTitle());
+            case uploadNuova -> String.format("Upload sul server della nuova pagina [%s] effettuato", risultato.getWikiTitle());
+            case uploadModificata -> String.format("Upload sul server della pagina [%s] modificata", risultato.getWikiTitle());
+            case uploadUguale -> String.format("Upload sul server della pagina [%s] già esistente e non modificata", risultato.getWikiTitle());
+            default -> VUOTA;
+        };
+        printRisultato(risultato);
+        logService.warn(new WrapLog().message(message).type(AETypeLog.test));
     }
 
 }

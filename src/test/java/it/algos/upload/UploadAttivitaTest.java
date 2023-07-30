@@ -23,7 +23,7 @@ import org.springframework.boot.test.context.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("production")
 //@Tag("upload")
-@DisplayName("Attività upload")
+@DisplayName("Upload Attività")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadAttivitaTest extends WikiTest {
 

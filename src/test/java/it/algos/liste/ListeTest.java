@@ -32,7 +32,6 @@ public abstract class ListeTest extends WikiTest {
     protected static String FUNZIONE = "isExistByKey";
 
 
-
     protected void setUpAll() {
         super.setUpAll();
 
@@ -42,6 +41,12 @@ public abstract class ListeTest extends WikiTest {
         metodiEseguibili = "listaBio(), listaWrap() e mappaWrap()";
     }
 
+    @Test
+    @Order(0)
+    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
+    void checkIniziale() {
+        super.fixCheckIniziale();
+    }
 
     @Test
     @Order(5)
@@ -58,7 +63,6 @@ public abstract class ListeTest extends WikiTest {
         //--costruisce un'istanza con un parametro farlocco
         super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
-
 
     protected void fixBeanStandard(final String valore) {
         //--7 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName
@@ -109,7 +113,6 @@ public abstract class ListeTest extends WikiTest {
     protected void debug(Lista istanza, String metodoEseguito) {
         debug(istanza, sorgente, metodoEseguito);
     }
-
 
     @Deprecated
     protected void fixConParametroNelCostruttore() {
@@ -184,10 +187,7 @@ public abstract class ListeTest extends WikiTest {
         }
     }
 
-
-
-
-    void fixBuilderPatternListe(Lista istanza,AETypeLista typeListaDefault) {
+    void fixBuilderPatternListe(Lista istanza, AETypeLista typeListaDefault) {
         super.debug(istanza, sorgente, VUOTA);
 
         if (istanzaValidaSubitoDopoCostruttore) {
@@ -253,10 +253,10 @@ public abstract class ListeTest extends WikiTest {
         debug(istanza, sorgente, "typeLista(AETypeLista.nazionalitaPlurale)");
     }
 
-//    void fixBuilderPattern(Object istanza, String keyValue, String nomeMetodo) {
-//        debug((Lista) istanza, keyValue, nomeMetodo);
-//        System.out.println(VUOTA);
-//    }
+    //    void fixBuilderPattern(Object istanza, String keyValue, String nomeMetodo) {
+    //        debug((Lista) istanza, keyValue, nomeMetodo);
+    //        System.out.println(VUOTA);
+    //    }
 
     protected void printLista(Lista listaEntityBean) {
         if (listaEntityBean == null) {
