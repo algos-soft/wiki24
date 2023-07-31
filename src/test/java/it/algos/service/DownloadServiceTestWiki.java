@@ -2,34 +2,20 @@ package it.algos.service;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
-import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.interfaces.*;
-import it.algos.vaad24.backend.service.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
-import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
-import it.algos.wiki24.wiki.query.*;
 import org.bson.*;
 import org.bson.conversions.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
 import java.util.stream.*;
@@ -46,7 +32,7 @@ import java.util.stream.*;
 @Tag("service")
 @DisplayName("Download Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DownloadServiceTest extends QuicklyTest {
+public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     private static String CAT = "Nati nel 560";
 

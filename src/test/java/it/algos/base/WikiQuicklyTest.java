@@ -6,7 +6,6 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,7 +26,7 @@ import java.util.*;
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
  * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
  */
-public abstract class QuicklyTest extends AlgosTest {
+public abstract class WikiQuicklyTest extends AlgosTest {
 
     protected static String currentDataBaseName = "wiki24";
 
