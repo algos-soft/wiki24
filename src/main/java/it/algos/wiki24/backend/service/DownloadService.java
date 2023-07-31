@@ -1,13 +1,18 @@
 package it.algos.wiki24.backend.service;
 
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import org.bson.*;
+import org.bson.conversions.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
@@ -202,10 +207,11 @@ public class DownloadService extends WAbstractService {
      */
     public List<Long> getListaPageIds(final String categoryTitle) {
         long inizio = System.currentTimeMillis();
+        List<Long> listaPageIds;
         String size;
         String time;
 
-        List<Long> listaPageIds = queryService.getCatIds(categoryTitle);
+        listaPageIds = queryService.getCatIds(categoryTitle);
 
         size = textService.format(listaPageIds.size());
         time = dateService.deltaText(inizio);
@@ -237,11 +243,21 @@ public class DownloadService extends WAbstractService {
 
         size = textService.format(lista.size());
         time = dateService.deltaText(inizio);
-        message = String.format("Recuperata da mongoDb una lista di %s pageIds esistenti nel database, in %s", size, time);
         if (Pref.debug.is()) {
-            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
+            message = String.format("Le pagine sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
+            logService.warn(new WrapLog().message(message).type(AETypeLog.bio));
+
+            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
+            inizio = System.currentTimeMillis();
+            List<Long> listaPageIds = projectionLong();
+            message = String.format("Le pagine sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
+            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
         }
-        logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        else {
+            message = String.format("Recuperata da mongoDb una lista di %s pageIds esistenti nel database, in %s", size, time);
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        }
 
         return lista;
     }
@@ -333,7 +349,7 @@ public class DownloadService extends WAbstractService {
         String size;
         String time;
         List<Long> listaPageIdsDaCreare = new ArrayList<>();
-        int max = 50000;
+        int max = 5000;
         List<Long> subLista = new ArrayList<>();
         String message;
 
@@ -378,12 +394,20 @@ public class DownloadService extends WAbstractService {
         List<Long> subLista = new ArrayList<>();
         long pageId;
 
+        long inizio=System.currentTimeMillis();
+        subLista = listaPageIds.stream().filter(p->!listaMongoIds.contains(p)).collect(Collectors.toList());
+        System.out.println(String.format("Le %s pagine mongo->cat sono state elaborate in %s col metodo stream", subLista.size(), dateService.deltaTextEsatto(inizio)));
+
+
         for (int k = 0; k < listaPageIds.size(); k++) {
             pageId = listaPageIds.get(k);
             if (!listaMongoIds.contains(pageId)) {
                 subLista.add(pageId);
             }
         }
+         inizio=System.currentTimeMillis();
+        subLista = listaPageIds.stream().filter(p->!listaMongoIds.contains(p)).collect(Collectors.toList());
+        System.out.println(String.format("Le %s pagine mongo->cat sono state elaborate in %s col metodo old", subLista.size(), dateService.deltaTextEsatto(inizio)));
 
         return subLista;
     }
@@ -658,6 +682,20 @@ public class DownloadService extends WAbstractService {
         String time = dateService.deltaText(inizio);
         message = String.format("Ciclo completo di download della categoria [%s] in %s", categoryTitle, time);
         logService.info(new WrapLog().message(message).usaDb().type(AETypeLog.bio).usaDb());
+    }
+
+    public List<Long> projectionLong() {
+        List<Long> listaProperty = new ArrayList();
+        MongoDatabase dataBase = mongoService.getDataBase();
+        MongoCollection<Document> collection = dataBase.getCollection("bio");
+
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID), Projections.excludeId());
+        FindIterable<Document> documents = collection.find().projection(projection);
+
+        for (var singolo : documents) {
+            listaProperty.add(singolo.get(FIELD_NAME_PAGE_ID, Long.class));
+        }
+        return listaProperty;
     }
 
 }

@@ -34,6 +34,8 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class QueryCat extends AQuery {
 
+    public WResult infoCatResult;
+
     private AETypeQueryProp queryProp = AETypeQueryProp.ids;
 
     private AETypeQueryType queryType = AETypeQueryType.page;
@@ -181,11 +183,14 @@ public class QueryCat extends AQuery {
             return result.queryType(AETypeQuery.getLoggatoConCookies);
         }
 
-        WResult infoResult = appContext.getBean(QueryInfoCat.class).urlRequest(wikiTitoloGrezzoPaginaCategoria);
-        if (infoResult.isValido()) {
-            result.setPageid(infoResult.getPageid());
+        if (infoCatResult == null) {
+            infoCatResult = appContext.getBean(QueryInfoCat.class).urlRequest(wikiTitoloGrezzoPaginaCategoria);
+        }
+
+        if (infoCatResult.isValido()) {
+            result.setPageid(infoCatResult.getPageid());
             type = botLogin != null ? botLogin.getUserType() : null;
-            num = infoResult.getIntValue();
+            num = infoCatResult.getIntValue();
             limit = type != null ? type.getLimit() : 0;
             result.limit(limit);
 
@@ -209,7 +214,7 @@ public class QueryCat extends AQuery {
             }
         }
         else {
-            return infoResult.queryType(AETypeQuery.getLoggatoConCookies);
+            return infoCatResult.queryType(AETypeQuery.getLoggatoConCookies);
         }
 
         if (botLogin == null) {

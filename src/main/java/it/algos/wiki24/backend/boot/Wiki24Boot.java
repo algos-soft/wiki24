@@ -268,6 +268,8 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListVaadin.add(ContinenteView.class);
 
         VaadVar.menuRouteListProject.add(WikiUtilityView.class);
+        VaadVar.menuRouteListProject.add(BioView.class);
+        VaadVar.menuRouteListProject.add(BioTempView.class);
         VaadVar.menuRouteListProject.add(GiornoWikiView.class);
         VaadVar.menuRouteListProject.add(AnnoWikiView.class);
         VaadVar.menuRouteListProject.add(AttSingolareView.class);
@@ -284,8 +286,6 @@ public class Wiki24Boot extends VaadBoot implements ServletContextListener {
         VaadVar.menuRouteListProject.add(CognomeCategoriaView.class);
         VaadVar.menuRouteListProject.add(CognomeIncipitView.class);
         VaadVar.menuRouteListProject.add(CognomeView.class);
-        VaadVar.menuRouteListProject.add(BioView.class);
-        VaadVar.menuRouteListProject.add(BioTempView.class);
         VaadVar.menuRouteListProject.add(StatisticaBioView.class);
         VaadVar.menuRouteListProject.add(ErroreBioView.class);
         VaadVar.menuRouteListProject.add(PaginaView.class);

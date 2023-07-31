@@ -223,6 +223,40 @@ public class QueryLoginTest extends WikiTest {
         printBotLogin();
     }
 
+    @Test
+    @Order(9)
+    @DisplayName("9 - urlRequest di queryLogin 'hamed' - user (valida)")
+    void urlRequestUserHamed() {
+        System.out.println("9 - urlRequest di queryLogin 'hamed' - user (valida) che registra i valori in botLogin");
+
+        sorgente ="Hamed";
+        sorgente2 ="sokoto79";
+        previsto = JSON_SUCCESS;
+        ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequest(sorgente,sorgente2);
+        assertTrue(ottenutoRisultato.isValido());
+        assertEquals(previsto, ottenutoRisultato.getCodeMessage());
+        assertEquals("lguserid: 1985, lgusername: Hamed", ottenutoRisultato.getMessage());
+        assertFalse(botLogin.isBot());
+        printRisultato(ottenutoRisultato);
+        printBotLogin();
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("10 - urlRequest di queryLogin 'hamed' - user (valida)")
+    void urlRequestUserHamed2() {
+        System.out.println("10 - urlRequest di queryLogin 'hamed' - user (valida) che registra i valori in botLogin");
+
+        previsto = JSON_SUCCESS;
+        ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestHamed();
+        assertTrue(ottenutoRisultato.isValido());
+        assertEquals(previsto, ottenutoRisultato.getCodeMessage());
+        assertEquals("lguserid: 1985, lgusername: Hamed", ottenutoRisultato.getMessage());
+        assertFalse(botLogin.isBot());
+        printRisultato(ottenutoRisultato);
+        printBotLogin();
+    }
+
 
     /**
      * Qui passa al termine di ogni singolo test <br>

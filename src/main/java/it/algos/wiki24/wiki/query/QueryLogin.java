@@ -127,8 +127,23 @@ public class QueryLogin extends AQuery {
 
     private AETypeUser typeUser;
 
-    public WResult urlRequest() {
+    public WResult urlRequestHamed() {
+        return urlRequest("Hamed","sokoto79");
+    }
+    public WResult urlRequestGac() {
+        this.loginName = "gac";
+        this.loginPassword = "Sokoto@1979";
+        return urlRequest(AETypeUser.admin);
+    }
+    public WResult urlRequestBot() {
+        this.loginName = "Biobot";
+        this.loginPassword = "lhgfmeb8ckefkniq85qmhul18r689nbq";
         return urlRequest(AETypeUser.bot);
+    }
+    public WResult urlRequest(String loginName, String loginPassword) {
+        this.loginName = loginName;
+        this.loginPassword = loginPassword;
+        return urlRequest(AETypeUser.user);
     }
 
     public WResult fixUserPassword(AETypeUser typeUser) {
@@ -136,23 +151,32 @@ public class QueryLogin extends AQuery {
         this.typeUser = typeUser;
         String message;
 
-        try {
-            message = String.format("wiki24%s.loginName", typeUser.tagLogin());
-            loginName = Objects.requireNonNull(environment.getProperty(message));
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_NAME)).usaDb());
-            result.errorMessage(PROPERTY_LOGIN_NAME);
+        if (textService.isEmpty(loginName)) {
+            try {
+                message = String.format("wiki24%s.loginName", typeUser.tagLogin());
+                loginName = Objects.requireNonNull(environment.getProperty(message));
+            } catch (Exception unErrore) {
+                logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_NAME)).usaDb());
+                result.errorMessage(PROPERTY_LOGIN_NAME);
+            }
         }
-        try {
-            message = String.format("wiki24%s.loginPassword", typeUser.tagLogin());
-            loginPassword = Objects.requireNonNull(environment.getProperty(message));
-        } catch (Exception unErrore) {
-            logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_PASSWORD)).usaDb());
-            result.errorMessage(PROPERTY_LOGIN_PASSWORD);
+
+        if (textService.isEmpty(loginPassword)) {
+            try {
+                message = String.format("wiki24%s.loginPassword", typeUser.tagLogin());
+                loginPassword = Objects.requireNonNull(environment.getProperty(message));
+            } catch (Exception unErrore) {
+                logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_PASSWORD)).usaDb());
+                result.errorMessage(PROPERTY_LOGIN_PASSWORD);
+            }
         }
 
         result.setFine();
         return result;
+    }
+
+    public WResult urlRequest() {
+        return urlRequest(AETypeUser.bot);
     }
 
     /**
