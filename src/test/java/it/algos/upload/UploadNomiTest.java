@@ -187,7 +187,7 @@ public class UploadNomiTest extends UploadTest {
     }
 
 
-    @Test
+//    @Test
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")
     void uploadReale() {

@@ -9,10 +9,12 @@ import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
+import it.algos.wiki24.backend.utility.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
 import org.bson.*;
 import org.bson.conversions.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
@@ -42,6 +44,9 @@ import java.util.stream.*;
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DownloadService extends WAbstractService {
+
+    @Autowired
+    public JvmMonitor monitor;
 
     public void cicloIniziale() {
         cicloIniziale(WPref.categoriaBio.getStr());
@@ -244,15 +249,15 @@ public class DownloadService extends WAbstractService {
         size = textService.format(lista.size());
         time = dateService.deltaText(inizio);
         if (Pref.debug.is()) {
-            message = String.format("Le pagine sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
+            message = String.format("Le pagine del database mongo sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
             logService.warn(new WrapLog().message(message).type(AETypeLog.bio));
 
-            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
-            inizio = System.currentTimeMillis();
-            List<Long> listaPageIds = projectionLong();
-            message = String.format("Le pagine sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
-            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
-            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
+            //            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
+            //            inizio = System.currentTimeMillis();
+            //            List<Long> listaPageIds = projectionLong();
+            //            message = String.format("Le pagine sono state recuperate in %s", dateService.deltaTextEsatto(inizio));
+            //            logService.warn(new WrapLog().message(message).type(AETypeLog.test));
+            //            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.test));
         }
         else {
             message = String.format("Recuperata da mongoDb una lista di %s pageIds esistenti nel database, in %s", size, time);
@@ -349,7 +354,7 @@ public class DownloadService extends WAbstractService {
         String size;
         String time;
         List<Long> listaPageIdsDaCreare = new ArrayList<>();
-        int max = 5000;
+        int max = 1000;
         List<Long> subLista = new ArrayList<>();
         String message;
 
@@ -364,6 +369,12 @@ public class DownloadService extends WAbstractService {
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         }
+
+        //--memoria
+        Object stat = monitor.takeMemoryStat();
+        int a=87;
+        //--memoria
+
         for (int k = 0; k < listaPageIds.size(); k += max) {
             inizioSub = System.currentTimeMillis();
             subLista = addSub(listaPageIds.subList(k, Math.min(k + max, listaPageIds.size())), listaMongoIds);
@@ -393,20 +404,35 @@ public class DownloadService extends WAbstractService {
     public List<Long> addSub(List<Long> listaPageIds, List<Long> listaMongoIds) {
         List<Long> subLista = new ArrayList<>();
         long pageId;
+        String message;
 
-        long inizio=System.currentTimeMillis();
-        subLista = listaPageIds.stream().filter(p->!listaMongoIds.contains(p)).collect(Collectors.toList());
-        System.out.println(String.format("Le %s pagine mongo->cat sono state elaborate in %s col metodo stream", subLista.size(), dateService.deltaTextEsatto(inizio)));
+        //        long inizio = System.currentTimeMillis();
+        //                subLista = listaPageIds.stream().filter(p -> !listaMongoIds.contains(p)).collect(Collectors.toList());
+        //        message=String.format("Le %s pageIds sono state elaborate in %s col metodo stream in", subLista.size(), dateService.deltaTextEsatto(inizio));
+        //        logService.debug(new WrapLog().message(message).type(AETypeLog.test));
 
+        Object stat = monitor.takeMemoryStat();
+int a=87;
 
+        long inizio = System.currentTimeMillis();
         for (int k = 0; k < listaPageIds.size(); k++) {
+            inizio = System.currentTimeMillis();
             pageId = listaPageIds.get(k);
+            System.out.println(String.format("Tempo get in %s", dateService.deltaTextEsatto(inizio)));
+
+            inizio = System.currentTimeMillis();
             if (!listaMongoIds.contains(pageId)) {
+//                System.out.println(String.format("Tempo contains %s", dateService.deltaTextEsatto(inizio)));
+//                inizio = System.currentTimeMillis();
                 subLista.add(pageId);
+                System.out.println(String.format("Tempo add %s", dateService.deltaTextEsatto(inizio)));
             }
+            System.out.println(String.format("Tempo contains %s", dateService.deltaTextEsatto(inizio)));
+            Object stat2 = monitor.takeMemoryStat();
+            int as=87;
         }
-         inizio=System.currentTimeMillis();
-        subLista = listaPageIds.stream().filter(p->!listaMongoIds.contains(p)).collect(Collectors.toList());
+        inizio = System.currentTimeMillis();
+        subLista = listaPageIds.stream().filter(p -> !listaMongoIds.contains(p)).collect(Collectors.toList());
         System.out.println(String.format("Le %s pagine mongo->cat sono state elaborate in %s col metodo old", subLista.size(), dateService.deltaTextEsatto(inizio)));
 
         return subLista;

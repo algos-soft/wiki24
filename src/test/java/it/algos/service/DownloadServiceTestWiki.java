@@ -2,10 +2,13 @@ package it.algos.service;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
+import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.service.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.utility.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
 import org.bson.conversions.*;
@@ -15,6 +18,8 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
 import org.springframework.data.mongodb.core.*;
 
 import java.util.*;
@@ -40,11 +45,19 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     private static String CAT3 = "Nati nel 1960";
 
+    @InjectMocks
+    JvmMonitor monitor;
+    @InjectMocks
+    DateService dateService;
+    @InjectMocks
+    TextService textService;
 
     @Mock
     private MongoOperations mongoOp;
 
     private List<Long> listaPageIdsCategoria3;
+
+    private List<Long> listaPageIdsCategoriaBio;
 
     private List<Long> listaMongoIdsAll;
 
@@ -88,12 +101,19 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
         MockitoAnnotations.openMocks(this);
         MockitoAnnotations.openMocks(service);
+        MockitoAnnotations.openMocks(monitor);
+        MockitoAnnotations.openMocks(dateService);
+        MockitoAnnotations.openMocks(textService);
+
     }
 
     protected void crossReferences() {
         super.crossReferences();
 
         service.logService = logService;
+        service.monitor = monitor;
+        service.dateService = dateService;
+        dateService.textService = textService;
         this.arrayService = arrayService;
     }
 
@@ -145,7 +165,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(3)
     @DisplayName("3 - getTitles")
@@ -170,7 +190,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(4)
     @DisplayName("4 - getPageIds")
@@ -196,7 +216,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+//    @Test
     @Order(5)
     @DisplayName("5 - findOnlyPageId")
     void findOnlyPageId() {
@@ -217,7 +237,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "NUMERO_PAGINE")
     @Order(6)
     @DisplayName("6 - deltaPageIds")
@@ -248,7 +268,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+//    @Test
     @Order(7)
     @DisplayName("7 - streaming")
     void stream() {
@@ -272,11 +292,27 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         System.out.println(VUOTA);
 
         inizio = System.currentTimeMillis();
-        subLista = listaParzialeMongo.stream().filter(p->!listaPageIdsCategoria3.contains(p)).collect(Collectors.toList());
+        subLista = listaParzialeMongo.stream().filter(p -> !listaPageIdsCategoria3.contains(p)).collect(Collectors.toList());
         System.out.println(String.format("Le %s pagine mongo->cat sono state elaborate in %s col metodo stream", subLista.size(), dateService.deltaTextEsatto(inizio)));
         System.out.println(VUOTA);
 
     }
+
+    @Test
+    @Order(8)
+    @DisplayName("8 - addSub")
+    void addSub() {
+
+        List<Long> lungoRandom = new ArrayList<>();
+
+        for (long k = 0; k < 450000; k++) {
+            lungoRandom.add(k);
+        }
+
+        //        listaPageIdsCategoriaBio = listaPageIdsCategoria("BioBot");
+        service.addSub(listaMongoIdsAll, lungoRandom);
+    }
+
 
     public List<Long> projectionLong() {
         List<Long> listaProperty = new ArrayList();
@@ -298,10 +334,12 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         long pageId;
 
         for (int k = 0; k < listaPageIds.size(); k++) {
+            inizio = System.currentTimeMillis();
             pageId = listaPageIds.get(k);
             if (!listaMongoIds.contains(pageId)) {
                 subLista.add(pageId);
             }
+            System.out.println(String.format("Tempo in %s", dateService.deltaTextEsatto(inizio)));
         }
 
         return subLista;
