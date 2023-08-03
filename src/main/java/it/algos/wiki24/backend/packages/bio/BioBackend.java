@@ -263,6 +263,7 @@ public class BioBackend extends WikiBackend {
         Long numBio = repository.countBioBySesso("M");
         return numBio > 0 ? numBio.intValue() : 0;
     }
+
     public int countDonne() {
         Long numBio = repository.countBioBySesso("F");
         return numBio > 0 ? numBio.intValue() : 0;
@@ -1389,10 +1390,6 @@ public class BioBackend extends WikiBackend {
         return mongoService.projectionString(Bio.class, "wikiTitle");
     }
 
-
-    public List<Long> findAllPageId() {
-        return mongoService.projectionLong(Bio.class, "pageId");
-    }
 
     public List<String> findAllCognomiDistinti() {
         // Lista di tutti i valori di una property

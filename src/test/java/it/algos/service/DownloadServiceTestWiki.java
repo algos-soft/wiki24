@@ -10,6 +10,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.utility.*;
 import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.wiki.query.*;
 import org.bson.*;
 import org.bson.conversions.*;
 import org.junit.jupiter.api.*;
@@ -32,6 +33,7 @@ import java.util.stream.*;
  * Date: Sat, 11-Mar-2023
  * Time: 17:41
  */
+@SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("quickly")
 @Tag("service")
@@ -47,8 +49,10 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     @InjectMocks
     JvmMonitor monitor;
+
     @InjectMocks
     DateService dateService;
+
     @InjectMocks
     TextService textService;
 
@@ -150,7 +154,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         assertTrue(lista.size() == 2);
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(2)
     @DisplayName("2 - queryInfoCat")
@@ -165,7 +169,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-//    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(3)
     @DisplayName("3 - getTitles")
@@ -190,7 +194,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(4)
     @DisplayName("4 - getPageIds")
@@ -216,7 +220,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(5)
     @DisplayName("5 - findOnlyPageId")
     void findOnlyPageId() {
@@ -237,7 +241,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "NUMERO_PAGINE")
     @Order(6)
     @DisplayName("6 - deltaPageIds")
@@ -268,7 +272,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-//    @Test
+    //    @Test
     @Order(7)
     @DisplayName("7 - streaming")
     void stream() {
@@ -302,15 +306,24 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     @Order(8)
     @DisplayName("8 - addSub")
     void addSub() {
+        List<Long> listaPageIdsCategoria;
+        List<Long> subLista = new ArrayList<>();
+        Long pageId;
+        listaPageIdsCategoria = this.listaPageIdsCategoria("BioBot");
 
-        List<Long> lungoRandom = new ArrayList<>();
+        Collections.sort(listaPageIdsCategoria);
+        Collections.sort(listaMongoIdsAll);
 
-        for (long k = 0; k < 450000; k++) {
-            lungoRandom.add(k);
+        inizio = System.currentTimeMillis();
+        for (int k = 0; k < listaPageIdsCategoria.size(); k++) {
+            pageId = listaPageIdsCategoria.get(k);
+            int pos = Collections.binarySearch(listaMongoIdsAll, pageId);
+
+            if (pos > 0) {
+                subLista.add(listaPageIdsCategoria.get(pos));
+            }
         }
-
-        //        listaPageIdsCategoriaBio = listaPageIdsCategoria("BioBot");
-        service.addSub(listaMongoIdsAll, lungoRandom);
+        System.out.println(String.format("Tempo in %s", dateService.deltaTextEsatto(inizio)));
     }
 
 
@@ -372,10 +385,14 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     protected List<Long> listaPageIdsCategoria(final String nomeCategoria) {
         List<Long> listaPageIdsCategoria;
-
-        ottenutoRisultato = queryInfoCat.urlRequest(nomeCategoria);
-        queryCat.infoCatResult = (WResult) ottenutoRisultato;
-        listaPageIdsCategoria = queryCat.getPageIds(nomeCategoria);
+        if (appContext != null) {
+            queryCat = appContext.getBean(QueryCat.class);
+        }
+        else {
+            ottenutoRisultato = queryInfoCat.urlRequest(nomeCategoria);
+            queryCat.infoCatResult = (WResult) ottenutoRisultato;
+        }
+        listaPageIdsCategoria = queryCat.getPageIdsOrdered(nomeCategoria);
 
         return listaPageIdsCategoria;
     }

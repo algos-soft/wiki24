@@ -88,6 +88,12 @@ public class QueryCat extends AQuery {
         return (List<Long>) urlRequest(catTitleGrezzo).getLista();
     }
 
+    public List<Long> getPageIdsOrdered(final String catTitleGrezzo) {
+        List<Long> lista = getPageIds(catTitleGrezzo);
+        Collections.sort(lista);
+        return lista;
+    }
+
     /**
      * Lista dei titoli di una categoria <br>
      *
