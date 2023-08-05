@@ -10,19 +10,19 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
  * Time: 13:54
  */
 public enum AETypeLista {
-    giornoNascita("nati", "nate", "giorno", "nascita"),
-    giornoMorte("morti", "morte", "giorno", "morte"),
-    annoNascita("nati", "nate", "anno", "nascita"),
-    annoMorte("morti", "morte", "anno", "morte"),
-    nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA),
-    nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
-    attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA),
-    attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA),
-    nomi(VUOTA, VUOTA, VUOTA, VUOTA),
-    cognomi(VUOTA, VUOTA, VUOTA, VUOTA),
-    listaBreve(VUOTA, VUOTA, VUOTA, VUOTA),
-    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA),
-    nessunaLista(VUOTA, VUOTA, VUOTA, VUOTA);
+    giornoNascita("nati", "nate", "giorno", "nascita", "Liste di nati per giorno"),
+    giornoMorte("morti", "morte", "giorno", "morte", "Liste di morti per giorno"),
+    annoNascita("nati", "nate", "anno", "nascita", "Liste di nati nel "),
+    annoMorte("morti", "morte", "anno", "morte", "Liste di morti nel "),
+    nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA, ""),
+    nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA, ""),
+    attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA, ""),
+    attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA, ""),
+    nomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per nome"),
+    cognomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per cognome"),
+    listaBreve(VUOTA, VUOTA, VUOTA, VUOTA, ""),
+    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA, ""),
+    nessunaLista(VUOTA, VUOTA, VUOTA, VUOTA, "");
 
     private String tagLower;
 
@@ -36,13 +36,16 @@ public enum AETypeLista {
 
     private String civile;
 
+    private String categoria;
 
-    AETypeLista(String tag, String tagF, String giornoAnno, String civile) {
+
+    AETypeLista(String tag, String tagF, String giornoAnno, String civile, String categoria) {
         this.tagLower = tag;
         this.tag = tag;
         this.tagF = tagF;
         this.giornoAnno = giornoAnno;
         this.civile = civile;
+        this.categoria = categoria;
         this.tagUpper = tag != null && tag.length() > 0 ? tag.substring(0, 1).toUpperCase() + tag.substring(1) : VUOTA;
     }
 
@@ -68,5 +71,9 @@ public enum AETypeLista {
 
     public String getCivile() {
         return civile;
+    }
+
+    public String getCategoria() {
+        return categoria;
     }
 }

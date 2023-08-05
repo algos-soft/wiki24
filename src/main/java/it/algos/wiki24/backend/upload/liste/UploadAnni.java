@@ -54,6 +54,7 @@ public class UploadAnni extends UploadListe {
         super.usaParagrafi = WPref.usaParagrafiAnni.is();
         super.typeToc = (AETypeToc) WPref.typeTocAnni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
+        super.usaDiv = true;
         super.patternCompleto = false;
     }
 

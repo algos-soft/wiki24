@@ -158,6 +158,7 @@ public class QueryWrite extends AQuery {
         }
         else {
             result.setModificata(false);
+            result.typeResult(AETypeResult.uploadSostanzialmenteUguale);
             result.setValidMessage("Nessuna modifica sostanziale ai contenuti");
             return result;
         }

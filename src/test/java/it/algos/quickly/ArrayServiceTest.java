@@ -1,4 +1,4 @@
-package it.algos.service;
+package it.algos.quickly;
 
 import it.algos.*;
 import it.algos.base.*;
@@ -267,7 +267,7 @@ public class ArrayServiceTest {
             }
             if (pos >= 0) {
                 listaPresentiEntrambi.add(longMaggiore);
-            }
+    }
         }
         long fine = System.currentTimeMillis();
         System.out.println(String.format("Tempo in %s millisecondi", (fine - inizio)));

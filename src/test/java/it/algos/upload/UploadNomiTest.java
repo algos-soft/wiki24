@@ -49,7 +49,7 @@ public class UploadNomiTest extends UploadTest {
         return Stream.of(
                 Arguments.of(VUOTA),
                 Arguments.of("Silvana"),
-                //                Arguments.of("Akira"),
+                Arguments.of("Andrew"),
                 //                Arguments.of("Alexandra"),
                 Arguments.of("Tomas"),
                 Arguments.of("maria teresa")
@@ -187,7 +187,7 @@ public class UploadNomiTest extends UploadTest {
     }
 
 
-//    @Test
+    @Test
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")
     void uploadReale() {
@@ -233,7 +233,7 @@ public class UploadNomiTest extends UploadTest {
     @Order(340)
     @DisplayName("340 - Esegue upload pagina con sottoPagina")
     void eseguePaginaConSottoPagina() {
-        System.out.println("80 - Esegue upload pagina con sottoPagina");
+        System.out.println("340 - Esegue upload pagina con sottoPagina");
         System.out.println(VUOTA);
 
         sorgente = "diego";

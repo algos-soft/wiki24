@@ -257,6 +257,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("Matteo Salvini", true),
                 Arguments.of("Matteo Renzi", true),
                 Arguments.of("Rocco Commisso", true),
+                Arguments.of("Kenny Adeleke", true),
                 Arguments.of("Charles Collins", true),
                 Arguments.of("Bernadette Soubirous", true)
 
@@ -760,6 +761,7 @@ public abstract class WikiTest extends AlgosTest {
         assertNotNull(cognomeBackend);
         assertNotNull(giornoWikiBackend);
         assertNotNull(annoWikiBackend);
+        assertNotNull(textService);
 
         clazzName = clazz != null ? clazz.getSimpleName() : NULL;
         clazzTestName = this.getClass().getSimpleName();

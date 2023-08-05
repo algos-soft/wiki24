@@ -259,6 +259,7 @@ public abstract class UploadTest extends WikiTest {
             case uploadNuova -> String.format("Upload sul server della nuova pagina [%s] effettuato", risultato.getWikiTitle());
             case uploadModificata -> String.format("Upload sul server della pagina [%s] modificata", risultato.getWikiTitle());
             case uploadUguale -> String.format("Upload sul server della pagina [%s] già esistente e non modificata", risultato.getWikiTitle());
+            case uploadSostanzialmenteUguale -> String.format("Upload sul server della pagina [%s] già esistente e non significativamente modificata", risultato.getWikiTitle());
             default -> VUOTA;
         };
         printRisultato(risultato);

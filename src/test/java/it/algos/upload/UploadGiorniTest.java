@@ -26,7 +26,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("upload")
+@Tag("upload")
 @DisplayName("Upload Giorni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadGiorniTest extends UploadTest {
@@ -37,13 +37,18 @@ public class UploadGiorniTest extends UploadTest {
      */
     private UploadGiorni istanza;
 
-    //--nome
+    //--nome giorno
+    //--typeCrono
     protected static Stream<Arguments> GIORNI_UPLOAD() {
         return Stream.of(
-                Arguments.of("43 marzo"),
-                Arguments.of("29 febbraio"),
-                Arguments.of("19 dicembra"),
-                Arguments.of("4gennaio")
+                Arguments.of(VUOTA, AETypeLista.giornoNascita),
+                Arguments.of("43 marzo", AETypeLista.giornoNascita),
+                Arguments.of("12 ottobre", AETypeLista.annoMorte),
+                Arguments.of("29 febbraio", AETypeLista.giornoNascita),
+                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
+                Arguments.of("3 luglio", AETypeLista.attivitaSingolare),
+                Arguments.of("19 dicembra", AETypeLista.giornoNascita),
+                Arguments.of("4gennaio", AETypeLista.giornoNascita)
         );
     }
 
@@ -113,12 +118,12 @@ public class UploadGiorniTest extends UploadTest {
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-    void mappaWrap(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).morte().esegue().mappaWrap();
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).esegue().mappaWrap();
         super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
@@ -126,12 +131,12 @@ public class UploadGiorniTest extends UploadTest {
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-    void mappaWrapDidascalie(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).morte().mappaWrap();
+        mappaWrap = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).mappaWrap();
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
@@ -139,12 +144,12 @@ public class UploadGiorniTest extends UploadTest {
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(60)
     @DisplayName("60 - Testo header")
-    void testoHeader(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void testoHeader(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).morte().testoHeader();
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).testoHeader();
         System.out.println(ottenuto);
     }
 
@@ -153,12 +158,12 @@ public class UploadGiorniTest extends UploadTest {
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
-    void testoBody(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void testoBody(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).morte().testoBody();
+        ottenuto = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).testoBody();
         System.out.println(ottenuto);
     }
 
@@ -167,15 +172,51 @@ public class UploadGiorniTest extends UploadTest {
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(80)
     @DisplayName("80 - Esegue upload test STANDARD")
-    void esegue(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void uploadTest(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
-        System.out.println("80 - Esegue upload test STANDARD");
+
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).test().upload();
+        printUpload(ottenutoRisultato);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD")
+    @Order(90)
+    @DisplayName("90 - Esegue upload REALE (attenzione)")
+    void uploadReale(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+        System.out.println("90 - Esegue upload REALE (attenzione)");
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).test().upload();
-        printRisultato(ottenutoRisultato);
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).upload();
+        printUpload(ottenutoRisultato);
+    }
+
+
+    private boolean valido(final String nomeGiorno, final AETypeLista type) {
+        if (textService.isEmpty(nomeGiorno)) {
+            System.out.println("Manca il nome del giorno");
+            return false;
+        }
+
+        if (type != AETypeLista.giornoNascita && type != AETypeLista.giornoMorte) {
+            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, UploadGiorni.class.getSimpleName());
+            System.out.println(message);
+            return false;
+        }
+
+        if (!giornoWikiBackend.isExistByKey(nomeGiorno)) {
+            message = String.format("Il giorno [%s] indicato NON esiste", nomeGiorno);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

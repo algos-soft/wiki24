@@ -172,9 +172,20 @@ public class UploadCognomiTest extends UploadTest {
 
         sorgente = "Abba";
         ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).test().upload();
-        printRisultato(ottenutoRisultato);
+        printUpload(ottenutoRisultato);
     }
 
+    @Test
+    @Order(90)
+    @DisplayName("90 - Esegue upload REALE (attenzione)")
+    void uploadReale() {
+        System.out.println("90 - Esegue upload REALE (attenzione)");
+        System.out.println(VUOTA);
+
+        sorgente = "Piazza";
+        ottenutoRisultato = appContext.getBean(UploadCognomi.class, sorgente).upload();
+        printUpload(ottenutoRisultato);
+    }
 
 //    @Test
     @Order(330)

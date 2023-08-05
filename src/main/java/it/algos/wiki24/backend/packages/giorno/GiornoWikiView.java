@@ -248,45 +248,15 @@ public class GiornoWikiView extends WikiView {
         reload();
     }
 
+
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
      */
     @Override
     public void uploadAll() {
-        WResult result = WResult.errato();
-        //        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
-        //        List<String> giorni;
-        //        String message;
-        //        int modificatiNati;
-        //        int modificatiMorti;
-        //
-        //        List<Mese> mesi = meseBackend.findAllSortCorrente();
-        //        for (Mese mese : mesi) {
-        //            giorni = backend.findAllForNomeByMese(mese);
-        //            modificatiNati = 0;
-        //            modificatiMorti = 0;
-        //            for (String nomeGiorno : giorni.subList(4,7)) {
-        //                result = appContext.getBean(UploadGiorni.class).nascita().upload(nomeGiorno);
-        //
-        //                if (result.isValido() && result.isModificata()) {
-        //                    modificatiNati++;
-        //                }
-        //
-        //                result = appContext.getBean(UploadGiorni.class).morte().upload(nomeGiorno);
-        //                if (result.isValido() && result.isModificata()) {
-        //                    modificatiMorti++;
-        //                }
-        //            }
-        //
-        //            if (Pref.debug.is()) {
-        //                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
-        //                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
-        //                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
-        //            }
-        //        }
-
-        appContext.getBean(UploadGiorni.class).uploadAll();
-        super.fixUpload(result.getInizio(), "dei giorni");
+        long inizio = System.currentTimeMillis();
+        WResult result = backend.uploadAll();
+        super.fixUpload(inizio, "dei giorni");
         reload();
     }
 
@@ -296,7 +266,7 @@ public class GiornoWikiView extends WikiView {
      */
     @Override
     public void uploadPaginaNati() {
-        WResult result = appContext.getBean(UploadGiorni.class,getNomeGiorno()).nascita().upload();
+        WResult result = appContext.getBean(UploadGiorni.class, getNomeGiorno()).nascita().upload();
         reload();
     }
 
@@ -305,7 +275,7 @@ public class GiornoWikiView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void uploadPaginaMorti() {
-        WResult result = appContext.getBean(UploadGiorni.class,getNomeGiorno()).morte().upload();
+        WResult result = appContext.getBean(UploadGiorni.class, getNomeGiorno()).morte().upload();
         reload();
     }
 

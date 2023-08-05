@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.nome.*;
@@ -138,7 +139,20 @@ public class UploadNomi extends UploadListe {
         }
 
         buffer.append(CAPO);
-        buffer.append(String.format("*[[Categoria:Liste di persone per nome|%s]]", cat));
+        buffer.append("*");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
+        buffer.append("[[Categoria:");
+        buffer.append(typeLista.getCategoria());
+        buffer.append("|");
+        buffer.append(cat);
+        buffer.append("]]");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
+
+//        buffer.append(String.format("*[[Categoria:Liste di persone per nome|%s]]", cat));
 
         return buffer.toString();
     }

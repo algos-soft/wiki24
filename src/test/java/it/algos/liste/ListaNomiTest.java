@@ -46,8 +46,19 @@ public class ListaNomiTest extends ListeTest {
         return Stream.of(
                 Arguments.of(VUOTA),
                 //                Arguments.of("Aaron"),
+                Arguments.of("Andrew"),
                 //                Arguments.of("Alexandra"),
                 Arguments.of("adriana"),
+                Arguments.of("maria teresa")
+        );
+    }
+
+
+    //--nome
+    protected static Stream<Arguments> NOMI_DOPPI() {
+        return Stream.of(
+                Arguments.of(VUOTA),
+                Arguments.of("Andrew"),
                 Arguments.of("maria teresa")
         );
     }
@@ -284,6 +295,22 @@ public class ListaNomiTest extends ListeTest {
         sorgente3 = sorgente + SLASH + sorgente2;
         this.printSotto(sorgente, sorgente2, wikiUtility.wikiTitleNomi(sorgente3), listWrapLista);
         super.fixWrapListaDidascalie(sorgente3, listWrapLista);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "NOMI_DOPPI")
+    @Order(3)
+    @DisplayName("410 - Lista di nomi nel database - singoli/doppi")
+    void nomiDoppi(final String nomeLista) {
+        if (textService.isEmpty(nomeLista)) {
+            return;
+        }
+        System.out.println("410 - Lista di nomi nel database - singoli/doppi");
+        System.out.println(VUOTA);
+        listBio = bioService.fetchNomi(nomeLista);
+        assertNotNull(listBio);
+        printBio(listBio);
     }
 
     void printSotto(String sorgente, String sorgente2, String sottoTitolo, List<WrapLista> listWrapLista) {

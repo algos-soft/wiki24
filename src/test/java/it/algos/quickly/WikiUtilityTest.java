@@ -1,4 +1,4 @@
-package it.algos.service;
+package it.algos.quickly;
 
 import com.mongodb.*;
 import com.mongodb.client.*;
@@ -103,6 +103,7 @@ public class WikiUtilityTest extends WikiTest {
     //--biografie
     private Stream<Bio> biografie() {
         return Stream.of(
+                creaBio(VUOTA),
                 creaBio("Ray Felix"),
                 creaBio("Roberto Rullo"),
                 creaBio("Stanley Adams (attore)"),
@@ -198,6 +199,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("41 - giornoNatoTesta")
         //--biografia
     void giornoNatoTesta(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.giornoNatoTesta(bio);
         ottenuto2 = service.giornoNatoTesta(bio, null);
         ottenuto3 = service.giornoNatoTesta(bio, AETypeLink.linkVoce);
@@ -218,6 +222,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("51 - giornoMortoTesta")
         //--biografia
     void giornoMortoTesta(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.giornoMortoTesta(bio);
         ottenuto2 = service.giornoMortoTesta(bio, null);
         ottenuto3 = service.giornoMortoTesta(bio, AETypeLink.linkVoce);
@@ -238,6 +245,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("61 - annoNatoTesta")
         //--biografia
     void annoNatoTesta(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.annoNatoTesta(bio);
         ottenuto2 = service.annoNatoTesta(bio, null);
         ottenuto3 = service.annoNatoTesta(bio, AETypeLink.linkVoce);
@@ -258,6 +268,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("71 - annoMortoTesta")
         //--biografia
     void annoMortoTesta(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.annoMortoTesta(bio);
         ottenuto2 = service.annoMortoTesta(bio, null);
         ottenuto3 = service.annoMortoTesta(bio, AETypeLink.linkVoce);
@@ -278,6 +291,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("141 - giornoNatoCoda")
         //--biografia
     void giornoNatoCoda(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.giornoNatoCoda(bio);
         senza1 = service.giornoNatoCoda(bio, null, false, false);
         senza2 = service.giornoNatoCoda(bio, AETypeLink.linkVoce, false, false);
@@ -309,6 +325,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("151 - giornoMortoCoda")
         //--biografia
     void giornoMortoCoda(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.giornoMortoCoda(bio);
         senza1 = service.giornoMortoCoda(bio, null, false, false);
         senza2 = service.giornoMortoCoda(bio, AETypeLink.linkVoce, false, false);
@@ -342,6 +361,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("161 - annoNatoCoda")
         //--biografia
     void annoNatoCoda(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.annoNatoCoda(bio);
         senza1 = service.annoNatoCoda(bio, null, false, false);
         senza2 = service.annoNatoCoda(bio, AETypeLink.linkVoce, false, false);
@@ -375,6 +397,9 @@ public class WikiUtilityTest extends WikiTest {
     @DisplayName("171 - annoMortoCoda")
         //--biografia
     void annoMortoCoda(final Bio bio) {
+        if (bio == null) {
+            return;
+        }
         ottenuto = service.annoMortoCoda(bio);
         senza1 = service.annoMortoCoda(bio, null, false, false);
         senza2 = service.annoMortoCoda(bio, AETypeLink.linkVoce, false, false);
@@ -401,6 +426,123 @@ public class WikiUtilityTest extends WikiTest {
         parentesi(ottenuto, senza1, senza2, senza3, senza4, senza5, senza6, con1, con2, con3, con4, con5, con6);
     }
 
+
+    @Test
+    @Order(201)
+    @DisplayName("201 - setParagrafo")
+    void setParagrafo() {
+        System.out.println(("201 - setParagrafo"));
+        System.out.println(VUOTA);
+        AETypeLista typeLista;
+
+        sorgente = "calciatori";
+        sorgenteIntero = 17;
+        ottenuto = service.setParagrafo(sorgente, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        sorgente = "VII secolo";
+        sorgenteIntero = 17;
+        ottenuto = service.setParagrafo(sorgente, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        sorgente = "aprile";
+        sorgenteIntero = 17;
+        ottenuto = service.setParagrafo(sorgente, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+    }
+
+    @Test
+    @Order(202)
+    @DisplayName("202 - setParagrafoIncludeOnly")
+    void setParagrafoIncludeOnly() {
+        System.out.println(("202 - setParagrafoIncludeOnly"));
+        System.out.println(VUOTA);
+        AETypeLista typeLista;
+
+        sorgente = "aprile";
+        sorgenteIntero = 17;
+        ottenuto = service.setParagrafoIncludeOnly(sorgente, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+
+        previsto = "\n<includeonly>=</includeonly>== V secolo <noinclude><span style=\"font-size:70%\">(1)</span></noinclude> ==<includeonly>=</includeonly>\n";
+        sorgente = "V secolo";
+        sorgenteIntero = 1;
+        ottenuto = service.setParagrafoIncludeOnly(sorgente, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(previsto);
+        System.out.println(ottenuto);
+        assertEquals(previsto, ottenuto);
+    }
+
+    @Test
+    @Order(203)
+    @DisplayName("203 - fixTitoloLink")
+    void fixTitoloLink() {
+        System.out.println(("203 - fixTitoloLink"));
+        System.out.println(VUOTA);
+        AETypeLista typeLista;
+
+        sorgente = "aprile";
+        sorgente2 = "";
+        sorgenteIntero = 17;
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        sorgente = "calciatori";
+        sorgente2 = "";
+        sorgenteIntero = 17;
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        sorgente = "V secolo";
+        sorgente2 = "";
+        sorgenteIntero = 17;
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+    }
+
+    @Test
+    @Order(204)
+    @DisplayName("204 - fixTitoloLinkType")
+    void fixTitoloLinkType() {
+        System.out.println(("204 - fixTitoloLinkType"));
+        System.out.println(VUOTA);
+        AETypeLista typeLista;
+
+        sorgente = "aprile";
+        sorgente2 = "";
+        sorgenteIntero = 17;
+        typeLista = AETypeLista.annoNascita;
+        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        sorgente = "calciatori";
+        sorgente2 = "";
+        sorgenteIntero = 17;
+        typeLista = AETypeLista.nomi;
+        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+
+        previsto = "\n<includeonly>=</includeonly>== V secolo <noinclude><span style=\"font-size:70%\">(1)</span></noinclude> ==<includeonly>=</includeonly>\n";
+        sorgente = "V secolo";
+        sorgente2 = "";
+        sorgenteIntero = 1;
+        typeLista = AETypeLista.giornoNascita;
+        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        assertTrue(textService.isValid(ottenuto));
+        System.out.println(ottenuto);
+        assertEquals(previsto, ottenuto);
+    }
 
     protected Bio creaBio(String wikiTitle) {
         Bio beanBio = null;

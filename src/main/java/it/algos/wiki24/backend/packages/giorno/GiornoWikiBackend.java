@@ -12,6 +12,7 @@ import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.wiki.*;
+import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.bson.*;
 import org.springframework.data.domain.*;
@@ -377,6 +378,83 @@ public class GiornoWikiBackend extends WikiBackend {
         }
 
         return beanGiorno;
+    }
+
+
+    /**
+     * Esegue la scrittura di tutte le pagine <br>
+     * Tutti i giorni nati <br>
+     * Tutti i giorni morti <br>
+     */
+    public WResult uploadAll() {
+        WResult result = WResult.errato();
+        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti dei giorni"));
+        List<Mese> mesi = null;
+        List<String> giorni;
+        String message;
+        int modificatiNati;
+        int modificatiMorti;
+
+        if (meseBackend == null) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("Manca meseBackend").usaDb());
+        }
+
+        try {
+            mesi = meseBackend.findAllSortCorrente();
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
+        }
+
+        if (mesi == null) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("Mancano i mesi").usaDb());
+        }
+        if (mesi.size() != 12) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("I mesi sono sbagliati").usaDb());
+        }
+
+        for (Mese mese : mesi) {
+            giorni = giornoBackend.findAllForNomeByMese(mese);
+            if (mesi == null) {
+                message = String.format("Mancano i giorni del mese %s", mese);
+                logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
+            if (mesi.size() < 1) {
+                message = String.format("Nel mese %s ci sono troppi pochi giorni", mese);
+                logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
+            modificatiNati = 0;
+            modificatiMorti = 0;
+            for (String nomeGiorno : giorni) {
+                result = appContext.getBean(UploadGiorni.class, nomeGiorno).nascita().upload();
+
+                if (result.isValido() && result.isModificata()) {
+                    modificatiNati++;
+                }
+                else {
+                    message = result.getMessage();
+                    message += String.format(" della pagina %s/%s", nomeGiorno, AETypeLista.giornoNascita.getTag());
+                    logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+                }
+
+                result = appContext.getBean(UploadGiorni.class, nomeGiorno).morte().upload();
+                if (result.isValido() && result.isModificata()) {
+                    modificatiMorti++;
+                }
+                else {
+                    message = result.getMessage();
+                    message += String.format(" della pagina %s/%s", nomeGiorno, AETypeLista.giornoMorte.getTag());
+                    logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+                }
+            }
+
+            if (Pref.debug.is()) {
+                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il mese di %s", modificatiNati, modificatiMorti, mese);
+                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
+                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
+            }
+        }
+
+        return result;
     }
 
 

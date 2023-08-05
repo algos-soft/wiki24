@@ -100,8 +100,18 @@ public class WikiUtility extends WAbstractService {
         return paragrafoVisibile;
     }
 
-    public String fixTitoloLink(String titoloParagrafo, String titoloParagrafoLink, int numVoci) {
-        String paragrafoVisibile = VUOTA;
+    public String fixTitoloLink(String titoloParagrafo, String titoloParagrafoLink, int numVociParagrafo) {
+        String paragrafoVisibile = getParagrafoVisibile(titoloParagrafo, titoloParagrafoLink);
+        return setParagrafo(paragrafoVisibile, numVociParagrafo);
+    }
+
+    public String fixTitoloLinkIncludeOnly(String titoloParagrafo, String titoloParagrafoLink, int numVociParagrafo) {
+        String paragrafoVisibile = getParagrafoVisibile(titoloParagrafo, titoloParagrafoLink);
+        return setParagrafoIncludeOnly(paragrafoVisibile, numVociParagrafo);
+    }
+
+    public String getParagrafoVisibile(String titoloParagrafo, String titoloParagrafoLink) {
+        String paragrafoVisibile;
 
         if (textService.isEmpty(titoloParagrafo)) {
             return VUOTA;
@@ -117,7 +127,7 @@ public class WikiUtility extends WAbstractService {
             paragrafoVisibile = textService.setDoppieQuadre(paragrafoVisibile);
         }
 
-        return setParagrafo(paragrafoVisibile, numVoci);
+        return paragrafoVisibile;
     }
 
     /**
@@ -163,21 +173,45 @@ public class WikiUtility extends WAbstractService {
      * @return testo coi tag html
      */
     public String setParagrafo(final String titolo, final int numero) {
-        String paragrafo = VUOTA;
+        StringBuffer buffer = new StringBuffer();
+        String titoloUpperCase = textService.primaMaiuscola(titolo);
 
-        paragrafo += CAPO;
-        paragrafo += PARAGRAFO;
-        paragrafo += SPAZIO;
-        paragrafo += titolo;
+        buffer.append(CAPO);
+        buffer.append(PARAGRAFO);
+        buffer.append(SPAZIO);
+        buffer.append(titoloUpperCase);
+
         if (numero > 0) {
-            paragrafo += SPAZIO;
-            paragrafo += smallNumero(numero);
+            buffer.append(SPAZIO);
+            buffer.append(smallNumero(numero));
         }
-        paragrafo += SPAZIO;
-        paragrafo += PARAGRAFO;
-        paragrafo += CAPO;
+        buffer.append(SPAZIO);
+        buffer.append(PARAGRAFO);
+        buffer.append(CAPO);
 
-        return paragrafo;
+        return buffer.toString();
+    }
+
+    public String setParagrafoIncludeOnly(final String titolo, final int numero) {
+        StringBuffer buffer = new StringBuffer();
+        String titoloUpperCase = textService.primaMaiuscola(titolo);
+
+        buffer.append(CAPO);
+        buffer.append(PARAGRAFO_INCLUDE_INI);
+        buffer.append(SPAZIO);
+        buffer.append(titoloUpperCase);
+
+        if (numero > 0) {
+            buffer.append(SPAZIO);
+            buffer.append(NO_INCLUDE_INI);
+            buffer.append(smallNumero(numero));
+            buffer.append(NO_INCLUDE_END);
+        }
+        buffer.append(SPAZIO);
+        buffer.append(PARAGRAFO_INCLUDE_END);
+        buffer.append(CAPO);
+
+        return buffer.toString();
     }
 
     /**
@@ -736,7 +770,7 @@ public class WikiUtility extends WAbstractService {
             }
         }
 
-        return  arrayService.sort(mappaAlfabetica);
+        return arrayService.sort(mappaAlfabetica);
     }
 
     public WrapDueStringhe creaWrapUguale(final String riga) {

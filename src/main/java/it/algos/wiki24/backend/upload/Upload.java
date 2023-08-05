@@ -257,6 +257,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean usaDiv;
 
+    protected int sogliaIncludeAll;
+
     /**
      * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -295,6 +297,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected void fixPreferenze() {
         this.summary = "[[Utente:Biobot|bioBot]]";
 
+        this.sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         this.sogliaSottopagina = WPref.sogliaSottoPagina.getInt();
         this.sogliaDiv = WPref.sogliaDiv.getInt();
         this.usaDiv = WPref.usaDivAttNaz.is();
@@ -607,6 +610,10 @@ public abstract class Upload implements AlgosBuilderPattern {
             localWikiTitle = textService.levaCodaDaUltimo(localWikiTitle, SLASH);
             text = textService.isValid(localWikiTitle) ? String.format("{{Torna a|%s}}", localWikiTitle) : VUOTA;
         }
+        text = switch (typeLista) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+            default -> text;
+        };
 
         return text;
     }
@@ -638,20 +645,37 @@ public abstract class Upload implements AlgosBuilderPattern {
     public String creaBody() {
         StringBuffer buffer = new StringBuffer();
         List<WrapLista> lista;
+        int numVociTotaliPagina = wikiUtility.getSizeAllWrap(mappaWrap);
+        int numVociParagrafo;
         int numVoci;
         String titoloParagrafoLink;
+        String titoloParagrafoDefinitivo;
         String vedi;
         String sottoPagina;
+        boolean usaDivLocal;
 
         for (String keyParagrafo : mappaWrap.keySet()) {
             lista = mappaWrap.get(keyParagrafo);
-            numVoci = lista.size();
+            numVociParagrafo = lista.size();
+            numVoci = usaNumeriTitoloParagrafi ? numVociParagrafo : 0;
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (isSottopagina) {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+                //                buffer.append(wikiUtility.fixTitoloLink(typeLista, keyParagrafo, titoloParagrafoLink,   numVoci ));
             }
             else {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
+                if (numVociTotaliPagina < sogliaIncludeAll) {
+                    titoloParagrafoDefinitivo = switch (typeLista) {
+                        case giornoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
+                        case giornoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
+                        case annoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
+                        case annoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
+                        default -> wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVoci);
+                    };
+                }
+                else {
+                    titoloParagrafoDefinitivo = wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVoci);
+                }
+                buffer.append(titoloParagrafoDefinitivo);
             }
 
             if (numVoci > sogliaSottopagina && !isSottopagina) {
@@ -661,14 +685,14 @@ public abstract class Upload implements AlgosBuilderPattern {
                 this.vediSottoPagina(sottoPagina, lista);
             }
             else {
-                usaDiv = usaDiv ? lista.size() > sogliaDiv : false;
-                buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
+                usaDivLocal = usaDiv ? lista.size() > sogliaDiv : false;
+                buffer.append(usaDivLocal ? "{{Div col}}" + CAPO : VUOTA);
                 for (WrapLista wrap : lista) {
                     buffer.append(ASTERISCO);
-                    buffer.append(wrap.lista);
+                    buffer.append(wrap.didascalia);
                     buffer.append(CAPO);
                 }
-                buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);
+                buffer.append(usaDivLocal ? "{{Div col end}}" + CAPO : VUOTA);
             }
         }
 
@@ -685,16 +709,11 @@ public abstract class Upload implements AlgosBuilderPattern {
         buffer.append(note(textDaEsaminare));
         buffer.append(correlate());
 
-        if (uploadTest) {
-            buffer.append(portale());
-        }
-        else {
-            buffer.append(includeIni());
-            buffer.append(portale());
-            buffer.append(categorie());
-            buffer.append(CAPO);
-            buffer.append(includeEnd());
-        }
+        buffer.append(includeIni());
+        buffer.append(portale());
+        buffer.append(categorie());
+        buffer.append(CAPO);
+        buffer.append(includeEnd());
 
         return buffer.toString();
     }
@@ -769,6 +788,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
         String sottoPagina;
+        String fixTitleTest;
 
         //        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
         //            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
@@ -793,32 +813,37 @@ public abstract class Upload implements AlgosBuilderPattern {
                 }
             }
             else {
-                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + textService.primaMaiuscola(nomeLista);
+                fixTitleTest = typeLista.getTag();
+                fixTitleTest = textService.isValid(fixTitleTest) ? textService.primaMaiuscola(fixTitleTest) + SLASH : VUOTA;
+                this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + fixTitleTest + textService.primaMaiuscola(nomeLista);
             }
 
             result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
-            result.setTagCode(nomeLista);
-                if (result.isValido()) {
-                switch (result.getTypeResult()) {
-                    case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
-                    case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
-                    case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
-                    default -> {}
-                };
-            }
-            else {
-                result.typeResult(AETypeResult.uploadErrato);
-            }
-
-            return result;
-        }
-
-        if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
-            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
         }
         else {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
+                result = appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
+            }
+            else {
+                result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+            }
         }
+
+        result.setTagCode(nomeLista);
+        if (result.isValido()) {
+            switch (result.getTypeResult()) {
+                case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
+                case queryWriteModificata -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
+                case uploadSostanzialmenteUguale -> result.typeResult(AETypeResult.uploadSostanzialmenteUguale);
+                default -> {}
+            } ;
+        }
+        else {
+            result.typeResult(AETypeResult.uploadErrato);
+        }
+
+        return result;
     }
 
     protected WResult registra(String wikiTitle, String newText) {

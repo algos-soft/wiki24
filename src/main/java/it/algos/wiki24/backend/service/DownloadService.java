@@ -471,6 +471,7 @@ public class DownloadService extends WAbstractService {
         String time;
         int numVociCreate = 0;
 
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         for (int k = 0; k <= listaPageIdsDaCreare.size(); k += maxAPI) {
             try {
                 max = Math.min(k + maxAPI, listaPageIdsDaCreare.size());
@@ -481,7 +482,6 @@ public class DownloadService extends WAbstractService {
             try {
                 numVociCreate += creaElaboraListaBio(listWrapBio);
                 if (Pref.debug.is()) {
-                    logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
                     sizeNew = textService.format(numVociCreate);
                     sizeTot = textService.format(mongoService.count(Bio.class));
                     time = dateService.deltaText(inizio);

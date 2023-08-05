@@ -22,6 +22,14 @@ public class Wiki24Cost {
 
     public static final String FIELD_NAME_PLURALE = "plurale";
 
+    public static final String FIELD_NAME_GIORNO_NATO = "giornoNato";
+
+    public static final String FIELD_NAME_GIORNO_MORTO = "giornoMorto";
+
+    public static final String FIELD_NAME_ANNO_NATO = "annoNato";
+
+    public static final String FIELD_NAME_ANNO_MORTO = "annoMorto";
+
     public static final int DELTA_ORDINE_ANNI = 100;
 
     public static final String TAG_BOLD = "'''";
@@ -46,6 +54,21 @@ public class Wiki24Cost {
 
     public static final String PATH_MODULO = "Modulo:Bio/";
 
+    public static final String INCLUDE_INI = "<includeonly>";
+
+    public static final String INCLUDE_END = "</includeonly>";
+
+    public static final String PARAGRAFO_INCLUDE_INI = INCLUDE_INI + UGUALE_SEMPLICE + INCLUDE_END + UGUALE_SEMPLICE + UGUALE_SEMPLICE;
+
+    public static final String PARAGRAFO_INCLUDE_END = UGUALE_SEMPLICE + UGUALE_SEMPLICE + INCLUDE_INI + UGUALE_SEMPLICE + INCLUDE_END;
+
+    public static final String NO_INCLUDE_INI = "<noinclude>";
+
+    public static final String NO_INCLUDE_END = "</noinclude>";
+
+    public static final String NO_WIKI_INI = "<nowiki>";
+
+    public static final String NO_WIKI_END = "</nowiki>";
 
     public static final String PATH_MODULO_LINK = PATH_MODULO + PATH_LINK;
 

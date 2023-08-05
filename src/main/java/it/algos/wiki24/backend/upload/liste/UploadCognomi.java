@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.upload.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.cognome.*;
@@ -113,50 +114,6 @@ public class UploadCognomi extends UploadListe {
     }
 
 
-    @Override
-    public String creaBody() {
-        StringBuffer buffer = new StringBuffer();
-        List<WrapLista> lista;
-        int numVoci;
-        int max = WPref.sogliaSottoPagina.getInt();
-        int maxDiv = WPref.sogliaDiv.getInt();
-        boolean usaDivBase = WPref.usaDivAttNaz.is();
-        boolean usaDiv;
-        String titoloParagrafoLink;
-        String vedi;
-        String sottoPagina;
-
-        for (String keyParagrafo : mappaWrap.keySet()) {
-            lista = mappaWrap.get(keyParagrafo);
-            numVoci = lista.size();
-            titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
-            if (isSottopagina) {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
-            }
-            else {
-                buffer.append(wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, usaNumeriTitoloParagrafi ? numVoci : 0));
-            }
-
-            if (numVoci > max && !isSottopagina) {
-                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
-                vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
-                buffer.append(vedi + CAPO);
-                appContext.getBean(UploadCognomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
-            }
-            else {
-                usaDiv = usaDivBase ? lista.size() > maxDiv : false;
-                buffer.append(usaDiv ? "{{Div col}}" + CAPO : VUOTA);
-                for (WrapLista wrap : lista) {
-                    buffer.append(ASTERISCO);
-                    buffer.append(wrap.lista);
-                    buffer.append(CAPO);
-                }
-                buffer.append(usaDiv ? "{{Div col end}}" + CAPO : VUOTA);
-            }
-        }
-
-        return buffer.toString().trim();
-    }
 
     protected String portale() {
         StringBuffer buffer = new StringBuffer();
@@ -176,7 +133,18 @@ public class UploadCognomi extends UploadListe {
         }
 
         buffer.append(CAPO);
-        buffer.append(String.format("*[[Categoria:Liste di persone per cognome|%s]]", cat));
+        buffer.append("*");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
+        buffer.append("[[Categoria:");
+        buffer.append(typeLista.getCategoria());
+        buffer.append("|");
+        buffer.append(cat);
+        buffer.append("]]");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
 
         return buffer.toString();
     }

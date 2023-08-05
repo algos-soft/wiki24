@@ -1,6 +1,7 @@
 package it.algos.base;
 
 import com.mongodb.client.*;
+import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.login.*;
@@ -90,6 +91,8 @@ public abstract class WikiQuicklyTest extends AlgosTest {
 
     @InjectMocks
     public BioBackend bioBackend;
+    @InjectMocks
+    public BioService bioService;
 
     @InjectMocks
     public MongoService mongoService;
@@ -98,6 +101,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
 
     protected MongoCollection collection;
     protected List<Long> listaPageIds;
+    protected List<Bio> listBio;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -135,6 +139,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
         MockitoAnnotations.openMocks(queryCat);
         MockitoAnnotations.openMocks(wikiBot);
         MockitoAnnotations.openMocks(bioBackend);
+        MockitoAnnotations.openMocks(bioService);
         MockitoAnnotations.openMocks(mongoService);
         //        MockitoAnnotations.openMocks(dataBase);
         //        MockitoAnnotations.openMocks(mongoClient);
@@ -162,6 +167,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
         assertNotNull(queryCat);
         assertNotNull(wikiBot);
         assertNotNull(bioBackend);
+        assertNotNull(bioService);
         assertNotNull(mongoService);
         //        assertNotNull(dataBase);
         //        assertNotNull(mongoClient);
@@ -201,6 +207,8 @@ public abstract class WikiQuicklyTest extends AlgosTest {
         mongoService.fileService = fileService;
         mongoService.logService = logService;
         mongoService.annotationService = annotationService;
+        logService.textService = textService;
+        bioService.textService = textService;
     }
 
     protected void fixRegolazioni() {
@@ -218,5 +226,54 @@ public abstract class WikiQuicklyTest extends AlgosTest {
         super.setUpEach();
     }
 
+    protected void printBioLista(List<Bio> listaBio) {
+        String message;
+        int max = 10;
+        int tot = listaBio.size();
+        int iniA = 0;
+        int endA = Math.min(max, tot);
+        int iniB = tot - max > 0 ? tot - max : 0;
+        int endB = tot;
+
+        if (listaBio != null) {
+            message = String.format("Faccio vedere una lista delle prime e delle ultime %d biografie", max);
+            System.out.println(message);
+            message = "Ordinate per forzaOrdinamento";
+            System.out.println(message);
+            message = "Ordinamento, wikiTitle, nome, cognome";
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            printBioBase(listaBio.subList(iniA, endA), iniA);
+            System.out.println(TRE_PUNTI);
+            printBioBase(listaBio.subList(iniB, endB), iniB);
+        }
+    }
+
+
+    protected void printBioBase(List<Bio> listaBio, final int inizio) {
+        int cont = inizio;
+
+        for (Bio bio : listaBio) {
+            cont++;
+            System.out.print(cont);
+            System.out.print(PARENTESI_TONDA_END);
+            System.out.print(SPAZIO);
+
+            System.out.print(textService.setQuadre(bio.ordinamento));
+            System.out.print(SPAZIO);
+
+            System.out.print(textService.setQuadre(bio.wikiTitle));
+            System.out.print(SPAZIO);
+
+            System.out.print(textService.setQuadre(textService.isValid(bio.nome) ? bio.nome : KEY_NULL));
+            System.out.print(SPAZIO);
+
+            System.out.print(textService.setQuadre(textService.isValid(bio.cognome) ? bio.cognome : KEY_NULL));
+            System.out.print(SPAZIO);
+
+            System.out.println(SPAZIO);
+        }
+    }
 
 }
