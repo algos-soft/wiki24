@@ -55,12 +55,17 @@ public class UploadCognomi extends UploadListe {
 
         super.wikiBackend = cognomeBackend;
         super.wikiTitleUpload = wikiUtility.wikiTitleCognomi(nomeLista);
+        super.collectionName = "cognome";
         super.summary = "[[Utente:Biobot/cognomiBio|cognomiBio]]";
         super.typeLista = AETypeLista.cognomi;
         super.typeToc = (AETypeToc) WPref.typeTocCognomi.getEnumCurrentObj();
         super.typeLinkParagrafi = (AETypeLink) WPref.linkParagrafiCognomi.getEnumCurrentObj();
-        super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
         super.patternCompleto = true;
+
+        super.sogliaSottopagina = WPref.sogliaSottoPaginaCognomi.getInt();
+        super.usaNumeriTitoloParagrafi = WPref.usaNumVociCognomi.is();
+        super.sogliaDiv = WPref.sogliaDiv.getInt();
+        super.usaDiv = WPref.usaDivAttNaz.is();
     }
 
 
@@ -79,6 +84,15 @@ public class UploadCognomi extends UploadListe {
             default -> this;
         };
     }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadCognomi sottoPagina(List<WrapLista> lista) {
+        this.wikiTitleUpload = wikiUtility.wikiTitleCognomi(nomeLista);
+        return (UploadCognomi) super.sottoPagina(lista);
+    }
+
     /**
      * Pattern Builder <br>
      */
@@ -113,6 +127,9 @@ public class UploadCognomi extends UploadListe {
         return true;
     }
 
+    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
+        return appContext.getBean(UploadCognomi.class, sottoPagina).sottoPagina(lista).test(uploadTest).upload();
+    }
 
 
     protected String portale() {

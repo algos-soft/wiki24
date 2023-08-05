@@ -62,7 +62,7 @@ public class UploadNomi extends UploadListe {
         super.usaNumeriTitoloParagrafi = WPref.usaNumVociNomi.is();
         super.patternCompleto = true;
 
-        super.sogliaSottopagina = WPref.sogliaSottoPagina.getInt();
+        super.sogliaSottopagina = WPref.sogliaSottoPaginaNomi.getInt();
         super.sogliaDiv = WPref.sogliaDiv.getInt();
         super.usaDiv = WPref.usaDivAttNaz.is();
     }
@@ -80,6 +80,14 @@ public class UploadNomi extends UploadListe {
             }
             default -> this;
         };
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadNomi sottoPagina(List<WrapLista> lista) {
+        this.wikiTitleUpload = wikiUtility.wikiTitleNomi(nomeLista);
+        return (UploadNomi) super.sottoPagina(lista);
     }
 
     /**
@@ -117,7 +125,7 @@ public class UploadNomi extends UploadListe {
     }
 
     protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
-        return appContext.getBean(UploadNomi.class, sottoPagina).test(uploadTest).sottoPagina(lista).upload();
+        return appContext.getBean(UploadNomi.class, sottoPagina).sottoPagina(lista).test(uploadTest).upload();
     }
 
 
@@ -151,8 +159,6 @@ public class UploadNomi extends UploadListe {
         if (uploadTest) {
             buffer.append(NO_WIKI_END);
         }
-
-//        buffer.append(String.format("*[[Categoria:Liste di persone per nome|%s]]", cat));
 
         return buffer.toString();
     }

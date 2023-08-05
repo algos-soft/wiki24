@@ -259,6 +259,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected int sogliaIncludeAll;
 
+    protected String keyParagrafoSottopagina;
+
     /**
      * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -405,6 +407,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     public Upload sottoPagina(LinkedHashMap<String, List<WrapLista>> mappa) {
         this.wikiTitleUpload = nomeLista;
         this.mappaWrap = mappa;
+        this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
     }
@@ -413,8 +416,22 @@ public abstract class Upload implements AlgosBuilderPattern {
      * Pattern Builder <br>
      */
     public Upload sottoPagina(List<WrapLista> lista) {
-        this.wikiTitleUpload = nomeLista;
         mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        this.costruttoreValido = true;
+        this.isSottopagina = true;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload sottoPagina(String keyParagrafo) {
+        this.wikiTitleUpload = nomeLista;
+        this.keyParagrafoSottopagina = keyParagrafo;
+        mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
+        List<WrapLista> lista = mappaWrap.get(keyParagrafo);
+        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
     }
@@ -537,14 +554,22 @@ public abstract class Upload implements AlgosBuilderPattern {
         return false;
     }
 
+    /**
+     * Solo per test <br>
+     */
     public String testoHeader() {
+        this.uploadTest = true;
         if (textService.isEmpty(uploadText)) {
             this.esegue();
         }
         return headerText;
     }
 
+    /**
+     * Solo per test <br>
+     */
     public String testoBody() {
+        this.uploadTest = true;
         if (textService.isEmpty(uploadText)) {
             this.esegue();
         }
@@ -652,6 +677,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         String titoloParagrafoDefinitivo;
         String vedi;
         String sottoPagina;
+        String sottoNomeLista;
         boolean usaDivLocal;
 
         for (String keyParagrafo : mappaWrap.keySet()) {
@@ -660,7 +686,7 @@ public abstract class Upload implements AlgosBuilderPattern {
             numVoci = usaNumeriTitoloParagrafi ? numVociParagrafo : 0;
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (isSottopagina) {
-                //                buffer.append(wikiUtility.fixTitoloLink(typeLista, keyParagrafo, titoloParagrafoLink,   numVoci ));
+                titoloParagrafoDefinitivo = wikiUtility.setParagrafo(keyParagrafo);
             }
             else {
                 if (numVociTotaliPagina < sogliaIncludeAll) {
@@ -675,14 +701,15 @@ public abstract class Upload implements AlgosBuilderPattern {
                 else {
                     titoloParagrafoDefinitivo = wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVoci);
                 }
-                buffer.append(titoloParagrafoDefinitivo);
             }
+            buffer.append(titoloParagrafoDefinitivo);
 
-            if (numVoci > sogliaSottopagina && !isSottopagina) {
-                sottoPagina = String.format("%s%s%s", wikiTitleUpload, SLASH, keyParagrafo);
+            if (numVoci >= sogliaSottopagina && !isSottopagina) {
+                sottoPagina = wikiTitleUpload + SLASH + keyParagrafo;
+                sottoNomeLista = nomeLista + SLASH + keyParagrafo;
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                this.vediSottoPagina(sottoPagina, lista);
+                this.vediSottoPagina(sottoNomeLista, lista);
             }
             else {
                 usaDivLocal = usaDiv ? lista.size() > sogliaDiv : false;
@@ -784,15 +811,11 @@ public abstract class Upload implements AlgosBuilderPattern {
 
 
     protected WResult registra(String newText) {
-        WResult result = WResult.crea();
+        WResult result;
         String newTextSignificativo = VUOTA;
         String tag = "progetto=biografie";
         String sottoPagina;
         String fixTitleTest;
-
-        //        if (wikiUtility.getSizeAllWrap(mappaWrap) < 1) {
-        //            return WResult.errato("Non ci sono biografie per la lista " + wikiTitleUpload);
-        //        }
 
         if (textService.isEmpty(wikiTitleUpload)) {
             return WResult.errato("Manca il wikiTitleUpload ");
@@ -810,6 +833,9 @@ public abstract class Upload implements AlgosBuilderPattern {
                 }
                 if (!sottoPagina.contains(UPLOAD_TITLE_DEBUG)) {
                     this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + sottoPagina;
+                }
+                if (textService.isValid(keyParagrafoSottopagina)) {
+                    this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + nomeLista + SLASH + keyParagrafoSottopagina;
                 }
             }
             else {

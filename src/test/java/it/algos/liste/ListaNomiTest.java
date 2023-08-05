@@ -47,6 +47,7 @@ public class ListaNomiTest extends ListeTest {
                 Arguments.of(VUOTA),
                 //                Arguments.of("Aaron"),
                 Arguments.of("Andrew"),
+                Arguments.of("Anton"),
                 //                Arguments.of("Alexandra"),
                 Arguments.of("adriana"),
                 Arguments.of("maria teresa")
@@ -267,7 +268,7 @@ public class ListaNomiTest extends ListeTest {
         System.out.println("220 - WrapLista di sottoPagina");
         System.out.println(VUOTA);
 
-        sorgente = "Adam";
+        sorgente = "Anton";
         sorgente2 = "Calciatori";
 
         mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();

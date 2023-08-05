@@ -51,7 +51,7 @@ public class UploadNomiTest extends UploadTest {
                 Arguments.of("Silvana"),
                 Arguments.of("Andrew"),
                 //                Arguments.of("Alexandra"),
-                Arguments.of("Tomas"),
+                Arguments.of("Anton"),
                 Arguments.of("maria teresa")
         );
     }
@@ -181,7 +181,7 @@ public class UploadNomiTest extends UploadTest {
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().upload();
         printRisultato(ottenutoRisultato);
 
-        sorgente = "silvana";
+        sorgente = "Anton";
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).test().upload();
         printUpload(ottenutoRisultato);
     }
@@ -194,7 +194,7 @@ public class UploadNomiTest extends UploadTest {
         System.out.println("90 - Esegue upload REALE (attenzione)");
         System.out.println(VUOTA);
 
-        sorgente = "Silvana";
+        sorgente = "Anton";
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).upload();
         printUpload(ottenutoRisultato);
     }
@@ -202,12 +202,12 @@ public class UploadNomiTest extends UploadTest {
 
     //    @Test
     @Order(330)
-    @DisplayName("330 - Esegue upload sottoPagina")
+    @DisplayName("330 - Esegue upload sottoPagina (listWrapLista)")
     void esegueSottoPaginaIsolata() {
-        System.out.println("330 - Esegue upload sottoPagina");
+        System.out.println("330 - Esegue upload sottoPagina (listWrapLista)");
         System.out.println(VUOTA);
 
-        sorgente = "adam";
+        sorgente = "Anton";
         sorgente2 = "calciatori";
 
         mappaWrap = appContext.getBean(ListaNomi.class, sorgente).mappaWrap();
@@ -217,12 +217,33 @@ public class UploadNomiTest extends UploadTest {
         listWrapLista = mappaWrap.get(textService.primaMaiuscola(sorgente2));
         assertNotNull(listWrapLista);
 
-        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).test().sottoPagina(listWrapLista).upload();
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente3).sottoPagina(listWrapLista).test().upload();
         assertTrue(ottenutoRisultato.isValido());
 
         System.out.println(VUOTA);
         System.out.println(String.format("Test del nome '%s' con attività '%s'", sorgente, sorgente2));
         System.out.println(String.format("Lista della sottopagina - Contiene %d elementi", listWrapLista.size()));
+        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente3)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente3));
+
+        System.out.println(VUOTA);
+    }
+
+    //    @Test
+    @Order(331)
+    @DisplayName("331 - Esegue upload sottoPagina (keyParagrafo)")
+    void esegueSottoPaginaIsolata2() {
+        System.out.println("331 - Esegue upload sottoPagina (keyParagrafo)");
+        System.out.println(VUOTA);
+
+        sorgente = "Anton";
+        sorgente2 = "Calciatori";
+
+        ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).sottoPagina(sorgente2).test().upload();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test del nome '%s' con attività '%s'", sorgente, sorgente2));
         System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNomi(sorgente3)));
         System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente3));
 

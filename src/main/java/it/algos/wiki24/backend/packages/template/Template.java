@@ -59,7 +59,6 @@ public class Template extends AEntity {
     @AIField(type = AETypeField.localDateTime)
     public LocalDateTime lastMongo;
 
-
     /**
      * valido se lastMongo >= timestamp
      */

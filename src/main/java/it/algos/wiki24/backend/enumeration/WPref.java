@@ -154,6 +154,8 @@ public enum WPref implements AIGenPref {
 
     usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni", false),
     sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki", false),
+    sogliaSottoPaginaNomi("sogliaSottoPaginaNomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un nome sul server wiki", false),
+    sogliaSottoPaginaCognomi("sogliaSottoPaginaCognomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un cognome sul server wiki", false),
 
     categoriaBio("categoriaBio", AETypePref.string, "BioBot", "Categoria di riferimento per le Biografie", false),
     sogliaAttNazWiki("sogliaAttNazWiki", AETypePref.integer, 50, "Soglia minima per creare la pagina di una attività o nazionalità sul server wiki", false),
