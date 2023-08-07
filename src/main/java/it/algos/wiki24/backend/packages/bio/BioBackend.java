@@ -426,7 +426,7 @@ public class BioBackend extends WikiBackend {
         }
 
         if (doc != null) {
-            beanBio = bioBackend.newEntity(doc);
+            beanBio = this.newEntity(doc);
         }
 
         return beanBio;

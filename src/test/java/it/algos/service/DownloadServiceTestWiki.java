@@ -72,9 +72,17 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     private List<Long> listaMongoIdsAll;
 
+    private List<Long> listaPageIdsDaLeggere;
+
     private List<Long> listaParzialeMongo;
 
     private List<WrapTime> listaWrapTime;
+
+    private List<WrapTime> listaWrapTimeCat3;
+
+    private List<WrapTime> listaWrapTimeAllBio;
+
+    List<WrapBio> listaWrapBioCat3;
 
     /**
      * Classe principale di riferimento <br>
@@ -255,11 +263,10 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         ottenuto = textService.format(ottenutoIntero);
         System.out.println(String.format("Ci sono %s pagine nella categoria [%s]", ottenuto, sorgente));
         System.out.println(VUOTA);
-        System.out.println(String.format("I %s pageIds sono stati recuperati con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
+        System.out.println(String.format("I %s pageIds della categoria sono stati recuperati con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
         System.out.println(VUOTA);
 
         assertTrue(ottenutoIntero > 10);
-        printLong(listaPageIds.subList(0, 10));
         listaPageIdsCategoriaBio = listaPageIds;
     }
 
@@ -277,7 +284,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         ottenuto = textService.format(ottenutoIntero);
         System.out.println(String.format("Ci sono %s pagine nel database", ottenuto));
         System.out.println(VUOTA);
-        System.out.println(String.format("Le %s pagine sono state recuperate con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
+        System.out.println(String.format("Le %s entities del database sono state recuperate con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
         System.out.println(VUOTA);
         assertTrue(ottenutoIntero > 10);
     }
@@ -327,6 +334,8 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         ottenutoIntero = listaWrapTime.size();
         ottenuto = textService.format(ottenutoIntero);
         System.out.println(String.format("Numero di '%s'%s%s. Tempo%s", "WrapTime", FORWARD, ottenuto, dateService.deltaText(inizio)));
+        // mette da parte 50.000 per risparmiare tempo
+        listaWrapTimeCat3 = listaWrapTime;
 
         inizio = System.currentTimeMillis();
         listaWrapTime = service.getListaWrapTime(listaPageIdsCategoriaBio.subList(0, 50000));
@@ -345,12 +354,72 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         System.out.println(VUOTA);
 
         listaWrapTime = service.getListaWrapTime(listaPageIdsCategoria3);
+        assertNotNull(listaWrapTime);
         listaPageIds = wikiBotService.elaboraWrapTime(listaWrapTime);
-
         assertNotNull(listaPageIds);
         ottenutoIntero = listaPageIds.size();
         ottenuto = textService.format(ottenutoIntero);
+        message = String.format("Elaborati %s pageIds (long) da listaWrapTime in %s", ottenuto, dateService.deltaText(inizio));
+        logService.warn(new WrapLog().message(message));
+
+        // mette da parte per risparmiare tempo
+        listaPageIdsCategoria3 = listaPageIds;
+    }
+
+    //    @Test
+    @Order(61)
+    @DisplayName("61 - downloadServiceElaboraListaWrapTime")
+    void downloadServiceElaboraListaWrapTime2() {
+        System.out.println("Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere )all)");
+        System.out.println(VUOTA);
+
+        if (listaWrapTimeAllBio != null && listaWrapTimeAllBio.size() > 0) {
+        }
+        else {
+            listaWrapTimeAllBio = service.getListaWrapTime(listaPageIdsCategoriaBio);
+        }
+
+        inizio = System.currentTimeMillis();
+        listaPageIds = wikiBotService.elaboraWrapTime(listaWrapTimeAllBio);
+        ottenutoIntero = listaPageIds.size();
+        ottenuto = textService.format(ottenutoIntero);
         System.out.println(String.format("Elaborati %s pageIds (long) da listaWrapTime in %s", ottenuto, dateService.deltaText(inizio)));
+        logService.warn(new WrapLog().message(message));
+
+        // mette da parte per risparmiare tempo
+        listaPageIdsDaLeggere = listaPageIdsCategoriaBio;
+    }
+
+
+    @Test
+    @Order(70)
+    @DisplayName("70 - downloadServiceGetListaWrapBio")
+    void downloadServiceGetListaWrapBio() {
+        System.out.println("Legge tutte le pagine");
+        System.out.println(VUOTA);
+        List<WrapTime> listaWrapTimeCatVariabile;
+
+        List<WrapBio> lista = appContext.getBean(QueryWrapBio.class).getWrap(listaPageIdsCategoria3);
+        assertNotNull(lista);
+        ottenutoIntero = listaPageIds.size();
+        message = String.format("Letti %s WrapBio dal server in %s", ottenuto, dateService.deltaText(inizio));
+        logService.warn(new WrapLog().message(message));
+        printWrapBio(lista.subList(0, 10));
+
+        // mette da parte per risparmiare tempo
+        listaWrapBioCat3 = lista;
+    }
+
+
+    @Test
+    @Order(80)
+    @DisplayName("80 - downloadServiceCreaElaboraListaBio")
+    void downloadServiceCreaElaboraListaBio() {
+        System.out.println("Crea/aggiorna le voci biografiche");
+        System.out.println(VUOTA);
+
+        ottenutoIntero = service.creaElaboraListaBio(listaWrapBioCat3);
+        message = String.format("Create o aggiornate %s pagine sul database in %s", ottenutoIntero, dateService.deltaText(inizio));
     }
 
 

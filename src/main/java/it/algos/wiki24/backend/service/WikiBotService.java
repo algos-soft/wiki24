@@ -145,7 +145,7 @@ public class WikiBotService extends WAbstractService {
         } catch (Exception unErrore) {
             logService.error(new WrapLog().exception(unErrore).usaDb());
         }
-        LocalDateTime mongoTime = bio != null ? bio.getLastMongo() : MONGO_TIME_ORIGIN;
+        LocalDateTime mongoTime = bio != null ? bio.getLastMongo() != null ? bio.getLastMongo() : MONGO_TIME_ORIGIN : MONGO_TIME_ORIGIN;
 
         boolean modificato = serverTime.isAfter(mongoTime);
         return serverTime.isAfter(mongoTime);
