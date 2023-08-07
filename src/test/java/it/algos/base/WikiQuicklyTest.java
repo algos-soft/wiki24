@@ -91,6 +91,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
 
     @InjectMocks
     public BioBackend bioBackend;
+
     @InjectMocks
     public BioService bioService;
 
@@ -100,7 +101,9 @@ public abstract class WikiQuicklyTest extends AlgosTest {
     protected MongoDatabase dataBase;
 
     protected MongoCollection collection;
+
     protected List<Long> listaPageIds;
+
     protected List<Bio> listBio;
 
     /**
@@ -147,7 +150,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
     }
 
     protected void checkMocks() {
-        //        assertNotNull(appContext);
+        assertNotNull(appContext);
         assertNotNull(textService);
         assertNotNull(arrayService);
         assertNotNull(annotationService);
@@ -212,7 +215,7 @@ public abstract class WikiQuicklyTest extends AlgosTest {
     }
 
     protected void fixRegolazioni() {
-        queryLogin.urlRequestHamed();
+        //        queryLogin.urlRequestHamed();
         dataBase = mongoService.getDB(currentDataBaseName);
     }
 

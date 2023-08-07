@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.bio;
 
+import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import com.vaadin.flow.data.provider.*;
@@ -414,7 +415,21 @@ public class BioBackend extends WikiBackend {
 
 
     public Bio findByKey(final long pageId) {
-        return repository.findFirstByPageId(pageId);
+        Bio beanBio = null;
+        Document doc = null;
+
+        if (repository != null) {
+            beanBio = repository.findFirstByPageId(pageId);
+        }
+        else {
+            doc = mongoService.findDocSingleByKey("bio", FIELD_NAME_PAGE_ID, pageId);
+        }
+
+        if (doc != null) {
+            beanBio = bioBackend.newEntity(doc);
+        }
+
+        return beanBio;
     }
 
     public Bio findByTitle(final String wikiTitle) {

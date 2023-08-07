@@ -259,6 +259,8 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("Rocco Commisso", true),
                 Arguments.of("Kenny Adeleke", true),
                 Arguments.of("Charles Collins", true),
+                Arguments.of("Elsie Inglis", true),
+                Arguments.of("Charles Dupaty", true),
                 Arguments.of("Bernadette Soubirous", true)
 
         );

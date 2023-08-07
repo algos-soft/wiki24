@@ -357,10 +357,11 @@ public class MongoService<capture> extends AbstractService {
         shortName = textService.primaMinuscola(shortName);
 
         if (textService.isValid(shortName)) {
-            if (isExistsCollection(shortName)) {
-                return dataBase != null ? dataBase.getCollection(shortName) : null;
-            }
-            return null;
+            return dataBase != null ? dataBase.getCollection(shortName) : null;
+            //            if (isExistsCollection(shortName)) {
+            //                return dataBase != null ? dataBase.getCollection(shortName) : null;
+            //            }
+            //            return null;
         }
         else {
             return null;
@@ -461,6 +462,18 @@ public class MongoService<capture> extends AbstractService {
         this.dataBase = dataBase;
     }
 
+
+    public Document findDocSingleByKey(final String collectionName, final String propertyName, final Object propertyValue) {
+        Document doc;
+
+        collection = this.getCollection(collectionName); ;
+        BasicDBObject whereQuery = new BasicDBObject();
+        whereQuery.put(propertyName, propertyValue);
+        doc = (Document) collection.find(whereQuery).first();
+
+        return doc;
+    }
+
     public List<AEntity> query(Class<? extends AEntity> entityClazz) {
         List<AEntity> listaEntities;
         Query query = new Query();
@@ -553,7 +566,7 @@ public class MongoService<capture> extends AbstractService {
             return null;
         }
 
-        Bson bSort= Sorts.ascending(property).toBsonDocument();
+        Bson bSort = Sorts.ascending(property).toBsonDocument();
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 

@@ -6,6 +6,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.service.*;
+import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.utility.*;
@@ -21,6 +22,7 @@ import org.mockito.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.context.*;
 import org.springframework.data.mongodb.core.*;
 
 import java.util.*;
@@ -35,7 +37,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("quickly")
+//@Tag("quickly")
 @Tag("service")
 @DisplayName("Download Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -56,6 +58,11 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     @InjectMocks
     TextService textService;
 
+    @InjectMocks
+    QueryService queryService;
+
+    private MongoDatabase dataBase;
+
     @Mock
     private MongoOperations mongoOp;
 
@@ -66,6 +73,8 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     private List<Long> listaMongoIdsAll;
 
     private List<Long> listaParzialeMongo;
+
+    private List<WrapTime> listaWrapTime;
 
     /**
      * Classe principale di riferimento <br>
@@ -108,25 +117,36 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         MockitoAnnotations.openMocks(monitor);
         MockitoAnnotations.openMocks(dateService);
         MockitoAnnotations.openMocks(textService);
-
+        MockitoAnnotations.openMocks(queryService);
     }
 
     protected void crossReferences() {
         super.crossReferences();
 
         service.logService = logService;
+        service.appContext = appContext;
         service.monitor = monitor;
         service.dateService = dateService;
+        service.textService = textService;
+        service.bioBackend = bioBackend;
+        service.arrayService = arrayService;
         dateService.textService = textService;
-        this.arrayService = arrayService;
+        service.queryService = queryService;
+        queryService.appContext = appContext;
+        wikiBotService.logService = logService;
+        wikiBotService.bioBackend = bioBackend;
+        bioBackend.annotationService = annotationService;
     }
 
     protected void fixRegolazioni() {
         super.fixRegolazioni();
 
+        dataBase = mongoService.getDB("wiki24");
+        mongoService.setDataBase(dataBase);
+
         this.listaPageIdsCategoria3 = this.listaPageIdsCategoria(CAT3);
         this.listaMongoIdsAll = this.listaPageIdsMongo();
-        this.listaParzialeMongo = listaMongoIdsAll.subList(0, 100000);
+        this.listaParzialeMongo = listaMongoIdsAll.subList(0, 50000);
     }
 
     /**
@@ -140,26 +160,32 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
         super.collection = null;
         queryCat.infoCatResult = null;
+        listaWrapTime = null;
     }
 
 
     @Test
     @Order(1)
-    @DisplayName("Primo test")
-    void xxx() {
+    @DisplayName("1 - queryWrapBio")
+    void queryWrapBio() {
+        System.out.println("1 - queryWrapBio");
+        System.out.println("Legge 2 WrapBio");
+        System.out.println(VUOTA);
         List<Long> listaPageIdsDaLeggere = Arrays.asList(689981L, 702527L);
 
         List<WrapBio> lista = queryWrapBio.getWrap(listaPageIdsDaLeggere);
         assertNotNull(lista);
         assertTrue(lista.size() == 2);
+        printWrapBio(lista);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(2)
     @DisplayName("2 - queryInfoCat")
     void queryInfoCat(final String nomeCategoria) {
-        System.out.println("Controlla quante pagine ci sono nella categoria");
+        System.out.println("2 - Controlla quante pagine ci sono nella categoria");
+        System.out.println(VUOTA);
         sorgente = nomeCategoria;
 
         ottenutoIntero = queryInfoCat.urlRequest(sorgente).getIntValue();
@@ -169,12 +195,12 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(3)
     @DisplayName("3 - getTitles")
     void getTitles(final String nomeCategoria) {
-        System.out.println("Crea la lista di tutti i (String) wikiTitle della category");
+        System.out.println("3 - Crea la lista di tutti i (String) wikiTitle della category");
         sorgente = nomeCategoria;
 
         //--di servizio - solo per iniettare infoCatResult nella queryCat
@@ -194,59 +220,146 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "CATEGORIE")
     @Order(4)
-    @DisplayName("4 - getPageIds")
-    void getPageIds(final String nomeCategoria) {
-        System.out.println("Crea la lista di tutti i (long) pageIds della category");
+    @DisplayName("4 - getListaPageIds")
+    void getListaPageIds(final String nomeCategoria) {
+        System.out.println("4 - Crea la lista di tutti i (long) pageIds della category");
+        System.out.println(VUOTA);
         sorgente = nomeCategoria;
 
-        //--di servizio - solo per iniettare infoCatResult nella queryCat
-        ottenutoRisultato = queryInfoCat.urlRequest(sorgente);
-        queryCat.infoCatResult = (WResult) ottenutoRisultato;
-        //--fine del servizio
-        List<Long> longList = queryCat.getPageIds(sorgente);
-
-        assertNotNull(longList);
-        ottenutoIntero = longList.size();
-        assertTrue(ottenutoIntero > 0);
-        System.out.println(String.format("Ci sono %d pagine nella categoria [%s]", ottenutoIntero, sorgente));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Le %d pagine sono state recuperate in %s", ottenutoIntero, dateService.deltaTextEsatto(inizio)));
-        System.out.println(VUOTA);
-        printLong(longList);
-        System.out.println(VUOTA);
-    }
-
-
-    //    @Test
-    @Order(5)
-    @DisplayName("5 - findOnlyPageId")
-    void findOnlyPageId() {
-        System.out.println("Crea la lista di tutti i (long) pageIds esistenti nel database (mongo) locale");
-
-        listaPageIds = projectionLong();
-
+        listaPageIds = service.getListaPageIds(sorgente);
         assertNotNull(listaPageIds);
         ottenutoIntero = listaPageIds.size();
         assertTrue(ottenutoIntero > 0);
-        System.out.println(String.format("Ci sono %s pagine nel database", textService.format(ottenutoIntero)));
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Ci sono %s pagine nella categoria [%s]", ottenuto, sorgente));
         System.out.println(VUOTA);
-        System.out.println(String.format("Le %s pagine sono state recuperate in %s", textService.format(ottenutoIntero), dateService.deltaTextEsatto(inizio)));
+        System.out.println(String.format("I %s pageIds sono stati recuperati con getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
+        System.out.println(VUOTA);
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("10 - downloadServiceGetListaPageIds")
+    void downloadServiceGetListaPageIds() {
+        System.out.println("Crea la lista di tutti i (long) pageIds della category BioBot");
+        System.out.println(VUOTA);
+        sorgente = "BioBot";
+
+        listaPageIds = service.getListaPageIds(sorgente);
+        assertNotNull(listaPageIds);
+        ottenutoIntero = listaPageIds.size();
+        assertTrue(ottenutoIntero > 0);
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Ci sono %s pagine nella categoria [%s]", ottenuto, sorgente));
+        System.out.println(VUOTA);
+        System.out.println(String.format("I %s pageIds sono stati recuperati con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
         System.out.println(VUOTA);
 
         assertTrue(ottenutoIntero > 10);
         printLong(listaPageIds.subList(0, 10));
+        listaPageIdsCategoriaBio = listaPageIds;
+    }
+
+    @Test
+    @Order(20)
+    @DisplayName("20 - downloadServiceGetListaMongoIds")
+    void downloadServiceGetListaMongoIds() {
+        System.out.println("Crea la lista di tutti i (long) pageIds esistenti nel database (mongo) locale");
+        System.out.println(VUOTA);
+
+        listaPageIds = service.getListaMongoIds();
+        assertNotNull(listaPageIds);
+        ottenutoIntero = listaPageIds.size();
+        assertTrue(ottenutoIntero > 0);
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Ci sono %s pagine nel database", ottenuto));
+        System.out.println(VUOTA);
+        System.out.println(String.format("Le %s pagine sono state recuperate con DownloadService.getListaPageIds in %s", ottenuto, dateService.deltaText(inizio)));
+        System.out.println(VUOTA);
+        assertTrue(ottenutoIntero > 10);
+    }
+
+
+    @Test
+    @Order(30)
+    @DisplayName("30 - downloadServiceDeltaCancella")
+    void downloadServiceDeltaCancella() {
+        System.out.println("Recupera i (long) pageIds non più presenti nella category e da cancellare dal database (mongo) locale");
+        System.out.println(VUOTA);
+        if (listaPageIdsCategoriaBio == null || listaPageIdsCategoriaBio.size() < 1) {
+            message = String.format("La %s è vuota", "listaPageIdsCategoriaBio");
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+        listaPageIds = service.deltaCancella(listaMongoIdsAll, listaPageIdsCategoriaBio);
+        assertNotNull(listaPageIds);
+    }
+
+    @Test
+    @Order(40)
+    @DisplayName("40 - downloadServiceDeltaCreare")
+    void downloadServiceDeltaCreare() {
+        System.out.println("Recupera i (long) pageIds presenti nella category e non ancora esistenti nel database (mongo) locale e da creare");
+        System.out.println(VUOTA);
+        if (listaPageIdsCategoriaBio == null || listaPageIdsCategoriaBio.size() < 1) {
+            message = String.format("La %s è vuota", "listaPageIdsCategoriaBio");
+            logService.warn(new WrapLog().message(message));
+            return;
+        }
+
+        listaPageIds = service.deltaCreare(listaPageIdsCategoriaBio, listaMongoIdsAll);
+        assertNotNull(listaPageIds);
+    }
+
+
+    @Test
+    @Order(50)
+    @DisplayName("50 - downloadServiceGetListaWrapTime")
+    void downloadServiceGetListaWrapTime() {
+        System.out.println("Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server");
+        System.out.println(VUOTA);
+
+        listaWrapTime = service.getListaWrapTime(listaPageIdsCategoria3);
+        assertNotNull(listaWrapTime);
+        ottenutoIntero = listaWrapTime.size();
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Numero di '%s'%s%s. Tempo%s", "WrapTime", FORWARD, ottenuto, dateService.deltaText(inizio)));
+
+        inizio = System.currentTimeMillis();
+        listaWrapTime = service.getListaWrapTime(listaPageIdsCategoriaBio.subList(0, 50000));
+        assertNotNull(listaWrapTime);
+        ottenutoIntero = listaWrapTime.size();
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Numero di '%s'%s%s. Tempo%s", "WrapTime", FORWARD, ottenuto, dateService.deltaText(inizio)));
+    }
+
+
+    @Test
+    @Order(60)
+    @DisplayName("60 - downloadServiceElaboraListaWrapTime")
+    void downloadServiceElaboraListaWrapTime() {
+        System.out.println("Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere");
+        System.out.println(VUOTA);
+
+        listaWrapTime = service.getListaWrapTime(listaPageIdsCategoria3);
+        listaPageIds = wikiBotService.elaboraWrapTime(listaWrapTime);
+
+        assertNotNull(listaPageIds);
+        ottenutoIntero = listaPageIds.size();
+        ottenuto = textService.format(ottenutoIntero);
+        System.out.println(String.format("Elaborati %s pageIds (long) da listaWrapTime in %s", ottenuto, dateService.deltaText(inizio)));
     }
 
 
     //    @ParameterizedTest
     @MethodSource(value = "NUMERO_PAGINE")
-    @Order(6)
-    @DisplayName("6 - deltaPageIds")
+    @Order(130)
+    @DisplayName("130 - deltaPageIds")
     void deltaPageIds(int numero) {
-        System.out.println("Recupera i (long) pageIds non più presenti nella category e da cancellare dal database (mongo) locale");
+        System.out.println("130 - Recupera i (long) pageIds non più presenti nella category e da cancellare dal database (mongo) locale");
         System.out.println(VUOTA);
         List<Long> listaParzialeMongo;
         List<Long> subLista;
@@ -273,8 +386,8 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
 
     //    @Test
-    @Order(7)
-    @DisplayName("7 - streaming")
+    @Order(140)
+    @DisplayName("140 - streaming")
     void stream() {
         System.out.println("Recupera i (long) pageIds non più presenti nella category e da cancellare dal database (mongo) locale");
         System.out.println("Streaming comparativo");
@@ -302,9 +415,9 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - addSub")
+    //    @Test
+    @Order(150)
+    @DisplayName("150 - addSub")
     void addSub() {
         List<Long> listaPageIdsCategoria;
         List<Long> subLista = new ArrayList<>();
@@ -331,8 +444,9 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         List<Long> listaProperty = new ArrayList();
         collection = dataBase.getCollection("bio");
 
+        Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
         Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID), Projections.excludeId());
-        FindIterable<Document> documents = collection.find().projection(projection);
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
         for (var singolo : documents) {
             listaProperty.add(singolo.get(FIELD_NAME_PAGE_ID, Long.class));
@@ -401,6 +515,17 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         List<Long> listaPageIdsMongo;
         listaPageIdsMongo = projectionLong();
         return listaPageIdsMongo;
+    }
+
+    protected void printWrapBio(List<WrapBio> listaWrapBio) {
+        if (listaWrapBio != null) {
+            System.out.println(VUOTA);
+            System.out.println(String.format("Wrap pageid e wikiTitle"));
+            System.out.println(VUOTA);
+            for (WrapBio wrap : listaWrapBio) {
+                System.out.println(String.format("%s (%s)", wrap.getPageid(), wrap.getTitle()));
+            }
+        }
     }
 
 }

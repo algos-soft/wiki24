@@ -71,14 +71,21 @@ public class QueryService extends WAbstractService {
     }
 
     public List<Long> getCatIdsOrdered(final String catTitleGrezzo) {
-        return appContext.getBean(QueryCat.class).getPageIdsOrdered(catTitleGrezzo);
+        if (appContext != null) {
+            return appContext.getBean(QueryCat.class).getPageIdsOrdered(catTitleGrezzo);
+        }
+        else {
+            QueryCat queryCat = new QueryCat();
+            return queryCat.getPageIdsOrdered(catTitleGrezzo);
+        }
     }
 
     public List<String> getCatTitles(final String catTitleGrezzo) {
         return appContext.getBean(QueryCat.class).getTitles(catTitleGrezzo);
     }
+
     public List<String> getSubCat(final String catTitleGrezzo) {
-        return appContext.getBean(QueryCat.class,catTitleGrezzo).getSubCat();
+        return appContext.getBean(QueryCat.class, catTitleGrezzo).getSubCat();
     }
 
     public List<WrapTime> getMiniWrap(final List<Long> listaPageids) {
@@ -112,6 +119,7 @@ public class QueryService extends WAbstractService {
     public WrapBio getBioWrap(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryBio.class).getWrap(wikiTitleGrezzo);
     }
+
     public Bio getBioGrezzo(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryBio.class).getBioGrezzo(wikiTitleGrezzo);
     }

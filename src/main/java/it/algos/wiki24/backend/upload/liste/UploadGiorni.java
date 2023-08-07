@@ -139,7 +139,11 @@ public class UploadGiorni extends UploadListe {
         buffer.append("{{Lista persone per giorno");
         buffer.append(CAPO);
         buffer.append("|titolo=");
-        buffer.append(wikiUtility.wikiTitleNatiGiorno(nomeLista));
+        buffer.append(switch (typeLista) {
+            case giornoNascita -> wikiUtility.wikiTitleNatiGiorno(nomeLista);
+            case giornoMorte -> wikiUtility.wikiTitleMortiGiorno(nomeLista);
+            default -> VUOTA;
+        });
         buffer.append(CAPO);
         buffer.append("|voci=");
         buffer.append(mappaWrap != null ? wikiUtility.getSizeAllWrap(mappaWrap) : VUOTA);

@@ -128,20 +128,21 @@ public class DownloadService extends WAbstractService {
 
         //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
         creaNewEntities(listaPageIdsDaCreare);
-        //        //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
-        //        listaWrapTime = getListaWrapTime(listaPageIds);
-        //
-        //        //--Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere
-        //        listaPageIdsDaLeggere = elaboraListaWrapTime(listaWrapTime);
-        //
-        //        //--Legge tutte le pagine
-        //        listaWrapBio = getListaWrapBio(listaPageIdsDaLeggere);
-        //
-        //        //--Crea/aggiorna le voci biografiche <br>
-        //        creaElaboraListaBio(listaWrapBio);
-        //
-        //        //--durata del ciclo completo
-        //        fixInfoDurataCiclo(inizio);
+
+        //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
+        listaWrapTime = getListaWrapTime(listaPageIds);
+
+        //--Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere
+        listaPageIdsDaLeggere = elaboraListaWrapTime(listaWrapTime);
+
+        //--Legge tutte le pagine
+        listaWrapBio = getListaWrapBio(listaPageIdsDaLeggere);
+
+        //--Crea/aggiorna le voci biografiche <br>
+        creaElaboraListaBio(listaWrapBio);
+
+        //--durata del ciclo completo
+        fixInfoDurataCiclo(inizio);
     }
 
 
@@ -237,7 +238,6 @@ public class DownloadService extends WAbstractService {
         String time;
 
         lista = bioBackend.findOnlyPageId();
-        Collections.sort(lista);
 
         if (lista == null || lista.size() == 0) {
             message = "La lista bio è vuota";
@@ -254,7 +254,7 @@ public class DownloadService extends WAbstractService {
     }
 
 
-    private List<Long> deltaCancella(List<Long> listaMongoIds, List<Long> listaPageIds) {
+    public List<Long> deltaCancella(List<Long> listaMongoIds, List<Long> listaPageIds) {
         List<Long> delta;
         long inizio = System.currentTimeMillis();
         String message;
@@ -333,7 +333,7 @@ public class DownloadService extends WAbstractService {
     }
 
 
-    private List<Long> deltaCreare(List<Long> listaPageIds, List<Long> listaMongoIds) {
+    public List<Long> deltaCreare(List<Long> listaPageIds, List<Long> listaMongoIds) {
         long inizio = System.currentTimeMillis();
         List<Long> delta;
         String message;
