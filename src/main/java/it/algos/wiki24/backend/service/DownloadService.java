@@ -472,7 +472,7 @@ public class DownloadService extends WAbstractService {
             logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
-        listaMiniWrap = queryService.getMiniWrap(listaPageIds.subList(0, 100));//@todo ASSOLUTAMENTE provvisorio
+        listaMiniWrap = queryService.getMiniWrap(listaPageIds);
 
         size = textService.format(listaMiniWrap.size());
         message = String.format("Creati %s wrapTimes dai pageIds della categoria [%s] in %s", size, cat, dateService.deltaText(inizio));
