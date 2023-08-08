@@ -468,7 +468,7 @@ public class DownloadService extends WAbstractService {
 
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
-            message = String.format("Creazione dei wrapTimes dalla categoria [%s] in (previsti) %s", cat, "15 minuti");
+            message = String.format("Creazione dei wrapTimes dalla categoria [%s] in (previsti) %s", cat, "8 minuti");
             logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
@@ -477,6 +477,7 @@ public class DownloadService extends WAbstractService {
         size = textService.format(listaMiniWrap.size());
         message = String.format("Creati %s wrapTimes dai pageIds della categoria [%s] in %s", size, cat, dateService.deltaText(inizio));
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
 
         return listaMiniWrap;
     }
