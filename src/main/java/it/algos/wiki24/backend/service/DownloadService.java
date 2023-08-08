@@ -219,7 +219,7 @@ public class DownloadService extends WAbstractService {
 
         size = textService.format(listaPageIds.size());
         time = dateService.deltaText(inizio);
-        String message = String.format("Recuperate %s pageIds (long) dalla categoria [%s]. Tempo %s", size, categoryTitle, time);
+        String message = String.format("Recuperati %s pageIds (long) dalla categoria [%s]. Tempo %s", size, categoryTitle, time);
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
 
         return listaPageIds;
@@ -262,47 +262,15 @@ public class DownloadService extends WAbstractService {
         delta = arrayService.deltaBinary(listaMongoIds, listaPageIds);
 
         if (delta != null && delta.size() > 0) {
-            message = String.format("Nel database (mongo) sono state individuate %s entities da cancellare. Tempo %s", delta.size(), dateService.deltaText(inizio));
+            message = String.format("Nel database (mongo) sono state individuate %s biografie da cancellare. Tempo %s", delta.size(), dateService.deltaText(inizio));
         }
         else {
-            message = String.format("Nel database (mongo) non ci sono entities da cancellare.", delta.size());
+            message = String.format("Nel database (mongo) non ci sono biografie da cancellare.", delta.size());
         }
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
 
         return delta;
     }
-
-    //    /**
-    //     * Recupera i (long) pageIds non più presenti nella category e da cancellare dal database (mongo) locale <br>
-    //     *
-    //     * @param listaMongoIds tutti i (long) pageIds presenti nel database mongo locale
-    //     * @param listaPageIds  tutti i (long) pageIds presenti sul server wiki
-    //     *
-    //     * @return lista di tutti i (long) pageId da cancellare dal database (mongo) locale
-    //     */
-    //    public List<Long> deltaPagxxeIds(List<Long> listaMongoIds, List<Long> listaPageIds, String nomeArray) {
-    //        List<Long> listaMongoIdsDaCancellare = null;
-    //        String message;
-    //        long inizio = System.currentTimeMillis();
-    //        String size;
-    //        String time;
-    //
-    //        if (listaMongoIds == null || listaPageIds == null) {
-    //            message = "La listaMongoIds oppure listaPageIds è vuota";
-    //            logService.warn(new WrapLog().message(message));
-    //            return listaMongoIdsDaCancellare;
-    //        }
-    //
-    //        //        listaMongoIdsDaCancellare = arrayService.differenzaLong(listaMongoIds, listaPageIds);
-    //        //        listaMongoIdsDaCancellare = getNewEntitiesDaCreare(listaMongoIds, listaPageIds);
-    //
-    //        size = textService.format(listaMongoIdsDaCancellare.size());
-    //        time = dateService.deltaText(inizio);
-    //        message = String.format("Elaborata una lista di %s pageIds esistenti nel database e da cancellare, in %s", size, time);
-    //        logService.info(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
-    //
-    //        return listaMongoIdsDaCancellare;
-    //    }
 
 
     /**
@@ -337,15 +305,16 @@ public class DownloadService extends WAbstractService {
         long inizio = System.currentTimeMillis();
         List<Long> delta;
         String message;
+        String cat = "BioBot";
         String deltaTxt;
 
         delta = arrayService.deltaBinary(listaPageIds, listaMongoIds);
         deltaTxt = textService.format(delta);
         if (delta != null && delta.size() > 0) {
-            message = String.format("Nel database (mongo) devono essere create %s pageIds presenti nella categoria. Tempo %s", deltaTxt, dateService.deltaText(inizio));
+            message = String.format("Nel database (mongo) mancano %s biografie esistenti nella categoria [%s]. Tempo %s", deltaTxt, cat, dateService.deltaText(inizio));
         }
         else {
-            message = String.format("Nel database (mongo) non ci sono entities da creare.", delta.size());
+            message = String.format("Nel database (mongo) non ci sono biografie da creare.", delta.size());
         }
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
 
@@ -462,41 +431,21 @@ public class DownloadService extends WAbstractService {
      */
     public void creaNewEntities(List<Long> listaPageIdsDaCreare) {
         long inizio = System.currentTimeMillis();
-        int maxAPI = 500; //--come da API mediaWiki
-        List<WrapBio> listWrapBio = null;
-        int max;
+        List<WrapBio> listWrapBio;
         String message;
         String sizeNew;
-        String sizeTot;
-        String time;
         int numVociCreate = 0;
 
-        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
-        for (int k = 0; k <= listaPageIdsDaCreare.size(); k += maxAPI) {
-            try {
-                max = Math.min(k + maxAPI, listaPageIdsDaCreare.size());
-                listWrapBio = getListaWrapBio(listaPageIdsDaCreare.subList(k, max));
-            } catch (Exception unErrore) {
-                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-            }
-            try {
-                numVociCreate += creaElaboraListaBio(listWrapBio);
-                if (Pref.debug.is()) {
-                    sizeNew = textService.format(numVociCreate);
-                    sizeTot = textService.format(mongoService.count(Bio.class));
-                    time = dateService.deltaText(inizio);
-                    message = String.format("Finora create %s nuove voci in %s (ce ne sono %s in totale nel mongoDB)", sizeNew, time, sizeTot);
-                    logService.info(new WrapLog().message(message).type(AETypeLog.bio));
-                }
-            } catch (Exception unErrore) {
-                logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-            }
+        if (listaPageIdsDaCreare != null && listaPageIdsDaCreare.size() > 0) {
+            listWrapBio = getListaWrapBio(listaPageIdsDaCreare);
+            numVociCreate = creaElaboraListaBio(listWrapBio);
         }
 
-        sizeNew = textService.format(numVociCreate);
-        time = dateService.deltaText(inizio);
-        message = String.format("Create %s nuove voci in %s", sizeNew, time);
-        logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        if (numVociCreate > 0) {
+            sizeNew = textService.format(numVociCreate);
+            message = String.format("Create %s nuove biografie in %s", sizeNew, dateService.deltaText(inizio));
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        }
     }
 
 
@@ -511,19 +460,22 @@ public class DownloadService extends WAbstractService {
      * @return lista di tutti i WrapTime con l'ultima modifica sul server
      */
     public List<WrapTime> getListaWrapTime(final List<Long> listaPageIds) {
+        List<WrapTime> listaMiniWrap = null;
         long inizio = System.currentTimeMillis();
+        String message;
         String size;
-        String time;
+        String cat = "BioBot";
 
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
+            message = String.format("Creazione dei wrapTimes dalla categoria [%s] in (previsti) %s", cat, "15 minuti");
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
-        List<WrapTime> listaMiniWrap = queryService.getMiniWrap(listaPageIds);
+        listaMiniWrap = queryService.getMiniWrap(listaPageIds.subList(0, 100));//@todo ASSOLUTAMENTE provvisorio
 
-        size = textService.format(listaPageIds.size());
-        time = dateService.deltaText(inizio);
-        String message = String.format("Creati %s wrapTimes dai corrispondenti pageIds in %s", size, time);
+        size = textService.format(listaMiniWrap.size());
+        message = String.format("Creati %s wrapTimes dai pageIds della categoria [%s] in %s", size, cat, dateService.deltaText(inizio));
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
 
         return listaMiniWrap;
@@ -552,6 +504,15 @@ public class DownloadService extends WAbstractService {
         int maxAPI = 50000;
         int max;
 
+        if (true) {
+            listaPageIdsDaLeggere = wikiBotService.elaboraWrapTime(listaWrapTimes);
+            size = textService.format(listaWrapTimes.size());
+            voci = textService.format(listaPageIdsDaLeggere.size());
+            String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+            return listaPageIdsDaLeggere;
+        }
+
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         }
@@ -571,8 +532,7 @@ public class DownloadService extends WAbstractService {
 
         size = textService.format(listaWrapTimes.size());
         voci = textService.format(listaPageIdsDaLeggere.size());
-        time = dateService.deltaText(inizio);
-        String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, time);
+        String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
 
@@ -591,7 +551,29 @@ public class DownloadService extends WAbstractService {
      * @return listaWrapBio
      */
     public List<WrapBio> getListaWrapBio(final List<Long> listaPageIdsDaLeggere) {
-        return appContext.getBean(QueryWrapBio.class).getWrap(listaPageIdsDaLeggere);
+        List<WrapBio> listaWrap = new ArrayList<>();
+        long inizio = System.currentTimeMillis();
+        List<Long> subList;
+        List<WrapBio> listaWrapTmp;
+        String message;
+        int stock = 10000;
+        int dim;
+
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
+        if (listaPageIdsDaLeggere != null) {
+            dim = listaPageIdsDaLeggere.size();
+            for (int k = 0; k < dim; k = k + stock) {
+                subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
+                listaWrapTmp = appContext.getBean(QueryWrapBio.class).getWrap(subList);
+                if (listaWrapTmp != null) {
+                    listaWrap.addAll(listaWrapTmp);
+                }
+            }
+            message = String.format("Recuperati in totale %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrap.size()), dateService.deltaText(inizio));
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        }
+
+        return listaWrap;
     }
 
 
@@ -605,6 +587,7 @@ public class DownloadService extends WAbstractService {
      */
     public int creaElaboraListaBio(final List<WrapBio> listaWrapBio) {
         int numVociCreate = 0;
+        long inizio = System.currentTimeMillis();
         String message;
 
         if (listaWrapBio != null && listaWrapBio.size() > 0) {
@@ -615,13 +598,10 @@ public class DownloadService extends WAbstractService {
                 else {
                     message = String.format("La pagina %s non è una biografia", wrap.getTitle());
                     logService.warn(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
-                    //@todo inviare mail
                 }
             }
-        }
-        else {
-            message = "Nessuna voce da aggiungere/modificare";
-            logService.info(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
+            message = String.format("Aggiornate %s biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
         return numVociCreate;
@@ -633,6 +613,7 @@ public class DownloadService extends WAbstractService {
      */
     public boolean creaElaboraBio(WrapBio wrap) {
         Bio bio;
+        Bio newBio;
         long pageId;
 
         if (wrap != null && wrap.isValida()) {
@@ -643,17 +624,16 @@ public class DownloadService extends WAbstractService {
                 bio = elaboraService.esegue(bio);
                 bio.lastServer = wrap.getTimeStamp();
                 bio.lastMongo = LocalDateTime.now();
-                bioBackend.save(bio);
+                newBio = bioBackend.save(bio);
             }
             else {
                 bio = bioBackend.newEntity(wrap);
                 bio = elaboraService.esegue(bio);
                 bio.lastServer = wrap.getTimeStamp();
                 bio.lastMongo = LocalDateTime.now();
-                bioBackend.insert(bio);
+                newBio = bioBackend.insert(bio);
             }
-
-            return true;
+            return newBio != null;
         }
 
         return false;
@@ -714,6 +694,7 @@ public class DownloadService extends WAbstractService {
 
         message = String.format("Ciclo completo di download in, %s", dateService.deltaText(inizio));
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
     }
 
     /**

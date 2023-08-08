@@ -27,6 +27,11 @@ public class WrapTime implements Comparable {
         this.lastModifica = (lastModificaString != null && lastModificaString.length() > 0) ? LocalDateTime.parse(lastModificaString, DateTimeFormatter.ISO_DATE_TIME) : null;
     }
 
+    public WrapTime(final long pageid, final LocalDateTime lastModifica) {
+        this.pageid = pageid;
+        this.lastModifica = lastModifica;
+    }
+
     public WrapTime(final long pageid, final String wikiTitle, final LocalDateTime lastModifica) {
         this.pageid = pageid;
         this.wikiTitle = wikiTitle;

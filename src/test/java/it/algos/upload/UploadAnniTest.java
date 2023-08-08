@@ -27,7 +27,7 @@ import java.util.stream.*;
  */
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("upload")
+@Tag("upload")
 @DisplayName("Upload Anni")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadAnniTest extends UploadTest {
@@ -43,11 +43,12 @@ public class UploadAnniTest extends UploadTest {
 
 
     //--nome
+    //--typeCrono
     protected static Stream<Arguments> ANNI_UPLOAD() {
         return Stream.of(
-                Arguments.of("43 marzo"),
-                Arguments.of("560"),
-                Arguments.of("azeri")
+                Arguments.of("43 marzo",AETypeLista.giornoNascita),
+                Arguments.of("560",AETypeLista.annoNascita),
+                Arguments.of("azeri",AETypeLista.attivitaSingolare)
         );
     }
 
@@ -84,6 +85,7 @@ public class UploadAnniTest extends UploadTest {
     @Order(7)
     @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
     void beanStandardCompleta() {
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
         sorgente = "4 marzo";
         super.fixBeanStandard(sorgente);
 
@@ -117,12 +119,12 @@ public class UploadAnniTest extends UploadTest {
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
-    void mappaWrap(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void mappaWrap(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadAnni.class, nomeLista).morte().esegue().mappaWrap();
+        mappaWrap = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).esegue().mappaWrap();
         super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
@@ -130,12 +132,12 @@ public class UploadAnniTest extends UploadTest {
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
-    void mappaWrapDidascalie(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void mappaWrapDidascalie(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        mappaWrap = appContext.getBean(UploadAnni.class, nomeLista).morte().mappaWrap();
+        mappaWrap = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).mappaWrap();
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
@@ -143,12 +145,12 @@ public class UploadAnniTest extends UploadTest {
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(60)
     @DisplayName("60 - Testo header")
-    void testoHeader(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void testoHeader(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadAnni.class, nomeLista).morte().testoHeader();
+        ottenuto = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).testoHeader();
         System.out.println(ottenuto);
     }
 
@@ -157,12 +159,12 @@ public class UploadAnniTest extends UploadTest {
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
-    void testoBody(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void testoBody(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
 
-        ottenuto = appContext.getBean(UploadAnni.class, nomeLista).morte().testoBody();
+        ottenuto = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).testoBody();
         System.out.println(ottenuto);
     }
 
@@ -171,15 +173,37 @@ public class UploadAnniTest extends UploadTest {
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(80)
     @DisplayName("80 - Esegue upload test STANDARD")
-    void esegue(final String nomeLista) {
-        if (textService.isEmpty(nomeLista)) {
+    void esegue(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
             return;
         }
         System.out.println("80 - Esegue upload test STANDARD");
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).morte().test().upload();
+        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).test().upload();
         printRisultato(ottenutoRisultato);
+    }
+
+
+    private boolean valido(final String nomeAnno, final AETypeLista type) {
+        if (textService.isEmpty(nomeAnno)) {
+            System.out.println("Manca il nome dell'anno");
+            return false;
+        }
+
+        if (type != AETypeLista.annoNascita && type != AETypeLista.annoMorte) {
+            message = String.format("Il type 'AETypeLista.%s' indicato è incompatibile con la classe [%s]", type, UploadAnni.class.getSimpleName());
+            System.out.println(message);
+            return false;
+        }
+
+        if (!annoWikiBackend.isExistByKey(nomeAnno)) {
+            message = String.format("L'anno [%s] indicato NON esiste", nomeAnno);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

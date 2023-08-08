@@ -1,5 +1,7 @@
 package it.algos.wiki24.backend.service;
 
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
@@ -7,6 +9,8 @@ import it.algos.wiki24.backend.packages.bio.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.apache.commons.lang3.*;
+import org.bson.*;
+import org.bson.conversions.*;
 import org.json.simple.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -313,7 +317,7 @@ public class WikiBotService extends WAbstractService {
      *
      * @return lista di pageId da leggere dal server
      */
-    public List<Long> elaboraWrapTime(final List<WrapTime> listaWrapTimes) {
+    public List<Long> elaboraWrapTimeOld(final List<WrapTime> listaWrapTimes) {
         List<Long> listaPageIdsDaLeggere = new ArrayList<>();
         List<WrapTime> listaMiniWrapTotali = new ArrayList<>();
         long inizio = System.currentTimeMillis();
@@ -349,6 +353,35 @@ public class WikiBotService extends WAbstractService {
         //        message = String.format("Elaborata una lista di miniWrap da leggere: %s nuove e %s modificate (%s totali) in %s",
         //                textService.format(nuove), textService.format(modificate), textService.format(totali), dateService.deltaText(inizio));
         //        logger.info(new WrapLog().type(AETypeLog.bio).exception(new AlgosException(message)));
+
+        return listaPageIdsDaLeggere;
+    }
+
+
+    public List<Long> elaboraWrapTime(final List<WrapTime> listaWrapTimesWiki) {
+        List<Long> listaPageIdsDaLeggere = new ArrayList<>();
+        long pageId;
+        WrapTime wrapMongo;
+        LocalDateTime lastWiki;
+        LocalDateTime lastMongo;
+        List<WrapTime> listaWrapTimesMongo = projectionWrapTime();
+
+        LinkedHashMap<Long, WrapTime> mappaMongo = new LinkedHashMap<>();
+        for (WrapTime wrapMongoMappa : listaWrapTimesMongo) {
+            mappaMongo.put(wrapMongoMappa.getPageid(), wrapMongoMappa);
+        }
+
+        if (listaWrapTimesWiki != null) {
+            for (WrapTime wrapWiki : listaWrapTimesWiki) {
+                pageId = wrapWiki.getPageid();
+                wrapMongo = mappaMongo.get(pageId);
+                lastWiki = wrapWiki.getLastModifica();
+                lastMongo = wrapMongo != null ? wrapMongo.getLastModifica() : ROOT_DATA_TIME;
+                if (lastWiki.isAfter(lastMongo)) {
+                    listaPageIdsDaLeggere.add(pageId);
+                }
+            }
+        }
 
         return listaPageIdsDaLeggere;
     }
@@ -2077,5 +2110,27 @@ public class WikiBotService extends WAbstractService {
     //    public boolean checkCollegamentoComeBot() {
     //        return appContext.getBean(QueryAssert.class).isValida();
     //    }
+
+
+    public List<WrapTime> projectionWrapTime() {
+        List<WrapTime> listaWrap = new ArrayList();
+        long pageId;
+        Date dateLastServer;
+        LocalDateTime lastServer;
+        MongoCollection collection = mongoService.getCollection("bio");
+
+        Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastServer"), Projections.excludeId());
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
+
+        for (var singolo : documents) {
+            pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
+            dateLastServer = singolo.get("lastServer", Date.class);
+            lastServer = dateService.dateToLocalDateTime(dateLastServer);
+            listaWrap.add(new WrapTime(pageId, lastServer));
+        }
+
+        return listaWrap;
+    }
 
 }

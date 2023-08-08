@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.*;
 import org.springframework.context.*;
 import org.springframework.data.mongodb.core.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -248,7 +249,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         System.out.println(VUOTA);
     }
 
-    @Test
+    //    @Test
     @Order(10)
     @DisplayName("10 - downloadServiceGetListaPageIds")
     void downloadServiceGetListaPageIds() {
@@ -270,7 +271,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         listaPageIdsCategoriaBio = listaPageIds;
     }
 
-    @Test
+    //    @Test
     @Order(20)
     @DisplayName("20 - downloadServiceGetListaMongoIds")
     void downloadServiceGetListaMongoIds() {
@@ -290,7 +291,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(30)
     @DisplayName("30 - downloadServiceDeltaCancella")
     void downloadServiceDeltaCancella() {
@@ -305,7 +306,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         assertNotNull(listaPageIds);
     }
 
-    @Test
+    //    @Test
     @Order(40)
     @DisplayName("40 - downloadServiceDeltaCreare")
     void downloadServiceDeltaCreare() {
@@ -322,7 +323,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(50)
     @DisplayName("50 - downloadServiceGetListaWrapTime")
     void downloadServiceGetListaWrapTime() {
@@ -355,22 +356,20 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
 
         listaWrapTime = service.getListaWrapTime(listaPageIdsCategoria3);
         assertNotNull(listaWrapTime);
-        listaPageIds = wikiBotService.elaboraWrapTime(listaWrapTime);
+
+        listaPageIds = this.elaboraWrapTime(listaWrapTime);
         assertNotNull(listaPageIds);
         ottenutoIntero = listaPageIds.size();
         ottenuto = textService.format(ottenutoIntero);
         message = String.format("Elaborati %s pageIds (long) da listaWrapTime in %s", ottenuto, dateService.deltaText(inizio));
         logService.warn(new WrapLog().message(message));
-
-        // mette da parte per risparmiare tempo
-        listaPageIdsCategoria3 = listaPageIds;
     }
 
     //    @Test
     @Order(61)
     @DisplayName("61 - downloadServiceElaboraListaWrapTime")
     void downloadServiceElaboraListaWrapTime2() {
-        System.out.println("Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere )all)");
+        System.out.println("Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere (all)");
         System.out.println(VUOTA);
 
         if (listaWrapTimeAllBio != null && listaWrapTimeAllBio.size() > 0) {
@@ -391,15 +390,18 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(70)
     @DisplayName("70 - downloadServiceGetListaWrapBio")
     void downloadServiceGetListaWrapBio() {
         System.out.println("Legge tutte le pagine");
         System.out.println(VUOTA);
-        List<WrapTime> listaWrapTimeCatVariabile;
 
-        List<WrapBio> lista = appContext.getBean(QueryWrapBio.class).getWrap(listaPageIdsCategoria3);
+        if (listaPageIdsCategoria3 == null) {
+            return;
+        }
+
+        List<WrapBio> lista = service.getListaWrapBio(listaPageIdsCategoria3);
         assertNotNull(lista);
         ottenutoIntero = listaPageIds.size();
         message = String.format("Letti %s WrapBio dal server in %s", ottenuto, dateService.deltaText(inizio));
@@ -411,7 +413,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     }
 
 
-    @Test
+    //    @Test
     @Order(80)
     @DisplayName("80 - downloadServiceCreaElaboraListaBio")
     void downloadServiceCreaElaboraListaBio() {
@@ -508,6 +510,65 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         System.out.println(String.format("Tempo in %s", dateService.deltaTextEsatto(inizio)));
     }
 
+
+    public List<Long> elaboraWrapTime(final List<WrapTime> listaWrapTimesWiki) {
+        List<Long> listaPageIdsDaLeggere = new ArrayList<>();
+        long pageId;
+        WrapTime wrapMongo;
+        LocalDateTime lastWiki;
+        LocalDateTime lastMongo;
+
+        long inizio = System.currentTimeMillis();
+        List<WrapTime> listaWrapTimesMongo = projectionWrapTime();
+        System.out.println(String.format("Tempo projectionWrapTime in %s", dateService.deltaTextEsatto(inizio)));
+
+        LinkedHashMap<Long, WrapTime> mappaMongo = new LinkedHashMap<>();
+        inizio = System.currentTimeMillis();
+        for (WrapTime wrapMongoMappa : listaWrapTimesMongo) {
+            mappaMongo.put(wrapMongoMappa.getPageid(), wrapMongoMappa);
+        }
+        System.out.println(String.format("Tempo creazione mappaMongo in %s", dateService.deltaTextEsatto(inizio)));
+
+        inizio = System.currentTimeMillis();
+        if (listaWrapTimesWiki != null) {
+            for (WrapTime wrapWiki : listaWrapTimesWiki) {
+                pageId = wrapWiki.getPageid();
+                wrapMongo = mappaMongo.get(pageId);
+                lastWiki = wrapWiki.getLastModifica();
+                lastMongo = wrapMongo != null ? wrapMongo.getLastModifica() : ROOT_DATA_TIME;
+                if (lastWiki.isAfter(lastMongo)) {
+                    listaPageIdsDaLeggere.add(pageId);
+                }
+            }
+        }
+        System.out.println(String.format("Tempo spazzolamento mappaMongo in %s", dateService.deltaTextEsatto(inizio)));
+
+        return listaPageIdsDaLeggere;
+    }
+
+
+    public List<WrapTime> projectionWrapTime() {
+        List<WrapTime> listaWrap = new ArrayList();
+        long pageId;
+        Date dateLastServer;
+        LocalDateTime lastServer;
+        long inizio = System.currentTimeMillis();
+        collection = dataBase.getCollection("bio");
+
+        Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastServer"), Projections.excludeId());
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
+
+        for (var singolo : documents) {
+            pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
+            dateLastServer = singolo.get("lastServer", Date.class);
+            lastServer = dateService.dateToLocalDateTime(dateLastServer);
+            listaWrap.add(new WrapTime(pageId, lastServer));
+        }
+        //        System.out.println(String.format("Tempo projectionWrapTime in %s", dateService.deltaTextEsatto(inizio)));
+
+        return listaWrap;
+    }
 
     public List<Long> projectionLong() {
         List<Long> listaProperty = new ArrayList();
