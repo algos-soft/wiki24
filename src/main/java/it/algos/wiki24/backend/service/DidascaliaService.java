@@ -318,6 +318,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         sottoParagrafo = wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
+        sottoParagrafo = VUOTA;
 
         return getWrap(
                 titoloPagina,
@@ -366,6 +367,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         sottoParagrafo = wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
+        sottoParagrafo = VUOTA;
 
         return getWrap(
                 titoloPagina,
@@ -413,6 +415,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         sottoParagrafo = wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
+        sottoParagrafo = VUOTA;
 
         return getWrap(
                 titoloPagina,
@@ -460,6 +463,7 @@ public class DidascaliaService extends WAbstractService {
         }
 
         sottoParagrafo = wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
+        sottoParagrafo = VUOTA;
 
         return getWrap(
                 titoloPagina,

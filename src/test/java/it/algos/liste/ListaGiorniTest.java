@@ -6,8 +6,10 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
@@ -98,13 +100,13 @@ public class ListaGiorniTest extends ListeTest {
         super.fixBeanStandard(sorgente);
     }
 
-//    @Test
-//    @Order(8)
-//    @DisplayName("8 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "27 novembre";
-//        super.fixConParametroNelCostruttore(sorgente);
-//    }
+    //    @Test
+    //    @Order(8)
+    //    @DisplayName("8 - esegueConParametroNelCostruttore")
+    //    void esegueConParametroNelCostruttore() {
+    //        sorgente = "27 novembre";
+    //        super.fixConParametroNelCostruttore(sorgente);
+    //    }
 
     @Test
     @Order(9)
@@ -266,19 +268,22 @@ public class ListaGiorniTest extends ListeTest {
         fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
     }
 
-    //    //    @Test
-    //    @Order(91)
-    //    @DisplayName("91 - Paragrafo singolo")
-    //    void costruttoreBase() {
-    //        System.out.println(("91 - Paragrafo singolo"));
-    //        System.out.println(VUOTA);
-    //
-    //        sorgente = "4 gennaio";
-    //        sorgente2 = "XVI secolo";
-    //
-    //        listWrapLista = appContext.getBean(ListaGiorni.class, sorgente).nascita().getWrapLista(sorgente2);
-    //        printSub(listWrapLista);
-    //    }
+    @Test
+    @Order(210)
+    @DisplayName("210 - Paragrafo singolo")
+    void costruttoreBase() {
+        System.out.println(("210 - Paragrafo singolo"));
+        System.out.println(VUOTA);
+
+        sorgente = "4 gennaio";
+        sorgente2 = "XVI secolo";
+
+        listWrapLista = appContext.getBean(ListaGiorni.class, sorgente).nascita().getWrapLista(sorgente2);
+        assertNotNull(listWrapLista);
+        for (WrapLista wrap : listWrapLista.subList(0, Math.min(MAX, listWrapLista.size()))) {
+            super.printWrap(wrap, this.textService);
+        }
+    }
 
 
     protected void printBio(AETypeLista type, List<Bio> listaBio) {

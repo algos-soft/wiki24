@@ -3,10 +3,13 @@ package it.algos.wiki24.backend.upload.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -98,6 +101,19 @@ public class UploadAnni extends UploadListe {
         return (UploadAnni) super.test();
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadAnni sottoPagina(String keyParagrafo) {
+        this.wikiTitleUpload = nomeLista;
+        this.keyParagrafoSottopagina = keyParagrafo;
+        mappaWrap = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).mappaWrap();
+        List<WrapLista> lista = mappaWrap.get(keyParagrafo);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
+        this.costruttoreValido = true;
+        this.isSottopagina = true;
+        return this;
+    }
 
     @Override
     public boolean fixMappaWrap() {
@@ -120,133 +136,83 @@ public class UploadAnni extends UploadListe {
         return true;
     }
 
+
+    protected String creaBodyLayer() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(getListaIni());
+        buffer.append(creaBody());
+        buffer.append(DOPPIE_GRAFFE_END);
+
+        this.bodyText = buffer.toString();
+        return bodyText;
+    }
+
+
+    protected String getListaIni() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("{{Lista persone per anno");
+        buffer.append(CAPO);
+        buffer.append("|titolo=");
+        buffer.append(switch (typeLista) {
+            case annoNascita -> wikiUtility.wikiTitleNatiAnno(nomeLista);
+            case annoMorte -> wikiUtility.wikiTitleMortiAnno(nomeLista);
+            default -> VUOTA;
+        });
+        buffer.append(CAPO);
+        buffer.append("|voci=");
+        buffer.append(mappaWrap != null ? wikiUtility.getSizeAllWrap(mappaWrap) : VUOTA);
+        buffer.append(CAPO);
+        buffer.append("|testo=<nowiki></nowiki>");
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
+
+    protected String categorie() {
+        StringBuffer buffer = new StringBuffer();
+        AnnoWiki anno = annoWikiBackend.findByKey(nomeLista);
+        int posCat = anno.getOrdine();
+        String secolo = anno.getSecolo().getNome();
+
+        buffer.append(CAPO);
+        buffer.append("*");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
+        buffer.append("[[Categoria:");
+        buffer.append(typeLista.getCategoria());
+        buffer.append(secolo);
+        buffer.append("|");
+        buffer.append(SPAZIO);
+        buffer.append(posCat);
+        buffer.append("]]");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
+
+        buffer.append(CAPO);
+        buffer.append("*");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
+        buffer.append("[[Categoria:");
+        buffer.append(wikiTitleUpload);
+        buffer.append("|");
+        buffer.append(SPAZIO);
+        buffer.append("]]");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
+
+        return buffer.toString();
+    }
+
     protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
         return appContext.getBean(UploadAnni.class, sottoPagina).typeLista(typeLista).test(uploadTest).sottoPagina(lista).upload();
     }
 
-//    /**
-//     * Esegue la scrittura della pagina <br>
-//     */
-//    @Override
-//    public WResult upload(String nomeAnno) {
-//        anno = annoWikiBackend.findByKey(nomeAnno);
-//        return super.upload(nomeAnno);
-//    }
-
-//    public void uploadSottoPagine(String wikiTitle, String parente, String sottoPagina, int ordineSottoPagina, List<WrapLista> lista) {
-//        UploadAnni anno = appContext.getBean(UploadAnni.class).typeLista(typeLista);
-//
-//        if (uploadTest) {
-//            anno = anno.test();
-//        }
-//
-//        anno.uploadSottoPagina(wikiTitle, parente, sottoPagina, ordineSottoPagina, lista);
-//    }
-
-//    /**
-//     * Esegue la scrittura di tutte le pagine <br>
-//     * Tutti gli anni nati <br>
-//     * Tutti gli anni morti <br>
-//     */
-//    public WResult uploadAll() {
-//        WResult result = WResult.errato();
-//        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti degli anni"));
-//        long inizio = System.currentTimeMillis();
-//        List<String> anni;
-//        String message;
-//        int modificatiNati;
-//        int modificatiMorti;
-//
-//        List<Secolo> secoli = secoloBackend.findAllSortCorrente();
-//        for (Secolo secolo : secoli) {
-//            anni = annoBackend.findAllForNomeBySecolo(secolo);
-//            modificatiNati = 0;
-//            modificatiMorti = 0;
-//
-//            for (String nomeAnno : anni) {
-//                result = nascita().upload(nomeAnno);
-//                if (result.isValido() && result.isModificata()) {
-//                    modificatiNati++;
-//                }
-//
-//                result = morte().upload(nomeAnno);
-//                if (result.isValido() && result.isModificata()) {
-//                    modificatiMorti++;
-//                }
-//            }
-//            message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il secolo %s", modificatiNati, modificatiMorti, secolo);
-//            logger.info(new WrapLog().type(AETypeLog.upload).message(message));
-//        }
-//
-//        fixUploadMinuti(inizio);
-//        return result;
-//    }
-
-//    @Override
-//    protected String categorie() {
-//        StringBuffer buffer = new StringBuffer();
-//        String message;
-//        String title = wikiUtility.wikiTitle(typeLista, nomeLista);
-//        Secolo secolo = anno.secolo;
-//        String secoloTxt = secolo != null ? secolo.nome : VUOTA;
-//
-//        if (uploadTest) {
-//            buffer.append(CAPO);
-//            if (WPref.sottoCategorieNatiPerAnno.is()) {
-//                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno, title);
-//            }
-//            else {
-//                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]][[Categoria:%s| ]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno, title);
-//            }
-//            buffer.append(message);
-//        }
-//        else {
-//            if (WPref.sottoCategorieNatiPerAnno.is()) {
-//                buffer.append(CAPO);
-//                buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno));
-//                buffer.append(CAPO);
-//                buffer.append(String.format("*[[Categoria:%s| ]]", title));
-//            }
-//            else {
-//                buffer.append(CAPO);
-//                buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
-//                buffer.append(CAPO);
-//                buffer.append(String.format("*[[Categoria:%s| ]]", title));
-//            }
-//        }
-//
-//        return buffer.toString();
-//    }
-
-//    @Override
-//    protected String categorieSotto() {
-//        StringBuffer buffer = new StringBuffer();
-//        Secolo secolo = anno.secolo;
-//        String secoloTxt = secolo != null ? secolo.nome : VUOTA;
-//        String message;
-//
-//        if (uploadTest) {
-//            if (WPref.sottoCategorieNatiPerAnno.is()) {
-//                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s nel %s| %s]]}}", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno);
-//            }
-//            else {
-//                message = String.format("{{Categorie bozza|[[Categoria:Liste di %s per %s| %s]]}}", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno);
-//            }
-//            buffer.append(message);
-//        }
-//
-//        if (WPref.sottoCategorieNatiPerAnno.is()) {
-//            buffer.append(CAPO);
-//            buffer.append(String.format("*[[Categoria:Liste di %s nel %s| %s]]", typeLista.getTagLower(), secoloTxt, ordineGiornoAnno));
-//            buffer.append(CAPO);
-//        }
-//        else {
-//            buffer.append(CAPO);
-//            buffer.append(String.format("*[[Categoria:Liste di %s per %s| %s]]", typeLista.getTagLower(), typeLista.getGiornoAnno(), ordineGiornoAnno));
-//            buffer.append(CAPO);
-//        }
-//
-//        return buffer.toString();
-//    }
 
 }

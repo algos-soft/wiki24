@@ -238,6 +238,7 @@ public class UploadNomiTest extends UploadTest {
 
         sorgente = "Anton";
         sorgente2 = "Calciatori";
+        sorgente3 = sorgente + SLASH + sorgente2;
 
         ottenutoRisultato = appContext.getBean(UploadNomi.class, sorgente).sottoPagina(sorgente2).test().upload();
         assertTrue(ottenutoRisultato.isValido());

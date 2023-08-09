@@ -114,6 +114,24 @@ public class WikiUtilityTest extends WikiTest {
         );
     }
 
+    //--anno
+    //--decade
+    private Stream<Arguments> decade() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA),
+                Arguments.of("1803", "1-10"),
+                Arguments.of("1413", "11-20"),
+                Arguments.of("525", "21-30"),
+                Arguments.of("834", "31-40"),
+                Arguments.of("750", "41-50"),
+                Arguments.of("1151", "51-60"),
+                Arguments.of("269", "61-70"),
+                Arguments.of("874", "71-80"),
+                Arguments.of("1588", "81-90"),
+                Arguments.of("1999", "91-00")
+        );
+    }
+
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
      * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
@@ -468,7 +486,6 @@ public class WikiUtilityTest extends WikiTest {
         assertTrue(textService.isValid(ottenuto));
         System.out.println(ottenuto);
 
-
         previsto = "\n<includeonly>=</includeonly>== V secolo <noinclude><span style=\"font-size:70%\">(1)</span></noinclude> ==<includeonly>=</includeonly>\n";
         sorgente = "V secolo";
         sorgenteIntero = 1;
@@ -509,7 +526,7 @@ public class WikiUtilityTest extends WikiTest {
         System.out.println(ottenuto);
     }
 
-    @Test
+    //    @Test
     @Order(204)
     @DisplayName("204 - fixTitoloLinkType")
     void fixTitoloLinkType() {
@@ -521,7 +538,7 @@ public class WikiUtilityTest extends WikiTest {
         sorgente2 = "";
         sorgenteIntero = 17;
         typeLista = AETypeLista.annoNascita;
-        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
         assertTrue(textService.isValid(ottenuto));
         System.out.println(ottenuto);
 
@@ -529,7 +546,7 @@ public class WikiUtilityTest extends WikiTest {
         sorgente2 = "";
         sorgenteIntero = 17;
         typeLista = AETypeLista.nomi;
-        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
         assertTrue(textService.isValid(ottenuto));
         System.out.println(ottenuto);
 
@@ -538,10 +555,38 @@ public class WikiUtilityTest extends WikiTest {
         sorgente2 = "";
         sorgenteIntero = 1;
         typeLista = AETypeLista.giornoNascita;
-        ottenuto = service.fixTitoloLink( sorgente, sorgente2, sorgenteIntero);
+        ottenuto = service.fixTitoloLink(sorgente, sorgente2, sorgenteIntero);
         assertTrue(textService.isValid(ottenuto));
         System.out.println(ottenuto);
         assertEquals(previsto, ottenuto);
+    }
+
+
+    @Test
+    @Order(301)
+    @DisplayName("301 - getDecade")
+    void getDecade() {
+        System.out.println(("301 - getDecade"));
+        System.out.println(VUOTA);
+
+        //--anno
+        //--decade
+        System.out.println(VUOTA);
+        decade().forEach(this::getDecadeBase);
+    }
+
+    //--anno
+    //--decade
+    void getDecadeBase(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previsto = (String) mat[1];
+
+        ottenuto = service.getDecade(sorgente);
+        assertEquals(textService.isValid(previsto),textService.isValid(ottenuto));
+        assertEquals(previsto, ottenuto);
+        message = String.format("L'anno '%s' ricade nella decade -> [%s]", sorgente, ottenuto);
+        System.out.println(message);
     }
 
     protected Bio creaBio(String wikiTitle) {

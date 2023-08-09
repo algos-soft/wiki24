@@ -2,11 +2,13 @@ package it.algos.upload;
 
 import it.algos.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
@@ -197,6 +199,32 @@ public class UploadGiorniTest extends UploadTest {
         printUpload(ottenutoRisultato);
     }
 
+
+    @Test
+    @Order(3)
+    @DisplayName("331 - Esegue upload sottoPagina (keyParagrafo)")
+    void esegueSottoPaginaIsolata2() {
+        System.out.println("331 - Esegue upload sottoPagina (keyParagrafo)");
+        System.out.println(VUOTA);
+
+        sorgente = "1º gennaio";
+        sorgente2 = "XVIII secolo";
+        sorgente3 = sorgente + SLASH + sorgente2;
+
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, sorgente)
+                .typeLista(AETypeLista.giornoNascita)
+                .sottoPagina(sorgente2)
+                .test()
+                .upload();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test del giorno '%s' con secolo '%s'", sorgente, sorgente2));
+        System.out.println(String.format("Titolo della sottopagina: %s", wikiUtility.wikiTitleNatiGiorno(sorgente3)));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente3));
+
+        System.out.println(VUOTA);
+    }
 
     private boolean valido(final String nomeGiorno, final AETypeLista type) {
         if (textService.isEmpty(nomeGiorno)) {

@@ -496,47 +496,16 @@ public class DownloadService extends WAbstractService {
      * @return listaPageIdsDaLeggere
      */
     public List<Long> elaboraListaWrapTime(final List<WrapTime> listaWrapTimes) {
-        List<Long> listaPageIdsDaLeggere = new ArrayList<>();
-        List<WrapTime> listaSub;
+        List<Long> listaPageIdsDaLeggere;
         long inizio = System.currentTimeMillis();
         String size;
         String voci;
-        String time;
-        int maxAPI = 50000;
-        int max;
 
-        if (true) {
-            listaPageIdsDaLeggere = wikiBotService.elaboraWrapTime(listaWrapTimes);
-            size = textService.format(listaWrapTimes.size());
-            voci = textService.format(listaPageIdsDaLeggere.size());
-            String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
-            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
-            return listaPageIdsDaLeggere;
-        }
-
-        if (Pref.debug.is()) {
-            logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
-        }
-        for (int k = 0; k < listaWrapTimes.size(); k += maxAPI) {
-            max = Math.min(k + maxAPI, listaWrapTimes.size());
-            listaSub = listaWrapTimes.subList(k, max);
-            listaPageIdsDaLeggere.addAll(wikiBotService.elaboraWrapTime(listaSub));
-
-            if (Pref.debug.is()) {
-                size = textService.format(k + maxAPI);
-                voci = textService.format(listaPageIdsDaLeggere.size());
-                time = dateService.deltaText(inizio);
-                String message = String.format("Finora elaborati %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, time);
-                logService.info(new WrapLog().message(message).type(AETypeLog.bio));
-            }
-        }
-
+        listaPageIdsDaLeggere = wikiBotService.elaboraWrapTime(listaWrapTimes);
         size = textService.format(listaWrapTimes.size());
         voci = textService.format(listaPageIdsDaLeggere.size());
         String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
         logService.info(new WrapLog().message(message).type(AETypeLog.bio));
-        logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
-
         return listaPageIdsDaLeggere;
     }
 

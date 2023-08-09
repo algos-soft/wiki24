@@ -3,14 +3,10 @@ package it.algos.wiki24.backend.upload.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
-import it.algos.vaad24.backend.packages.crono.mese.*;
-import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -100,6 +96,19 @@ public class UploadGiorni extends UploadListe {
         return (UploadGiorni) super.test();
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public UploadGiorni sottoPagina(String keyParagrafo) {
+        this.wikiTitleUpload = nomeLista;
+        this.keyParagrafoSottopagina = keyParagrafo;
+        mappaWrap = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(typeLista).mappaWrap();
+        List<WrapLista> lista = mappaWrap.get(keyParagrafo);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
+        this.costruttoreValido = true;
+        this.isSottopagina = true;
+        return this;
+    }
 
     @Override
     public boolean fixMappaWrap() {

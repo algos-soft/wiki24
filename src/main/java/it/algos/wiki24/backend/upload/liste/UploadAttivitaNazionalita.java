@@ -140,7 +140,8 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         buffer.append(CAPO);
         buffer.append(includeIni());
         buffer.append(fixToc());
-        buffer.append(fixUnconnected());
+        buffer.append(fixUnConnected());
+        buffer.append(fixUnEditableSection());
         buffer.append(torna(wikiTitle));
         buffer.append(tmpListaBio(numVoci));
         buffer.append(includeEnd());
@@ -166,7 +167,8 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         buffer.append(CAPO);
         buffer.append(includeIni());
         buffer.append(AETypeToc.noToc.get());
-        buffer.append(fixUnconnected());
+        buffer.append(fixUnConnected());
+        buffer.append(fixUnEditableSection());
         buffer.append(torna(wikiTitle));
         buffer.append(tmpListaBio(numVoci));
         buffer.append(includeEnd());
@@ -193,7 +195,8 @@ public abstract class UploadAttivitaNazionalita extends Upload {
         buffer.append(CAPO);
         buffer.append(includeIni());
         buffer.append(AETypeToc.noToc.get());
-        buffer.append(fixUnconnected());
+        buffer.append(fixUnConnected());
+        buffer.append(fixUnEditableSection());
         buffer.append(torna(wikiTitle));
         buffer.append(tmpListaBio(numVoci));
         buffer.append(includeEnd());

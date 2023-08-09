@@ -39,16 +39,14 @@ public class UploadAnniTest extends UploadTest {
     private UploadAnni istanza;
 
 
-
-
-
     //--nome
     //--typeCrono
     protected static Stream<Arguments> ANNI_UPLOAD() {
         return Stream.of(
-                Arguments.of("43 marzo",AETypeLista.giornoNascita),
-                Arguments.of("560",AETypeLista.annoNascita),
-                Arguments.of("azeri",AETypeLista.attivitaSingolare)
+                Arguments.of("43 marzo", AETypeLista.giornoNascita),
+                Arguments.of("560", AETypeLista.annoNascita),
+                Arguments.of("560", AETypeLista.annoMorte),
+                Arguments.of("azeri", AETypeLista.attivitaSingolare)
         );
     }
 
@@ -93,14 +91,13 @@ public class UploadAnniTest extends UploadTest {
         super.fixBeanStandard(sorgente);
     }
 
-//    @Test
-//    @Order(8)
-//    @DisplayName("8 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "560";
-//        super.fixConParametroNelCostruttore(sorgente);
-//    }
-
+    //    @Test
+    //    @Order(8)
+    //    @DisplayName("8 - esegueConParametroNelCostruttore")
+    //    void esegueConParametroNelCostruttore() {
+    //        sorgente = "560";
+    //        super.fixConParametroNelCostruttore(sorgente);
+    //    }
 
 
     @Test
@@ -184,6 +181,20 @@ public class UploadAnniTest extends UploadTest {
         printRisultato(ottenutoRisultato);
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_UPLOAD")
+    @Order(90)
+    @DisplayName("90 - Esegue upload REALE (attenzione)")
+    void uploadReale(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+        System.out.println("90 - Esegue upload REALE (attenzione)");
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).upload();
+        printUpload(ottenutoRisultato);
+    }
 
     private boolean valido(final String nomeAnno, final AETypeLista type) {
         if (textService.isEmpty(nomeAnno)) {

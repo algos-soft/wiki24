@@ -160,7 +160,7 @@ public enum WPref implements AIGenPref {
     categoriaBio("categoriaBio", AETypePref.string, "BioBot", "Categoria di riferimento per le Biografie", false),
     sogliaAttNazWiki("sogliaAttNazWiki", AETypePref.integer, 50, "Soglia minima per creare la pagina di una attività o nazionalità sul server wiki", false),
     sogliaSottoPagina("sogliaSottoPagina", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di una attività o nazionalità sul server wiki", false),
-    sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima per usare {{Div col}}", false),
+    sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima per usare {{Div col}} nel singolo paragrafo", false),
     sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima per 'includere' la voce in giorni/anni", false),
     sogliaIncludeParagrafo("sogliaIncludeParagrafo", AETypePref.integer, 50, "Soglia minima per usare i paragrafi 'inclusi' di secondo livello", false),
 

@@ -748,7 +748,7 @@ public class WikiUtility extends WAbstractService {
         return testoModulo;
     }
 
-    public LinkedHashMap<String, List<WrapLista>> creaMappaAlfabetica(List<WrapLista> listaAll) {
+    public LinkedHashMap<String, List<WrapLista>> creaMappaSottopagina(List<WrapLista> listaAll) {
         LinkedHashMap<String, List<WrapLista>> mappaAlfabetica = new LinkedHashMap<>();
         String key;
         List<WrapLista> lista;
@@ -805,6 +805,39 @@ public class WikiUtility extends WAbstractService {
         wrap.seconda = seconda;
 
         return wrap;
+    }
+
+    public String getDecade(final String annoIn) {
+        String decade = VUOTA;
+        String anno;
+        char character;
+        char character2;
+
+        if (textService.isEmpty(annoIn)) {
+            return VUOTA;
+        }
+        anno = annoIn;
+        character = anno.charAt(anno.length() - 2);
+        character2 = anno.charAt(anno.length() - 1);
+        if (character2==48) {
+            character-=1;
+        }
+
+        decade = switch (character) {
+            case 48 -> "1-10";
+            case 49 -> "11-20";
+            case 50 -> "21-30";
+            case 51 -> "31-40";
+            case 52 -> "41-50";
+            case 53 -> "51-60";
+            case 54 -> "61-70";
+            case 55 -> "71-80";
+            case 56 -> "81-90";
+            case 57 -> "91-00";
+            default -> VUOTA;
+        };
+
+        return decade;
     }
 
 }

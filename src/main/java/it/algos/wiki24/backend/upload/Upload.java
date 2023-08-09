@@ -416,7 +416,7 @@ public abstract class Upload implements AlgosBuilderPattern {
      * Pattern Builder <br>
      */
     public Upload sottoPagina(List<WrapLista> lista) {
-        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
@@ -430,7 +430,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         this.keyParagrafoSottopagina = keyParagrafo;
         mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
         List<WrapLista> lista = mappaWrap.get(keyParagrafo);
-        mappaWrap = wikiUtility.creaMappaAlfabetica(lista);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
@@ -597,7 +597,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
         buffer.append(includeIni());
         buffer.append(fixToc());
-        buffer.append(fixUnconnected());
+        buffer.append(fixUnConnected());
+        buffer.append(fixUnEditableSection());
         buffer.append(torna());
         buffer.append(tmpListaBio());
         buffer.append(includeEnd());
@@ -622,8 +623,12 @@ public abstract class Upload implements AlgosBuilderPattern {
         }
     }
 
-    protected String fixUnconnected() {
+    protected String fixUnConnected() {
         return UNCONNECTED;
+    }
+
+    protected String fixUnEditableSection() {
+        return NOEDITSECTION;
     }
 
 
