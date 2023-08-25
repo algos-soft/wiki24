@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.boot.test.context.*;
 
+import java.time.*;
+
 /**
  * Project wiki23
  * Created by Algos
@@ -227,12 +229,12 @@ public class QueryWriteTest extends WikiTest {
         WResult result = WResult.crea();
 
         sorgente = "Utente:Biobot/Abba2";
-        sorgente2 = "Primo testo creazione";
+        sorgente2 = "Primo testo creazione " + LocalDateTime.now();
         ottenutoRisultato = appContext.getBean(QueryWrite.class).urlRequest(sorgente, sorgente2);
         if (ottenutoRisultato.isValido()) {
             switch (ottenutoRisultato.getTypeResult()) {
                 case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
-                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteModificata -> result.typeResult(AETypeResult.uploadModificata);
                 case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
                 default -> {}
             }
@@ -241,7 +243,7 @@ public class QueryWriteTest extends WikiTest {
             result.typeResult(AETypeResult.uploadErrato);
         }
         printRisultato(result);
-        assertEquals(result.getTypeResult(), AETypeResult.uploadNuova);
+        assertEquals(result.getTypeResult(), AETypeResult.uploadModificata);
         System.out.println(VUOTA);
         System.out.println(VUOTA);
 
@@ -250,7 +252,7 @@ public class QueryWriteTest extends WikiTest {
         if (ottenutoRisultato.isValido()) {
             switch (ottenutoRisultato.getTypeResult()) {
                 case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
-                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteModificata -> result.typeResult(AETypeResult.uploadModificata);
                 case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
                 default -> {}
             }
@@ -267,7 +269,7 @@ public class QueryWriteTest extends WikiTest {
         if (ottenutoRisultato.isValido()) {
             switch (ottenutoRisultato.getTypeResult()) {
                 case queryWriteCreata -> result.typeResult(AETypeResult.uploadNuova);
-                case queryWriteModificata  -> result.typeResult(AETypeResult.uploadModificata);
+                case queryWriteModificata -> result.typeResult(AETypeResult.uploadModificata);
                 case queryWriteEsistente -> result.typeResult(AETypeResult.uploadUguale);
                 default -> {}
             }

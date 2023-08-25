@@ -819,8 +819,13 @@ public class WikiUtility extends WAbstractService {
         anno = annoIn;
         character = anno.charAt(anno.length() - 2);
         character2 = anno.charAt(anno.length() - 1);
-        if (character2==48) {
-            character-=1;
+        if (character2 == 48) {
+            if (character == 48) {
+                character += 9;
+            }
+            else {
+                character -= 1;
+            }
         }
 
         decade = switch (character) {

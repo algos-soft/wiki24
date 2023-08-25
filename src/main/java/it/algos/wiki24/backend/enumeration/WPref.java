@@ -181,6 +181,8 @@ public enum WPref implements AIGenPref {
 
     usaParagrafiGiorni("usaParagrafiGiorni", AETypePref.bool, true, "Usa i paragrafi (secoli) nelle pagine dei giorni", false),
     usaParagrafiAnni("usaParagrafiAnni", AETypePref.bool, true, "Usa i paragrafi (mesi) nelle pagine degli anni", false),
+    usaParagrafiGiorniSotto("usaParagrafiGiorniSotto", AETypePref.bool, true, "Usa i paragrafi (decadi) nelle sotto-pagine dei giorni", false),
+    usaParagrafiAnniSotto("usaParagrafiAnniSotto", AETypePref.bool, false, "Usa i paragrafi (?) nelle sotto-pagine degli anni", false),
     usaParagrafiAttNaz("usaParagrafiAttNaz", AETypePref.bool, true, "Usa i paragrafi (nazionalità/attività) nelle pagine attività/nazionalità", false),
     usaSottoSottoAttNaz("usaSottoSottoAttNaz", AETypePref.bool, false, "Usa le sotto-sottopagine (nazionalità/attività) di lettere alfabetiche", false),
     usaDivAttNaz("usaDivAttNaz", AETypePref.bool, false, "Usa i {{Div col}} nelle pagine attività e nazionalità", false),

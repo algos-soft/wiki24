@@ -132,11 +132,33 @@ public class QueryWrapBioTest extends WikiTest {
         }
     }
 
+
     @Test
     @Order(5)
-    @DisplayName("5 - Categoria media")
+    @DisplayName("5 - Test per altre due biografie esistenti (urlRequest)")
+    void urlRequestLista2() {
+        System.out.println(("5 - Test per altre due biografie esistenti (urlRequest)"));
+
+        listaPageIds = new ArrayList<>();
+        listaPageIds.add(106234L);
+        listaPageIds.add(105803L);
+        listWrapBio = appContext.getBean(QueryWrapBio.class).getWrap(listaPageIds);
+        assertNotNull(listWrapBio);
+        assertTrue(listWrapBio.size() == 2);
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Lista di biografie (%d)", listWrapBio.size()));
+
+        for (WrapBio wrapBio : listWrapBio) {
+            printWrapBio(wrapBio);
+        }
+    }
+
+    @Test
+    @Order(20)
+    @DisplayName("20 - Categoria media")
     void urlRequestListaCat() {
-        System.out.println(("5 - Categoria media"));
+        System.out.println(("20 - Categoria media"));
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
         listaPageIds = queryService.getCatIdsOrdered(sorgente);
@@ -154,10 +176,10 @@ public class QueryWrapBioTest extends WikiTest {
     }
 
     //    @Test
-    @Order(6)
-    @DisplayName("6 - Categoria lunga")
+    @Order(30)
+    @DisplayName("30 - Categoria lunga")
     void urlRequestListaCat2() {
-        System.out.println(("6 - Categoria lunga"));
+        System.out.println(("30 - Categoria lunga"));
         sorgente = CATEGORIA_ESISTENTE_LUNGA;
         listaPageIds = queryService.getCatIdsOrdered(sorgente);
 
@@ -176,10 +198,10 @@ public class QueryWrapBioTest extends WikiTest {
 
 
 //    @Test
-    @Order(7)
-    @DisplayName("7 - Categoria media bio")
+    @Order(40)
+    @DisplayName("40 - Categoria media bio")
     void urlRequestListaCatBio() {
-        System.out.println(("7 - Categoria media bio"));
+        System.out.println(("40 - Categoria media bio"));
 
         sorgente = "Nati nel 1782";
         listaPageIds = queryService.getCatIdsOrdered(sorgente);

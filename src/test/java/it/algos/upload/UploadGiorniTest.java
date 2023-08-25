@@ -183,6 +183,26 @@ public class UploadGiorniTest extends UploadTest {
         printUpload(ottenutoRisultato);
     }
 
+    @Test
+    @Order(3)
+    @DisplayName("81 - Esegue upload test pagina con sottopagine")
+    void uploadTest2() {
+        System.out.println("81 - Esegue upload test pagina con sottopagine");
+        System.out.println(VUOTA);
+
+        sorgente = "1º gennaio";
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, sorgente)
+                .typeLista(AETypeLista.giornoNascita)
+                .test()
+                .upload();
+        assertTrue(ottenutoRisultato.isValido());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Test del giorno '%s' con sottopagine", sorgente));
+        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente));
+
+        System.out.println(VUOTA);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
@@ -200,8 +220,8 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-    @Test
-    @Order(3)
+//    @Test
+    @Order(331)
     @DisplayName("331 - Esegue upload sottoPagina (keyParagrafo)")
     void esegueSottoPaginaIsolata2() {
         System.out.println("331 - Esegue upload sottoPagina (keyParagrafo)");

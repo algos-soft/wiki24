@@ -111,12 +111,25 @@ public class MongoServiceTest extends AlgosTest {
         System.out.println("3 - listCollectionNames correnti");
         System.out.println(VUOTA);
 
-        sorgente = VaadVar.moduloVaadin24;
+        sorgente = VaadVar.projectCurrent;
         dataBase = service.getDB(sorgente);
         assertNotNull(dataBase);
         listaCollectionsName = service.listCollectionNames(dataBase);
         message = String.format("Collezioni del database '%s'", dataBase.getName());
         print(listaCollectionsName, message);
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("5 - getCollezioni")
+    void getCollezioni() {
+        System.out.println(("5 - getCollezioni"));
+        System.out.println(("Lista dei nomi delle 'collections' esistenti"));
+        System.out.println(VUOTA);
+
+        listaCollectionsName = service.getCollezioni();
+        assertNotNull(listaCollectionsName);
+        System.out.println(VUOTA);
     }
 
     @Test

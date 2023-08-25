@@ -292,9 +292,24 @@ public class QueryBioTest extends WikiTest {
         System.out.println(("12- Test per una bio completa"));
 
         sorgenteLong = BIO_RENZI_PAGEID;
-//        bio = appContext.getBean(QueryBio.class).getBio(BIO_RENZI_PAGEID);
+        bio = appContext.getBean(QueryBio.class).getBioGrezzo(sorgenteLong);
         assertNotNull(bio);
         assertEquals(sorgenteLong, bio.getPageId());
+
+        System.out.println(VUOTA);
+        System.out.println(String.format("Costruita la bio '%s' recuperata dal server wikipedia", bio.getWikiTitle()));
+    }
+
+    @Test
+    @Order(13)
+    @DisplayName("13 - Altra bio completa")
+    void getBio2() {
+        System.out.println(("13- Altra bio completa"));
+
+        sorgente = "Lina Sastri";
+        bio = appContext.getBean(QueryBio.class).getBioGrezzo(sorgente);
+        assertNotNull(bio);
+        assertEquals(sorgente, bio.getWikiTitle());
 
         System.out.println(VUOTA);
         System.out.println(String.format("Costruita la bio '%s' recuperata dal server wikipedia", bio.getWikiTitle()));

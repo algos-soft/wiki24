@@ -128,7 +128,7 @@ public class WikiUtilityTest extends WikiTest {
                 Arguments.of("269", "61-70"),
                 Arguments.of("874", "71-80"),
                 Arguments.of("1588", "81-90"),
-                Arguments.of("1999", "91-00")
+                Arguments.of("1800", "91-00")
         );
     }
 

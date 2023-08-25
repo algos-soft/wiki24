@@ -26,7 +26,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Wiki24App.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("query")
-@DisplayName("QueryBio")
+@DisplayName("Test QueryBio")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryBioTest2 extends WikiTest {
 

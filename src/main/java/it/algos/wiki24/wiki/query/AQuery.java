@@ -831,7 +831,7 @@ public abstract class AQuery {
                 //                wrap = result.getWrap().valida(false).type(AETypePage.redirect);
                 //                result.setWrap(wrap);
                 mappaUrlResponse.put(KEY_JSON_REDIRECT, true);
-                wikiLink = content.substring(content.indexOf(SPAZIO)).trim();
+                wikiLink = content.substring(content.indexOf(DOPPIE_QUADRE_INI)).trim();
                 wikiLink = textService.setNoQuadre(wikiLink);
                 result.setTxtValue(wikiLink);
                 return result.typePage(AETypePage.redirect);

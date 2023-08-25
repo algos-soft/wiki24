@@ -75,8 +75,8 @@ public class QueryBio extends AQuery {
         typeQuery = AETypeQuery.getSenzaLoginSenzaCookies;
         WResult result = requestGetTitle(WIKI_QUERY_BASE_TITLE, wikiTitleGrezzoBio);
 
-        if (result.getTypePage() == AETypePage.contienePipe) {
-            result.setWrap(new WrapBio().valida(false).title(result.getWikiTitle()).pageid(result.getPageid()).type(AETypePage.contienePipe));
+        if (result.getTypePage() == AETypePage.contienePipe || result.getTypePage() == AETypePage.redirect) {
+            result.setWrap(new WrapBio().valida(false).title(result.getWikiTitle()).pageid(result.getPageid()).type(result.getTypePage()));
         }
 
         return result;

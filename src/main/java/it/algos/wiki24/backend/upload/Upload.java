@@ -833,9 +833,9 @@ public abstract class Upload implements AlgosBuilderPattern {
         if (uploadTest) {
             if (isSottopagina) {
                 sottoPagina = nomeLista;
-                if (sottoPagina.contains(SPAZIO)) {
-                    sottoPagina = sottoPagina.substring(sottoPagina.lastIndexOf(SPAZIO), sottoPagina.length());
-                }
+//                if (sottoPagina.contains(SPAZIO)) {
+//                    sottoPagina = sottoPagina.substring(sottoPagina.lastIndexOf(SPAZIO), sottoPagina.length());
+//                }
                 if (!sottoPagina.contains(UPLOAD_TITLE_DEBUG)) {
                     this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + sottoPagina;
                 }

@@ -46,7 +46,7 @@ public class UploadGiorni extends UploadListe {
         super.lastUpload = WPref.uploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
         super.nextUpload = WPref.uploadGiorniPrevisto;
-        super.sogliaSottopagina = Integer.MAX_VALUE;
+        //        super.sogliaSottopagina = Integer.MAX_VALUE;
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
@@ -166,7 +166,15 @@ public class UploadGiorni extends UploadListe {
 
     protected String categorie() {
         StringBuffer buffer = new StringBuffer();
-        int posCat = giornoWikiBackend.findByKey(nomeLista).getOrdine();
+        int posCat;
+        String nomeGiorno;
+        if (isSottopagina) {
+            nomeGiorno = textService.levaCodaDaPrimo(nomeLista, SLASH);
+        }
+        else {
+            nomeGiorno = nomeLista;
+        }
+        posCat = giornoWikiBackend.findByKey(nomeGiorno).getOrdine();
 
         buffer.append(CAPO);
         buffer.append("*");
@@ -200,5 +208,8 @@ public class UploadGiorni extends UploadListe {
         return buffer.toString();
     }
 
+    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
+        return appContext.getBean(UploadGiorni.class, sottoPagina).typeLista(typeLista).test(uploadTest).sottoPagina(lista).upload();
+    }
 
 }

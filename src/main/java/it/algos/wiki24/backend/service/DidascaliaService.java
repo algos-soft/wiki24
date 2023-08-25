@@ -317,8 +317,12 @@ public class DidascaliaService extends WAbstractService {
             paragrafo = TAG_LISTA_NO_ANNO;
         }
 
-        sottoParagrafo = wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
-        sottoParagrafo = VUOTA;
+        if (WPref.usaParagrafiGiorniSotto.is()) {
+            sottoParagrafo = textService.isValid(bio.annoNato) ? ANNI + SPAZIO + wikiUtility.getDecade(bio.annoNato) : VUOTA;
+        }
+        else {
+            sottoParagrafo = VUOTA;
+        }
 
         return getWrap(
                 titoloPagina,
@@ -366,8 +370,12 @@ public class DidascaliaService extends WAbstractService {
             paragrafo = TAG_LISTA_NO_ANNO;
         }
 
-        sottoParagrafo = wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
-        sottoParagrafo = VUOTA;
+        if (WPref.usaParagrafiGiorniSotto.is()) {
+            sottoParagrafo = textService.isValid(bio.annoNato) ? ANNI + SPAZIO + wikiUtility.getDecade(bio.annoMorto) : VUOTA;
+        }
+        else {
+            sottoParagrafo = VUOTA;
+        }
 
         return getWrap(
                 titoloPagina,
@@ -414,8 +422,12 @@ public class DidascaliaService extends WAbstractService {
             paragrafo = TAG_LISTA_NO_GIORNO;
         }
 
-        sottoParagrafo = wikiUtility.annoNatoTesta(bio, typeLinkParagrafi);
-        sottoParagrafo = VUOTA;
+        if (WPref.usaParagrafiAnniSotto.is()) {
+            sottoParagrafo = VUOTA;
+        }
+        else {
+            sottoParagrafo = VUOTA;
+        }
 
         return getWrap(
                 titoloPagina,
@@ -462,8 +474,12 @@ public class DidascaliaService extends WAbstractService {
             paragrafo = TAG_LISTA_NO_GIORNO;
         }
 
-        sottoParagrafo = wikiUtility.annoMortoTesta(bio, typeLinkParagrafi);
-        sottoParagrafo = VUOTA;
+        if (WPref.usaParagrafiAnniSotto.is()) {
+            sottoParagrafo = VUOTA;
+        }
+        else {
+            sottoParagrafo = VUOTA;
+        }
 
         return getWrap(
                 titoloPagina,

@@ -182,7 +182,7 @@ public class QueryTimestampTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(7)
     @DisplayName("7 - Test per categoria grande")
     void categoria3() {

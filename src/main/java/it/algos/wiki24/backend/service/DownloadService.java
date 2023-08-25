@@ -523,10 +523,11 @@ public class DownloadService extends WAbstractService {
     public List<WrapBio> getListaWrapBio(final List<Long> listaPageIdsDaLeggere) {
         List<WrapBio> listaWrap = new ArrayList<>();
         long inizio = System.currentTimeMillis();
+        long inizio2;
         List<Long> subList;
         List<WrapBio> listaWrapTmp;
         String message;
-        int stock = 10000;
+        int stock = 1000;
         int dim;
 
         logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
@@ -534,9 +535,19 @@ public class DownloadService extends WAbstractService {
             dim = listaPageIdsDaLeggere.size();
             for (int k = 0; k < dim; k = k + stock) {
                 subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
+                if (subList.contains(106234L)) {
+                    int a = 87;
+                }
+                if (subList.contains(105803L)) {
+                    int ab = 87;
+                }
+
+                inizio2 = System.currentTimeMillis();
                 listaWrapTmp = appContext.getBean(QueryWrapBio.class).getWrap(subList);
                 if (listaWrapTmp != null) {
                     listaWrap.addAll(listaWrapTmp);
+                    message = String.format("Recuperati %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrapTmp.size()), dateService.deltaText(inizio2));
+                    logService.info(new WrapLog().message(message).type(AETypeLog.bio));
                 }
             }
             message = String.format("Recuperati in totale %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrap.size()), dateService.deltaText(inizio));
