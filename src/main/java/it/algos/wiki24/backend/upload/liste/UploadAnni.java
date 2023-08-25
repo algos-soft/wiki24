@@ -137,6 +137,25 @@ public class UploadAnni extends UploadListe {
     }
 
 
+    protected String torna() {
+        String localWikiTitle = wikiTitleUpload;
+        String text = VUOTA;
+
+        if (isSottopagina) {
+            localWikiTitle = textService.levaCodaDaUltimo(localWikiTitle, SLASH);
+            text = textService.isValid(localWikiTitle) ? String.format("{{Torna a|%s}}", localWikiTitle) : VUOTA;
+        }
+        else {
+            text = switch (typeLista) {
+                case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+                default -> text;
+            };
+        }
+
+        return text;
+    }
+
+
     protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
 

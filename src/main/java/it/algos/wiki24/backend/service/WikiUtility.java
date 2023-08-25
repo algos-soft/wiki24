@@ -757,17 +757,22 @@ public class WikiUtility extends WAbstractService {
             return mappaAlfabetica;
         }
 
-        for (WrapLista wrap : listaAll) {
-            key = wrap.titoloSottoParagrafo;
-            if (mappaAlfabetica.containsKey(key)) {
-                lista = mappaAlfabetica.get(key);
-                lista.add(wrap);
+        if (WPref.usaParagrafiGiorniSotto.is()) {
+            for (WrapLista wrap : listaAll) {
+                key = wrap.titoloSottoParagrafo;
+                if (mappaAlfabetica.containsKey(key)) {
+                    lista = mappaAlfabetica.get(key);
+                    lista.add(wrap);
+                }
+                else {
+                    lista = new ArrayList<>();
+                    lista.add(wrap);
+                    mappaAlfabetica.put(key, lista);
+                }
             }
-            else {
-                lista = new ArrayList<>();
-                lista.add(wrap);
-                mappaAlfabetica.put(key, lista);
-            }
+        }
+        else {
+            mappaAlfabetica.put(VUOTA, listaAll);
         }
 
         return arrayService.sort(mappaAlfabetica);

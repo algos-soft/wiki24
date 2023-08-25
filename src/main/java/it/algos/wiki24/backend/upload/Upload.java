@@ -640,10 +640,12 @@ public abstract class Upload implements AlgosBuilderPattern {
             localWikiTitle = textService.levaCodaDaUltimo(localWikiTitle, SLASH);
             text = textService.isValid(localWikiTitle) ? String.format("{{Torna a|%s}}", localWikiTitle) : VUOTA;
         }
-        text = switch (typeLista) {
-            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
-            default -> text;
-        };
+        else {
+            text = switch (typeLista) {
+                case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+                default -> text;
+            };
+        }
 
         return text;
     }
@@ -684,6 +686,18 @@ public abstract class Upload implements AlgosBuilderPattern {
         String sottoPagina;
         String sottoNomeLista;
         boolean usaDivLocal;
+
+        if (isSottopagina && mappaWrap.size() == 1) {
+            lista = mappaWrap.get(VUOTA);
+            buffer.append("{{Div col}}" + CAPO);
+            for (WrapLista wrap : lista) {
+                buffer.append(ASTERISCO);
+                buffer.append(wrap.didascalia);
+                buffer.append(CAPO);
+            }
+            buffer.append("{{Div col end}}" + CAPO);
+            return buffer.toString().trim();
+        }
 
         for (String keyParagrafo : mappaWrap.keySet()) {
             lista = mappaWrap.get(keyParagrafo);
@@ -833,9 +847,9 @@ public abstract class Upload implements AlgosBuilderPattern {
         if (uploadTest) {
             if (isSottopagina) {
                 sottoPagina = nomeLista;
-//                if (sottoPagina.contains(SPAZIO)) {
-//                    sottoPagina = sottoPagina.substring(sottoPagina.lastIndexOf(SPAZIO), sottoPagina.length());
-//                }
+                //                if (sottoPagina.contains(SPAZIO)) {
+                //                    sottoPagina = sottoPagina.substring(sottoPagina.lastIndexOf(SPAZIO), sottoPagina.length());
+                //                }
                 if (!sottoPagina.contains(UPLOAD_TITLE_DEBUG)) {
                     this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + sottoPagina;
                 }

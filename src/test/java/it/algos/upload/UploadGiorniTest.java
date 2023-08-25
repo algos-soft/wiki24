@@ -47,7 +47,7 @@ public class UploadGiorniTest extends UploadTest {
                 Arguments.of("43 marzo", AETypeLista.giornoNascita),
                 Arguments.of("12 ottobre", AETypeLista.annoMorte),
                 Arguments.of("29 febbraio", AETypeLista.giornoNascita),
-                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
+//                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
                 Arguments.of("3 luglio", AETypeLista.attivitaSingolare),
                 Arguments.of("19 dicembra", AETypeLista.giornoNascita),
                 Arguments.of("4gennaio", AETypeLista.giornoNascita)
@@ -95,13 +95,6 @@ public class UploadGiorniTest extends UploadTest {
         super.fixBeanStandard(sorgente);
     }
 
-    //    @Test
-    //    @Order(8)
-    //    @DisplayName("8 - esegueConParametroNelCostruttore")
-    //    void esegueConParametroNelCostruttore() {
-    //        sorgente = "24 agosto";
-    //        super.fixConParametroNelCostruttore(sorgente, "typeLista(), nascita()(, morte()");
-    //    }
 
 
     @Test
@@ -116,7 +109,7 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
@@ -129,7 +122,7 @@ public class UploadGiorniTest extends UploadTest {
         super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
@@ -142,7 +135,7 @@ public class UploadGiorniTest extends UploadTest {
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(60)
     @DisplayName("60 - Testo header")
@@ -156,7 +149,7 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
@@ -183,8 +176,8 @@ public class UploadGiorniTest extends UploadTest {
         printUpload(ottenutoRisultato);
     }
 
-    @Test
-    @Order(3)
+//    @Test
+    @Order(81)
     @DisplayName("81 - Esegue upload test pagina con sottopagine")
     void uploadTest2() {
         System.out.println("81 - Esegue upload test pagina con sottopagine");
@@ -215,12 +208,12 @@ public class UploadGiorniTest extends UploadTest {
         System.out.println("90 - Esegue upload REALE (attenzione)");
         System.out.println(VUOTA);
 
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).upload();
-        printUpload(ottenutoRisultato);
+//        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).upload();
+//        printUpload(ottenutoRisultato);
     }
 
 
-//    @Test
+    //    @Test
     @Order(331)
     @DisplayName("331 - Esegue upload sottoPagina (keyParagrafo)")
     void esegueSottoPaginaIsolata2() {

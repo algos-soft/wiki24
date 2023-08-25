@@ -131,12 +131,37 @@ public class UploadGiorni extends UploadListe {
         return true;
     }
 
+
+    protected String torna() {
+        String localWikiTitle = wikiTitleUpload;
+        String text = VUOTA;
+
+        if (isSottopagina) {
+            localWikiTitle = textService.levaCodaDaUltimo(localWikiTitle, SLASH);
+            text = textService.isValid(localWikiTitle) ? String.format("{{Torna a|%s}}", localWikiTitle) : VUOTA;
+        }
+        else {
+            text = switch (typeLista) {
+                case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+                default -> text;
+            };
+        }
+
+        return text;
+    }
+
+
     protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append(getListaIni());
-        buffer.append(creaBody());
-        buffer.append(DOPPIE_GRAFFE_END);
+        if (isSottopagina) {
+            buffer.append(creaBody());
+        }
+        else {
+            buffer.append(getListaIni());
+            buffer.append(creaBody());
+            buffer.append(DOPPIE_GRAFFE_END);
+        }
 
         this.bodyText = buffer.toString();
         return bodyText;
