@@ -109,7 +109,7 @@ public class UploadAnni extends UploadListe {
         this.keyParagrafoSottopagina = keyParagrafo;
         mappaWrap = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).mappaWrap();
         List<WrapLista> lista = mappaWrap.get(keyParagrafo);
-        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista, WPref.usaParagrafiAnniSotto.is());
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;

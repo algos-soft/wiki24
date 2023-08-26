@@ -748,7 +748,7 @@ public class WikiUtility extends WAbstractService {
         return testoModulo;
     }
 
-    public LinkedHashMap<String, List<WrapLista>> creaMappaSottopagina(List<WrapLista> listaAll) {
+    public LinkedHashMap<String, List<WrapLista>> creaMappaSottopagina(List<WrapLista> listaAll, boolean usaMappa) {
         LinkedHashMap<String, List<WrapLista>> mappaAlfabetica = new LinkedHashMap<>();
         String key;
         List<WrapLista> lista;
@@ -757,7 +757,7 @@ public class WikiUtility extends WAbstractService {
             return mappaAlfabetica;
         }
 
-        if (WPref.usaParagrafiGiorniSotto.is()) {
+        if (usaMappa) {
             for (WrapLista wrap : listaAll) {
                 key = wrap.titoloSottoParagrafo;
                 if (mappaAlfabetica.containsKey(key)) {

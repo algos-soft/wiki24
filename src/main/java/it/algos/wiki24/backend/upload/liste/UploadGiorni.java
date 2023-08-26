@@ -104,7 +104,7 @@ public class UploadGiorni extends UploadListe {
         this.keyParagrafoSottopagina = keyParagrafo;
         mappaWrap = appContext.getBean(ListaGiorni.class, nomeLista).typeLista(typeLista).mappaWrap();
         List<WrapLista> lista = mappaWrap.get(keyParagrafo);
-        mappaWrap = wikiUtility.creaMappaSottopagina(lista);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista, WPref.usaParagrafiGiorniSotto.is());
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;

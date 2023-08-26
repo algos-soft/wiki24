@@ -426,7 +426,6 @@ public class GiornoWikiBackend extends WikiBackend {
             modificatiMorti = 0;
             for (String nomeGiorno : giorni) {
                 result = appContext.getBean(UploadGiorni.class, nomeGiorno).nascita().upload();
-
                 if (result.isValido() && result.isModificata()) {
                     modificatiNati++;
                 }
