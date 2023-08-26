@@ -208,8 +208,8 @@ public class UploadGiorniTest extends UploadTest {
         System.out.println("90 - Esegue upload REALE (attenzione)");
         System.out.println(VUOTA);
 
-//        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).upload();
-//        printUpload(ottenutoRisultato);
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).upload();
+        printUpload(ottenutoRisultato);
     }
 
 

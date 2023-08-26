@@ -193,11 +193,14 @@ public class UploadGiorni extends UploadListe {
         StringBuffer buffer = new StringBuffer();
         int posCat;
         String nomeGiorno;
+        String nomeCat;
         if (isSottopagina) {
             nomeGiorno = textService.levaCodaDaPrimo(nomeLista, SLASH);
+            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
         }
         else {
             nomeGiorno = nomeLista;
+            nomeCat = wikiTitleUpload;
         }
         posCat = giornoWikiBackend.findByKey(nomeGiorno).getOrdine();
 
@@ -222,7 +225,7 @@ public class UploadGiorni extends UploadListe {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(wikiTitleUpload);
+        buffer.append(nomeCat);
         buffer.append("|");
         buffer.append(SPAZIO);
         buffer.append("]]");

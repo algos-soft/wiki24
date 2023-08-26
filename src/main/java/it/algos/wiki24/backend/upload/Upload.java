@@ -758,7 +758,6 @@ public abstract class Upload implements AlgosBuilderPattern {
         buffer.append(includeIni());
         buffer.append(portale());
         buffer.append(categorie());
-        buffer.append(CAPO);
         buffer.append(includeEnd());
 
         return buffer.toString();
