@@ -353,7 +353,7 @@ public class AnnoWikiView extends WikiView {
     @Override
     public void uploadAll() {
         long inizio = System.currentTimeMillis();
-        appContext.getBean(UploadAnni.class).uploadAll();
+        WResult result = backend.uploadAll();
         super.fixUpload(inizio, "degli anni");
         reload();
     }

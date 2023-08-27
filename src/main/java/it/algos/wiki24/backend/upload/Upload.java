@@ -731,8 +731,8 @@ public abstract class Upload implements AlgosBuilderPattern {
             buffer.append(titoloParagrafoDefinitivo);
 
             if (numVoci >= sogliaSottopagina && !isSottopagina) {
-                sottoPagina = wikiTitleUpload + SLASH + keyParagrafo;
-                sottoNomeLista = nomeLista + SLASH + keyParagrafo;
+                sottoPagina = wikiTitleUpload + SLASH + textService.primaMaiuscola(keyParagrafo);
+                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
                 if (isUploading) {

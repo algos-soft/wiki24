@@ -182,7 +182,7 @@ public class UploadAnniTest extends UploadTest {
         printRisultato(ottenutoRisultato);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")
