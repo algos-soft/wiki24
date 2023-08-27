@@ -11,6 +11,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.wiki24.backend.layer.*;
 import org.bson.*;
 import org.bson.types.*;
 import org.springframework.data.domain.*;
@@ -736,10 +737,18 @@ public abstract class CrudBackend extends AbstractService {
         }
     }
 
+
     public DataProvider getProvider() {
         return DataProvider.fromCallbacks(
                 query -> this.fetch(query.getOffset(), query.getLimit()),
                 query -> this.count()
+        );
+    }
+
+    public DataProvider getProvider(Filtro filtroCorrente) {
+        return DataProvider.fromCallbacks(
+                query -> this.fetch(query.getOffset(), query.getLimit(), filtroCorrente),
+                query -> this.count(filtroCorrente)
         );
     }
 
@@ -753,6 +762,21 @@ public abstract class CrudBackend extends AbstractService {
         lista = mongoService.mongoOp.find(query, entityClazz);
 
         return lista != null ? lista.stream() : null;
+    }
+
+    public Stream<Object> fetch(final int offset, final int limit, Filtro filtroCorrente) {
+        List lista;
+        Query query = filtroCorrente != null ? filtroCorrente.getQuery() : new Query();
+        query.skip(offset);
+        query.limit(limit);
+        lista = mongoService.mongoOp.find(query, entityClazz);
+
+        return lista != null ? lista.stream() : null;
+    }
+
+    public int count(Filtro filtroCorrente) {
+        Query query = filtroCorrente != null ? filtroCorrente.getQuery() : new Query();
+        return ((Long) mongoService.mongoOp.count(query, entityClazz)).intValue();
     }
 
     //    /**

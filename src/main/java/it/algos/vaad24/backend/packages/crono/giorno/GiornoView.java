@@ -68,6 +68,7 @@ public class GiornoView extends CrudView {
         super.gridPropertyNamesList = Arrays.asList("ordine", "nome", "trascorsi", "mancanti", "mese");
         super.formPropertyNamesList = Arrays.asList("ordine", "nome", "trascorsi", "mancanti", "mese");
 
+        super.usaDataProvider = true;
         super.usaRowIndex = false;
         super.usaBottoneReset = true;
         super.usaReset = true;
