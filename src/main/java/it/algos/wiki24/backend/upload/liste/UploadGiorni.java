@@ -46,7 +46,6 @@ public class UploadGiorni extends UploadListe {
         super.lastUpload = WPref.uploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
         super.nextUpload = WPref.uploadGiorniPrevisto;
-        //        super.sogliaSottopagina = Integer.MAX_VALUE;
         super.usaParagrafi = WPref.usaParagrafiGiorni.is();
         super.typeToc = (AETypeToc) WPref.typeTocGiorni.getEnumCurrentObj();
         super.unitaMisuraUpload = AETypeTime.secondi;
@@ -142,7 +141,7 @@ public class UploadGiorni extends UploadListe {
         }
         else {
             text = switch (typeLista) {
-                case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+                case giornoNascita, giornoMorte -> String.format("{{Torna a|%s}}", nomeLista);
                 default -> text;
             };
         }

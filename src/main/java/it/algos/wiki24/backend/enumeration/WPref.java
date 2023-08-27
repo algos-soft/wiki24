@@ -221,7 +221,7 @@ public enum WPref implements AIGenPref {
     statistichePrevisto("statistichePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossima elaborazione delle statistiche"),
 
     maxPageLength("maxPageLength", AETypePref.integer, 200000, "Soglia massima di una pagina in byte", false),
-    maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine  giorni/anni", false),
+    maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine giorni/anni", false),
     scriveComunque("scriveComunque", AETypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data", false),
     sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, true, "Categorizzazione per secoli delle liste di 'Nati per anno'", false),
 
@@ -236,6 +236,7 @@ public enum WPref implements AIGenPref {
     usaNumVociNomi("usaNumVociNomi", AETypePref.bool, true, "Numero di voci nei paragrafi di Nomi'", false),
     usaNumVociCognomi("usaNumVociCognomi", AETypePref.bool, true, "Numero di voci nei paragrafi di Cognomi'", false),
     oreValiditaElaborazione("oreValiditaElaborazione", AETypePref.integer, 1, "Ore di validità di una elaborazione prima di rieseguirla."),
+    sogliaVociPerParagrafi("sogliaVociPerParagrafi", AETypePref.integer, 50, "Numero di voci per usare i paragrafi."),
     ;
 
     //--codice di riferimento.

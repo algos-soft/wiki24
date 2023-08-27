@@ -147,7 +147,7 @@ public class UploadAnni extends UploadListe {
         }
         else {
             text = switch (typeLista) {
-                case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+                case annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
                 default -> text;
             };
         }
@@ -159,9 +159,14 @@ public class UploadAnni extends UploadListe {
     protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append(getListaIni());
-        buffer.append(creaBody());
-        buffer.append(DOPPIE_GRAFFE_END);
+        if (isSottopagina) {
+            buffer.append(creaBody());
+        }
+        else {
+            buffer.append(getListaIni());
+            buffer.append(creaBody());
+            buffer.append(DOPPIE_GRAFFE_END);
+        }
 
         this.bodyText = buffer.toString();
         return bodyText;
@@ -192,9 +197,18 @@ public class UploadAnni extends UploadListe {
 
     protected String categorie() {
         StringBuffer buffer = new StringBuffer();
-        AnnoWiki anno = annoWikiBackend.findByKey(nomeLista);
+        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
+        AnnoWiki anno = annoWikiBackend.findByKey(nomeAnno);
         int posCat = anno.getOrdine();
         String secolo = anno.getSecolo().getNome();
+
+        String nomeCat;
+        if (isSottopagina) {
+            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
+        }
+        else {
+            nomeCat = wikiTitleUpload;
+        }
 
         buffer.append(CAPO);
         buffer.append("*");
@@ -218,7 +232,7 @@ public class UploadAnni extends UploadListe {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(wikiTitleUpload);
+        buffer.append(nomeCat);
         buffer.append("|");
         buffer.append(SPAZIO);
         buffer.append("]]");

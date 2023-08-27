@@ -331,7 +331,7 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void testPaginaNati() {
-//        appContext.getBean(UploadAnni.class).nascita().test().upload(getNomeAnno());
+        appContext.getBean(UploadAnni.class, getNomeAnno()).nascita().test().upload();
         reload();
     }
 
@@ -342,7 +342,7 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void testPaginaMorti() {
-//        appContext.getBean(UploadAnni.class).morte().test().upload(getNomeAnno());
+        appContext.getBean(UploadAnni.class, getNomeAnno()).morte().test().upload();
         reload();
     }
 
@@ -364,7 +364,7 @@ public class AnnoWikiView extends WikiView {
      */
     @Override
     public void uploadPaginaNati() {
-//        appContext.getBean(UploadAnni.class).nascita().upload(getNomeAnno());
+        appContext.getBean(UploadAnni.class, getNomeAnno()).nascita().upload();
         reload();
     }
 
@@ -373,7 +373,7 @@ public class AnnoWikiView extends WikiView {
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void uploadPaginaMorti() {
-//        appContext.getBean(UploadAnni.class).morte().upload(getNomeAnno());
+        appContext.getBean(UploadAnni.class, getNomeAnno()).morte().upload();
         reload();
     }
 

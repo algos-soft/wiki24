@@ -249,6 +249,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean patternCompleto = false;
 
+    protected boolean isUploading = false;
+
     protected String collectionName;
 
     protected int sogliaSottopagina;
@@ -416,7 +418,7 @@ public abstract class Upload implements AlgosBuilderPattern {
      * Pattern Builder <br>
      */
     public Upload sottoPagina(List<WrapLista> lista) {
-        mappaWrap = wikiUtility.creaMappaSottopagina(lista,true);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista, true);
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
@@ -430,7 +432,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         this.keyParagrafoSottopagina = keyParagrafo;
         mappaWrap = appContext.getBean(ListaNomi.class, nomeLista).mappaWrap();
         List<WrapLista> lista = mappaWrap.get(keyParagrafo);
-        mappaWrap = wikiUtility.creaMappaSottopagina(lista,true);
+        mappaWrap = wikiUtility.creaMappaSottopagina(lista, true);
         this.costruttoreValido = true;
         this.isSottopagina = true;
         return this;
@@ -517,6 +519,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public WResult upload() {
         String message;
+        isUploading = true;
 
         if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
             System.out.println(VUOTA);
@@ -676,7 +679,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public String creaBody() {
         StringBuffer buffer = new StringBuffer();
-        List<WrapLista> lista;
+        List<WrapLista> lista = null;
         int numVociTotaliPagina = wikiUtility.getSizeAllWrap(mappaWrap);
         int numVociParagrafo;
         int numVoci;
@@ -687,15 +690,19 @@ public abstract class Upload implements AlgosBuilderPattern {
         String sottoNomeLista;
         boolean usaDivLocal;
 
-        if (isSottopagina && mappaWrap.size() == 1) {
-            lista = mappaWrap.get(VUOTA);
-            buffer.append("{{Div col}}" + CAPO);
-            for (WrapLista wrap : lista) {
-                buffer.append(ASTERISCO);
-                buffer.append(wrap.didascalia);
-                buffer.append(CAPO);
+        if (isSottopagina && mappaWrap.size() == 1 || numVociTotaliPagina < WPref.sogliaVociPerParagrafi.getInt()) {
+            for (String key : mappaWrap.keySet()) {
+                lista = mappaWrap.get(key);
             }
-            buffer.append("{{Div col end}}" + CAPO);
+            if (lista != null) {
+                buffer.append("{{Div col}}" + CAPO);
+                for (WrapLista wrap : lista) {
+                    buffer.append(ASTERISCO);
+                    buffer.append(wrap.didascalia);
+                    buffer.append(CAPO);
+                }
+                buffer.append("{{Div col end}}" + CAPO);
+            }
             return buffer.toString().trim();
         }
 
@@ -728,7 +735,9 @@ public abstract class Upload implements AlgosBuilderPattern {
                 sottoNomeLista = nomeLista + SLASH + keyParagrafo;
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                this.vediSottoPagina(sottoNomeLista, lista);
+                if (isUploading) {
+                    this.vediSottoPagina(sottoNomeLista, lista);
+                }
             }
             else {
                 usaDivLocal = usaDiv ? lista.size() > sogliaDiv : false;
