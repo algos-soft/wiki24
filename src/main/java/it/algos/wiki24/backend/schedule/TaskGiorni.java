@@ -1,11 +1,14 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -20,6 +23,8 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskGiorni extends VaadTask {
 
+    @Autowired
+    public GiornoWikiBackend giornoWikiBackend;
 
     public TaskGiorni() {
         super.descrizioneTask = WPref.uploadGiorni.getDescrizione();
@@ -33,8 +38,7 @@ public class TaskGiorni extends VaadTask {
         if (super.execute()) {
 
             //--L'upload comprende anche le info per la view
-            appContext.getBean(UploadGiorni.class).uploadAll();
-
+            giornoWikiBackend.uploadAll();
             super.loggerTask();
         }
     }

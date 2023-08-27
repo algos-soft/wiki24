@@ -86,6 +86,7 @@ public class AnnoWikiView extends WikiView {
 
         super.sortOrder = Sort.by(Sort.Direction.DESC, "ordine");
         super.usaRowIndex = false;
+        super.usaDataProvider = true;
 
         super.usaBottoneReset = true;
         super.usaReset = true;
@@ -164,14 +165,16 @@ public class AnnoWikiView extends WikiView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
-        List<AnnoWiki> items = (List) super.sincroFiltri();
-        if (items == null) {
-            return null;
-        }
+        List<AnnoWiki> items = null;
 
-        if (comboSecolo != null && comboSecolo.getValue() != null) {
-            if (comboSecolo.getValue() instanceof Secolo secolo) {
-                items = items.stream().filter(anno -> anno.secolo.nome.equals(secolo.nome)).toList();
+        if (comboSecolo != null) {
+            if (comboSecolo.getValue() != null) {
+                if (comboSecolo.getValue() instanceof Secolo secolo) {
+                    items = backend.findAllBySecolo(secolo);
+                }
+            }
+            else {
+                super.fixItems();
             }
         }
 

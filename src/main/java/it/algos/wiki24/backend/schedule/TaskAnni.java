@@ -4,8 +4,10 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -19,6 +21,9 @@ import org.springframework.context.annotation.Scope;
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskAnni extends VaadTask {
+
+    @Autowired
+    public AnnoWikiBackend annoWikiBackend;
 
     public TaskAnni() {
         super.descrizioneTask = WPref.uploadAnni.getDescrizione();
@@ -34,7 +39,8 @@ public class TaskAnni extends VaadTask {
 
             //--L'upload comprende anche le info per la view
             inizio = System.currentTimeMillis();
-            appContext.getBean(UploadAnni.class).uploadAll();
+            annoWikiBackend.uploadAll();
+            super.loggerTask();
         }
     }
 

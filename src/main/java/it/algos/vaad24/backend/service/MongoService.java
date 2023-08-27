@@ -357,11 +357,10 @@ public class MongoService<capture> extends AbstractService {
         shortName = textService.primaMinuscola(shortName);
 
         if (textService.isValid(shortName)) {
-            return dataBase != null ? dataBase.getCollection(shortName) : null;
-            //            if (isExistsCollection(shortName)) {
-            //                return dataBase != null ? dataBase.getCollection(shortName) : null;
-            //            }
-            //            return null;
+            if (isExistsCollection(shortName)) {
+                return dataBase != null ? dataBase.getCollection(shortName) : null;
+            }
+            return null;
         }
         else {
             return null;
@@ -566,7 +565,7 @@ public class MongoService<capture> extends AbstractService {
             return null;
         }
 
-        Bson bSort = Sorts.ascending(property).toBsonDocument();
+        Bson bSort= Sorts.ascending(property).toBsonDocument();
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
@@ -607,7 +606,5 @@ public class MongoService<capture> extends AbstractService {
 
         return listaExcluded;
     }
-
-
 
 }

@@ -217,7 +217,7 @@ public class TextServiceTest extends AlgosTest {
 
         sorgente3 = "nome";
 
-        //        sorgente = "asia";
+//        sorgente = "asia";
 //        continente = service.levaPunti(sorgente);
 //        assertNotNull(continente);
 //

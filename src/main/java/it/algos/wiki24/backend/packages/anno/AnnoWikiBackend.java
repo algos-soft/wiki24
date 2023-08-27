@@ -56,6 +56,7 @@ public class AnnoWikiBackend extends WikiBackend {
         super.lastStatistica = WPref.statisticaAnni;
         super.durataStatistica = WPref.statisticaAnniTime;
 
+        this.sortOrder = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
         this.unitaMisuraElaborazione = AETypeTime.minuti;
     }
 
