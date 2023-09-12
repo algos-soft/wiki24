@@ -197,7 +197,7 @@ public class UploadGiorniTest extends UploadTest {
         System.out.println(VUOTA);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")

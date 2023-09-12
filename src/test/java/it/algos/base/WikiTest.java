@@ -876,10 +876,10 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("1 - Costruttore base new %s(xxx) con ALMENO un parametro", clazzName));
             System.out.println(VUOTA);
 
-            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("La classe [%s] NON prevede un costruttore SENZA parametri", clazzName));
             System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
             System.out.println(String.format("new %s() NON funziona (dà errore)", clazzName));
-            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("È OBBLIGATORIO usare il costruttore con 1 PARAMETRO per la creazione.");
             System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
 
 
@@ -934,10 +934,10 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(VUOTA);
             System.out.println("Errore previsto (nel test). Tipo warning.");
 
-            System.out.println(String.format("La classe [%s] non prevede un costruttore SENZA parametri", clazzName));
+            System.out.println(String.format("La classe [%s] NON prevede un costruttore SENZA parametri", clazzName));
             System.out.println(String.format("Non è possibile creare un'istanza di [%s] SENZA parametri", clazzName));
             System.out.println(String.format("appContext.getBean(%s.class) NON funziona (dà errore)", clazzName));
-            System.out.println("È obbligatorio usare il costruttore con un parametro per la creazione.");
+            System.out.println("È OBBLIGATORIO usare il costruttore con 1 PARAMETRO per la creazione.");
             System.out.println("Ci potrebbero essere anche altri costruttori oltre a quello base con un parametro.");
             System.out.println(VUOTA);
 

@@ -217,7 +217,7 @@ public class DidascaliaService extends WAbstractService {
         buffer.append(SPAZIO);
         buffer.append(wikiUtility.annoNatoCoda(bio, typeLinkCrono, usaIcona, true));
 
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
 
@@ -233,6 +233,7 @@ public class DidascaliaService extends WAbstractService {
      */
     public String didascaliaAnnoNato(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
+        String coda;
 
         buffer.append(getWikiTitle(bio));
         if (textService.isValid(attivitaNazionalita(bio))) {
@@ -242,7 +243,7 @@ public class DidascaliaService extends WAbstractService {
         buffer.append(SPAZIO);
         buffer.append(wikiUtility.annoMortoCoda(bio, typeLinkCrono, usaIcona, true));
 
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
     /**
@@ -254,17 +255,17 @@ public class DidascaliaService extends WAbstractService {
      */
     public String didascaliaAnnoMorto(final Bio bio, AETypeLink typeLinkCrono, boolean usaIcona) {
         StringBuffer buffer = new StringBuffer();
-        boolean nonBreaking = Pref.usaNonBreaking.is();
+        String coda;
 
         buffer.append(getWikiTitle(bio));
         if (textService.isValid(attivitaNazionalita(bio))) {
             buffer.append(VIRGOLA_SPAZIO);
             buffer.append(attivitaNazionalita(bio));
         }
-        //        buffer.append(nonBreaking ? Pref.nonBreaking.getStr() : SPAZIO);
+        buffer.append(SPAZIO);
         buffer.append(wikiUtility.annoNatoCoda(bio, typeLinkCrono, usaIcona, true));
 
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
 

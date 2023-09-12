@@ -561,6 +561,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         List items;
 
         if (usaDataProvider) {
+            filtroCorrente.setSort(sortOrder);
             provider = crudBackend.getProvider(filtroCorrente);
             if (provider != null) {
                 grid.setDataProvider(provider);

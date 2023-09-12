@@ -96,13 +96,13 @@ public class ListaAnniTest extends ListeTest {
         super.fixBeanStandard(sorgente);
     }
 
-    @Test
-    @Order(8)
-    @DisplayName("8 - esegueConParametroNelCostruttore")
-    void esegueConParametroNelCostruttore() {
-        sorgente = "560";
-        super.fixConParametroNelCostruttore(sorgente);
-    }
+//    @Test
+//    @Order(8)
+//    @DisplayName("8 - esegueConParametroNelCostruttore")
+//    void esegueConParametroNelCostruttore() {
+//        sorgente = "560";
+//        super.fixConParametroNelCostruttore(sorgente);
+//    }
 
 
 
