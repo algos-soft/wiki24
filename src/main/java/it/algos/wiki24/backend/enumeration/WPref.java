@@ -152,7 +152,9 @@ public enum WPref implements AIGenPref {
     statisticaNomiTime("statisticaNomiTime", AETypePref.integer, 0, "Durata elaborazione e upload delle statistiche per i nomi."),
 
 
-    usaSottoGiorniAnni("usaSottoGiorniAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli/mesi) per giorni/anni", false),
+    usaSottoPaginaGiorni("usaSottoPaginaGiorni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli) per giorni", false),
+    sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", AETypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagina dei paragrafi singoli (se superano le 50 voci)", false),
+    usaSottoPaginaAnni("usaSottoPaginaAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (mesi) per anni", false),
     sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki", false),
     sogliaSottoPaginaNomi("sogliaSottoPaginaNomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un nome sul server wiki", false),
     sogliaSottoPaginaCognomi("sogliaSottoPaginaCognomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un cognome sul server wiki", false),
@@ -161,7 +163,7 @@ public enum WPref implements AIGenPref {
     sogliaAttNazWiki("sogliaAttNazWiki", AETypePref.integer, 50, "Soglia minima per creare la pagina di una attività o nazionalità sul server wiki", false),
     sogliaSottoPagina("sogliaSottoPagina", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di una attività o nazionalità sul server wiki", false),
     sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima per usare {{Div col}} nel singolo paragrafo", false),
-    sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima per 'includere' la voce in giorni/anni", false),
+    sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima di voci per 'includere' la voce in giorni/anni", false),
     sogliaIncludeParagrafo("sogliaIncludeParagrafo", AETypePref.integer, 50, "Soglia minima per usare i paragrafi 'inclusi' di secondo livello", false),
 
     usaTreAttivita("usaTreAttivita", AETypePref.bool, false, "Considera tutte le attività (tre) nelle liste di attività", false),

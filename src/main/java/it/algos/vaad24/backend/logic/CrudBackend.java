@@ -741,7 +741,7 @@ public abstract class CrudBackend extends AbstractService {
     public DataProvider getProvider() {
         return DataProvider.fromCallbacks(
                 query -> this.fetch(query.getOffset(), query.getLimit()),
-                query -> this.count()
+                query -> this.countProvider()
         );
     }
 
@@ -754,24 +754,34 @@ public abstract class CrudBackend extends AbstractService {
 
     public Stream<Object> fetch(final int offset, final int limit) {
         List lista;
+        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = new Query();
 
         query.skip(offset);
         query.limit(limit);
         query.with(getSortOrder());
-        lista = mongoService.mongoOp.find(query, entityClazz);
+
+        lista = mongoService.mongoOp.find(query, entityClazz, collectionName);
 
         return lista != null ? lista.stream() : null;
     }
 
     public Stream<Object> fetch(final int offset, final int limit, Filtro filtroCorrente) {
         List lista;
+        String collectionName = annotationService.getCollectionName(entityClazz);
         Query query = filtroCorrente != null ? filtroCorrente.getQuery() : new Query();
         query.skip(offset);
         query.limit(limit);
-        lista = mongoService.mongoOp.find(query, entityClazz);
+        query.with(getSortOrder());
+
+        lista = mongoService.mongoOp.find(query, entityClazz, collectionName);
 
         return lista != null ? lista.stream() : null;
+    }
+
+
+    public int countProvider() {
+        return mongoService.count(entityClazz);
     }
 
     public int count(Filtro filtroCorrente) {

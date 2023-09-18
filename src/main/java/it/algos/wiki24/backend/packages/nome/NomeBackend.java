@@ -127,9 +127,6 @@ public class NomeBackend extends WikiBackend {
     }
 
 
-    public int count() {
-        return super.count();
-    }
 
     public int countBySopraSoglia() {
         Query query = new Query();

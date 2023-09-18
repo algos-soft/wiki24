@@ -94,6 +94,11 @@ public abstract class UploadGiorniAnni extends UploadListe {
         this.uploadTest = true;
         return this;
     }
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        this.usaSottoGiorniAnni = false;
+    }
 
 
     /**
@@ -136,7 +141,7 @@ public abstract class UploadGiorniAnni extends UploadListe {
 
             //--controllo delle dimensioni in byte della pagina wiki
             usaSottoGiorniAnni = false;
-            if (WPref.usaSottoGiorniAnni.is()) {
+//            if (WPref.usaSottoGiorniAnni.is()) {
                 numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
                 if (numVoci > sogliaIncludeAll) {
                     numBio = wikiUtility.getSizeAllWrap(mappaWrap);
@@ -144,7 +149,7 @@ public abstract class UploadGiorniAnni extends UploadListe {
                         usaSottoGiorniAnni = true;
                     }
                 }
-            }
+//            }
 
             if (uploadTest) {
                 this.wikiTitleUpload = UPLOAD_TITLE_DEBUG + wikiTitleUpload;

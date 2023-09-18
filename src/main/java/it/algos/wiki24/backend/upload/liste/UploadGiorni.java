@@ -41,6 +41,7 @@ public class UploadGiorni extends UploadListe {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaSottoPagina = WPref.usaSottoPaginaGiorni.is();
         super.wikiBackend = giornoWikiBackend;
         super.summary = "[[Utente:Biobot/giorniBio|giorniBio]]";
         super.lastUpload = WPref.uploadGiorni;

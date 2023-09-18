@@ -537,7 +537,6 @@ public abstract class AlgosTest {
         String message = VUOTA;
         int cont = 1;
         int tot;
-        System.out.println(VUOTA);
 
         if (lista != null) {
             if (lista.size() > 0) {

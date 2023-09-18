@@ -49,6 +49,7 @@ public class UploadAnni extends UploadListe {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaSottoPagina = WPref.usaSottoPaginaAnni.is();
         super.wikiBackend = annoWikiBackend;
         super.summary = "[[Utente:Biobot/anniBio|anniBio]]";
         super.lastUpload = WPref.uploadAnni;

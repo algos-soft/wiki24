@@ -8,6 +8,7 @@ import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
@@ -39,7 +40,7 @@ public class UploadAnniTest extends UploadTest {
     private UploadAnni istanza;
 
 
-    //--nome
+    //--nome anno
     //--typeCrono
     protected static Stream<Arguments> ANNI_UPLOAD() {
         return Stream.of(
@@ -50,6 +51,15 @@ public class UploadAnniTest extends UploadTest {
                 Arguments.of("azeri", AETypeLista.attivitaSingolare)
         );
     }
+    //--nome anno
+    //--typeCrono
+    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
+        return Stream.of(
+                Arguments.of("2004", AETypeLista.annoMorte)
+        );
+    }
+
+
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -179,10 +189,26 @@ public class UploadAnniTest extends UploadTest {
         System.out.println(VUOTA);
 
         ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).test().upload();
+        assertTrue(ottenutoRisultato.isValido());
         printRisultato(ottenutoRisultato);
     }
 
-//    @ParameterizedTest
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNI_UPLOAD_SOTTO_PAGINE")
+    @Order(81)
+    @DisplayName("81 - Esegue upload test pagine con sottopagine")
+    void uploadTestSottoPagine(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
+
+        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).test().upload();
+        assertTrue(ottenutoRisultato.isValido());
+        printUpload(ottenutoRisultato);
+    }
+
+    //    @ParameterizedTest
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")

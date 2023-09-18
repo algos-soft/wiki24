@@ -263,6 +263,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected String keyParagrafoSottopagina;
 
+    protected boolean usaSottoPagina;
+
     /**
      * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -301,6 +303,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected void fixPreferenze() {
         this.summary = "[[Utente:Biobot|bioBot]]";
 
+        this.usaSottoPagina = false;
         this.sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         this.sogliaSottopagina = WPref.sogliaSottoPagina.getInt();
         this.sogliaDiv = WPref.sogliaDiv.getInt();
@@ -682,7 +685,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         List<WrapLista> lista = null;
         int numVociTotaliPagina = wikiUtility.getSizeAllWrap(mappaWrap);
         int numVociParagrafo;
-        int numVoci;
+        int numVociPerTitolo;
         String titoloParagrafoLink;
         String titoloParagrafoDefinitivo;
         String vedi;
@@ -709,7 +712,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         for (String keyParagrafo : mappaWrap.keySet()) {
             lista = mappaWrap.get(keyParagrafo);
             numVociParagrafo = lista.size();
-            numVoci = usaNumeriTitoloParagrafi ? numVociParagrafo : 0;
+            numVociPerTitolo = usaNumeriTitoloParagrafi ? numVociParagrafo : 0;
             titoloParagrafoLink = lista.get(0).titoloParagrafoLink;
             if (isSottopagina) {
                 titoloParagrafoDefinitivo = wikiUtility.setParagrafo(keyParagrafo);
@@ -717,20 +720,20 @@ public abstract class Upload implements AlgosBuilderPattern {
             else {
                 if (numVociTotaliPagina < sogliaIncludeAll) {
                     titoloParagrafoDefinitivo = switch (typeLista) {
-                        case giornoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
-                        case giornoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
-                        case annoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
-                        case annoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVoci);
-                        default -> wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVoci);
+                        case giornoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
+                        case giornoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
+                        case annoNascita -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
+                        case annoMorte -> wikiUtility.fixTitoloLinkIncludeOnly(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
+                        default -> wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
                     };
                 }
                 else {
-                    titoloParagrafoDefinitivo = wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVoci);
+                    titoloParagrafoDefinitivo = wikiUtility.fixTitoloLink(keyParagrafo, titoloParagrafoLink, numVociPerTitolo);
                 }
             }
             buffer.append(titoloParagrafoDefinitivo);
 
-            if (numVoci >= sogliaSottopagina && !isSottopagina) {
+            if (usaSottopagina(numVociTotaliPagina, numVociParagrafo)) {
                 sottoPagina = wikiTitleUpload + SLASH + textService.primaMaiuscola(keyParagrafo);
                 sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
@@ -752,6 +755,31 @@ public abstract class Upload implements AlgosBuilderPattern {
         }
 
         return buffer.toString().trim();
+    }
+
+
+    protected boolean usaSottopagina(int numVociTotaliPagina, int numVociParagrafo) {
+        boolean usaSottopagina = false;
+
+        if (isSottopagina) {
+            return false;
+        }
+        if (numVociParagrafo < sogliaSottopagina) {
+            return false;
+        }
+        if (!usaSottoPagina) {
+            return false;
+        }
+        if (typeLista == AETypeLista.annoNascita || typeLista == AETypeLista.annoMorte || typeLista == AETypeLista.giornoNascita || typeLista == AETypeLista.giornoMorte) {
+            if (numVociTotaliPagina > WPref.sogliaPaginaGiorniAnni.getInt()) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+
+        return usaSottopagina;
     }
 
     protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {

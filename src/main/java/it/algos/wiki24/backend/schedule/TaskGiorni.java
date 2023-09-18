@@ -29,9 +29,13 @@ public class TaskGiorni extends VaadTask {
     public TaskGiorni() {
         super.descrizioneTask = WPref.uploadGiorni.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getGiorni();
+        super.typeSchedule = Wiki24Var.typeSchedule.getGiorni();
+
+
         super.flagAttivazione = WPref.usaTaskGiorni;
         super.flagPrevisione = WPref.uploadGiorniPrevisto;
     }
+
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {

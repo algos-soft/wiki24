@@ -47,10 +47,21 @@ public class UploadGiorniTest extends UploadTest {
                 Arguments.of("43 marzo", AETypeLista.giornoNascita),
                 Arguments.of("12 ottobre", AETypeLista.annoMorte),
                 Arguments.of("29 febbraio", AETypeLista.giornoNascita),
-//                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
+                //                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
                 Arguments.of("3 luglio", AETypeLista.attivitaSingolare),
                 Arguments.of("19 dicembra", AETypeLista.giornoNascita),
                 Arguments.of("4gennaio", AETypeLista.giornoNascita)
+        );
+    }
+
+    //--nome giorno
+    //--typeCrono
+    protected static Stream<Arguments> GIORNI_UPLOAD_SOTTO_PAGINE() {
+        return Stream.of(
+                Arguments.of("1º gennaio", AETypeLista.giornoNascita),
+                Arguments.of("1º gennaio", AETypeLista.giornoMorte),
+                Arguments.of("2 gennaio", AETypeLista.giornoNascita),
+                Arguments.of("2 gennaio", AETypeLista.giornoMorte)
         );
     }
 
@@ -96,7 +107,6 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-
     @Test
     @Order(9)
     @DisplayName("9 - builderPattern")
@@ -109,7 +119,7 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
@@ -122,7 +132,7 @@ public class UploadGiorniTest extends UploadTest {
         super.fixMappaWrapKey(nomeLista, mappaWrap);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
@@ -135,7 +145,7 @@ public class UploadGiorniTest extends UploadTest {
         super.fixMappaWrapDidascalie(nomeLista, mappaWrap);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(60)
     @DisplayName("60 - Testo header")
@@ -149,7 +159,7 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
@@ -173,31 +183,26 @@ public class UploadGiorniTest extends UploadTest {
         }
 
         ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).test().upload();
+        assertTrue(ottenutoRisultato.isValido());
         printUpload(ottenutoRisultato);
     }
 
-//    @Test
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI_UPLOAD_SOTTO_PAGINE")
     @Order(81)
-    @DisplayName("81 - Esegue upload test pagina con sottopagine")
-    void uploadTest2() {
-        System.out.println("81 - Esegue upload test pagina con sottopagine");
-        System.out.println(VUOTA);
+    @DisplayName("81 - Esegue upload test pagine con sottopagine")
+    void uploadTestSottoPagine(final String nomeLista, final AETypeLista type) {
+        if (!valido(nomeLista, type)) {
+            return;
+        }
 
-        sorgente = "1º gennaio";
-        ottenutoRisultato = appContext.getBean(UploadGiorni.class, sorgente)
-                .typeLista(AETypeLista.giornoNascita)
-                .test()
-                .upload();
+        ottenutoRisultato = appContext.getBean(UploadGiorni.class, nomeLista).typeLista(type).test().upload();
         assertTrue(ottenutoRisultato.isValido());
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Test del giorno '%s' con sottopagine", sorgente));
-        System.out.println(String.format("Pagina di test: %s", UPLOAD_TITLE_DEBUG + sorgente));
-
-        System.out.println(VUOTA);
+        printUpload(ottenutoRisultato);
     }
 
-//    @ParameterizedTest
+
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")

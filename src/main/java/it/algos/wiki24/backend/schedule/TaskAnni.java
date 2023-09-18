@@ -32,7 +32,6 @@ public class TaskAnni extends VaadTask {
         super.flagPrevisione = WPref.uploadAnniPrevisto;
     }
 
-
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
         if (super.execute()) {
