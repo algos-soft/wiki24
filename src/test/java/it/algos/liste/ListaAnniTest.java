@@ -96,15 +96,6 @@ public class ListaAnniTest extends ListeTest {
         super.fixBeanStandard(sorgente);
     }
 
-//    @Test
-//    @Order(8)
-//    @DisplayName("8 - esegueConParametroNelCostruttore")
-//    void esegueConParametroNelCostruttore() {
-//        sorgente = "560";
-//        super.fixConParametroNelCostruttore(sorgente);
-//    }
-
-
 
     @Test
     @Order(9)
@@ -185,10 +176,15 @@ public class ListaAnniTest extends ListeTest {
     }
 
 
-
-
-
-
+    @ParameterizedTest
+    @Order(51)
+    @DisplayName("51 - WrapLista di un paragrafo")
+    @CsvSource({"2005,febbraio"})
+    void wrapListaParagrafo(final String nomeLista, final String keyParagrafo) {
+        AETypeLista typeLista = AETypeLista.annoMorte;
+        listWrapLista = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).listaWrap(keyParagrafo);
+        super.fixWrapLista(nomeLista + SLASH + keyParagrafo, listWrapLista, "51 - WrapLista del singolo paragrafo");
+    }
 
 
     @ParameterizedTest
@@ -270,13 +266,6 @@ public class ListaAnniTest extends ListeTest {
 
         fixMappaWrapDidascalie(nomeLista, mappaWrap, "151 - MappaWrap ALTERNATIVA(2) con linkParagrafi=linkLista e linkCrono=linkVoce e usaIcona=false");
     }
-
-
-
-
-
-
-
 
     //    @Test
     //    @Order(91)

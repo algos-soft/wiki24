@@ -265,6 +265,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean usaSottoPagina;
 
+    protected int ordineCategoriaSottopagina;
+
     /**
      * Costruttore base senza parametri <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -441,6 +443,14 @@ public abstract class Upload implements AlgosBuilderPattern {
         return this;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload ordineCategoriaSottopagina(int ordineCategoriaSottopagina) {
+        this.ordineCategoriaSottopagina = ordineCategoriaSottopagina;
+        return this;
+    }
+
 
     @Override
     public boolean isCostruttoreValido() {
@@ -580,6 +590,17 @@ public abstract class Upload implements AlgosBuilderPattern {
             this.esegue();
         }
         return bodyText;
+    }
+
+    /**
+     * Solo per test <br>
+     */
+    public String testoUpload() {
+        this.uploadTest = true;
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
+        }
+        return uploadText;
     }
 
     public String creaHader() {
@@ -735,11 +756,11 @@ public abstract class Upload implements AlgosBuilderPattern {
 
             if (usaSottopagina(numVociTotaliPagina, numVociParagrafo)) {
                 sottoPagina = wikiTitleUpload + SLASH + textService.primaMaiuscola(keyParagrafo);
-                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+//                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
                 if (isUploading) {
-                    this.vediSottoPagina(sottoNomeLista, lista);
+                    this.creaSottoPagina(keyParagrafo, lista);
                 }
             }
             else {
@@ -782,7 +803,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         return usaSottopagina;
     }
 
-    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
+    protected WResult creaSottoPagina(String keyParagrafo, List<WrapLista> lista) {
         return WResult.errato();
     }
 

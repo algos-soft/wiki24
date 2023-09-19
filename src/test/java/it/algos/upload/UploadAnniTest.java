@@ -3,16 +3,21 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.enumeration.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.anno.*;
 import it.algos.wiki24.backend.upload.liste.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -33,7 +38,6 @@ import java.util.stream.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadAnniTest extends UploadTest {
 
-
     /**
      * Classe principale di riferimento <br>
      */
@@ -51,14 +55,14 @@ public class UploadAnniTest extends UploadTest {
                 Arguments.of("azeri", AETypeLista.attivitaSingolare)
         );
     }
-    //--nome anno
-    //--typeCrono
-    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
-        return Stream.of(
-                Arguments.of("2004", AETypeLista.annoMorte)
-        );
-    }
 
+//    //--nome anno
+//    //--typeCrono
+//    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
+//        return Stream.of(
+//                Arguments.of("2005", AETypeLista.annoMorte)
+//        );
+//    }
 
 
     /**
@@ -102,13 +106,6 @@ public class UploadAnniTest extends UploadTest {
         super.fixBeanStandard(sorgente);
     }
 
-    //    @Test
-    //    @Order(8)
-    //    @DisplayName("8 - esegueConParametroNelCostruttore")
-    //    void esegueConParametroNelCostruttore() {
-    //        sorgente = "560";
-    //        super.fixConParametroNelCostruttore(sorgente);
-    //    }
 
 
     @Test
@@ -176,6 +173,40 @@ public class UploadAnniTest extends UploadTest {
         System.out.println(ottenuto);
     }
 
+    @ParameterizedTest
+    @Order(71)
+    @DisplayName("71 - Testo body sottopagina")
+    @CsvSource({"2005,febbraio"})
+    void testoBodySottopagina(final String nomeLista, final String keyParagrafo) {
+        AETypeLista typeLista = AETypeLista.annoMorte;
+
+        listWrapLista = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).listaWrap(keyParagrafo);
+        sorgente = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+        ottenuto = appContext.getBean(UploadAnni.class, sorgente).typeLista(typeLista).test(true).sottoPagina(listWrapLista).testoBody();
+
+        System.out.println(ottenuto);
+    }
+
+    @ParameterizedTest
+    @Order(72)
+    @DisplayName("72 - Testo upload sottopagina")
+    @CsvSource({"2005,febbraio"})
+    void testoUploadSottopagina(final String nomeLista, final String keyParagrafo) {
+        AETypeLista typeLista = AETypeLista.annoMorte;
+
+        listWrapLista = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).listaWrap(keyParagrafo);
+        sorgente = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+        int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+
+        ottenuto = appContext.getBean(UploadAnni.class, sorgente)
+                .typeLista(typeLista)
+                .test(true)
+                .sottoPagina(listWrapLista)
+                .ordineCategoriaSottopagina(ordineCategoriaSottopagina)
+                .testoUpload();
+
+        System.out.println(ottenuto);
+    }
 
     @ParameterizedTest
     @MethodSource(value = "ANNI_UPLOAD")
@@ -195,20 +226,19 @@ public class UploadAnniTest extends UploadTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "ANNI_UPLOAD_SOTTO_PAGINE")
     @Order(81)
     @DisplayName("81 - Esegue upload test pagine con sottopagine")
-    void uploadTestSottoPagine(final String nomeLista, final AETypeLista type) {
-        if (!valido(nomeLista, type)) {
-            return;
-        }
+    @CsvSource({"2005"})
+    void uploadTestSottoPagine(final String nomeLista) {
+        AETypeLista typeLista = AETypeLista.annoMorte;
 
-        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).test().upload();
+        ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(typeLista).test().upload();
         assertTrue(ottenutoRisultato.isValido());
         printUpload(ottenutoRisultato);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
+    @Disabled("Test su pagine on line")
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(90)
     @DisplayName("90 - Esegue upload REALE (attenzione)")

@@ -40,7 +40,7 @@ import java.util.function.*;
  * Liste di attività e nazionalità (in Progetto:Biografie) <br>
  * Sovrascritta nelle sottoclassi concrete <br>
  */
-public abstract class Lista implements  AlgosBuilderPattern {
+public abstract class Lista implements AlgosBuilderPattern {
 
     /**
      * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
@@ -353,10 +353,12 @@ public abstract class Lista implements  AlgosBuilderPattern {
     public boolean isCostruttoreValido() {
         return this.costruttoreValido;
     }
+
     @Override
     public boolean isPatternCompleto() {
         return this.patternCompleto;
     }
+
     @Override
     public String getNome() {
         return this.nomeLista;
@@ -513,6 +515,20 @@ public abstract class Lista implements  AlgosBuilderPattern {
         return mappaWrap;
     }
 
+    /**
+     * Mappa ordinata di tutti i wrapLista che hanno una valore valido per la pagina specifica <br>
+     * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public List<WrapLista> listaWrap(String keyParagrafo) {
+        if (mappaWrap == null || mappaWrap.size() == 0) {
+            this.mappaWrap();
+        }
+        if (mappaWrap != null && mappaWrap.containsKey(keyParagrafo)) {
+            return mappaWrap.get(keyParagrafo);
+        }
+
+        return null;
+    }
 
     public boolean mappaWrapTest() {
         LinkedHashMap<String, List<WrapLista>> mappaWrap = mappaWrap();

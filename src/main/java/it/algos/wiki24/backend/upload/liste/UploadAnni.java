@@ -138,6 +138,7 @@ public class UploadAnni extends UploadListe {
     }
 
 
+    @Override
     protected String torna() {
         String localWikiTitle = wikiTitleUpload;
         String text = VUOTA;
@@ -157,6 +158,7 @@ public class UploadAnni extends UploadListe {
     }
 
 
+    @Override
     protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
 
@@ -196,16 +198,18 @@ public class UploadAnni extends UploadListe {
     }
 
 
+    @Override
     protected String categorie() {
         StringBuffer buffer = new StringBuffer();
         String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
         AnnoWiki anno = annoWikiBackend.findByKey(nomeAnno);
         int posCat = anno.getOrdine();
         String secolo = anno.getSecolo().getNome();
-
         String nomeCat;
+
         if (isSottopagina) {
             nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
+            posCat += ordineCategoriaSottopagina;
         }
         else {
             nomeCat = wikiTitleUpload;
@@ -244,8 +248,17 @@ public class UploadAnni extends UploadListe {
         return buffer.toString();
     }
 
-    protected WResult vediSottoPagina(String sottoPagina, List<WrapLista> lista) {
-        return appContext.getBean(UploadAnni.class, sottoPagina).typeLista(typeLista).test(uploadTest).sottoPagina(lista).upload();
+    @Override
+    protected WResult creaSottoPagina(String keyParagrafo, List<WrapLista> lista) {
+        String sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+        int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+
+        return appContext.getBean(UploadAnni.class, sottoNomeLista)
+                .typeLista(typeLista)
+                .test(uploadTest)
+                .sottoPagina(lista)
+                .ordineCategoriaSottopagina(ordineCategoriaSottopagina)
+                .upload();
     }
 
 
