@@ -400,7 +400,7 @@ public class GiornoWikiBackend extends WikiBackend {
         }
 
         try {
-            mesi = meseBackend.findAllSortCorrente().subList(3,4);
+            mesi = meseBackend.findAllSortCorrente();
         } catch (Exception unErrore) {
             logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
@@ -413,7 +413,7 @@ public class GiornoWikiBackend extends WikiBackend {
         }
 
         for (Mese mese : mesi) {
-            giorni = giornoBackend.findAllForNomeByMese(mese).subList(23,25);
+            giorni = giornoBackend.findAllForNomeByMese(mese);
             if (mesi == null) {
                 message = String.format("Mancano i giorni del mese %s", mese);
                 logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
