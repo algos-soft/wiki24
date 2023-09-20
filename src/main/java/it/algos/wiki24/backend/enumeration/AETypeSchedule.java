@@ -16,6 +16,7 @@ public enum AETypeSchedule {
             AESchedule.zeroCinqueNoLunedi,
             AESchedule.dueNoLunedi,
             AESchedule.quattroNoLunedi,
+            AESchedule.quattroNoLunedi,
             AESchedule.dieciMartedi,
             AESchedule.dieciMercoledi,
             AESchedule.dieciGiovedi,
@@ -27,6 +28,7 @@ public enum AETypeSchedule {
             AESchedule.zeroCinqueLunedi,
             AESchedule.zeroCinqueNoLunedi,
             AESchedule.disparipiudomenica3,
+            AESchedule.paripiudomenica5,
             AESchedule.paripiudomenica5,
             AESchedule.dieciMartedi,
             AESchedule.dieciMercoledi,
@@ -43,6 +45,7 @@ public enum AETypeSchedule {
     private AESchedule giorni;
 
     private AESchedule anni;
+    private AESchedule annoMorte2023;
 
     private AESchedule attivita;
 
@@ -61,6 +64,7 @@ public enum AETypeSchedule {
             AESchedule updateBio,
             AESchedule giorni,
             AESchedule anni,
+            AESchedule annoMorte2023,
             AESchedule attivita,
             AESchedule nazionalita,
             AESchedule cognomi,
@@ -71,6 +75,7 @@ public enum AETypeSchedule {
         this.updateBio = updateBio;
         this.giorni = giorni;
         this.anni = anni;
+        this.annoMorte2023 = annoMorte2023;
         this.attivita = attivita;
         this.nazionalita = nazionalita;
         this.cognomi = cognomi;

@@ -4,6 +4,7 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.anno.*;
@@ -56,13 +57,13 @@ public class UploadAnniTest extends UploadTest {
         );
     }
 
-//    //--nome anno
-//    //--typeCrono
-//    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
-//        return Stream.of(
-//                Arguments.of("2005", AETypeLista.annoMorte)
-//        );
-//    }
+    //    //--nome anno
+    //    //--typeCrono
+    //    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
+    //        return Stream.of(
+    //                Arguments.of("2005", AETypeLista.annoMorte)
+    //        );
+    //    }
 
 
     /**
@@ -105,7 +106,6 @@ public class UploadAnniTest extends UploadTest {
         sorgente = "1967";
         super.fixBeanStandard(sorgente);
     }
-
 
 
     @Test
@@ -197,6 +197,31 @@ public class UploadAnniTest extends UploadTest {
         listWrapLista = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).listaWrap(keyParagrafo);
         sorgente = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
         int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+
+        ottenuto = appContext.getBean(UploadAnni.class, sorgente)
+                .typeLista(typeLista)
+                .test(true)
+                .sottoPagina(listWrapLista)
+                .ordineCategoriaSottopagina(ordineCategoriaSottopagina)
+                .testoUpload();
+
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @Order(73)
+    @DisplayName("73 - Testo upload sottopagina")
+    @CsvSource({"2005,Senza giorno specificato"})
+    void testoUploadSottopagina2(final String nomeLista, final String keyParagrafo) {
+        AETypeLista typeLista = AETypeLista.annoMorte;
+
+        listWrapLista = appContext.getBean(ListaAnni.class, nomeLista).typeLista(typeLista).listaWrap(keyParagrafo);
+        sorgente = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+        int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+        if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
+            ordineCategoriaSottopagina = 13;
+        }
 
         ottenuto = appContext.getBean(UploadAnni.class, sorgente)
                 .typeLista(typeLista)

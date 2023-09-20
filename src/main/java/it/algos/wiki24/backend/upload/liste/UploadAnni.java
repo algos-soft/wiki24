@@ -252,6 +252,9 @@ public class UploadAnni extends UploadListe {
     protected WResult creaSottoPagina(String keyParagrafo, List<WrapLista> lista) {
         String sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
         int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+        if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
+            ordineCategoriaSottopagina = 13;
+        }
 
         return appContext.getBean(UploadAnni.class, sottoNomeLista)
                 .typeLista(typeLista)
