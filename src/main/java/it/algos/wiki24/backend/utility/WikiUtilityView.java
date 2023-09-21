@@ -7,6 +7,7 @@ import com.vaadin.flow.router.*;
 import it.algos.vaad24.backend.boot.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
+import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.packages.crono.anno.*;
 import it.algos.vaad24.backend.packages.crono.giorno.*;
@@ -109,7 +110,25 @@ public class WikiUtilityView extends UtilityView {
         this.paragrafoUploadListe();
         this.paragrafoUploadStatistiche();
 
-//        regolazioniFinali();
+        //        regolazioniFinali();
+    }
+
+    public void paragrafoFlag() {
+        super.paragrafoFlag();
+
+        this.fixTask(WPref.usaTaskBio);
+        this.fixTask(WPref.usaTaskGiorni);
+        this.fixTask(WPref.usaTaskAnni);
+        this.fixTask(WPref.usaTaskAttivita);
+        this.fixTask(WPref.usaTaskNazionalita);
+        this.fixTask(WPref.usaTaskNomi);
+        this.fixTask(WPref.usaTaskCognomi);
+    }
+
+
+    public void fixTask(AIGenPref pref) {
+        String message = String.format("Task: %s%s%s", pref.getKeyCode(), UGUALE, pref.is());
+        this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
     }
 
     public void regolazioniFinali() {
@@ -648,10 +667,10 @@ public class WikiUtilityView extends UtilityView {
         logger.info(new WrapLog().message("Utility: test di upload dei Giorni.").type(AETypeLog.utility));
 
         sorgente = "23 aprile";
-//        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
+        //        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoNascita).upload(sorgente);
 
         sorgente = "8 dicembre";
-//        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoMorte).upload(sorgente);
+        //        appContext.getBean(UploadGiorni.class).test().typeCrono(AETypeLista.giornoMorte).upload(sorgente);
 
         super.fineDebug();
     }
@@ -662,10 +681,10 @@ public class WikiUtilityView extends UtilityView {
         logger.info(new WrapLog().message("Utility: test di upload degli Anni.").type(AETypeLog.utility));
 
         sorgente = "1875";
-//        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoNascita).upload(sorgente);
+        //        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoNascita).upload(sorgente);
 
         sorgente = "2018";
-//        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoMorte).upload(sorgente);
+        //        appContext.getBean(UploadAnni.class).test().typeLista(AETypeLista.annoMorte).upload(sorgente);
 
         super.fineDebug();
     }
@@ -733,18 +752,18 @@ public class WikiUtilityView extends UtilityView {
         super.inizioDebug();
 
         logger.info(new WrapLog().message("Utility: test di upload per le statistiche dei Giorni.").type(AETypeLog.utility));
-//        appContext.getBean(StatisticheGiorni.class).uploadTest();
+        //        appContext.getBean(StatisticheGiorni.class).uploadTest();
 
         super.fineDebug();
     }
 
 
-   @Deprecated
-   public void uploadStatisticheAnni() {
+    @Deprecated
+    public void uploadStatisticheAnni() {
         super.inizioDebug();
 
         logger.info(new WrapLog().message("Utility: test di upload per le statistiche degli Anni.").type(AETypeLog.utility));
-//        appContext.getBean(StatisticheAnni.class).uploadTest();
+        //        appContext.getBean(StatisticheAnni.class).uploadTest();
 
         super.fineDebug();
     }
