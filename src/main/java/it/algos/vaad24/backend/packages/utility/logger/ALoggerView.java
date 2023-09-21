@@ -74,6 +74,7 @@ public class ALoggerView extends CrudView {
         super.usaBottoneNew = false;
         super.usaBottoneDeleteAll = true;
         super.usaComboType = true;
+        super.usaDataProvider = false;
         super.dialogClazz = ALoggerDialog.class;
     }
 
