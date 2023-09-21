@@ -17,12 +17,12 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.layer.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
-import it.algos.wiki24.backend.layer.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;
@@ -561,9 +561,7 @@ public abstract class CrudView extends VerticalLayout implements AfterNavigation
         List items;
 
         if (usaDataProvider) {
-//            filtroCorrente.setSort(sortOrder);
-//            provider = crudBackend.getProvider(filtroCorrente);
-            provider = crudBackend.getProvider();
+            provider = crudBackend.getProvider(filtroCorrente);
             if (provider != null) {
                 grid.setDataProvider(provider);
             }

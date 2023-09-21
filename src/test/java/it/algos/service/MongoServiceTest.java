@@ -5,31 +5,15 @@ import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.boot.*;
-import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.packages.anagrafica.*;
 import it.algos.vaad24.backend.service.*;
-import it.algos.wiki24.backend.packages.anno.*;
-import it.algos.wiki24.backend.packages.attplurale.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
-import it.algos.wiki24.backend.packages.cognome.*;
-import it.algos.wiki24.backend.packages.cognomecategoria.*;
-import it.algos.wiki24.backend.packages.cognomeincipit.*;
-import it.algos.wiki24.backend.packages.giorno.*;
-import it.algos.wiki24.backend.packages.nazplurale.*;
-import it.algos.wiki24.backend.packages.nazsingolare.*;
-import it.algos.wiki24.backend.packages.nome.*;
-import it.algos.wiki24.backend.packages.nomecategoria.*;
-import it.algos.wiki24.backend.packages.nomeincipit.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.*;
-import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.test.context.junit.jupiter.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project vaad24
