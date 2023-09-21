@@ -134,33 +134,7 @@ public class AnnoView extends CrudView {
      * Può essere sovrascritto, SENZA invocare il metodo della superclasse <br>
      */
     protected List<AEntity> sincroFiltri() {
-//        List<Anno> items = (List) super.sincroFiltri();
-//
-//        if (items == null) {
-//            return null;
-//        }
-//
-//        if (comboSecolo != null && comboSecolo.getValue() != null) {
-//            if (comboSecolo.getValue() instanceof Secolo secolo) {
-//                items = items.stream().filter(anno -> anno.secolo.nome.equals(secolo.nome)).toList();
-//            }
-//        }
-//
-//        if (boxBox != null && !boxBox.isIndeterminate()) {
-//            items = items.stream().filter(anno -> anno.dopoCristo == boxBox.getValue()).toList();
-//        }
-//
-//        if (boxBisestile != null && !boxBisestile.isIndeterminate()) {
-//            items = items.stream().filter(anno -> anno.bisestile == boxBisestile.getValue()).toList();
-//        }
-//
-//        if (items != null) {
-//            grid.setItems((List) items);
-//            elementiFiltrati = items.size();
-//            sicroBottomLayout();
-//        }
-//
-//        return (List) items;
+        List<Anno> items = (List) super.sincroFiltri();
 
         if (items == null) {
             return null;

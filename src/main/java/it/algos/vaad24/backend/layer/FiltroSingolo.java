@@ -1,9 +1,6 @@
-package it.algos.wiki24.backend.layer;
+package it.algos.vaad24.backend.layer;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.vaad24.backend.enumeration.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.data.domain.*;
 
 /**

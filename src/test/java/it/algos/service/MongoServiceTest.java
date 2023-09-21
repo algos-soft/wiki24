@@ -48,22 +48,6 @@ public class MongoServiceTest extends AlgosTest {
      */
     private MongoService service;
 
-    //--wiki class for query
-    protected static Stream<Arguments> WIKI_CLASS() {
-        return Stream.of(
-                Arguments.of(GiornoWiki.class),
-                Arguments.of(AnnoWiki.class),
-                Arguments.of(AttSingolare.class),
-                Arguments.of(AttPlurale.class),
-                Arguments.of(NazSingolare.class),
-                Arguments.of(Nome.class),
-                Arguments.of(NomeIncipit.class),
-                Arguments.of(NomeCategoria.class),
-                Arguments.of(CognomeCategoria.class),
-                Arguments.of(CognomeIncipit.class),
-                Arguments.of(Cognome.class)
-        );
-    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -137,9 +121,9 @@ public class MongoServiceTest extends AlgosTest {
 
     @Test
     @Order(42)
-    @DisplayName("42 - versione")
+    @DisplayName("4 - versione")
     void versione() {
-        System.out.println("42 - versione");
+        System.out.println("4 - versione");
         System.out.println(VUOTA);
 
         ottenuto = service.versione();
@@ -152,7 +136,7 @@ public class MongoServiceTest extends AlgosTest {
     @Order(52)
     @DisplayName("52 - count (senza repository)")
     void count() {
-        System.out.println("52 - count (senza repository)");
+        System.out.println("5 - count (senza repository)");
         System.out.println(VUOTA);
 
         sorgenteClasse = Via.class;
@@ -191,83 +175,19 @@ public class MongoServiceTest extends AlgosTest {
         assertFalse(ottenutoBooleano);
     }
 
-//    @Test
-    @Order(71)
-    @DisplayName("71 - queryWikiAll")
-    void queryWikiAll() {
-        System.out.println("71 - queryWikiAll");
-        if (!VaadVar.projectCurrent.equals("wiki24")) {
-            return;
-        }
-
-        //--wiki class for query
-        System.out.println(VUOTA);
-        WIKI_CLASS().forEach(this::queryAll);
-    }
-
-    void queryAll(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgenteClasse = (Class) mat[0];
-        sorgente = annotationService.getCollectionName(sorgenteClasse);
-
-        ottenutoIntero = service.count(sorgenteClasse);
-        ottenuto = textService.format(ottenutoIntero);
-        message = String.format("Clazz [%s]%s%s", sorgenteClasse.getSimpleName(), FORWARD, ottenuto);
-        System.out.println(message);
-
-        ottenutoIntero = service.count(sorgente);
-        ottenuto = textService.format(ottenutoIntero);
-        message = String.format("Collection [%s]%s%s", sorgente, FORWARD, ottenuto);
-        System.out.println(message);
-
-        listaBeans = service.query(sorgenteClasse);
-        assertNotNull(listaBeans);
-        printSubLista(listaBeans,10);
-        System.out.println(VUOTA);
+    /**
+     * Qui passa al termine di ogni singolo test <br>
+     */
+    @AfterEach
+    void tearDown() {
     }
 
 
-
-    @Test
-    @Order(81)
-    @DisplayName("81 - queryWiki")
-    void queryWiki() {
-        System.out.println("71 - queryWiki");
-        if (!VaadVar.projectCurrent.equals("wiki24")) {
-            return;
-        }
-
-        //--wiki class for query
-        System.out.println(VUOTA);
-        WIKI_CLASS().forEach(this::query);
+    /**
+     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
+     */
+    @AfterAll
+    void tearDownAll() {
     }
-
-    void query(Arguments arg) {
-        Object[] mat = arg.get();
-        sorgenteClasse = (Class) mat[0];
-        sorgente = annotationService.getCollectionName(sorgenteClasse);
-        Query query = new Query();
-
-        listaBeans = service.query(sorgenteClasse);
-        assertNotNull(listaBeans);
-
-        listaBeans = service.mongoOp.find(query, sorgenteClasse);
-        listaBeans = (List<AEntity>) service.mongoOp.find(query, sorgenteClasse, sorgente);
-
-        query.skip(0);
-        query.limit(50);
-
-        listaBeans = service.mongoOp.find(query, sorgenteClasse);
-        listaBeans = (List<AEntity>) service.mongoOp.find(query, sorgenteClasse, sorgente);
-
-        message = String.format("Clazz [%s]", sorgenteClasse.getSimpleName());
-        System.out.println(message);
-        message = String.format("Collection [%s]", sorgente);
-        System.out.println(message);
-        printSubLista(listaBeans,10);
-        System.out.println(VUOTA);
-    }
-
-
 
 }

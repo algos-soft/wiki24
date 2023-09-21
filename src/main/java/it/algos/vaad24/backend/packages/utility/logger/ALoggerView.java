@@ -70,11 +70,11 @@ public class ALoggerView extends CrudView {
             super.formPropertyNamesList = Arrays.asList("type", "livello", "evento", "descrizione", "classe", "metodo", "linea");
         }
         super.sortOrder = Sort.by(Sort.Direction.DESC, "evento");
+        super.usaDataProvider = false;
         super.usaBottoneReset = false;
         super.usaBottoneNew = false;
         super.usaBottoneDeleteAll = true;
         super.usaComboType = true;
-        super.usaDataProvider = false;
         super.dialogClazz = ALoggerDialog.class;
     }
 
