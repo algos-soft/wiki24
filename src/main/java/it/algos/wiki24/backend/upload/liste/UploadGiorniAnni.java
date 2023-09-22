@@ -109,7 +109,7 @@ public abstract class UploadGiorniAnni extends UploadListe {
         int numVoci;
         int numBio;
         int sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
-        int sogliaMaxPagina = WPref.maxBioPageAnniGiorni.getInt();
+        int sogliaMinimaPagina = WPref.sogliaPaginaGiorniAnni.getInt();
 
         if (textService.isValid(nomeGiornoAnno)) {
             wikiTitleUpload = switch (typeLista) {
@@ -145,7 +145,7 @@ public abstract class UploadGiorniAnni extends UploadListe {
                 numVoci = wikiUtility.getSizeAllWrap(mappaWrap);
                 if (numVoci > sogliaIncludeAll) {
                     numBio = wikiUtility.getSizeAllWrap(mappaWrap);
-                    if (numBio > sogliaMaxPagina) {
+                    if (numBio > sogliaMinimaPagina) {
                         usaSottoGiorniAnni = true;
                     }
                 }

@@ -22,6 +22,19 @@ import java.util.*;
 public enum WPref implements AIGenPref {
 
 
+    //task
+    usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false, true,true),
+    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false, true,true),
+    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto", false, true,true),
+    usaTaskAnnoMorteCorrente("usaTaskAnnoMorteCorrente", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei morti dell'anno corrente", false, true,true),
+    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività", false, true,true),
+    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità", false, true,true),
+    usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi", false, true,true),
+    usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi", false, true,true),
+    usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori", false,false,true),
+    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche", false, true,true),
+
+
     //giorni
     resetGiorni("resetGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset della tavola 'giorni'"),
     elaboraGiorni("elaboraGiorni", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutti i giorni."),
@@ -124,7 +137,7 @@ public enum WPref implements AIGenPref {
     downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
     downloadGenereTime("downloadGenereTime", AETypePref.integer, 0, "Durata download di Genere."),
 
-    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa", false),
+    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa", false, false),
     resetBio("resetBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset completo delle voci biografiche"),
     resetBioTime("resetBioTime", AETypePref.integer, 0, "Durata Reset completo delle biografie."),
     resetBioPrevisto("resetBioPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo reset previsto delle voci biografiche."),
@@ -153,20 +166,20 @@ public enum WPref implements AIGenPref {
 
 
     usaSottoPaginaGiorni("usaSottoPaginaGiorni", AETypePref.bool, true, "Usa le sotto-sottopagine (secoli) per giorni", false),
-    sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", AETypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagina dei paragrafi singoli (se superano le 50 voci)", false),
+    sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", AETypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi", false, true),
     usaSottoPaginaAnni("usaSottoPaginaAnni", AETypePref.bool, true, "Usa le sotto-sottopagine (mesi) per anni", false),
-    sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki", false),
+    sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un giorno o anno sul server wiki", false, true),
     sogliaSottoPaginaNomi("sogliaSottoPaginaNomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un nome sul server wiki", false),
     sogliaSottoPaginaCognomi("sogliaSottoPaginaCognomi", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di un cognome sul server wiki", false),
 
     categoriaBio("categoriaBio", AETypePref.string, "BioBot", "Categoria di riferimento per le Biografie", false),
     sogliaAttNazWiki("sogliaAttNazWiki", AETypePref.integer, 50, "Soglia minima per creare la pagina di una attività o nazionalità sul server wiki", false),
     sogliaSottoPagina("sogliaSottoPagina", AETypePref.integer, 50, "Soglia minima per creare una sottopagina di una attività o nazionalità sul server wiki", false),
-    sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima per usare {{Div col}} nel singolo paragrafo", false),
-    sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima di voci per 'includere' la voce in giorni/anni", false),
+    sogliaDiv("sogliaDiv", AETypePref.integer, 5, "Soglia minima di voci per usare {{Div col}} nel singolo paragrafo", false, true),
+    sogliaIncludeAll("sogliaIncludeAll", AETypePref.integer, 200, "Soglia minima di voci totali della pagina per 'includerla' in giorni/anni", false, true),
     sogliaIncludeParagrafo("sogliaIncludeParagrafo", AETypePref.integer, 50, "Soglia minima per usare i paragrafi 'inclusi' di secondo livello", false),
 
-    usaTreAttivita("usaTreAttivita", AETypePref.bool, false, "Considera tutte le attività (tre) nelle liste di attività", false),
+    usaTreAttivita("usaTreAttivita", AETypePref.bool, false, "Considera tutte le attività (tre) nelle liste di attività", false, true),
     usaTreAttivitaStatistiche("usaTreAttivitaStatistiche", AETypePref.bool, true, "Considera tutte le attività (tre) nelle statistiche di attività", false),
     usaParagrafiDimensionati("usaParagrafiDimensionati", AETypePref.bool, true, "Nel titolo del paragrafo aggiunge la dimensione delle " + "voci elencate", false),
     usaLinkStatistiche("usaLinkStatistiche", AETypePref.bool, true, "Link alle liste di attività nel template statistiche, anche se " + "rossi", false),
@@ -191,23 +204,13 @@ public enum WPref implements AIGenPref {
 
     simboloNato("simboloNato", AETypePref.string, "n.", "Simbolo della nascita nelle didascalie", false),
     simboloMorto("simboloMorto", AETypePref.string, "†", "Simbolo della morte nelle didascalie", false),
-    usaSimboliCrono("usaSimboliCrono", AETypePref.bool, true, "Uso dei simboli crono per nati e morti", false),
+    usaSimboliCrono("usaSimboliCrono", AETypePref.bool, true, "Uso dei simboli crono per nati e morti", false, true),
 
-    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.linkLista, "[AETypeLink] a giorni/anni nelle didascalie"),
+    linkCrono("linkCrono", AETypePref.enumerationType, AETypeLink.linkLista, "[AETypeLink] a giorni/anni nelle didascalie", false, true),
     linkParametriAttNaz("linkParametriAttNaz", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in attività/nazionalità"),
     linkParagrafiGiorniAnni("linkParagrafiGiorniAnni", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in giorni/anni"),
     linkParagrafiNomi("linkParagrafiNomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di nome"),
     linkParagrafiCognomi("linkParagrafiCognomi", AETypePref.enumerationType, AETypeLink.nessunLink, "[AETypeLink] nei titoli dei paragrafi in persone di cognome"),
-
-    usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false),
-    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false),
-    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto", false),
-    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività", false),
-    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità", false),
-    usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi", false),
-    usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi", false),
-    usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori", false),
-    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche", false),
 
 
     usaRigheGiorni("usaRigheGiorni", AETypePref.bool, false, "Usa righe raggruppate per anno nelle liste dei giorni", false),
@@ -222,8 +225,8 @@ public enum WPref implements AIGenPref {
 
     statistichePrevisto("statistichePrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossima elaborazione delle statistiche"),
 
-    maxPageLength("maxPageLength", AETypePref.integer, 200000, "Soglia massima di una pagina in byte", false),
-    maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine giorni/anni", false),
+    //    maxPageLength("maxPageLength", AETypePref.integer, 200000, "Soglia massima di una pagina in byte", false,true),
+    //    maxBioPageAnniGiorni("maxBioPageAnniGiorni", AETypePref.integer, 1700, "Soglia massima di bio per usare le sottopagine giorni/anni", false,true),
     scriveComunque("scriveComunque", AETypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data", false),
     sottoCategorieNatiPerAnno("sottoCategorieNatiPerAnno", AETypePref.bool, true, "Categorizzazione per secoli delle liste di 'Nati per anno'", false),
 
@@ -275,12 +278,24 @@ public enum WPref implements AIGenPref {
 
     private Class<?> enumClazz;
 
+    private boolean critical;
+
+    private boolean task;
+
     WPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione) {
         this(keyCode, type, defaultValue, descrizione, true);
     }// fine del costruttore
 
 
     WPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamica) {
+        this(keyCode, type, defaultValue, descrizione, dinamica, false);
+    }// fine del costruttore
+
+    WPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamica, boolean critical) {
+        this(keyCode, type, defaultValue, descrizione, dinamica, critical, false);
+    }// fine del costruttore
+
+    WPref(final String keyCode, final AETypePref type, final Object defaultValue, final String descrizione, boolean dinamica, boolean critical, boolean task) {
         this.keyCode = keyCode;
         this.type = type;
         this.descrizione = descrizione;
@@ -303,8 +318,9 @@ public enum WPref implements AIGenPref {
             this.enumClazz = null;
             this.dinamica = dinamica;
         }
+        this.critical = critical;
+        this.task = task;
     }// fine del costruttore
-
 
     public static List<WPref> getAllEnums() {
         return Arrays.stream(values()).toList();
@@ -448,6 +464,14 @@ public enum WPref implements AIGenPref {
 
     public Class<?> getEnumClazz() {
         return enumClazz;
+    }
+
+    public boolean isCritical() {
+        return critical;
+    }
+
+    public boolean isTask() {
+        return task;
     }
 
     @Component

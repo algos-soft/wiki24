@@ -113,23 +113,74 @@ public class WikiUtilityView extends UtilityView {
         //        regolazioniFinali();
     }
 
-    public void paragrafoFlag() {
-        super.paragrafoFlag();
+    @Override
+    public void paragrafoTask() {
+        super.paragrafoTask();
 
-        this.fixTask(WPref.usaTaskBio);
-        this.fixTask(WPref.usaTaskGiorni);
-        this.fixTask(WPref.usaTaskAnni);
-        this.fixTask(WPref.usaTaskAttivita);
-        this.fixTask(WPref.usaTaskNazionalita);
-        this.fixTask(WPref.usaTaskNomi);
-        this.fixTask(WPref.usaTaskCognomi);
+        for (WPref pref : WPref.getAllEnums()) {
+            if (pref.isTask()) {
+                this.fixTask(pref);
+            }
+        }
+    }
+
+    @Override
+    public void paragrafoCriticalFlag() {
+        super.paragrafoCriticalFlag();
+
+        for (WPref pref : WPref.getAllEnums()) {
+            if (pref.isCritical() && !pref.isTask()) {
+                this.fixCritical(pref);
+            }
+        }
+    }
+
+    @Override
+    public void paragrafoAllFlag() {
+        super.paragrafoAllFlag();
+
+        if (Pref.debug.is()) {
+            for (WPref pref : WPref.getAllEnums()) {
+                if (!pref.isCritical() && !pref.isTask()) {
+                    this.fixNormal(pref);
+                }
+            }
+        }
     }
 
 
     public void fixTask(AIGenPref pref) {
-        String message = String.format("Task: %s%s%s", pref.getKeyCode(), UGUALE, pref.is());
-        this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
+        String message = String.format("%s%s%s%s%s", pref.getKeyCode(), DUE_PUNTI_SPAZIO, pref.getDescrizione(), UGUALE_SPAZIATO, pref.get());
+        if (pref.getType() == AETypePref.bool) {
+            this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
+        }
+        else {
+            this.add(ASpan.text(message).color(AETypeColor.blue));
+        }
     }
+
+
+    public void fixCritical(AIGenPref pref) {
+        String message = String.format("%s%s%s%s%s", pref.getKeyCode(), DUE_PUNTI_SPAZIO, pref.getDescrizione(), UGUALE_SPAZIATO, pref.get());
+        if (pref.getType() == AETypePref.bool) {
+            this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
+        }
+        else {
+            this.add(ASpan.text(message).color(AETypeColor.blue));
+        }
+    }
+
+
+    public void fixNormal(AIGenPref pref) {
+        String message = String.format("%s%s%s%s%s", pref.getKeyCode(), DUE_PUNTI_SPAZIO, pref.getDescrizione(), UGUALE_SPAZIATO, pref.get());
+        if (pref.getType() == AETypePref.bool) {
+            this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
+        }
+        else {
+            this.add(ASpan.text(message).color(AETypeColor.normale));
+        }
+    }
+
 
     public void regolazioniFinali() {
         if (mongoService.isCollectionNullOrEmpty(GiornoWiki.class)) {

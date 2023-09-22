@@ -404,7 +404,7 @@ public class CognomeBackend extends WikiBackend {
         DistinctIterable<String> listaCognomiMongo = mongoService.getCollection(TAG_BIO).distinct("cognome", String.class);
         Cognome entityBean;
         int numBio;
-        int sogliaMongo = WPref.sogliaMongoNomi.getInt();
+        int sogliaMongo = WPref.sogliaMongoCognomi.getInt();
         List<AEntity> lista = new ArrayList<>();
         boolean debug = Pref.debug.is();
 
