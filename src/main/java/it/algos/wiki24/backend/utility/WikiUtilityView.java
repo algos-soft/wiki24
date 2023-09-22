@@ -14,6 +14,7 @@ import it.algos.vaad24.backend.packages.crono.giorno.*;
 import it.algos.vaad24.backend.packages.crono.mese.*;
 import it.algos.vaad24.backend.packages.crono.secolo.*;
 import it.algos.vaad24.backend.packages.geografia.continente.*;
+import it.algos.vaad24.backend.schedule.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.utility.*;
 import it.algos.vaad24.backend.wrapper.*;
@@ -28,7 +29,6 @@ import it.algos.wiki24.backend.packages.giorno.*;
 import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
@@ -117,10 +117,8 @@ public class WikiUtilityView extends UtilityView {
     public void paragrafoTask() {
         super.paragrafoTask();
 
-        for (WPref pref : WPref.getAllEnums()) {
-            if (pref.isTask()) {
-                this.fixTask(pref);
-            }
+        for (VaadTask task : VaadVar.taskList) {
+            this.fixTask(task);
         }
     }
 
@@ -149,13 +147,16 @@ public class WikiUtilityView extends UtilityView {
     }
 
 
-    public void fixTask(AIGenPref pref) {
-        String message = String.format("%s%s%s%s%s", pref.getKeyCode(), DUE_PUNTI_SPAZIO, pref.getDescrizione(), UGUALE_SPAZIATO, pref.get());
+    public void fixTask(VaadTask task) {
+        System.out.println(task.info());
+        String message = task.info();
+        AIGenPref pref = task.getFlagAttivazione();
+
         if (pref.getType() == AETypePref.bool) {
             this.add(ASpan.text(message).color(pref.is() ? AETypeColor.verde : AETypeColor.rosso));
         }
         else {
-            this.add(ASpan.text(message).color(AETypeColor.blue));
+
         }
     }
 

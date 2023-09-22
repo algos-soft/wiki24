@@ -288,7 +288,7 @@ public enum AESchedule {
 
 
     public String getNota() {
-        return nota;
+        return "Eseguita " + nota;
     }
 
 

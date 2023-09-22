@@ -28,7 +28,7 @@ public class TaskAnnoMorteCorrente extends VaadTask {
 
 
     public TaskAnnoMorteCorrente() {
-        super.descrizioneTask = "Upload di tutte le liste di morti per il solo anno corrente";
+        super.descrizioneTask = WPref.usaTaskAnnoMorteCorrente.getDescrizione();
         super.typeSchedule = AESchedule.alba;
         super.flagAttivazione = WPref.usaTaskAnni;
     }

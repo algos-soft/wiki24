@@ -708,7 +708,7 @@ public class VaadBoot {
 
         if (VaadVar.taskList != null && VaadVar.taskList.size() > 0) {
             for (VaadTask task : VaadVar.taskList) {
-                message = task.info();
+                message = task.infoFlag();
                 logger.info(new WrapLog().message(message).type(AETypeLog.schedule));
             }
         }

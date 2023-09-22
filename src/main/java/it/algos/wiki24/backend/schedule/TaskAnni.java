@@ -26,7 +26,7 @@ public class TaskAnni extends VaadTask {
     public AnnoWikiBackend annoWikiBackend;
 
     public TaskAnni() {
-        super.descrizioneTask = WPref.uploadAnni.getDescrizione();
+        super.descrizioneTask = WPref.usaTaskAnni.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getAnni();
         super.flagAttivazione = WPref.usaTaskAnni;
         super.flagPrevisione = WPref.uploadAnniPrevisto;

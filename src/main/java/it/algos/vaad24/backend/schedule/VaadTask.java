@@ -135,6 +135,18 @@ public class VaadTask extends Task {
 
     public String info() {
         String message;
+        String clazzName = this.getClass().getSimpleName();
+        String desc = this.getDescrizioneTask();
+        AESchedule type = this.getTypeSchedule();
+        String pattern = type.getPattern();
+        String nota = type.getNota();
+
+        message = String.format("%s [%s] %s %s %s", clazzName, pattern, FORWARD, desc, nota);
+        return message;
+    }
+
+    public String infoFlag() {
+        String message;
         String flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
         String clazzName = this.getClass().getSimpleName();
         String desc = this.getDescrizioneTask();
@@ -156,9 +168,9 @@ public class VaadTask extends Task {
         return message;
     }
 
-    public static String info(Class taskNonIstanziata) {
+    public static String infoFlag(Class taskNonIstanziata) {
         VaadTask task = getTask(taskNonIstanziata);
-        return task != null ? task.info() : VUOTA;
+        return task != null ? task.infoFlag() : VUOTA;
     }
 
 

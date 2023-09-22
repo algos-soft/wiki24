@@ -1,12 +1,10 @@
 package it.algos.wiki24.backend.packages.nome;
 
 import ch.carnet.kasparscherrer.*;
-import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
-import static it.algos.vaad24.backend.boot.VaadCost.PATH_WIKI;
 import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
@@ -110,7 +108,7 @@ public class NomeView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        String infoTask = VaadTask.info(TaskNomi.class);
+        String infoTask = VaadTask.infoFlag(TaskNomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_NOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_NOMI;
         String sogliaMongo = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaMongoNomi.getInt()));

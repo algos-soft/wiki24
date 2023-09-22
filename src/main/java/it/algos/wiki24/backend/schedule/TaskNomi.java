@@ -4,10 +4,8 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.wiki24.backend.boot.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.sauronsoftware.cron4j.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
@@ -24,7 +22,7 @@ public class TaskNomi extends VaadTask {
 
 
     public TaskNomi() {
-        super.descrizioneTask = WPref.uploadNomi.getDescrizione();
+        super.descrizioneTask = WPref.usaTaskNomi.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getNomi();
         super.flagAttivazione = WPref.usaTaskNomi;
         super.flagPrevisione = WPref.uploadNomiPrevisto;
@@ -48,8 +46,8 @@ public class TaskNomi extends VaadTask {
 
     }
 
-    public String info() {
-        return super.info() + WPref.sogliaWikiNomi.getInt();
+    public String infoFlag() {
+        return super.infoFlag() + WPref.sogliaWikiNomi.getInt();
     }
 
 }

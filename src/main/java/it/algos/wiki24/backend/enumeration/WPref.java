@@ -23,16 +23,16 @@ public enum WPref implements AIGenPref {
 
 
     //task
-    usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie", false, true,true),
-    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto", false, true,true),
-    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto", false, true,true),
-    usaTaskAnnoMorteCorrente("usaTaskAnnoMorteCorrente", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei morti dell'anno corrente", false, true,true),
-    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività", false, true,true),
-    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità", false, true,true),
-    usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi", false, true,true),
-    usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi", false, true,true),
-    usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori", false,false,true),
-    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche", false, true,true),
+    usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie.", false, true,true),
+    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto.", false, true,true),
+    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto.", false, true,true),
+    usaTaskAnnoMorteCorrente("usaTaskAnnoMorteCorrente", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei morti dell'anno corrente.", false, true,true),
+    usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività.", false, true,true),
+    usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità.", false, true,true),
+    usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi.", false, true,true),
+    usaTaskCognomi("usaTaskCognomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei cognomi.", false, true,true),
+    usaTaskElabora("usaTaskElabora", AETypePref.bool, false, "Lista pagine da cancellare e lista errori.", false,false,true),
+    usaTaskStatistiche("usaTaskStatistiche", AETypePref.bool, false, "Elaborazione delle statistiche.", false, true,true),
 
 
     //giorni
@@ -137,12 +137,12 @@ public enum WPref implements AIGenPref {
     downloadGenere("downloadGenere", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di Modulo:Bio/Plurale attività genere."),
     downloadGenereTime("downloadGenereTime", AETypePref.integer, 0, "Durata download di Genere."),
 
-    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa", false, false),
+    usaTaskResetBio("usaTaskResetBio", AETypePref.bool, false, "Reset calendarizzato di tutte le biografie con cancellazione completa.", false, false),
     resetBio("resetBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Reset completo delle voci biografiche"),
     resetBioTime("resetBioTime", AETypePref.integer, 0, "Durata Reset completo delle biografie."),
     resetBioPrevisto("resetBioPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo reset previsto delle voci biografiche."),
 
-    downloadBio("downloadBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di tutte le biografie nuove e modificate"),
+    downloadBio("downloadBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Download di tutte le biografie nuove e modificate."),
     downloadBioTime("downloadBioTime", AETypePref.integer, 0, "Durata ciclo completo download delle biografie."),
     downloadBioPrevisto("downloadBioPrevisto", AETypePref.localdatetime, ROOT_DATA_TIME, "Prossimo download previsto delle voci biografiche."),
     elaboraBio("elaboraBio", AETypePref.localdatetime, ROOT_DATA_TIME, "Elaborazione di tutte le biografie."),

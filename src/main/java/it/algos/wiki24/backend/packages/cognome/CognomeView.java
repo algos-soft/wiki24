@@ -1,21 +1,17 @@
 package it.algos.wiki24.backend.packages.cognome;
 
 import ch.carnet.kasparscherrer.*;
-import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
-import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.router.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.components.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.schedule.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
-import static it.algos.wiki24.backend.boot.Wiki24Cost.PATH_WIKI;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.wiki.*;
@@ -106,7 +102,7 @@ public class CognomeView extends WikiView {
     public void fixAlert() {
         super.fixAlert();
 
-        String infoTask = VaadTask.info(TaskCognomi.class);
+        String infoTask = VaadTask.infoFlag(TaskCognomi.class);
         String statisticaNomi = TAG_ANTROPONIMI + TAG_COGNOMI;
         String statisticaListe = TAG_ANTROPONIMI + TAG_LISTA_COGNOMI;
         String sogliaMongo = String.format("<span style=\"color:red\"><strong>%s</strong></span>", textService.format(WPref.sogliaMongoCognomi.getInt()));

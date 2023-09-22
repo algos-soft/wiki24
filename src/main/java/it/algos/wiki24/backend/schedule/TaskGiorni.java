@@ -27,7 +27,7 @@ public class TaskGiorni extends VaadTask {
     public GiornoWikiBackend giornoWikiBackend;
 
     public TaskGiorni() {
-        super.descrizioneTask = WPref.uploadGiorni.getDescrizione();
+        super.descrizioneTask = WPref.usaTaskGiorni.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getGiorni();
         super.typeSchedule = Wiki24Var.typeSchedule.getGiorni();
 

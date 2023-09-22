@@ -26,7 +26,7 @@ public class TaskCognomi extends VaadTask {
 
 
     public TaskCognomi() {
-        super.descrizioneTask = WPref.uploadCognomi.getDescrizione();
+        super.descrizioneTask = WPref.usaTaskCognomi.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getCognomi();
         super.flagAttivazione = WPref.usaTaskCognomi;
         super.flagPrevisione = WPref.uploadCognomiPrevisto;

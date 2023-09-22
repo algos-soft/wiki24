@@ -33,7 +33,7 @@ public class TaskBio extends VaadTask {
 
 
     public TaskBio() {
-        super.descrizioneTask = WPref.downloadBio.getDescrizione();
+        super.descrizioneTask = WPref.usaTaskBio.getDescrizione();
         super.typeSchedule = Wiki24Var.typeSchedule.getUpdateBio();
         super.flagAttivazione = WPref.usaTaskBio;
         super.flagPrevisione = WPref.downloadBioPrevisto;
