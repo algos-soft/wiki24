@@ -449,7 +449,6 @@ public abstract class Lista implements AlgosBuilderPattern {
 
             for (Bio bio : listaBio) {
                 wrap = didascaliaService.getWrap(titoloPagina, bio, typeLista, typeLinkParagrafi, typeLinkCrono, usaIcona);
-
                 if (wrap != null) {
                     listaWrap.add(wrap);
                 }
