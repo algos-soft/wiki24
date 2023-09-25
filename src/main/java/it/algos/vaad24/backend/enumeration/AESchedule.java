@@ -51,7 +51,7 @@ public enum AESchedule {
     /**
      * Descrizione: ogni giorno alle sei
      */
-    alba("* 6 * * *", "ogni giorno alle sei."),
+    alba("0 6 * * *", "ogni giorno alle sei."),
 
     /**
      * Pattern: 0 0 * * mon
