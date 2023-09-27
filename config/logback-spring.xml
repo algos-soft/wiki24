@@ -63,6 +63,22 @@
     </appender>
 
 
+    <!-- JVM monitoring log -->
+    <variable name="MONITORING_LOG_FILE" value="log/wam-monitor.log"/>
+    <appender name="monitoringAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${MONITORING_LOG_FILE}</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p | %m%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- monthly rollover -->
+            <fileNamePattern>${MONITORING_LOG_FILE}.%d{yyyy-MM}.log</fileNamePattern>
+            <maxHistory>12</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+
     <!--additivity = false: il log si ferma qui-->
     <!--additivity = true: il log attraversa questo logger e viene propagato agli ancestors-->
     <!--un logger può avere più appender e invia il log a tutti i suoi appender-->
@@ -78,6 +94,11 @@
     <logger name="vaad24.admin" level="INFO" additivity="true">
         <appender-ref ref="adminAppender"/>
     </logger>
+
+    <logger name="monitoring" level="INFO" additivity="false">
+        <appender-ref ref="monitoringAppender"/>
+    </logger>
+
 
 
     <!--    un logger di questo tipo (senza appender) blocca tutti i log qui e non li propaga oltre-->

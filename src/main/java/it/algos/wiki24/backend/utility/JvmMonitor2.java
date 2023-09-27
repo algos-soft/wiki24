@@ -8,9 +8,6 @@ import lombok.Data;
 import lombok.extern.slf4j.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.*;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -24,7 +21,7 @@ import java.text.StringCharacterIterator;
 
 @Service
 @Slf4j
-public class JvmMonitor {
+public class JvmMonitor2 {
 
 
 //    @Autowired

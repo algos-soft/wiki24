@@ -4,7 +4,6 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
-import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -46,7 +45,7 @@ import java.util.stream.*;
 public class DownloadService extends WAbstractService {
 
     @Autowired
-    public JvmMonitor monitor;
+    public JvmMonitor2 monitor;
 
     public void cicloIniziale() {
         cicloIniziale(WPref.categoriaBio.getStr());

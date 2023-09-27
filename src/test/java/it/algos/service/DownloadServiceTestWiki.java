@@ -20,9 +20,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.context.*;
 import org.springframework.data.mongodb.core.*;
 
 import java.time.*;
@@ -51,7 +49,7 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
     private static String CAT3 = "Nati nel 1960";
 
     @InjectMocks
-    JvmMonitor monitor;
+    JvmMonitor2 monitor;
 
     @InjectMocks
     DateService dateService;
