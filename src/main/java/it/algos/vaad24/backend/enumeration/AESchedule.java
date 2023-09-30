@@ -54,7 +54,7 @@ public enum AESchedule {
     alba("0 6 * * *", "ogni giorno alle sei."),
 
     /**
-     * Pattern: 0 0 * * mon
+     * Pattern: 5 0 * * mon
      * Descrizione: ogni settimana ai cinque dopo mezzanotte tra domenica e lunedì
      */
     zeroCinqueLunedi("5 0 * * mon", "ogni settimana ai cinque dopo mezzanotte tra domenica e lunedì.", 7),
@@ -64,6 +64,11 @@ public enum AESchedule {
      * Descrizione: ai cinque dopo mezzanotte di ogni giorno della settimana esclusa la notte tra domenica e lunedì
      */
     zeroCinqueNoLunedi("5 0 * * sun,tue,wed,thu,fri,sat", "ai cinque dopo mezzanotte di ogni giorno della settimana esclusa la notte tra domenica e lunedì.", 1),
+    /**
+     * Pattern: 15 0 * * sun,tue,wed,thu,fri,sat
+     * Descrizione: ai quindici dopo mezzanotte di ogni giorno della settimana esclusa la notte tra domenica e lunedì
+     */
+    zeroQuindiciNoLunedi("15 0 * * sun,tue,wed,thu,fri,sat", "ai quindici dopo mezzanotte di ogni giorno della settimana esclusa la notte tra domenica e lunedì.", 1),
 
     /**
      * Pattern: 0 2 * * sun,tue,wed,thu,fri,sat

@@ -207,6 +207,7 @@ mongorestore -d wiki24 /Users/guidoceresa/Desktop/dump/wiki24 mongorestore -d wi
 cd Desktop
 cd wiki
 java -jar -Dserver.port=8090 wiki24-1.0.jar
+java  -Xmx1024m -jar -Dserver.port=8090 wiki24-1.0.jar & echo $! > ./pid.file
 
 == Criteria ==
 

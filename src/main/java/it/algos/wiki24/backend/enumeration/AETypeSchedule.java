@@ -26,7 +26,7 @@ public enum AETypeSchedule {
     ),
     schema2(
             AESchedule.zeroCinqueLunedi,
-            AESchedule.zeroCinqueNoLunedi,
+            AESchedule.zeroQuindiciNoLunedi,
             AESchedule.disparipiudomenica3,
             AESchedule.paripiudomenica5,
             AESchedule.paripiudomenica5,
