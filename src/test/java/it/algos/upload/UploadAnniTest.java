@@ -52,7 +52,7 @@ public class UploadAnniTest extends UploadTest {
                 Arguments.of("43 marzo", AETypeLista.giornoNascita),
                 Arguments.of("560", AETypeLista.annoNascita),
                 Arguments.of("560", AETypeLista.annoMorte),
-                Arguments.of("1460", AETypeLista.annoNascita),
+                Arguments.of("1350", AETypeLista.annoNascita),
                 Arguments.of("azeri", AETypeLista.attivitaSingolare)
         );
     }

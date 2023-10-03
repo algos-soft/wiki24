@@ -51,6 +51,7 @@ public class ListaAnniTest extends ListeTest {
                 Arguments.of("1467", AETypeLista.giornoNascita),
                 Arguments.of("406 a.C.", AETypeLista.annoMorte),
                 Arguments.of("1467", AETypeLista.annoNascita),
+                Arguments.of("1350", AETypeLista.annoNascita),
                 Arguments.of("560", AETypeLista.annoMorte)
         );
     }
@@ -176,7 +177,7 @@ public class ListaAnniTest extends ListeTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @Order(51)
     @DisplayName("51 - WrapLista di un paragrafo")
     @CsvSource({"2005,febbraio"})

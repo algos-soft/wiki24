@@ -157,6 +157,9 @@ public class UploadAnni extends UploadListe {
         return text;
     }
 
+    protected String fixToc() {
+        return VUOTA;
+    }
 
     @Override
     protected String creaBodyLayer() {
@@ -197,6 +200,15 @@ public class UploadAnni extends UploadListe {
         return buffer.toString();
     }
 
+    protected String interprogetto() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(CAPO);
+        buffer.append("{{subst:#if:{{subst:#invoke:string|match|{{subst:#invoke:interprogetto|interprogetto}}|template vuoto|nomatch=}}||== Altri progetti ==\n" +
+                "{{interprogetto}}}}");
+
+        return buffer.toString();
+    }
 
     @Override
     protected String categorie() {

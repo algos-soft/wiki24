@@ -204,6 +204,7 @@ public class DidascaliaServiceTest extends WikiTest {
     private Stream<Bio> biografie() {
         return Stream.of(
                 creaBio("Johann Schweikhard von Kronberg"),
+                creaBio("Vincenzo Ferreri"),
                 creaBio("Roberto Rullo"),
                 creaBio("Stanley Adams (attore)"),
                 creaBio("Daniel Williams"),

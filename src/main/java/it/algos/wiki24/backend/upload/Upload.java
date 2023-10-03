@@ -642,6 +642,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
     protected String fixToc() {
+
         if (isSottopagina) {
             return AETypeToc.noToc.get();
         }
@@ -715,10 +716,13 @@ public abstract class Upload implements AlgosBuilderPattern {
         boolean usaDivLocal;
 
         if (isSottopagina && mappaWrap.size() == 1 || numVociTotaliPagina < WPref.sogliaVociPerParagrafi.getInt()) {
+            lista = new ArrayList<>();
             for (String key : mappaWrap.keySet()) {
-                lista = mappaWrap.get(key);
+                if (mappaWrap.get(key) != null && mappaWrap.get(key).size() > 0) {
+                    lista.addAll(mappaWrap.get(key));
+                }
             }
-            if (lista != null) {
+            if (lista != null && lista.size() > 0) {
                 buffer.append("{{Div col}}" + CAPO);
                 for (WrapLista wrap : lista) {
                     buffer.append(ASTERISCO);
@@ -756,7 +760,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
             if (usaSottopagina(numVociTotaliPagina, numVociParagrafo)) {
                 sottoPagina = wikiTitleUpload + SLASH + textService.primaMaiuscola(keyParagrafo);
-//                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+                //                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
                 if (isUploading) {
@@ -814,6 +818,7 @@ public abstract class Upload implements AlgosBuilderPattern {
         buffer.append(correlate());
 
         buffer.append(includeIni());
+        buffer.append(interprogetto());
         buffer.append(portale());
         buffer.append(categorie());
         buffer.append(includeEnd());
@@ -847,6 +852,11 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected String correlate() {
         return VUOTA;
     }
+
+    protected String interprogetto() {
+        return VUOTA;
+    }
+
 
     protected String portale() {
         StringBuffer buffer = new StringBuffer();

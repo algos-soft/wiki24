@@ -187,6 +187,7 @@ public abstract class UploadGiorniAnni extends UploadListe {
         buffer.append(testoBody(mappa));
         buffer.append(uploadTest ? VUOTA : DOPPIE_GRAFFE_END);
         buffer.append(includeIni());
+        buffer.append(interprogetto());
         buffer.append(portale());
         buffer.append(categorie());
         buffer.append(includeEnd());
