@@ -150,6 +150,9 @@ public class UploadGiorni extends UploadListe {
         return text;
     }
 
+    protected String fixToc() {
+        return VUOTA;
+    }
 
     protected String creaBodyLayer() {
         StringBuffer buffer = new StringBuffer();
