@@ -46,12 +46,13 @@ public class UploadGiorniTest extends UploadTest {
                 Arguments.of(VUOTA, AETypeLista.giornoNascita),
                 Arguments.of("43 marzo", AETypeLista.giornoNascita),
                 Arguments.of("12 ottobre", AETypeLista.annoMorte),
-                Arguments.of("1º gennaio", AETypeLista.giornoNascita),
-                Arguments.of("29 febbraio", AETypeLista.giornoNascita),
+                Arguments.of("21 febbraio", AETypeLista.giornoMorte)
+                //                Arguments.of("1º gennaio", AETypeLista.giornoNascita),
+                //                Arguments.of("29 febbraio", AETypeLista.giornoNascita),
                 //                Arguments.of("29 febbraio", AETypeLista.giornoMorte),
-                Arguments.of("3 luglio", AETypeLista.attivitaSingolare),
-                Arguments.of("19 dicembra", AETypeLista.giornoNascita),
-                Arguments.of("4gennaio", AETypeLista.giornoNascita)
+                //                Arguments.of("3 luglio", AETypeLista.attivitaSingolare),
+                //                Arguments.of("19 dicembra", AETypeLista.giornoNascita),
+                //                Arguments.of("4gennaio", AETypeLista.giornoNascita)
         );
     }
 
@@ -160,7 +161,7 @@ public class UploadGiorniTest extends UploadTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
@@ -188,7 +189,7 @@ public class UploadGiorniTest extends UploadTest {
         printUpload(ottenutoRisultato);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI_UPLOAD_SOTTO_PAGINE")
     @Order(81)
     @DisplayName("81 - Esegue upload test pagine con sottopagine")

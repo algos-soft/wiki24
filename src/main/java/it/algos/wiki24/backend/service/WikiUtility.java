@@ -821,16 +821,24 @@ public class WikiUtility extends WAbstractService {
         if (textService.isEmpty(annoIn)) {
             return VUOTA;
         }
-        anno = annoIn;
-        character = anno.charAt(anno.length() - 2);
-        character2 = anno.charAt(anno.length() - 1);
-        if (character2 == 48) {
-            if (character == 48) {
-                character += 9;
+
+        anno = annoIn.trim();
+        anno = textService.levaCoda(anno, ANNI_AC);
+
+        if (anno.length() > 1) {
+            character = anno.charAt(anno.length() - 2);
+            character2 = anno.charAt(anno.length() - 1);
+            if (character2 == 48) {
+                if (character == 48) {
+                    character += 9;
+                }
+                else {
+                    character -= 1;
+                }
             }
-            else {
-                character -= 1;
-            }
+        }
+        else {
+            character = 48;
         }
 
         decade = switch (character) {
@@ -846,6 +854,9 @@ public class WikiUtility extends WAbstractService {
             case 57 -> "91-00";
             default -> VUOTA;
         };
+        if (textService.isEmpty(decade)) {
+            int a = 87;
+        }
 
         return decade;
     }

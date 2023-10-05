@@ -50,6 +50,7 @@ public class ListaGiorniTest extends ListeTest {
                 Arguments.of(VUOTA, AETypeLista.giornoMorte),
                 Arguments.of("1857", AETypeLista.giornoNascita),
                 Arguments.of("8 aprile", AETypeLista.attivitaPlurale),
+                Arguments.of("21 febbraio", AETypeLista.giornoMorte),
                 Arguments.of("34 febbraio", AETypeLista.giornoMorte),
                 Arguments.of("1º gennaio", AETypeLista.giornoNascita),
                 Arguments.of("23 marzo", AETypeLista.annoMorte),
