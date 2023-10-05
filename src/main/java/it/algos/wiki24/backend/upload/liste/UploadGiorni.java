@@ -240,4 +240,20 @@ public class UploadGiorni extends UploadListe {
         return appContext.getBean(UploadGiorni.class, sottoPagina).typeLista(typeLista).test(uploadTest).sottoPagina(lista).upload();
     }
 
+    @Override
+    protected WResult creaSottoPagina(String keyParagrafo, List<WrapLista> lista) {
+        String sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
+//        int ordineCategoriaSottopagina = AEMese.getOrder(keyParagrafo);
+//        if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
+//            ordineCategoriaSottopagina = 13;
+//        }
+
+        return appContext.getBean(UploadGiorni.class, sottoNomeLista)
+                .typeLista(typeLista)
+                .test(uploadTest)
+                .sottoPagina(lista)
+//                .ordineCategoriaSottopagina(ordineCategoriaSottopagina)
+                .upload();
+    }
+
 }

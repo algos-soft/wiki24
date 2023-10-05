@@ -249,8 +249,6 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean patternCompleto = false;
 
-    protected boolean isUploading = false;
-
     protected String collectionName;
 
     protected int sogliaSottopagina;
@@ -532,7 +530,6 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public WResult upload() {
         String message;
-        isUploading = true;
 
         if (typeLista == null || typeLista == AETypeLista.nessunaLista) {
             System.out.println(VUOTA);
@@ -763,9 +760,7 @@ public abstract class Upload implements AlgosBuilderPattern {
                 //                sottoNomeLista = nomeLista + SLASH + textService.primaMaiuscola(keyParagrafo);
                 vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                 buffer.append(vedi + CAPO);
-                if (isUploading) {
-                    this.creaSottoPagina(keyParagrafo, lista);
-                }
+                this.creaSottoPagina(keyParagrafo, lista);
             }
             else {
                 usaDivLocal = usaDiv ? lista.size() > sogliaDiv : false;
@@ -795,9 +790,18 @@ public abstract class Upload implements AlgosBuilderPattern {
         if (!usaSottoPagina) {
             return false;
         }
-        if (typeLista == AETypeLista.annoNascita || typeLista == AETypeLista.annoMorte || typeLista == AETypeLista.giornoNascita || typeLista == AETypeLista.giornoMorte) {
-            if (numVociTotaliPagina > WPref.sogliaPaginaGiorniAnni.getInt()) {
-                return true;
+        if (typeLista == AETypeLista.giornoNascita || typeLista == AETypeLista.giornoMorte) {
+            if (WPref.usaSottoPaginaGiorni.is()) {
+                return numVociTotaliPagina > WPref.sogliaPaginaGiorniAnni.getInt();
+            }
+            else {
+                return false;
+            }
+        }
+
+        if (typeLista == AETypeLista.annoNascita || typeLista == AETypeLista.annoMorte) {
+            if (WPref.usaSottoPaginaAnni.is()) {
+                return numVociTotaliPagina > WPref.sogliaPaginaGiorniAnni.getInt();
             }
             else {
                 return false;
