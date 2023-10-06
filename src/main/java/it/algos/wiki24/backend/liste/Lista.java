@@ -421,7 +421,7 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     public List<WrapLista> listaWrap() {
         listaWrap = new ArrayList<>();
-        WrapLista wrap;
+        WrapLista wrap = null;
         String message;
 
         if (typeLista == null) {

@@ -45,6 +45,7 @@ public class ListaAnniTest extends ListeTest {
         return Stream.of(
                 Arguments.of(VUOTA, AETypeLista.annoNascita),
                 Arguments.of(VUOTA, AETypeLista.annoMorte),
+                Arguments.of("2002", AETypeLista.annoMorte),
                 Arguments.of("4 gennaio", AETypeLista.annoNascita),
                 Arguments.of("1985", AETypeLista.nazionalitaSingolare),
                 Arguments.of("1º gennaio", AETypeLista.annoMorte),

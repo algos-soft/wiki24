@@ -50,6 +50,7 @@ public class UploadAnniTest extends UploadTest {
     protected static Stream<Arguments> ANNI_UPLOAD() {
         return Stream.of(
                 Arguments.of("43 marzo", AETypeLista.giornoNascita),
+                Arguments.of("2002", AETypeLista.annoMorte),
                 Arguments.of("560", AETypeLista.annoNascita),
                 Arguments.of("560", AETypeLista.annoMorte),
                 Arguments.of("1350", AETypeLista.annoNascita),
