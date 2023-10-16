@@ -38,7 +38,8 @@ public class JvmMonitor {
     /**
      * Monitor the Garbage Collector activity
      */
-    @Scheduled(cron = "0 0 * * * ?")    // every hour at minute 0
+//    @Scheduled(cron = "0 0 * * * ?")    // every hour at minute 0
+    @Scheduled(cron = "0 */5 * * * ?")    // every hour every 5 minutes at second zero
     public void monitorGC() {
         String type = "GC STAT";
         GcStat stat = takeGcStat();
@@ -59,7 +60,7 @@ public class JvmMonitor {
      * Monitor the memory status
      */
 //    @Scheduled(cron = "0 1 * * * ?")    // every hour at minute 1
-    @Scheduled(cron = "0 */5 * * * ?")    // every hour at minute 1
+    @Scheduled(cron = "0 */5 * * * ?")    // every hour every 5 minutes at second zero
     public void monitorMemory() {
         String type = "MEM STAT";
         MemoryStat stat = takeMemoryStat();
