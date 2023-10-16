@@ -59,7 +59,7 @@ public class JvmMonitor {
      * Monitor the memory status
      */
 //    @Scheduled(cron = "0 1 * * * ?")    // every hour at minute 1
-    @Scheduled(cron = "0 5 * * * ?")    // every hour at minute 1
+    @Scheduled(cron = "0 */5 * * * ?")    // every hour at minute 1
     public void monitorMemory() {
         String type = "MEM STAT";
         MemoryStat stat = takeMemoryStat();
