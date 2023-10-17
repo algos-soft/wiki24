@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.*;
+import org.springframework.scheduling.annotation.*;
 
 /**
  * The entry point of the Spring Boot application.
@@ -20,6 +21,7 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
  * and some desktop browsers.
  *
  */
+@EnableScheduling
 @SpringBootApplication(scanBasePackages = {"it.algos"}, exclude = {SecurityAutoConfiguration.class})
 @Theme(value = "wiki24")
 @NpmPackage(value = "line-awesome", version = "1.3.0")
