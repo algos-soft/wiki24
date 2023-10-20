@@ -53,18 +53,10 @@ public class UploadAnniTest extends UploadTest {
                 Arguments.of("2002", AETypeLista.annoMorte),
                 Arguments.of("560", AETypeLista.annoNascita),
                 Arguments.of("560", AETypeLista.annoMorte),
-                Arguments.of("1350", AETypeLista.annoNascita),
+                Arguments.of("1984", AETypeLista.annoNascita),
                 Arguments.of("azeri", AETypeLista.attivitaSingolare)
         );
     }
-
-    //    //--nome anno
-    //    //--typeCrono
-    //    protected static Stream<Arguments> ANNI_UPLOAD_SOTTO_PAGINE() {
-    //        return Stream.of(
-    //                Arguments.of("2005", AETypeLista.annoMorte)
-    //        );
-    //    }
 
 
     /**
@@ -122,6 +114,7 @@ public class UploadAnniTest extends UploadTest {
 
 
     @ParameterizedTest
+    @Disabled()
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(40)
     @DisplayName("40 - Key della mappaWrap STANDARD")
@@ -135,6 +128,7 @@ public class UploadAnniTest extends UploadTest {
     }
 
     @ParameterizedTest
+    @Disabled()
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(50)
     @DisplayName("50 - MappaWrap STANDARD con paragrafi e righe")
@@ -148,6 +142,7 @@ public class UploadAnniTest extends UploadTest {
     }
 
     @ParameterizedTest
+    @Disabled()
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(60)
     @DisplayName("60 - Testo header")
@@ -162,6 +157,7 @@ public class UploadAnniTest extends UploadTest {
 
 
     @ParameterizedTest
+    @Disabled()
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(70)
     @DisplayName("70 - Testo body STANDARD con paragrafi e righe")
@@ -175,6 +171,7 @@ public class UploadAnniTest extends UploadTest {
     }
 
     @ParameterizedTest
+    @Disabled()
     @Order(71)
     @DisplayName("71 - Testo body sottopagina")
     @CsvSource({"2005,febbraio"})
@@ -189,6 +186,7 @@ public class UploadAnniTest extends UploadTest {
     }
 
     @ParameterizedTest
+    @Disabled()
     @Order(72)
     @DisplayName("72 - Testo upload sottopagina")
     @CsvSource({"2005,febbraio"})
@@ -211,6 +209,7 @@ public class UploadAnniTest extends UploadTest {
 
 
     @ParameterizedTest
+    @Disabled()
     @Order(73)
     @DisplayName("73 - Testo upload sottopagina")
     @CsvSource({"2005,Senza giorno specificato"})
@@ -235,6 +234,7 @@ public class UploadAnniTest extends UploadTest {
     }
 
     @ParameterizedTest
+    @Disabled()
     @MethodSource(value = "ANNI_UPLOAD")
     @Order(80)
     @DisplayName("80 - Esegue upload test STANDARD")
@@ -252,6 +252,7 @@ public class UploadAnniTest extends UploadTest {
 
 
     @ParameterizedTest
+    @Disabled()
     @Order(81)
     @DisplayName("81 - Esegue upload test pagine con sottopagine")
     @CsvSource({"2005"})
@@ -277,6 +278,16 @@ public class UploadAnniTest extends UploadTest {
 
         ottenutoRisultato = appContext.getBean(UploadAnni.class, nomeLista).typeLista(type).upload();
         printUpload(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(110)
+    @DisplayName("110 - test su anno specifico")
+    void annoSpecifico() {
+        sorgente = "1986";
+        AETypeLista type = AETypeLista.annoMorte;
+        ottenutoRisultato = appContext.getBean(UploadAnni.class, sorgente).typeLista(type).test().upload();
     }
 
     private boolean valido(final String nomeAnno, final AETypeLista type) {

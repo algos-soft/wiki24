@@ -27,5 +27,16 @@ public class AUpload extends AConfirm {
 
         AConfirm.title("Upload").message(buffer.toString()).confirmError("Upload").annullaPrimary().open(confirmHandler);
     }
+    public static void uploadSelezione(final Runnable confirmHandler) {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("Upload sul server wiki delle pagine selezionate. Vengono sovrascritte quelle esistenti.");
+        buffer.append(CAPO_HTML);
+        buffer.append(ASpan.text("Sei sicuro di volerle sovrascrivere le pagine selezionate ?").rosso().bold().get());
+        buffer.append(CAPO_HTML);
+        buffer.append(ASpan.text("L'operazione è irreversibile").blue().bold().get());
+
+        AConfirm.title("Upload").message(buffer.toString()).confirmError("Upload").annullaPrimary().open(confirmHandler);
+    }
 
 }

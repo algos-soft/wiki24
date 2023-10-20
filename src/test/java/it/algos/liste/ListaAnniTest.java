@@ -52,7 +52,7 @@ public class ListaAnniTest extends ListeTest {
                 Arguments.of("1467", AETypeLista.giornoNascita),
                 Arguments.of("406 a.C.", AETypeLista.annoMorte),
                 Arguments.of("1467", AETypeLista.annoNascita),
-                Arguments.of("1430", AETypeLista.annoNascita),
+                Arguments.of("1984", AETypeLista.annoNascita),
                 Arguments.of("560", AETypeLista.annoMorte)
         );
     }

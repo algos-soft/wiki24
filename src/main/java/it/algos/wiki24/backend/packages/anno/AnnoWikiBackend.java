@@ -487,6 +487,64 @@ public class AnnoWikiBackend extends WikiBackend {
         return beanAnno;
     }
 
+    /**
+     * Esegue la scrittura di tutti gli anni di un secolo <br>
+     * Tutti gli anni nati <br>
+     * Tutti gli anni morti <br>
+     */
+    public WResult uploadSecolo(Secolo secolo) {
+        WResult result = WResult.errato();
+        logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti nel secolo " + secolo.nome));
+        List<String> anni;
+        String message;
+        int modificatiNati;
+        int modificatiMorti;
+
+        if (secoloBackend == null) {
+            logger.error(new WrapLog().type(AETypeLog.upload).message("Manca secoloBackend").usaDb());
+        }
+
+        anni = annoBackend.findAllForNomeBySecolo(secolo);
+        if (anni == null) {
+            message = String.format("Mancano gli anni del secolo %s", anni);
+            logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+        }
+        if (anni.size() < 1) {
+            message = String.format("Nel secolo %s ci sono troppi pochi anni", secolo);
+            logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+        }
+        modificatiNati = 0;
+        modificatiMorti = 0;
+        for (String nomeAnno : anni) {
+            result = appContext.getBean(UploadAnni.class, nomeAnno).nascita().upload();
+            if (result.isValido() && result.isModificata()) {
+                modificatiNati++;
+            }
+            else {
+                message = result.getMessage();
+                message += String.format(" della pagina %s/%s", nomeAnno, AETypeLista.annoNascita.getTag());
+                logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
+
+            result = appContext.getBean(UploadAnni.class, nomeAnno).morte().upload();
+            if (result.isValido() && result.isModificata()) {
+                modificatiMorti++;
+            }
+            else {
+                message = result.getMessage();
+                message += String.format(" della pagina %s/%s", nomeAnno, AETypeLista.annoMorte.getTag());
+                logger.debug(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
+            }
+
+            if (Pref.debug.is()) {
+                message = String.format("Modificate sul server %d pagine di 'nati' e %d di 'morti' per il secolo %s", modificatiNati, modificatiMorti, secolo);
+                message += String.format(" in %s", dateService.deltaText(result.getInizio()));
+                logger.info(new WrapLog().type(AETypeLog.upload).message(message));
+            }
+        }
+
+        return result;
+    }
 
     /**
      * Esegue la scrittura di tutte le pagine <br>

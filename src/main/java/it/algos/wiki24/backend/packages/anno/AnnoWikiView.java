@@ -23,6 +23,7 @@ import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.statistiche.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import it.algos.wiki24.backend.wrapper.*;
+import it.algos.wiki24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 
@@ -352,6 +353,18 @@ public class AnnoWikiView extends WikiView {
 
     /**
      * Esegue un azione di upload, specifica del programma/package in corso <br>
+     */
+    public void upload() {
+        if (comboSecolo != null && comboSecolo.getValue() == null) {
+            AUpload.upload(this::uploadAll);
+        }
+        else {
+            AUpload.uploadSelezione(this::uploadSecolo);
+        }
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
      * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
      */
     @Override
@@ -359,6 +372,23 @@ public class AnnoWikiView extends WikiView {
         long inizio = System.currentTimeMillis();
         WResult result = backend.uploadAll();
         super.fixUpload(inizio, "degli anni");
+        reload();
+    }
+
+    /**
+     * Esegue un azione di upload, specifica del programma/package in corso <br>
+     * Deve essere sovrascritto, invocando DOPO il metodo della superclasse <br>
+     */
+    public void uploadSecolo() {
+        long inizio = System.currentTimeMillis();
+        Secolo secolo = null;
+
+        if (comboSecolo != null && comboSecolo.getValue() != null) {
+            secolo = (Secolo) comboSecolo.getValue();
+        }
+
+        WResult result = ((AnnoWikiBackend)backend).uploadSecolo(secolo);
+        super.fixUpload(inizio, String.format("del secolo %s", secolo != null ? secolo.nome : VUOTA));
         reload();
     }
 
