@@ -48,6 +48,7 @@ public class GiornoBackend extends CrudBackend {
      */
     @Override
     public Giorno newEntity(final String keyPropertyValue) {
+
         return newEntity(0, keyPropertyValue, null, 0, 0);
     }
 

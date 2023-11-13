@@ -504,7 +504,7 @@ public class AnnoWikiBackend extends WikiBackend {
             logger.error(new WrapLog().type(AETypeLog.upload).message("Manca secoloBackend").usaDb());
         }
 
-        anni = annoBackend.findAllForNomeBySecolo(secolo);
+        anni = annoBackend.findAllForNomeBySecoloAsc(secolo);
         if (anni == null) {
             message = String.format("Mancano gli anni del secolo %s", anni);
             logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());
