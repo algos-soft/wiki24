@@ -3,11 +3,6 @@ package it.algos;
 import com.vaadin.flow.component.dependency.NpmPackage;
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.theme.Theme;
-import it.algos.vaad24.backend.boot.*;
-import it.algos.vaad24.backend.configuration.*;
-import it.algos.wiki24.backend.boot.*;
-import it.algos.wiki24.backend.configuration.*;
-import it.algos.wiki24.backend.packages.nazplurale.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -29,9 +24,8 @@ import org.springframework.scheduling.annotation.*;
 public class Wiki24App implements AppShellConfigurator {
 
     public static void main(String[] args) {
-        VaadBoot.start();
-        Wiki24Boot.start();
-//        Wiki24Configuration.START();
+//        VaadBoot.start();
+//        Wiki24Boot.start();
         SpringApplication.run(Wiki24App.class, args);
     }
 
