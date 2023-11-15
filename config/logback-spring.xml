@@ -11,29 +11,29 @@
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <!--                        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) - %C.%M:%L %n-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) - %C.%M:%L %n-->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5p) - ${PID:-} %cyan([%15t]) %blue(%-100m) %n
             </pattern>
         </encoder>
     </appender>
 
 
-    <variable name="VAAD24_LOG_FILE" value="log/vaad24.log"/>
+    <variable name="BASE24_LOG_FILE" value="log/base24.log"/>
     <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${VAAD24_LOG_FILE}</file>
+        <file>${BASE24_LOG_FILE}</file>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p --- ${PID:-} [%t] %C.%M:%L --- %m %n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
             <maxIndex>10</maxIndex>
-            <FileNamePattern>${VAAD24_LOG_FILE}.%i.log</FileNamePattern>
+            <FileNamePattern>${BASE24_LOG_FILE}.%i.log</FileNamePattern>
         </rollingPolicy>
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
             <MaxFileSize>10MB</MaxFileSize>
         </triggeringPolicy>
     </appender>
 
-    <variable name="SPRING_LOG_FILE" value="log/vaad24-spring.log"/>
+    <variable name="SPRING_LOG_FILE" value="log/base24-spring.log"/>
     <appender name="springContextAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${SPRING_LOG_FILE}</file>
         <encoder>
@@ -48,7 +48,7 @@
         </triggeringPolicy>
     </appender>
 
-    <variable name="ADMIN_LOG_FILE" value="log/vaad24-admin.log"/>
+    <variable name="ADMIN_LOG_FILE" value="log/base24-admin.log"/>
     <appender name="adminAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${ADMIN_LOG_FILE}</file>
         <encoder>
@@ -59,22 +59,6 @@
             <!-- daily rollover -->
             <fileNamePattern>${ADMIN_LOG_FILE}.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
-
-
-    <!-- JVM monitoring log -->
-    <variable name="MONITORING_LOG_FILE" value="log/wam-monitor.log"/>
-    <appender name="monitoringAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${MONITORING_LOG_FILE}</file>
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p | %m%n</pattern>
-        </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!-- monthly rollover -->
-            <fileNamePattern>${MONITORING_LOG_FILE}.%d{yyyy-MM}.log</fileNamePattern>
-            <maxHistory>12</maxHistory>
         </rollingPolicy>
     </appender>
 
@@ -91,14 +75,9 @@
         <appender-ref ref="springContextAppender"/>
     </logger>
 
-    <logger name="vaad24.admin" level="INFO" additivity="true">
+    <logger name="base24.admin" level="INFO" additivity="true">
         <appender-ref ref="adminAppender"/>
     </logger>
-
-    <logger name="monitoring" level="INFO" additivity="false">
-        <appender-ref ref="monitoringAppender"/>
-    </logger>
-
 
 
     <!--    un logger di questo tipo (senza appender) blocca tutti i log qui e non li propaga oltre-->
