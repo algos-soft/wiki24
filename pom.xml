@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <!-- Project from https://start.vaadin.com/project/40318f1f-62df-486f-9edc-466288617eb5 -->
     <groupId>it.algos</groupId>
@@ -13,7 +14,7 @@
         <java.version>17</java.version>
         <vaadin.version>24.2.3</vaadin.version>
         <!-- this parameter is needed as spring-boot bom overwrites it -->
-<!--        <selenium.version>4.5.3</selenium.version>-->
+        <!--        <selenium.version>4.5.3</selenium.version>-->
     </properties>
 
     <parent>
@@ -108,31 +109,41 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/com.vaadin/vaadin-testbench-junit5 -->
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-testbench</artifactId>
+            <artifactId>vaadin-testbench-junit5</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Include JUnit 4 support for TestBench and others -->
-        <dependency>
-            <groupId>org.junit.vintage</groupId>
-            <artifactId>junit-vintage-engine</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.github.bonigarcia</groupId>
-            <artifactId>webdrivermanager</artifactId>
-            <version>5.1.1</version>
-            <scope>test</scope>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.junit.vintage</groupId>-->
+        <!--            <artifactId>junit-vintage-engine</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--            <exclusions>-->
+        <!--                <exclusion>-->
+        <!--                    <groupId>org.hamcrest</groupId>-->
+        <!--                    <artifactId>hamcrest-core</artifactId>-->
+        <!--                </exclusion>-->
+        <!--            </exclusions>-->
+        <!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>io.github.bonigarcia</groupId>-->
+        <!--            <artifactId>webdrivermanager</artifactId>-->
+        <!--            <version>5.1.1</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
         <!-- fine vaadin standard -->
 
+        <!--        &lt;!&ndash; Spring security&ndash;&gt;-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--            <version>2.7.6</version>-->
+        <!--        </dependency>-->
+        <!--        &lt;!&ndash; Spring security&ndash;&gt;-->
+
+        <!-- ALGOS ADDED -->
 
         <!-- Spring MongoDB -->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb -->
@@ -153,7 +164,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
         <!-- Logback requires the Janino library for conditional logging -->
@@ -161,7 +172,7 @@
         <dependency>
             <groupId>org.codehaus.janino</groupId>
             <artifactId>janino</artifactId>
-            <version>3.1.9</version>
+            <version>3.1.10</version>
         </dependency>
         <!-- lombok -->
 
@@ -170,7 +181,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>32.1.3-jre</version>
         </dependency>
         <!-- com.google.common.base -->
 
@@ -184,30 +195,6 @@
         </dependency>
         <!-- opencsv -->
 
-        <!-- exporter -->
-        <!-- https://mvnrepository.com/artifact/org.vaadin.haijian/exporter -->
-        <dependency>
-            <groupId>org.vaadin.haijian</groupId>
-            <artifactId>exporter</artifactId>
-            <version>3.0.1</version>
-        </dependency>
-        <!-- exporter -->
-
-        <!-- json -->
-        <!-- https://mvnrepository.com/artifact/org.json/json -->
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20220924</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <!-- json -->
-
         <!-- Spring mail-->
         <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
         <dependency>
@@ -216,7 +203,6 @@
             <version>2.7.6</version>
         </dependency>
         <!-- Spring mail-->
-
 
         <!-- https://mvnrepository.com/artifact/ch.carnet.kasparscherrer/indeterminate-checkbox -->
         <dependency>
@@ -233,72 +219,98 @@
             <version>2.2.5</version>
         </dependency>
 
-
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
+        <!-- exporter -->
+        <!-- https://mvnrepository.com/artifact/org.vaadin.haijian/exporter -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
+            <groupId>org.vaadin.haijian</groupId>
+            <artifactId>exporter</artifactId>
+            <version>3.0.1</version>
         </dependency>
+        <!-- exporter -->
 
-        <!-- commons -->
-        <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
-        </dependency>
-        <!-- commons -->
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.vaadin.crudui/crudui &ndash;&gt;-->
+        <!--        &lt;!&ndash; commons &ndash;&gt;-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>commons-beanutils</groupId>-->
+        <!--            <artifactId>commons-beanutils</artifactId>-->
+        <!--            <version>1.9.4</version>-->
+        <!--        </dependency>-->
+        <!--        &lt;!&ndash; commons &ndash;&gt;-->
+
+
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.reflections/reflections &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.reflections</groupId>-->
+        <!--            <artifactId>reflections</artifactId>-->
+        <!--            <version>0.10.2</version>-->
+        <!--        </dependency>-->
+
+
+<!--        &lt;!&ndash; json &ndash;&gt;-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.json/json &ndash;&gt;-->
 <!--        <dependency>-->
-<!--            <groupId>org.vaadin.crudui</groupId>-->
-<!--            <artifactId>crudui</artifactId>-->
-<!--            <version>6.2.0</version>-->
+<!--            <groupId>org.json</groupId>-->
+<!--            <artifactId>json</artifactId>-->
+<!--            <version>20220924</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.googlecode.json-simple</groupId>-->
+<!--            <artifactId>json-simple</artifactId>-->
+<!--            <version>1.1.1</version>-->
+<!--        </dependency>-->
+<!--        &lt;!&ndash; json &ndash;&gt;-->
+
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.commons</groupId>-->
+<!--            <artifactId>commons-collections4</artifactId>-->
+<!--            <version>4.4</version>-->
 <!--        </dependency>-->
 
 
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <version>2.7.6</version>
-        </dependency>
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.vaadin.crudui/crudui &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.vaadin.crudui</groupId>-->
+        <!--            <artifactId>crudui</artifactId>-->
+        <!--            <version>6.2.0</version>-->
+        <!--        </dependency>-->
 
 
-        <!-- https://mvnrepository.com/artifact/org.webjars.bowergithub.vaadin/vaadin-material-styles -->
-        <dependency>
-            <groupId>org.webjars.bowergithub.vaadin</groupId>
-            <artifactId>vaadin-material-styles</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
-        <dependency>
-            <groupId>javax.persistence</groupId>
-            <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
-        </dependency>
-
-
-        <!-- Spring security-->
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-            <version>2.7.6</version>
-        </dependency>
-        <!-- Spring security-->
-
-        <!--        &lt;!&ndash; Spring security&ndash;&gt;-->
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--            <version>3.0.1</version>-->
+<!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
+<!--            <version>2.7.6</version>-->
 <!--        </dependency>-->
-<!--        &lt;!&ndash; Spring security&ndash;&gt;-->
+
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.webjars.bowergithub.vaadin/vaadin-material-styles &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.webjars.bowergithub.vaadin</groupId>-->
+<!--            <artifactId>vaadin-material-styles</artifactId>-->
+<!--            <version>1.3.2</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>javax.persistence</groupId>-->
+<!--            <artifactId>javax.persistence-api</artifactId>-->
+<!--            <version>2.2</version>-->
+<!--        </dependency>-->
+
+
+
+        <!--        &lt;!&ndash; Spring security&ndash;&gt;-->
+        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-security</artifactId>-->
+        <!--            <version>3.0.1</version>-->
+        <!--        </dependency>-->
+        <!--        &lt;!&ndash; Spring security&ndash;&gt;-->
 
     </dependencies>
 
