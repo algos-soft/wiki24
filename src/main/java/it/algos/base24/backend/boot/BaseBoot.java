@@ -228,8 +228,8 @@ public class BaseBoot {
          */
         try {
             property = "algos.base24.modulo";
-            String projectModulo = Objects.requireNonNull(environment.getProperty(property));
-            BaseVar.pathModuloBase = PATH_ALGOS + PUNTO + property;
+            String moduloBase = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.pathModuloBase = PATH_ALGOS + PUNTO + moduloBase;
         } catch (Exception unErrore) {
             logError(unErrore, property);
         }
@@ -241,7 +241,8 @@ public class BaseBoot {
          */
         try {
             property = "algos.project.modulo";
-            BaseVar.pathModuloProgetto = PATH_ALGOS + PUNTO + property;
+            String moduloProject = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.pathModuloProgetto = PATH_ALGOS + PUNTO + moduloProject;
         } catch (Exception unErrore) {
             logError(unErrore, property);
         }
@@ -278,7 +279,7 @@ public class BaseBoot {
      */
     protected void fixMenuRoutes() {
         if (Pref.usaMenuAutomatici.is()) {
-            for (Class clazz : reflectionService.getSubClazzView()) {
+            for (Class clazz : reflectionService.getSubClazzViewBase()) {
                 if (annotationService.usaMenuAutomatico(clazz)) {
                     BaseVar.menuRouteListVaadin.add(clazz);
                 }

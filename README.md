@@ -45,3 +45,9 @@ Once the JAR file is built, you can run it using
 - Find add-ons at [vaadin.com/directory](https://vaadin.com/directory).
 - Ask questions on [Stack Overflow](https://stackoverflow.com/questions/tagged/vaadin) or join our [Discord channel](https://discord.gg/MYFq5RTbBn).
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin).
+
+## JAR base24 (non funzionano le view)
+- mvn clean package -Pproduction -Dmaven.test.skip=true
+- cd /Users/gac/Documents/IdeaProjects/operativi/base24/target/classes
+- jar cf base24.jar it/algos/base24/*
+- jar tf base24.jar

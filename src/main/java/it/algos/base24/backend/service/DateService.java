@@ -2,9 +2,9 @@ package it.algos.base24.backend.service;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -27,7 +27,7 @@ import java.util.*;
 @Service
 public class DateService {
 
-    @Autowired
+    @Inject
     private TextService textService;
 
     public static final String INFERIORE_SECONDO = "meno di un secondo";

@@ -10,9 +10,9 @@ import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import jakarta.annotation.*;
-import org.springframework.beans.factory.annotation.*;
 import org.vaadin.lineawesome.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -20,9 +20,10 @@ import java.util.*;
  */
 public class MainLayout extends AppLayout {
 
-    @Autowired
+    @Inject
     private AnnotationService annotationService;
-    @Autowired
+
+    @Inject
     private LayoutService layoutService;
 
     private H2 viewTitle;
@@ -54,7 +55,7 @@ public class MainLayout extends AppLayout {
 
         //--Colorazione di controllo <br>
         if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            header.getElement().getStyle().set("background-color","red");
+            header.getElement().getStyle().set("background-color", "red");
         }
         Scroller scroller = new Scroller(createNavigation());
 
@@ -72,8 +73,8 @@ public class MainLayout extends AppLayout {
         SideNavItem sideItem;
         SideNavItem itemSection;
 
-//        nav.addItem(new SideNavItem("Hello World", HelloWorldView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-//        nav.addItem(new SideNavItem("About", AboutView.class, LineAwesomeIcon.FILE.create()));
+        //        nav.addItem(new SideNavItem("Hello World", HelloWorldView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
+        //        nav.addItem(new SideNavItem("About", AboutView.class, LineAwesomeIcon.FILE.create()));
 
         if (BaseVar.menuRouteListVaadin != null && BaseVar.menuRouteListVaadin.size() > 0) {
             lista.addAll(BaseVar.menuRouteListVaadin);
@@ -136,4 +137,5 @@ public class MainLayout extends AppLayout {
         PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
         return title == null ? "" : title.value();
     }
+
 }

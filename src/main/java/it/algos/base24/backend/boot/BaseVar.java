@@ -111,6 +111,7 @@ public class BaseVar {
      * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
      */
     public static String pathModuloBase;
+
     /**
      * Path del modulo di progetto <br>
      * Di default BaseVers oppure possibile sottoclasse del progetto <br>

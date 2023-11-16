@@ -4,6 +4,7 @@ import com.opencsv.bean.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
@@ -326,6 +327,8 @@ public class ResourceService {
     public Class getClazzBoot(String projectModulo, String projectName) {
         Class clazz = null;
         String clazzName = VUOTA;
+        String message;
+
         if (textService.isValid(projectName)) {
             clazzName = PATH_ALGOS + PUNTO + projectModulo + PUNTO + PATH_BOOT + PUNTO + textService.primaMaiuscola(projectName) + SUFFIX_BOOT;
         }
@@ -334,7 +337,8 @@ public class ResourceService {
             try {
                 clazz = Class.forName(clazzName);
             } catch (Exception unErrore) {
-                logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
+                message=String.format("Non ho trovato la classe [%s%s]",projectName,SUFFIX_BOOT);
+                logger.error(new WrapLog().exception(new AlgosException(unErrore.getCause(),message)).usaDb());
             }
         }
 

@@ -17,8 +17,8 @@ import java.util.stream.*;
 public enum MenuGroup implements Type {
     nessuno(VUOTA, 999),
     anagrafe("anagrafica", 1),
-    crono("crono", 3),
     geografia("geografia", 2),
+    crono("crono", 3),
     utility("utility", 4),
     ;
 

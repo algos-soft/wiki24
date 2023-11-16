@@ -221,8 +221,11 @@ public class ReflectionService {
         return getSubClazz(AbstractEntity.class, PATH_ALGOS);
     }
 
-    public List<Class> getSubClazzView() {
-        return getSubClazz(CrudView.class, PATH_ALGOS);
+    public List<Class> getSubClazzViewBase() {
+        return getSubClazz(CrudView.class, BaseVar.pathModuloBase);
+    }
+    public List<Class> getSubClazzViewProgetto() {
+        return getSubClazz(CrudView.class, BaseVar.pathModuloProgetto);
     }
 
     public List<Class> getSubClazzModulo() {
