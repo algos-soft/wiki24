@@ -16,6 +16,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE) //can use in class and interface.
 public @interface AView {
+
     /**
      * (Optional) nome visibile nel menu (maiuscolo) solo se diverso dal nome della route <br>
      * Di default lo stesso nome della route con iniziale maiuscolo <br>
@@ -27,4 +28,7 @@ public @interface AView {
     MenuGroup menuGroup() default MenuGroup.nessuno;
 
     boolean menuAutomatico() default true;
+
+    String menuGroupName() default VUOTA;
+
 }// end of interface annotation

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.sidenav.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
@@ -25,6 +26,9 @@ public class MainLayout extends AppLayout {
 
     @Inject
     private LayoutService layoutService;
+
+    @Inject
+    private TextService textService;
 
     private H2 viewTitle;
 
@@ -49,7 +53,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1("base24");
+        H1 appName = new H1(BaseVar.projectCurrent);
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
@@ -85,7 +89,7 @@ public class MainLayout extends AppLayout {
 
         if (lista != null && lista.size() > 0) {
             for (Class clazz : lista) {
-                menuGroup = annotationService.getMenuGroup(clazz).getTag();
+                menuGroup = annotationService.getMenuGroupName(clazz);
                 menuName = annotationService.getMenuName(clazz);
                 icon = annotationService.getMenuIcon(clazz);
                 sideItem = new SideNavItem(menuName, clazz, icon.create());
@@ -96,20 +100,18 @@ public class MainLayout extends AppLayout {
             }
         }
 
-        for (MenuGroup group : MenuGroup.getAllOrderedEnums()) {
-            keyGroup = group.getTag();
-            if (group != MenuGroup.nessuno) {
-                itemSection = new SideNavItem(keyGroup);
-                if (mappa.get(keyGroup) != null) {
-                    for (SideNavItem item : mappa.get(keyGroup)) {
+        mappa = fixOrderMappa(mappa);
+        if (mappa != null) {
+            for (String key : mappa.keySet()) {
+                if (textService.isValid(key)) {
+                    itemSection = new SideNavItem(key);
+                    for (SideNavItem item : mappa.get(key)) {
                         itemSection.addItem(item);
                     }
                     nav.addItem(itemSection);
                 }
-            }
-            else {
-                if (mappa.get(keyGroup) != null) {
-                    for (SideNavItem item : mappa.get(keyGroup)) {
+                else {
+                    for (SideNavItem item : mappa.get(key)) {
                         nav.addItem(item);
                     }
                 }
@@ -117,6 +119,31 @@ public class MainLayout extends AppLayout {
         }
 
         return nav;
+    }
+
+    private LinkedHashMap<String, List<SideNavItem>> fixOrderMappa(LinkedHashMap<String, List<SideNavItem>> mappa) {
+        LinkedHashMap<String, List<SideNavItem>> mappaOrdered = new LinkedHashMap<>();
+        String key;
+
+        for (MenuGroup group : MenuGroup.getAllOrderedEnums()) {
+            key = group.getTag();
+            if (mappa.containsKey(key)) {
+                mappaOrdered.put(key, mappa.get(key));
+            }
+        }
+
+        for (String key2 : mappa.keySet()) {
+            if (!mappaOrdered.containsKey(key2)) {
+                mappaOrdered.put(key2, mappa.get(key2));
+            }
+        }
+
+        if (mappaOrdered.containsKey(VUOTA)) {
+            mappaOrdered.remove(VUOTA);
+            mappaOrdered.put(VUOTA,mappa.get(VUOTA));
+        }
+
+        return mappaOrdered;
     }
 
     private Footer createFooter() {

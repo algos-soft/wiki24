@@ -1,9 +1,14 @@
 package it.algos.wiki24.backend.boot;
 
 import it.algos.base24.backend.boot.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project wiki24
@@ -39,18 +44,29 @@ public class WikiBoot extends BaseBoot {
     @Override
     protected void fixMenuRoutes() {
         super.fixMenuRoutes();
+        List<Class> listaViewsProject;
+        String message;
+        String viewName;
 
         if (Pref.usaMenuAutomatici.is()) {
-            for (Class clazz : reflectionService.getSubClazz(CrudView.class, "it.algos.wiki24")) {
-                if (annotationService.usaMenuAutomatico(clazz)) {
-                    BaseVar.menuRouteListProject.add(clazz);
+            listaViewsProject = reflectionService.getSubClazzViewProgetto();
+            if (listaViewsProject != null) {
+                for (Class clazz : listaViewsProject) {
+                    if (annotationService.usaMenuAutomatico(clazz)) {
+                        menuRouteListProject.add(clazz);
+                        viewName = clazz.getSimpleName();
+                        viewName = textService.levaCoda(viewName, SUFFIX_VIEW);
+                        nameViewListProject.add(viewName);
+                    }
                 }
             }
+            else {
+                message = String.format("Non esiste nessuna view/route nel progetto [%s]", projectCurrent);
+                logger.warn(new WrapLog().exception(new Exception(message)));
+            }
         }
-
-        Object alfa=BaseVar.menuRouteListVaadin;
-        Object beta=BaseVar.menuRouteListProject;
-        Object gamma=BaseVar.menuRouteListProject;
     }
-
 }
+
+
+

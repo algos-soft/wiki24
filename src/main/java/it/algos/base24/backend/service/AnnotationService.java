@@ -325,6 +325,32 @@ public class AnnotationService {
      *
      * @return the menuName
      */
+    public String getMenuGroupName(final Class viewClazz) {
+        String menuGroupName = MenuGroup.nessuno.getTag();
+        AView annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkView(viewClazz, "getMenuGroupName")) {
+            return menuGroupName;
+        }
+
+        annotation = this.getViewAnnotation(viewClazz);
+        if (annotation != null) {
+            menuGroupName = annotation.menuGroupName();
+            if (textService.isEmpty(menuGroupName)) {
+                menuGroupName = annotation.menuGroup().getTag();
+            }
+        }
+
+        return textService.primaMaiuscola(menuGroupName);
+    }
+    /**
+     * Get the menuGroup of the CrudView type clazz.
+     *
+     * @param viewClazz the class of type CrudView
+     *
+     * @return the menuName
+     */
     public MenuGroup getMenuGroup(final Class viewClazz) {
         MenuGroup menuGroup = MenuGroup.nessuno;
         AView annotation;
@@ -414,7 +440,7 @@ public class AnnotationService {
      * @return the menuName
      */
     public LineAwesomeIcon getMenuIcon(final Class viewClazz) {
-        LineAwesomeIcon menuIcon = null;
+        LineAwesomeIcon menuIcon = LineAwesomeIcon.FOLDER;
         AView annotation;
 
         // Controlla che i parametri in ingresso siano validi

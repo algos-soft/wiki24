@@ -1,6 +1,7 @@
 package it.algos.base24.backend.boot;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.anagrafica.via.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
@@ -8,10 +9,11 @@ import it.algos.base24.backend.packages.utility.role.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import jakarta.annotation.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.env.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
+import java.lang.reflect.*;
 import java.util.*;
 
 /**
@@ -24,28 +26,28 @@ import java.util.*;
 @Service
 public class BaseBoot {
 
-    @Autowired
+    @Inject
     public Environment environment;
 
-    @Autowired
+    @Inject
     public BaseVar baseVar;
 
-    @Autowired
+    @Inject
     public PreferenzaModulo preferenzaModulo;
 
-    @Autowired
+    @Inject
     public LogService logger;
 
-    @Autowired
+    @Inject
     public TextService textService;
 
-    @Autowired
+    @Inject
     public ResourceService resourceService;
 
-    @Autowired
+    @Inject
     public ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     public AnnotationService annotationService;
 
     private String property;
@@ -85,12 +87,12 @@ public class BaseBoot {
         //        this.creaPreferenzeMongoDB();
         //        logger.setUpIni();
 
-        //        this.printInfo();
         //        this.fixDBMongo();
         //        this.fixDebug();
 
         //        this.fixVariabiliRiferimentoIstanzeGenerali();
         this.fixMenuRoutes();
+        this.printInfo();
         //        this.fixData();
         //        this.fixVersioni();
         //        this.fixSchedule();
@@ -109,23 +111,22 @@ public class BaseBoot {
     protected void fixVariabili() {
 
         /**
-         * Nome identificativo minuscolo del framework base2023 <br>
+         * Nome identificativo maiuscolo del framework base <br>
          * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
-        BaseVar.frameworkBase2023 = "base2023";
-
-        /**
-         * Nome del database mongo collegato <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
-         */
-        BaseVar.mongoDatabaseName = "base2023";
+        try {
+            property = "algos.base24.name";
+            BaseVar.frameworkBase = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+        }
 
         /**
          * Nome identificativo del progetto corrente <br>
          * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
         try {
-            property = "algos.project.name";
+            property = "algos.project.current";
             BaseVar.projectCurrent = Objects.requireNonNull(environment.getProperty(property));
         } catch (Exception unErrore) {
             logError(unErrore, property);
@@ -136,21 +137,22 @@ public class BaseBoot {
          * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
         try {
-            property = "algos.project.name";
-            BaseVar.projectCurrentLower = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
+            property = "algos.project.modulo";
+            BaseVar.projectModulo = Objects.requireNonNull(environment.getProperty(property)).toLowerCase();
         } catch (Exception unErrore) {
             logError(unErrore, property);
         }
 
         /**
-         * Nome identificativo maiuscolo dell' applicazione <br>
+         * Nome identificativo del prefisso corrente <br>
          * Usato (eventualmente) nella barra di menu in testa pagina <br>
          * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
          * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
         try {
-            property = "algos.project.name";
-            BaseVar.projectCurrentUpper = Objects.requireNonNull(environment.getProperty(property).toUpperCase());
+            property = "algos.project.prefix";
+            BaseVar.projectPrefix = Objects.requireNonNull(textService.primaMaiuscola(environment.getProperty(property)));
+            int a = 87;
         } catch (Exception unErrore) {
             logError(unErrore, property);
         }
@@ -192,11 +194,22 @@ public class BaseBoot {
         }
 
         /**
+         * Nome del database mongo collegato <br>
+         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         */
+        try {
+            property = "spring.data.mongodb.database";
+            BaseVar.mongoDatabaseName = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+        }
+
+        /**
          * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
          * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
          * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
          */
-        BaseVar.menuRouteListVaadin = new ArrayList<>();
+        menuRouteListVaadin = new ArrayList<>();
 
         /**
          * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
@@ -206,18 +219,26 @@ public class BaseBoot {
         BaseVar.menuRouteListProject = new ArrayList<>();
 
         /**
+         * Lista delle views (@Routes) del framework base. <br>
+         * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+         */
+        BaseVar.nameViewListVaadin = new ArrayList<>();
+
+        /**
+         * Lista delle views (@Routes) del project corrente. <br>
+         * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+         */
+        BaseVar.nameViewListProject = new ArrayList<>();
+
+        /**
          * Classe da usare per il Boot iniziale di regolazione <br>
          * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
          * Deve essere regolata in resources.application.properties <br>
          */
         try {
-            property = "algos.project.modulo";
-            String projectModulo = Objects.requireNonNull(environment.getProperty(property));
-            property = "algos.project.name";
-            String projectName = Objects.requireNonNull(environment.getProperty(property));
-            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectName);
+            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
         } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
             logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
         }
 
@@ -278,17 +299,31 @@ public class BaseBoot {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixMenuRoutes() {
+        List<Class> listaViewsBase;
+        String message;
+        String viewName;
+
         if (Pref.usaMenuAutomatici.is()) {
-            for (Class clazz : reflectionService.getSubClazzViewBase()) {
-                if (annotationService.usaMenuAutomatico(clazz)) {
-                    BaseVar.menuRouteListVaadin.add(clazz);
+            listaViewsBase = reflectionService.getSubClazzViewBase();
+            if (listaViewsBase != null) {
+                for (Class clazz : reflectionService.getSubClazzViewBase()) {
+                    if (annotationService.usaMenuAutomatico(clazz)) {
+                        menuRouteListVaadin.add(clazz);
+                        viewName = clazz.getSimpleName();
+                        viewName = textService.levaCoda(viewName, SUFFIX_VIEW);
+                        BaseVar.nameViewListVaadin.add(viewName);
+                    }
                 }
+            }
+            else {
+                message = "Non esiste nessuna [view] nel progetto [base]";
+                logger.warn(new WrapLog().exception(new Exception(message)));
             }
         }
         else {
-            BaseVar.menuRouteListVaadin.add(RoleView.class);
-            BaseVar.menuRouteListVaadin.add(PreferenzaView.class);
-            BaseVar.menuRouteListVaadin.add(ViaView.class);
+            menuRouteListVaadin.add(RoleView.class);
+            menuRouteListVaadin.add(PreferenzaView.class);
+            menuRouteListVaadin.add(ViaView.class);
         }
 
     }
@@ -296,6 +331,30 @@ public class BaseBoot {
     private void logError(Exception unErrore, String property) {
         String message = String.format("Non ho trovato la property %s nelle risorse", property);
         logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+    }
+
+    private void printInfo() {
+        List<Field> lista = Arrays.stream(BaseVar.class.getFields())
+                .filter(element -> !element.getName().equals("menuRouteListVaadin"))
+                .filter(element -> !element.getName().equals("menuRouteListProject"))
+                .toList();
+        Object value;
+        String message;
+
+        if (Pref.debug.is()) {
+            if (lista != null) {
+                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+                message = "Variabili globali di BaseVar";
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+
+                for (Field field : lista) {
+                    value = reflectionService.getPropertyValue(baseVar, field.getName());
+                    message = String.format("%s%s%s", field.getName(), FORWARD, value);
+                    logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                }
+                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+            }
+        }
     }
 
 }

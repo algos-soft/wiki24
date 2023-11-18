@@ -139,7 +139,7 @@ public class ReflectionService {
      *
      * @return the property value
      */
-    public Object getPropertyValue(final AbstractEntity entityBean, final String publicFieldName) {
+    public Object getPropertyValue(final Object entityBean, final String publicFieldName) {
         Object value = null;
         //        List<Field> fieldsList = null;
         Field[] fieldsArray;
@@ -156,7 +156,6 @@ public class ReflectionService {
                 if (field.getName().equals(publicFieldName)) {
                     field.setAccessible(true);
                     value = field.get(entityBean);
-                    Object beta = field.getType();
                 }
             }
         } catch (Exception unErrore) {

@@ -22,10 +22,10 @@ import java.util.*;
 public class BaseVar {
 
     /**
-     * Nome identificativo minuscolo del framework base2023 <br>
+     * Nome identificativo maiuscolo del framework base <br>
      * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
      */
-    public static String frameworkBase2023;
+    public static String frameworkBase;
 
     /**
      * Nome identificativo del progetto corrente <br>
@@ -35,33 +35,20 @@ public class BaseVar {
 
 
     /**
-     * Nome identificativo minuscolo del progetto corrente <br>
+     * Nome identificativo del modulo corrente <br>
      * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
      */
-    public static String projectCurrentLower;
+    public static String projectModulo;
 
     /**
-     * Nome identificativo maiuscolo dell' applicazione <br>
+     * Nome identificativo del prefisso corrente <br>
      * Usato (eventualmente) nella barra di menu in testa pagina <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
      * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
      */
-    public static String projectCurrentUpper;
+    public static String projectPrefix;
 
 
-    /**
-     * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     * Usata da LayoutService per conto di MainLayout allo start della UI-logic <br>
-     */
-    public static List<Class<? extends CrudView>> menuRouteListVaadin;
-
-    /**
-     * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
-     */
-    public static List<Class<? extends CrudView>> menuRouteListProject;
 
 
     /**
@@ -90,6 +77,32 @@ public class BaseVar {
      * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
      */
     public static String mongoDatabaseName;
+
+    /**
+     * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+     * Usata da LayoutService per conto di MainLayout allo start della UI-logic <br>
+     */
+    public static List<Class<? extends CrudView>> menuRouteListVaadin;
+
+    /**
+     * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+     * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
+     */
+    public static List<Class<? extends CrudView>> menuRouteListProject;
+
+    /**
+     * Lista delle views (@Routes) del framework base. <br>
+     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+     */
+    public static List<String> nameViewListVaadin;
+
+    /**
+     * Lista delle views (@Routes) del project corrente. <br>
+     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
+     */
+    public static List<String> nameViewListProject;
 
     /**
      * Classe da usare per il Boot iniziale di regolazione <br>

@@ -7,6 +7,7 @@ import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.backend.boot.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -48,12 +49,14 @@ public class Application implements AppShellConfigurator {
      */
     @EventListener(ContextRefreshedEvent.class)
     private void doSomethingAfterStartup() {
-        try {
-            BaseBoot currentBoot = (BaseBoot) applicationContext.getBean(BaseVar.bootClazz);
+        WikiBoot currentBoot = applicationContext.getBean(WikiBoot.class);
+
+        if (currentBoot != null) {
             currentBoot.inizia();
-        } catch (Exception unErrore) {
+        }
+        else {
             String message = String.format("La variabile generale %s non può essere nulla", "BaseVar.bootClazz");
-            logger.error(new WrapLog().exception(unErrore).message(message).type(TypeLog.startup));
+            logger.error(new WrapLog().exception(new Exception(message)).type(TypeLog.startup));
         }
     }
 

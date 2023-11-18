@@ -165,7 +165,7 @@ public class LayoutService {
 
         String message;
         double doppio = BaseVar.projectVersion;
-        String nome = BaseVar.projectCurrentUpper;
+        String nome = BaseVar.projectCurrent;
         String data = BaseVar.projectDate;
         String note = BaseVar.projectNote;
 
