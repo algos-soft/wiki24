@@ -8,6 +8,7 @@ import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.boot.*;
+import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import jakarta.annotation.*;
@@ -53,39 +54,58 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        H1 appName = new H1(BaseVar.projectCurrent);
+        if (projectCurrent.equals(frameworkBase) ){
+            addDrawerContentBase();
+        }
+        else {
+            addDrawerContentProject();
+        }
+    }
+
+
+    private void addDrawerContentBase() {
+        H1 appName = new H1(projectCurrent);
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
         //--Colorazione di controllo <br>
         if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            header.getElement().getStyle().set("background-color", "red");
+            header.getElement().getStyle().set("background-color", "lightblue");
         }
-        Scroller scroller = new Scroller(createNavigation());
+        Scroller scroller = new Scroller(createNavigation(menuRouteListVaadin));
 
         addToDrawer(header, scroller, createFooter());
     }
 
-    private SideNav createNavigation() {
+    private void addDrawerContentProject() {
+        H1 appName = new H1(frameworkBase);
+        appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+        Header header = new Header(appName);
+        H1 projectName = new H1(projectCurrent);
+        projectName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
+        Header headerProject = new Header(projectName);
+
+        //--Colorazione di controllo <br>
+        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
+            header.getElement().getStyle().set("background-color", "lightblue");
+        }
+        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
+            headerProject.getElement().getStyle().set("background-color", "lightgreen");
+        }
+        Scroller scroller = new Scroller(createNavigation(menuRouteListVaadin));
+        Scroller scrollerProject = new Scroller(createNavigation(menuRouteListProject));
+
+        addToDrawer(header, scroller, headerProject, scrollerProject, createFooter());
+    }
+
+    private SideNav createNavigation(List<Class<? extends CrudView>> lista) {
         SideNav nav = new SideNav();
-        List<Class> lista = new ArrayList<>();
         String menuGroup;
-        String keyGroup;
         String menuName;
         LineAwesomeIcon icon;
         LinkedHashMap<String, List<SideNavItem>> mappa = new LinkedHashMap<>();
         SideNavItem sideItem;
         SideNavItem itemSection;
-
-        //        nav.addItem(new SideNavItem("Hello World", HelloWorldView.class, LineAwesomeIcon.PENCIL_RULER_SOLID.create()));
-        //        nav.addItem(new SideNavItem("About", AboutView.class, LineAwesomeIcon.FILE.create()));
-
-        if (BaseVar.menuRouteListVaadin != null && BaseVar.menuRouteListVaadin.size() > 0) {
-            lista.addAll(BaseVar.menuRouteListVaadin);
-        }
-        if (BaseVar.menuRouteListProject != null && BaseVar.menuRouteListProject.size() > 0) {
-            lista.addAll(BaseVar.menuRouteListProject);
-        }
 
         if (lista != null && lista.size() > 0) {
             for (Class clazz : lista) {
@@ -121,6 +141,7 @@ public class MainLayout extends AppLayout {
         return nav;
     }
 
+
     private LinkedHashMap<String, List<SideNavItem>> fixOrderMappa(LinkedHashMap<String, List<SideNavItem>> mappa) {
         LinkedHashMap<String, List<SideNavItem>> mappaOrdered = new LinkedHashMap<>();
         String key;
@@ -140,7 +161,7 @@ public class MainLayout extends AppLayout {
 
         if (mappaOrdered.containsKey(VUOTA)) {
             mappaOrdered.remove(VUOTA);
-            mappaOrdered.put(VUOTA,mappa.get(VUOTA));
+            mappaOrdered.put(VUOTA, mappa.get(VUOTA));
         }
 
         return mappaOrdered;
