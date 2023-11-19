@@ -7,7 +7,6 @@ import com.vaadin.flow.component.sidenav.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;

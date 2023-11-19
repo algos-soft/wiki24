@@ -31,6 +31,8 @@ public class NazSingolareList extends CrudList {
         layout.add(ASpan.text(String.format("Prova")).verde());
         super.addAlert(layout);
     }
+
+
     public ExcelExporter creaExcelExporter() {
         String[] properties = {"nome", "plurale","numBio"};
         ExcelExporter exporter = new ExcelExporter(NazSingolareEntity.class, filtri, List.of(properties), mongoService);
