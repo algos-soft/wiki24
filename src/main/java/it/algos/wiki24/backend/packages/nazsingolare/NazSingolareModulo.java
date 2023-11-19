@@ -66,5 +66,10 @@ public class NazSingolareModulo extends CrudModulo {
     }
 
 
+    @Override
+    public RisultatoReset resetDelete() {
+//        RisultatoReset typeReset = super.resetDelete();
+        return null;
+    }
 
 }// end of CrudModulo class
