@@ -1,13 +1,16 @@
 package it.algos.base24.backend.packages.geografia.stato;
 
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.geografia.continente.*;
-import it.algos.base24.ui.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -35,14 +38,37 @@ public class StatoList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
+        Anchor anchor1;
+        Anchor anchor2;
+        Anchor anchor3;
+        String link;
+        String caption;
         String message;
         String alfa3 = "ISO 3166-1 alpha-3";
         String capitali = "Capitali degli Stati del mondo";
         String alfa2 = "ISO 3166-1";
 
-        message = String.format("Tavola di base.");
-        message += String.format(" Costruita da Wiki con: [%s], [%s] e [%s]", alfa3, capitali, alfa2);
-        layout.add(ASpan.text(message).verde());
+        link = String.format("%s%s", TAG_WIKI, alfa3);
+        caption = String.format("%s%s%s", QUADRA_INI, alfa3, QUADRA_END);
+        anchor1 = new Anchor(link, caption);
+        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
+        link = String.format("%s%s", TAG_WIKI, capitali);
+        caption = String.format("%s%s%s", QUADRA_INI, capitali, QUADRA_END);
+        anchor2 = new Anchor(link, caption);
+        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
+        link = String.format("%s%s", TAG_WIKI, alfa2);
+        caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
+        anchor3 = new Anchor(link, caption);
+        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
+        message = "Tavola di base. Costruita dalle pagine Wiki: ";
+        Label testo = new Label(message);
+        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+
+        layout.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
 
         super.addAlert(layout);
     }
@@ -55,7 +81,7 @@ public class StatoList extends CrudList {
         super.fixTop();
 
         comboContinente = new ComboBox<>();
-        comboContinente.setPlaceholder( "Continenti...");
+        comboContinente.setPlaceholder("Continenti...");
         comboContinente.setClearButtonVisible(true);
         comboContinente.setWidth("14rem");
         comboContinente.setItems(continenteModulo.findAll());
@@ -81,7 +107,7 @@ public class StatoList extends CrudList {
 
 
     public ExcelExporter creaExcelExporter() {
-        String[] properties = {"ordine", "nome","capitale","alfa3","alfa2"};
+        String[] properties = {"ordine", "nome", "capitale", "alfa3", "alfa2"};
         ExcelExporter exporter = new ExcelExporter(StatoEntity.class, filtri, List.of(properties), mongoService);
 
         exporter.setTitle("Lista degli stati");

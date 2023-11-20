@@ -1,14 +1,15 @@
 package it.algos.base24.backend.packages.geografia.regione;
 
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.geografia.stato.*;
-import it.algos.base24.ui.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -23,6 +24,7 @@ public class RegioneList extends CrudList {
     public StatoModulo statoModulo;
 
     private ComboBox comboStato;
+
     private ComboBox comboType;
 
     public RegioneList(final RegioneModulo crudModulo) {
@@ -37,14 +39,23 @@ public class RegioneList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
+        Anchor anchor1;
+        String link;
+        String caption;
         String message;
-        String alfa3 = "ISO 3166-1 alpha-3";
-        String capitali = "Capitali degli Stati del mondo";
-        String alfa2 = "ISO 3166-1";
+        String alfa1 = "ISO 3166-1";
+        String alfa2 = "ISO 3166-2:xx";
 
-        message = String.format("Tavola di base.");
-        message += String.format(" Costruita da Wiki con: [%s]", "ISO 3166-2:...");
-        layout.add(ASpan.text(message).verde());
+        link = String.format("%s%s", TAG_WIKI, alfa1);
+        caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
+        anchor1 = new Anchor(link, caption);
+        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
+        message = "Tavola di base. Costruita dalle pagine Wiki: ";
+        Label testo = new Label(message);
+        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+        layout.add(new Span(testo, anchor1));
 
         super.addAlert(layout);
     }
@@ -57,7 +68,7 @@ public class RegioneList extends CrudList {
         super.fixTop();
 
         comboStato = new ComboBox<>();
-        comboStato.setPlaceholder( "Stati...");
+        comboStato.setPlaceholder("Stati...");
         comboStato.setClearButtonVisible(true);
         comboStato.setWidth("14rem");
         comboStato.setItems(statoModulo.findAllEuropa());
@@ -65,7 +76,7 @@ public class RegioneList extends CrudList {
         topPlaceHolder.add(comboStato);
 
         comboType = new ComboBox<>();
-        comboType.setPlaceholder( "Type...");
+        comboType.setPlaceholder("Type...");
         comboType.setClearButtonVisible(true);
         comboType.setWidth("14rem");
         comboType.setItems(TypeRegione.values());
@@ -100,7 +111,7 @@ public class RegioneList extends CrudList {
     }
 
     public ExcelExporter creaExcelExporter() {
-        String[] properties = {"sigla", "nome","stato","type"};
+        String[] properties = {"sigla", "nome", "stato", "type"};
         ExcelExporter exporter = new ExcelExporter(RegioneEntity.class, filtri, List.of(properties), mongoService);
 
         exporter.setTitle("Lista delle regioni");

@@ -181,10 +181,7 @@ public abstract class CrudList extends VerticalLayout {
         this.setMargin(false);
         setSizeFull();
 
-        //--Colorazione di controllo <br>
-        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            this.getElement().getStyle().set("background-color", "yellow");
-        }
+        this.getElement().getStyle().set("background-color", "ivory");
 
         //--Aggiunge un layout per informazioni aggiuntive come header della lista <br>
         //--Qui costruisce sempre il contenitore (placeHolder) anche vuoto <br>
@@ -533,7 +530,6 @@ public abstract class CrudList extends VerticalLayout {
     public void saveHandler(final AbstractEntity entityBean, final CrudOperation operation) {
         this.refreshData();
     }
-
 
 
     public boolean isSingolo() {

@@ -53,7 +53,7 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContent() {
-        if (projectCurrent.equals(frameworkBase) ){
+        if (projectCurrent.equals(frameworkBase)) {
             addDrawerContentBase();
         }
         else {
@@ -67,10 +67,8 @@ public class MainLayout extends AppLayout {
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
 
-        //--Colorazione di controllo <br>
-        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            header.getElement().getStyle().set("background-color", "lightblue");
-        }
+        header.getElement().getStyle().set("background-color", "lightblue");
+
         Scroller scroller = new Scroller(createNavigation(menuRouteListVaadin));
 
         addToDrawer(header, scroller, createFooter());
@@ -85,12 +83,8 @@ public class MainLayout extends AppLayout {
         Header headerProject = new Header(projectName);
 
         //--Colorazione di controllo <br>
-        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            header.getElement().getStyle().set("background-color", "lightblue");
-        }
-        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            headerProject.getElement().getStyle().set("background-color", "lightgreen");
-        }
+        header.getElement().getStyle().set("background-color", "lightblue");
+        headerProject.getElement().getStyle().set("background-color", "lightpink");
         Scroller scroller = new Scroller(createNavigation(menuRouteListVaadin));
         Scroller scrollerProject = new Scroller(createNavigation(menuRouteListProject));
 
