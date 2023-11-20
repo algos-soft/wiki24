@@ -68,7 +68,7 @@ public class ASpan extends Span {
     }
 
     public ASpan small() {
-        this.fontSize = FontSize.em7;
+        this.fontSize = FontSize.em8;
         this.getElement().getStyle().set(TAG_HTML_LINE_HEIGHT, LineHeight.em12.getTag());
         return size(fontSize);
     }

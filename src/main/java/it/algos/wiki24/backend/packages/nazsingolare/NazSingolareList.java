@@ -57,8 +57,17 @@ public class NazSingolareList extends CrudList {
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
         layout.add(new Span(testo, anchor1, new Text(SEP), anchor2));
+        message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
+        layout.add(ASpan.text(message).size(FontSize.em8).rosso());
 
-        super.addAlert(layout);
+        message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
+        layout.add(ASpan.text(message).rosso());
+        message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
+        layout.add(ASpan.text(message).rosso());
+        message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
+        layout.add(ASpan.text(message).rosso().small());
+
+        alertPlaceHolder.add(layout);
     }
 
 
