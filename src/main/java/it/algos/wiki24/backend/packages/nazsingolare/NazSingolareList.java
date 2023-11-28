@@ -11,6 +11,7 @@ import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
@@ -18,7 +19,7 @@ import java.util.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NazSingolareList extends CrudList {
+public class NazSingolareList extends WikiList {
 
 
     public NazSingolareList(final NazSingolareModulo crudModulo) {
@@ -32,7 +33,7 @@ public class NazSingolareList extends CrudList {
 
     @Override
     public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+//        VerticalLayout layout = new SimpleVerticalLayout();
         Anchor anchor1;
         Anchor anchor2;
         String link;
@@ -56,23 +57,23 @@ public class NazSingolareList extends CrudList {
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        layout.add(new Span(testo, anchor1, new Text(SEP), anchor2));
+        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
         message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
-        layout.add(ASpan.text(message).size(FontSize.em8).rosso());
+        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
         message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
-        layout.add(ASpan.text(message).rosso());
+        alertPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
-        layout.add(ASpan.text(message).rosso());
+        alertPlaceHolder.add(ASpan.text(message).rosso());
         message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
-        layout.add(ASpan.text(message).rosso().small());
+        alertPlaceHolder.add(ASpan.text(message).rosso().small());
 
-        alertPlaceHolder.add(layout);
+//        alertPlaceHolder.add(layout);
     }
 
 
     public ExcelExporter creaExcelExporter() {
-        String[] properties = {"nome", "plurale","numBio"};
+        String[] properties = {"nome", "plurale", "numBio"};
         ExcelExporter exporter = new ExcelExporter(NazSingolareEntity.class, filtri, List.of(properties), mongoService);
 
         exporter.setTitle("Lista delle nazioni (singolare)");

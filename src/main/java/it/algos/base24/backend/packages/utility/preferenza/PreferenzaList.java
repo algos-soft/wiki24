@@ -53,7 +53,9 @@ public class PreferenzaList extends CrudList {
         VerticalLayout layout = new SimpleVerticalLayout();
         String message;
 
-        layout.add(ASpan.text(String.format(TEXT_ENUM, "Pref", "Preferenza")).verde());
+        message = String.format(TEXT_ENUM, "Pref", "Preferenza");
+        layout.add(ASpan.text(message).verde().bold());
+
         layout.add(ASpan.text(TEXT_NEWS).rosso());
         layout.add(ASpan.text(TEXT_RESET_STARTUP).rosso());
         layout.add(ASpan.text(TEXT_RESET_ADD).rosso());

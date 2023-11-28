@@ -155,7 +155,7 @@ public class StatoModulo extends CrudModulo {
                         nome = textService.trim(nome);
                         nome = textService.setNoDoppieQuadre(nome);
                         if (nome.contains(PIPE)) {
-                            nome = textService.levaTesta(nome, PIPE);
+                            nome = textService.levaPrimaAncheTag(nome, PIPE);
                         }
                         mappaBeans.put(alfa3, newEntity(pos++, nome, alfa3));
                     }
@@ -185,8 +185,9 @@ public class StatoModulo extends CrudModulo {
 
         if (righeTable != null) {
             for (String riga : righeTable) {
-                riga = textService.levaTesta(riga, CAPO_REGEX);
-                partiRiga = StringUtils.splitByWholeSeparator(riga, CAPO_REGEX);
+                riga = textService.levaTesta(riga, TRATTINO);
+                riga = textService.levaTesta(riga, CAPO_SPLIT);
+                partiRiga = StringUtils.splitByWholeSeparator(riga, CAPO_SPLIT);
                 if (partiRiga != null && partiRiga.length > 0) {
                     //                    sottoPartiRiga = StringUtils.split(partiRiga[0], PIPE + PIPE);
                     if (partiRiga != null && partiRiga.length > 2) {
@@ -210,7 +211,7 @@ public class StatoModulo extends CrudModulo {
                             capitale = textService.levaTesta(capitale, PIPE);
                         }
                         if (capitale.contains(PIPE)) {
-                            capitale = textService.levaTesta(capitale, PIPE);
+                            capitale = textService.levaPrimaAncheTag(capitale, PIPE);
                         }
                         if (capitale.contains(DOPPIE_QUADRE_END) && capitale.contains(DOPPIE_QUADRE_INI)) {
                             capitale = textService.levaCodaDaPrimo(capitale, DOPPIE_QUADRE_END);
@@ -223,7 +224,7 @@ public class StatoModulo extends CrudModulo {
                             mappaBeans.put(alfa3, entityBean);
                         }
                         else {
-                            message = String.format("Non ho trovato %s nella mappa - leggeCapitali()", alfa3);
+                            message = String.format("Non ho trovato %s nella riga %s della mappa - leggeCapitali()", alfa3, riga);
                             logger.warn(new WrapLog().message(message).type(TypeLog.reset));
                         }
                     }
@@ -312,8 +313,10 @@ public class StatoModulo extends CrudModulo {
             parti = testoUtile.split(sep);
             if (parti != null) {
                 for (String parte : parti) {
-                    alfa3 = textService.levaCodaDaPrimo(parte, TAG_REF);
+                    alfa3 = parte;
+                    alfa3 = textService.levaCodaDaPrimo(alfa3, TAG_REF);
                     alfa3 = textService.levaCodaDaPrimo(alfa3, DOPPIE_QUADRE_INI);
+                    alfa3 = textService.levaCoda(alfa3, CAPO_SPLIT);
                     alfa3 = textService.setNoDoppieGraffe(alfa3);
                     alfa3 = textService.levaCodaDaPrimo(alfa3, TRATTINO);
                     alfa3 = textService.levaTesta(alfa3, PIPE);
@@ -323,7 +326,7 @@ public class StatoModulo extends CrudModulo {
                         mappaBeans.put(alfa3, entityBean);
                     }
                     else {
-                        message = String.format("Non ho trovato %s nella mappa - leggeContinente() di %s", alfa3, continente.nome);
+                        message = String.format("Non ho trovato %s nella riga %s della mappa - leggeContinente() di %s", alfa3, parte, continente.nome);
                         logger.warn(new WrapLog().message(message).type(TypeLog.reset));
                     }
                 }

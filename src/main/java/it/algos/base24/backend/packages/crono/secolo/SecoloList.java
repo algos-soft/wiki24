@@ -26,9 +26,13 @@ public class SecoloList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format(TEXT_ENUM, "SecoloEnum", "Secolo")).verde());
+        String message;
+
+        message = String.format(TEXT_ENUM, "SecoloEnum", "Secolo");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
-        layout.add(ASpan.text("L'anno [zero] non esiste").blue());
+        layout.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }
 
 }// end of CrudList class

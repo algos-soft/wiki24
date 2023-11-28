@@ -33,7 +33,11 @@ public class GiornoList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format(TEXT_BACK,  "Giorno")).verde());
+        String message;
+
+        message = String.format(TEXT_BACK, "Giorno");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
     }
 

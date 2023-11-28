@@ -26,4 +26,5 @@ public class NotaForm extends CrudForm {
         super.numResponsiveStepColumn = 1;
     }
 
+
 }// end of CrudForm class

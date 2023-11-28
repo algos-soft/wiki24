@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "nazsingolare", keyPropertyName = "nome",usaStartupReset = true, typeReset = TypeReset.resetAdd)
+@AEntity(collectionName = "nazsingolare", keyPropertyName = "nome",usaStartupReset = true, typeReset = TypeReset.resetDelete)
 public class NazSingolareEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, headerText = "singolare", caption = "singolare", widthRem = 20)

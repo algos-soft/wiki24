@@ -13,7 +13,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "anno", usaStartupReset = true, typeReset = TypeReset.soloShow)
+@AEntity(collectionName = "anno", usaStartupReset = true, typeReset = TypeReset.soloList)
 public class AnnoEntity extends AbstractEntity {
 
     @AField(type = TypeField.integer, headerText = "#", widthRem = 5, caption = "Ordine a partire dal 1.000 a.C.")

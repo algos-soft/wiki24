@@ -33,7 +33,11 @@ public class RoleList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format(TEXT_ENUM, "RoleEnum", "Role")).verde());
+        String message;
+
+        message = String.format(TEXT_ENUM, "RoleEnum", "Role");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
     }
 

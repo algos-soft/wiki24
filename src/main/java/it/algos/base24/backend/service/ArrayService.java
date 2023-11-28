@@ -25,8 +25,10 @@ import java.util.*;
  */
 @Service
 public class ArrayService {
+
     @Inject
     private TextService textService;
+
     @Inject
     LogService logger;
 
@@ -193,7 +195,6 @@ public class ArrayService {
     public boolean isMappaSemplificabile(Map<String, List<String>> multiParametersMap) {
         return multiParametersMap != null && multiParametersMap.size() > 0 && multiParametersMap.values().stream().filter(n -> n.size() > 1).count() == 0;
     }
-
 
 
     /**

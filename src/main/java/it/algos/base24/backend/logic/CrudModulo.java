@@ -17,6 +17,7 @@ import org.springframework.context.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
 
+import javax.inject.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -34,13 +35,13 @@ public class CrudModulo {
      * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
-    @Autowired
+    @Inject
     public ApplicationContext appContext;
 
-    @Autowired
+    @Inject
     public ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     public AnnotationService annotationService;
 
     @Autowired

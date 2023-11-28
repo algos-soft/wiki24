@@ -52,7 +52,7 @@ public class RegioneList extends CrudList {
         anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         message = "Tavola di base. Costruita dalle pagine Wiki: ";
-        Label testo = new Label(message);
+        Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
         layout.add(new Span(testo, anchor1));

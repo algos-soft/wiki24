@@ -111,6 +111,8 @@ public abstract class CrudList extends VerticalLayout {
 
     protected TypeReset typeReset;
 
+    protected String message;
+
     public CrudList() {
     }
 
@@ -227,6 +229,9 @@ public abstract class CrudList extends VerticalLayout {
         if (usaBottoneShows) {
             layout.add(ASpan.text(TEXT_HARD).rosso());
         }
+        if (!usaBottoneShows && !usaBottoneEdit) {
+            layout.add(ASpan.text(TEXT_HARD).rosso());
+        }
 
         if (usaBottoneResetDelete) {
             layout.add(ASpan.text(TEXT_RESET_DELETE).rosso());
@@ -304,16 +309,21 @@ public abstract class CrudList extends VerticalLayout {
                 return;
             }
 
-            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
-                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
-                Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
-                downloadAnchor.getStyle().set("margin-left", "0.4rem");
-                buttonBar.export(downloadAnchor);
-            }
-            else {
-                String message = String.format("Nella classe %s c'è flag usaBottoneExport=true ma manca il metodo %s()", this.getClass().getSimpleName(), METHOD_EXPORT);
-                logger.warn(new WrapLog().message(message));
-            }
+            String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
+            Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
+            downloadAnchor.getStyle().set("margin-left", "0.4rem");
+            buttonBar.export(downloadAnchor);
+
+//            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
+//                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
+//                Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
+//                downloadAnchor.getStyle().set("margin-left", "0.4rem");
+//                buttonBar.export(downloadAnchor);
+//            }
+//            else {
+//                String message = String.format("Nella classe %s c'è flag usaBottoneExport=true ma manca il metodo %s()", this.getClass().getSimpleName(), METHOD_EXPORT);
+//                logger.warn(new WrapLog().message(message));
+//            }
         }
     }
 
@@ -702,7 +712,14 @@ public abstract class CrudList extends VerticalLayout {
 
 
     public ExcelExporter creaExcelExporter() {
-        return null;
+        ExcelExporter exporter;
+        List<String> properties = currentCrudModulo.getPropertyNames();
+        String title = String.format("Lista %s", annotationService.getMenuName(currentCrudEntityClazz));
+
+        exporter = new ExcelExporter(currentCrudEntityClazz, filtri, properties, mongoService);
+        exporter.setTitle(title);
+
+        return exporter;
     }
 
 }

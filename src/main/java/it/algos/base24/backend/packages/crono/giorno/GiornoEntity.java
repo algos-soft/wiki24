@@ -14,7 +14,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "giorno", usaStartupReset = true, typeReset = TypeReset.soloShow)
+@AEntity(collectionName = "giorno", usaStartupReset = true, typeReset = TypeReset.soloList)
 public class GiornoEntity extends AbstractEntity {
 
     @AField(type = TypeField.integer, headerText = "#", widthRem = 3, caption = "Ordinamento da inizio anno")

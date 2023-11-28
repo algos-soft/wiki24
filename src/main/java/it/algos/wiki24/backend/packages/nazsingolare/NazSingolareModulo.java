@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -44,7 +45,7 @@ public class NazSingolareModulo extends CrudModulo {
      */
     @Override
     public NazSingolareEntity newEntity() {
-        return newEntity(VUOTA,VUOTA);
+        return newEntity(VUOTA, VUOTA);
     }
 
     /**
@@ -68,7 +69,12 @@ public class NazSingolareModulo extends CrudModulo {
 
     @Override
     public RisultatoReset resetDelete() {
-//        RisultatoReset typeReset = super.resetDelete();
+        //        RisultatoReset typeReset = super.resetDelete();
+        String nomeModulo = TAG_MODULO + "Plurale attività";
+        String testoLeggibile = VUOTA;
+
+        testoLeggibile = webService.leggeWikiParse(nomeModulo);
+        int a = 87;
         return null;
     }
 

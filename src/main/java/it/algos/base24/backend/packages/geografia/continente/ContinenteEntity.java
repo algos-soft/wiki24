@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "continente", usaStartupReset = true, typeReset = TypeReset.soloShow)
+@AEntity(collectionName = "continente", usaStartupReset = true, typeReset = TypeReset.soloList)
 public class ContinenteEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine, headerText = "#")

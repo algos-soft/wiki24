@@ -198,7 +198,7 @@ public class BaseCost {
 
     public static String TEXT_ENUM = "Tavola di servizio usata solo in background. Costruita dalla enum %s in %sModulo.resetDelete().";
 
-    public static String TEXT_HARD = "Solo hard coded. Non creabili e non modificabili. La scheda si apre solo in 'visione'.";
+    public static String TEXT_HARD = "Solo hard coded. Non creabili e non modificabili.";
 
     public static String TEXT_NEWS = "Creazione automatica della tavola. Si possono modificare i valori. Se ne possono aggiungere altri.";
 

@@ -32,7 +32,11 @@ public class ViaList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format("%s%s", TEXT_CSV, "vie")).verde());
+        String message;
+
+        message = String.format("%s%s", TEXT_CSV, "vie");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
     }
 

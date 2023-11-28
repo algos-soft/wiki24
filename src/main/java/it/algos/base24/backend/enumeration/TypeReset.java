@@ -10,7 +10,9 @@ package it.algos.base24.backend.enumeration;
 public enum TypeReset {
     nessuno(false, false, false, false, false, false, false, false, true, false),
     standard(true, false, false, true, true, false, true, true, true, false),
+    soloList(true, true, false, false, false, false, false, true, true, false),
     soloShow(true, true, false, false, false, true, false, true, true, false),
+    resetDelete(true, true, false, false, false, true, false, true, true, true),
     resetAdd(true, false, true, true, true, false, true, true, true, true),
     preferenze(false, false, false, false, false, false, false, false, true, false),
     additivo(false, false, false, false, false, false, false, false, true, false),

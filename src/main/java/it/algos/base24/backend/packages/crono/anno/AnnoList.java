@@ -33,8 +33,13 @@ public class AnnoList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format(TEXT_BACK,  "Anno")).verde());
+        String message;
+
+        message = String.format(TEXT_BACK, "Anno");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
+        layout.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }
 
 

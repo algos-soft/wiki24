@@ -32,7 +32,11 @@ public class ContinenteList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format(TEXT_ENUM, "ContinenteEnum", "Continente")).verde());
+        String message;
+
+        message = String.format(TEXT_ENUM, "ContinenteEnum", "Continente");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
     }
 

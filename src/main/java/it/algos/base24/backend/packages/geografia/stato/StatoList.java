@@ -38,12 +38,12 @@ public class StatoList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
+        String message;
         Anchor anchor1;
         Anchor anchor2;
         Anchor anchor3;
         String link;
         String caption;
-        String message;
         String alfa3 = "ISO 3166-1 alpha-3";
         String capitali = "Capitali degli Stati del mondo";
         String alfa2 = "ISO 3166-1";
@@ -64,7 +64,7 @@ public class StatoList extends CrudList {
         anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         message = "Tavola di base. Costruita dalle pagine Wiki: ";
-        Label testo = new Label(message);
+        Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 

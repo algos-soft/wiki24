@@ -25,7 +25,11 @@ public class NotaList extends CrudList {
     @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format("Prova")).verde());
+        String message;
+
+        message = String.format("Prova");
+        layout.add(ASpan.text(message).verde().bold());
+
         super.addAlert(layout);
     }
 

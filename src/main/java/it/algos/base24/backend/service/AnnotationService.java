@@ -378,7 +378,7 @@ public class AnnotationService {
      */
     public String getMenuName(final Class genericClazz) {
         String menuName = VUOTA;
-        Class clazz = genericClazz;
+        Class clazz = null;
         String clazzName = VUOTA;
         AView annotation;
         String message;
@@ -396,6 +396,7 @@ public class AnnotationService {
             return pageTitle.value();
         }
 
+
         // Controlla che i parametri in ingresso siano validi
         if (!CrudView.class.isAssignableFrom(genericClazz)) {
             if (clazz == null && AbstractEntity.class.isAssignableFrom(genericClazz)) {
@@ -412,6 +413,11 @@ public class AnnotationService {
             if (clazz == null) {
                 return menuName;
             }
+        }
+
+        pageTitle = (PageTitle) clazz.getAnnotation(PageTitle.class);
+        if (pageTitle != null) {
+            return pageTitle.value();
         }
 
         annotation = this.getViewAnnotation(clazz);
