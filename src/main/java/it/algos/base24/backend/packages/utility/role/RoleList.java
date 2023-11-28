@@ -2,7 +2,6 @@ package it.algos.base24.backend.packages.utility.role;
 
 import com.vaadin.flow.component.orderedlayout.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
@@ -31,14 +30,14 @@ public class RoleList extends CrudList {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         String message;
 
         message = String.format(TEXT_ENUM, "RoleEnum", "Role");
         layout.add(ASpan.text(message).verde().bold());
 
-        super.addAlert(layout);
+        return super.addAlert(layout);
     }
 
 

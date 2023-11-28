@@ -24,7 +24,7 @@ public class ScheduleTaskUsingCronExpression {
 
     @Scheduled(cron = "0 0 * * * ?")
     public void scheduleOgniOra() {
-        ogniOra();
+        ogniMinuto();
     }
 
     protected void ogniOra() {
@@ -32,7 +32,7 @@ public class ScheduleTaskUsingCronExpression {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void scheduleOgniGiorno() {
-        ogniGiorno();
+        ogniMinuto();
     }
 
     protected void ogniGiorno() {

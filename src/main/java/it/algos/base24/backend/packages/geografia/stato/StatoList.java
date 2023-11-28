@@ -6,7 +6,6 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
@@ -36,8 +35,8 @@ public class StatoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         String message;
         Anchor anchor1;
         Anchor anchor2;
@@ -70,7 +69,7 @@ public class StatoList extends CrudList {
 
         layout.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
 
-        super.addAlert(layout);
+        return super.addAlert(layout);
     }
 
     /**

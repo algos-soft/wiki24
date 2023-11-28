@@ -3,7 +3,6 @@ package it.algos.base24.backend.packages.crono.mese;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
@@ -24,28 +23,14 @@ public class MeseList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
-        String message;
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
 
         message = String.format(TEXT_ENUM, "MeseEnum", "Mese");
         layout.add(ASpan.text(message).verde().bold());
 
-        super.addAlert(layout);
+        return super.addAlert(layout);
     }
 
-//    public ExcelExporter creaExcelExporter() {
-//        String[] properties = {"ordine", "nome", "giorni", "primo", "ultimo"};
-//        ExcelExporter exporter = new ExcelExporter(MeseEntity.class, filtri, List.of(properties), mongoService);
-//
-//        exporter.setTitle("Lista dei mesi");
-//        exporter.setColumnWidth("ordine", 8);
-//        exporter.setColumnWidth("nome", 20);
-//        exporter.setColumnWidth("giorni", 8);
-//        exporter.setColumnWidth("primo", 8);
-//        exporter.setColumnWidth("ultimo", 8);
-//
-//        return exporter;
-//    }
 
 }// end of CrudList class

@@ -221,7 +221,8 @@ public abstract class CrudList extends VerticalLayout {
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void fixAlert() {
+    public VerticalLayout fixAlert() {
+        return new SimpleVerticalLayout();
     }
 
 
@@ -314,16 +315,16 @@ public abstract class CrudList extends VerticalLayout {
             downloadAnchor.getStyle().set("margin-left", "0.4rem");
             buttonBar.export(downloadAnchor);
 
-//            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
-//                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
-//                Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
-//                downloadAnchor.getStyle().set("margin-left", "0.4rem");
-//                buttonBar.export(downloadAnchor);
-//            }
-//            else {
-//                String message = String.format("Nella classe %s c'è flag usaBottoneExport=true ma manca il metodo %s()", this.getClass().getSimpleName(), METHOD_EXPORT);
-//                logger.warn(new WrapLog().message(message));
-//            }
+            //            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
+            //                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
+            //                Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
+            //                downloadAnchor.getStyle().set("margin-left", "0.4rem");
+            //                buttonBar.export(downloadAnchor);
+            //            }
+            //            else {
+            //                String message = String.format("Nella classe %s c'è flag usaBottoneExport=true ma manca il metodo %s()", this.getClass().getSimpleName(), METHOD_EXPORT);
+            //                logger.warn(new WrapLog().message(message));
+            //            }
         }
     }
 

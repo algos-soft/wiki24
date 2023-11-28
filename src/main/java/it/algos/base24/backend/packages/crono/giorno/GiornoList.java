@@ -4,7 +4,6 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.ui.wrapper.*;
@@ -31,14 +30,14 @@ public class GiornoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         String message;
 
         message = String.format(TEXT_BACK, "Giorno");
         layout.add(ASpan.text(message).verde().bold());
 
-        super.addAlert(layout);
+        return super.addAlert(layout);
     }
 
 

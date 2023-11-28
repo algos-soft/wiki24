@@ -32,8 +32,8 @@ public class NazSingolareList extends WikiList {
     }
 
     @Override
-    public void fixAlert() {
-//        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         Anchor anchor1;
         Anchor anchor2;
         String link;
@@ -69,6 +69,7 @@ public class NazSingolareList extends WikiList {
         alertPlaceHolder.add(ASpan.text(message).rosso().small());
 
 //        alertPlaceHolder.add(layout);
+        return null;
     }
 
 

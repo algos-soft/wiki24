@@ -4,7 +4,6 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.ui.wrapper.*;
@@ -31,15 +30,15 @@ public class AnnoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         String message;
 
         message = String.format(TEXT_BACK, "Anno");
         layout.add(ASpan.text(message).verde().bold());
 
-        super.addAlert(layout);
         layout.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
+        return super.addAlert(layout);
     }
 
 

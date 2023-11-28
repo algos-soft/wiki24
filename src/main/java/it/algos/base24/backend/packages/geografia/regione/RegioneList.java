@@ -5,7 +5,6 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
@@ -37,8 +36,8 @@ public class RegioneList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
         Anchor anchor1;
         String link;
         String caption;
@@ -57,7 +56,7 @@ public class RegioneList extends CrudList {
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
         layout.add(new Span(testo, anchor1));
 
-        super.addAlert(layout);
+        return super.addAlert(layout);
     }
 
     /**

@@ -5,7 +5,6 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
@@ -49,9 +48,8 @@ public class PreferenzaList extends CrudList {
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
-        String message;
+    public VerticalLayout fixAlert() {
+        VerticalLayout layout = super.fixAlert();
 
         message = String.format(TEXT_ENUM, "Pref", "Preferenza");
         layout.add(ASpan.text(message).verde().bold());
@@ -63,7 +61,7 @@ public class PreferenzaList extends CrudList {
         message += String.format("%sSearch ...by [%s] apre un popup", SPAZIO,"Type");
         layout.add(ASpan.text(String.format(message)).rosso().italic());
 
-        alertPlaceHolder.add(layout);
+        return super.addAlert(layout);
     }
 
     /**
