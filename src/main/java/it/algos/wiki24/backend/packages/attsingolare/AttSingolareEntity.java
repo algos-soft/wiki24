@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "nazsingolare", keyPropertyName = "nome",usaStartupReset = true, typeReset = TypeReset.resetDelete)
-public class NazSingolareEntity extends AbstractEntity {
+@AEntity(collectionName = "attsingolare", keyPropertyName = "nome",usaStartupReset = true, typeReset = TypeReset.resetDelete)
+public class AttSingolareEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, headerText = "singolare", caption = "singolare", widthRem = 20)
     public String nome;
@@ -21,7 +21,7 @@ public class NazSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
 
-    @AField(type = TypeField.integer, headerText = "bio", caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 6)
+    @AField(type = TypeField.integer, headerText = "bio", caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 6)
     public int numBio;
 
     @Override

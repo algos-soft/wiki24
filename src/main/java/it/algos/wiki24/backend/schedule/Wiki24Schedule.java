@@ -1,11 +1,7 @@
 package it.algos.wiki24.backend.schedule;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.schedule.*;
-import it.algos.base24.backend.service.*;
-import it.algos.wiki24.backend.packages.nazsingolare.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -21,7 +17,7 @@ import javax.inject.*;
 public class Wiki24Schedule extends ScheduleTaskUsingCronExpression {
 
     @Inject
-    public NazSingolareModulo nazSingolareModulo;
+    public AttSingolareModulo nazSingolareModulo;
 
     protected void ogniMinuto() {
         nazSingolareModulo.resetDelete();

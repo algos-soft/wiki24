@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NazSingolareForm extends CrudForm {
+public class AttSingolareForm extends CrudForm {
 
 
-    public NazSingolareForm(NazSingolareModulo crudModulo, NazSingolareEntity entityBean, CrudOperation operation) {
+    public AttSingolareForm(AttSingolareModulo crudModulo, AttSingolareEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

@@ -1,16 +1,10 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -20,15 +14,15 @@ import com.vaadin.flow.component.textfield.TextField;
  * Time: 18:35
  */
 @Service
-public class NazSingolareModulo extends CrudModulo {
+public class AttSingolareModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public NazSingolareModulo() {
-        super(NazSingolareEntity.class, NazSingolareList.class, NazSingolareForm.class);
+    public AttSingolareModulo() {
+        super(AttSingolareEntity.class, AttSingolareList.class, AttSingolareForm.class);
     }
 
 
@@ -44,7 +38,7 @@ public class NazSingolareModulo extends CrudModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public NazSingolareEntity newEntity() {
+    public AttSingolareEntity newEntity() {
         return newEntity(VUOTA, VUOTA);
     }
 
@@ -56,14 +50,14 @@ public class NazSingolareModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NazSingolareEntity newEntity(final String keyPropertyValue, String plurale) {
-        NazSingolareEntity newEntityBean = NazSingolareEntity.builder()
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale) {
+        AttSingolareEntity newEntityBean = AttSingolareEntity.builder()
                 .nome(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .numBio(0)
                 .build();
 
-        return (NazSingolareEntity) fixKey(newEntityBean);
+        return (AttSingolareEntity) fixKey(newEntityBean);
     }
 
 

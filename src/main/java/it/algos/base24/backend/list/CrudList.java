@@ -66,6 +66,8 @@ public abstract class CrudList extends VerticalLayout {
 
     @Autowired
     public MongoService mongoService;
+    @Autowired
+    public DateService dateService;
 
     protected Class currentCrudEntityClazz;
 
@@ -213,7 +215,7 @@ public abstract class CrudList extends VerticalLayout {
     /**
      * Costruisce un layout per informazioni aggiuntive come header della lista <br>
      */
-    private void addAlertPlaceHolder() {
+    protected void addAlertPlaceHolder() {
         alertPlaceHolder = new SimpleVerticalLayout();
         this.add(alertPlaceHolder);
     }

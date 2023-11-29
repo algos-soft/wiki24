@@ -27,7 +27,7 @@ import java.util.*;
  * Date: Wed, 02-Aug-2023
  * Time: 15:05
  */
-public class CrudModulo {
+public abstract class CrudModulo {
 
     /**
      * Istanza di una interfaccia SpringBoot <br>
@@ -77,13 +77,13 @@ public class CrudModulo {
     //    protected CrudOperation operation;
 
     protected Map<String, AbstractEntity> mappaBeans;
-
     /**
      * Regola la entityClazz associata a questo Modulo <br>
      */
     public CrudModulo(Class entityClazz) {
         this(entityClazz, DefaultList.class);
     }
+
 
 
     /**

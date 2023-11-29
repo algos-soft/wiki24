@@ -200,6 +200,9 @@ public class DateService {
         return durata < 1 ? INFERIORE_MINUTO : toTextSecondi(durata * 60);
     }
 
+    public String get(LocalDateTime localDateTime) {
+        return localDateTime.format(DateTimeFormatter.ofPattern("d-MMM-yy H:mm", Locale.ITALIAN));
+    }
 
     /**
      * Restituisce la data nella forma del pattern ricevuto. <br>

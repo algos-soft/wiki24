@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nazsingolare;
+package it.algos.wiki24.backend.packages.attsingolare;
 
 import com.vaadin.flow.router.*;
 import it.algos.base24.backend.annotation.*;
@@ -15,16 +15,16 @@ import org.springframework.beans.factory.annotation.*;
  *
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
-@PageTitle("NazionalitàSingolari")
-@Route(value = "nazsingolare", layout = MainLayout.class)
+@PageTitle("AttivitàSingolari")
+@Route(value = "attsingolare", layout = MainLayout.class)
 @AView(menuGroupName = "tabelle")
-public class NazSingolareView extends CrudView {
+public class AttSingolareView extends CrudView {
 
 
     /**
      * Regola il crudModulo associato a questa @Route e lo passa alla superclasse <br>
      */
-    public NazSingolareView(@Autowired NazSingolareModulo crudModulo) {
+    public AttSingolareView(@Autowired AttSingolareModulo crudModulo) {
         super(crudModulo);
     }
 
