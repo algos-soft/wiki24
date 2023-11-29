@@ -19,10 +19,10 @@ import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.view.*;
 import it.algos.base24.ui.wrapper.*;
 import jakarta.annotation.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.data.domain.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -43,31 +43,31 @@ public abstract class CrudList extends VerticalLayout {
      * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
-    @Autowired
+    @Inject
     public ApplicationContext appContext;
 
-    @Autowired
+    @Inject
     public ColumnService columnService;
 
-    @Autowired
+    @Inject
     public AnnotationService annotationService;
 
-    @Autowired
+    @Inject
     public ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     public LogService logger;
 
-    @Autowired
+    @Inject
     public TextService textService;
 
-    @Autowired
+    @Inject
     public DataProviderService dataProviderService;
 
-    @Autowired
+    @Inject
     public MongoService mongoService;
 
-    @Autowired
+    @Inject
     public DateService dateService;
 
     protected Class currentCrudEntityClazz;

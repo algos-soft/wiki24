@@ -270,8 +270,9 @@ public class BaseCost {
 
     public static final Locale LOCALE = Locale.ITALIAN;
 
-    //    public static final LocalDateTime ROOT_DATA_TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
-    public static final LocalDateTime ROOT_DATA_TIME = LocalDateTime.of(1978, 4, 17, 14, 35);
+    public static final LocalDateTime ROOT_DATA_TIME = LocalDateTime.of(2000, 1, 1, 0, 0);
+
+    public static final LocalDateTime ERROR_DATA_TIME = LocalDateTime.of(1978, 4, 17, 14, 35);
 
 
     public static final String GIALLO = "\u001b[38;5;111m%s\u001b[0m";
@@ -340,6 +341,7 @@ public class BaseCost {
     public static final int ANTE_CRISTO_MAX = 1000;
 
     public static final int DOPO_CRISTO_MAX = 2030;
+
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
 
 

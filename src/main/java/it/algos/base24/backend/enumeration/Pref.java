@@ -7,6 +7,7 @@ import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 /**
@@ -16,7 +17,7 @@ import java.util.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum Pref implements Type {
+public enum Pref implements Type, IPref {
     debug("debug", TypePref.bool, true, "Flag generale di debug"),
     usaBackgroundColor("usaBackgroundColor", TypePref.bool, true, "Uso dello sfondo [background] colorato."),
     nonBreaking("nonBreaking", TypePref.string, SPAZIO_NON_BREAKING, "Spazio non-breaking."),
@@ -110,16 +111,20 @@ public enum Pref implements Type {
     }
 
 
+    public String getStr() {
+        return preferenzaModulo != null ? preferenzaModulo.getStr(this) : VUOTA;
+    }
+
     public boolean is() {
         return preferenzaModulo != null ? preferenzaModulo.is(this) : false;
     }
 
-    public String get() {
-        return preferenzaModulo != null ? preferenzaModulo.get(this) : VUOTA;
-    }
-
     public int getInt() {
         return preferenzaModulo != null ? preferenzaModulo.getInt(this) : 0;
+    }
+
+    public LocalDateTime getDateTime() {
+        return preferenzaModulo != null ? preferenzaModulo.getDateTime(this) : ROOT_DATA_TIME;
     }
 
     @Component

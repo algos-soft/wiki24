@@ -6,6 +6,7 @@ import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 /**
@@ -17,6 +18,8 @@ import java.util.*;
  */
 @Service
 public class PreferenzaModulo extends CrudModulo {
+
+    private String message;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -111,7 +114,6 @@ public class PreferenzaModulo extends CrudModulo {
 
     public RisultatoReset resetStartup() {
         RisultatoReset typeReset = RisultatoReset.nessuno;
-        String message;
 
         if (reflectionService.isEsisteMetodo(getClass(), METHOD_RESET_ADD)) {
             typeReset = collectionNullOrEmpty() ? RisultatoReset.vuotoMaCostruito : RisultatoReset.esistenteNonModificato;
@@ -146,6 +148,27 @@ public class PreferenzaModulo extends CrudModulo {
         }
     }
 
+
+    public String getStr(Pref pref) {
+        return getStr(pref.getType(), pref.getKeyCode());
+    }
+
+    public String getStr(TypePref type, String keyCode) {
+        Object obj;
+
+        if (type == TypePref.string) {
+            obj = getValue(type, keyCode);
+            if (obj instanceof String value) {
+                return value;
+            }
+        }
+
+        message = String.format("La preferenza [%s] di type (%s) è stata chiamata col metodo '%s' da usare solo coi type (%s)", keyCode, type, "getStr", TypePref.string.getTag());
+        logger.warn(new WrapLog().message(message));
+        return VUOTA;
+    }
+
+
     public boolean is(Pref pref) {
         return is(pref.getType(), pref.getKeyCode());
     }
@@ -158,32 +181,11 @@ public class PreferenzaModulo extends CrudModulo {
             if (obj instanceof Boolean value) {
                 return value;
             }
-            return false;
         }
-        else {
-            //            log(type, keyCode, "getInt");
-            return false;
-        }
-    }
 
-    public String get(Pref pref) {
-        return get(pref.getType(), pref.getKeyCode());
-    }
-
-    public String get(TypePref type, String keyCode) {
-        Object obj;
-
-        if (type == TypePref.integer) {
-            obj = getValue(type, keyCode);
-            if (obj instanceof String value) {
-                return value;
-            }
-            return VUOTA;
-        }
-        else {
-            //            log(type, keyCode, "getInt");
-            return VUOTA;
-        }
+        message = String.format("La preferenza [%s] di type (%s) è stata chiamata col metodo '%s' da usare solo coi type (%s)", keyCode, type, "is", TypePref.bool.getTag());
+        logger.warn(new WrapLog().message(message));
+        return false;
     }
 
     public int getInt(Pref pref) {
@@ -198,13 +200,40 @@ public class PreferenzaModulo extends CrudModulo {
             if (obj instanceof Integer value) {
                 return value;
             }
-            return 0;
         }
-        else {
-            //            log(type, keyCode, "getInt");
-            return 0;
-        }
+
+        message = String.format("La preferenza [%s] di type (%s) è stata chiamata col metodo '%s' da usare solo coi type (%s)", keyCode, type, "getInt", TypePref.integer.getTag());
+        logger.warn(new WrapLog().message(message));
+        return 0;
     }
+
+
+
+
+
+
+
+    public LocalDateTime getDateTime(Pref pref) {
+        return getDateTime(pref.getType(), pref.getKeyCode());
+    }
+
+    public LocalDateTime getDateTime(TypePref type, String keyCode) {
+        Object obj;
+
+        if (type == TypePref.localdatetime) {
+            obj = getValue(type, keyCode);
+            if (obj instanceof LocalDateTime value) {
+                return value;
+            }
+        }
+
+        message = String.format("La preferenza [%s] di type (%s) è stata chiamata col metodo '%s' da usare solo coi type (%s)", keyCode, type, "getDateTime", TypePref.localdatetime.getTag());
+        logger.warn(new WrapLog().message(message));
+        return ERROR_DATA_TIME;
+    }
+
+
+
 
     public Object getValue(TypePref type, String keyCode) {
         Object javaValue;
