@@ -247,7 +247,6 @@ public class AnnotationService {
     }
 
 
-
     /**
      * Get the value of usaIdPrimaMinuscola flag.
      *
@@ -344,6 +343,7 @@ public class AnnotationService {
 
         return textService.primaMaiuscola(menuGroupName);
     }
+
     /**
      * Get the menuGroup of the CrudView type clazz.
      *
@@ -395,7 +395,6 @@ public class AnnotationService {
         if (pageTitle != null) {
             return pageTitle.value();
         }
-
 
         // Controlla che i parametri in ingresso siano validi
         if (!CrudView.class.isAssignableFrom(genericClazz)) {
@@ -631,6 +630,38 @@ public class AnnotationService {
         }
 
         return typeDate;
+    }
+
+    /**
+     * Get the widthR of the property.
+     *
+     * @param entityClazz  the class of type AbstractEntity
+     * @param propertyName the property name
+     *
+     * @return the width of the field
+     */
+    public int getWidthInt(final Class entityClazz, final String propertyName) {
+        int width = 0;
+        AField annotation;
+        TypeField typeField;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, propertyName, "getWidthInt")) {
+            return width;
+        }
+
+        annotation = this.getFieldAnnotation(entityClazz, propertyName);
+        if (annotation != null && annotation.widthRem() > 0) {
+            width = annotation.widthRem();
+        }
+        if (annotation != null && width == 0) {
+            typeField = annotation.type();
+            if (typeField != null) {
+                width = typeField.getWidthColumnInt();
+            }
+        }
+
+        return width;
     }
 
     /**

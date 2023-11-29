@@ -66,6 +66,7 @@ public abstract class CrudList extends VerticalLayout {
 
     @Autowired
     public MongoService mongoService;
+
     @Autowired
     public DateService dateService;
 
@@ -272,7 +273,7 @@ public abstract class CrudList extends VerticalLayout {
 
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Può essere sovrascritto <br>
      */
     protected void fixTop() {
         buttonBar = appContext.getBean(ListButtonBar.class, this);
@@ -718,9 +719,18 @@ public abstract class CrudList extends VerticalLayout {
         ExcelExporter exporter;
         List<String> properties = currentCrudModulo.getPropertyNames();
         String title = String.format("Lista %s", annotationService.getMenuName(currentCrudEntityClazz));
+        int width;
+        double multi = 1.5;
+        Double doppio;
 
         exporter = new ExcelExporter(currentCrudEntityClazz, filtri, properties, mongoService);
         exporter.setTitle(title);
+        for (String key : properties) {
+            width = annotationService.getWidthInt(currentCrudEntityClazz, key);
+            doppio = width * multi;
+            width = doppio.intValue();
+            exporter.setColumnWidth(key, width);
+        }
 
         return exporter;
     }

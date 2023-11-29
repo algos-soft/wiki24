@@ -3,8 +3,11 @@ package it.algos.wiki24.backend.logic;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.logic.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.service.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+
+import javax.inject.*;
 
 /**
  * Project wiki24
@@ -23,6 +26,13 @@ public abstract class WikiModulo extends CrudModulo {
 
     protected WPref durataElaborazione;
 
+    protected long inizio;
+
+    protected String message;
+
+    @Inject
+    protected WikiApiService wikiApiService;
+
     /**
      * Regola la modelClazz associata a questo Modulo <br>
      * Regola la listClazz associata a questo Modulo <br>
@@ -30,6 +40,9 @@ public abstract class WikiModulo extends CrudModulo {
      */
     public WikiModulo(Class entityClazz, Class listClazz, Class formClazz) {
         super(entityClazz, listClazz, formClazz);
+    }
+
+    public void download() {
     }
 
 }

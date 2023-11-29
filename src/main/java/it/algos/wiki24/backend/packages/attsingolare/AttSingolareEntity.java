@@ -12,11 +12,11 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "attsingolare", keyPropertyName = "nome",usaStartupReset = true, typeReset = TypeReset.resetDelete)
+@AEntity(collectionName = "attsingolare", keyPropertyName = "singolare",usaStartupReset = true, typeReset = TypeReset.resetDelete)
 public class AttSingolareEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, headerText = "singolare", caption = "singolare", widthRem = 20)
-    public String nome;
+    public String singolare;
 
     @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
@@ -26,7 +26,7 @@ public class AttSingolareEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return nome;
+        return singolare;
     }
 
 }// end of Entity class

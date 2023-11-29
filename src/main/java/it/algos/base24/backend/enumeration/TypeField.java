@@ -36,11 +36,17 @@ public enum TypeField {
     preferenza(12, 12),
     ;
 
+    private int widthColumnInt;
+
+    private int widthFieldInt;
+
     private String widthColumn;
 
     private String widthField;
 
     TypeField(final int intWidthColumn, final int intWidthField) {
+        this.widthColumnInt = intWidthColumn;
+        this.widthFieldInt = intWidthField;
         this.widthColumn = intWidthColumn + BaseCost.HTML_WIDTH_UNIT;
         this.widthField = intWidthField + BaseCost.HTML_WIDTH_UNIT;
     }
@@ -49,6 +55,14 @@ public enum TypeField {
         return Arrays.stream(values()).toList();
     }
 
+
+    public int getWidthColumnInt() {
+        return widthColumnInt;
+    }
+
+    public int getWidthFieldInt() {
+        return widthFieldInt;
+    }
 
     public String getWidthColumn() {
         return widthColumn;

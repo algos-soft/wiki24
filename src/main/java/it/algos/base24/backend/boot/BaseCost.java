@@ -97,6 +97,9 @@ public class BaseCost {
     public static final String TAB_SPAZIO = DOPPIO_SPAZIO + DOPPIO_SPAZIO;
 
     public static final String VIRGOLA_SPAZIO = VIRGOLA + SPAZIO;
+    public static final String UGUALE_SEMPLICE = "=";
+
+    public static final String UGUALE_SPAZIATO = SPAZIO + UGUALE_SEMPLICE + SPAZIO;
 
     public static final String PIPE_REGEX = "\\|";
 

@@ -28,11 +28,11 @@ public class ListButtonBar extends HorizontalLayout {
     @Autowired
     AnnotationService annotationService;
 
-    CrudList currentCrudList;
+   protected CrudList currentCrudList;
 
-    CrudModulo currentCrudModulo;
+    protected  CrudModulo currentCrudModulo;
 
-    Class currentCrudModelClazz;
+    protected  Class currentCrudModelClazz;
 
     private boolean usaBottoneDeleteAll;
 

@@ -134,6 +134,7 @@ public class WebService {
         String tagIniziale = "wikitext\":\"";
         String tagFinale = "\"}}";
         String wikiTitleElaborato = wikiTitleGrezzo.replaceAll(SPAZIO, UNDERSCORE);
+        wikiTitleElaborato = wikiTitleElaborato.replaceAll("à", "%E0");
 
         testoGrezzo = legge(WIKI_PARSE + wikiTitleElaborato);
 

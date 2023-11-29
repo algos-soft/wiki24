@@ -749,4 +749,28 @@ public class TextService {
         return stringaOut.trim();
     }
 
+
+    /**
+     * Elimina (eventuali) 'doppi apici' " in testa ed in coda alla stringa. <br>
+     * Se arriva una stringa vuota, restituisce una stringa vuota <br>
+     *
+     * @param stringaIn in ingresso
+     *
+     * @return stringa senza doppi apici iniziali e finali
+     */
+    public String setNoDoppiApici(String stringaIn) {
+        String stringaOut = stringaIn.trim();
+        String doppioApice = "\"";
+        int cicli = 4;
+
+        if (this.isValid(stringaOut)) {
+            for (int k = 0; k < cicli; k++) {
+                stringaOut = this.levaTesta(stringaOut, doppioApice);
+                stringaOut = this.levaCoda(stringaOut, doppioApice);
+            }
+        }
+
+        return stringaOut.trim();
+    }
+
 }

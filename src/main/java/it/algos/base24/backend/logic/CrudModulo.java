@@ -77,13 +77,13 @@ public abstract class CrudModulo {
     //    protected CrudOperation operation;
 
     protected Map<String, AbstractEntity> mappaBeans;
+
     /**
      * Regola la entityClazz associata a questo Modulo <br>
      */
     public CrudModulo(Class entityClazz) {
         this(entityClazz, DefaultList.class);
     }
-
 
 
     /**
