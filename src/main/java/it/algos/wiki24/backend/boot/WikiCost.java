@@ -15,7 +15,10 @@ import org.springframework.stereotype.*;
  */
 @Service
 public class WikiCost {
-    public static final String TAG_MODULO ="Modulo:Bio/";
+
+    public static final String TAG_MODULO = "Modulo:Bio/";
+
+    public static final String PATH_MODULO = TAG_WIKI + "Modulo:Bio/";
 
     public static final String KEY_MAPPA_PARSE = "parse";
 

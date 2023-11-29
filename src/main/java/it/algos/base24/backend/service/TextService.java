@@ -691,27 +691,33 @@ public class TextService {
         return testoIn.trim();
     }
 
+
     /**
-     * Elimina (eventuali) graffe doppie in testa e coda della stringa.
-     * Funziona solo se le graffe sono esattamente in TESTA e in CODA alla stringa
+     * Elimina (eventuali) quadre singole in testa e coda della stringa.
+     * Funziona solo se le quadre sono esattamente in TESTA e in CODA alla stringa
      * Se arriva una stringa vuota, restituisce una stringa vuota
      * Elimina spazi vuoti iniziali e finali
      *
      * @param stringaIn in ingresso
      *
-     * @return stringa con doppie graffe eliminate
+     * @return stringa con singole quadre eliminate
      */
-    public String setNoDoppieGraffe(String stringaIn) {
+    public String setNoQuadre(String stringaIn) {
         String stringaOut = stringaIn;
 
         if (isValid(stringaIn)) {
             stringaIn = stringaIn.trim();
 
-            if (stringaIn.startsWith(DOPPIE_GRAFFE_INI) && stringaIn.endsWith(DOPPIE_GRAFFE_END)) {
+            if (stringaIn.startsWith(QUADRA_INI) && stringaIn.endsWith(QUADRA_END)) {
                 stringaOut = stringaIn;
-                stringaOut = levaCoda(stringaOut, DOPPIE_GRAFFE_END);
-                stringaOut = levaTesta(stringaOut, DOPPIE_GRAFFE_INI);
+                stringaOut = levaTesta(stringaOut, QUADRA_INI);
+                stringaOut = levaCoda(stringaOut, QUADRA_END);
             }
+        }
+
+        //--se c'erano delle quadre interne, non elimina quelle esterne in quanto non è un singolo link
+        if (stringaOut.contains(QUADRA_INI) && stringaOut.contains(QUADRA_END)) {
+            stringaOut = stringaIn;
         }
 
         return stringaOut.trim();
@@ -748,6 +754,36 @@ public class TextService {
 
         return stringaOut.trim();
     }
+
+
+
+    /**
+     * Elimina (eventuali) graffe doppie in testa e coda della stringa.
+     * Funziona solo se le graffe sono esattamente in TESTA e in CODA alla stringa
+     * Se arriva una stringa vuota, restituisce una stringa vuota
+     * Elimina spazi vuoti iniziali e finali
+     *
+     * @param stringaIn in ingresso
+     *
+     * @return stringa con doppie graffe eliminate
+     */
+    public String setNoDoppieGraffe(String stringaIn) {
+        String stringaOut = stringaIn;
+
+        if (isValid(stringaIn)) {
+            stringaIn = stringaIn.trim();
+
+            if (stringaIn.startsWith(DOPPIE_GRAFFE_INI) && stringaIn.endsWith(DOPPIE_GRAFFE_END)) {
+                stringaOut = stringaIn;
+                stringaOut = levaCoda(stringaOut, DOPPIE_GRAFFE_END);
+                stringaOut = levaTesta(stringaOut, DOPPIE_GRAFFE_INI);
+            }
+        }
+
+        return stringaOut.trim();
+    }
+
+
 
 
     /**

@@ -21,7 +21,7 @@ import org.springframework.stereotype.*;
  * Date: Sat, 02-Sep-2023
  * Time: 15:23
  */
-@Component
+@Component(QUALIFIER_LIST_BUTTON_BAR)
 @Scope(value = SCOPE_PROTOTYPE)
 public class ListButtonBar extends HorizontalLayout {
 

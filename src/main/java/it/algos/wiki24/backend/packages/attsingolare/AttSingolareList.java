@@ -50,7 +50,7 @@ public class AttSingolareList extends WikiList {
         String plurale = "Plurale attività";
         String ex = "Ex attività";
 
-        link = String.format("%s%s", TAG_MODULO, plurale);
+        link = String.format("%s%s", PATH_MODULO, plurale);
         caption = String.format("%s%s%s", QUADRA_INI, plurale, QUADRA_END);
         anchor1 = new Anchor(link, caption);
         anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());

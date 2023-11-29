@@ -20,7 +20,7 @@ public class Wiki24Schedule extends ScheduleTaskUsingCronExpression {
     public AttSingolareModulo nazSingolareModulo;
 
     protected void ogniMinuto() {
-        nazSingolareModulo.resetDelete();
+//        nazSingolareModulo.resetDelete();
     }
 
 }

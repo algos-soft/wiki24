@@ -340,6 +340,7 @@ public class BaseCost {
     public static final int ANTE_CRISTO_MAX = 1000;
 
     public static final int DOPO_CRISTO_MAX = 2030;
+    public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
 
 
 }

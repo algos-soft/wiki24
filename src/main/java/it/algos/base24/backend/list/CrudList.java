@@ -276,7 +276,7 @@ public abstract class CrudList extends VerticalLayout {
      * Può essere sovrascritto <br>
      */
     protected void fixTop() {
-        buttonBar = appContext.getBean(ListButtonBar.class, this);
+        buttonBar = (ListButtonBar) appContext.getBean(QUALIFIER_LIST_BUTTON_BAR, this);
 
         if (usaBottoneDeleteAll) {
             buttonBar.deleteAll();

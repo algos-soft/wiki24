@@ -116,8 +116,10 @@ public class WikiApiService {
 
     @Inject
     WebService webService;
+
     @Inject
     public HtmlService htmlService;
+
     @Inject
     public ApplicationContext appContext;
 
@@ -333,7 +335,7 @@ public class WikiApiService {
         String tagSezioni = UGUALE_SEMPLICE;
         String[] righe = null;
         String[] sezioni = null;
-        String key;
+        String key = VUOTA;
         String value;
         String testoModulo = this.leggeModulo(wikiTitle);
 
@@ -349,20 +351,18 @@ public class WikiApiService {
             for (String riga : righe) {
 
                 sezioni = riga.split(tagSezioni);
-                if (sezioni != null && sezioni.length == 1) {
-                    key = sezioni[0];
+                if (sezioni != null && sezioni.length > 0) {
+                    key = sezioni[0].trim();
                     key = textService.levaCoda(key, VIRGOLA);
-
-                    key = textService.setNoDoppieQuadre(key);
+                    key = textService.setNoQuadre(key);
                     key = textService.setNoDoppiApici(key);
+                }
+
+                if (sezioni != null && sezioni.length == 1) {
                     mappa.put(key, key);
                 }
                 if (sezioni != null && sezioni.length == 2) {
-                    key = sezioni[0];
-
-                    key = textService.setNoDoppieQuadre(key);
-                    key = textService.setNoDoppiApici(key);
-                    value = sezioni[1];
+                    value = sezioni[1].trim();
                     value = textService.levaCoda(value, VIRGOLA);
                     value = textService.setNoDoppiApici(value);
                     value = textService.setNoDoppieGraffe(value);
@@ -462,22 +462,22 @@ public class WikiApiService {
 
 
     public void scrive(String wikiTitle, String newText) {
-         scrive(wikiTitle, newText, SUMMARY);
+        scrive(wikiTitle, newText, SUMMARY);
     }
 
     public void scrive(String wikiTitle, String newText, String summary) {
-//         appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
+        //         appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
     }
 
-//    public Bio downloadAndSave(String wikiTitle) {
-//        Bio bio = this.queryService.getBio(wikiTitle);
-//
-//        if (bio != null) {
-//            bio = elaboraService.esegueSave(bio);
-//        }
-//
-//        return bio;
-//    }
+    //    public Bio downloadAndSave(String wikiTitle) {
+    //        Bio bio = this.queryService.getBio(wikiTitle);
+    //
+    //        if (bio != null) {
+    //            bio = elaboraService.esegueSave(bio);
+    //        }
+    //
+    //        return bio;
+    //    }
 
     /**
      * Recupera spazio e caratteri strani nel titolo <br>
@@ -854,7 +854,8 @@ public class WikiApiService {
 
     public void openWikiPage(String wikiTitle) {
         String link = "\"" + TAG_WIKI + wikiTitle + "\"";
-//        UI.getCurrent().getPage().executeJavaScript("window.open(" + link + ");");
+        UI.getCurrent().getPage().open(link);
+        //        UI.getCurrent().getPage().executeJavaScript("window.open(" + link + ");");
     }
 
     /**
