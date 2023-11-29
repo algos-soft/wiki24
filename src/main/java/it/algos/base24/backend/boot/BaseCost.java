@@ -97,6 +97,7 @@ public class BaseCost {
     public static final String TAB_SPAZIO = DOPPIO_SPAZIO + DOPPIO_SPAZIO;
 
     public static final String VIRGOLA_SPAZIO = VIRGOLA + SPAZIO;
+
     public static final String UGUALE_SEMPLICE = "=";
 
     public static final String UGUALE_SPAZIATO = SPAZIO + UGUALE_SEMPLICE + SPAZIO;
@@ -192,7 +193,9 @@ public class BaseCost {
     public static final String SUFFIX_VAR = "Var";
 
     public static final String NO_INCLUDE = "<noinclude>";
+
     public static final String HTML_CODE = "code";
+
     public static final String HTML_KBD = "kbd";
 
     public static String TEXT_CSV = "Tavola di servizio usata solo in background. File originale (CSV) sul server /www.algos.it/vaadin24/config/";

@@ -28,7 +28,7 @@ public class ListButtonBar extends HorizontalLayout {
     @Autowired
     AnnotationService annotationService;
 
-   protected CrudList currentCrudList;
+    protected CrudList currentCrudList;
 
     protected  CrudModulo currentCrudModulo;
 
