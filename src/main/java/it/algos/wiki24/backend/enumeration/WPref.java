@@ -8,6 +8,7 @@ import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 /**
@@ -17,7 +18,7 @@ import java.util.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum WPref implements Type {
+public enum WPref implements Type,IPref {
     usaTaskAttSin("usaTaskAttSin", TypePref.bool, true, "Flag per usare la task di download AttivitàSingolare."),
     lastDownloadAttSin("lastDownloadAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàSingolare."),
     downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in minuti."),
@@ -120,48 +121,61 @@ public enum WPref implements Type {
         return preferenzaModulo.getValue(type, keyCode);
     }
 
-    public boolean is() {
-        Object obj;
-        if (type == TypePref.bool) {
-            obj = getValue();
-            if (obj instanceof Boolean value) {
-                return value;
-            }
-            return false;
-        }
-        else {
-            return false;
-        }
+
+    @Override
+    public void setValue(Object javaValue) {
+        preferenzaModulo.setValue(type, keyCode, javaValue);
     }
 
     public String getStr() {
         Object obj;
 
-        if (type == TypePref.integer) {
-            obj = getValue();
+        if (type == TypePref.string) {
+            obj = preferenzaModulo.getValue(type, keyCode);
             if (obj instanceof String value) {
                 return value;
             }
-            return VUOTA;
         }
-        else {
-            return VUOTA;
+
+        return VUOTA;
+    }
+
+    public boolean is() {
+        Object obj;
+
+        if (type == TypePref.bool) {
+            obj = preferenzaModulo.getValue(type, keyCode);
+            if (obj instanceof Boolean value) {
+                return value;
+            }
         }
+        return false;
     }
 
     public int getInt() {
         Object obj;
 
         if (type == TypePref.integer) {
-            obj = getValue();
+            obj = preferenzaModulo.getValue(type, keyCode);
             if (obj instanceof Integer value) {
                 return value;
             }
-            return 0;
         }
-        else {
-            return 0;
+
+        return 0;
+    }
+
+    public LocalDateTime getDateTime() {
+        Object obj;
+
+        if (type == TypePref.localdatetime) {
+            obj = preferenzaModulo.getValue(type, keyCode);
+            if (obj instanceof LocalDateTime value) {
+                return value;
+            }
         }
+
+        return ERROR_DATA_TIME;
     }
 
     @Component

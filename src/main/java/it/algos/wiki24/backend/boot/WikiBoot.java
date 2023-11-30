@@ -6,6 +6,7 @@ import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
+import it.algos.wiki24.backend.enumeration.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -30,6 +31,19 @@ public class WikiBoot extends BaseBoot {
     @Override
     protected void fixVariabili() {
         super.fixVariabili();
+    }
+
+
+    /**
+     * Injection di SpringBoot <br>
+     * Usa la injection di SpringBoot per ogni Enumeration della lista globale <br>
+     * NON crea le preferenze su mondoDB <br>
+     * Non deve essere sovrascritto <br>
+     */
+    public void fixEnumerationPreferenze() {
+        for (WPref pref : WPref.values()) {
+            pref.preferenzaModulo = this.preferenzaModulo;
+        }
     }
 
     /**

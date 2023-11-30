@@ -221,7 +221,7 @@ public abstract class WikiList extends CrudList {
 
 
     public boolean download() {
-        currentCrudModulo.download();
+        currentCrudModulo.resetDelete();
         refreshData();
 
         return true;

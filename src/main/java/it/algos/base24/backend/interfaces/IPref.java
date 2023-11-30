@@ -10,6 +10,7 @@ import java.time.*;
  * Time: 21:02
  */
 public interface IPref {
+     void setValue(Object javaValue) ;
 
     String getStr();
 

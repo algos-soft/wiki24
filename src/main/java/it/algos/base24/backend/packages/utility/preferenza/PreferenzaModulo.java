@@ -208,11 +208,6 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
 
-
-
-
-
-
     public LocalDateTime getDateTime(Pref pref) {
         return getDateTime(pref.getType(), pref.getKeyCode());
     }
@@ -233,7 +228,16 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
 
+    public void setValue(TypePref type, String keyCode, Object javaValue) {
+        PreferenzaEntity preferenza = (PreferenzaEntity) mongoService.findOneById(PreferenzaEntity.class, keyCode);
 
+        if (preferenza == null) {
+            return;
+        }
+
+        preferenza.setValue(type.objectToBytes(javaValue));
+        mongoService.save(preferenza);
+    }
 
     public Object getValue(TypePref type, String keyCode) {
         Object javaValue;

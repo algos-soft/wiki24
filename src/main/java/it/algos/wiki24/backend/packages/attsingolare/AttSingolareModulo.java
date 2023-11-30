@@ -67,13 +67,7 @@ public class AttSingolareModulo extends WikiModulo {
 
     @Override
     public RisultatoReset resetDelete() {
-        //        RisultatoReset typeReset = super.resetDelete();
-//        String nomeModulo = TAG_MODULO + "Plurale attività";
-//        String testoLeggibile = VUOTA;
-//
-//        testoLeggibile = webService.leggeWikiParse(nomeModulo);
-//        int a = 87;
-
+        RisultatoReset typeReset = super.resetDelete();
         this.download();
         return null;
     }
@@ -87,18 +81,14 @@ public class AttSingolareModulo extends WikiModulo {
      * Cancella la (eventuale) precedente lista di attività singolari <br>
      */
     public void download() {
-         inizio = System.currentTimeMillis();
+        inizio = System.currentTimeMillis();
         String moduloPlurale = TAG_MODULO + "Plurale attività";
         String moduloEx = TAG_MODULO + "Ex attività";
 
-//        int sizeBase = 0;
-//        int sizeExtra = 0;
-//
         downloadAttivitaPlurali(moduloPlurale);
-//        sizeExtra = downloadAttivitaExtra(moduloEx);
-//        downloadAttivitaLink(moduloLink);
-//
-//        super.fixDownloadSecondi(inizio, VUOTA, 0, 0);
+        //     downloadAttivitaExtra(moduloEx);
+
+        super.fixDownload(inizio);
     }
 
 
@@ -114,7 +104,7 @@ public class AttSingolareModulo extends WikiModulo {
         String singolare;
         String plurale;
         Map<String, String> mappaPlurale = wikiApiService.leggeMappaModulo(moduloPlurale);
-        AttSingolareEntity newBean ;
+        AttSingolareEntity newBean;
 
         if (mappaPlurale != null && mappaPlurale.size() > 0) {
             deleteAll();
@@ -128,7 +118,6 @@ public class AttSingolareModulo extends WikiModulo {
         else {
             message = String.format("Non sono riuscito a leggere da wiki il %s", moduloPlurale);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-            return ;
         }
 
     }

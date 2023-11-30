@@ -110,6 +110,10 @@ public enum Pref implements Type, IPref {
         return descrizione;
     }
 
+    @Override
+    public void setValue(Object javaValue) {
+        preferenzaModulo.setValue(type, keyCode, javaValue);
+    }
 
     public String getStr() {
         return preferenzaModulo != null ? preferenzaModulo.getStr(this) : VUOTA;
