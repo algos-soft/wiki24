@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "via", usaStartupReset = true, typeReset = TypeReset.resetAdd)
+@AEntity(collectionName = "via", typeList = TypeList.softCsv)
 public class ViaEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine, headerText = "#")

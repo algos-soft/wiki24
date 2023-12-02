@@ -34,6 +34,14 @@ public class ViaModulo extends CrudModulo {
         super.fixPreferenze();
     }
 
+    public ViaEntity creaIfNotExists(ViaEntity entityBean) {
+        if (existById(entityBean.getId())) {
+            return null;
+        }
+        else {
+            return (ViaEntity) insert(entityBean);
+        }
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -86,7 +94,7 @@ public class ViaModulo extends CrudModulo {
                 newBean = newEntity(pos++, rigaUnValore.get(0));
                 mappaBeans.put(rigaUnValore.get(0), newBean);
             }
-            mappaBeans.values().stream().forEach(bean -> insertSave(bean));
+            mappaBeans.values().stream().forEach(bean -> creaIfNotExists((ViaEntity)bean));
         }
         else {
             message = String.format("Manca il file [%s] nella directory /config o sul server", nomeFileCSV);

@@ -17,7 +17,7 @@ import java.util.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum Pref implements Type, IPref {
+public enum Pref implements  IPref {
     debug("debug", TypePref.bool, true, "Flag generale di debug"),
     usaBackgroundColor("usaBackgroundColor", TypePref.bool, true, "Uso dello sfondo [background] colorato."),
     nonBreaking("nonBreaking", TypePref.string, SPAZIO_NON_BREAKING, "Spazio non-breaking."),
@@ -63,8 +63,12 @@ public enum Pref implements Type, IPref {
     }// fine del costruttore
 
 
-    public static List<Pref> getAllEnums() {
-        return Arrays.stream(values()).toList();
+    public static List<IPref> getAllEnums() {
+        List<IPref> list = new ArrayList<>();
+        for (Pref pref : values()) {
+            list.add(pref);
+        }
+        return list;
     }
 
     @Override
@@ -76,7 +80,7 @@ public enum Pref implements Type, IPref {
     public List<String> getAllTags() {
         List<String> listaTags = new ArrayList<>();
 
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
+        getAllEnums().forEach(pref -> listaTags.add(pref.getTag()));
         return listaTags;
     }
 
@@ -90,22 +94,27 @@ public enum Pref implements Type, IPref {
     public static List<String> getAllKeyCode() {
         List<String> listaTags = new ArrayList<>();
 
-        getAllEnums().forEach(type -> listaTags.add(type.getKeyCode()));
+        getAllEnums().forEach(pref -> listaTags.add(pref.getKeyCode()));
         return listaTags;
     }
 
+    @Override
     public String getKeyCode() {
         return keyCode;
     }
 
+    @Override
     public TypePref getType() {
         return type;
     }
 
+
+    @Override
     public Object getDefaultValue() {
         return defaultValue;
     }
 
+    @Override
     public String getDescrizione() {
         return descrizione;
     }

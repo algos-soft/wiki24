@@ -174,11 +174,35 @@ public class ResourceService {
      * @return mappa dei titoli più le righe grezze
      */
     public Map<String, List<String>> leggeMappaServer(final String simpleNameFileToBeRead) {
-        String rawText = leggeServer(simpleNameFileToBeRead);
+        String nameFile = simpleNameFileToBeRead;
+        String rawText;
         String message;
 
-        if (textService.isEmpty(rawText)) {
-            message = String.format("Non sono riuscito a leggere il file [%s] dal server '%s'", simpleNameFileToBeRead, "algos");
+        //--primo tentativo sul server
+        rawText = leggeServer(nameFile);
+
+        //--secondo tentativo sul server
+        if (textService.isValid(rawText)) {
+            return elaboraMappa(rawText);
+        }
+        else {
+            nameFile = textService.levaCoda(nameFile, SUFFIX_CSV);
+            rawText = leggeServer(nameFile);
+            if (textService.isValid(rawText)) {
+                message = String.format("Sul server 'algos' esiste il file [%s] invece di [%s]", nameFile, simpleNameFileToBeRead);
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                return elaboraMappa(rawText);
+            }
+        }
+
+        //--terzo (e ultimo) tentativo in locale
+        rawText = leggeConfig(nameFile);
+        if (textService.isValid(rawText)) {
+            message = String.format("Sul server 'algos' non esiste il file [%s] che ho invece trovato nella directory '%s' locale", nameFile, "config");
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+        }
+        else {
+            message = String.format("Non sono riuscito a leggere il file [%s] neanche nella directory '%s' locale", nameFile, "config");
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
         }
 
@@ -210,7 +234,7 @@ public class ResourceService {
             righe = rawText.split(CAPO);
             if (righe != null && righe.length > 0) {
                 mappa = new LinkedHashMap<>();
-                for (String riga : Arrays.stream(righe).toList().subList(1,righe.length)) {
+                for (String riga : Arrays.stream(righe).toList().subList(1, righe.length)) {
                     listaParti = new ArrayList<>();
                     parti = riga.split(sep);
 
@@ -261,14 +285,15 @@ public class ResourceService {
     }
 
     public List<List<String>> leggeListaCSV(final String pathFileToBeRead, final String sepColonna, final String sepRiga) {
-        List<List<String>> lista = new ArrayList<>();
-        List<String> riga = null;
+        List<List<String>> lista = null;
+        List<String> riga;
         String[] righe;
         String[] colonne;
 
         String testo = leggeFile(pathFileToBeRead);
 
         if (textService.isValid(testo)) {
+            lista = new ArrayList<>();
             righe = testo.split(sepRiga);
             if (righe != null && righe.length > 0) {
                 for (String rigaTxt : righe) {
@@ -287,7 +312,7 @@ public class ResourceService {
             }
         }
 
-        return lista.subList(1, lista.size());
+        return lista != null ? lista.subList(1, lista.size()) : null;
     }
 
 
@@ -337,8 +362,8 @@ public class ResourceService {
             try {
                 clazz = Class.forName(clazzName);
             } catch (Exception unErrore) {
-                message=String.format("Non ho trovato la classe [%s%s]",projectName,SUFFIX_BOOT);
-                logger.error(new WrapLog().exception(new AlgosException(unErrore.getCause(),message)).usaDb());
+                message = String.format("Non ho trovato la classe [%s%s]", projectName, SUFFIX_BOOT);
+                logger.error(new WrapLog().exception(new AlgosException(unErrore.getCause(), message)).usaDb());
             }
         }
 

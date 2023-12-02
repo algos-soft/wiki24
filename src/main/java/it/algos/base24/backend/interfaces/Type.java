@@ -11,7 +11,6 @@ import java.util.*;
  */
 public interface Type {
 
-
     List getAll();
 
     List<String> getAllTags();

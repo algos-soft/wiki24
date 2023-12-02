@@ -1,5 +1,7 @@
 package it.algos.base24.backend.interfaces;
 
+import it.algos.base24.backend.enumeration.*;
+
 import java.time.*;
 
 /**
@@ -9,8 +11,17 @@ import java.time.*;
  * Date: Wed, 29-Nov-2023
  * Time: 21:02
  */
-public interface IPref {
-     void setValue(Object javaValue) ;
+public interface IPref extends Type {
+
+    String getKeyCode();
+
+    TypePref getType();
+
+    Object getDefaultValue();
+
+    String getDescrizione();
+
+    void setValue(Object javaValue);
 
     String getStr();
 

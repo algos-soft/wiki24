@@ -41,14 +41,21 @@ public class DialogDelete extends DialogConfirm {
     public static void deleteAll(final Runnable confirmHandler) {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("Cancella dal database tutti i valori della collezione");
+        buffer.append(ASpan.text(DELETE).blue().bold().get());
         buffer.append(CAPO_HTML);
-        buffer.append(ASpan.text("Sei sicuro di volerli cancellare tutti ?").rosso().bold().get());
-        buffer.append(CAPO_HTML);
-        buffer.append(IRREVERSIBILE);
+        buffer.append(ASpan.text(TEXT_SICURO).rosso().bold().get());
 
         DialogDelete.title("Delete all").message(buffer.toString()).confirmError("Delete all").annullaPrimary().open(confirmHandler);
     }
 
+    public static void reset(final Runnable confirmHandler) {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(ASpan.text(DELETE_RICREA).blue().bold().get());
+        buffer.append(CAPO_HTML);
+        buffer.append(ASpan.text(TEXT_SICURO).rosso().bold().get());
+
+        DialogConfirm.title("ResetDelete").message(buffer.toString()).confirmError(BUTTON_RESET).annullaPrimary().open(confirmHandler);
+    }
 
 }

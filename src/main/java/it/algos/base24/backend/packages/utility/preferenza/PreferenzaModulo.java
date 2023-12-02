@@ -1,11 +1,15 @@
 package it.algos.base24.backend.packages.utility.preferenza;
 
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
+import org.springframework.context.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.time.*;
 import java.util.*;
 
@@ -18,6 +22,9 @@ import java.util.*;
  */
 @Service
 public class PreferenzaModulo extends CrudModulo {
+
+    @Inject
+    ApplicationContext applicationContext;
 
     private String message;
 
@@ -81,7 +88,7 @@ public class PreferenzaModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public PreferenzaEntity newEntity(Pref pref) {
+    public PreferenzaEntity newEntity(IPref pref) {
         String keyCode = pref.getKeyCode();
         TypePref type = pref.getType();
         Object defaultValue = pref.getDefaultValue();
@@ -115,16 +122,16 @@ public class PreferenzaModulo extends CrudModulo {
     public RisultatoReset resetStartup() {
         RisultatoReset typeReset = RisultatoReset.nessuno;
 
-        if (reflectionService.isEsisteMetodo(getClass(), METHOD_RESET_ADD)) {
-            typeReset = collectionNullOrEmpty() ? RisultatoReset.vuotoMaCostruito : RisultatoReset.esistenteNonModificato;
-            resetBase();
-            mappaBeans.values().stream().forEach(bean -> creaIfNotExists((PreferenzaEntity) bean));
-            return typeReset;
-        }
-        else {
-            message = String.format("La POJO [%s] ha il flag usaStartupReset=true ma manca il metodo %s() nella classe %s", currentCrudEntityClazz.getSimpleName(), METHOD_RESET_ADD, getClass().getSimpleName());
-            logger.warn(new WrapLog().message(message).type(TypeLog.startup));
-        }
+        //        if (reflectionService.isEsisteMetodo(getClass(), METHOD_RESET_ADD)) {
+        //            typeReset = collectionNullOrEmpty() ? RisultatoReset.vuotoMaCostruito : RisultatoReset.esistenteNonModificato;
+        resetBase();
+        mappaBeans.values().stream().forEach(bean -> creaIfNotExists((PreferenzaEntity) bean));
+        //            return typeReset;
+        //        }
+        //        else {
+        //            message = String.format("La POJO [%s] ha il flag usaStartupReset=true ma manca il metodo %s() nella classe %s", currentCrudEntityClazz.getSimpleName(), METHOD_RESET_ADD, getClass().getSimpleName());
+        //            logger.warn(new WrapLog().message(message).type(TypeLog.startup));
+        //        }
 
         return typeReset;
     }
@@ -141,10 +148,17 @@ public class PreferenzaModulo extends CrudModulo {
 
     private void resetBase() {
         PreferenzaEntity newBean;
+        BaseBoot currentBoot = null;
+        try {
+            currentBoot = (BaseBoot) applicationContext.getBean(BaseVar.bootClazzQualifier);
+        } catch (Exception unErrore) {
+        }
 
-        for (Pref pref : Pref.getAllEnums()) {
-            newBean = newEntity(pref);
-            mappaBeans.put(pref.name(), newBean);
+        if (currentBoot != null) {
+            for (IPref pref : currentBoot.getAllEnums()) {
+                newBean = newEntity(pref);
+                mappaBeans.put(pref.getTag(), newBean);
+            }
         }
     }
 

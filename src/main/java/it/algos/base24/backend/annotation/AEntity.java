@@ -52,7 +52,13 @@ public @interface AEntity {
      * (Optional) pacchetto di preferenze per l'uso dei bottoni nella lista <br>
      * Di default nessuno <br>
      */
-    TypeReset typeReset() default TypeReset.standard;
+    TypeResetOld typeReset() default TypeResetOld.standard;
+
+    /**
+     * (Optional) pacchetto di preferenze per l'uso dei bottoni nella lista <br>
+     * Di default nessuno <br>
+     */
+    TypeList typeList() default TypeList.standard;
 
     /**
      * (Optional) usa forzare la primaMinuscola per l'Idkey <br>

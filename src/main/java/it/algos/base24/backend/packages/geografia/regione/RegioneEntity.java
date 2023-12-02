@@ -13,7 +13,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "regione", keyPropertyName = "sigla", searchPropertyName = "nome", usaStartupReset = true, typeReset = TypeReset.resetAdd, usaIdPrimaMinuscola = false)
+@AEntity(collectionName = "regione", keyPropertyName = "sigla", searchPropertyName = "nome", typeList = TypeList.softWiki, usaIdPrimaMinuscola = false)
 public class RegioneEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine)

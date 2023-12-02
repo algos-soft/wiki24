@@ -49,8 +49,6 @@ public class BaseVar {
     public static String projectPrefix;
 
 
-
-
     /**
      * Versione dell' applicazione <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
@@ -110,6 +108,13 @@ public class BaseVar {
      * Deve essere regolata in resources.application.properties <br>
      */
     public static Class bootClazz;
+
+    /**
+     * Qualifier da usare per il Boot iniziale di regolazione <br>
+     * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
+     * Deve essere regolata in resources.application.properties <br>
+     */
+    public static String bootClazzQualifier;
 
     /**
      * Classe da usare per gestire le versioni <br>

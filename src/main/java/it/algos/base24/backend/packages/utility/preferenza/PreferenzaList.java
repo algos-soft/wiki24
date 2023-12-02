@@ -2,12 +2,10 @@ package it.algos.base24.backend.packages.utility.preferenza;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.combobox.*;
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
-import it.algos.base24.ui.wrapper.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
@@ -33,36 +31,41 @@ public class PreferenzaList extends CrudList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.basicSortOrder = null;
-        super.usaBottoneDeleteAll = true;
-        super.usaBottoneResetAdd = true;
-        super.usaBottoneResetDelete = false;
-        this.usaBottoneNew = false;
-        this.usaBottoneEdit = true;
-        this.usaBottoneDeleteEntity = false;
-        this.usaBottoneExport = false;
-        this.usaBottoneSearch = true;
+//        super.basicSortOrder = null;
+//        super.usaBottoneDeleteAll = true;
+//        super.usaBottoneResetAdd = true;
+//        super.usaBottoneResetDelete = false;
+//        this.usaBottoneNew = false;
+//        this.usaBottoneEdit = true;
+//        this.usaBottoneDeleteEntity = false;
+//        this.usaBottoneExport = false;
+//        this.usaBottoneSearch = true;
     }
 
+    @Override
+    public void fixAlert() {
+        super.infoScopo = String.format(typeList.getInfoScopo());
+        super.fixAlert();
+    }
 
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public VerticalLayout fixAlert() {
-        VerticalLayout layout = super.fixAlert();
-
-        message = String.format(TEXT_ENUM, "Pref", "Preferenza");
-        layout.add(ASpan.text(message).verde().bold());
-
-        layout.add(ASpan.text(TEXT_NEWS).rosso());
-        layout.add(ASpan.text(TEXT_RESET_STARTUP).rosso());
-        layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
-        message = String.format(TEXT_SEARCH, "Code");
-        message += String.format("%sSearch ...by [%s] apre un popup", SPAZIO,"Type");
-        layout.add(ASpan.text(String.format(message)).rosso().italic());
-
-        return super.addAlert(layout);
-    }
+//    public VerticalLayout fixAlert() {
+//        VerticalLayout layout = super.fixAlert();
+//
+//        message = String.format(TEXT_ENUM, "Pref", "Preferenza");
+//        layout.add(ASpan.text(message).verde().bold());
+//
+//        layout.add(ASpan.text(TEXT_NEWS).rosso());
+//        layout.add(ASpan.text(TEXT_RESET_STARTUP).rosso());
+//        layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
+//        message = String.format(TEXT_SEARCH, "Code");
+//        message += String.format("%sSearch ...by [%s] apre un popup", SPAZIO,"Type");
+//        layout.add(ASpan.text(String.format(message)).rosso().italic());
+//
+//        return super.addAlert(layout);
+//    }
 
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>

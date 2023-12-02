@@ -13,7 +13,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "stato", keyPropertyName = "nome", usaStartupReset = true, typeReset = TypeReset.resetAdd)
+@AEntity(collectionName = "stato", keyPropertyName = "nome", typeList = TypeList.hardWiki)
 public class StatoEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine)

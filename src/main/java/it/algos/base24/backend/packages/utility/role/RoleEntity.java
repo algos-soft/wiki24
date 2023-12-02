@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "role", usaStartupReset = true, typeReset = TypeReset.soloList)
+@AEntity(collectionName = "role", typeList = TypeList.hardEnum)
 public class RoleEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine, headerText = "#")

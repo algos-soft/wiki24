@@ -279,8 +279,9 @@ public class AnnotationService {
      *
      * @return value of startupRest flag
      */
-    public TypeReset getTypeReset(final Class entityClazz) {
-        TypeReset typeReset = TypeReset.nessuno;
+    @Deprecated
+    public TypeResetOld getTypeReset(final Class entityClazz) {
+        TypeResetOld typeReset = TypeResetOld.nessuno;
         AEntity annotation;
 
         // Controlla che i parametri in ingresso siano validi
@@ -294,6 +295,31 @@ public class AnnotationService {
         }
 
         return typeReset;
+    }
+
+
+    /**
+     * Get the typeReset for buttons in list <br>.
+     *
+     * @param entityClazz di riferimento
+     *
+     * @return value of startupRest flag
+     */
+    public TypeList getTypeList(final Class entityClazz) {
+        TypeList typeList = TypeList.standard;
+        AEntity annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, "getTypeList")) {
+            return typeList;
+        }
+
+        annotation = this.getEntityAnnotation(entityClazz);
+        if (annotation != null) {
+            typeList = annotation.typeList();
+        }
+
+        return typeList;
     }
 
     //==========================================================================

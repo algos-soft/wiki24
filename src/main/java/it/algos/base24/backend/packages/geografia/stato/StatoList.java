@@ -3,7 +3,6 @@ package it.algos.base24.backend.packages.geografia.stato;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
@@ -35,9 +34,7 @@ public class StatoList extends CrudList {
     }
 
     @Override
-    public VerticalLayout fixAlert() {
-        VerticalLayout layout = super.fixAlert();
-        String message;
+    public void fixAlert() {
         Anchor anchor1;
         Anchor anchor2;
         Anchor anchor3;
@@ -62,14 +59,13 @@ public class StatoList extends CrudList {
         anchor3 = new Anchor(link, caption);
         anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        message = "Tavola di base. Costruita dalle pagine Wiki: ";
-        Span testo = new Span(message);
+        Span testo = new Span(typeList.getInfoScopo());
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        layout.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
+        alertPlaceHolder.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
 
-        return super.addAlert(layout);
+        super.fixAlert();
     }
 
     /**

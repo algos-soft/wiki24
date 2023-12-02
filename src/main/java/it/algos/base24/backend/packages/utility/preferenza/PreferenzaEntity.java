@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "preferenza", keyPropertyName = "code", usaStartupReset = true)
+@AEntity(collectionName = "preferenza", keyPropertyName = "code", typeList = TypeList.pref)
 public class PreferenzaEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, widthRem = 16)

@@ -30,15 +30,19 @@ public class ListButtonBar extends HorizontalLayout {
 
     protected CrudList currentCrudList;
 
-    protected  CrudModulo currentCrudModulo;
+    protected CrudModulo currentCrudModulo;
 
-    protected  Class currentCrudModelClazz;
+    protected Class currentCrudModelClazz;
 
     private boolean usaBottoneDeleteAll;
 
     private boolean usaBottoneResetDelete;
 
     private boolean usaBottoneResetAdd;
+
+    private boolean usaBottoneResetPref;
+
+    private boolean usaBottoneDownload;
 
     private boolean usaBottoneNew;
 
@@ -58,6 +62,9 @@ public class ListButtonBar extends HorizontalLayout {
 
     private Button buttonResetAdd = new Button();
 
+    private Button buttonResetPref = new Button();
+
+    private Button buttonDownload = new Button();
 
     private Button buttonNew = new Button();
 
@@ -101,6 +108,22 @@ public class ListButtonBar extends HorizontalLayout {
      */
     public ListButtonBar resetAdd() {
         this.usaBottoneResetAdd = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public ListButtonBar resetPref() {
+        this.usaBottoneResetPref = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public ListButtonBar download() {
+        this.usaBottoneDownload = true;
         return this;
     }
 
@@ -180,6 +203,12 @@ public class ListButtonBar extends HorizontalLayout {
         if (usaBottoneResetAdd) {
             this.addResetAdd();
         }
+        if (usaBottoneResetPref) {
+            this.addResetPref();
+        }
+        if (usaBottoneDownload) {
+            this.addDownload();
+        }
         if (usaBottoneNew) {
             this.addNew();
         }
@@ -200,7 +229,7 @@ public class ListButtonBar extends HorizontalLayout {
     private void addDeleteAll() {
         buttonDeleteAll.getElement().setAttribute("theme", "primary");
         buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        buttonDeleteAll.getElement().setProperty("title", "Delete: cancella completamente tutta la collezione");
+        buttonDeleteAll.getElement().setProperty("title", TEXT_DELETE);
         buttonDeleteAll.setIcon(new Icon(VaadinIcon.TRASH));
         buttonDeleteAll.addClickListener(event -> currentCrudList.deleteAll());
         this.add(buttonDeleteAll);
@@ -208,7 +237,8 @@ public class ListButtonBar extends HorizontalLayout {
 
     private void addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
-        buttonResetDelete.getElement().setProperty("title", "Reset: cancella completamente la collection e la ricrea.");
+        buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
         buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
         this.add(buttonResetDelete);
@@ -216,12 +246,30 @@ public class ListButtonBar extends HorizontalLayout {
 
     private void addResetAdd() {
         buttonResetAdd.getElement().setAttribute("theme", "primary");
-        buttonResetAdd.getElement().setProperty("title",TEXT_RESET_ADD);
+        buttonResetAdd.getElement().setProperty("title", TEXT_RESET_ADD);
         buttonResetAdd.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetAdd.addClickListener(event -> currentCrudList.resetAdd());
         this.add(buttonResetAdd);
     }
 
+
+    private void addResetPref() {
+        buttonResetPref.getElement().setAttribute("theme", "primary");
+        buttonResetPref.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonResetPref.getElement().setProperty("title", TEXT_RESET_PREF);
+        buttonResetPref.setIcon(new Icon(VaadinIcon.REFRESH));
+        buttonResetPref.addClickListener(event -> currentCrudList.resetPref());
+        this.add(buttonResetPref);
+    }
+
+    private void addDownload() {
+        buttonDownload.getElement().setAttribute("theme", "primary");
+        buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonDownload.getElement().setProperty("title", TEXT_DOWNLOAD);
+        buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
+        buttonDownload.addClickListener(event -> currentCrudList.download());
+        this.add(buttonDownload);
+    }
 
     private void addNew() {
         buttonNew.getElement().setAttribute("theme", "primary");
@@ -291,8 +339,10 @@ public class ListButtonBar extends HorizontalLayout {
 
     public boolean sincroSelection(boolean singoloSelezionato) {
         buttonDeleteAll.setEnabled(!singoloSelezionato);
-        buttonResetAdd.setEnabled(!singoloSelezionato);
         buttonResetDelete.setEnabled(!singoloSelezionato);
+        buttonResetAdd.setEnabled(!singoloSelezionato);
+        buttonResetPref.setEnabled(!singoloSelezionato);
+        buttonDownload.setEnabled(!singoloSelezionato);
         buttonNew.setEnabled(!singoloSelezionato);
         buttonEdit.setEnabled(singoloSelezionato);
         buttonShow.setEnabled(singoloSelezionato);

@@ -88,11 +88,17 @@ public abstract class CrudList extends VerticalLayout {
 
     protected VerticalLayout bottomPlaceHolder;
 
+    protected String infoScopo;
+
     public boolean usaBottoneDeleteAll;
 
     public boolean usaBottoneResetDelete;
 
     public boolean usaBottoneResetAdd;
+
+    public boolean usaBottoneResetPref;
+
+    public boolean usaBottoneDownload;
 
     public boolean usaBottoneNew;
 
@@ -112,7 +118,9 @@ public abstract class CrudList extends VerticalLayout {
 
     public Sort.Order basicSortOrder;
 
-    protected TypeReset typeReset;
+    protected TypeResetOld typeReset;
+
+    protected TypeList typeList;
 
     protected String message;
 
@@ -140,23 +148,25 @@ public abstract class CrudList extends VerticalLayout {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.typeReset = annotationService.getTypeReset(currentCrudEntityClazz);
+        this.typeList = annotationService.getTypeList(currentCrudEntityClazz);
 
         this.propertyListNames = currentCrudModulo.getPropertyNames();
         this.usaDataProvider = true;
         this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
 
-        if (typeReset != null) {
-            this.usaBottoneDeleteAll = typeReset.isUsaBottoneDeleteAll();
-            this.usaBottoneResetDelete = typeReset.isUsaBottoneResetDelete();
-            this.usaBottoneResetAdd = typeReset.isUsaBottoneResetAdd();
-            this.usaBottoneNew = typeReset.isUsaBottoneNew();
-            this.usaBottoneEdit = typeReset.isUsaBottoneEdit();
-            this.usaBottoneShows = typeReset.isUsaBottoneShows();
-            this.usaBottoneDeleteEntity = typeReset.isUsaBottoneDeleteEntity();
-            this.usaBottoneSearch = typeReset.isUsaBottoneSearch();
-            this.usaBottoneExport = typeReset.isUsaBottoneExport();
+        if (typeList != null) {
+            this.usaBottoneDeleteAll = typeList.isUsaBottoneDeleteAll();
+            this.usaBottoneResetDelete = typeList.isUsaBottoneResetDelete();
+            this.usaBottoneResetAdd = typeList.isUsaBottoneResetAdd();
+            this.usaBottoneResetPref = typeList.isUsaBottoneResetPref();
+            this.usaBottoneDownload = typeList.isUsaBottoneDownload();
+            this.usaBottoneNew = typeList.isUsaBottoneNew();
+            this.usaBottoneEdit = typeList.isUsaBottoneEdit();
+            this.usaBottoneShows = typeList.isUsaBottoneShows();
+            this.usaBottoneDeleteEntity = typeList.isUsaBottoneDeleteEntity();
+            this.usaBottoneSearch = typeList.isUsaBottoneSearch();
+            this.usaBottoneExport = typeList.isUsaBottoneExport();
         }
     }
 
@@ -221,37 +231,56 @@ public abstract class CrudList extends VerticalLayout {
         this.add(alertPlaceHolder);
     }
 
+    //    /**
+    //     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+    //     */
+    //    public VerticalLayout fixAlert() {
+    //        return new SimpleVerticalLayout();
+    //    }
+
+
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Può essere sovrascritto, invocando prima o dopo il metodo della superclasse <br>
      */
-    public VerticalLayout fixAlert() {
-        return new SimpleVerticalLayout();
-    }
-
-
-    public VerticalLayout addAlert(VerticalLayout layout) {
-        if (usaBottoneShows) {
-            layout.add(ASpan.text(TEXT_HARD).rosso());
-        }
-        if (!usaBottoneShows && !usaBottoneEdit) {
-            layout.add(ASpan.text(TEXT_HARD).rosso());
+    public void fixAlert() {
+        if (typeList != TypeList.hardWiki && typeList != TypeList.softWiki) {
+            if (textService.isEmpty(infoScopo)) {
+                infoScopo = typeList.getInfoScopo();
+            }
+            if (textService.isValid(infoScopo)) {
+                alertPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
+            }
         }
 
-        if (usaBottoneResetDelete) {
-            layout.add(ASpan.text(TEXT_RESET_DELETE).rosso());
-        }
+        alertPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
+        alertPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
 
-        if (usaBottoneResetAdd) {
-            layout.add(ASpan.text(TEXT_NEWS).rosso());
-            layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
-        }
+        //        if (usaBottoneShows) {
+        //            layout.add(ASpan.text(TEXT_HARD).rosso());
+        //        }
+        //        if (!usaBottoneShows && !usaBottoneEdit) {
+        //            layout.add(ASpan.text(TEXT_HARD).rosso());
+        //        }
+        //
+        //        if (usaBottoneResetDelete) {
+        //            layout.add(ASpan.text(TEXT_RESET_DELETE).rosso());
+        //        }
+        //
+        //        if (usaBottoneResetAdd) {
+        //            layout.add(ASpan.text(TEXT_NEWS).rosso());
+        //            layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
+        //        }
+        //        if (usaBottoneResetPref) {
+        //            layout.add(ASpan.text(TEXT_NEWS).rosso());
+        //            layout.add(ASpan.text(TEXT_RESET_PREF).rosso());
+        //        }
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-            layout.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
+            alertPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
         }
 
-        alertPlaceHolder.add(layout);
-        return layout;
+        //        alertPlaceHolder.add(layout);
+        //        return layout;
     }
 
 
@@ -286,6 +315,12 @@ public abstract class CrudList extends VerticalLayout {
         }
         if (usaBottoneResetAdd) {
             buttonBar.resetAdd();
+        }
+        if (usaBottoneResetPref) {
+            buttonBar.resetPref();
+        }
+        if (usaBottoneDownload) {
+            buttonBar.download();
         }
         if (usaBottoneNew) {
             buttonBar.add();
@@ -591,7 +626,16 @@ public abstract class CrudList extends VerticalLayout {
         }
     }
 
-    public boolean deleteAll() {
+    public void deleteAll() {
+        if (Pref.usaConfermaCancellazione.is()) {
+            DialogDelete.deleteAll(this::deleteAllEsegue);
+        }
+        else {
+            deleteAllEsegue();
+        }
+    }
+
+    public boolean deleteAllEsegue() {
         RisultatoDelete typeDelete = currentCrudModulo.deleteAll();
 
         if (typeDelete == RisultatoDelete.empty) {
@@ -610,7 +654,6 @@ public abstract class CrudList extends VerticalLayout {
         return true;
     }
 
-
     public boolean resetDelete() {
         currentCrudModulo.dialogResetDelete();
         refreshData();
@@ -624,7 +667,32 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean resetAdd() {
-        currentCrudModulo.dialogResetAdd();
+        currentCrudModulo.resetAdd();
+        refreshData();
+
+        return true;
+    }
+
+    /**
+     * Proveniente da un click sul bottone RestPref della buttonBar <br>
+     * Invoca il metodo dedicato del Modulo specifico <br>
+     * Aggiorna il contenuto della Grid tramite DataProvider <br>
+     */
+    public boolean resetPref() {
+        //        currentCrudModulo.dialogResetAdd();
+        refreshData();
+
+        return true;
+    }
+
+
+    /**
+     * Proveniente da un click sul bottone RestPref della buttonBar <br>
+     * Invoca il metodo dedicato del Modulo specifico <br>
+     * Aggiorna il contenuto della Grid tramite DataProvider <br>
+     */
+    public boolean download() {
+        currentCrudModulo.download();
         refreshData();
 
         return true;

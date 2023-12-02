@@ -7,6 +7,7 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import it.algos.wiki24.backend.enumeration.*;
+import jakarta.annotation.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -19,7 +20,30 @@ import java.util.*;
  * Time: 13:55
  */
 @Service
+@Component("WikiBoot")
 public class WikiBoot extends BaseBoot {
+
+    public WikiBoot() {
+        System.out.println(String.format("Costruttore (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
+        BaseVar.bootClazz = this.getClass();
+        BaseVar.bootClazzQualifier=this.getClass().getSimpleName();
+        System.out.println(String.format("Regolata bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
+
+    }
+
+    @PostConstruct
+    protected void postConstruct() {
+        System.out.println(String.format("postConstruct (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
+        System.out.println(String.format("Adesso bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
+        //        try {
+        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
+        //            System.out.println(String.format("Regolata bootClazz=[%s]",BaseVar.bootClazz.getSimpleName()));
+        //        } catch (Exception unErrore) {
+        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
+        //            System.out.println(message);
+        ////        }
+        this.fixVariabili();
+    }
 
     /**
      * Regola le variabili generali dell' applicazione con il loro valore iniziale di default <br>
@@ -80,6 +104,7 @@ public class WikiBoot extends BaseBoot {
             }
         }
     }
+
 }
 
 

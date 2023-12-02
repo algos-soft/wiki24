@@ -3,6 +3,7 @@ package it.algos.base24.backend.boot;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.packages.anagrafica.via.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
 import it.algos.base24.backend.packages.utility.role.*;
@@ -24,6 +25,7 @@ import java.util.*;
  * Time: 20:52
  */
 @Service
+@Component("baseBoot")
 public class BaseBoot {
 
     @Inject
@@ -52,6 +54,12 @@ public class BaseBoot {
 
     private String property;
 
+
+    public BaseBoot() {
+        BaseVar.bootClazz = this.getClass();
+        BaseVar.bootClazzQualifier = "baseBoot";
+    }
+
     /**
      * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
      * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
@@ -63,8 +71,9 @@ public class BaseBoot {
      */
     @PostConstruct
     protected void postConstruct() {
-        this.fixVariabili();
+        //        this.fixVariabili();
     }
+
 
     /**
      * Primo ingresso nel programma <br>
@@ -83,7 +92,6 @@ public class BaseBoot {
     public void inizia() {
         this.fixVariabili();
         this.fixEnumerationPreferenze();
-
         //        this.creaPreferenzeMongoDB();
         //        logger.setUpIni();
 
@@ -230,17 +238,17 @@ public class BaseBoot {
          */
         BaseVar.nameViewListProject = new ArrayList<>();
 
-        /**
-         * Classe da usare per il Boot iniziale di regolazione <br>
-         * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
-         * Deve essere regolata in resources.application.properties <br>
-         */
-        try {
-            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
-        } catch (Exception unErrore) {
-            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
-            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        }
+        //        /**
+        //         * Classe da usare per il Boot iniziale di regolazione <br>
+        //         * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
+        //         * Deve essere regolata in resources.application.properties <br>
+        //         */
+        //        try {
+        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
+        //        } catch (Exception unErrore) {
+        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
+        //            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        //        }
 
         /**
          * Classe da usare per il Boot iniziale di regolazione <br>
@@ -286,6 +294,10 @@ public class BaseBoot {
         for (Pref pref : Pref.values()) {
             pref.preferenzaModulo = this.preferenzaModulo;
         }
+    }
+
+    public List<IPref> getAllEnums() {
+        return Pref.getAllEnums();
     }
 
 

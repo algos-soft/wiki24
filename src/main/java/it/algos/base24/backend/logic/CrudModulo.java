@@ -424,21 +424,23 @@ public abstract class CrudModulo {
     }
 
     public void dialogResetDelete() {
-        DialogResetDelete.reset(this::resetDelete);
+        DialogDelete.reset(this::resetDelete);
     }
 
     public RisultatoReset resetDelete() {
         return RisultatoReset.getDelete(deleteAll());
     }
 
-    public void dialogResetAdd() {
-        DialogResetAdd.reset(this::resetAdd);
-    }
+//    public void dialogResetAdd() {
+//        DialogResetAdd.reset(this::resetAdd);
+//    }
 
     public RisultatoReset resetAdd() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
     }
 
+    public void download() {
+    }
 
     public int nextOrdine() {
         int nextOrdine = 1;

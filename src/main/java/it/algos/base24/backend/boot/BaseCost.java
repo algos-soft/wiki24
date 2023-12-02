@@ -192,25 +192,50 @@ public class BaseCost {
 
     public static final String SUFFIX_VAR = "Var";
 
+    public static final String SUFFIX_CSV = ".csv";
+
     public static final String NO_INCLUDE = "<noinclude>";
 
     public static final String HTML_CODE = "code";
 
     public static final String HTML_KBD = "kbd";
 
-    public static String TEXT_CSV = "Tavola di servizio usata solo in background. File originale (CSV) sul server /www.algos.it/vaadin24/config/";
+    public static String TEXT_STANDARD = "Si possono creare, modificare e cancellare i valori.";
 
-    public static String TEXT_BACK = "Tavola di servizio usata solo in background. Costruita hardcoded in %sModulo.resetDelete().";
+    public static String TEXT_TAVOLA = "Tavola di servizio usata solo in background.";
 
-    public static String TEXT_ENUM = "Tavola di servizio usata solo in background. Costruita dalla enum %s in %sModulo.resetDelete().";
+    public static String TEXT_BASE = "Tavola di base.";
 
-    public static String TEXT_HARD = "Solo hard coded. Non creabili e non modificabili.";
+    public static String TEXT_WIKI = TEXT_BASE + SPAZIO + "Costruita dalle pagine Wiki: ";
+
+
+    public static String TEXT_CSV = "File originale (CSV) sul server [/www.algos.it/vaadin24/config/%s]";
+
+    public static String TEXT_HARD = "Solo hard coded. Non creabili, non modificabili e non cancellabili.";
+
+    public static String TEXT_CODE = "Costruita hardcoded in %sModulo.resetDelete().";
+
+    public static String TEXT_ENUM = "Costruita dalla enum %sEnum in %sModulo.resetDelete().";
+    public static String TEXT_ENUM_PREF = "Costruita dalla enum Pref in PreferenzaModulo.resetDelete().";
 
     public static String TEXT_NEWS = "Creazione automatica della tavola. Si possono modificare i valori. Se ne possono aggiungere altri.";
+    public static String TEXT_PREF = "Creazione automatica di tutti i valori. Non se ne possono creare di nuovi. Si può modificare la descrizione ed il valore.";
 
-    public static String TEXT_RESET_DELETE = "ResetDelete ricostruisce completamente la collezione.";
+    public static String DELETE = "Cancella dal database tutti i valori della collezione";
 
-    public static String TEXT_RESET_ADD = "ResetAdd ricostruisce i valori della tavola originale senza modificare i nuovi inserimenti.";
+    public static String TEXT_DELETE = "Delete: " + DELETE;
+
+    public static String DELETE_RICREA = DELETE + " e li ricrea.";
+
+    public static String TEXT_RESET_DELETE = "ResetDelete. " + DELETE_RICREA;
+
+    public static String TEXT_SICURO = "Sei sicuro? L'operazione è irreversibile";
+
+    public static String TEXT_RESET_ADD = "ResetAdd. Reinserisce elementi originali mancanti. Mantiene le modifiche ed i nuovi inserimenti.";
+
+    public static String TEXT_RESET_PREF = "ResetPref. Aggiunge nuovi (eventuali) valori della enum e aggiorna tutte le descrizioni esistenti. I valori correnti rimangono inalterati.";
+
+    public static String TEXT_DOWNLOAD = "Download. Ricarica tutti i valori dal server.";
 
     public static String TEXT_SEARCH = "Search ...by [%s] è 'caseInsensitive' su inizio della property di Text.";
 

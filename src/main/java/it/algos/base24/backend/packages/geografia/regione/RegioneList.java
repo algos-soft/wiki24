@@ -2,7 +2,6 @@ package it.algos.base24.backend.packages.geografia.regione;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
@@ -36,27 +35,24 @@ public class RegioneList extends CrudList {
     }
 
     @Override
-    public VerticalLayout fixAlert() {
-        VerticalLayout layout = super.fixAlert();
-        Anchor anchor1;
+    public void fixAlert() {
+        Anchor anchor;
         String link;
         String caption;
-        String message;
         String alfa1 = "ISO 3166-1";
         String alfa2 = "ISO 3166-2:xx";
 
         link = String.format("%s%s", TAG_WIKI, alfa1);
         caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
-        anchor1 = new Anchor(link, caption);
-        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor = new Anchor(link, caption);
+        anchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        message = "Tavola di base. Costruita dalle pagine Wiki: ";
-        Span testo = new Span(message);
+        Span testo = new Span(typeList.getInfoScopo());
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        layout.add(new Span(testo, anchor1));
+        alertPlaceHolder.add(new Span(testo, anchor));
 
-        return super.addAlert(layout);
+        super.fixAlert();
     }
 
     /**

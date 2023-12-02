@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "secolo", usaStartupReset = true, typeReset = TypeReset.soloList, usaIdPrimaMinuscola = false)
+@AEntity(collectionName = "secolo", typeList = TypeList.hardCsv, usaIdPrimaMinuscola = false)
 public class SecoloEntity extends AbstractEntity {
 
     @AField(type = TypeField.integer, headerText = "#", widthRem = 4, caption = "Ordinamento a partire dal XX secolo a.C.")

@@ -1,8 +1,6 @@
 package it.algos.base24.backend.packages.crono.secolo;
 
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
@@ -23,15 +21,10 @@ public class SecoloList extends CrudList {
     }
 
     @Override
-    public VerticalLayout fixAlert() {
-        VerticalLayout layout = super.fixAlert();
-        String message;
-
-        message = String.format(TEXT_ENUM, "SecoloEnum", "Secolo");
-        layout.add(ASpan.text(message).verde().bold());
-
-        layout.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
-        return super.addAlert(layout);
+    public void fixAlert() {
+        super.infoScopo = String.format(typeList.getInfoScopo(), "secoli");
+        super.fixAlert();
+        alertPlaceHolder.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }
 
 }// end of CrudList class
