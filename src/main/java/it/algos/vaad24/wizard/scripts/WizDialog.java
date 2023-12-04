@@ -10,6 +10,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.dialog.*;
 import static it.algos.vaad24.wizard.scripts.WizCost.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;

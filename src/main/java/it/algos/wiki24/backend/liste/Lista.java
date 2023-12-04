@@ -19,6 +19,7 @@ import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nome.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;

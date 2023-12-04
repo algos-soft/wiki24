@@ -114,7 +114,7 @@ public class PreferenzaView extends VerticalLayout implements AfterNavigationObs
 
     @Override
     public void afterNavigation(AfterNavigationEvent afterNavigationEvent) {
-        WebBrowser browser = VaadinSession.getCurrent().getBrowser();
+//        WebBrowser browser = VaadinSession.getCurrent().getBrowser();
         UI.getCurrent().getPage().retrieveExtendedClientDetails(details -> fixBrowser(details));
         this.fixPreferenze();
         this.fixAlert();

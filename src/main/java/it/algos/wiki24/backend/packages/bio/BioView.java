@@ -101,7 +101,7 @@ public class BioView extends WikiView {
         super.usaDataProvider = true;
         super.usaBottoneElabora = true;
         super.usaBottoneErrori = true;
-        super.usaBottoneReset = true;
+        super.usaBottoneReset = false;
         super.usaBottoneNew = true;
         super.usaBottoneDeleteAll = true;
         super.usaBottoneSearch = false;

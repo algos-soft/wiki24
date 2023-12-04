@@ -67,14 +67,15 @@ public class Avviso {
     }
 
     public void open() {
-        if (VaadinSession.getCurrent()!=null) {
-            if (themeVariant == null) {
-                Notification.show(message, durata(), posizione);
-            }
-            else {
-                Notification.show(message, durata(), posizione).addThemeVariants(themeVariant);
-            }
-        }
+        //@todo rimettere
+//        if (VaadinSession.getCurrent()!=null) {
+//            if (themeVariant == null) {
+//                Notification.show(message, durata(), posizione);
+//            }
+//            else {
+//                Notification.show(message, durata(), posizione).addThemeVariants(themeVariant);
+//            }
+//        }
     }
 
 

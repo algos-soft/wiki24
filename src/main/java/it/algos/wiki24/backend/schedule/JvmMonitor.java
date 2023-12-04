@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.schedule;
 import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.databind.*;
 import it.algos.wiki24.backend.utility.*;
+import jakarta.annotation.*;
 import lombok.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;

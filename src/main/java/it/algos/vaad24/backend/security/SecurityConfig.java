@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.*;
 //@EnableWebSecurity
 //@Configuration
 //public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
-    public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
+    public class SecurityConfig  {
 
 //    @Override
 //    protected void configure(HttpSecurity http) throws Exception {

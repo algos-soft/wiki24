@@ -8,7 +8,9 @@ import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.wrapper.*;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.*;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -17,8 +19,6 @@ import org.springframework.stereotype.*;
 
 import javax.inject.*;
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.*;
 import java.lang.reflect.Field;
 import java.util.*;
 

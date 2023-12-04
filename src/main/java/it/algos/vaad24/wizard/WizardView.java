@@ -16,6 +16,7 @@ import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
 import it.algos.vaad24.wizard.scripts.*;
 import static it.algos.vaad24.wizard.scripts.WizCost.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;

@@ -40,15 +40,15 @@ public class MailService extends AbstractService {
      * Spring constructor
      */
     public MailService() {
-        this.mailSender = new JavaMailSenderImpl();
-
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "465");
-        properties.put("mail.smtp.ssl.enable", "true");
-        mailSender.setUsername("2gacgac@gmail.com");
-        mailSender.setPassword("djacllkkfckgmpsx");
-        mailSender.setJavaMailProperties(properties);
+//        this.mailSender = new JavaMailSenderImpl();
+//
+//        Properties properties = new Properties();
+//        properties.put("mail.smtp.host", "smtp.gmail.com");
+//        properties.put("mail.smtp.port", "465");
+//        properties.put("mail.smtp.ssl.enable", "true");
+//        mailSender.setUsername("2gacgac@gmail.com");
+//        mailSender.setPassword("djacllkkfckgmpsx");
+//        mailSender.setJavaMailProperties(properties);
     }// end of constructor
 
     /**
@@ -82,23 +82,23 @@ public class MailService extends AbstractService {
      */
     public boolean send(String from, String to, String title, String body) {
         boolean status = false;
-        MimeMessage message = this.mailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
-        try {
-            if (textService.isValid(from)) {
-                mimeMessageHelper.setFrom(from);
-            }
-            mimeMessageHelper.setSubject(title);
-            mimeMessageHelper.setText(body);
-            mimeMessageHelper.setTo(to);
-            this.mailSender.send(message);
-            status = true;
-        } catch (MessagingException messageException) {
-            // You could also 'throw' this exception. I am not a fan of checked exceptions.
-            // If you want to go that route, then just update this method and the interface.
-            throw new RuntimeException(messageException);
-            //            throw AlgosException.stack(messageException, "Pippoz", getClass(), "send");
-        }
+//        MimeMessage message = this.mailSender.createMimeMessage();
+//        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+//        try {
+//            if (textService.isValid(from)) {
+//                mimeMessageHelper.setFrom(from);
+//            }
+//            mimeMessageHelper.setSubject(title);
+//            mimeMessageHelper.setText(body);
+//            mimeMessageHelper.setTo(to);
+//            this.mailSender.send(message);
+//            status = true;
+//        } catch (MessagingException messageException) {
+//            // You could also 'throw' this exception. I am not a fan of checked exceptions.
+//            // If you want to go that route, then just update this method and the interface.
+//            throw new RuntimeException(messageException);
+//            //            throw AlgosException.stack(messageException, "Pippoz", getClass(), "send");
+//        }
         return status;
     }
 

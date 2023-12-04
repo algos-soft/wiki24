@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.utility;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.util.*;
 import com.fasterxml.jackson.databind.*;
+import jakarta.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.*;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;

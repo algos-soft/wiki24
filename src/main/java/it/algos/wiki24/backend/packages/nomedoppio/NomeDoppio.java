@@ -28,7 +28,7 @@ import org.springframework.stereotype.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nomedoppio", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "nomedoppio", keyPropertyName = "nome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class NomeDoppio extends AEntity {
 
 

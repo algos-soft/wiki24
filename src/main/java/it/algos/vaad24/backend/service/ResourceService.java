@@ -7,7 +7,6 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import static it.algos.vaad24.backend.service.FileService.*;
 import it.algos.vaad24.backend.wrapper.*;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -370,7 +369,7 @@ public class ResourceService extends AbstractService {
      */
     public Image getImageFromMongo(final String mongoValue) {
         Image image = null;
-        byte[] bytes = Base64.decodeBase64(mongoValue);
+        byte[] bytes = Base64.getDecoder().decode(mongoValue);
 
         if (bytes != null) {
             image = getImageFromBytes(bytes);
@@ -421,7 +420,7 @@ public class ResourceService extends AbstractService {
         byte[] bytes = getBytes(simpleResourceFileName);
 
         if (bytes != null) {
-            bytesCodificati = Base64.encodeBase64String(bytes);
+            bytesCodificati = Base64.getEncoder().encodeToString(bytes);
         }
 
         return bytesCodificati;

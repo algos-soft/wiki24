@@ -30,7 +30,7 @@ import javax.persistence.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "genere", keyPropertyName = "singolare", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "genere", keyPropertyName = "singolare", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Genere extends AEntity {
 
     private static final transient int WIDTHEM = 20;

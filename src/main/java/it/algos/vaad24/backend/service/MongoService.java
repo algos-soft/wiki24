@@ -10,6 +10,7 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.logic.*;
 import it.algos.vaad24.backend.wrapper.*;
+import jakarta.annotation.*;
 import org.bson.*;
 import org.bson.conversions.*;
 import org.springframework.beans.factory.annotation.*;

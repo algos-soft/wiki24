@@ -73,7 +73,7 @@ public class AComboField extends CustomField implements HasValue {
          */
         if (isAllowCustomValue) {
             comboBox.setAllowCustomValue(true);
-            this.addCustomListener();
+//            this.addCustomListener(); //@todo rimettere
         }
 
         add(comboBox);
@@ -129,14 +129,16 @@ public class AComboField extends CustomField implements HasValue {
     }
 
 
-    public void addCustomListener() {
-        comboBox.addCustomValueSetListener(event -> {
-            String newValue = ((GeneratedVaadinComboBox.CustomValueSetEvent) event).getDetail();
-            items.add(newValue);
-            setItems(items);
-            comboBox.setValue(newValue);
-        });
-    }
+    //@todo rimettere
+//    public void addCustomListener() {
+//        comboBox.addCustomValueSetListener(event -> {
+////            String newValue = ((GeneratedVaadinComboBox.CustomValueSetEvent) event).getDetail();
+//            String newValue = ( event.getSource());
+//            items.add(newValue);
+//            setItems(items);
+//            comboBox.setValue(newValue);
+//        });
+//    }
 
 
     @Override

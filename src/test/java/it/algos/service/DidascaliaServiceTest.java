@@ -211,7 +211,8 @@ public class DidascaliaServiceTest extends WikiTest {
                 creaBio("Jameson Adams"),
                 creaBio("Marianna Saltini"),
                 creaBio("Giuseppe Marchetti"),
-                creaBio("Jordan Adams (1981)")
+                creaBio("Jordan Adams (1981)"),
+                creaBio("Massimo Turci")
         );
     }
 

@@ -78,6 +78,8 @@ public class AttPluraleView extends WikiView {
         super.usaBottoneDownload = true;
         super.usaInfoDownload = true;
         super.usaBottoneUploadModuloAlfabetizzato = true;
+
+        usaDataProvider = false;
     }
 
     /**

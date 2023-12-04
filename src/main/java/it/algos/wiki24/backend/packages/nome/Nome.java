@@ -35,7 +35,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "nome", keyPropertyName = "nome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "nome", keyPropertyName = "nome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Nome extends AEntity {
 
     @AIField(type = AETypeField.text, header = "nome", caption = "nome", widthEM = 14)

@@ -5,6 +5,7 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.packages.utility.logger.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.wrapper.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;

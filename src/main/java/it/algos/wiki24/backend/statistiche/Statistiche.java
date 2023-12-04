@@ -19,6 +19,7 @@ import it.algos.wiki24.backend.packages.wiki.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.wiki.query.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 

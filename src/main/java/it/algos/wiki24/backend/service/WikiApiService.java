@@ -979,7 +979,7 @@ public class WikiApiService extends WAbstractService {
 
     public void openWikiPage(String wikiTitle) {
         String link = "\"" + VaadCost.PATH_WIKI + wikiTitle + "\"";
-        UI.getCurrent().getPage().executeJavaScript("window.open(" + link + ");");
+//        UI.getCurrent().getPage().executeJavaScript("window.open(" + link + ");");
     }
 
     /**

@@ -3,10 +3,10 @@ package it.algos.wiki24.backend.packages.template;
 import it.algos.vaad24.backend.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 import org.springframework.data.mongodb.core.index.*;
 import org.springframework.data.mongodb.core.index.Indexed;

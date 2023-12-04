@@ -5,12 +5,12 @@ import it.algos.vaad24.backend.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.time.*;
 import java.time.format.*;
 

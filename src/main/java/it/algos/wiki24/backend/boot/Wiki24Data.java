@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.boot;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 

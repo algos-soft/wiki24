@@ -6,13 +6,13 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.wiki24.backend.enumeration.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.index.*;
 import org.springframework.stereotype.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 /**
  * Project wiki23

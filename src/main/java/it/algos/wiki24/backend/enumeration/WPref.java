@@ -4,6 +4,7 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.service.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 

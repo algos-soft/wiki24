@@ -1,5 +1,6 @@
 package it.algos.vaad24.backend.configuration;
 
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.mongodb.core.convert.*;

@@ -162,7 +162,7 @@ public class WAbstractService extends AbstractService {
         SERVIZI.add(this.wikiApiService);
         SERVIZI.add(this.wikiUtility);
         SERVIZI.add(this.wikiBotService);
-        SERVIZI.add(this.elaboraService);
+//        SERVIZI.add(this.elaboraService);
         SERVIZI.add(this.bioService);
         SERVIZI.add(this.queryService);
         SERVIZI.add(this.attSingolareBackend);

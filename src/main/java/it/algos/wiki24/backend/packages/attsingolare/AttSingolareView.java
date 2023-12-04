@@ -77,6 +77,8 @@ public class AttSingolareView extends WikiView {
         this.usaBottonePaginaWiki = false;
         this.usaInfoDownload = true;
         super.usaBottoneUploadModuloAlfabetizzato = true;
+
+        usaDataProvider = false;
     }
 
     /**

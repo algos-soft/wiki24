@@ -34,7 +34,7 @@ import com.vaadin.flow.component.textfield.TextField;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "attgenere", keyPropertyName = "singolare", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "attgenere", keyPropertyName = "singolare", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class AttGenere extends AEntity {
 
     @AIField(type = AETypeField.text, header = "singolare", caption = "singolare", widthEM = 20)

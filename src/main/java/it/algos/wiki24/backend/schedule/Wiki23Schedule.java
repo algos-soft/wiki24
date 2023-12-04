@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.schedule;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.boot.*;
 import it.algos.vaad24.backend.schedule.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 

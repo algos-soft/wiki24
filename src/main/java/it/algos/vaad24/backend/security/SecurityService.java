@@ -24,10 +24,10 @@ public class SecurityService {
         return null;
     }
 
-    public void logout() {
-        UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
-        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-        logoutHandler.logout(VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);
-    }
+//    public void logout() {
+//        UI.getCurrent().getPage().setLocation(LOGOUT_SUCCESS_URL);
+//        SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+//        logoutHandler.logout(VaadinServletRequest.getCurrent().getHttpServletRequest(), null, null);
+//    }
 
 }

@@ -5,11 +5,11 @@ import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.packages.utility.preferenza.*;
 import it.algos.vaad24.backend.service.*;
+import jakarta.servlet.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 
-import javax.servlet.*;
 
 /**
  * Project vaadin23

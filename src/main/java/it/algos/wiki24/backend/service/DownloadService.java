@@ -59,7 +59,13 @@ public class DownloadService extends WAbstractService {
      */
     public void cicloIniziale(final String categoryTitle) {
         long inizio = System.currentTimeMillis();
-        List<Long> listaPageIds;
+        List<Long> listaPageIdsDaLeggere;
+        List<Long> subList;
+        List<WrapBio> listaWrapBio;
+        int dim;
+        int stock = 10000;
+        String message;
+        int numVociCreate = 0;
 
         //--Cancella (drop) il database
         mongoService.deleteAll(Bio.class);
@@ -71,10 +77,21 @@ public class DownloadService extends WAbstractService {
         checkBot();
 
         //--Crea la lista di tutti i (long) pageIds della category
-        listaPageIds = getListaPageIds(categoryTitle);
+        listaPageIdsDaLeggere = getListaPageIds(categoryTitle);
 
-        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
-        creaNewEntities(listaPageIds);
+        dim = listaPageIdsDaLeggere.size();
+        for (int k = 0; k < dim; k = k + stock) {
+            subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
+
+            //--Legge le pagine
+            listaWrapBio = getListaWrapBio(subList);
+
+            //--Crea/aggiorna le voci biografiche <br>
+            numVociCreate = creaElaboraListaBio(listaWrapBio);
+
+            message = String.format("Create %s nuove biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
+            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        }
 
         //--durata del ciclo completo
         fixInfoDurataReset(inizio);
@@ -99,6 +116,11 @@ public class DownloadService extends WAbstractService {
         List<WrapTime> listaWrapTime;
         List<Long> listaPageIdsDaLeggere;
         List<WrapBio> listaWrapBio;
+        List<Long> subList;
+        int dim;
+        int stock = 10000;
+        int numVociCreate = 0;
+        String message;
 
         logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         logService.info(new WrapLog().message("Inizio ciclo di download").type(AETypeLog.bio));
@@ -125,8 +147,29 @@ public class DownloadService extends WAbstractService {
         //--Recupera i (long) pageIds presenti nella category e non ancora esistenti nel database (mongo) locale e da creare
         listaPageIdsDaCreare = deltaCreare(listaPageIds, listaMongoIds);
 
-        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
-        creaNewEntities(listaPageIdsDaCreare);
+        dim = listaPageIdsDaCreare.size();
+        for (int k = 0; k < dim; k = k + stock) {
+            subList = listaPageIdsDaCreare.subList(k, Math.min(k + stock, dim));
+
+            //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
+            creaNewEntities(subList);
+
+//            //--Legge le pagine
+//            listaWrapBio = getListaWrapBio(subList);
+//
+//            //--Crea/aggiorna le voci biografiche <br>
+//            numVociCreate = creaElaboraListaBio(listaWrapBio);
+//
+//            message = String.format("Create %s nuove biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
+//            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+        }
+
+
+
+
+
+//        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
+//        creaNewEntities(listaPageIdsDaCreare);
 
         //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
         listaWrapTime = getListaWrapTime(listaPageIds);
@@ -467,7 +510,7 @@ public class DownloadService extends WAbstractService {
 
         if (Pref.debug.is()) {
             logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
-            message = String.format("Creazione dei wrapTimes dalla categoria [%s] in (previsti) %s", cat, "8 minuti");
+            message = String.format("Creazione dei wrapTimes dalla categoria [%s] in (previsti) %s", cat, "9 minuti");
             logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
@@ -528,24 +571,27 @@ public class DownloadService extends WAbstractService {
         String message;
         int stock = 1000;
         int dim;
+        int num = 0;
+        String size;
+        String sizeTot;
+        String inizioTxt;
+        String inizioTxtTot;
 
         logService.info(new WrapLog().message(VUOTA).type(AETypeLog.bio));
         if (listaPageIdsDaLeggere != null) {
             dim = listaPageIdsDaLeggere.size();
+            sizeTot = textService.format(dim);
             for (int k = 0; k < dim; k = k + stock) {
                 subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
-                if (subList.contains(106234L)) {
-                    int a = 87;
-                }
-                if (subList.contains(105803L)) {
-                    int ab = 87;
-                }
-
                 inizio2 = System.currentTimeMillis();
                 listaWrapTmp = appContext.getBean(QueryWrapBio.class).getWrap(subList);
                 if (listaWrapTmp != null) {
+                    num += listaWrapTmp.size();
+                    size = textService.format(num);
+                    inizioTxt = dateService.deltaText(inizio2);
+                    inizioTxtTot = dateService.deltaText(inizio);
                     listaWrap.addAll(listaWrapTmp);
-                    message = String.format("Recuperati %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrapTmp.size()), dateService.deltaText(inizio2));
+                    message = String.format("Recuperati %s/%s WrapBio di biografie da aggiornare in %s sul totale di %s", size, sizeTot, inizioTxt, inizioTxtTot);
                     logService.info(new WrapLog().message(message).type(AETypeLog.bio));
                 }
             }
@@ -574,6 +620,7 @@ public class DownloadService extends WAbstractService {
             for (WrapBio wrap : listaWrapBio) {
                 if (creaElaboraBio(wrap)) {
                     numVociCreate++;
+//                    logService.info(new WrapLog().message(numVociCreate + "").type(AETypeLog.bio));
                 }
                 else {
                     message = String.format("La pagina %s non è una biografia", wrap.getTitle());
@@ -595,16 +642,27 @@ public class DownloadService extends WAbstractService {
         Bio bio;
         Bio newBio;
         long pageId;
+        String oldTemplBio;
+        String newTemplBio;
 
         if (wrap != null && wrap.isValida()) {
             pageId = wrap.getPageid();
             bio = bioBackend.findByKey(pageId);
             if (bio != null) {
-                bio.setTmplBio(wrap.getTemplBio());
-                bio = elaboraService.esegue(bio);
-                bio.lastServer = wrap.getTimeStamp();
-                bio.lastMongo = LocalDateTime.now();
-                newBio = bioBackend.save(bio);
+                oldTemplBio = bio.getTmplBio();
+                newTemplBio = wrap.getTemplBio();
+                if (newTemplBio.equals(oldTemplBio)) {
+                    bio.lastServer = wrap.getTimeStamp();
+                    bio.lastMongo = LocalDateTime.now();
+                    newBio = bioBackend.save(bio);
+                }
+                else {
+                    bio.setTmplBio(wrap.getTemplBio());
+                    bio = elaboraService.esegue(bio);
+                    bio.lastServer = wrap.getTimeStamp();
+                    bio.lastMongo = LocalDateTime.now();
+                    newBio = bioBackend.save(bio);
+                }
             }
             else {
                 bio = bioBackend.newEntity(wrap);

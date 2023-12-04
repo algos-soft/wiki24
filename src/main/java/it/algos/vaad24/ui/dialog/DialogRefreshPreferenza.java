@@ -8,6 +8,7 @@ import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 

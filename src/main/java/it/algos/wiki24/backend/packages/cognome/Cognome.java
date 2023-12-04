@@ -12,7 +12,6 @@ import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 
 /**
  * Project wiki23
@@ -32,7 +31,7 @@ import javax.validation.constraints.*;
 @Builder()
 @EqualsAndHashCode(callSuper = false)
 @MappedSuperclass()
-@AIEntity(collectionName = "cognome", keyPropertyName = "cognome", usaReset = true, usaKeyIdMinuscolaCaseInsensitive = false)
+@AIEntity(collectionName = "cognome", keyPropertyName = "cognome", usaReset = false, usaKeyIdMinuscolaCaseInsensitive = false)
 public class Cognome extends AEntity {
 
 

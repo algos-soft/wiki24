@@ -14,6 +14,7 @@ import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.security.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.ui.service.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 
 import javax.annotation.*;
@@ -83,13 +84,14 @@ public class MainLayout extends AppLayout {
         viewTitle = new H1();
         viewTitle.addClassNames("m-0", "text-l");
 
-        if (VaadVar.usaSecurity) {
-            logout = new Button("Log out", e -> securityService.logout());
-            header = new HorizontalLayout(toggle, viewTitle, logout);
-        }
-        else {
-            header = new HorizontalLayout(toggle, viewTitle);
-        }
+//        if (VaadVar.usaSecurity) {
+//            logout = new Button("Log out", e -> securityService.logout());
+//            header = new HorizontalLayout(toggle, viewTitle, logout);
+//        }
+//        else {
+//            header = new HorizontalLayout(toggle, viewTitle);
+//        }
+        header = new HorizontalLayout(toggle, viewTitle);
 
         // Configure styling for the header
         header.setId("header");

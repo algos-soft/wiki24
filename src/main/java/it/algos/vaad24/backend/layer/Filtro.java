@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.enumeration.*;
 import it.algos.vaad24.backend.service.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;

@@ -34,6 +34,8 @@ import it.algos.wiki24.backend.packages.statistica.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.utility.*;
+import jakarta.annotation.*;
+import jakarta.servlet.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
@@ -41,7 +43,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.*;
 
 import javax.annotation.*;
-import javax.servlet.*;
 
 /**
  * Project Wiki23

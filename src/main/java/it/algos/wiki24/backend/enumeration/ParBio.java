@@ -6,6 +6,7 @@ import it.algos.vaad24.backend.exception.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.service.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 

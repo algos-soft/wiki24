@@ -3,14 +3,19 @@ package it.algos.wiki24.backend.service;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.entity.*;
 import it.algos.vaad24.backend.exception.*;
+import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.anno.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
 import it.algos.wiki24.backend.packages.bio.*;
 import it.algos.wiki24.backend.packages.giorno.*;
+import it.algos.wiki24.backend.packages.nazplurale.*;
 import it.algos.wiki24.backend.packages.nazsingolare.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
@@ -37,8 +42,65 @@ import java.util.regex.*;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class ElaboraService extends WAbstractService {
+public class ElaboraService  {
 
+    @Autowired
+    public TextService textService;
+
+    @Autowired
+    public RegexService regexService;
+
+    @Autowired
+    public WikiApiService wikiApiService;
+
+    @Autowired
+    public BotLogin botLogin;
+
+    @Autowired
+    public WikiBotService wikiBotService;
+
+    @Autowired
+    public ElaboraService elaboraService;
+
+//    @Autowired
+//    public NomeDoppioBackend doppioNomeBackend;
+
+    @Autowired
+    public AttSingolareBackend attSingolareBackend;
+
+    @Autowired
+    public AttPluraleBackend attPluraleBackend;
+
+    @Autowired
+    public NazSingolareBackend nazSingolareBackend;
+
+    @Autowired
+    public NazPluraleBackend nazPluraleBackend;
+
+//    @Autowired
+//    public GenereBackend genereBackend;
+
+    @Autowired
+    public BioBackend bioBackend;
+
+    @Autowired
+    public BioService bioService;
+
+    @Autowired
+    public QueryService queryService;
+
+    @Autowired
+    public GiornoWikiBackend giornoWikiBackend;
+
+
+    @Autowired
+    public AnnoWikiBackend annoWikiBackend;
+
+//    @Autowired
+//    public CognomeBackend cognomeBackend;
+
+    @Autowired
+    public LogService logService;
 
     /**
      * Elabora la singola voce biografica <br>
@@ -136,7 +198,7 @@ public class ElaboraService extends WAbstractService {
      */
     public String fixNome(final String valorePropertyTmplBioServer) {
         String testoValido = wikiBotService.fixElimina(valorePropertyTmplBioServer);
-        List<String> listaDoppiNomi;
+        List<String> listaDoppiNomi=null;
 
         if (textService.isEmpty(testoValido)) {
             return VUOTA;
@@ -144,7 +206,7 @@ public class ElaboraService extends WAbstractService {
 
         testoValido = wikiBotService.fixDopo(testoValido);
         if (testoValido.contains(SPAZIO)) {
-            listaDoppiNomi = doppioNomeBackend.fetchCode();
+//            listaDoppiNomi = doppioNomeBackend.fetchCode();
             if (!listaDoppiNomi.contains(testoValido)) {
                 testoValido = testoValido.substring(0, testoValido.indexOf(SPAZIO)).trim();
             }

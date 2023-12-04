@@ -12,6 +12,7 @@ import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
 import it.algos.vaad24.ui.dialog.*;
 import it.algos.vaad24.ui.views.*;
+import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
