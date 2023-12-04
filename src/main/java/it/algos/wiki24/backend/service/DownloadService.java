@@ -154,22 +154,18 @@ public class DownloadService extends WAbstractService {
             //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
             creaNewEntities(subList);
 
-//            //--Legge le pagine
-//            listaWrapBio = getListaWrapBio(subList);
-//
-//            //--Crea/aggiorna le voci biografiche <br>
-//            numVociCreate = creaElaboraListaBio(listaWrapBio);
-//
-//            message = String.format("Create %s nuove biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
-//            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+            //            //--Legge le pagine
+            //            listaWrapBio = getListaWrapBio(subList);
+            //
+            //            //--Crea/aggiorna le voci biografiche <br>
+            //            numVociCreate = creaElaboraListaBio(listaWrapBio);
+            //
+            //            message = String.format("Create %s nuove biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
+            //            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
         }
 
-
-
-
-
-//        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
-//        creaNewEntities(listaPageIdsDaCreare);
+        //        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
+        //        creaNewEntities(listaPageIdsDaCreare);
 
         //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
         listaWrapTime = getListaWrapTime(listaPageIds);
@@ -614,21 +610,39 @@ public class DownloadService extends WAbstractService {
     public int creaElaboraListaBio(final List<WrapBio> listaWrapBio) {
         int numVociCreate = 0;
         long inizio = System.currentTimeMillis();
+        int stock = 1000;
+        int dim;
+        String sizeTot;
         String message;
+        List<WrapBio> subList;
 
         if (listaWrapBio != null && listaWrapBio.size() > 0) {
-            for (WrapBio wrap : listaWrapBio) {
-                if (creaElaboraBio(wrap)) {
-                    numVociCreate++;
-//                    logService.info(new WrapLog().message(numVociCreate + "").type(AETypeLog.bio));
+            dim = listaWrapBio.size();
+            sizeTot = textService.format(dim);
+            for (int k = 0; k < dim; k = k + stock) {
+                subList = listaWrapBio.subList(k, Math.min(k + stock, dim));
+                for (WrapBio wrap : subList) {
+                    if (creaElaboraBio(wrap)) {
+                        numVociCreate++;
+                    }
+                    else {
+                        message = String.format("La pagina %s non è una biografia", listaWrapBio.get(k).getTitle());
+                        logService.warn(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
+                    }
                 }
-                else {
-                    message = String.format("La pagina %s non è una biografia", wrap.getTitle());
-                    logService.warn(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
-                }
+                message = String.format("Aggiornate %s/%s biografie in %s", textService.format(numVociCreate), sizeTot, dateService.deltaText(inizio));
+                logService.info(new WrapLog().message(message).type(AETypeLog.bio));
             }
-            message = String.format("Aggiornate %s biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
-            logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+
+            //            for (WrapBio wrap : listaWrapBio) {
+            //                if (creaElaboraBio(wrap)) {
+            //                    numVociCreate++;
+            //                }
+            //                else {
+            //                    message = String.format("La pagina %s non è una biografia", wrap.getTitle());
+            //                    logService.warn(new WrapLog().message(message).usaDb().type(AETypeLog.bio));
+            //                }
+            //            }
         }
 
         return numVociCreate;
