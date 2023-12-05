@@ -1,7 +1,5 @@
 package it.algos.quickly;
 
-import it.algos.*;
-import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
 import it.algos.vaad24.backend.service.*;
 import org.junit.jupiter.api.*;

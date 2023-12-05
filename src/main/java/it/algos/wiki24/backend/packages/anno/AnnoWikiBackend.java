@@ -189,6 +189,11 @@ public class AnnoWikiBackend extends WikiBackend {
         return super.findAllByProperty(FIELD_NAME_SECOLO, secolo);
     }
 
+    public List<AnnoWiki> findAllBySecolo(Secolo secolo, boolean ascendente) {
+        Sort sort = Sort.by(ascendente ? Sort.Direction.ASC : Sort.Direction.DESC, "ordine");
+        return super.findAllByProperty(FIELD_NAME_SECOLO, secolo, sort);
+    }
+
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
         return findAllBySecolo(secolo).stream().map(anno -> anno.nome).collect(Collectors.toList());
     }
@@ -492,7 +497,7 @@ public class AnnoWikiBackend extends WikiBackend {
      * Tutti gli anni nati <br>
      * Tutti gli anni morti <br>
      */
-    public WResult uploadSecolo(Secolo secolo) {
+    public WResult uploadSecolo(Secolo secolo, boolean ascendente) {
         WResult result = WResult.errato();
         logger.info(new WrapLog().type(AETypeLog.upload).message("Inizio upload liste nati e morti nel secolo " + secolo.nome));
         List<String> anni;
@@ -504,7 +509,13 @@ public class AnnoWikiBackend extends WikiBackend {
             logger.error(new WrapLog().type(AETypeLog.upload).message("Manca secoloBackend").usaDb());
         }
 
-        anni = annoBackend.findAllForNomeBySecoloAsc(secolo);
+        if (ascendente) {
+            anni = annoBackend.findAllForNomeBySecoloAsc(secolo);
+        }
+        else {
+            anni = annoBackend.findAllForNomeBySecoloDesc(secolo);
+        }
+
         if (anni == null) {
             message = String.format("Mancano gli anni del secolo %s", anni);
             logger.error(new WrapLog().type(AETypeLog.upload).message(message).usaDb());

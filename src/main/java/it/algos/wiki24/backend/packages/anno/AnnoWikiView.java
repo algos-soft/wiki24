@@ -58,6 +58,8 @@ public class AnnoWikiView extends WikiView {
 
     private ComboBox comboSecolo;
 
+    private Checkbox checkBoxSecolo;
+
     //--per eventuali metodi specifici
     private AnnoWikiDialog dialog;
 
@@ -161,6 +163,10 @@ public class AnnoWikiView extends WikiView {
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
         topPlaceHolder.add(comboSecolo);
 
+        checkBoxSecolo = new Checkbox("Ascendente");
+        checkBoxSecolo.addValueChangeListener(event -> sincroFiltri());
+        topPlaceHolder.add(checkBoxSecolo);
+
     }
 
     /**
@@ -168,11 +174,15 @@ public class AnnoWikiView extends WikiView {
      */
     protected List<AEntity> sincroFiltri() {
         List<AnnoWiki> items = null;
+        boolean ascendente = false;
 
         if (comboSecolo != null) {
+            if (checkBoxSecolo != null) {
+                ascendente = checkBoxSecolo.getValue();
+            }
             if (comboSecolo.getValue() != null) {
                 if (comboSecolo.getValue() instanceof Secolo secolo) {
-                    items = backend.findAllBySecolo(secolo);
+                    items = backend.findAllBySecolo(secolo, ascendente);
                 }
             }
             else {
@@ -382,12 +392,17 @@ public class AnnoWikiView extends WikiView {
     public void uploadSecolo() {
         long inizio = System.currentTimeMillis();
         Secolo secolo = null;
+        boolean ascendente=false;
+
+        if (checkBoxSecolo != null) {
+            ascendente = checkBoxSecolo.getValue();
+        }
 
         if (comboSecolo != null && comboSecolo.getValue() != null) {
             secolo = (Secolo) comboSecolo.getValue();
         }
 
-        WResult result = ((AnnoWikiBackend)backend).uploadSecolo(secolo);
+        WResult result = ((AnnoWikiBackend) backend).uploadSecolo(secolo,ascendente);
         super.fixUpload(inizio, String.format("del secolo %s", secolo != null ? secolo.nome : VUOTA));
         reload();
     }

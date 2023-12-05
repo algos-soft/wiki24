@@ -142,6 +142,10 @@ public class AnnoBackend extends CrudBackend {
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
         return findAllByProperty(FIELD_NAME_SECOLO, secolo, sort);
     }
+    public List<Anno> findAllBySecoloDesc(Secolo secolo) {
+        Sort sort = Sort.by(Sort.Direction.DESC, FIELD_NAME_ORDINE);
+        return findAllByProperty(FIELD_NAME_SECOLO, secolo, sort);
+    }
 
 
     public List<String> findAllForNomeBySecolo(Secolo secolo) {
@@ -152,6 +156,12 @@ public class AnnoBackend extends CrudBackend {
     }
     public List<String> findAllForNomeBySecoloAsc(Secolo secolo) {
         return findAllBySecoloAsc(secolo)
+                .stream()
+                .map(anno -> anno.nome)
+                .collect(Collectors.toList());
+    }
+    public List<String> findAllForNomeBySecoloDesc(Secolo secolo) {
+        return findAllBySecoloDesc(secolo)
                 .stream()
                 .map(anno -> anno.nome)
                 .collect(Collectors.toList());
