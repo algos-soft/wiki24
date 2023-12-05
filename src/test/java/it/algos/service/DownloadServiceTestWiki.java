@@ -399,15 +399,15 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
             return;
         }
 
-        List<WrapBio> lista = service.getListaWrapBio(listaPageIdsCategoria3);
-        assertNotNull(lista);
-        ottenutoIntero = listaPageIds.size();
-        message = String.format("Letti %s WrapBio dal server in %s", ottenuto, dateService.deltaText(inizio));
-        logService.warn(new WrapLog().message(message));
-        printWrapBio(lista.subList(0, 10));
+//        List<WrapBio> lista = service.getListaWrapBio(listaPageIdsCategoria3);
+//        assertNotNull(lista);
+//        ottenutoIntero = listaPageIds.size();
+//        message = String.format("Letti %s WrapBio dal server in %s", ottenuto, dateService.deltaText(inizio));
+//        logService.warn(new WrapLog().message(message));
+//        printWrapBio(lista.subList(0, 10));
 
         // mette da parte per risparmiare tempo
-        listaWrapBioCat3 = lista;
+//        listaWrapBioCat3 = lista;
     }
 
 
@@ -418,8 +418,8 @@ public class DownloadServiceTestWiki extends WikiQuicklyTest {
         System.out.println("Crea/aggiorna le voci biografiche");
         System.out.println(VUOTA);
 
-        ottenutoIntero = service.creaElaboraListaBio(listaWrapBioCat3);
-        message = String.format("Create o aggiornate %s pagine sul database in %s", ottenutoIntero, dateService.deltaText(inizio));
+//        ottenutoIntero = service.creaElaboraListaBio(listaWrapBioCat3);
+//        message = String.format("Create o aggiornate %s pagine sul database in %s", ottenutoIntero, dateService.deltaText(inizio));
     }
 
 
