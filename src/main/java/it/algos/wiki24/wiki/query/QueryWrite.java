@@ -115,8 +115,8 @@ public class QueryWrite extends AQuery {
      *
      * @return wrapper di informazioni
      */
-    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newText, final String newTextSignificativo) {
-        return urlRequestCheck(wikiTitleGrezzo, newText, newTextSignificativo, VUOTA);
+    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newText) {
+        return urlRequestCheck(wikiTitleGrezzo, newText, VUOTA);
     }
 
     /**
@@ -131,22 +131,23 @@ public class QueryWrite extends AQuery {
      *
      * @return wrapper di informazioni
      */
-    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newTextAll, final String newTextSignificativo, final String summary) {
+    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newTextAll, final String summary) {
         WResult result = checkWrite(wikiTitleGrezzo, newTextAll, summary);
         if (result.isErrato()) {
             return result;
         }
+        String newTextSignificativo = wikiBotService.getTestoSignificativo(newTextAll);
 
         if (textService.isEmpty(newTextSignificativo)) {
-            return (WResult) result.errorMessage("Manca il newTextSignificativo");
+            return result.errorMessage("Manca il newTextSignificativo");
         }
 
-        if (!newTextAll.endsWith(newTextSignificativo)) {
-            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
-        }
+        //        if (!newTextAll.endsWith(newTextSignificativo)) {
+        //            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
+        //        }
 
         //--confronto della parte 'significativa' per decidere se registrare
-        if (isModificataSignificativamente(wikiTitleGrezzo, newTextAll, newTextSignificativo)) {
+        if (isModificataSignificativamente(wikiTitleGrezzo, newTextSignificativo)) {
             //--La prima request è di tipo GET
             //--Indispensabile aggiungere i cookies del botLogin
             result = this.primaryRequestGet(result);
@@ -176,13 +177,13 @@ public class QueryWrite extends AQuery {
      *
      * @return true se significativamente cambiata e deve essere scritta
      */
-    public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextAll, final String newTextSignificativo) {
+    public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextSignificativo) {
         boolean modificataSignificativamente = true;
         String oldTextAll;
 
         oldTextAll = appContext.getBean(QueryRead.class).getText(wikiTitleGrezzo);
         if (textService.isValid(oldTextAll)) {
-            if (oldTextAll.endsWith(newTextSignificativo)) {
+            if (oldTextAll.contains(newTextSignificativo)) {
                 modificataSignificativamente = false;
             }
         }
@@ -463,7 +464,7 @@ public class QueryWrite extends AQuery {
         if (objectAll != null && objectAll.get(QUERY) != null && objectAll.get(QUERY) instanceof JSONObject) {
             objectQuery = (JSONObject) objectAll.get(QUERY);
         }
-        if (objectQuery==null) {
+        if (objectQuery == null) {
             logger.error(new WrapLog().message("objectQuery==null"));
         }
 

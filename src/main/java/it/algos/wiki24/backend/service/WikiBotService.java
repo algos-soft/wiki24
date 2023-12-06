@@ -2133,4 +2133,18 @@ public class WikiBotService extends WAbstractService {
         return listaWrap;
     }
 
+    public String getTestoSignificativo(String newText) {
+        String newTextSignificativo = newText;
+        String tagIni = "</noinclude>";
+        String tagEnd = "<noinclude>";
+        int posIni ;
+        int posEnd ;
+
+        posIni = newText.indexOf(tagIni) + tagIni.length();
+        posEnd = newText.lastIndexOf(tagEnd);
+        newTextSignificativo = newText.substring(posIni, posEnd);
+
+        return newTextSignificativo;
+    }
+
 }

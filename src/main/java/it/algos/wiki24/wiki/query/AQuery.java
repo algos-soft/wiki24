@@ -40,6 +40,9 @@ public abstract class AQuery {
     @Autowired
     public ApplicationContext appContext;
 
+    @Autowired
+    public WikiBotService wikiBotService;
+
     /**
      * Tag base delle API per costruire l' 'urlDomain' completo <br>
      */

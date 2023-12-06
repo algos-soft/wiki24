@@ -156,6 +156,9 @@ public abstract class Upload implements AlgosBuilderPattern {
     public WikiApiService wikiApiService;
 
     @Autowired
+    public WikiBotService wikiBotService;
+
+    @Autowired
     public ArrayService arrayService;
 
     @Autowired
@@ -903,8 +906,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected WResult registra(String newText) {
         WResult result;
-        String newTextSignificativo = VUOTA;
-        String tag = "progetto=biografie";
+        //        String newTextSignificativo = VUOTA;
+        //        String tag = "progetto=biografie";
         String sottoPagina;
         String fixTitleTest;
 
@@ -912,9 +915,10 @@ public abstract class Upload implements AlgosBuilderPattern {
             return WResult.errato("Manca il wikiTitleUpload ");
         }
 
-        if (newText.contains(tag)) {
-            newTextSignificativo = newText.substring(newText.indexOf(tag));
-        }
+        //        if (newText.contains(tag)) {
+        //            newTextSignificativo = wikiBotService.getTestoSignificativo(newText);
+        //            newTextSignificativo = newText.substring(newText.indexOf(tag));
+        //        }
 
         if (uploadTest) {
             if (isSottopagina) {
@@ -938,11 +942,12 @@ public abstract class Upload implements AlgosBuilderPattern {
             result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
         }
         else {
-            if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
-                result = appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, newTextSignificativo, summary);
+            //            if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
+            if (WPref.scriveComunque.is()) {
+                result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
             }
             else {
-                result = appContext.getBean(QueryWrite.class).urlRequest(wikiTitleUpload, newText, summary);
+                result = appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitleUpload, newText, summary);
             }
         }
 
@@ -964,22 +969,23 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
     protected WResult registra(String wikiTitle, String newText) {
-        String newTextSignificativo = VUOTA;
-        String tag = "progetto=biografie";
+        //        String newTextSignificativo = VUOTA;
+        //        String tag = "progetto=biografie";
 
         if (uploadTest) {
             return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
         }
 
-        if (newText.contains(tag)) {
-            newTextSignificativo = newText.substring(newText.indexOf(tag));
-        }
+        //        if (newText.contains(tag)) {
+        //            newTextSignificativo = newText.substring(newText.indexOf(tag));
+        //        }
 
-        if (!WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
-            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitle, newText, newTextSignificativo, summary);
+        //        if (WPref.scriveComunque.is() && textService.isValid(newTextSignificativo)) {
+        if (WPref.scriveComunque.is()) {
+            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
         }
         else {
-            return appContext.getBean(QueryWrite.class).urlRequest(wikiTitle, newText, summary);
+            return appContext.getBean(QueryWrite.class).urlRequestCheck(wikiTitle, newText, summary);
         }
     }
 
