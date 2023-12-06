@@ -104,6 +104,7 @@ public class MongoService<capture> extends AbstractService {
      */
     @PostConstruct
     private void postConstruct() {
+        fixClient();
         fixProperties();
     }
 
@@ -126,16 +127,27 @@ public class MongoService<capture> extends AbstractService {
     }
 
     /**
-     * Restituisce un generico database
+     * Crea il collegamento
      */
-    public MongoDatabase getDB(String databaseName) {
+    public void fixClient() {
         ConnectionString connectionString = new ConnectionString(CONNECTION_STRING + databaseName);
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();
         mongoClient = MongoClients.create(mongoClientSettings);
+    }
 
-        return mongoClient.getDatabase(databaseName);
+    /**
+     * Restituisce un generico database
+     */
+    public MongoDatabase getDB(String databaseName) {
+//        ConnectionString connectionString = new ConnectionString(CONNECTION_STRING + databaseName);
+//        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+//                .applyConnectionString(connectionString)
+//                .build();
+//        mongoClient = MongoClients.create(mongoClientSettings);
+
+        return mongoClient!=null?mongoClient.getDatabase(databaseName):null;
     }
 
 
