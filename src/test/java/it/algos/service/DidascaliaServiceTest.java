@@ -224,7 +224,7 @@ public class DidascaliaServiceTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = DidascaliaService.class;
-        VaadVar.mongoDatabaseName = "wiki24";
+        VaadVar.mongoDatabaseName = "wiki24old";
 
         MockitoAnnotations.openMocks(this);
         MockitoAnnotations.openMocks(service);

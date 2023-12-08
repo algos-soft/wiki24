@@ -141,13 +141,13 @@ public class MongoService<capture> extends AbstractService {
      * Restituisce un generico database
      */
     public MongoDatabase getDB(String databaseName) {
-//        ConnectionString connectionString = new ConnectionString(CONNECTION_STRING + databaseName);
-//        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
-//                .applyConnectionString(connectionString)
-//                .build();
-//        mongoClient = MongoClients.create(mongoClientSettings);
+        //        ConnectionString connectionString = new ConnectionString(CONNECTION_STRING + databaseName);
+        //        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+        //                .applyConnectionString(connectionString)
+        //                .build();
+        //        mongoClient = MongoClients.create(mongoClientSettings);
 
-        return mongoClient!=null?mongoClient.getDatabase(databaseName):null;
+        return mongoClient != null ? mongoClient.getDatabase(databaseName) : null;
     }
 
 
@@ -578,7 +578,7 @@ public class MongoService<capture> extends AbstractService {
             return null;
         }
 
-        Bson bSort= Sorts.ascending(property).toBsonDocument();
+        Bson bSort = Sorts.ascending(property).toBsonDocument();
         Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
