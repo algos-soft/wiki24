@@ -25,9 +25,9 @@ public enum WPref implements AIGenPref {
 
     //task
     usaTaskBio("usaTaskBio", AETypePref.bool, true, "Download calendarizzato di tutte le biografie.", false, true,true),
-    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei giorni nato/morto.", false, true,true),
-    usaTaskAnni("usaTaskAnni", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine degli anni nato/morto.", false, true,true),
-    usaTaskAnnoMorteCorrente("usaTaskAnnoMorteCorrente", AETypePref.bool, true, "Upload calendarizzato di tutte le pagine dei morti dell'anno corrente.", false, true,true),
+    usaTaskGiorni("usaTaskGiorni", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei giorni nato/morto.", false, true,true),
+    usaTaskAnni("usaTaskAnni", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine degli anni nato/morto.", false, true,true),
+    usaTaskAnnoMorteCorrente("usaTaskAnnoMorteCorrente", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei morti dell'anno corrente.", false, true,true),
     usaTaskAttivita("usaTaskAttivita", AETypePref.bool, false, "Upload calendarizzato di tutte le attività.", false, true,true),
     usaTaskNazionalita("usaTaskNazionalita", AETypePref.bool, false, "Upload calendarizzato di tutte le nazionalità.", false, true,true),
     usaTaskNomi("usaTaskNomi", AETypePref.bool, false, "Upload calendarizzato di tutte le pagine dei nomi.", false, true,true),
