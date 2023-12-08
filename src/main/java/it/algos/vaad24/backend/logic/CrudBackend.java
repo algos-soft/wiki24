@@ -12,9 +12,11 @@ import it.algos.vaad24.backend.interfaces.*;
 import it.algos.vaad24.backend.layer.*;
 import it.algos.vaad24.backend.service.*;
 import it.algos.vaad24.backend.wrapper.*;
+import it.algos.wiki24.backend.boot.*;
 import jakarta.annotation.*;
 import org.bson.*;
 import org.bson.types.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
 import org.springframework.data.mongodb.core.query.Query;
@@ -60,6 +62,8 @@ import java.util.stream.*;
  */
 public abstract class CrudBackend extends AbstractService {
 
+    @Autowired
+    public Wiki24Boot wiki24Boot;
 
     public Sort sortOrder;
 

@@ -70,6 +70,7 @@ public abstract class WikiBackend extends CrudBackend {
     @Autowired
     public LogService logger;
 
+
     protected String message;
 
     protected WPref lastReset;

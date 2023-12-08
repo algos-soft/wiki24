@@ -599,7 +599,9 @@ public class LogService extends AbstractService {
 
         //-- Inserimento opzionale nella collection di mongoDB
         if (flagUsaDB) {
-            aLoggerBackend.crea(level, wrap);
+            if (aLoggerBackend!=null) {
+                aLoggerBackend.crea(level, wrap);
+            }
         }
 
         //-- Invio opzionale di una mail

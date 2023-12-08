@@ -89,8 +89,8 @@ public class MongoService<capture> extends AbstractService {
     @Autowired
     public MongoService(MongoTemplate mongoOp, @Value("${spring.data.mongodb.database}") String databaseName) {
         this.mongoOp = mongoOp;
-        if (databaseName==null||databaseName.equals("")) {
-            String  property = "spring.data.mongodb.database";
+        if (databaseName == null || databaseName.equals("")) {
+            String property = "spring.data.mongodb.database";
             databaseName = Objects.requireNonNull(environment.getProperty(property));
 
         }
@@ -152,6 +152,14 @@ public class MongoService<capture> extends AbstractService {
         //                .applyConnectionString(connectionString)
         //                .build();
         //        mongoClient = MongoClients.create(mongoClientSettings);
+
+        if (textService.isEmpty(databaseName)) {
+            databaseName = this.databaseName;
+        }
+
+        if (mongoClient == null) {
+            fixClient();
+        }
 
         return mongoClient != null ? mongoClient.getDatabase(databaseName) : null;
     }

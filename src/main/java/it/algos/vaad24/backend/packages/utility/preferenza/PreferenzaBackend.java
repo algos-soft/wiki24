@@ -288,7 +288,7 @@ public class PreferenzaBackend extends CrudBackend {
 
         for (AIGenPref preferenza : VaadVar.prefList) {
             if (preferenza instanceof Pref prefVaad) {
-                if (preferenzaBackend.crea(preferenza)) {
+                if (this.crea(preferenza)) {
                     listaPrefVaad.add(prefVaad);
                     numPreferenzeVaadCreate++;
                 }
@@ -297,7 +297,7 @@ public class PreferenzaBackend extends CrudBackend {
                 }
             }
             else {
-                if (preferenzaBackend.crea(preferenza)) {
+                if (this.crea(preferenza)) {
                     listaPrefSpecifiche.add(preferenza);
                     numPreferenzeSpecificheCreate++;
                 }

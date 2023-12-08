@@ -12,7 +12,11 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.*;
+import org.springframework.context.*;
+import org.springframework.context.event.*;
 import org.springframework.scheduling.annotation.*;
+
+import javax.inject.*;
 
 /**
  * The entry point of the Spring Boot application.
@@ -27,6 +31,7 @@ import org.springframework.scheduling.annotation.*;
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
 public class Wiki24App implements AppShellConfigurator {
+
 
     public static void main(String[] args) {
         VaadBoot.start();
