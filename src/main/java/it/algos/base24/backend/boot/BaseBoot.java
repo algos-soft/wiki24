@@ -57,11 +57,9 @@ public class BaseBoot {
 
     private String property;
 
-
-    public BaseBoot() {
-        BaseVar.bootClazz = this.getClass();
-        BaseVar.bootClazzQualifier = "baseBoot";
-    }
+    //    public BaseBoot() {
+    //        BaseVar.bootClazz = this.getClass();
+    //    }
 
     /**
      * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
@@ -94,6 +92,7 @@ public class BaseBoot {
      */
     public void inizia() {
         this.fixVariabiliProperty();
+        this.addPreferenze();
         this.fixEnumerationPreferenze();
         this.creaPreferenzeMongoDB();
         //        logger.setUpIni();
@@ -226,6 +225,15 @@ public class BaseBoot {
         }
     }
 
+    /**
+     * Aggiunta delle preferenze (Enumeration) alla lista BaseVar.prefList <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void addPreferenze() {
+        for (Pref pref : Pref.values()) {
+            prefList.add(pref);
+        }
+    }
 
     /**
      * Injection di SpringBoot <br>
@@ -234,16 +242,13 @@ public class BaseBoot {
      * Non deve essere sovrascritto <br>
      */
     public void fixEnumerationPreferenze() {
-        for (Pref pref : Pref.values()) {
-            pref.preferenzaModulo = this.preferenzaModulo;
+        for (IPref pref : prefList) {
+            pref.setPreferenzaModulo(preferenzaModulo);
         }
     }
 
     public void creaPreferenzeMongoDB() {
         preferenzaModulo.resetStartup();
-    }
-    public List<IPref> getAllEnums() {
-        return Pref.getAllEnums();
     }
 
 
@@ -303,6 +308,8 @@ public class BaseBoot {
                     .filter(element -> !element.getName().equals("menuRouteListVaadin"))
                     .filter(element -> !element.getName().equals("menuRouteListProject"))
                     .filter(element -> !element.getName().equals("crudModuloListVaadin"))
+                    .filter(element -> !element.getName().equals("crudModuloListProject"))
+                    .filter(element -> !element.getName().equals("prefList"))
                     .toList();
             if (listaVar != null) {
                 logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
@@ -328,7 +335,7 @@ public class BaseBoot {
             message = Strings.repeat(TRATTINO, message.length());
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
-            for (IPref pref : Pref.getAllEnums()) {
+            for (IPref pref : prefList) {
                 currentValue = pref.getCurrentValue();
                 defaultValue = pref.getDefaultValue();
                 message = String.format("%s%s%s (%s)", pref.getKeyCode(), FORWARD, currentValue, defaultValue);

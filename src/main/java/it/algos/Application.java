@@ -16,9 +16,12 @@ import org.springframework.boot.autoconfigure.security.servlet.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.context.event.*;
+import org.springframework.context.event.EventListener;
+import org.springframework.core.env.*;
 import org.springframework.scheduling.annotation.*;
 
 import javax.inject.*;
+import java.util.*;
 
 /**
  * The entry point of the Spring Boot application.
@@ -27,11 +30,14 @@ import javax.inject.*;
  * and some desktop browsers.
  */
 @EnableScheduling
-@SpringBootApplication(scanBasePackages = {"it.algos"}, exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication(scanBasePackages = {"it.algos"})
 @Theme(value = "wiki24")
 @NpmPackage(value = "line-awesome", version = "1.3.0")
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
 public class Application implements AppShellConfigurator {
+
+    @Inject
+    public Environment environment;
 
     @Inject
     ApplicationContext applicationContext;
@@ -53,26 +59,35 @@ public class Application implements AppShellConfigurator {
     @EventListener(ContextRefreshedEvent.class)
     private void doSomethingAfterStartup() {
         BaseBoot currentBoot = null;
-        String message ;
+        String property;
+        String message;
+
+        try {
+            property = "algos.project.boot.qualifier";
+            BaseVar.bootClazzQualifier = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new Exception(unErrore)).type(TypeLog.startup));
+        }
 
         try {
             currentBoot = (BaseBoot) applicationContext.getBean(BaseVar.bootClazzQualifier);
         } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(new Exception(unErrore)).type(TypeLog.startup));
         }
 
         if (currentBoot != null) {
+            BaseVar.bootClazz = currentBoot.getClass();
             currentBoot.inizia();
         }
         else {
-            if (BaseVar.bootClazz==null) {
+            if (BaseVar.bootClazz == null) {
                 message = String.format("La variabile generale %s non può essere nulla", "BaseVar.bootClazz");
             }
             else {
-                message = String.format("Non ho trovato nessuna classe di Boot con 'qualifier'=[%s]", BaseVar.bootClazz.getSimpleName());
+                message = String.format("Non ho trovato nessuna classe di Boot con 'qualifier'=[%s]", BaseVar.bootClazzQualifier);
             }
             logger.error(new WrapLog().exception(new Exception(message)).type(TypeLog.startup));
         }
     }
-
 
 }

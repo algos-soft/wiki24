@@ -122,6 +122,9 @@ public abstract class CrudModulo {
         if (BaseVar.crudModuloListVaadin != null) {
             BaseVar.crudModuloListVaadin.add(this);
         }
+        if (BaseVar.nameModuloListVaadin != null) {
+            BaseVar.nameModuloListVaadin.add(simpleName);
+        }
     }
 
     /**
@@ -415,7 +418,7 @@ public abstract class CrudModulo {
                 if (typeReset == RisultatoReset.esistenteIntegrato) {
                     typeReset = RisultatoReset.vuotoMaCostruito;
                 }
-                 elementi = count();
+                elementi = count();
                 message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Non esisteva e sono stati creati %d elementi.", collectionName, elementi);
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
 

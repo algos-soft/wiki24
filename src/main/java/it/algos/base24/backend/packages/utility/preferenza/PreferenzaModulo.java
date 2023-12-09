@@ -155,7 +155,7 @@ public class PreferenzaModulo extends CrudModulo {
         }
 
         if (currentBoot != null) {
-            for (IPref pref : currentBoot.getAllEnums()) {
+            for (IPref pref : BaseVar.prefList) {
                 newBean = newEntity(pref);
                 mappaBeans.put(pref.getTag(), newBean);
             }

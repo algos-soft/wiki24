@@ -4,6 +4,7 @@ import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -21,7 +22,7 @@ import java.util.*;
  * Time: 13:55
  */
 @Service
-@Component("WikiBoot")
+@Component("wikiBoot")
 public class WikiBoot extends BaseBoot {
 
     public WikiBoot() {
@@ -46,17 +47,19 @@ public class WikiBoot extends BaseBoot {
 ////        this.fixVariabili();
 //    }
 
+    public void inizia() {
+        super.inizia();
+    }
 
 
     /**
-     * Injection di SpringBoot <br>
-     * Usa la injection di SpringBoot per ogni Enumeration della lista globale <br>
-     * NON crea le preferenze su mondoDB <br>
-     * Non deve essere sovrascritto <br>
+     * Aggiunta delle preferenze (Enumeration) alla lista BaseVar.prefList <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    public void fixEnumerationPreferenze() {
-        for (WPref pref : WPref.values()) {
-            pref.preferenzaModulo = this.preferenzaModulo;
+    public void addPreferenze() {
+        super.addPreferenze();
+        for (IPref pref : WPref.values()) {
+            prefList.add(pref);
         }
     }
 

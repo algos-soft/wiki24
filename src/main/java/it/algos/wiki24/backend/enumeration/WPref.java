@@ -185,20 +185,25 @@ public enum WPref implements  IPref {
         return ERROR_DATA_TIME;
     }
 
-    @Component
-    public static class PreferenzaInjector {
-
-        @Autowired
-        private PreferenzaModulo preferenzaModulo;
-
-
-        @PostConstruct
-        public void postConstruct() {
-            for (WPref pref : WPref.values()) {
-                pref.preferenzaModulo = this.preferenzaModulo;
-            }
-        }
-
+    @Override
+    public void setPreferenzaModulo(PreferenzaModulo preferenzaModulo) {
+        this.preferenzaModulo=preferenzaModulo;
     }
+
+    //    @Component
+//    public static class PreferenzaInjector {
+//
+//        @Autowired
+//        private PreferenzaModulo preferenzaModulo;
+//
+//
+//        @PostConstruct
+//        public void postConstruct() {
+//            for (WPref pref : WPref.values()) {
+//                pref.preferenzaModulo = this.preferenzaModulo;
+//            }
+//        }
+//
+//    }
 
 }

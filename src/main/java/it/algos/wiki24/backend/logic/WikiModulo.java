@@ -1,11 +1,14 @@
 package it.algos.wiki24.backend.logic;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.base24.backend.boot.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
+import jakarta.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
@@ -43,6 +46,17 @@ public abstract class WikiModulo extends CrudModulo {
      */
     public WikiModulo(Class entityClazz, Class listClazz, Class formClazz) {
         super(entityClazz, listClazz, formClazz);
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        super.postConstruct();
+        if (BaseVar.crudModuloListProject != null) {
+            BaseVar.crudModuloListProject.add(this);
+        }
+        if (BaseVar.nameModuloListProject != null) {
+            BaseVar.nameModuloListProject.add(simpleName);
+        }
     }
 
     public void download() {

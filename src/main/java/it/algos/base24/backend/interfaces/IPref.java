@@ -1,6 +1,7 @@
 package it.algos.base24.backend.interfaces;
 
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.utility.preferenza.*;
 
 import java.time.*;
 
@@ -32,6 +33,8 @@ public interface IPref extends Type {
     int getInt();
 
     LocalDateTime getDateTime();
+
+    void setPreferenzaModulo(PreferenzaModulo preferenzaModulo);
 
 }// end of interface
 

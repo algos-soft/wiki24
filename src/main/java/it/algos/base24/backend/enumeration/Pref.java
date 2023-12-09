@@ -3,9 +3,6 @@ package it.algos.base24.backend.enumeration;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
-import jakarta.annotation.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
@@ -18,7 +15,7 @@ import java.util.stream.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum Pref implements  IPref {
+public enum Pref implements IPref {
     debug("debug", TypePref.bool, true, "Flag generale di debug"),
     usaBackgroundColor("usaBackgroundColor", TypePref.bool, true, "Uso dello sfondo [background] colorato."),
     nonBreaking("nonBreaking", TypePref.string, SPAZIO_NON_BREAKING, "Spazio non-breaking."),
@@ -81,7 +78,7 @@ public enum Pref implements  IPref {
     public List<String> getAllTags() {
         return getAllEnums()
                 .stream()
-                .map(type->type.getTag())
+                .map(type -> type.getTag())
                 .collect(Collectors.toList());
     }
 
@@ -146,20 +143,9 @@ public enum Pref implements  IPref {
         return preferenzaModulo != null ? preferenzaModulo.getDateTime(this) : ROOT_DATA_TIME;
     }
 
-    @Component
-    public static class PreferenzaInjector {
-
-        @Autowired
-        private PreferenzaModulo preferenzaModulo;
-
-
-        @PostConstruct
-        public void postConstruct() {
-            for (Pref pref : Pref.values()) {
-                pref.preferenzaModulo = this.preferenzaModulo;
-            }
-        }
-
+    @Override
+    public void setPreferenzaModulo(PreferenzaModulo preferenzaModulo) {
+        this.preferenzaModulo = preferenzaModulo;
     }
 
 }
