@@ -1,5 +1,6 @@
 package it.algos.base24.backend.boot;
 
+import it.algos.base24.backend.logic.*;
 import it.algos.base24.ui.view.*;
 import org.springframework.stereotype.*;
 
@@ -22,119 +23,128 @@ import java.util.*;
 public class BaseVar {
 
     /**
-     * Nome identificativo maiuscolo del framework base <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Nome identificativo del framework base <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String frameworkBase;
 
     /**
      * Nome identificativo del progetto corrente <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectCurrent;
 
 
     /**
-     * Nome identificativo del modulo corrente <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Nome identificativo minuscolo del modulo corrente <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectModulo;
 
     /**
-     * Nome identificativo del prefisso corrente <br>
+     * Nome identificativo del prefisso di progetto corrente <br>
      * Usato (eventualmente) nella barra di menu in testa pagina <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectPrefix;
 
 
     /**
-     * Versione dell' applicazione <br>
+     * Versione del progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static double projectVersion;
 
     /**
-     * Data di rilascio della versione <br>
+     * Data di rilascio della versione di progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectDate;
 
     /**
-     * Note di rilascio della versione <br>
+     * Note di rilascio della versione di progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectNote;
 
     /**
-     * Nome del database mongo collegato <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Nome del database mongo collegato in esecuzione <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String mongoDatabaseName;
 
-    /**
-     * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     * Usata da LayoutService per conto di MainLayout allo start della UI-logic <br>
-     */
-    public static List<Class<? extends CrudView>> menuRouteListVaadin;
-
-    /**
-     * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
-     */
-    public static List<Class<? extends CrudView>> menuRouteListProject;
-
-    /**
-     * Lista delle views (@Routes) del framework base. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     */
-    public static List<String> nameViewListVaadin;
-
-    /**
-     * Lista delle views (@Routes) del project corrente. <br>
-     * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-     */
-    public static List<String> nameViewListProject;
-
-    /**
-     * Classe da usare per il Boot iniziale di regolazione <br>
-     * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
-     * Deve essere regolata in resources.application.properties <br>
-     */
-    public static Class bootClazz;
-
-    /**
-     * Qualifier da usare per il Boot iniziale di regolazione <br>
-     * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
-     * Deve essere regolata in resources.application.properties <br>
-     */
-    public static String bootClazzQualifier;
-
-    /**
-     * Classe da usare per gestire le versioni <br>
-     * Di default BaseVers oppure possibile sottoclasse del progetto <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
-     */
-    public static Class versionClazz;
 
     /**
      * Path del modulo base <br>
-     * Di default BaseVers oppure possibile sottoclasse del progetto <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Di default [it.algos.base24] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String pathModuloBase;
 
     /**
      * Path del modulo di progetto <br>
-     * Di default BaseVers oppure possibile sottoclasse del progetto <br>
-     * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+     * Non esiste default. Probabilmente [it.algos.xxx]
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String pathModuloProgetto;
+
+
+    /**
+     * Lista delle classi @Route di tipo [CrudView] del framework base <br>
+     * Da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Usata da LayoutService per conto di MainLayout allo start della UI-logic <br>
+     * Regolata in backend.boot.BaseBoot.fixMenuRoutes() del modulo [base24] <br>
+     */
+    public static List<Class<? extends CrudView>> menuRouteListVaadin = new ArrayList<>();
+
+    /**
+     * Lista delle classi @Route di tipo [CrudView] del progetto corrente <br>
+     * Da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
+     * Usata da LayoutService per conto di MainLayout allo start della UI-logic <br>
+     * Regolata in backend.boot.XxxBoot.fixMenuRoutes() del modulo [progettoCorrente] <br>
+     */
+    public static List<Class<? extends CrudView>> menuRouteListProject = new ArrayList<>();
+
+    /**
+     * Lista dei nomi delle views (@Routes) del framework base. <br>
+     * Le view sono istanze SCOPE_PROTOTYPE <br>
+     * Regolata in backend.boot.BaseBoot.fixMenuRoutes() del modulo [base24] <br>
+     */
+    public static List<String> nameViewListVaadin = new ArrayList<>();
+
+    /**
+     * Lista dei nomi delle views (@Routes) del project corrente. <br>
+     * Le view sono istanze SCOPE_PROTOTYPE <br>
+     * Regolata in backend.boot.XxxBoot.fixMenuRoutes() del modulo [progettoCorrente] <br>
+     */
+    public static List<String> nameViewListProject = new ArrayList<>();
+
+
+    /**
+     * Lista delle istanze di [CrudModulo] del framework base. <br>
+     * I moduli sono istanze SCOPE_SINGLETON <br>
+     * Regolata nel metodo postConstruct() di ogni istanza del modulo [base24] <br>
+     */
+    public static List<CrudModulo> crudModuloListVaadin = new ArrayList<>();
+
+
+    /**
+     * Classe da usare per il Boot iniziale di regolazione <br>
+     * Di default [BaseBoot] oppure una sottoclasse specifica del progetto <br>
+     * Regolata nel metodo doSomethingAfterStartup() di [Application] <br>
+     */
+    public static Class bootClazz;
+
+    /**
+     * Qualifier da usare per il Boot iniziale di regolazione <br>
+     * Di default [baseBoot] oppure un 'qualifier' specifico della classe xxxBoot di progetto <br>
+     * Regolata nel costruttore della classe [BaseBoot] oppure in una sua sottoclasse <br>
+     */
+    public static String bootClazzQualifier;
+
 
 }

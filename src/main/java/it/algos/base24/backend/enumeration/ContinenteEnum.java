@@ -3,6 +3,7 @@ package it.algos.base24.backend.enumeration;
 import it.algos.base24.backend.interfaces.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadflow14
@@ -13,22 +14,23 @@ import java.util.*;
  */
 public enum ContinenteEnum implements Type {
 
-    europa("Europa", "Europa",true),
-    asia("Asia", "Asia",true),
-    africa("Africa", "Africa",true),
-    nordcentroamerica("NordCentroAmerica", "America settentrionale e centrale",true),
-    sudamerica("SudAmerica", "America meridionale",true),
-    oceania("Oceania", "Oceania",true),
-    antartide("Antartide", "Antartide",false),
+    europa("Europa", "Europa", true),
+    asia("Asia", "Asia", true),
+    africa("Africa", "Africa", true),
+    nordcentroamerica("NordCentroAmerica", "America settentrionale e centrale", true),
+    sudamerica("SudAmerica", "America meridionale", true),
+    oceania("Oceania", "Oceania", true),
+    antartide("Antartide", "Antartide", false),
     ;
 
     private String tag;
+
     private String template;
 
     boolean abitato;
 
 
-    ContinenteEnum(String tag, String template,boolean abitato) {
+    ContinenteEnum(String tag, String template, boolean abitato) {
         this.tag = tag;
         this.template = template;
         this.abitato = abitato;
@@ -39,11 +41,6 @@ public enum ContinenteEnum implements Type {
     }
 
 
-    public boolean isAbitato() {
-        return abitato;
-    }
-
-
     @Override
     public List<ContinenteEnum> getAll() {
         return Arrays.stream(values()).toList();
@@ -51,13 +48,20 @@ public enum ContinenteEnum implements Type {
 
     @Override
     public List<String> getAllTags() {
-        return null;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getTag() {
         return tag;
     }
+    public boolean isAbitato() {
+        return abitato;
+    }
+
 
     public String getTemplate() {
         return template;

@@ -192,6 +192,13 @@ public class PreferenzaModulo extends CrudModulo {
 
         if (type == TypePref.bool) {
             obj = getValue(type, keyCode);
+
+            if (obj ==null) {
+                message = String.format("Nel database non esiste la preferenza [%s]. Controlla che l'enumeration delle preferenze sia stata caricata", keyCode);
+                logger.error(new WrapLog().message(message));
+                return false;
+            }
+
             if (obj instanceof Boolean value) {
                 return value;
             }
@@ -257,6 +264,19 @@ public class PreferenzaModulo extends CrudModulo {
         Object javaValue;
         PreferenzaEntity preferenza = (PreferenzaEntity) findOneById(keyCode);
         javaValue = preferenza != null ? type.bytesToObject(preferenza.getValue()) : null;
+
+        return javaValue;
+    }
+
+    public Object getValue(String keyCode) {
+        Object javaValue = null;
+        TypePref type;
+
+        PreferenzaEntity preferenza = (PreferenzaEntity) findOneById(keyCode);
+        if (preferenza != null) {
+            type = preferenza.type;
+            javaValue = type.bytesToObject(preferenza.getValue());
+        }
 
         return javaValue;
     }

@@ -12,6 +12,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Created by gac on 30 lug 2016. <br>
@@ -555,10 +556,10 @@ public enum TypePref implements Type {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -168,6 +168,8 @@ public class BaseCost {
 
     public static final String SUFFIX_LIST = "List";
 
+    public static final String SUFFIX_MODULO = "Modulo";
+
     public static final String SUFFIX_FORM = "Form";
 
     public static final String SUFFIX_ENTITY = "Entity";
@@ -216,9 +218,11 @@ public class BaseCost {
     public static String TEXT_CODE = "Costruita hardcoded in %sModulo.resetDelete().";
 
     public static String TEXT_ENUM = "Costruita dalla enum %sEnum in %sModulo.resetDelete().";
+
     public static String TEXT_ENUM_PREF = "Costruita dalla enum Pref in PreferenzaModulo.resetDelete().";
 
     public static String TEXT_NEWS = "Creazione automatica della tavola. Si possono modificare i valori. Se ne possono aggiungere altri.";
+
     public static String TEXT_PREF = "Creazione automatica di tutti i valori. Non se ne possono creare di nuovi. Si può modificare la descrizione ed il valore.";
 
     public static String DELETE = "Cancella dal database tutti i valori della collezione";

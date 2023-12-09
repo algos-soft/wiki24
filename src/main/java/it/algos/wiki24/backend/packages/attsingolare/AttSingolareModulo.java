@@ -5,6 +5,7 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
 
@@ -33,6 +34,8 @@ public class AttSingolareModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastDownload = WPref.lastDownloadAttSin;
     }
 
 

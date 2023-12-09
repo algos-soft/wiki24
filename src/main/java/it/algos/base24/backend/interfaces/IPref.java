@@ -19,6 +19,8 @@ public interface IPref extends Type {
 
     Object getDefaultValue();
 
+    Object getCurrentValue();
+
     String getDescrizione();
 
     void setValue(Object javaValue);

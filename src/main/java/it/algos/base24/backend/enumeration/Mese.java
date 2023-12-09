@@ -289,10 +289,10 @@ public enum Mese implements Type {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     @Override

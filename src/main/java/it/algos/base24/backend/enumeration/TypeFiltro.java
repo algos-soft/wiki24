@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.query.*;
 
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 /**
  * Project vaadflow14
@@ -193,11 +194,12 @@ public enum TypeFiltro implements Type {
     }
 
 
-    public  List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
-        return listaTags;
+    @Override
+    public List<String> getAllTags() {
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     public String getTag() {

@@ -43,10 +43,10 @@ public enum MenuGroup implements Type {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(group -> listaTags.add(group.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     public static List<MenuGroup> getAllOrderedEnums() {

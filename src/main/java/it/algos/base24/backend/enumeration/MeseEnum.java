@@ -1,6 +1,7 @@
 package it.algos.base24.backend.enumeration;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.service.*;
 import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
@@ -10,7 +11,7 @@ import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
-public enum MeseEnum {
+public enum MeseEnum implements Type {
 
     gennaio("gennaio", 31, 31, "gen", "Jan"),
 
@@ -71,12 +72,25 @@ public enum MeseEnum {
         return Arrays.stream(values()).toList();
     }
 
-    public static List<String> getAllNomi() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getNome()));
-        return listaTags;
+    @Override
+    public List<MeseEnum> getAll() {
+        return Arrays.stream(values()).toList();
     }
+
+    @Override
+    public List<String> getAllTags() {
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getTag() {
+        return nome;
+    }
+
+
 
     /**
      * Numero di giorni di ogni mese <br>

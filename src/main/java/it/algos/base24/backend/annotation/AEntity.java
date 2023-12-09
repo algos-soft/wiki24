@@ -40,19 +40,15 @@ public @interface AEntity {
      */
     String sortPropertyName() default VUOTA;
 
-    /**
-     * (Optional) usa il metodo resetStartup() alla creazione della classe xxxModulo <br>
-     * Di default false <br>
-     *
-     * @return the status
-     */
-    boolean usaStartupReset() default false;
+//    /**
+//     * (Optional) usa il metodo resetStartup() alla creazione della classe xxxModulo <br>
+//     * Di default false <br>
+//     *
+//     * @return the status
+//     */
+//    @Deprecated
+//    boolean usaStartupReset() default false;
 
-    /**
-     * (Optional) pacchetto di preferenze per l'uso dei bottoni nella lista <br>
-     * Di default nessuno <br>
-     */
-    TypeResetOld typeReset() default TypeResetOld.standard;
 
     /**
      * (Optional) pacchetto di preferenze per l'uso dei bottoni nella lista <br>

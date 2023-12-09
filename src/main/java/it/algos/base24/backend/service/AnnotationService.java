@@ -9,10 +9,10 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.vaadin.lineawesome.*;
 
+import javax.inject.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -34,13 +34,13 @@ import java.util.*;
 @Service
 public class AnnotationService {
 
-    @Autowired
+    @Inject
     TextService textService;
 
-    @Autowired
+    @Inject
     ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     LogService logger;
 
     //==========================================================================
@@ -106,9 +106,7 @@ public class AnnotationService {
      * @return the keyPropertyName of entityClazz
      */
     public String getKeyPropertyName(final Class entityClazz) {
-        String keyPropertyName = VUOTA;
-        AEntity annotation;
-        List<String> possibiliPropertyKey = BaseCost.FIELD_KEY_NAME_LIST;
+        String keyPropertyName = VUOTA; AEntity annotation; List<String> possibiliPropertyKey = BaseCost.FIELD_KEY_NAME_LIST;
 
         // Controlla che i parametri in ingresso siano validi
         if (!checkEntity(entityClazz, "getKeyPropertyName")) {
@@ -123,8 +121,7 @@ public class AnnotationService {
         if (textService.isEmpty(keyPropertyName)) {
             for (String possibileKey : possibiliPropertyKey) {
                 if (reflectionService.isEsiste(entityClazz, possibileKey)) {
-                    keyPropertyName = possibileKey;
-                    break;
+                    keyPropertyName = possibileKey; break;
                 }
             }
         }
@@ -145,8 +142,7 @@ public class AnnotationService {
      * @return the searchPropertyName of entityClazz
      */
     public String getSearchPropertyName(final Class entityClazz) {
-        String searchPropertyName = VUOTA;
-        String keyPropertyName = VUOTA;
+        String searchPropertyName = VUOTA; String keyPropertyName = VUOTA;
         AEntity annotation;
 
         // Controlla che i parametri in ingresso siano validi
@@ -184,8 +180,7 @@ public class AnnotationService {
     public String getSortPropertyName(final Class entityClazz) {
         String sortPropertyName = VUOTA;
         String keyPropertyName = VUOTA;
-        AEntity annotation;
-        List<String> possibiliSortProperty = BaseCost.FIELD_SORT_NAME_LIST;
+        AEntity annotation; List<String> possibiliSortProperty = BaseCost.FIELD_SORT_NAME_LIST;
 
         // Controlla che i parametri in ingresso siano validi
         if (!checkEntity(entityClazz, "getSortPropertyName")) {
@@ -201,8 +196,7 @@ public class AnnotationService {
         if (textService.isEmpty(sortPropertyName)) {
             for (String possibileKey : possibiliSortProperty) {
                 if (reflectionService.isEsiste(entityClazz, possibileKey)) {
-                    sortPropertyName = possibileKey;
-                    break;
+                    sortPropertyName = possibileKey; break;
                 }
             }
         }
@@ -229,9 +223,11 @@ public class AnnotationService {
      *
      * @return value of startupRest flag
      */
+    @Deprecated
     public boolean usaStartupReset(final Class entityClazz) {
         boolean usaStartupReset = false;
         AEntity annotation;
+        TypeList typeList;
 
         // Controlla che i parametri in ingresso siano validi
         if (!checkEntity(entityClazz, "usaStartupReset")) {
@@ -240,61 +236,13 @@ public class AnnotationService {
 
         annotation = this.getEntityAnnotation(entityClazz);
         if (annotation != null) {
-            usaStartupReset = annotation.usaStartupReset();
+            typeList = annotation.typeList();
+            if (typeList != null) {
+                usaStartupReset = typeList.isUsaStartupReset();
+            }
         }
 
         return usaStartupReset;
-    }
-
-
-    /**
-     * Get the value of usaIdPrimaMinuscola flag.
-     *
-     * @param entityClazz di riferimento
-     *
-     * @return value of startupRest flag
-     */
-    public boolean usaIdPrimaMinuscola(final Class entityClazz) {
-        boolean usaIdPrimaMinuscola = true;
-        AEntity annotation;
-
-        // Controlla che i parametri in ingresso siano validi
-        if (!checkEntity(entityClazz, "usaIdPrimaMinuscola")) {
-            return usaIdPrimaMinuscola;
-        }
-
-        annotation = this.getEntityAnnotation(entityClazz);
-        if (annotation != null) {
-            usaIdPrimaMinuscola = annotation.usaIdPrimaMinuscola();
-        }
-
-        return usaIdPrimaMinuscola;
-    }
-
-
-    /**
-     * Get the typeReset for buttons in list <br>.
-     *
-     * @param entityClazz di riferimento
-     *
-     * @return value of startupRest flag
-     */
-    @Deprecated
-    public TypeResetOld getTypeReset(final Class entityClazz) {
-        TypeResetOld typeReset = TypeResetOld.nessuno;
-        AEntity annotation;
-
-        // Controlla che i parametri in ingresso siano validi
-        if (!checkEntity(entityClazz, "getTyperReset")) {
-            return typeReset;
-        }
-
-        annotation = this.getEntityAnnotation(entityClazz);
-        if (annotation != null) {
-            typeReset = annotation.typeReset();
-        }
-
-        return typeReset;
     }
 
 
@@ -322,6 +270,31 @@ public class AnnotationService {
         return typeList;
     }
 
+
+    /**
+     * Get the value of usaIdPrimaMinuscola flag.
+     *
+     * @param entityClazz di riferimento
+     *
+     * @return value of startupRest flag
+     */
+    public boolean usaIdPrimaMinuscola(final Class entityClazz) {
+        boolean usaIdPrimaMinuscola = true;
+        AEntity annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, "usaIdPrimaMinuscola")) {
+            return usaIdPrimaMinuscola;
+        }
+
+        annotation = this.getEntityAnnotation(entityClazz);
+        if (annotation != null) {
+            usaIdPrimaMinuscola = annotation.usaIdPrimaMinuscola();
+        }
+
+        return usaIdPrimaMinuscola;
+    }
+
     //==========================================================================
     // @AView
     //==========================================================================
@@ -341,57 +314,6 @@ public class AnnotationService {
         }
 
         return viewClazz.getAnnotation(AView.class);
-    }
-
-    /**
-     * Get the menuGroup of the CrudView type clazz.
-     *
-     * @param viewClazz the class of type CrudView
-     *
-     * @return the menuName
-     */
-    public String getMenuGroupName(final Class viewClazz) {
-        String menuGroupName = MenuGroup.nessuno.getTag();
-        AView annotation;
-
-        // Controlla che i parametri in ingresso siano validi
-        if (!checkView(viewClazz, "getMenuGroupName")) {
-            return menuGroupName;
-        }
-
-        annotation = this.getViewAnnotation(viewClazz);
-        if (annotation != null) {
-            menuGroupName = annotation.menuGroupName();
-            if (textService.isEmpty(menuGroupName)) {
-                menuGroupName = annotation.menuGroup().getTag();
-            }
-        }
-
-        return textService.primaMaiuscola(menuGroupName);
-    }
-
-    /**
-     * Get the menuGroup of the CrudView type clazz.
-     *
-     * @param viewClazz the class of type CrudView
-     *
-     * @return the menuName
-     */
-    public MenuGroup getMenuGroup(final Class viewClazz) {
-        MenuGroup menuGroup = MenuGroup.nessuno;
-        AView annotation;
-
-        // Controlla che i parametri in ingresso siano validi
-        if (!checkView(viewClazz, "getMenuGroup")) {
-            return menuGroup;
-        }
-
-        annotation = this.getViewAnnotation(viewClazz);
-        if (annotation != null) {
-            menuGroup = annotation.menuGroup();
-        }
-
-        return menuGroup;
     }
 
 
@@ -431,11 +353,9 @@ public class AnnotationService {
                 try {
                     clazz = Class.forName(clazzName);
                 } catch (Exception unErrore) {
-                    clazz = null;
-                    logger.error(new WrapLog().exception(unErrore).usaDb());
+                    clazz = null; logger.error(new WrapLog().exception(unErrore).usaDb());
                 }
-            }
-            if (clazz == null) {
+            } if (clazz == null) {
                 return menuName;
             }
         }
@@ -464,29 +384,55 @@ public class AnnotationService {
 
 
     /**
-     * Get the menuIcon of the CrudView type clazz.
+     * Get the menuGroup of the CrudView type clazz.
      *
      * @param viewClazz the class of type CrudView
      *
      * @return the menuName
      */
-    public LineAwesomeIcon getMenuIcon(final Class viewClazz) {
-        LineAwesomeIcon menuIcon = LineAwesomeIcon.FOLDER;
+    public MenuGroup getMenuGroup(final Class viewClazz) {
+        MenuGroup menuGroup = MenuGroup.nessuno;
         AView annotation;
 
         // Controlla che i parametri in ingresso siano validi
-        if (!checkView(viewClazz, "getMenuIcon")) {
-            return menuIcon;
+        if (!checkView(viewClazz, "getMenuGroup")) {
+            return menuGroup;
         }
 
         annotation = this.getViewAnnotation(viewClazz);
         if (annotation != null) {
-            menuIcon = annotation.menuIcon();
+            menuGroup = annotation.menuGroup();
         }
 
-        return menuIcon;
+        return menuGroup;
     }
 
+    /**
+     * Get the menuGroup of the CrudView type clazz.
+     *
+     * @param viewClazz the class of type CrudView
+     *
+     * @return the menuName
+     */
+    public String getMenuGroupName(final Class viewClazz) {
+        String menuGroupName = MenuGroup.nessuno.getTag();
+        AView annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkView(viewClazz, "getMenuGroupName")) {
+            return menuGroupName;
+        }
+
+        annotation = this.getViewAnnotation(viewClazz);
+        if (annotation != null) {
+            menuGroupName = annotation.menuGroupName();
+            if (textService.isEmpty(menuGroupName)) {
+                menuGroupName = annotation.menuGroup().getTag();
+            }
+        }
+
+        return textService.primaMaiuscola(menuGroupName);
+    }
 
     /**
      * Automatic use of menu.
@@ -510,6 +456,31 @@ public class AnnotationService {
         }
 
         return usaMenuAutomatico;
+    }
+
+
+    /**
+     * Get the menuIcon of the CrudView type clazz.
+     *
+     * @param viewClazz the class of type CrudView
+     *
+     * @return the menuName
+     */
+    public LineAwesomeIcon getMenuIcon(final Class viewClazz) {
+        LineAwesomeIcon menuIcon = LineAwesomeIcon.FOLDER;
+        AView annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkView(viewClazz, "getMenuIcon")) {
+            return menuIcon;
+        }
+
+        annotation = this.getViewAnnotation(viewClazz);
+        if (annotation != null) {
+            menuIcon = annotation.menuIcon();
+        }
+
+        return menuIcon;
     }
 
     //==========================================================================
@@ -679,10 +650,8 @@ public class AnnotationService {
         annotation = this.getFieldAnnotation(entityClazz, propertyName);
         if (annotation != null && annotation.widthRem() > 0) {
             width = annotation.widthRem();
-        }
-        if (annotation != null && width == 0) {
-            typeField = annotation.type();
-            if (typeField != null) {
+        } if (annotation != null && width == 0) {
+            typeField = annotation.type(); if (typeField != null) {
                 width = typeField.getWidthColumnInt();
             }
         }
@@ -712,10 +681,8 @@ public class AnnotationService {
         annotation = this.getFieldAnnotation(entityClazz, propertyName);
         if (annotation != null && annotation.widthRem() > 0) {
             width = annotation.widthRem() + tag;
-        }
-        if (annotation != null && textService.isEmpty(width)) {
-            typeField = annotation.type();
-            if (typeField != null) {
+        } if (annotation != null && textService.isEmpty(width)) {
+            typeField = annotation.type(); if (typeField != null) {
                 width = typeField.getWidthColumn();
             }
         }
@@ -892,14 +859,12 @@ public class AnnotationService {
      * @return false se mancano parametri o non sono validi
      */
     public boolean checkEntity(final Class genericClazz, final String methodName) {
-        String message;
-        Class entityClazz;
+        String message; Class entityClazz;
 
         // Controlla che la classe in ingresso non sia nulla
         if (genericClazz == null) {
             message = String.format("Nel metodo '%s' di [%s], manca la model clazz '%s'", methodName, this.getClass().getSimpleName(), "(null)");
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         // Controlla che la classe in ingresso implementi AlgosModel
@@ -908,8 +873,7 @@ public class AnnotationService {
         }
         else {
             message = String.format("Nel metodo '%s' di [%s], la classe '%s' non implementa AbstractEntity", methodName, this.getClass().getSimpleName(), genericClazz.getSimpleName());
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         return true;
@@ -931,8 +895,7 @@ public class AnnotationService {
         // Controlla che la classe in ingresso non sia nulla
         if (genericClazz == null) {
             message = String.format("Nel metodo '%s' di [%s], manca la model clazz '%s'", methodName, this.getClass().getSimpleName(), "(null)");
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         // Controlla che la classe in ingresso implementi AlgosModel
@@ -941,15 +904,13 @@ public class AnnotationService {
         }
         else {
             message = String.format("Nel metodo '%s' di [%s], la classe '%s' non implementa AbstractEntity", methodName, this.getClass().getSimpleName(), genericClazz.getSimpleName());
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         // Controlla che il parametro in ingresso non sia nullo
         if (textService.isEmpty(propertyName)) {
             message = String.format("Nel metodo '%s' di [%s], manca il parametro '%s'", methodName, this.getClass().getSimpleName(), "propertyName");
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         // Controlla che il parametro in ingresso esista nella classe
@@ -972,14 +933,12 @@ public class AnnotationService {
      * @return false se mancano parametri o non sono validi
      */
     public boolean checkView(final Class genericClazz, final String methodName) {
-        String message;
-        Class viewClazz;
+        String message; Class viewClazz;
 
         // Controlla che la classe in ingresso non sia nulla
         if (genericClazz == null) {
             message = String.format("Nel metodo '%s' di [%s], manca la view clazz '%s'", methodName, this.getClass().getSimpleName(), "(null)");
-            logger.warn(message);
-            return false;
+            logger.warn(message); return false;
         }
 
         // Controlla che la classe in ingresso implementi CrudView

@@ -118,13 +118,13 @@ public abstract class WikiList extends CrudList {
             //                }
             //                addSpan(ASpan.text(message).verde().small());
             //            }
-            if (lastDownload != null && lastDownload.getValue() instanceof LocalDateTime download) {
+            if (lastDownload != null && lastDownload.getCurrentValue() instanceof LocalDateTime download) {
                 if (download.equals(ROOT_DATA_TIME)) {
                     message = "Download non ancora effettuato";
                 }
                 else {
                     message = String.format("Ultimo download effettuato il %s", dateService.get(download));
-                    if (durataDownload != null && durataDownload.getValue() instanceof Integer durata) {
+                    if (durataDownload != null && durataDownload.getCurrentValue() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraDownload);
                         }
@@ -132,13 +132,13 @@ public abstract class WikiList extends CrudList {
                 }
                 infoPlaceHolder.add(ASpan.text(message).verde().small());
             }
-            if (lastElaborazione != null && lastElaborazione.getValue() instanceof LocalDateTime elaborazione) {
+            if (lastElaborazione != null && lastElaborazione.getCurrentValue() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
                     message = "Elaborazione non ancora effettuata";
                 }
                 else {
                     message = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
-                    if (durataElaborazione != null && durataElaborazione.getValue() instanceof Integer durata) {
+                    if (durataElaborazione != null && durataElaborazione.getCurrentValue() instanceof Integer durata) {
                         if (durata > 0) {
                             message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
                         }

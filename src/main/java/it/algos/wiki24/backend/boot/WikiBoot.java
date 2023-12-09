@@ -7,6 +7,7 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.attsingolare.*;
 import jakarta.annotation.*;
 import org.springframework.stereotype.*;
 
@@ -31,31 +32,20 @@ public class WikiBoot extends BaseBoot {
 
     }
 
-    @PostConstruct
-    protected void postConstruct() {
-        System.out.println(String.format("postConstruct (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
-        System.out.println(String.format("Adesso bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
-        //        try {
-        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
-        //            System.out.println(String.format("Regolata bootClazz=[%s]",BaseVar.bootClazz.getSimpleName()));
-        //        } catch (Exception unErrore) {
-        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
-        //            System.out.println(message);
-        ////        }
-        this.fixVariabili();
-    }
+//    @PostConstruct
+//    protected void postConstruct() {
+//        System.out.println(String.format("postConstruct (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
+//        System.out.println(String.format("Adesso bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
+//        //        try {
+//        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
+//        //            System.out.println(String.format("Regolata bootClazz=[%s]",BaseVar.bootClazz.getSimpleName()));
+//        //        } catch (Exception unErrore) {
+//        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
+//        //            System.out.println(message);
+//        ////        }
+////        this.fixVariabili();
+//    }
 
-    /**
-     * Regola le variabili generali dell' applicazione con il loro valore iniziale di default <br>
-     * Le variabili (static) sono uniche per tutta l' applicazione <br>
-     * Alcuni valori sono hardcoded, altri sono 'letti' da [application.properties] <br>
-     * Il loro valore può essere modificato SOLO in questa classe o in una sua sottoclasse <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void fixVariabili() {
-        super.fixVariabili();
-    }
 
 
     /**
@@ -103,6 +93,10 @@ public class WikiBoot extends BaseBoot {
                 logger.warn(new WrapLog().exception(new Exception(message)));
             }
         }
+        else {
+            menuRouteListProject.add(AttSingolareView.class);
+        }
+
     }
 
 }

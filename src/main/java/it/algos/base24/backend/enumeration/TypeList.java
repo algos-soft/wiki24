@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.interfaces.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project base24
@@ -73,19 +74,26 @@ public enum TypeList implements Type {
     }
 
 
+    public static List<TypeList> getAllEnums() {
+        return Arrays.stream(values()).toList();
+    }
+
     @Override
-    public List getAll() {
-        return null;
+    public List<TypeList> getAll() {
+        return Arrays.stream(values()).toList();
     }
 
     @Override
     public List<String> getAllTags() {
-        return null;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     @Override
     public String getTag() {
-        return null;
+        return infoScopo;
     }
 
 

@@ -86,7 +86,7 @@ public class LogService {
         String typeTag = textService.fixSizeQuadre(wrap.getTag(), PAD_TYPE);
 
         //--1) Inserimento fisso iniziale del type merceologico - se manca di default usa 'system'
-        message = typeTag + SPAZIO + message;
+        message = typeTag;
 
         //--2) Messaggio fisso della descrizione
         message += textService.isValid(wrap.getMessage()) ? SEP + wrap.getMessage() : VUOTA;

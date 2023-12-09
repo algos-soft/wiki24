@@ -6,6 +6,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.interfaces.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project vaadflow
@@ -173,10 +174,10 @@ public enum TypeDate implements Type {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     public String getTag() {

@@ -1,9 +1,11 @@
 package it.algos.base24.backend.boot;
 
+import com.google.common.base.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.interfaces.*;
+import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.anagrafica.via.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
 import it.algos.base24.backend.packages.utility.role.*;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.*;
 
 import javax.inject.*;
 import java.lang.reflect.*;
+import java.util.Objects;
 import java.util.*;
 
 /**
@@ -90,9 +93,9 @@ public class BaseBoot {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void inizia() {
-        this.fixVariabili();
+        this.fixVariabiliProperty();
         this.fixEnumerationPreferenze();
-        //        this.creaPreferenzeMongoDB();
+        this.creaPreferenzeMongoDB();
         //        logger.setUpIni();
 
         //        this.fixDBMongo();
@@ -109,18 +112,18 @@ public class BaseBoot {
         //        logger.setUpEnd();
     }
 
+
     /**
      * Regola le variabili generali dell' applicazione con il loro valore iniziale di default <br>
      * Le variabili (static) sono uniche per tutta l' applicazione <br>
-     * Alcuni valori sono hardcoded, altri sono 'letti' da [application.properties] <br>
+     * I valori sono 'letti' da [application.properties] <br>
      * Il loro valore può essere modificato SOLO in questa classe o in una sua sottoclasse <br>
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
-    protected void fixVariabili() {
+    protected void fixVariabiliProperty() {
 
         /**
-         * Nome identificativo maiuscolo del framework base <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Nome identificativo del framework base <br>
          */
         try {
             property = "algos.base24.name";
@@ -131,7 +134,6 @@ public class BaseBoot {
 
         /**
          * Nome identificativo del progetto corrente <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
         try {
             property = "algos.project.current";
@@ -141,8 +143,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome identificativo minuscolo del progetto corrente <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Nome identificativo minuscolo del modulo corrente <br>
          */
         try {
             property = "algos.project.modulo";
@@ -152,10 +153,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome identificativo del prefisso corrente <br>
-         * Usato (eventualmente) nella barra di menu in testa pagina <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Nome identificativo del prefisso di progetto corrente <br>
          */
         try {
             property = "algos.project.prefix";
@@ -166,9 +164,7 @@ public class BaseBoot {
         }
 
         /**
-         * Versione dell' applicazione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Versione del progetto corrente <br>
          */
         try {
             property = "algos.project.version";
@@ -178,9 +174,7 @@ public class BaseBoot {
         }
 
         /**
-         * Data di rilascio della versione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Data di rilascio della versione di progetto corrente <br>
          */
         try {
             property = "algos.project.version.date";
@@ -190,9 +184,7 @@ public class BaseBoot {
         }
 
         /**
-         * Note di rilascio della versione <br>
-         * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Note di rilascio della versione di progetto corrente <br>
          */
         try {
             property = "algos.project.version.note";
@@ -202,8 +194,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome del database mongo collegato <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Nome del database mongo collegato in esecuzione <br>
          */
         try {
             property = "spring.data.mongodb.database";
@@ -213,47 +204,7 @@ public class BaseBoot {
         }
 
         /**
-         * Lista dei moduli di menu del framework base, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-         * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
-         * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
-         */
-        menuRouteListVaadin = new ArrayList<>();
-
-        /**
-         * Lista dei moduli di menu del project corrente, da inserire nel Drawer del MainLayout per le gestione delle @Routes. <br>
-         * Regolata dall'applicazione durante l'esecuzione del 'container startup' (non-UI logic) <br>
-         * Usata da ALayoutService per conto di MainLayout allo start della UI-logic <br>
-         */
-        BaseVar.menuRouteListProject = new ArrayList<>();
-
-        /**
-         * Lista delle views (@Routes) del framework base. <br>
-         * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-         */
-        BaseVar.nameViewListVaadin = new ArrayList<>();
-
-        /**
-         * Lista delle views (@Routes) del project corrente. <br>
-         * Regolata dall' applicazione durante l' esecuzione del 'container startup' (non-UI logic) <br>
-         */
-        BaseVar.nameViewListProject = new ArrayList<>();
-
-        //        /**
-        //         * Classe da usare per il Boot iniziale di regolazione <br>
-        //         * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
-        //         * Deve essere regolata in resources.application.properties <br>
-        //         */
-        //        try {
-        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
-        //        } catch (Exception unErrore) {
-        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
-        //            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
-        //        }
-
-        /**
-         * Classe da usare per il Boot iniziale di regolazione <br>
-         * Di default BaseBoot oppure una sottoclasse specifica del progetto <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
+         * Path del modulo base <br>
          */
         try {
             property = "algos.base24.modulo";
@@ -265,8 +216,6 @@ public class BaseBoot {
 
         /**
          * Path del modulo di progetto <br>
-         * Di default BaseVers oppure possibile sottoclasse del progetto <br>
-         * Deve essere regolato in backend.boot.BaseBoot.fixVariabili() del modulo [base24] <br>
          */
         try {
             property = "algos.project.modulo";
@@ -275,14 +224,8 @@ public class BaseBoot {
         } catch (Exception unErrore) {
             logError(unErrore, property);
         }
-
-        /**
-         * Classe da usare per gestire le versioni <br>
-         * Di default BaseVers oppure possibile sottoclasse del progetto <br>
-         * Deve essere regolata in backend.boot.BaseBoot.fixVariabili() del modulo [base2023] <br>
-         */
-        //        public static Class versionClazz;
     }
+
 
     /**
      * Injection di SpringBoot <br>
@@ -296,6 +239,9 @@ public class BaseBoot {
         }
     }
 
+    public void creaPreferenzeMongoDB() {
+        preferenzaModulo.resetStartup();
+    }
     public List<IPref> getAllEnums() {
         return Pref.getAllEnums();
     }
@@ -346,26 +292,65 @@ public class BaseBoot {
     }
 
     private void printInfo() {
-        List<Field> lista = Arrays.stream(BaseVar.class.getFields())
-                .filter(element -> !element.getName().equals("menuRouteListVaadin"))
-                .filter(element -> !element.getName().equals("menuRouteListProject"))
-                .toList();
+        List<Field> listaVar;
         Object value;
+        Object currentValue;
+        Object defaultValue;
         String message;
 
         if (Pref.debug.is()) {
-            if (lista != null) {
+            listaVar = Arrays.stream(BaseVar.class.getFields())
+                    .filter(element -> !element.getName().equals("menuRouteListVaadin"))
+                    .filter(element -> !element.getName().equals("menuRouteListProject"))
+                    .filter(element -> !element.getName().equals("crudModuloListVaadin"))
+                    .toList();
+            if (listaVar != null) {
                 logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
                 message = "Variabili globali di BaseVar";
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                message = Strings.repeat(TRATTINO, message.length());
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
-                for (Field field : lista) {
+                for (Field field : listaVar) {
                     value = reflectionService.getPropertyValue(baseVar, field.getName());
                     message = String.format("%s%s%s", field.getName(), FORWARD, value);
                     logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 }
-                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+                message = Strings.repeat(TRATTINO, message.length());
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
             }
+        }
+
+        if (Pref.debug.is()) {
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+            message = "Valori correnti (default) delle preferenze";
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            message = Strings.repeat(TRATTINO, message.length());
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+
+            for (IPref pref : Pref.getAllEnums()) {
+                currentValue = pref.getCurrentValue();
+                defaultValue = pref.getDefaultValue();
+                message = String.format("%s%s%s (%s)", pref.getKeyCode(), FORWARD, currentValue, defaultValue);
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            }
+            message = Strings.repeat(TRATTINO, message.length());
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+        }
+
+        if (Pref.debug.is()) {
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+            message = "Moduli controllo del resetStartup";
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            message = Strings.repeat(TRATTINO, message.length());
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+
+            for (CrudModulo modulo : BaseVar.crudModuloListVaadin) {
+                modulo.checkReset();
+            }
+            message = Strings.repeat(TRATTINO, message.length());
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
         }
     }
 

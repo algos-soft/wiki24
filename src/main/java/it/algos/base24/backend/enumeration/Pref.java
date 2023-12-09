@@ -9,6 +9,7 @@ import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project base2023
@@ -78,10 +79,10 @@ public enum Pref implements  IPref {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(pref -> listaTags.add(pref.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
 
@@ -112,6 +113,11 @@ public enum Pref implements  IPref {
     @Override
     public Object getDefaultValue() {
         return defaultValue;
+    }
+
+    @Override
+    public Object getCurrentValue() {
+        return preferenzaModulo.getValue(type, keyCode);
     }
 
     @Override

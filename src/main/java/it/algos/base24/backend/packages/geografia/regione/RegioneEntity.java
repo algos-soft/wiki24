@@ -16,7 +16,7 @@ import org.springframework.stereotype.*;
 @AEntity(collectionName = "regione", keyPropertyName = "sigla", searchPropertyName = "nome", typeList = TypeList.softWiki, usaIdPrimaMinuscola = false)
 public class RegioneEntity extends AbstractEntity {
 
-    @AField(type = TypeField.ordine)
+    @AField(type = TypeField.ordine, widthRem = 5)
     public int ordine;
 
     @AField(type = TypeField.text)

@@ -80,16 +80,5 @@ public class AttSingolareList extends WikiList {
     }
 
 
-//    public ExcelExporter creaExcelExporter() {
-//        String[] properties = {"nome", "plurale", "numBio"};
-//        ExcelExporter exporter = new ExcelExporter(AttSingolareEntity.class, filtri, List.of(properties), mongoService);
-//
-//        exporter.setTitle("Lista delle attività (singolare)");
-//        exporter.setColumnWidth("nome", 30);
-//        exporter.setColumnWidth("plurale", 30);
-//        exporter.setColumnWidth("numBio", 8);
-//
-//        return exporter;
-//    }
 
 }// end of CrudList class

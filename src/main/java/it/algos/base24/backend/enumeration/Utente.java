@@ -4,6 +4,7 @@ package it.algos.base24.backend.enumeration;
 import it.algos.base24.backend.interfaces.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project base2023
@@ -50,10 +51,10 @@ public enum Utente implements Type {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(group -> listaTags.add(group.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
     @Override

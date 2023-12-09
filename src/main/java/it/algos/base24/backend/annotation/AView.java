@@ -23,12 +23,12 @@ public @interface AView {
      */
     String menuName() default VUOTA;
 
-    LineAwesomeIcon menuIcon() default LineAwesomeIcon.FOLDER;
-
     MenuGroup menuGroup() default MenuGroup.nessuno;
+
+    String menuGroupName() default VUOTA;
 
     boolean menuAutomatico() default true;
 
-    String menuGroupName() default VUOTA;
+    LineAwesomeIcon menuIcon() default LineAwesomeIcon.FOLDER;
 
 }// end of interface annotation

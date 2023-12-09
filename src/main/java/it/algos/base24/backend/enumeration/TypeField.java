@@ -1,8 +1,10 @@
 package it.algos.base24.backend.enumeration;
 
 import it.algos.base24.backend.boot.*;
+import it.algos.base24.backend.interfaces.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project base2023
@@ -12,7 +14,8 @@ import java.util.*;
  * Time: 16:02
  * Enumeration type: senza schema fisso
  */
-public enum TypeField {
+public enum TypeField implements Type {
+
     text(10, 14),
     phone(9, 14),
     password(10, 14),
@@ -53,6 +56,24 @@ public enum TypeField {
 
     public static List<TypeField> getAllEnums() {
         return Arrays.stream(values()).toList();
+    }
+
+    @Override
+    public List<TypeField> getAll() {
+        return Arrays.stream(values()).toList();
+    }
+
+    @Override
+    public List<String> getAllTags() {
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getTag() {
+        return name();
     }
 
 

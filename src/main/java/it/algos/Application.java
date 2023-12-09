@@ -18,6 +18,8 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.event.*;
 import org.springframework.scheduling.annotation.*;
 
+import javax.inject.*;
+
 /**
  * The entry point of the Spring Boot application.
  * <p>
@@ -31,10 +33,10 @@ import org.springframework.scheduling.annotation.*;
 @NpmPackage(value = "@vaadin-component-factory/vcf-nav", version = "1.0.6")
 public class Application implements AppShellConfigurator {
 
-    @Autowired
+    @Inject
     ApplicationContext applicationContext;
 
-    @Autowired
+    @Inject
     protected LogService logger;
 
     public static void main(String[] args) {
@@ -54,7 +56,7 @@ public class Application implements AppShellConfigurator {
         String message ;
 
         try {
-            currentBoot = (BaseBoot) applicationContext.getBean(BaseVar.bootClazz.getSimpleName());
+            currentBoot = (BaseBoot) applicationContext.getBean(BaseVar.bootClazzQualifier);
         } catch (Exception unErrore) {
         }
 

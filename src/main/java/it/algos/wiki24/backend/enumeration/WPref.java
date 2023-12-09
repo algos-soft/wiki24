@@ -10,6 +10,7 @@ import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project base2023
@@ -18,7 +19,7 @@ import java.util.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum WPref implements Type,IPref {
+public enum WPref implements  IPref {
     usaTaskAttSin("usaTaskAttSin", TypePref.bool, true, "Flag per usare la task di download AttivitàSingolare."),
     lastDownloadAttSin("lastDownloadAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàSingolare."),
     downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in minuti."),
@@ -70,8 +71,12 @@ public enum WPref implements Type,IPref {
     }// fine del costruttore
 
 
-    public static List<WPref> getAllEnums() {
-        return Arrays.stream(values()).toList();
+    public static List<IPref> getAllEnums() {
+        List<IPref> list = new ArrayList<>();
+        for (WPref pref : values()) {
+            list.add(pref);
+        }
+        return list;
     }
 
     @Override
@@ -81,10 +86,10 @@ public enum WPref implements Type,IPref {
 
     @Override
     public List<String> getAllTags() {
-        List<String> listaTags = new ArrayList<>();
-
-        getAllEnums().forEach(type -> listaTags.add(type.getTag()));
-        return listaTags;
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
     }
 
 
@@ -113,13 +118,15 @@ public enum WPref implements Type,IPref {
         return defaultValue;
     }
 
+    @Override
+    public Object getCurrentValue() {
+        return preferenzaModulo.getValue(type, keyCode);
+    }
+
     public String getDescrizione() {
         return descrizione;
     }
 
-    public Object getValue() {
-        return preferenzaModulo.getValue(type, keyCode);
-    }
 
 
     @Override

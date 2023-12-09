@@ -2,6 +2,7 @@ package it.algos.base24.backend.logic;
 
 import com.mongodb.client.result.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
@@ -64,6 +65,9 @@ public abstract class CrudModulo {
     @Autowired
     public HtmlService htmlService;
 
+    @Autowired
+    public BaseVar baseVar;
+
     public Class currentCrudEntityClazz;
 
     protected Class currentCrudListClazz;
@@ -77,6 +81,8 @@ public abstract class CrudModulo {
     //    protected CrudOperation operation;
 
     protected Map<String, AbstractEntity> mappaBeans;
+
+    public String simpleName;
 
     /**
      * Regola la entityClazz associata a questo Modulo <br>
@@ -110,9 +116,12 @@ public abstract class CrudModulo {
 
     @PostConstruct
     public void postConstruct() {
+        this.simpleName = textService.levaCoda(this.getClass().getSimpleName(), SUFFIX_MODULO);
         this.fixPreferenze();
         this.currentCollectionName = currentCrudEntityClazz != null ? annotationService.getCollectionName(currentCrudEntityClazz) : VUOTA;
-        this.checkReset();
+        if (BaseVar.crudModuloListVaadin != null) {
+            BaseVar.crudModuloListVaadin.add(this);
+        }
     }
 
     /**
@@ -126,7 +135,7 @@ public abstract class CrudModulo {
     }
 
 
-    protected void checkReset() {
+    public void checkReset() {
         String message;
         String nomeMetodo = "resetStartup";
         Class clazz = this.getClass();
@@ -406,11 +415,14 @@ public abstract class CrudModulo {
                 if (typeReset == RisultatoReset.esistenteIntegrato) {
                     typeReset = RisultatoReset.vuotoMaCostruito;
                 }
+                 elementi = count();
+                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Non esisteva e sono stati creati %d elementi.", collectionName, elementi);
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
                 return typeReset;
             }
             else {
-                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Esistevano già %d elementi.", collectionName, elementi);
+                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Esiste e ci sono %d elementi.", collectionName, elementi);
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 typeReset = RisultatoReset.esistenteNonModificato;
             }
@@ -431,9 +443,9 @@ public abstract class CrudModulo {
         return RisultatoReset.getDelete(deleteAll());
     }
 
-//    public void dialogResetAdd() {
-//        DialogResetAdd.reset(this::resetAdd);
-//    }
+    //    public void dialogResetAdd() {
+    //        DialogResetAdd.reset(this::resetAdd);
+    //    }
 
     public RisultatoReset resetAdd() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
@@ -555,6 +567,10 @@ public abstract class CrudModulo {
         }
 
         return allPropertyNames;
+    }
+
+    public String getSimpleName() {
+        return simpleName;
     }
 
 }

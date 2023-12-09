@@ -1,5 +1,10 @@
 package it.algos.base24.backend.enumeration;
 
+import it.algos.base24.backend.interfaces.*;
+
+import java.util.*;
+import java.util.stream.*;
+
 /**
  * Project base24
  * Created by Algos
@@ -7,7 +12,7 @@ package it.algos.base24.backend.enumeration;
  * Date: Sun, 12-Nov-2023
  * Time: 18:46
  */
-public enum TemplateBandierina {
+public enum TemplateBandierina implements Type {
     GLP("Guadalupa"),
     MTQ("Martinica"),
     GUF("Guyana francese"),
@@ -38,7 +43,26 @@ public enum TemplateBandierina {
         this.tag = tag;
     }
 
+    public static List<TemplateBandierina> getAllEnums() {
+        return Arrays.stream(values()).toList();
+    }
+
+    @Override
+    public List<TemplateBandierina> getAll() {
+        return Arrays.stream(values()).toList();
+    }
+
+    @Override
+    public List<String> getAllTags() {
+        return getAllEnums()
+                .stream()
+                .map(type->type.getTag())
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public String getTag() {
         return tag;
     }
+
 }
