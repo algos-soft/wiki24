@@ -24,13 +24,17 @@ import java.time.*;
  */
 public abstract class WikiModulo extends CrudModulo {
 
-    protected WPref lastDownload;
+    public WPref lastDownload;
 
-    protected WPref durataDownload;
+    public WPref durataDownload;
 
-    protected WPref lastElaborazione;
+    public WPref lastElaborazione;
 
-    protected WPref durataElaborazione;
+    public WPref durataElaborazione;
+
+    public String unitaMisuraDownload;
+
+    public String unitaMisuraElaborazione;
 
     protected long inizio;
 
@@ -63,7 +67,7 @@ public abstract class WikiModulo extends CrudModulo {
     }
 
 
-    public void fixDownload(final long inizio ) {
+    public void fixDownload(final long inizio) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
 
@@ -77,7 +81,7 @@ public abstract class WikiModulo extends CrudModulo {
 
         if (durataDownload != null) {
             delta = delta / 1000;
-                delta = delta / 60;
+//            delta = delta / 60;
 
             durataDownload.setValue(delta.intValue());
         }
@@ -86,16 +90,16 @@ public abstract class WikiModulo extends CrudModulo {
             return;
         }
 
-//        if (textService.isValid(wikiTitle) && sizeServerWiki > 0 && sizeMongoDB > 0) {
-//            if (sizeServerWiki == sizeMongoDB) {
-//                message = String.format("Download di %s righe da [%s] in %d millisecondi", wikiTxt, wikiTitle, delta);
-//            }
-//            else {
-//                message = String.format("Download di %s righe da [%s] convertite in %s elementi su mongoDB", wikiTxt, wikiTitle, mongoTxt);
-//            }
-//
-//            logger.info(new WrapLog().message(message));
-//        }
+        //        if (textService.isValid(wikiTitle) && sizeServerWiki > 0 && sizeMongoDB > 0) {
+        //            if (sizeServerWiki == sizeMongoDB) {
+        //                message = String.format("Download di %s righe da [%s] in %d millisecondi", wikiTxt, wikiTitle, delta);
+        //            }
+        //            else {
+        //                message = String.format("Download di %s righe da [%s] convertite in %s elementi su mongoDB", wikiTxt, wikiTitle, mongoTxt);
+        //            }
+        //
+        //            logger.info(new WrapLog().message(message));
+        //        }
     }
 
 }

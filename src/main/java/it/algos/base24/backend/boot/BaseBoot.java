@@ -309,6 +309,7 @@ public class BaseBoot {
                     .filter(element -> !element.getName().equals("menuRouteListProject"))
                     .filter(element -> !element.getName().equals("crudModuloListVaadin"))
                     .filter(element -> !element.getName().equals("crudModuloListProject"))
+                    .filter(element -> !element.getName().equals("prefList"))
                     .toList();
             if (listaVar != null) {
                 logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
@@ -334,7 +335,7 @@ public class BaseBoot {
             message = Strings.repeat(TRATTINO, message.length());
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
-            for (IPref pref : Pref.getAllEnums()) {
+            for (IPref pref : prefList) {
                 currentValue = pref.getCurrentValue();
                 defaultValue = pref.getDefaultValue();
                 message = String.format("%s%s%s (%s)", pref.getKeyCode(), FORWARD, currentValue, defaultValue);

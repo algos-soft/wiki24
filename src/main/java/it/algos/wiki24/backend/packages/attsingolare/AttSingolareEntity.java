@@ -15,7 +15,7 @@ import org.springframework.stereotype.*;
 @AEntity(collectionName = "attsingolare", keyPropertyName = "singolare", typeList = TypeList.hardWiki)
 public class AttSingolareEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text, headerText = "singolare", caption = "singolare", widthRem = 20)
+    @AField(type = TypeField.text, headerText = "singolare", widthRem = 20)
     public String singolare;
 
     @AField(type = TypeField.text, widthRem = 20)

@@ -74,19 +74,20 @@ public abstract class WikiList extends CrudList {
 
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
-        this.usaInfoDownload = true;
+
+        this.fixPreferenzeDaModulo();
     }
 
-    //    protected void fixPreferenzeBackend() {
-    //        if (crudBackend != null) {
-    //            crudBackend.lastDownload = lastDownload;
-    //            crudBackend.durataDownload = durataDownload;
-    //            crudBackend.lastElabora = lastElaborazione;
-    //            crudBackend.durataElaborazione = durataElaborazione;
-    //            crudBackend.lastUpload = lastUpload;
-    //            crudBackend.durataUpload = durataUpload;
-    //        }
-    //    }
+    protected void fixPreferenzeDaModulo() {
+        if (currentCrudModulo != null) {
+            lastDownload = currentCrudModulo.lastDownload;
+            durataDownload = currentCrudModulo.durataDownload;
+            lastElaborazione = currentCrudModulo.lastElaborazione;
+            durataElaborazione = currentCrudModulo.durataElaborazione;
+            //            crudBackend.lastUpload = lastUpload;
+            //            crudBackend.durataUpload = durataUpload;
+        }
+    }
 
     /**
      * Costruisce un layout per informazioni aggiuntive come header della lista <br>

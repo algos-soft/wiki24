@@ -37,6 +37,10 @@ public class AttSingolareModulo extends WikiModulo {
         super.fixPreferenze();
 
         super.lastDownload = WPref.lastDownloadAttSin;
+        super.durataDownload = WPref.downloadAttSinTime;
+
+        super.unitaMisuraDownload = "secondi";
+        super.unitaMisuraElaborazione = "minuti";
     }
 
 
@@ -153,14 +157,14 @@ public class AttSingolareModulo extends WikiModulo {
                     oldBean = (AttSingolareEntity) findOneById(key);
                     if (oldBean != null) {
                         singolare = TAG_EX_SPAZIO + oldBean.singolare;
-                        singolare=textService.primaMinuscola(singolare);
+                        singolare = textService.primaMinuscola(singolare);
                         plurale = oldBean.plurale;
                         newBean = newEntity(singolare, plurale, true);
                         insertSave(newBean);
                     }
                 }
                 else {
-                    message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", moduloEx,key);
+                    message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", moduloEx, key);
                     logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
                 }
             }

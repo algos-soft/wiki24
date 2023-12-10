@@ -18,7 +18,8 @@ public class WikiCost {
 
     public static final String TAG_MODULO = "Modulo:Bio/";
 
-    public static final String PATH_MODULO = TAG_WIKI + "Modulo:Bio/";
+    public static final String PATH_MODULO = TAG_WIKI + TAG_MODULO;
+    public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";
 
     public static final String KEY_MAPPA_PARSE = "parse";
 
@@ -57,5 +58,15 @@ public class WikiCost {
 
     public static final String TAG_EX_SPAZIO = "Ex" + SPAZIO;
 
+    public static final String PATH_LINK = "Link ";
+
+    public static final String ATT = "Attività";
+
+    public static final String NAZ = "Nazionalità";
+
+    public static final String ATT_LOWER = ATT.toLowerCase();
+
+    public static final String PATH_STATISTICHE_ATTIVITA = PATH_BIOGRAFIE + ATT;
+    public static final String STATISTICHE = "Statistiche";
 
 }

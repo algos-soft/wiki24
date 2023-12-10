@@ -18,13 +18,18 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.*;
 
+import javax.inject.*;
 import java.util.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
 public class AttSingolareList extends WikiList {
+
+    @Inject
+    AttSingolareModulo attSingolareModulo;
 
     private IndeterminateCheckbox checkEx;
 
@@ -39,13 +44,10 @@ public class AttSingolareList extends WikiList {
         super.fixPreferenze();
 
         super.usaInfoDownload = true;
-        super.lastDownload = WPref.lastDownloadAttSin;
-        super.durataDownload = WPref.downloadAttSinTime;
-        super.lastElaborazione = WPref.lastElaboraAttSin;
-        super.durataElaborazione = WPref.elaboraAttSinTime;
-
-        super.unitaMisuraDownload = "secondi";
-        super.unitaMisuraElaborazione = "minuti";
+//        super.lastDownload = attSingolareModulo.lastDownloadAttSin;
+//        super.durataDownload = WPref.downloadAttSinTime;
+//        super.lastElaborazione = WPref.lastElaboraAttSin;
+//        super.durataElaborazione = WPref.elaboraAttSinTime;
     }
 
     @Override
@@ -68,13 +70,13 @@ public class AttSingolareList extends WikiList {
         anchor2 = new Anchor(link, caption);
         anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        message = "Tavola di base. Costruita dai Moduli Wiki: ";
+        message = "Tavola di base. Costruita dai moduli Wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-
         alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
-        message = "Indipendentemente da come sono scritte nel modulo, tutte le attività singolari sono convertite in minuscolo.";
+
+        message = "Indipendentemente da come sono scritte nei moduli, tutte le attività singolari sono convertite in minuscolo.";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
         message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
@@ -126,13 +128,15 @@ public class AttSingolareList extends WikiList {
 
         String propertyEx = "ex";
         if (checkEx != null) {
-            if(checkEx.isIndeterminate()){
+            if (checkEx.isIndeterminate()) {
                 filtri.remove(propertyEx);
                 filtri.sort(basicSortOrder);
-            } else if(checkEx.getValue()) {
+            }
+            else if (checkEx.getValue()) {
                 filtri.add(propertyEx, true);
                 filtri.sort(Sort.Order.asc(propertyEx));
-            } else {
+            }
+            else {
                 filtri.add(propertyEx, false);
                 filtri.sort(Sort.Order.asc(propertyEx));
             }
