@@ -50,7 +50,6 @@ public class AttSingolareList extends WikiList {
 
     @Override
     public void fixAlert() {
-        //        VerticalLayout layout = super.fixAlert();
         Anchor anchor1;
         Anchor anchor2;
         String link;
@@ -70,7 +69,7 @@ public class AttSingolareList extends WikiList {
         anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         message = "Tavola di base. Costruita dai Moduli Wiki: ";
-        Label testo = new Label(message);
+        Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
