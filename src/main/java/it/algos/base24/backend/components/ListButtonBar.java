@@ -34,51 +34,51 @@ public class ListButtonBar extends HorizontalLayout {
 
     protected Class currentCrudModelClazz;
 
-    private boolean usaBottoneDeleteAll;
+    protected boolean usaBottoneDeleteAll;
 
-    private boolean usaBottoneResetDelete;
+    protected boolean usaBottoneResetDelete;
 
-    private boolean usaBottoneResetAdd;
+    protected boolean usaBottoneResetAdd;
 
-    private boolean usaBottoneResetPref;
+    protected boolean usaBottoneResetPref;
 
-    private boolean usaBottoneDownload;
+    protected boolean usaBottoneDownload;
 
-    private boolean usaBottoneNew;
+    protected boolean usaBottoneNew;
 
-    private boolean usaBottoneEdit;
+    protected boolean usaBottoneEdit;
 
-    private boolean usaBottoneShows;
+    protected boolean usaBottoneShows;
 
-    private boolean usaBottoneDeleteEntity;
+    protected boolean usaBottoneDeleteEntity;
 
-    private boolean usaBottoneExport;
+    protected boolean usaBottoneExport;
 
-    private boolean usaBottoneSearch;
+    protected boolean usaBottoneSearch;
 
-    private Button buttonDeleteAll = new Button();
+    protected Button buttonDeleteAll = new Button();
 
-    private Button buttonResetDelete = new Button();
+    protected Button buttonResetDelete = new Button();
 
-    private Button buttonResetAdd = new Button();
+    protected Button buttonResetAdd = new Button();
 
-    private Button buttonResetPref = new Button();
+    protected Button buttonResetPref = new Button();
 
-    private Button buttonDownload = new Button();
+    protected Button buttonDownload = new Button();
 
-    private Button buttonNew = new Button();
+    protected Button buttonNew = new Button();
 
-    private Button buttonEdit = new Button();
+    protected Button buttonEdit = new Button();
 
-    private Button buttonShow = new Button();
+    protected Button buttonShow = new Button();
 
-    private Button buttonDeleteEntity = new Button();
+    protected Button buttonDeleteEntity = new Button();
 
-    private Anchor downloadAnchor;
+    protected Anchor downloadAnchor;
 
-    private TextField searchField = new TextField();
+    protected TextField searchField = new TextField();
 
-    private String searchFieldName;
+    protected String searchFieldName;
 
     public ListButtonBar(final CrudList crudList) {
         this.currentCrudList = crudList;
@@ -326,7 +326,7 @@ public class ListButtonBar extends HorizontalLayout {
     //    }
 
 
-    private void addSearchField() {
+    protected void addSearchField() {
         //        searchFieldName = annotationService.getKeyPropertyName(currentCrudModelClazz);
         searchField.setPlaceholder(TAG_ALTRE_BY + searchFieldName);
         searchField.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);

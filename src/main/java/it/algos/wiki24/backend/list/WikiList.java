@@ -4,6 +4,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.ui.wrapper.*;
@@ -212,9 +213,9 @@ public abstract class WikiList extends CrudList {
         //        if (usaBottoneDeleteEntity) {
         //            buttonBar.deleteEntity();
         //        }
-        //        if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-        //            buttonBar.searchField(searchFieldName);
-        //        }
+        if (usaBottoneSearch && textService.isValid(searchFieldName)) {
+            buttonBar.searchField(searchFieldName);
+        }
 
         topPlaceHolder.add(buttonBar.build());
     }
@@ -223,7 +224,7 @@ public abstract class WikiList extends CrudList {
     public boolean download() {
         currentCrudModulo.resetDelete();
         refreshData();
-
+        fixInfo();
         return true;
     }
 

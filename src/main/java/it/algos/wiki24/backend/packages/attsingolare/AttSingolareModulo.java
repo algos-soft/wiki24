@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -46,7 +47,7 @@ public class AttSingolareModulo extends WikiModulo {
      */
     @Override
     public AttSingolareEntity newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, false);
     }
 
     /**
@@ -57,16 +58,21 @@ public class AttSingolareModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale) {
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex) {
         AttSingolareEntity newEntityBean = AttSingolareEntity.builder()
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
+                .ex(ex)
                 .numBio(0)
                 .build();
 
         return (AttSingolareEntity) fixKey(newEntityBean);
     }
 
+    public List<String> findAllSingolari() {
+        List<AttSingolareEntity> attivita = findAll();
+        return attivita.stream().map(att -> att.singolare).collect(Collectors.toList());
+    }
 
     @Override
     public RisultatoReset resetDelete() {
@@ -89,7 +95,7 @@ public class AttSingolareModulo extends WikiModulo {
         String moduloEx = TAG_MODULO + "Ex attività";
 
         downloadAttivitaPlurali(moduloPlurale);
-        //     downloadAttivitaExtra(moduloEx);
+        downloadAttivitaExtra(moduloEx);
 
         super.fixDownload(inizio);
     }
@@ -114,7 +120,7 @@ public class AttSingolareModulo extends WikiModulo {
             for (Map.Entry<String, String> entry : mappaPlurale.entrySet()) {
                 singolare = entry.getKey();
                 plurale = entry.getValue();
-                newBean = newEntity(singolare, plurale);
+                newBean = newEntity(singolare, plurale, false);
                 insertSave(newBean);
             }
         }
@@ -122,7 +128,47 @@ public class AttSingolareModulo extends WikiModulo {
             message = String.format("Non sono riuscito a leggere da wiki il %s", moduloPlurale);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
         }
+    }
 
+
+    /**
+     * Legge le mappa dal Modulo:Bio/Ex attività <br>
+     * Crea le attività <br>
+     *
+     * @param moduloEx della pagina su wikipedia
+     *
+     * @return entities create
+     */
+    public void downloadAttivitaExtra(String moduloEx) {
+        String singolare;
+        String plurale;
+        List<String> listaSingolari = findAllSingolari();
+        List<String> listaEx = wikiApiService.leggeListaModulo(moduloEx);
+        AttSingolareEntity oldBean;
+        AttSingolareEntity newBean;
+
+        if (listaEx != null && listaEx.size() > 0) {
+            for (String key : listaEx) {
+                if (listaSingolari.contains(key)) {
+                    oldBean = (AttSingolareEntity) findOneById(key);
+                    if (oldBean != null) {
+                        singolare = TAG_EX_SPAZIO + oldBean.singolare;
+                        singolare=textService.primaMinuscola(singolare);
+                        plurale = oldBean.plurale;
+                        newBean = newEntity(singolare, plurale, true);
+                        insertSave(newBean);
+                    }
+                }
+                else {
+                    message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", moduloEx,key);
+                    logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+                }
+            }
+        }
+        else {
+            message = String.format("Non sono riuscito a leggere da wiki il %s", moduloEx);
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+        }
     }
 
 }// end of CrudModulo class

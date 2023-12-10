@@ -68,7 +68,7 @@ public class RegioneList extends CrudList {
         comboStato.setWidth("14rem");
         comboStato.setItems(statoModulo.findAllEuropa());
         comboStato.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(comboStato);
+        buttonBar.add(comboStato);
 
         comboType = new ComboBox<>();
         comboType.setPlaceholder("Type...");
@@ -76,7 +76,7 @@ public class RegioneList extends CrudList {
         comboType.setWidth("14rem");
         comboType.setItems(TypeRegione.values());
         comboType.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(comboType);
+        buttonBar.add(comboType);
     }
 
     @Override

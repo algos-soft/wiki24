@@ -170,11 +170,11 @@
     "proj4": "$proj4",
     "@vaadin/tabsheet": "$@vaadin/tabsheet",
     "@vaadin/tooltip": "$@vaadin/tooltip",
-    "line-awesome": "$line-awesome",
-    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
     "@vaadin/a11y-base": "$@vaadin/a11y-base",
     "@vaadin/overlay": "$@vaadin/overlay",
-    "@vaadin/side-nav": "$@vaadin/side-nav"
+    "@vaadin/side-nav": "$@vaadin/side-nav",
+    "@vaadin-component-factory/vcf-nav": "$@vaadin-component-factory/vcf-nav",
+    "line-awesome": "$line-awesome"
   },
   "vaadin": {
     "dependencies": {

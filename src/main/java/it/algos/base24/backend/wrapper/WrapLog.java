@@ -147,6 +147,14 @@ public class WrapLog {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WrapLog senzaNotifica() {
+        this.notifica = TypeNotifica.nessuna;
+        return this;
+    }
+
     public WrapLog exception(Exception exception) {
         this.exception = new AlgosException(exception);
         this.usaStackTrace = true;
@@ -212,9 +220,9 @@ public class WrapLog {
     //        return buffer.toString();
     //    }
 
-        public AlgosException getException() {
-            return exception;
-        }
+    public AlgosException getException() {
+        return exception;
+    }
 
     public LogLevel getLivello() {
         return livello;

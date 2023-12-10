@@ -81,7 +81,7 @@ public class StatoList extends CrudList {
         comboContinente.setWidth("14rem");
         comboContinente.setItems(continenteModulo.findAll());
         comboContinente.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(comboContinente);
+        buttonBar.add(comboContinente);
     }
 
     @Override

@@ -48,7 +48,7 @@ public class AnnoList extends CrudList {
         comboSecolo.setWidth("12rem");
         comboSecolo.setItems(secoloModulo.findAll());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(comboSecolo);
+        buttonBar.add(comboSecolo);
     }
 
     @Override

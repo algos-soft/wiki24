@@ -1,8 +1,13 @@
 package it.algos.wiki24.backend.packages.attsingolare;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
@@ -13,6 +18,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -20,6 +26,9 @@ import java.util.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class AttSingolareList extends WikiList {
 
+    private IndeterminateCheckbox checkEx;
+
+    protected TextField searchPlurale = new TextField();
 
     public AttSingolareList(final AttSingolareModulo crudModulo) {
         super(crudModulo);
@@ -41,7 +50,7 @@ public class AttSingolareList extends WikiList {
 
     @Override
     public void fixAlert() {
-//        VerticalLayout layout = super.fixAlert();
+        //        VerticalLayout layout = super.fixAlert();
         Anchor anchor1;
         Anchor anchor2;
         String link;
@@ -55,7 +64,7 @@ public class AttSingolareList extends WikiList {
         anchor1 = new Anchor(link, caption);
         anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        link = String.format("%s%s", TAG_MODULO, ex);
+        link = String.format("%s%s", PATH_MODULO, ex);
         caption = String.format("%s%s%s", QUADRA_INI, ex, QUADRA_END);
         anchor2 = new Anchor(link, caption);
         anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
@@ -75,10 +84,60 @@ public class AttSingolareList extends WikiList {
         alertPlaceHolder.add(ASpan.text(message).rosso());
         message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
         alertPlaceHolder.add(ASpan.text(message).rosso().small());
+    }
 
-        super.fixAlert();
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixTop() {
+        super.fixTop();
+        searchPlurale.setPlaceholder(TAG_ALTRE_BY + "plurale");
+        searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
+        searchPlurale.setClearButtonVisible(true);
+        searchPlurale.addValueChangeListener(event -> sincroFiltri());
+        buttonBar.add(searchPlurale);
+
+        checkEx = new IndeterminateCheckbox("Ex attività");
+        checkEx.getStyle().set("margin-top", "0.5rem");
+        checkEx.addValueChangeListener(event -> sincroFiltri());
+        buttonBar.add(checkEx);
     }
 
 
+    @Override
+    protected void fixFiltri() {
+        super.fixFiltri();
+
+        String propertyPlurale = "plurale";
+        String pluraleValue = VUOTA;
+        if (searchPlurale != null) {
+            pluraleValue = searchPlurale.getValue();
+
+        }
+
+        if (textService.isValid(pluraleValue)) {
+            filtri.inizio(propertyPlurale, pluraleValue);
+            filtri.sort(Sort.Order.asc(propertyPlurale));
+        }
+        else {
+            filtri.remove(propertyPlurale);
+            filtri.sort(basicSortOrder);
+        }
+
+        String propertyEx = "ex";
+        if (checkEx != null) {
+            if(checkEx.isIndeterminate()){
+                filtri.remove(propertyEx);
+                filtri.sort(basicSortOrder);
+            } else if(checkEx.getValue()) {
+                filtri.add(propertyEx, true);
+                filtri.sort(Sort.Order.asc(propertyEx));
+            } else {
+                filtri.add(propertyEx, false);
+                filtri.sort(Sort.Order.asc(propertyEx));
+            }
+        }
+    }
 
 }// end of CrudList class

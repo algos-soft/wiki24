@@ -68,6 +68,9 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneUpload) {
             //            this.addUpload();
         }
+        if (usaBottoneSearch) {
+            this.addSearchField();
+        }
     }
 
 

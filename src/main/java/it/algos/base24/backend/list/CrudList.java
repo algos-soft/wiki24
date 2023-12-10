@@ -692,9 +692,13 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean download() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
         currentCrudModulo.download();
         refreshData();
 
+        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 

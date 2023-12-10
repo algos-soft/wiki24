@@ -376,6 +376,27 @@ public class WikiApiService {
 
 
     /**
+     * Legge la lista dei valori (singoli) di modulo di una pagina wiki <br>
+     *
+     * @param wikiTitle della pagina wiki
+     *
+     * @return lista valore del modulo
+     */
+    public List<String> leggeListaModulo(final String wikiTitle) {
+        List<String> lista = null;
+        Map<String, String> mappa = leggeMappaModulo(wikiTitle);
+
+        if (mappa != null && mappa.size() > 0) {
+            lista = new ArrayList<>();
+            for (String key : mappa.keySet()) {
+                lista.add(key);
+            }
+        }
+
+        return lista;
+    }
+
+    /**
      * Legge (come user) il testo JSON di una pagina dal server wiki <br>
      * Usa una API con action=parse SENZA bisogno di loggarsi <br>
      * Recupera dalla urlRequest title, pageid e wikitext <br>

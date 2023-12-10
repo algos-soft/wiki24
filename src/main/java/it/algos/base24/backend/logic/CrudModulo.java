@@ -290,7 +290,12 @@ public abstract class CrudModulo {
             modifiche = jSonService.getProperties(entityBean);
             message = String.format("Creata una nuova entity [%s.%s]", entityName, savedEntityBean.getId());
             message = String.format("%s%s%s", message, FORWARD, modifiche);
-            logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            if (Pref.usaNotification.is()) {
+                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            }
+            else {
+                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb().senzaNotifica());
+            }
         }
         else {
             message = String.format("Non sono riuscito a creare la entity [%s.%s]", entityName, savedEntityBean.getId());

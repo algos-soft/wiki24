@@ -55,4 +55,7 @@ public class WikiCost {
 
     public static final String ENCODE = "UTF-8";
 
+    public static final String TAG_EX_SPAZIO = "Ex" + SPAZIO;
+
+
 }

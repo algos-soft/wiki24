@@ -46,7 +46,7 @@ public class GiornoList extends CrudList {
         comboMese.setWidth("12rem");
         comboMese.setItems(meseModulo.findAll());
         comboMese.addValueChangeListener(event -> sincroFiltri());
-        topPlaceHolder.add(comboMese);
+        buttonBar.add(comboMese);
     }
 
     @Override

@@ -21,6 +21,10 @@ public class AttSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
 
+    @AField(type = TypeField.booleano)
+    public boolean ex;
+
+
     @AField(type = TypeField.integer, headerText = "bio", caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 6)
     public int numBio;
 
