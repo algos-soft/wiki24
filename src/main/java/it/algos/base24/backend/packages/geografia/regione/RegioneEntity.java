@@ -13,7 +13,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "regione", keyPropertyName = "sigla", searchPropertyName = "nome", typeList = TypeList.softWiki, usaIdPrimaMinuscola = false)
+@AEntity(collectionName = "regione", keyPropertyName = "sigla", searchPropertyName = "nome", typeList = TypeList.hardWiki, usaIdPrimaMinuscola = false)
 public class RegioneEntity extends AbstractEntity {
 
     @AField(type = TypeField.ordine, widthRem = 5)
@@ -28,6 +28,9 @@ public class RegioneEntity extends AbstractEntity {
     //    @DBRef //@todo perché non funziona?
     @AField(type = TypeField.linkDBRef, widthRem = 14)
     public StatoEntity stato;
+
+    @AField(type = TypeField.linkWiki, headerText = "Pagina", widthRem = 12)
+    public String linkPagina;
 
     @AField(type = TypeField.text, widthRem = 20)
     public TypeRegione type;

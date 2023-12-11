@@ -44,10 +44,6 @@ public class AttSingolareList extends WikiList {
         super.fixPreferenze();
 
         super.usaInfoDownload = true;
-//        super.lastDownload = attSingolareModulo.lastDownloadAttSin;
-//        super.durataDownload = WPref.downloadAttSinTime;
-//        super.lastElaborazione = WPref.lastElaboraAttSin;
-//        super.durataElaborazione = WPref.elaboraAttSinTime;
     }
 
     @Override

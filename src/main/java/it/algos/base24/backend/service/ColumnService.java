@@ -9,9 +9,10 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
-import org.springframework.beans.factory.annotation.*;
+import it.algos.base24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
@@ -34,21 +35,23 @@ import java.util.*;
 @Service
 public class ColumnService {
 
-    @Autowired
+    @Inject
     private TextService textService;
 
-    @Autowired
+    @Inject
     private AnnotationService annotationService;
 
-    @Autowired
+    @Inject
     private DateService dateService;
 
-    @Autowired
+    @Inject
     private ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     private LogService logger;
 
+    @Inject
+    private WebService webService;
 
     /**
      * Aggiunge in automatico le colonne previste in gridPropertyNamesList <br>
@@ -82,6 +85,7 @@ public class ColumnService {
         Icon headerIcon;
         Field field;
         boolean sortable = true;
+        String anchorPrefix;
 
         // Controlla che i parametri in ingresso siano validi
         if (!check(grid, modelClazz, propertyName, "crea")) {
@@ -93,6 +97,7 @@ public class ColumnService {
         header = annotationService.getHeaderText(modelClazz, propertyName);
         headerIcon = annotationService.getHeaderIcon(modelClazz, propertyName);
         field = reflectionService.getJavaField(modelClazz, propertyName);
+        anchorPrefix = annotationService.getAnchorPrefix(modelClazz, propertyName);
 
         colonna = switch (type) {
             case text -> grid.addColumn(propertyName).setSortable(sortable);
@@ -100,19 +105,64 @@ public class ColumnService {
             case integer, ordine, lungo -> grid.addColumn(propertyName).setSortable(sortable);
             case booleano -> addBoolean(grid, modelClazz, propertyName);
             case enumType -> grid.addColumn(propertyName).setSortable(sortable);
+            case linkStatico -> grid.addColumn(propertyName).setSortable(sortable);
             case linkDBRef -> grid.addColumn(propertyName).setSortable(sortable);
-//            case linkDBRef -> grid.addColumn(new ComponentRenderer<>(entity -> {
-//                Object obj = null;
-//                Object alfa = entity;
-//                Object beta = entity;
-//                try { // prova a eseguire il codice
-//                    obj = field.get(entity);
-//                    Object alfetta = entity;
-//                } catch (Exception unErrore) {// intercetta l'errore
-//                    logger.warn(new WrapLog().exception(unErrore));
-//                }// fine del blocco try-catch
-//                return new Span(obj != null ? obj.toString() : VUOTA);
-//            }));//end of lambda expressions and anonymous inner class
+            case linkWiki -> grid.addColumn(new ComponentRenderer<>(entity -> {
+                Object obj = null;
+                Anchor anchor;
+
+                try {
+                    obj = field.get(entity);
+                } catch (Exception unErrore) {
+                    logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
+                }
+
+                if (obj != null && obj instanceof String wikiTitle) {
+                    anchor = new Anchor(anchorPrefix + wikiTitle, "[" + wikiTitle + "]");
+                    anchor.getElement().getStyle().set("color", "blue");
+                    anchor.getElement().getStyle().set("fontWeight", "bold");
+                    //                    anchor.getElement().getStyle().set("font-style", "italic");
+
+                    return new Span(anchor);
+                }
+                return new Span(VUOTA);
+            }));
+            case linkWikiCheck -> grid.addColumn(new ComponentRenderer<>(entity -> {
+                Object obj = null;
+                Anchor anchor;
+
+                try {
+                    obj = field.get(entity);
+                } catch (Exception unErrore) {
+                    logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
+                }
+
+                if (obj != null && obj instanceof String wikiTitle) {
+                    anchor = new Anchor(anchorPrefix + wikiTitle, "[" + wikiTitle + "]");
+                    if (webService.isEsisteWiki(wikiTitle)) {
+                        anchor.getElement().getStyle().set("color", "green");
+                    }
+                    else {
+                        anchor.getElement().getStyle().set("color", "red");
+                    }
+                    anchor.getElement().getStyle().set("fontWeight", "bold");
+                    return new Span(anchor);
+                }
+                return new Span(VUOTA);
+            }));
+
+            //            case linkDBRef -> grid.addColumn(new ComponentRenderer<>(entity -> {
+            //                Object obj = null;
+            //                Object alfa = entity;
+            //                Object beta = entity;
+            //                try { // prova a eseguire il codice
+            //                    obj = field.get(entity);
+            //                    Object alfetta = entity;
+            //                } catch (Exception unErrore) {// intercetta l'errore
+            //                    logger.warn(new WrapLog().exception(unErrore));
+            //                }// fine del blocco try-catch
+            //                return new Span(obj != null ? obj.toString() : VUOTA);
+            //            }));//end of lambda expressions and anonymous inner class
 
             case preferenza -> addPreferenza(grid, modelClazz, propertyName);
             default -> null;

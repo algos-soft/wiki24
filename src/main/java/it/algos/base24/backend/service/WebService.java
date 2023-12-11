@@ -89,6 +89,17 @@ public class WebService {
         return risposta;
     }
 
+    public boolean isEsisteWiki(final String wikiTitleGrezzo) {
+        boolean esiste = false;
+        String tag = "{\"error";
+        String testoLeggibile = leggeWikiParse(wikiTitleGrezzo);
+
+        if (textService.isValid(testoLeggibile) && !testoLeggibile.startsWith(tag)) {
+            esiste = true;
+        }
+
+        return esiste;
+    }
 
     /**
      * Request di tipo GET. Legge la pagina intera. <br>

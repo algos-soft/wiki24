@@ -424,13 +424,13 @@ public abstract class CrudModulo {
                     typeReset = RisultatoReset.vuotoMaCostruito;
                 }
                 elementi = count();
-                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Non esisteva e sono stati creati %d elementi.", collectionName, elementi);
+                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Non esisteva e sono stati creati %s elementi.", collectionName, textService.format(elementi));
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
                 return typeReset;
             }
             else {
-                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Esiste e ci sono %d elementi.", collectionName, elementi);
+                message = String.format("La collection [%s] (usaStartupReset=true) è stata controllata. Esiste e ci sono %s elementi.", collectionName, textService.format(elementi));
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 typeReset = RisultatoReset.esistenteNonModificato;
             }
@@ -457,6 +457,16 @@ public abstract class CrudModulo {
 
     public RisultatoReset resetAdd() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
+    }
+
+
+    public void downloadNoNotification() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
+        download();
+
+        Pref.usaNotification.setValue(usaNotification);
     }
 
     public void download() {

@@ -29,13 +29,6 @@ public class AttPluraleList extends WikiList {
         super.fixPreferenze();
 
         super.usaInfoDownload = true;
-        super.lastDownload = WPref.lastDownloadAttSin;
-        super.durataDownload = WPref.downloadAttSinTime;
-        super.lastElaborazione = WPref.lastElaboraAttSin;
-        super.durataElaborazione = WPref.elaboraAttSinTime;
-
-        super.unitaMisuraDownload = "secondi";
-        super.unitaMisuraElaborazione = "minuti";
     }
 
     @Override
@@ -64,7 +57,7 @@ public class AttPluraleList extends WikiList {
 
         message = String.format("Download%sCancella tutto. Esegue un download di AttSingolare. Crea una nuova tavola dai plurali (DISTINCT) di AttSingolare.", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
-        message = String.format("Download%sAggiunge un link alla PaginaLista di ogni attività. Scarica il modulo wiki [%s].", FORWARD, PATH_LINK + ATT_LOWER);
+        message = String.format("Download%sCrea un link alla PaginaLista di ogni attività. Scarica il modulo wiki [%s]. Crea un link ad ogni Attività.", FORWARD, PATH_LINK + ATT_LOWER);
         alertPlaceHolder.add(ASpan.text(message).rosso());
     }
 

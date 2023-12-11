@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.logic;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
@@ -32,9 +33,9 @@ public abstract class WikiModulo extends CrudModulo {
 
     public WPref durataElaborazione;
 
-    public String unitaMisuraDownload;
+    public TypeDurata unitaMisuraDownload;
 
-    public String unitaMisuraElaborazione;
+    public TypeDurata unitaMisuraElaborazione;
 
     protected long inizio;
 
@@ -81,7 +82,11 @@ public abstract class WikiModulo extends CrudModulo {
 
         if (durataDownload != null) {
             delta = delta / 1000;
-//            delta = delta / 60;
+            delta = switch (unitaMisuraDownload) {
+                case secondi -> delta;
+                case minuti -> delta / 60;
+                default -> delta;
+            };
 
             durataDownload.setValue(delta.intValue());
         }

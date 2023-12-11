@@ -19,14 +19,23 @@ import java.util.stream.*;
  * Date: Thu, 07-Sep-2023
  * Time: 10:53
  */
-public enum WPref implements  IPref {
+public enum WPref implements IPref {
     usaTaskAttSin("usaTaskAttSin", TypePref.bool, true, "Flag per usare la task di download AttivitàSingolare."),
     lastDownloadAttSin("lastDownloadAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàSingolare."),
-    downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in minuti."),
+    downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in secondi."),
     usaElaboraAttSin("usaElaboraAttSin", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàSingolare."),
     lastElaboraAttSin("lastElaboraAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàSingolare."),
     elaboraAttSinTime("elaboraAttSinTime", TypePref.integer, 0, "Durata elaborazione di AttivitàSingolare in minuti."),
 
+    //***************
+    usaTaskAttPlu("usaTaskAttPlu", TypePref.bool, true, "Flag per usare la task di download AttivitàPlurale."),
+    lastDownloadAttPlu("lastDownloadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàPlurale."),
+    downloadAttPluTime("downloadAttPluTime", TypePref.integer, 0, "Durata download di AttivitàPlurale in secondi."),
+    usaElaboraAttPlu("usaElaboraAttPlu", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàPlurale."),
+    lastElaboraAttPlu("lastElaboraAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàPlurale."),
+    elaboraAttPluTime("elaboraAttPluTime", TypePref.integer, 0, "Durata elaborazione di AttivitàPlurale in minuti."),
+
+    //***************
 
     usaTaskNazSin("usaTaskNazSin", TypePref.bool, true, "Flag per usare la task di download NazionalitàSingolare."),
     lastDownloadNazSin("lastDownloadNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàSingolare."),
@@ -88,7 +97,7 @@ public enum WPref implements  IPref {
     public List<String> getAllTags() {
         return getAllEnums()
                 .stream()
-                .map(type->type.getTag())
+                .map(type -> type.getTag())
                 .collect(Collectors.toList());
     }
 
@@ -126,7 +135,6 @@ public enum WPref implements  IPref {
     public String getDescrizione() {
         return descrizione;
     }
-
 
 
     @Override
@@ -187,23 +195,23 @@ public enum WPref implements  IPref {
 
     @Override
     public void setPreferenzaModulo(PreferenzaModulo preferenzaModulo) {
-        this.preferenzaModulo=preferenzaModulo;
+        this.preferenzaModulo = preferenzaModulo;
     }
 
     //    @Component
-//    public static class PreferenzaInjector {
-//
-//        @Autowired
-//        private PreferenzaModulo preferenzaModulo;
-//
-//
-//        @PostConstruct
-//        public void postConstruct() {
-//            for (WPref pref : WPref.values()) {
-//                pref.preferenzaModulo = this.preferenzaModulo;
-//            }
-//        }
-//
-//    }
+    //    public static class PreferenzaInjector {
+    //
+    //        @Autowired
+    //        private PreferenzaModulo preferenzaModulo;
+    //
+    //
+    //        @PostConstruct
+    //        public void postConstruct() {
+    //            for (WPref pref : WPref.values()) {
+    //                pref.preferenzaModulo = this.preferenzaModulo;
+    //            }
+    //        }
+    //
+    //    }
 
 }

@@ -86,7 +86,11 @@ public class ContinenteModulo extends CrudModulo {
                 logger.error(new WrapLog().exception(new AlgosException(message)).usaDb().type(TypeLog.startup));
             }
         }
+
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
+        Pref.usaNotification.setValue(usaNotification);
 
         return typeReset;
     }

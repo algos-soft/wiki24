@@ -21,6 +21,7 @@ public class BaseCost {
 
     public static final String TAG_WIKI = "https://it.wikipedia.org/wiki/";
 
+    public static final String TAG_ISO_3166 = "ISO 3166-2:";
 
     public static final String WIKI_PARSE = "https://it.wikipedia.org/w/api.php?&format=json&formatversion=2&action=parse&prop=wikitext&page=";
 

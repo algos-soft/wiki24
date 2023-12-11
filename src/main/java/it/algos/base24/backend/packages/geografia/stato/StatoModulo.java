@@ -47,11 +47,15 @@ public class StatoModulo extends CrudModulo {
      */
     @Override
     public StatoEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA, VUOTA, VUOTA, VUOTA, null);
+        return newEntity(0, VUOTA, VUOTA, VUOTA, VUOTA, VUOTA, null, VUOTA);
     }
 
     public StatoEntity newEntity(int ordine, String nome, String alfa3) {
-        return newEntity(ordine, nome, VUOTA, alfa3, VUOTA, VUOTA, null);
+        return newEntity(ordine, nome, VUOTA, alfa3, VUOTA, VUOTA, null, VUOTA);
+    }
+
+    public StatoEntity newEntity(int ordine, String nome, String alfa3, String linkDivisioni) {
+        return newEntity(ordine, nome, VUOTA, alfa3, VUOTA, VUOTA, null, linkDivisioni);
     }
 
     /**
@@ -62,7 +66,15 @@ public class StatoModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public StatoEntity newEntity(int ordine, String nome, String capitale, String alfa3, String alfa2, String numerico, ContinenteEntity continente) {
+    public StatoEntity newEntity(
+            int ordine,
+            String nome,
+            String capitale,
+            String alfa3,
+            String alfa2,
+            String numerico,
+            ContinenteEntity continente,
+            String linkDivisioni) {
         StatoEntity newEntityBean = StatoEntity.builder()
                 .ordine(ordine == 0 ? nextOrdine() : ordine)
                 .nome(textService.isValid(nome) ? nome : null)
@@ -71,6 +83,7 @@ public class StatoModulo extends CrudModulo {
                 .alfa2(textService.isValid(alfa2) ? alfa2 : null)
                 .numerico(textService.isValid(numerico) ? numerico : null)
                 .continente(continente)
+                .linkDivisioni(textService.isValid(linkDivisioni) ? linkDivisioni : null)
                 .build();
 
         return (StatoEntity) fixKey(newEntityBean);
@@ -87,6 +100,11 @@ public class StatoModulo extends CrudModulo {
                 .toList();
     }
 
+    @Override
+    public void download() {
+        RisultatoReset typeReset = super.resetDelete();
+         resetBase(typeReset);
+    }
     @Override
     public RisultatoReset resetDelete() {
         RisultatoReset typeReset = super.resetDelete();
@@ -263,6 +281,7 @@ public class StatoModulo extends CrudModulo {
                     entityBean = (StatoEntity) mappaBeans.get(alfa3);
                     entityBean.numerico = numerico;
                     entityBean.alfa2 = alfa2;
+                    entityBean.linkDivisioni = TAG_ISO_3166 + alfa2;
                     mappaBeans.put(alfa3, entityBean);
                 }
                 else {

@@ -196,7 +196,7 @@ public abstract class CrudList extends VerticalLayout {
         this.setMargin(false);
         setSizeFull();
 
-        this.getElement().getStyle().set("background-color", "ivory");
+        this.getElement().getStyle().set("background-color", "#E0FFFF");
 
         //--Aggiunge un layout per informazioni aggiuntive come header della lista <br>
         //--Qui costruisce sempre il contenitore (placeHolder) anche vuoto <br>
@@ -419,7 +419,7 @@ public abstract class CrudList extends VerticalLayout {
 
         //--Colorazione di controllo <br>
         if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            grid.getElement().getStyle().set("background-color", "green");
+            grid.getElement().getStyle().set("background-color", "#FFE6E8");
         }
 
         if (grid != null) {
@@ -458,7 +458,7 @@ public abstract class CrudList extends VerticalLayout {
             }
         }
 
-        this.sicroBottomLayout();
+        this.sincroBottomLayout();
     }
 
 
@@ -475,7 +475,7 @@ public abstract class CrudList extends VerticalLayout {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixBottom() {
-        sicroBottomLayout();
+        sincroBottomLayout();
     }
 
 
@@ -655,9 +655,13 @@ public abstract class CrudList extends VerticalLayout {
     }
 
     public boolean resetDelete() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
         currentCrudModulo.dialogResetDelete();
         refreshData();
 
+        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 
@@ -667,9 +671,13 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean resetAdd() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
         currentCrudModulo.resetAdd();
         refreshData();
 
+        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 
@@ -692,13 +700,8 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean download() {
-        boolean usaNotification = Pref.usaNotification.is();
-        Pref.usaNotification.setValue(false);
-
-        currentCrudModulo.download();
+        currentCrudModulo.downloadNoNotification();
         refreshData();
-
-        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 
@@ -746,7 +749,7 @@ public abstract class CrudList extends VerticalLayout {
         return cancellata;
     }
 
-    protected void sicroBottomLayout() {
+    protected void sincroBottomLayout() {
         String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
         collectionName = textService.primaMaiuscola(collectionName);
         int elementiTotali = currentCrudModulo.count();

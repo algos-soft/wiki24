@@ -40,9 +40,9 @@ public abstract class WikiList extends CrudList {
 
     protected WPref durataElaborazione;
 
-    protected String unitaMisuraDownload;
+    protected TypeDurata unitaMisuraDownload;
 
-    protected String unitaMisuraElaborazione;
+    protected TypeDurata unitaMisuraElaborazione;
 
     private boolean usaBottoneDownload;
 
@@ -82,8 +82,12 @@ public abstract class WikiList extends CrudList {
         if (currentCrudModulo != null) {
             lastDownload = currentCrudModulo.lastDownload;
             durataDownload = currentCrudModulo.durataDownload;
+            unitaMisuraDownload = currentCrudModulo.unitaMisuraDownload;
+
             lastElaborazione = currentCrudModulo.lastElaborazione;
             durataElaborazione = currentCrudModulo.durataElaborazione;
+            unitaMisuraElaborazione = currentCrudModulo.unitaMisuraElaborazione;
+
             //            crudBackend.lastUpload = lastUpload;
             //            crudBackend.durataUpload = durataUpload;
         }
@@ -223,7 +227,7 @@ public abstract class WikiList extends CrudList {
 
 
     public boolean download() {
-        currentCrudModulo.resetDelete();
+        currentCrudModulo.downloadNoNotification();
         refreshData();
         fixInfo();
         return true;

@@ -954,6 +954,31 @@ public class AnnotationService {
         return true;
     }
 
+    /**
+     * Get the property.
+     *
+     * @param entityClazz  the class of type AbstractEntity
+     * @param propertyName the property name
+     *
+     * @return the property
+     */
+    public String getAnchorPrefix(final Class entityClazz, final String propertyName) {
+        String prefix = VUOTA;
+        AField annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, propertyName, "getAnchorPrefix")) {
+            return VUOTA;
+        }
+
+        annotation = this.getFieldAnnotation(entityClazz, propertyName);
+        if (annotation != null) {
+            prefix = TAG_WIKI + annotation.anchorPrefix();
+        }
+
+        return prefix;
+    }
+
 
     public boolean isEsisteKeyPropertyName(final Class modelClazz) {
         return textService.isValid(getKeyPropertyName(modelClazz));

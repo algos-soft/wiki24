@@ -7,6 +7,7 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -38,9 +39,11 @@ public class AttSingolareModulo extends WikiModulo {
 
         super.lastDownload = WPref.lastDownloadAttSin;
         super.durataDownload = WPref.downloadAttSinTime;
+        super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.unitaMisuraDownload = "secondi";
-        super.unitaMisuraElaborazione = "minuti";
+        super.lastElaborazione = WPref.lastElaboraAttSin;
+        super.durataElaborazione = WPref.elaboraAttSinTime;
+        super.unitaMisuraElaborazione = TypeDurata.minuti;
     }
 
 
@@ -73,9 +76,66 @@ public class AttSingolareModulo extends WikiModulo {
         return (AttSingolareEntity) fixKey(newEntityBean);
     }
 
-    public List<String> findAllSingolari() {
-        List<AttSingolareEntity> attivita = findAll();
-        return attivita.stream().map(att -> att.singolare).collect(Collectors.toList());
+    public AttSingolareEntity findOneById(String idValue) {
+        return (AttSingolareEntity) super.findOneById(idValue);
+    }
+
+    @Override
+    public List<AttSingolareEntity> findAll() {
+        return super.findAll();
+    }
+
+    public List<String> findSingolareAll() {
+        return findAll().stream().map(att -> att.singolare).collect(Collectors.toList());
+    }
+
+    public List<AttSingolareEntity> findAllByProperty(final String propertyName, final Object propertyValue) {
+        Query query = new Query();
+
+        if (textService.isEmpty(propertyName)) {
+            return null;
+        }
+        if (propertyValue == null) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+
+        return findQuery(query);
+    }
+    private List<AttSingolareEntity> findQuery(Query query) {
+        String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
+
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz, collectionName);
+        }
+        else {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz);
+        }
+    }
+
+    public List<AttSingolareEntity> findAllByPlurale(String plurale) {
+        return this.findAllByProperty("plurale", plurale);
+    }
+
+
+    public List<String> findSingolariByPlurale(String plurale) {
+        return  findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList()) ;
+    }
+
+    public List<String> findPluraliByDistinct() {
+        List<String> lista = new ArrayList<>();
+        Set<String> setPlurali = new HashSet();
+        List<AttSingolareEntity> listaAll = findAll();
+
+        for (AttSingolareEntity attivita : listaAll) {
+            if (setPlurali.add(attivita.plurale)) {
+                lista.add(attivita.plurale);
+            }
+        }
+
+        Collections.sort(lista);
+        return lista;
     }
 
     @Override
@@ -146,7 +206,7 @@ public class AttSingolareModulo extends WikiModulo {
     public void downloadAttivitaExtra(String moduloEx) {
         String singolare;
         String plurale;
-        List<String> listaSingolari = findAllSingolari();
+        List<String> listaSingolari = findSingolareAll();
         List<String> listaEx = wikiApiService.leggeListaModulo(moduloEx);
         AttSingolareEntity oldBean;
         AttSingolareEntity newBean;
@@ -154,7 +214,7 @@ public class AttSingolareModulo extends WikiModulo {
         if (listaEx != null && listaEx.size() > 0) {
             for (String key : listaEx) {
                 if (listaSingolari.contains(key)) {
-                    oldBean = (AttSingolareEntity) findOneById(key);
+                    oldBean = findOneById(key);
                     if (oldBean != null) {
                         singolare = TAG_EX_SPAZIO + oldBean.singolare;
                         singolare = textService.primaMinuscola(singolare);

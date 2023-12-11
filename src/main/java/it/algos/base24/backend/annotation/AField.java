@@ -95,4 +95,12 @@ public @interface AField {
      */
     TypeDate typeDate() default TypeDate.iso8601;
 
+    /**
+     * (Optional) Prefisso web del Anchor.
+     * Utilizzato nei Link.
+     *
+     * @return the prefix
+     */
+    String anchorPrefix() default VUOTA;
+
 }

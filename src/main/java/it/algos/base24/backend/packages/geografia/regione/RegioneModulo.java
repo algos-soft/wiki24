@@ -21,7 +21,6 @@ import java.util.*;
 @Service
 public class RegioneModulo extends CrudModulo {
 
-    public static final String ISO_PREFIX = "ISO 3166-2:";
 
     @Autowired
     public StatoModulo statoModulo;
@@ -57,7 +56,7 @@ public class RegioneModulo extends CrudModulo {
      */
     @Override
     public RegioneEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA, null, null);
+        return newEntity(0, VUOTA, VUOTA, null, VUOTA, null);
     }
 
     /**
@@ -65,18 +64,24 @@ public class RegioneModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public RegioneEntity newEntity(int ordine, String nome, String sigla, StatoEntity stato, TypeRegione type) {
+    public RegioneEntity newEntity(int ordine, String nome, String sigla, StatoEntity stato, String linkPagina, TypeRegione type) {
         RegioneEntity newEntityBean = RegioneEntity.builder()
                 .ordine(ordine == 0 ? nextOrdine() : ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .sigla(textService.isValid(sigla) ? sigla : null)
                 .stato(stato)
+                .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .type(type)
                 .build();
 
         return (RegioneEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public void download() {
+        RisultatoReset typeReset = super.resetDelete();
+        resetBase(typeReset);
+    }
 
     @Override
     public RisultatoReset resetDelete() {
@@ -129,7 +134,8 @@ public class RegioneModulo extends CrudModulo {
     }
 
     public int add(String nomeStato, TypeRegione type, int pos) {
-        listaBean = this.getLista(nomeStato, 1);
+        StatoEntity stato = getStato(nomeStato);
+        listaBean = this.getLista(stato, 1);
 
         for (List<String> rigaArray : listaBean) {
             pos = pos + 1;
@@ -147,7 +153,7 @@ public class RegioneModulo extends CrudModulo {
                 }
             }
 
-            entityBean = newEntity(pos, nome, sigla, getStato(nomeStato), type);
+            entityBean = newEntity(pos, nome, sigla, getStato(nomeStato), TAG_ISO_3166 + stato.alfa2, type);
             if (entityBean != null) {
                 mappaBeans.put(sigla, entityBean);
             }
@@ -163,7 +169,7 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = this.getStato(nomeStato);
 
         //--regioni
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.regione);
         for (RegioneSpeciali regio : RegioneSpeciali.values()) {
             entityBean = (RegioneEntity) mappaBeans.get(regio.getSigla());
@@ -174,11 +180,11 @@ public class RegioneModulo extends CrudModulo {
         entityBean.type = TypeRegione.regioneSpeciale;
 
         //--città metropolitane
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.cittaMetropolitana);
 
         //--province
-        listaBean = this.getLista(nomeStato, 3);
+        listaBean = this.getLista(stato, 3);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         return pos;
@@ -190,26 +196,26 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--regioni
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.regioneMetropolitana);
 
         //--collettività
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.collettivitaSpeciale);
         entityBean = (RegioneEntity) mappaBeans.get("FR-6AE");
         entityBean.type = TypeRegione.collettivitaEuropea;
         mappaBeans.put("FR-6AE", entityBean);
 
         //--dipartimenti
-        listaBean = this.getLista(nomeStato, 3);
+        listaBean = this.getLista(stato, 3);
         pos = add(stato, listaBean, pos, TypeRegione.dipartimentoMetropolitano);
 
         //--dipartimenti d'oltremare
-        listaBean = this.getLista(nomeStato, 4);
+        listaBean = this.getLista(stato, 4);
         pos = add(stato, listaBean, pos, TypeRegione.dipartimentoOltremare);
 
         //--collettività d'oltremare
-        listaBean = this.getLista(nomeStato, 5);
+        listaBean = this.getLista(stato, 5);
         pos = add(stato, listaBean, pos, TypeRegione.collettivitaOltremare);
         return pos;
     }
@@ -219,15 +225,15 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--comunità
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.comunitaAutonoma);
 
         //--città autonome
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.cittaAutonoma);
 
         //--province
-        listaBean = this.getLista(nomeStato, 3);
+        listaBean = this.getLista(stato, 3);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         return pos;
@@ -238,11 +244,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--distretto
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.distretto);
 
         //--regione autonome
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.regioneAutonoma);
 
         return pos;
@@ -253,7 +259,7 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--provincia
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         //--capitale
@@ -269,11 +275,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--regione
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.regione);
 
         //--provincia
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         return pos;
@@ -284,11 +290,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--regioni
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.regione);
 
         //--distretti
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.distretto);
 
         return pos;
@@ -300,11 +306,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--contee
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.contea);
 
         //--città comitali
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.cittaComitale);
 
         return pos;
@@ -316,11 +322,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--province
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         //--nazioni costitutive
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         for (List<String> rigaArray : listaBean.subList(0, 3)) {
             pos = pos + 1;
             sigla = rigaArray.get(0);
@@ -332,14 +338,14 @@ public class RegioneModulo extends CrudModulo {
                     break;
                 }
             }
-            entityBean = newEntity(pos, nome, sigla, stato, TypeRegione.nazione);
+            entityBean = newEntity(pos, nome, sigla, stato,  stato.alfa2+"xx", TypeRegione.nazione);
             if (entityBean != null) {
                 mappaBeans.put(sigla, entityBean);
             }
         }
 
         //--municipalità speciale
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         for (List<String> rigaArray : listaBean.subList(3, 6)) {
             pos = pos + 1;
             sigla = rigaArray.get(0);
@@ -350,7 +356,7 @@ public class RegioneModulo extends CrudModulo {
                     break;
                 }
             }
-            entityBean = newEntity(pos, nome, sigla, stato, TypeRegione.municipalita);
+            entityBean = newEntity(pos, nome, sigla, stato, TAG_ISO_3166 + stato.alfa2, TypeRegione.municipalita);
             if (entityBean != null) {
                 mappaBeans.put(sigla, entityBean);
             }
@@ -365,11 +371,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--distretto
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.distretto);
 
         //--città capitale
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.capitale);
 
         return pos;
@@ -381,11 +387,11 @@ public class RegioneModulo extends CrudModulo {
         StatoEntity stato = getStato(nomeStato);
 
         //--province
-        listaBean = this.getLista(nomeStato, 1);
+        listaBean = this.getLista(stato, 1);
         pos = add(stato, listaBean, pos, TypeRegione.provincia);
 
         //--distretti
-        listaBean = this.getLista(nomeStato, 2);
+        listaBean = this.getLista(stato, 2);
         pos = add(stato, listaBean, pos, TypeRegione.distretto);
 
         return pos;
@@ -412,7 +418,7 @@ public class RegioneModulo extends CrudModulo {
                     }
                 }
 
-                entityBean = newEntity(pos, nome, sigla, stato, type);
+                entityBean = newEntity(pos, nome, sigla, stato, TAG_ISO_3166 + stato.alfa2, type);
                 if (entityBean != null) {
                     mappaBeans.put(sigla, entityBean);
                 }
@@ -485,18 +491,15 @@ public class RegioneModulo extends CrudModulo {
         return stato;
     }
 
-    private List<List<String>> getLista(String nomeStato, int pos) {
+    private List<List<String>> getLista(StatoEntity stato, int pos) {
         List<List<String>> lista = null;
         String nomePaginaWiki;
         String message;
-        StatoEntity stato;
-
-        stato = getStato(nomeStato);
         if (stato == null) {
             return lista;
         }
 
-        nomePaginaWiki = ISO_PREFIX + stato.alfa2;
+        nomePaginaWiki = TAG_ISO_3166 + stato.alfa2;
         if (textService.isEmpty(nomePaginaWiki)) {
             message = String.format("Nello stato [%s] manca la property 'alfa2'", stato);
             logger.error(new WrapLog().exception(new AlgosException(message)).type(TypeLog.startup));
