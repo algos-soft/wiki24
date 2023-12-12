@@ -54,7 +54,25 @@ public class AttSingolareModulo extends WikiModulo {
      */
     @Override
     public AttSingolareEntity newEntity() {
-        return newEntity(VUOTA, VUOTA, false);
+        return newEntity(VUOTA, VUOTA, false, VUOTA);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (con keyID ma non salvata)
+     */
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale) {
+        return newEntity(keyPropertyValue, plurale, false, VUOTA);
+    }
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @return la nuova entity appena creata (con keyID ma non salvata)
+     */
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex) {
+        return newEntity(keyPropertyValue, plurale, ex, VUOTA);
     }
 
     /**
@@ -65,11 +83,12 @@ public class AttSingolareModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex) {
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex, String linkAttivita) {
         AttSingolareEntity newEntityBean = AttSingolareEntity.builder()
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .ex(ex)
+                .linkAttivita(linkAttivita)
                 .numBio(0)
                 .build();
 
@@ -103,6 +122,7 @@ public class AttSingolareModulo extends WikiModulo {
 
         return findQuery(query);
     }
+
     private List<AttSingolareEntity> findQuery(Query query) {
         String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
 
@@ -120,7 +140,7 @@ public class AttSingolareModulo extends WikiModulo {
 
 
     public List<String> findSingolariByPlurale(String plurale) {
-        return  findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList()) ;
+        return findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList());
     }
 
     public List<String> findPluraliByDistinct() {
@@ -155,11 +175,14 @@ public class AttSingolareModulo extends WikiModulo {
      */
     public void download() {
         inizio = System.currentTimeMillis();
-        String moduloPlurale = TAG_MODULO + "Plurale attività";
-        String moduloEx = TAG_MODULO + "Ex attività";
 
-        downloadAttivitaPlurali(moduloPlurale);
-        downloadAttivitaExtra(moduloEx);
+        super.deleteAll();
+
+        this.downloadAttivitaPlurali();
+        this.downloadAttivitaExtra();
+        this.downloadPagineAttivita();
+
+        mappaBeans.values().stream().forEach(bean -> insertSave(bean));
 
         super.fixDownload(inizio);
     }
@@ -167,71 +190,89 @@ public class AttSingolareModulo extends WikiModulo {
 
     /**
      * Legge le mappa dal Modulo:Bio/Plurale attività <br>
-     * Crea le attività <br>
-     *
-     * @param moduloPlurale della pagina su wikipedia
      *
      * @return entities create
      */
-    public void downloadAttivitaPlurali(String moduloPlurale) {
+    public void downloadAttivitaPlurali() {
+        String modulo = TAG_MODULO + "Plurale attività";
         String singolare;
         String plurale;
-        Map<String, String> mappaPlurale = wikiApiService.leggeMappaModulo(moduloPlurale);
-        AttSingolareEntity newBean;
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(modulo);
 
-        if (mappaPlurale != null && mappaPlurale.size() > 0) {
-            deleteAll();
-            for (Map.Entry<String, String> entry : mappaPlurale.entrySet()) {
-                singolare = entry.getKey();
-                plurale = entry.getValue();
-                newBean = newEntity(singolare, plurale, false);
-                insertSave(newBean);
-            }
-        }
-        else {
-            message = String.format("Non sono riuscito a leggere da wiki il %s", moduloPlurale);
+        if (mappa == null || mappa.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da wiki il %s", modulo);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+
+        for (Map.Entry<String, String> entry : mappa.entrySet()) {
+            singolare = entry.getKey();
+            plurale = entry.getValue();
+            mappaBeans.put(singolare, newEntity(singolare, plurale));
         }
     }
 
 
     /**
      * Legge le mappa dal Modulo:Bio/Ex attività <br>
-     * Crea le attività <br>
-     *
-     * @param moduloEx della pagina su wikipedia
      *
      * @return entities create
      */
-    public void downloadAttivitaExtra(String moduloEx) {
+    public void downloadAttivitaExtra() {
+        String modulo = TAG_MODULO + "Ex attività";
         String singolare;
         String plurale;
-        List<String> listaSingolari = findSingolareAll();
-        List<String> listaEx = wikiApiService.leggeListaModulo(moduloEx);
+        List<String> lista = wikiApiService.leggeListaModulo(modulo);
         AttSingolareEntity oldBean;
-        AttSingolareEntity newBean;
 
-        if (listaEx != null && listaEx.size() > 0) {
-            for (String key : listaEx) {
-                if (listaSingolari.contains(key)) {
-                    oldBean = findOneById(key);
-                    if (oldBean != null) {
-                        singolare = TAG_EX_SPAZIO + oldBean.singolare;
-                        singolare = textService.primaMinuscola(singolare);
-                        plurale = oldBean.plurale;
-                        newBean = newEntity(singolare, plurale, true);
-                        insertSave(newBean);
-                    }
-                }
-                else {
-                    message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", moduloEx, key);
-                    logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
-                }
+        if (lista == null || lista.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da wiki il %s", modulo);
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+
+        for (String key : lista) {
+            if (mappaBeans.containsKey(key)) {
+                oldBean = (AttSingolareEntity) mappaBeans.get(key);
+                singolare = TAG_EX_SPAZIO + oldBean.singolare;
+                singolare = textService.primaMinuscola(singolare);
+                plurale = oldBean.plurale;
+                mappaBeans.put(singolare, newEntity(singolare, plurale, true));
+            }
+            else {
+                message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nel modulo %s", modulo, key, "Plurale attività");
+                logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
         }
-        else {
-            message = String.format("Non sono riuscito a leggere da wiki il %s", moduloEx);
+    }
+
+
+    /**
+     * Legge le mappa dal Modulo:Bio/Link attività <br>
+     * Crea le attività <br>
+     *
+     * @return entities create
+     */
+    public void downloadPagineAttivita() {
+        String modulo = TAG_MODULO + "Link attività";
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(modulo);
+        AttSingolareEntity oldBean;
+
+        if (mappa == null || mappa.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da wiki il %s", modulo);
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+
+        for (String key : mappa.keySet()) {
+            if (mappaBeans.containsKey(key)) {
+                oldBean = (AttSingolareEntity) mappaBeans.get(key);
+                oldBean.linkAttivita = mappa.get(key);
+            }
+            else {
+                message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", modulo, key);
+                logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            }
         }
     }
 

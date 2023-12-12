@@ -27,8 +27,6 @@ public class AttPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Attività/")
     public String paginaLista;
 
-    @AField(type = TypeField.linkWiki, headerText = "attivita")
-    public String linkAttivita;
 
     @AField(type = TypeField.integer, headerText = "bio", widthRem = 20)
     public int numBio;

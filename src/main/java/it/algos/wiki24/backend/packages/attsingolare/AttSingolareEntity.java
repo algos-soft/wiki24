@@ -24,6 +24,8 @@ public class AttSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.booleano)
     public boolean ex;
 
+    @AField(type = TypeField.linkWiki, headerText = "pagina")
+    public String linkAttivita;
 
     @AField(type = TypeField.integer, headerText = "bio", caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 6)
     public int numBio;

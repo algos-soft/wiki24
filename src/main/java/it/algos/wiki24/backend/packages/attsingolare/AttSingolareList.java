@@ -50,11 +50,13 @@ public class AttSingolareList extends WikiList {
     public void fixAlert() {
         Anchor anchor1;
         Anchor anchor2;
+        Anchor anchor3;
         String link;
         String caption;
         String message;
         String plurale = "Plurale attività";
         String ex = "Ex attività";
+        String pagina = "Link attività";
 
         link = String.format("%s%s", PATH_MODULO, plurale);
         caption = String.format("%s%s%s", QUADRA_INI, plurale, QUADRA_END);
@@ -66,20 +68,25 @@ public class AttSingolareList extends WikiList {
         anchor2 = new Anchor(link, caption);
         anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
+        link = String.format("%s%s", PATH_MODULO, pagina);
+        caption = String.format("%s%s%s", QUADRA_INI, pagina, QUADRA_END);
+        anchor3 = new Anchor(link, caption);
+        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
         message = "Tavola di base. Costruita dai moduli Wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
+        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2,new Text(SEP), anchor3));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le attività singolari sono convertite in minuscolo.";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
-        message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
+        message = String.format("Download%sCancella tutto e scarica i 3 moduli wiki", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
-        message = "Il download dei link alla pagina di attività, la lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
+        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
         alertPlaceHolder.add(ASpan.text(message).rosso().small());
     }
 
