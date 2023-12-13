@@ -43,6 +43,14 @@ public enum WPref implements IPref {
     usaElaboraNazSin("usaElaboraNazSin", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàSingolare."),
     lastElaboraNazSin("lastElaboraNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàSingolare."),
     elaboraNazSinTime("elaboraNazSinTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàSingolare in minuti."),
+
+    //***************
+    usaTaskNazPlu("usaTaskNazPlu", TypePref.bool, true, "Flag per usare la task di download NazionalitàPlurale."),
+    lastDownloadNazPlu("lastDownloadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàPlurale."),
+    downloadNazPluTime("downloadNazPluTime", TypePref.integer, 0, "Durata download di NazionalitàPlurale in secondi."),
+    usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàPlurale."),
+    lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
+    elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
     ;
 
     public PreferenzaModulo preferenzaModulo;

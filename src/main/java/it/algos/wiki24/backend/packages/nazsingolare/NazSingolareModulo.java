@@ -6,7 +6,9 @@ import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -39,6 +42,14 @@ public class NazSingolareModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastDownload = WPref.lastDownloadNazSin;
+        super.durataDownload = WPref.downloadNazSinTime;
+        super.unitaMisuraDownload = TypeDurata.secondi;
+
+        super.lastElaborazione = WPref.lastElaboraNazSin;
+        super.durataElaborazione = WPref.elaboraNazSinTime;
+        super.unitaMisuraElaborazione = TypeDurata.minuti;
     }
 
 
@@ -49,10 +60,11 @@ public class NazSingolareModulo extends WikiModulo {
      */
     @Override
     public NazSingolareEntity newEntity() {
-        return newEntity(VUOTA,VUOTA,VUOTA);
+        return newEntity(VUOTA, VUOTA, VUOTA);
     }
+
     public NazSingolareEntity newEntity(String keyPropertyValue, String plurale) {
-        return newEntity(keyPropertyValue,plurale,VUOTA);
+        return newEntity(keyPropertyValue, plurale, VUOTA);
     }
 
     /**
@@ -63,15 +75,64 @@ public class NazSingolareModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NazSingolareEntity newEntity(final String keyPropertyValue, String plurale,String pagina) {
+    public NazSingolareEntity newEntity(final String keyPropertyValue, String plurale, String pagina) {
         NazSingolareEntity newEntityBean = NazSingolareEntity.builder()
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
-                .pagina(pagina)
+                .pagina(textService.isValid(pagina) ? pagina : null)
                 .bio(0)
                 .build();
 
         return (NazSingolareEntity) fixKey(newEntityBean);
+    }
+
+    public List<NazSingolareEntity> findAllByDistinctPlurale() {
+        List<NazSingolareEntity> lista = new ArrayList<>();
+        Set<String> setPlurali = new HashSet();
+        List<NazSingolareEntity> listaAll = findAll();
+
+        for (NazSingolareEntity nazionalita : listaAll) {
+            if (setPlurali.add(nazionalita.plurale)) {
+                lista.add(nazionalita);
+            }
+        }
+
+        return lista;
+    }
+
+    public List<NazSingolareEntity> findAllByPlurale(NazSingolareEntity plurale) {
+        return this.findAllByProperty("plurale", plurale.plurale);
+    }
+
+    public List<String> findSingolariByPlurale(NazSingolareEntity plurale) {
+        return findAllByPlurale(plurale).stream().map(naz -> naz.singolare).collect(Collectors.toList());
+    }
+
+
+    public List<NazSingolareEntity> findAllByProperty(final String propertyName, final Object propertyValue) {
+        Query query = new Query();
+
+        if (textService.isEmpty(propertyName)) {
+            return null;
+        }
+        if (propertyValue == null) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+
+        return findQuery(query);
+    }
+
+    private List<NazSingolareEntity> findQuery(Query query) {
+        String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
+
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz, collectionName);
+        }
+        else {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz);
+        }
     }
 
     @Override
@@ -95,6 +156,7 @@ public class NazSingolareModulo extends WikiModulo {
         super.deleteAll();
 
         this.downloadNazionalita();
+        this.downloadPagineAttivita();
 
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
 
@@ -123,6 +185,36 @@ public class NazSingolareModulo extends WikiModulo {
             singolare = entry.getKey();
             plurale = entry.getValue();
             mappaBeans.put(singolare, newEntity(singolare, plurale));
+        }
+    }
+
+
+    /**
+     * Legge le mappa dal Modulo:Bio/Link nazionalità <br>
+     * Crea le attività <br>
+     *
+     * @return entities create
+     */
+    public void downloadPagineAttivita() {
+        String modulo = TAG_MODULO + "Link nazionalità";
+        Map<String, String> mappa = wikiApiService.leggeMappaModulo(modulo);
+        NazSingolareEntity oldBean;
+
+        if (mappa == null || mappa.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da wiki il %s", modulo);
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
+
+        for (String key : mappa.keySet()) {
+            if (mappaBeans.containsKey(key)) {
+                oldBean = (NazSingolareEntity) mappaBeans.get(key);
+                oldBean.pagina = textService.primaMaiuscola(mappa.get(key));
+            }
+            else {
+                message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle nazionalità singolari", modulo, key);
+                logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            }
         }
     }
 

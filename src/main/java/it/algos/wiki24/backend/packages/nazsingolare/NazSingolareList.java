@@ -35,39 +35,33 @@ public class NazSingolareList extends WikiList {
     public void fixAlert() {
         Anchor anchor1;
         Anchor anchor2;
-        Anchor anchor3;
         String link;
         String message;
-        String plurale = "Plurale attività";
-        String ex = "Ex attività";
-        String pagina = "Link attività";
+        String plurale = "Plurale nazionalità";
+        String pagina = "Link nazionalità";
 
         link = String.format("%s%s", PATH_MODULO, plurale);
         anchor1 = new Anchor(link, textService.setQuadre(plurale));
         anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        link = String.format("%s%s", PATH_MODULO, ex);
-        anchor2 = new Anchor(link,  textService.setQuadre(ex));
-        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-
         link = String.format("%s%s", PATH_MODULO, pagina);
-        anchor3 = new Anchor(link, textService.setQuadre(pagina));
-        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor2 = new Anchor(link, textService.setQuadre(pagina));
+        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         message = "Tavola di base. Costruita dai moduli Wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2,new Text(SEP), anchor3));
+        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
 
-        message = "Indipendentemente da come sono scritte nei moduli, tutte le attività singolari sono convertite in minuscolo.";
+        message = "Indipendentemente da come sono scritte nei moduli, tutte le nazionalità singolari sono convertite in minuscolo.";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
-        message = String.format("Download%sCancella tutto e scarica i 3 moduli wiki", FORWARD);
+        message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
-        message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività singolare.", FORWARD);
+        message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola nazionalità singolare.", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
-        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Attività sono gestiti dalla task AttPlurale.";
+        message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Nazionalità sono gestiti dalla task NazPlurale.";
         alertPlaceHolder.add(ASpan.text(message).rosso().small());
     }
 

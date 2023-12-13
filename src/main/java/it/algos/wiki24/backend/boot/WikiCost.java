@@ -67,6 +67,7 @@ public class WikiCost {
     public static final String ATT_LOWER = ATT.toLowerCase();
 
     public static final String PATH_STATISTICHE_ATTIVITA = PATH_BIOGRAFIE + ATT;
+    public static final String PATH_STATISTICHE_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
     public static final String STATISTICHE = "Statistiche";
 
 }

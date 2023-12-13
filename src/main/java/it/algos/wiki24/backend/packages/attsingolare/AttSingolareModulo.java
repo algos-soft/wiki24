@@ -88,7 +88,7 @@ public class AttSingolareModulo extends WikiModulo {
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .ex(ex)
-                .pagina(pagina)
+                .pagina(textService.isValid(pagina) ? pagina : null)
                 .bio(0)
                 .build();
 
@@ -145,6 +145,7 @@ public class AttSingolareModulo extends WikiModulo {
     public List<String> findSingolariByPlurale(AttSingolareEntity plurale) {
         return findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList());
     }
+
     public List<String> findSingolariByPlurale(String plurale) {
         return findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList());
     }

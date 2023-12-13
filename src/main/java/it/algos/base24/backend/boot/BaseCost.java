@@ -373,6 +373,7 @@ public class BaseCost {
     public static final int DOPO_CRISTO_MAX = 2030;
 
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
+    public static final String MAIL_TO = "gac@algos.it";
 
 
 }

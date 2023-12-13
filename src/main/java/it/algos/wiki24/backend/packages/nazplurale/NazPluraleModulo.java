@@ -1,14 +1,14 @@
-package it.algos.wiki24.backend.packages.attplurale;
+package it.algos.wiki24.backend.packages.nazplurale;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
-import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.packages.nazsingolare.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -23,22 +23,21 @@ import java.util.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 10-Dec-2023
- * Time: 11:54
+ * Date: Wed, 13-Dec-2023
+ * Time: 08:49
  */
 @Service
-public class AttPluraleModulo extends WikiModulo {
+public class NazPluraleModulo extends WikiModulo {
 
     @Inject
-    protected AttSingolareModulo attSingolareModulo;
-
+    private NazSingolareModulo nazSingolareModulo;
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public AttPluraleModulo() {
-        super(AttPluraleEntity.class, AttPluraleList.class, AttPluraleForm.class);
+    public NazPluraleModulo() {
+        super(NazPluraleEntity.class, NazPluraleList.class, NazPluraleForm.class);
     }
 
 
@@ -46,12 +45,12 @@ public class AttPluraleModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastDownload = WPref.lastDownloadAttPlu;
-        super.durataDownload = WPref.downloadAttPluTime;
+        super.lastDownload = WPref.lastDownloadNazPlu;
+        super.durataDownload = WPref.downloadNazPluTime;
         super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.lastElaborazione = WPref.lastElaboraAttPlu;
-        super.durataElaborazione = WPref.elaboraAttPluTime;
+        super.lastElaborazione = WPref.lastElaboraNazPlu;
+        super.durataElaborazione = WPref.elaboraNazPluTime;
         super.unitaMisuraElaborazione = TypeDurata.minuti;
     }
 
@@ -62,7 +61,7 @@ public class AttPluraleModulo extends WikiModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public AttPluraleEntity newEntity() {
+    public NazPluraleEntity newEntity() {
         return newEntity(VUOTA, null, VUOTA, VUOTA, 0, 0, false, false);
     }
 
@@ -73,7 +72,7 @@ public class AttPluraleModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public AttPluraleEntity newEntity(
+    public NazPluraleEntity newEntity(
             String plurale,
             List<String> singolari,
             String lista,
@@ -82,7 +81,7 @@ public class AttPluraleModulo extends WikiModulo {
             int numSingolari,
             boolean superaSoglia,
             boolean esisteLista) {
-        AttPluraleEntity newEntityBean = AttPluraleEntity.builder()
+        NazPluraleEntity newEntityBean = NazPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .singolari(singolari)
                 .lista(textService.isValid(lista) ? lista : null)
@@ -93,7 +92,7 @@ public class AttPluraleModulo extends WikiModulo {
                 .esisteLista(esisteLista)
                 .build();
 
-        return (AttPluraleEntity) fixKey(newEntityBean);
+        return (NazPluraleEntity) fixKey(newEntityBean);
     }
 
 
@@ -116,7 +115,7 @@ public class AttPluraleModulo extends WikiModulo {
 
         super.deleteAll();
 
-        attSingolareModulo.download();
+        nazSingolareModulo.download();
         this.creaTavolaDistinct();
 
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
@@ -126,22 +125,21 @@ public class AttPluraleModulo extends WikiModulo {
 
 
     public void creaTavolaDistinct() {
-        List<AttSingolareEntity> listaAttSingolariDistinte = attSingolareModulo.findAllByDistinctPlurale(); ;
-        AttPluraleEntity newBean;
+        List<NazSingolareEntity> listaNazSingolariDistinte = nazSingolareModulo.findAllByDistinctPlurale(); ;
+        NazPluraleEntity newBean;
         List<String> listaSingolari;
 
-        if (listaAttSingolariDistinte == null || listaAttSingolariDistinte.size() < 1) {
-            message = String.format("Non sono riuscito a leggere da mongoDB la collection  %s", "attsingolare");
+        if (listaNazSingolariDistinte == null || listaNazSingolariDistinte.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da mongoDB la collection  %s", "nazsingolare");
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return;
         }
 
-        for (AttSingolareEntity att : listaAttSingolariDistinte) {
-            listaSingolari = attSingolareModulo.findSingolariByPlurale(att);
-            newBean = newEntity(att.plurale, listaSingolari, textService.primaMaiuscola(att.plurale), textService.primaMaiuscola(att.pagina), 0, 0, false, false);
-            mappaBeans.put(att.plurale, newBean);
+        for (NazSingolareEntity naz : listaNazSingolariDistinte) {
+            listaSingolari = nazSingolareModulo.findSingolariByPlurale(naz);
+            newBean = newEntity(naz.plurale, listaSingolari, textService.primaMaiuscola(naz.plurale), textService.primaMaiuscola(naz.pagina), 0, 0, false, false);
+            mappaBeans.put(naz.plurale, newBean);
         }
     }
-
 
 }// end of CrudModulo class

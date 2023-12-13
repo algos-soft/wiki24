@@ -21,11 +21,12 @@ public class NazSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
 
-    @AField(type = TypeField.linkWiki)
+    @AField(type = TypeField.linkWiki, widthRem = 18)
     public String pagina;
 
-    @AField(type = TypeField.integer,  caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 6)
+    @AField(type = TypeField.integer, caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 6)
     public int bio;
+
     @Override
     public String toString() {
         return singolare;
