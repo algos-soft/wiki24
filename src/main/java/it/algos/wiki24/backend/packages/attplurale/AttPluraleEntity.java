@@ -18,18 +18,20 @@ import java.util.*;
 @AEntity(collectionName = "attplurale", keyPropertyName = "plurale", typeList = TypeList.hardWiki)
 public class AttPluraleEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text, widthRem = 20)
+    @AField(type = TypeField.text, widthRem = 16)
     public String plurale;
 
     @AField(type = TypeField.linkStatico, headerText = "singolari", widthRem = 30)
-    public List<String> listaSingolari;
+    public List<String> singolari;
 
     @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Attività/")
-    public String paginaLista;
+    public String lista;
 
+    @AField(type = TypeField.linkWiki)
+    public String pagina;
 
-    @AField(type = TypeField.integer, headerText = "bio", widthRem = 20)
-    public int numBio;
+    @AField(type = TypeField.integer,  widthRem = 20)
+    public int bio;
 
     @AField(type = TypeField.integer, headerText = "numSin")
     public int numSingolari;

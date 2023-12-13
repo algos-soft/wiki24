@@ -60,18 +60,19 @@ public abstract class WikiList extends CrudList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        if (typeReset != null) {
-            this.usaBottoneDeleteAll = typeReset.isUsaBottoneDeleteAll();
-            this.usaBottoneResetDelete = typeReset.isUsaBottoneResetDelete();
-            this.usaBottoneResetAdd = typeReset.isUsaBottoneResetAdd();
-            this.usaBottoneNew = typeReset.isUsaBottoneNew();
-            this.usaBottoneEdit = typeReset.isUsaBottoneEdit();
-            this.usaBottoneShows = typeReset.isUsaBottoneShows();
-            this.usaBottoneDeleteEntity = typeReset.isUsaBottoneDeleteEntity();
-            this.usaBottoneSearch = typeReset.isUsaBottoneSearch();
-            this.usaBottoneExport = typeReset.isUsaBottoneExport();
+        if (typeList != null) {
+            this.usaBottoneDeleteAll = typeList.isUsaBottoneDeleteAll();
+            this.usaBottoneResetDelete = typeList.isUsaBottoneResetDelete();
+            this.usaBottoneResetAdd = typeList.isUsaBottoneResetAdd();
+            this.usaBottoneNew = typeList.isUsaBottoneNew();
+            this.usaBottoneEdit = typeList.isUsaBottoneEdit();
+            this.usaBottoneShows = typeList.isUsaBottoneShows();
+            this.usaBottoneDeleteEntity = typeList.isUsaBottoneDeleteEntity();
+            this.usaBottoneSearch = typeList.isUsaBottoneSearch();
+            this.usaBottoneExport = typeList.isUsaBottoneExport();
         }
 
+        this.usaInfoDownload = true;
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
 
@@ -206,18 +207,18 @@ public abstract class WikiList extends CrudList {
         //        if (usaBottoneResetAdd) {
         //            buttonBar.resetAdd();
         //        }
-        //        if (usaBottoneNew) {
-        //            buttonBar.add();
-        //        }
-        //        if (usaBottoneEdit) {
-        //            buttonBar.edit();
-        //        }
-        //        if (usaBottoneShows) {
-        //            buttonBar.shows();
-        //        }
-        //        if (usaBottoneDeleteEntity) {
-        //            buttonBar.deleteEntity();
-        //        }
+        if (usaBottoneNew) {
+            buttonBar.add();
+        }
+        if (usaBottoneEdit) {
+            buttonBar.edit();
+        }
+        if (usaBottoneShows) {
+            buttonBar.shows();
+        }
+        if (usaBottoneDeleteEntity) {
+            buttonBar.deleteEntity();
+        }
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
             buttonBar.searchField(searchFieldName);
         }

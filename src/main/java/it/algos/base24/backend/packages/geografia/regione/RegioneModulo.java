@@ -64,13 +64,13 @@ public class RegioneModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public RegioneEntity newEntity(int ordine, String nome, String sigla, StatoEntity stato, String linkPagina, TypeRegione type) {
+    public RegioneEntity newEntity(int ordine, String nome, String sigla, StatoEntity stato, String pagina, TypeRegione type) {
         RegioneEntity newEntityBean = RegioneEntity.builder()
                 .ordine(ordine == 0 ? nextOrdine() : ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .sigla(textService.isValid(sigla) ? sigla : null)
                 .stato(stato)
-                .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
+                .pagina(textService.isValid(pagina) ? pagina : null)
                 .type(type)
                 .build();
 

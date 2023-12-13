@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.attsingolare;
+package it.algos.wiki24.backend.packages.nazsingolare;
 
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "attsingolare", keyPropertyName = "singolare", typeList = TypeList.hardWiki)
-public class AttSingolareEntity extends AbstractEntity {
+@AEntity(collectionName = "nazsingolare", keyPropertyName = "singolare", typeList = TypeList.hardWiki)
+public class NazSingolareEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, headerText = "singolare", widthRem = 20)
     public String singolare;
@@ -21,15 +21,11 @@ public class AttSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
 
-    @AField(type = TypeField.booleano)
-    public boolean ex;
-
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.integer,  caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 6)
+    @AField(type = TypeField.integer,  caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 6)
     public int bio;
-
     @Override
     public String toString() {
         return singolare;

@@ -271,7 +271,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonDownload);
     }
 
-    private void addNew() {
+    protected void addNew() {
         buttonNew.getElement().setAttribute("theme", "primary");
         buttonNew.getElement().setProperty("title", "New: aggiunge un elemento alla collezione");
         buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
@@ -281,7 +281,7 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-    private void addEdit() {
+    protected void addEdit() {
         buttonEdit.getElement().setAttribute("theme", "primary");
         buttonEdit.getElement().setProperty("title", "Edit: modifica il singolo elemento selezionato");
         buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
@@ -290,7 +290,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonEdit);
     }
 
-    private void addShows() {
+    protected void addShows() {
         buttonShow.getElement().setAttribute("theme", "primary");
         buttonShow.getElement().setProperty("title", "Shows: mostra il singolo elemento selezionato");
         buttonShow.setIcon(new Icon(VaadinIcon.POINTER));
@@ -300,7 +300,7 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-    private void addDeleteEntity() {
+    protected void addDeleteEntity() {
         buttonDeleteEntity.getElement().setAttribute("theme", "primary");
         buttonDeleteEntity.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteEntity.getElement().setProperty("title", "Delete: cancella il singolo elemento selezionato");

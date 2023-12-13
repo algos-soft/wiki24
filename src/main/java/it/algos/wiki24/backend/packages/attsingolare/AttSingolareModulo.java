@@ -83,13 +83,13 @@ public class AttSingolareModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex, String linkAttivita) {
+    public AttSingolareEntity newEntity(final String keyPropertyValue, String plurale, boolean ex, String pagina) {
         AttSingolareEntity newEntityBean = AttSingolareEntity.builder()
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .ex(ex)
-                .linkAttivita(linkAttivita)
-                .numBio(0)
+                .pagina(pagina)
+                .bio(0)
                 .build();
 
         return (AttSingolareEntity) fixKey(newEntityBean);
@@ -134,13 +134,33 @@ public class AttSingolareModulo extends WikiModulo {
         }
     }
 
+    public List<AttSingolareEntity> findAllByPlurale(AttSingolareEntity plurale) {
+        return this.findAllByProperty("plurale", plurale.plurale);
+    }
     public List<AttSingolareEntity> findAllByPlurale(String plurale) {
         return this.findAllByProperty("plurale", plurale);
     }
 
 
+    public List<String> findSingolariByPlurale(AttSingolareEntity plurale) {
+        return findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList());
+    }
     public List<String> findSingolariByPlurale(String plurale) {
         return findAllByPlurale(plurale).stream().map(att -> att.singolare).collect(Collectors.toList());
+    }
+
+    public List<AttSingolareEntity> findAllByDistinctPlurale() {
+        List<AttSingolareEntity> lista = new ArrayList<>();
+        Set<String> setPlurali = new HashSet();
+        List<AttSingolareEntity> listaAll = findAll();
+
+        for (AttSingolareEntity attivita : listaAll) {
+            if (setPlurali.add(attivita.plurale)) {
+                lista.add(attivita);
+            }
+        }
+
+        return lista;
     }
 
     public List<String> findPluraliByDistinct() {
@@ -267,7 +287,7 @@ public class AttSingolareModulo extends WikiModulo {
         for (String key : mappa.keySet()) {
             if (mappaBeans.containsKey(key)) {
                 oldBean = (AttSingolareEntity) mappaBeans.get(key);
-                oldBean.linkAttivita = mappa.get(key);
+                oldBean.pagina = textService.primaMaiuscola(mappa.get(key));
             }
             else {
                 message = String.format("Nel modulo %s c'è l'attività [%s] che però non trovo nelle attività singolari", modulo, key);

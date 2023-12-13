@@ -1,39 +1,28 @@
-package it.algos.wiki24.backend.packages.attsingolare;
+package it.algos.wiki24.backend.packages.nazsingolare;
 
-import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
-import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
-import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.importexport.*;
+import it.algos.base24.backend.list.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
-import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
-import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.*;
-
-import javax.inject.*;
-import java.util.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class AttSingolareList extends WikiList {
-
-
-    private IndeterminateCheckbox checkEx;
+public class NazSingolareList extends WikiList {
 
     protected TextField searchPlurale = new TextField();
 
-    public AttSingolareList(final AttSingolareModulo crudModulo) {
+    public NazSingolareList(final NazSingolareModulo crudModulo) {
         super(crudModulo);
     }
 
@@ -82,6 +71,7 @@ public class AttSingolareList extends WikiList {
         alertPlaceHolder.add(ASpan.text(message).rosso().small());
     }
 
+
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
@@ -93,11 +83,6 @@ public class AttSingolareList extends WikiList {
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
         buttonBar.add(searchPlurale);
-
-        checkEx = new IndeterminateCheckbox("Ex attività");
-        checkEx.getStyle().set("margin-top", "0.5rem");
-        checkEx.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(checkEx);
     }
 
 
@@ -119,22 +104,6 @@ public class AttSingolareList extends WikiList {
         else {
             filtri.remove(propertyPlurale);
             filtri.sort(basicSortOrder);
-        }
-
-        String propertyEx = "ex";
-        if (checkEx != null) {
-            if (checkEx.isIndeterminate()) {
-                filtri.remove(propertyEx);
-                filtri.sort(basicSortOrder);
-            }
-            else if (checkEx.getValue()) {
-                filtri.add(propertyEx, true);
-                filtri.sort(Sort.Order.asc(propertyEx));
-            }
-            else {
-                filtri.add(propertyEx, false);
-                filtri.sort(Sort.Order.asc(propertyEx));
-            }
         }
     }
 

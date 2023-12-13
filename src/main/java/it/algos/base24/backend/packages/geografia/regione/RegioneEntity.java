@@ -29,8 +29,8 @@ public class RegioneEntity extends AbstractEntity {
     @AField(type = TypeField.linkDBRef, widthRem = 14)
     public StatoEntity stato;
 
-    @AField(type = TypeField.linkWiki, headerText = "Pagina", widthRem = 12)
-    public String linkPagina;
+    @AField(type = TypeField.linkWiki)
+    public String pagina;
 
     @AField(type = TypeField.text, widthRem = 20)
     public TypeRegione type;

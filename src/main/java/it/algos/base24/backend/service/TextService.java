@@ -127,7 +127,7 @@ public class TextService {
             tag = tagIniziale.trim();
             if (testoOut.startsWith(tag)) {
                 pos = testoOut.indexOf(tagIniziale);
-                if (pos>-1) {
+                if (pos > -1) {
                     testoOut = testoOut.substring(pos + tag.length());
                 }
             }
@@ -558,6 +558,7 @@ public class TextService {
 
         return testoOut.trim();
     }
+
     /**
      * Elimina il testo prima di tagIniziale, levando anche il tag. <br>
      * <p>
@@ -756,7 +757,6 @@ public class TextService {
     }
 
 
-
     /**
      * Elimina (eventuali) graffe doppie in testa e coda della stringa.
      * Funziona solo se le graffe sono esattamente in TESTA e in CODA alla stringa
@@ -784,8 +784,6 @@ public class TextService {
     }
 
 
-
-
     /**
      * Elimina (eventuali) 'doppi apici' " in testa ed in coda alla stringa. <br>
      * Se arriva una stringa vuota, restituisce una stringa vuota <br>
@@ -804,6 +802,17 @@ public class TextService {
                 stringaOut = this.levaTesta(stringaOut, doppioApice);
                 stringaOut = this.levaCoda(stringaOut, doppioApice);
             }
+        }
+
+        return stringaOut.trim();
+    }
+
+
+    public String setQuadre(String stringaIn) {
+        String stringaOut = stringaIn.trim();
+
+        if (this.isValid(stringaOut)) {
+            stringaOut = QUADRA_INI + stringaOut + QUADRA_END;
         }
 
         return stringaOut.trim();

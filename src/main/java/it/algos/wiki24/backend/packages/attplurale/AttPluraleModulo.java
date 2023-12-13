@@ -63,7 +63,7 @@ public class AttPluraleModulo extends WikiModulo {
      */
     @Override
     public AttPluraleEntity newEntity() {
-        return newEntity(VUOTA, null, VUOTA, 0, 0, false, false);
+        return newEntity(VUOTA, null, VUOTA, VUOTA, 0, 0, false, false);
     }
 
     /**
@@ -75,17 +75,19 @@ public class AttPluraleModulo extends WikiModulo {
      */
     public AttPluraleEntity newEntity(
             String plurale,
-            List<String> listaSingolari,
-            String paginaLista,
-            int numbio,
+            List<String> singolari,
+            String lista,
+            String pagina,
+            int bio,
             int numSingolari,
             boolean superaSoglia,
             boolean esisteLista) {
         AttPluraleEntity newEntityBean = AttPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
-                .listaSingolari(listaSingolari)
-                .paginaLista(paginaLista)
-                .numBio(numbio)
+                .singolari(singolari)
+                .lista(lista)
+                .pagina(pagina)
+                .bio(bio)
                 .numSingolari(numSingolari)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
@@ -112,28 +114,32 @@ public class AttPluraleModulo extends WikiModulo {
     public void download() {
         inizio = System.currentTimeMillis();
 
-        //        attSingolareModulo.download();
-        creaTavolaDistinct();
-        downloadAttivitaLink();
+        super.deleteAll();
+
+        attSingolareModulo.download();
+        this.creaTavolaDistinct();
+
+        mappaBeans.values().stream().forEach(bean -> insertSave(bean));
 
         super.fixDownload(inizio);
     }
 
 
     public void creaTavolaDistinct() {
-        List<String> listaDistintiPlurali = null;
+        List<AttSingolareEntity> listaAttSingolariDistinte = attSingolareModulo.findAllByDistinctPlurale(); ;
         AttPluraleEntity newBean;
         List<String> listaSingolari;
 
-        listaDistintiPlurali = attSingolareModulo.findPluraliByDistinct();
+        if (listaAttSingolariDistinte == null || listaAttSingolariDistinte.size() < 1) {
+            message = String.format("Non sono riuscito a leggere da mongoDB la collection  %s", "attsingolare");
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return;
+        }
 
-        if (listaDistintiPlurali != null && listaDistintiPlurali.size() > 0) {
-            deleteAll();
-            for (String key : listaDistintiPlurali) {
-                listaSingolari = attSingolareModulo.findSingolariByPlurale(key);
-//                newBean = newEntity(key, listaSingolari, "Arcieri", "Calcio a 5", 0, 0, false, false);
-//                insertSave(newBean);
-            }
+        for (AttSingolareEntity att : listaAttSingolariDistinte) {
+            listaSingolari = attSingolareModulo.findSingolariByPlurale(att);
+            newBean = newEntity(att.plurale, listaSingolari, textService.primaMaiuscola(att.plurale), textService.primaMaiuscola(att.pagina), 0, 0, false, false);
+            mappaBeans.put(att.plurale, newBean);
         }
     }
 
@@ -145,55 +151,55 @@ public class AttPluraleModulo extends WikiModulo {
      */
     public void downloadAttivitaLink() {
         String moduloLink = TAG_MODULO + "Link attività";
-//        String attSingolareNome;
-//        String attPluraleNome;
+        //        String attSingolareNome;
+        //        String attPluraleNome;
         String singolare;
         String plurale;
         String paginaAttivitaOld;
         String paginaAttivitaNew;
-//        AttSingolare attivitaSin;
-//        AttPlurale attivitaPlur;
+        //        AttSingolare attivitaSin;
+        //        AttPlurale attivitaPlur;
         List listaMancanti = new ArrayList();
         List listaDiversi = new ArrayList();
 
         Map<String, String> mappa = wikiApiService.leggeMappaModulo(moduloLink);
 
-//        for (AttPlurale att : findAll()) {
-//            att.linkAttivita = VUOTA;
-//            update(att);
-//        }
+        //        for (AttPlurale att : findAll()) {
+        //            att.linkAttivita = VUOTA;
+        //            update(att);
+        //        }
 
         if (mappa != null && mappa.size() > 0) {
             for (Map.Entry<String, String> entry : mappa.entrySet()) {
                 singolare = entry.getKey();
                 plurale = entry.getValue();
-//                paginaAttivitaNew = textService.primaMaiuscola(paginaAttivitaNew);
-//                attivitaSin = attSingolareBackend.findByKey(attSingolareNome);
+                //                paginaAttivitaNew = textService.primaMaiuscola(paginaAttivitaNew);
+                //                attivitaSin = attSingolareBackend.findByKey(attSingolareNome);
 
-//                if (attivitaSin == null) {
-//                    listaMancanti.add(attSingolareNome);
-//                    continue;
-//                }
+                //                if (attivitaSin == null) {
+                //                    listaMancanti.add(attSingolareNome);
+                //                    continue;
+                //                }
 
-//                attPluraleNome = attivitaSin.plurale;
-//                attivitaPlur = findByKey(attPluraleNome);
-//                paginaAttivitaOld = attivitaPlur.linkAttivita;
+                //                attPluraleNome = attivitaSin.plurale;
+                //                attivitaPlur = findByKey(attPluraleNome);
+                //                paginaAttivitaOld = attivitaPlur.linkAttivita;
 
-//                if (textService.isEmpty(paginaAttivitaOld)) {
-//                    attivitaPlur.linkAttivita = paginaAttivitaNew;
-//                    update(attivitaPlur);
-//                }
-//                else {
-//                    if (!paginaAttivitaNew.equals(paginaAttivitaOld)) {
-//                        listaDiversi.add(paginaAttivitaNew);
-//                    }
-//                }
+                //                if (textService.isEmpty(paginaAttivitaOld)) {
+                //                    attivitaPlur.linkAttivita = paginaAttivitaNew;
+                //                    update(attivitaPlur);
+                //                }
+                //                else {
+                //                    if (!paginaAttivitaNew.equals(paginaAttivitaOld)) {
+                //                        listaDiversi.add(paginaAttivitaNew);
+                //                    }
+                //                }
             }
 
-//            fixDiversi(listaDiversi);
-//            result.setLista(listaDiversi);
-//            result.setLista(listaMancanti);
-//            super.fixDownloadModulo(moduloLink);
+            //            fixDiversi(listaDiversi);
+            //            result.setLista(listaDiversi);
+            //            result.setLista(listaMancanti);
+            //            super.fixDownloadModulo(moduloLink);
         }
         else {
             message = String.format("Non sono riuscito a leggere da wiki il modulo %s", moduloLink);

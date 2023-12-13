@@ -27,8 +27,6 @@ public class AttPluraleList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-
-        super.usaInfoDownload = true;
     }
 
     @Override
@@ -36,29 +34,35 @@ public class AttPluraleList extends WikiList {
         String categoria = TAG_WIKI + "Categoria:Bio attività";
         String modulo = PATH_MODULO;
 
-        Anchor anchor1 = new Anchor(modulo + PATH_LINK + ATT_LOWER, PATH_LINK + ATT_LOWER);
-        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        //        Anchor anchor1 = new Anchor(modulo + PATH_LINK + ATT_LOWER, PATH_LINK + ATT_LOWER);
+        //        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        Anchor anchor2 = new Anchor(categoria, "Categoria");
+        Anchor anchor2 = new Anchor(categoria, textService.setQuadre("Categoria"));
         anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        Anchor anchor3 = new Anchor(TAG_WIKI + PATH_STATISTICHE_ATTIVITA, STATISTICHE);
+        Anchor anchor3 = new Anchor(TAG_WIKI + PATH_STATISTICHE_ATTIVITA, textService.setQuadre(STATISTICHE));
         anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
-        message = "Tavola di base. Costruita dai moduli Wiki: ";
+        message = "Tavola di base. Vedi pagine wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2, new Text(SEP), anchor3));
+        alertPlaceHolder.add(new Span(testo, anchor2, new Text(SEP), anchor3));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le attività plurali sono convertite in minuscolo.";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
-        message = String.format("Download%sCancella tutto. Esegue un download di AttSingolare. Crea una nuova tavola dai plurali (DISTINCT) di AttSingolare.", FORWARD);
+        message = String.format("Download%sCancella tutto. Esegue un download di AttSingolare.", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
-        message = String.format("Download%sCrea un link alla PaginaLista di ogni attività. Scarica il modulo wiki [%s]. Crea un link ad ogni Attività.", FORWARD, PATH_LINK + ATT_LOWER);
+        message = String.format("Download%sCrea una nuova tavola dai plurali (DISTINCT) di AttSingolare.", FORWARD);
         alertPlaceHolder.add(ASpan.text(message).rosso());
+        message = String.format("Download%sCrea un link alla PaginaLista. Crea un link alla pagina di Attività.", FORWARD);
+        alertPlaceHolder.add(ASpan.text(message).rosso());
+        message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività plurale.", FORWARD);
+        alertPlaceHolder.add(ASpan.text(message).rosso());
+        message = "Gestisce l'elaborazione delle liste biografiche e gli upload delle liste di Attività.";
+        alertPlaceHolder.add(ASpan.text(message).rosso().small());
     }
 
 }// end of CrudList class
