@@ -189,7 +189,9 @@ public class ColumnService {
             if (type == TypeField.ordine) {
                 colonna.setHeader("#");
             }
-
+        }
+        else {
+            return colonna;
         }
 
         if (textService.isEmpty(colonna.getKey())) {

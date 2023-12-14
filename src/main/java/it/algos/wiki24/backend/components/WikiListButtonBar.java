@@ -104,4 +104,22 @@ public class WikiListButtonBar extends ListButtonBar {
     }
 
 
+    public boolean sincroSelection(boolean singoloSelezionato) {
+        buttonDeleteAll.setEnabled(!singoloSelezionato);
+        buttonResetDelete.setEnabled(!singoloSelezionato);
+        buttonResetAdd.setEnabled(!singoloSelezionato);
+        buttonResetPref.setEnabled(!singoloSelezionato);
+        buttonDownload.setEnabled(!singoloSelezionato);
+        buttonElabora.setEnabled(!singoloSelezionato);
+        buttonNew.setEnabled(!singoloSelezionato);
+        buttonEdit.setEnabled(singoloSelezionato);
+        buttonShow.setEnabled(singoloSelezionato);
+        buttonDeleteEntity.setEnabled(singoloSelezionato);
+        if (downloadAnchor != null) {
+            downloadAnchor.setEnabled(!singoloSelezionato);
+        }
+
+        return singoloSelezionato;
+    }
+
 }

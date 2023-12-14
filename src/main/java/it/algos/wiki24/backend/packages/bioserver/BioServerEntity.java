@@ -1,0 +1,55 @@
+package it.algos.wiki24.backend.packages.bioserver;
+
+import it.algos.base24.backend.annotation.*;
+import it.algos.base24.backend.entity.*;
+import it.algos.base24.backend.enumeration.*;
+import jakarta.validation.constraints.*;
+import lombok.*;
+import org.springframework.data.mongodb.core.index.*;
+import org.springframework.stereotype.*;
+import org.springframework.stereotype.Indexed;
+
+import java.time.*;
+
+@Component
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(callSuper = true)
+@AEntity(collectionName = "bioserver", typeList = TypeList.standard)
+public class BioServerEntity extends AbstractEntity {
+
+    @Positive()
+    @AField(type = TypeField.lungo, widthRem = 7)
+    public long pageId;
+
+
+    @NotBlank()
+    @AField(type = TypeField.text, widthRem = 16)
+    public String wikiTitle;
+
+    //    @Lob
+    @AField(type = TypeField.textArea, widthRem = 48)
+    public String tmplBio;
+
+
+    @AField(type = TypeField.localDateTime)
+    public LocalDateTime lastServer;
+
+
+    @AField(type = TypeField.localDateTime)
+    public LocalDateTime lastMongo;
+
+    /**
+     * valido se lastMongo >= timestamp
+     */
+    @AField(type = TypeField.booleano)
+    public boolean valido;
+
+    @Override
+    public String toString() {
+        return wikiTitle;
+    }
+
+}// end of crud entity class
