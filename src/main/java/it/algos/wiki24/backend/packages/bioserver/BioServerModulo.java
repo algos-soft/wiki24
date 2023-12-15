@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -19,7 +20,7 @@ import com.vaadin.flow.component.textfield.TextField;
  * Time: 21:41
  */
 @Service
-public class BioServerModulo extends CrudModulo {
+public class BioServerModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>

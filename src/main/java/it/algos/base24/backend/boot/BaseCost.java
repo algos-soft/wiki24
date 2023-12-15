@@ -15,6 +15,9 @@ import java.util.*;
 @Service
 public class BaseCost {
 
+
+    public static final String NULL = "(null)";
+
     public static final String TAG_INIZIALE = "http://";
 
     public static final String TAG_INIZIALE_SECURE = "https://";

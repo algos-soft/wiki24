@@ -4,6 +4,7 @@ import com.vaadin.flow.component.*;
 import static com.vaadin.flow.component.Tag.*;
 import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.base24.backend.boot.BaseCost.WIKI_PARSE;
 import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.boot.WikiCost.SUMMARY;

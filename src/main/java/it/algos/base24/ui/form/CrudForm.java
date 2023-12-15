@@ -7,7 +7,9 @@ import com.vaadin.flow.component.formlayout.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.data.binder.*;
+import com.vaadin.flow.data.converter.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
@@ -197,7 +199,7 @@ public abstract class CrudForm extends Dialog {
     protected void fixHeader() {
         String message;
         String tag;
-        String collectionName=VUOTA;
+        String collectionName = VUOTA;
 
         tag = switch (crudOperation) {
             case shows -> FORM_TAG_SHOW;
@@ -206,7 +208,7 @@ public abstract class CrudForm extends Dialog {
         };
 
         // @todo ATTENTION QUI
-//        collectionName = annotationService.getCollectionName(currentCrudModulo.getCurrentCrudModelClazz());
+        //        collectionName = annotationService.getCollectionName(currentCrudModulo.getCurrentCrudModelClazz());
         message = String.format("%s%s%s", tag, SPAZIO, collectionName);
         this.setHeaderTitle(message);
     }
@@ -242,6 +244,7 @@ public abstract class CrudForm extends Dialog {
     protected void binderFields() {
         String key2;
         AbstractField field;
+        TypeField type;
 
         //--crea e regola un nuovo binder (vuoto) per questo Dialog e questa entityBean (currentItem)
         binder = new BeanValidationBinder(currentEntityModel.getClass());
@@ -249,9 +252,19 @@ public abstract class CrudForm extends Dialog {
         //--aggiunge i valori dei fields al binder
         for (String key : mappaFields.keySet()) {
             field = mappaFields.get(key);
+            type = annotationService.getType(currentEntityModel.getClass(), key);
             key2 = field.getElement().getAttribute(KEY_TAG_PROPERTY_KEY);
             if (textService.isValid(key2)) {
-                binder.forField(field).bind(key2);
+                if (type == TypeField.lungo) {
+                    String message = String.format("%s deve contenere solo caratteri numerici", key);
+                    StringToLongConverter longConverter = new StringToLongConverter(0L, message);
+                    binder.forField(field)
+                            .withConverter(longConverter)
+                            .bind(key);
+                }
+                else {
+                    binder.forField(field).bind(key2);
+                }
             }
         }
 
@@ -297,6 +310,12 @@ public abstract class CrudForm extends Dialog {
         }
 
         this.add(formLayout);
+
+        for (String key : mappaFields.keySet()) {
+            if (mappaFields.get(key) instanceof TextArea testoAreaField) {
+                formLayout.setColspan(testoAreaField, numResponsiveStepColumn);
+            }
+        }
     }
 
     /**

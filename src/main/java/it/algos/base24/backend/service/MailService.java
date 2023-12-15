@@ -7,7 +7,6 @@ import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import org.springframework.core.env.*;
 import org.springframework.mail.javamail.*;
-import org.springframework.stereotype.*;
 import org.springframework.stereotype.Service;
 
 import javax.inject.*;

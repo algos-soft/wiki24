@@ -18,6 +18,9 @@ public class NotaEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String code;
 
+    @AField(type = TypeField.lungo)
+    public long lungo;
+
     @Override
     public String toString() {
         return code;

@@ -38,8 +38,8 @@ public class FieldService {
     @Autowired
     ApplicationContext applicationContext;
 
-//    @Autowired
-//    PreferenzaModulo preferenzaModulo;
+    //    @Autowired
+    //    PreferenzaModulo preferenzaModulo;
     // @todo ATTENTION QUI
 
     @Autowired
@@ -100,8 +100,12 @@ public class FieldService {
             case text:
             case phone:
                 yield new TextField(caption);
+            case textArea:
+                yield new TextArea(caption);
             case integer, ordine:
                 yield new IntegerField(caption);
+            case lungo:
+                yield new TextField(caption);
             case booleano:
                 yield new Checkbox(caption);
             case localDateTime:
