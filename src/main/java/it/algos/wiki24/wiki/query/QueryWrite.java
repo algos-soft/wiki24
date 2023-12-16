@@ -183,7 +183,7 @@ public class QueryWrite extends AQuery {
 
         oldTextAll = appContext.getBean(QueryRead.class).getText(wikiTitleGrezzo);
         if (textService.isValid(oldTextAll)) {
-            if (oldTextAll.contains(newTextSignificativo)) {
+            if (!oldTextAll.contains(newTextSignificativo)) {
                 modificataSignificativamente = false;
             }
         }
