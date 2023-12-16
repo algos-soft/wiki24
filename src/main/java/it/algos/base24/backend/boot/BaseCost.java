@@ -16,7 +16,7 @@ import java.util.*;
 public class BaseCost {
 
 
-    public static final String NULL = "(null)";
+    public static final String KEY_NULL = "null";
 
     public static final String TAG_INIZIALE = "http://";
 
@@ -117,6 +117,8 @@ public class BaseCost {
     public static final String FORWARD = " -> ";
 
     public static final String NULLO = "(null)";
+
+    public static final String TAG_VUOTA = "VUOTA";
 
     public static final String SEP = SPAZIO + TRATTINO + SPAZIO;
 
@@ -376,6 +378,7 @@ public class BaseCost {
     public static final int DOPO_CRISTO_MAX = 2030;
 
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
+
     public static final String MAIL_TO = "gac@algos.it";
 
 

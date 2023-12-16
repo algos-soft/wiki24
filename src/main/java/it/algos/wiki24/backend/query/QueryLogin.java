@@ -4,17 +4,20 @@ import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
+import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.apache.poi.ss.formula.functions.*;
 import org.json.simple.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.*;
 
+import javax.inject.*;
 import java.net.*;
 import java.util.*;
 
@@ -28,6 +31,7 @@ import java.util.*;
  * <li> Ogni utilizzo del bot deve essere preceduto da un login </li>
  * <li> Il login deve essere effettuato tramite le API </li>
  * <li> Il login deve essere effettuato con nickname e password </li>
+ * <li> Nickname e password vengono letti da config.application.properties </li>
  * <li> Controlla che l'accesso abbia un risultato positivo </li>
  * </ul>
  * Due request: GET e POST
@@ -54,14 +58,6 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class QueryLogin extends AQuery {
 
-
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata dal framework SpringBoot/Vaadin usando il metodo setter() <br>
-     * al termine del ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
-    public Environment environment;
 
     /**
      * Valore di collegamento iniziale <br>
@@ -127,57 +123,82 @@ public class QueryLogin extends AQuery {
 
     private TypeUser typeUser;
 
+    private String property;
+
+    private String message;
+
+    public QueryLogin() {
+    }
+
     public WResult urlRequestHamed() {
-        return urlRequest("Hamed","sokoto79");
+        typeUser = TypeUser.user;
+
+        try {
+            property = "wiki24.user.loginName";
+            loginName = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+        try {
+            property = "wiki24.user.loginPassword";
+            loginPassword = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        return urlRequest();
     }
+
     public WResult urlRequestGac() {
-        this.loginName = "gac";
-        this.loginPassword = "Sokoto@1979";
-        return urlRequest(TypeUser.admin);
+        typeUser = TypeUser.admin;
+
+        try {
+            property = "wiki24.admin.loginName";
+            loginName = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+        try {
+            property = "wiki24.admin.loginPassword";
+            loginPassword = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        return urlRequest();
     }
+
     public WResult urlRequestBot() {
-        this.loginName = "Biobot";
-        this.loginPassword = "lhgfmeb8ckefkniq85qmhul18r689nbq";
-        return urlRequest(TypeUser.bot);
+        typeUser = TypeUser.bot;
+
+        try {
+            property = "wiki24.bot.loginName";
+            loginName = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+        try {
+            property = "wiki24.bot.loginPassword";
+            loginPassword = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            message = String.format("Non ho trovato la property %s nelle risorse", property);
+            logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        }
+
+        return urlRequest();
     }
+
     public WResult urlRequest(String loginName, String loginPassword) {
         this.loginName = loginName;
         this.loginPassword = loginPassword;
-        return urlRequest(TypeUser.user);
+        return urlRequest();
     }
 
-    public WResult fixUserPassword(TypeUser typeUser) {
-        WResult result = WResult.valido();
-        this.typeUser = typeUser;
-        String message;
-
-        if (textService.isEmpty(loginName)) {
-            try {
-                message = String.format("wiki24%s.loginName", typeUser.tagLogin());
-                loginName = Objects.requireNonNull(environment.getProperty(message));
-            } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_NAME)).usaDb());
-                result.errorMessage(PROPERTY_LOGIN_NAME);
-            }
-        }
-
-        if (textService.isEmpty(loginPassword)) {
-            try {
-                message = String.format("wiki24%s.loginPassword", typeUser.tagLogin());
-                loginPassword = Objects.requireNonNull(environment.getProperty(message));
-            } catch (Exception unErrore) {
-                logger.error(new WrapLog().exception(new AlgosException(PROPERTY_LOGIN_PASSWORD)).usaDb());
-                result.errorMessage(PROPERTY_LOGIN_PASSWORD);
-            }
-        }
-
-        result.setFine();
-        return result;
-    }
-
-    public WResult urlRequest() {
-        return urlRequest(TypeUser.bot);
-    }
 
     /**
      * Request al software mediawiki composta di due request <br>
@@ -197,16 +218,10 @@ public class QueryLogin extends AQuery {
      *
      * @return wrapper di informazioni
      */
-    public WResult urlRequest(TypeUser typeUser) {
+    public WResult urlRequest() {
         typeQuery = TypeQuery.login;
-        WResult result = fixUserPassword(typeUser);
+        WResult result;
 
-        if (result.isErrato()) {
-            if (botLogin != null) {
-                botLogin.reset();
-            }
-            return result;
-        }
         this.reset();
 
         //--La prima request è di tipo GET
@@ -243,7 +258,8 @@ public class QueryLogin extends AQuery {
         try {
             urlConn = this.creaGetConnection(urlDomain);
             urlResponse = sendRequest(urlConn);
-            result.setCookies(downlodCookies(urlConn));
+            cookies = downlodCookies(urlConn);
+            result.setCookies(cookies);
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -325,7 +341,7 @@ public class QueryLogin extends AQuery {
             uploadCookies(urlConn, result.getCookies());
             addPostConnection(urlConn);
             urlResponse = sendRequest(urlConn);
-            result.setMappa(downlodCookies(urlConn));
+            result.setCookies(downlodCookies(urlConn));
         } catch (Exception unErrore) {
         }
 
@@ -380,9 +396,11 @@ public class QueryLogin extends AQuery {
             }
             if (valido) {
                 result.setCodeMessage(JSON_SUCCESS);
+                result.typeResult(TypeResult.querySuccess);
             }
             else {
                 result.setValido(false);
+                result.typeResult(TypeResult.queryError);
                 result.setErrorCode(jsonResult.toString());
                 result.setErrorMessage((String) jsonLogin.get(JSON_REASON));
                 return result;
@@ -398,11 +416,16 @@ public class QueryLogin extends AQuery {
 
         //--trasferisce nella istanza singleton BotLogin i cookies per essere utilizzati in tutte le query
         if (valido) {
+            String userName = result.getCookies().get("itwikiUserName");
+            String userID = result.getCookies().get("itwikiUserID");
+            cookies.put("itwikiUserName", userName);
+            cookies.put("itwikiUserID", userID);
             botLogin.setValido(true);
             botLogin.setBot(typeUser == TypeUser.bot);
             botLogin.setLguserid(lguserid);
             botLogin.setLgusername(lgusername);
             botLogin.setUserType(typeUser);
+            botLogin.setCookies(cookies);
             botLogin.setResult(result);
             result.setUserType(typeUser);
             result.setResponse(jsonLogin.toString());

@@ -27,6 +27,14 @@ import java.util.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class QueryAssert extends AQuery {
 
+    public static final String RESPONSE_NO_LOGIN = "Manca il botLogin";
+
+    public static final String RESPONSE_NO_QUERY = "BotLogin non ha registrato nessuna chiamata di QueryLogin";
+
+    public static final String RESPONSE_NO_COOKIES = "Mancano i cookies nel result di botLogin";
+
+    public static final String RESPONSE_NO_RIGHT = "You do not have the bot right, so the action could not be completed.";
+
 
     public QueryAssert() {
         super();
@@ -60,16 +68,16 @@ public class QueryAssert extends AQuery {
         //--se manca il botLogin
         if (botLogin == null) {
             result.setValido(false);
-            result.setErrorCode(JSON_BOT_LOGIN);
-            result.setMessage("Manca il botLogin");
+            result.setErrorCode(ERROR_JSON_BOT_NO_LOGIN);
+            result.setMessage(RESPONSE_NO_LOGIN);
             return result;
         }
 
         //--se il botLogin non ha registrato nessuna chiamata di QueryLogin
         if (botLogin.getResult() == null) {
             result.setValido(false);
-            result.setErrorCode(JSON_NOT_QUERY_LOGIN);
-            result.setMessage("Il botLogin non ha registrato nessuna chiamata di QueryLogin");
+            result.setErrorCode(ERROR_JSON_BOT_NO_QUERY);
+            result.setMessage(RESPONSE_NO_QUERY);
             return result;
         }
 
@@ -77,8 +85,8 @@ public class QueryAssert extends AQuery {
         cookies = botLogin.getCookies();
         if (cookies == null || cookies.size() < 1) {
             result.setValido(false);
-            result.setErrorCode(JSON_COOKIES);
-            result.setMessage("Mancano i cookies nel result di botLogin");
+            result.setErrorCode(ERROR_JSON_BOT_NO_COOKIES);
+            result.setMessage(RESPONSE_NO_COOKIES);
             return result;
         }
 
@@ -116,6 +124,8 @@ public class QueryAssert extends AQuery {
 
         if ((boolean) mappaUrlResponse.get(KEY_JSON_ERROR)) {
             result.setValido(false);
+            result.setErrorCode(ERROR_JSON_BOT_NO_RIGHT);
+            result.setErrorMessage(RESPONSE_NO_RIGHT);
         }
 
         return result;

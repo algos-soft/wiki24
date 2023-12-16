@@ -18,6 +18,7 @@ import org.mockito.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
+import javax.inject.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -34,6 +35,8 @@ import java.util.stream.*;
  */
 public abstract class WikiTest extends AlgosTest {
 
+    protected String clazzName;
+
     public static int MAX = 175;
 
     protected static final String OBBLIGATORIO = "(obbligatorio - ancora da regolare)";
@@ -48,19 +51,19 @@ public abstract class WikiTest extends AlgosTest {
      * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
-    @Autowired
+    @Inject
     public ApplicationContext appContext;
 
-    @Autowired
+    @Inject
     protected MongoService mongoService;
 
-    @Autowired
+    @Inject
     public WikiBotService wikiBotService;
 
-    @Autowired
+    @Inject
     public LogService logger;
 
-    @Autowired
+    @Inject
     TextService textService;
     //    @Autowired
     //    public ElaboraService elaboraService;
@@ -86,10 +89,10 @@ public abstract class WikiTest extends AlgosTest {
     //    @Autowired
     //    public NazionalitaBackend nazionalitaBackend;
 
-    @Autowired
+    @Inject
     public BotLogin botLogin;
 
-    @Autowired
+    @Inject
     public DateService dateService;
 
     //    protected CrudBackend crudBackend;
@@ -215,8 +218,6 @@ public abstract class WikiTest extends AlgosTest {
     //    protected LinkedHashMap<String, List<WrapLista>> mappaWrap;
 
     protected Class clazz;
-
-    protected String clazzName;
 
     protected String clazzTestName;
 
@@ -738,48 +739,10 @@ public abstract class WikiTest extends AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void initMocks() {
-        //        super.initMocks();
-
-        //        assertNotNull(wikiBotService);
-        //        assertNotNull(elaboraService);
-        //        assertNotNull(didascaliaService);
-        //        assertNotNull(bioService);
-        //        assertNotNull(bioBackend);
-        //        assertNotNull(botLogin);
-        //        assertNotNull(queryService);
-        //        assertNotNull(downloadService);
-        //        assertNotNull(wikiUtility);
-        //        assertNotNull(giornoBackend);
-        //        assertNotNull(meseBackend);
-        //        assertNotNull(annoBackend);
-        //        assertNotNull(cognomeBackend);
-        //        assertNotNull(giornoWikiBackend);
-        //        assertNotNull(annoWikiBackend);
-        //        assertNotNull(textService);
-
-        clazzName = clazz != null ? clazz.getSimpleName() : "NULL";
+        clazzName = clazz != null ? clazz.getSimpleName() : NULLO;
         clazzTestName = this.getClass().getSimpleName();
     }
 
-    //    /**
-    //     * Regola tutti riferimenti incrociati <br>
-    //     * Deve essere fatto dopo aver costruito tutte le referenze 'mockate' <br>
-    //     * Nelle sottoclassi devono essere regolati i riferimenti dei service specifici <br>
-    //     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    protected void fixRiferimentiIncrociati() {
-    //        super.fixRiferimentiIncrociati();
-    //
-    //        elaboraService.wikiBotService = wikiBotService;
-    //        wikiUtility.queryService = queryService;
-    //        wikiUtility.regexService = regexService;
-    //        attivitaBackend.logger = logService;
-    //        nazionalitaBackend.logger = logService;
-    //        bioBackend.giornoBackend = giornoBackend;
-    //        bioBackend.meseBackend = meseBackend;
-    //        cognomeBackend.bioBackend = bioBackend;
-    //    }
-    //
 
     /**
      * Qui passa prima di ogni test delle sottoclassi <br>
@@ -1277,9 +1240,9 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Istanza di classe [%s]", clazzName));
         System.out.println(String.format("Istanza valida subito dopo il costruttore: %s", istanzaValidaSubitoDopoCostruttore));
         System.out.println(String.format("Metodi BuilderPattern disponibili: %s", metodiBuilderPattern));
-        System.out.println(String.format("Metodo di default: %s", textService.isValid(metodoDefault) ? metodoDefault : NULL));
-        System.out.println(String.format("Metodi da regolare: %s", textService.isValid(metodiDaRegolare) ? metodiDaRegolare : NULL));
-        System.out.println(String.format("Metodi eseguibili: %s", textService.isValid(metodiEseguibili) ? metodiEseguibili : NULL));
+        System.out.println(String.format("Metodo di default: %s", textService.isValid(metodoDefault) ? metodoDefault : NULLO));
+        System.out.println(String.format("Metodi da regolare: %s", textService.isValid(metodiDaRegolare) ? metodiDaRegolare : NULLO));
+        System.out.println(String.format("Metodi eseguibili: %s", textService.isValid(metodiEseguibili) ? metodiEseguibili : NULLO));
 
         if (istanzaValidaSubitoDopoCostruttore) {
             message = String.format("Si possono invocare i metodi eseguibili", clazz.getSimpleName());
@@ -1448,55 +1411,57 @@ public abstract class WikiTest extends AlgosTest {
     //        }
     //    }
 
-    //    protected void printRisultato(WResult result) {
-    //        if (result == null) {
-    //            return;
-    //        }
-    //
-    //        List lista = result.getLista();
-    //        lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
-    //        String newText = result.getNewtext();
-    //        newText = newText.length() < MAX ? newText : newText.substring(0, Math.min(MAX, newText.length()));
-    //        String content = result.getContent();
-    //        content = content.length() < MAX ? content : content.substring(0, Math.min(MAX, content.length()));
-    //
-    //        System.out.println("Risultato");
-    //        System.out.println(String.format("Status: %s", result.isValido() ? "true" : "false"));
-    //        System.out.println(String.format("Modificata: %s", result.isModificata() ? "true" : "false"));
-    //        System.out.println(String.format("Query: %s", result.getQueryType()));
-    //        System.out.println(String.format("TypeResult: %s", result.getTypeResult()));
-    //        System.out.println(String.format("Title: %s", result.getWikiTitle()));
-    //        System.out.println(String.format("PageId: %s", result.getPageid()));
-    //        System.out.println(String.format("Namespace: %s", result.getNameSpace()));
-    //        System.out.println(String.format("Type: %s", result.getTypePage()));
-    //        System.out.println(String.format("User: %s", result.getUserType()));
-    //        System.out.println(String.format("Limit: %d", result.getLimit()));
-    //        System.out.println(String.format("Summary: %s", result.getSummary()));
-    //        System.out.println(String.format("Preliminary url: %s", result.getUrlPreliminary()));
-    //        System.out.println(String.format("Secondary url: %s", result.getUrlRequest()));
-    //        System.out.println(String.format("Get request url: %s", result.getGetRequest()));
-    //        System.out.println(String.format("Cookies: %s", result.getCookies()));
-    //        System.out.println(String.format("Preliminary response: %s", result.getPreliminaryResponse()));
-    //        System.out.println(String.format("Token: %s", result.getToken()));
-    //        System.out.println(String.format("Post: %s", result.getPost()));
-    //        System.out.println(String.format("New text: %s", newText));
-    //        System.out.println(String.format("Secondary response: %s", result.getResponse()));
-    //        System.out.println(String.format("Message code: %s", result.getCodeMessage()));
-    //        System.out.println(String.format("Message: %s", result.getMessage()));
-    //        System.out.println(String.format("Error code: %s", result.getErrorCode()));
-    //        System.out.println(String.format("Error message: %s", result.getErrorMessage()));
-    //        System.out.println(String.format("Valid message: %s", result.getValidMessage()));
-    //        System.out.println(String.format("NewTimeStamp: %s", result.getNewtimestamp()));
-    //        System.out.println(String.format("Numeric value: %s", textService.format(result.getIntValue())));
-    //        System.out.println(String.format("Cicli: %d", result.getCicli())); ;
-    //        System.out.println(String.format("Text value: %s", result.getTxtValue()));
-    //        System.out.println(String.format("List value: %s", lista));
-    //        System.out.println(String.format("Map value: %s", result.getMappa()));
-    //        System.out.println(String.format("Content value: %s", content));
-    //        System.out.println(String.format("Risultato ottenuto in %s", dateService.toText(result.getDurata())));
-    //        System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaTextEsatto(result.getInizio(), result.getFine())));
-    //        printWrapBio(result.getWrap());
-    //    }
+    protected void printRisultato(WResult result) {
+        if (result == null) {
+            return;
+        }
+
+        List lista = result.getLista();
+        lista = lista != null && lista.size() > 20 ? lista.subList(0, 10) : lista;
+        String newText = result.getNewtext();
+        newText = newText.length() < MAX ? newText : newText.substring(0, Math.min(MAX, newText.length()));
+        String content = result.getContent();
+        content = content.length() < MAX ? content : content.substring(0, Math.min(MAX, content.length()));
+
+        System.out.println(VUOTA);
+        System.out.println("Risultato");
+        System.out.println(String.format("Status: %s", result.isValido() ? "true" : "false"));
+        System.out.println(String.format("Modificata: %s", result.isModificata() ? "true" : "false"));
+        System.out.println(String.format("Query: %s", result.getQueryType()));
+        System.out.println(String.format("Page: %s", result.getTypePage()));
+        System.out.println(String.format("TypeResult: %s", result.getTypeResult()));
+        System.out.println(String.format("Title: %s", result.getWikiTitle()));
+        System.out.println(String.format("PageId: %s", result.getPageid()));
+        System.out.println(String.format("Namespace: %s", result.getNameSpace()));
+        System.out.println(String.format("Type: %s", result.getTypePage()));
+        System.out.println(String.format("User: %s", result.getUserType()));
+        System.out.println(String.format("Limit: %d", result.getLimit()));
+        System.out.println(String.format("Summary: %s", result.getSummary()));
+        System.out.println(String.format("Preliminary url: %s", result.getUrlPreliminary()));
+        System.out.println(String.format("Secondary url: %s", result.getUrlRequest()));
+        System.out.println(String.format("Get request url: %s", result.getGetRequest()));
+        System.out.println(String.format("Cookies: %s", result.getCookies()));
+        System.out.println(String.format("Preliminary response: %s", result.getPreliminaryResponse()));
+        System.out.println(String.format("Token: %s", result.getToken()));
+        System.out.println(String.format("Post: %s", result.getPost()));
+        System.out.println(String.format("New text: %s", newText));
+        System.out.println(String.format("Secondary response: %s", result.getResponse()));
+        System.out.println(String.format("Message code: %s", result.getCodeMessage()));
+        System.out.println(String.format("Message: %s", result.getMessage()));
+        System.out.println(String.format("Error code: %s", result.getErrorCode()));
+        System.out.println(String.format("Error message: %s", result.getErrorMessage()));
+        System.out.println(String.format("Valid message: %s", result.getValidMessage()));
+        System.out.println(String.format("NewTimeStamp: %s", result.getNewtimestamp()));
+        System.out.println(String.format("Numeric value: %s", textService.format(result.getIntValue())));
+        System.out.println(String.format("Cicli: %d", result.getCicli())); ;
+        System.out.println(String.format("Text value: %s", result.getTxtValue()));
+        System.out.println(String.format("List value: %s", lista));
+        System.out.println(String.format("Map value: %s", result.getMappa()));
+        System.out.println(String.format("Content value: %s", content));
+        System.out.println(String.format("Risultato ottenuto in %s", dateService.toText(result.getDurata())));
+        System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaTextEsatto(result.getInizio(), result.getFine())));
+        printWrapBio(result.getWrap());
+    }
 
 
     protected void printWrapBio(WrapBio wrap) {
@@ -1573,6 +1538,33 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Userid: %d", botLogin.getUserid()));
         System.out.println(String.format("Username: %s", botLogin.getUsername()));
         System.out.println(String.format("UserType: %s", botLogin.getUserType()));
+        System.out.println(String.format("Response: %s", botLogin.getUrlResponse()));
+        System.out.print(String.format("Cookies: "));
+        if (botLogin.getCookies() != null && botLogin.getCookies().size() > 0) {
+            System.out.println();
+            printMappaTab(botLogin.getCookies());
+        }
+        else {
+            System.out.println(NULLO);
+        }
+        System.out.print(String.format("Mappa: "));
+        if (botLogin.getMappa() != null && botLogin.getMappa().size() > 0) {
+            System.out.println();
+            printMappaTab(botLogin.getMappa());
+        }
+        else {
+            System.out.println(NULLO);
+        }
+
+    }
+
+
+    protected void printMappaTab(Map<String, String> mappa) {
+        if (mappa != null && mappa.size() > 0) {
+            for (String key : mappa.keySet()) {
+                System.out.println(String.format("%s%s %s", TAB, key, mappa.get(key)));
+            }
+        }
     }
 
     protected void printLong(List<Long> listaLong, int max) {

@@ -12,10 +12,11 @@ import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
+import org.springframework.core.env.*;
 
 import javax.inject.*;
 import java.io.*;
@@ -34,13 +35,6 @@ import java.util.*;
  */
 public abstract class AQuery {
 
-    /**
-     * Istanza di una interfaccia SpringBoot <br>
-     * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Inject
-    public ApplicationContext appContext;
 
     /**
      * Tag base delle API per costruire l' 'urlDomain' completo <br>
@@ -113,12 +107,6 @@ public abstract class AQuery {
     public DateService dateService;
 
     @Inject
-    public LogService logger;
-
-    @Inject
-    public BotLogin botLogin;
-
-    @Inject
     public ArrayService array;
 
     @Inject
@@ -129,20 +117,31 @@ public abstract class AQuery {
 
     @Inject
     public JSonService jSonService;
+    @Inject
+    public ApplicationContext appContext;
 
-//    @Inject
-//    public BioBackend bioBackend;
+    @Inject
+    public Environment environment;
 
-//    @Inject
-//    public ElaboraService elaboraService;
+    @Inject
+    public LogService logger;
 
-//    @Inject
-//    public MathService mathService;
+    @Inject
+    public BotLogin botLogin;
+
+    //    @Inject
+    //    public BioBackend bioBackend;
+
+    //    @Inject
+    //    public ElaboraService elaboraService;
+
+    //    @Inject
+    //    public MathService mathService;
 
     //        public QueryAssert queryAssert;
 
     // ci metto tutti i cookies restituiti da URLConnection.responses
-    protected Map<String, Object> cookies;
+    protected Map<String, String> cookies;
 
     protected LinkedHashMap<String, Object> mappaUrlResponse;
 
@@ -397,13 +396,13 @@ public abstract class AQuery {
 
             if (Pref.debug.is()) {
                 num += max;
-//                if (mathService.multiploEsatto(50000, num)) {
-//                    String time = dateService.deltaText(inizio);
-//                    message = String.format("Finora creati %s wrapTimes in %s (la categoria ha %s voci)", textService.format(num), time,
-//                            textService.format(size)
-//                    );
-//                    logger.info(new WrapLog().message(message).type(TypeLog.bio));
-//                }
+                //                if (mathService.multiploEsatto(50000, num)) {
+                //                    String time = dateService.deltaText(inizio);
+                //                    message = String.format("Finora creati %s wrapTimes in %s (la categoria ha %s voci)", textService.format(num), time,
+                //                            textService.format(size)
+                //                    );
+                //                    logger.info(new WrapLog().message(message).type(TypeLog.bio));
+                //                }
             }
         }
 
@@ -581,6 +580,7 @@ public abstract class AQuery {
 
         JSONObject jsonContinue = null;
         String message;
+
         JSONObject jsonAll = (JSONObject) JSONValue.parse(rispostaDellaQuery);
         mappaUrlResponse.put(KEY_JSON_ALL, jsonAll);
 

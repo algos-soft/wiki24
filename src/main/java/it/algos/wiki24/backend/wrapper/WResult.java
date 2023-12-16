@@ -104,6 +104,8 @@ public class WResult {
     protected LinkedHashMap mappa = null;
     protected String txtValue = VUOTA;
 
+    protected List lista = null;
+
     public WResult() {
         this((WrapBio) null);
     }
@@ -173,7 +175,7 @@ public class WResult {
     }
 
     public static WResult valido() {
-        return WResult.build();
+        return WResult.build().valido(true);
     }
 
     public WResult method(final String method) {
@@ -641,6 +643,32 @@ public class WResult {
     }
     public void setCodeMessage(String codeMessage) {
         this.codeMessage = codeMessage;
+    }
+
+    public String getCodeMessage() {
+        return codeMessage;
+    }
+
+    public String getMessage() {
+        return isValido() ? getValidMessage() : getErrorMessage();
+    }
+    public int getIntValue() {
+        return intValue;
+    }
+    public String getTxtValue() {
+        return txtValue;
+    }
+
+    public TypeResult getTypeResult() {
+        return typeResult;
+    }
+
+    public List getLista() {
+        return lista;
+    }
+
+    public String getValidMessage() {
+        return validMessage;
     }
 
 }

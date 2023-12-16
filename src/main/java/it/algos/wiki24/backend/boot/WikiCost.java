@@ -40,11 +40,12 @@ public class WikiCost {
 
     public static final String JSON_FAILED = "Failed";
 
-    public static final String JSON_COOKIES = "cookies";
 
-    public static final String JSON_BOT_LOGIN = "botLogin";
+    public static final String ERROR_JSON_BOT_NO_LOGIN = "noBotLogin";
 
-    public static final String JSON_NOT_QUERY_LOGIN = "notQueryLogin";
+    public static final String ERROR_JSON_BOT_NO_QUERY = "notQueryLogin";
+    public static final String ERROR_JSON_BOT_NO_COOKIES = "noCookies";
+    public static final String ERROR_JSON_BOT_NO_RIGHT = "assertbotfailed";
 
     public static final String JSON_NO_BOT = "assertbotfailed";
 

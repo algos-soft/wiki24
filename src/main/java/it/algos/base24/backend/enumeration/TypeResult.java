@@ -63,7 +63,9 @@ public enum TypeResult implements Type {
     mancaTypeLog("Manca il typeLog"),
     queryWriteCreata("Pagina wiki creata"),
     queryWriteEsistente("Pagina wiki esistente"),
-    queryWriteModificata("Pagina wiki modificata");
+    queryWriteModificata("Pagina wiki modificata"),
+    querySuccess("MediaWiki API valida"),
+    queryError("MediaWiki API errata");
 
     private String tag;
 

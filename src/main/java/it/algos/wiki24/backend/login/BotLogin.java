@@ -38,6 +38,8 @@ public class BotLogin {
 
     private boolean valido;
 
+    private Map<String, String> cookies;
+
     public BotLogin() {
     }
 
@@ -57,7 +59,7 @@ public class BotLogin {
         return userType;
     }
 
-    public Map<String, String> getCookies() {
+    public Map<String, String> getMappa() {
         return result != null ? result.getMappa() : null;
     }
 
@@ -95,6 +97,18 @@ public class BotLogin {
 
     public void setValido(boolean valido) {
         this.valido = valido;
+    }
+
+    public String getUrlResponse() {
+        return result != null ? result.getResponse() : TAG_VUOTA;
+    }
+
+    public void setCookies(Map<String, String> cookies) {
+        this.cookies = cookies;
+    }
+
+    public Map<String, String> getCookies() {
+        return cookies;
     }
 
     public void reset() {
