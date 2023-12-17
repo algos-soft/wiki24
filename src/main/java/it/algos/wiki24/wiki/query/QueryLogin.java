@@ -78,17 +78,17 @@ public class QueryLogin extends AQuery {
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_NAME = "&lgname=";
+    public static final String TAG_NAME = "&lgname=";
 
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_PASSWORD = "&lgpassword=";
+    public static final String TAG_PASSWORD = "&lgpassword=";
 
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_TOKEN = "&lgtoken=";
+    public static final String TAG_TOKEN = "&lgtoken=";
 
 
     /**

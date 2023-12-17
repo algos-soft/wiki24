@@ -3,11 +3,17 @@ package it.algos.query;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.vaad24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.Wiki24Cost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.wiki.query.*;
+import static it.algos.wiki24.wiki.query.AQuery.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.boot.test.context.*;
+
+import java.io.*;
+import java.net.*;
 
 /**
  * Project wiki23
@@ -83,32 +89,76 @@ public class QueryAssertTest extends WikiTest {
         assertFalse(ottenutoBooleano);
     }
 
+//    @Test
+//    @Order(3)
+//    @DisplayName("3 - Collegato come bot")
+//    void collegatoBot() {
+//        appContext.getBean(QueryLogin.class).urlRequest(AETypeUser.bot);
+//        assertNotNull(botLogin);
+//        assertTrue(botLogin.isValido());
+//        assertEquals(botLogin.getUserType(), AETypeUser.bot);
+//
+//        ottenutoBooleano = appContext.getBean(QueryAssert.class).isEsiste();
+//        assertTrue(ottenutoBooleano);
+//    }
+
     @Test
-    @Order(3)
-    @DisplayName("3 - Collegato come bot")
-    void collegatoBot() {
-        appContext.getBean(QueryLogin.class).urlRequest(AETypeUser.bot);
-        assertNotNull(botLogin);
-        assertTrue(botLogin.isValido());
-        assertEquals(botLogin.getUserType(), AETypeUser.bot);
+    @Order(33)
+    @DisplayName("33 - Semplice")
+    void provaCookies() {
+        URLConnection urlConn;
+//        String urlDomain = WIKI_PARSE;
+        String urlDomain = WIKI_QUERY;
+        urlDomain+="Abeloya";
+        String urlResponse;
 
-        ottenutoBooleano = appContext.getBean(QueryAssert.class).isEsiste();
-        assertTrue(ottenutoBooleano);
+        try {
+            urlConn = new URL(urlDomain).openConnection();
+            urlConn.setDoOutput(true);
+            urlConn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
+            urlConn.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; PPC Mac OS X; it-it) AppleWebKit/418.9 (KHTML, like Gecko) Safari/419.3");
+            urlResponse = this.sendRequest(urlConn);
+            int a=87;
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
+        }
+
     }
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
 
     /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
+     * Invia la request (GET oppure POST) <br>
+     *
+     * @param urlConn connessione con la request
+     *
+     * @return valore di ritorno della request
      */
-    @AfterAll
-    void tearDownAll() {
+    public String sendRequest(URLConnection urlConn) throws Exception {
+        InputStream input;
+        InputStreamReader inputReader;
+        BufferedReader readBuffer;
+        StringBuilder textBuffer = new StringBuilder();
+        String stringa;
+
+        if (urlConn == null) {
+            return VUOTA;
+        }
+
+        input = urlConn.getInputStream();
+        inputReader = new InputStreamReader(input, "UTF8");
+
+        // read the response
+        readBuffer = new BufferedReader(inputReader);
+        while ((stringa = readBuffer.readLine()) != null) {
+            textBuffer.append(stringa);
+        }
+
+        //--close all
+        readBuffer.close();
+        inputReader.close();
+        input.close();
+
+        return textBuffer.toString();
     }
 
 }

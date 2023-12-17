@@ -64,12 +64,12 @@ public abstract class AQuery {
     /**
      * Tag per la costruzione del primo 'urlDomain' completo per una queryWrite <br>
      */
-    protected static final String TAG_PRELIMINARY_REQUEST_GET = TAG_QUERY + "&meta=tokens&type=csrf";
+    public static final String TAG_PRELIMINARY_REQUEST_GET = TAG_QUERY + "&meta=tokens&type=csrf";
 
     /**
      * Tag per la costruzione del primo 'urlDomain' completo per la preliminaryRequestGet di login <br>
      */
-    protected static final String TAG_LOGIN_PRELIMINARY_REQUEST_GET = TAG_PRELIMINARY_REQUEST_GET + "&type=login";
+    public static final String TAG_LOGIN_PRELIMINARY_REQUEST_GET = TAG_PRELIMINARY_REQUEST_GET + "&type=login";
 
     /**
      * Tag per la costruzione del secondo 'urlDomain' completo per una queryWrite <br>
@@ -89,7 +89,7 @@ public abstract class AQuery {
     /**
      * Tag per la costruzione del secondo 'urlDomain' completo per la secondaryRequestPost di login <br>
      */
-    protected static final String TAG_LOGIN_SECONDARY_REQUEST_POST = TAG_FORMAT + "&action=login";
+    public static final String TAG_LOGIN_SECONDARY_REQUEST_POST = TAG_FORMAT + "&action=login";
 
 
     protected static final String CSRF_TOKEN = "csrftoken";
@@ -575,7 +575,7 @@ public abstract class AQuery {
      *
      * @return valore di ritorno della request
      */
-    protected String sendRequest(URLConnection urlConn) throws Exception {
+    public String sendRequest(URLConnection urlConn) throws Exception {
         InputStream input;
         InputStreamReader inputReader;
         BufferedReader readBuffer;
