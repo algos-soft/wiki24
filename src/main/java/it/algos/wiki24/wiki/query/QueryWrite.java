@@ -180,12 +180,12 @@ public class QueryWrite extends AQuery {
     public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextSignificativo) {
         boolean modificataSignificativamente = true;
         String oldTextAll;
+        String oldTextSignificativo;
 
         oldTextAll = appContext.getBean(QueryRead.class).getText(wikiTitleGrezzo);
-        if (textService.isValid(oldTextAll)) {
-            if (!oldTextAll.contains(newTextSignificativo)) {
-                modificataSignificativamente = false;
-            }
+        oldTextSignificativo = wikiBotService.getTestoSignificativo(oldTextAll);
+        if (newTextSignificativo.equals(oldTextSignificativo)) {
+            modificataSignificativamente = false;
         }
 
         return modificataSignificativamente;

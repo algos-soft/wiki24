@@ -3,6 +3,7 @@ package it.algos.upload;
 import it.algos.*;
 import it.algos.base.*;
 import static it.algos.vaad24.backend.boot.VaadCost.*;
+import it.algos.wiki24.backend.packages.attplurale.*;
 import it.algos.wiki24.backend.upload.liste.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ import org.springframework.boot.test.context.*;
 //@Tag("upload")
 @DisplayName("Upload Attività")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadAttivitaTest extends WikiTest {
+public class UploadAttivitaTest extends UploadTest {
 
 
     /**
@@ -41,8 +42,11 @@ public class UploadAttivitaTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazz = UploadAttivita.class;
+        super.backendClazzName = AttPluraleBackend.class.getSimpleName();
+        super.collectionName = "attplurale";
         super.setUpAll();
-        assertNull(istanza);
+        super.ammessoCostruttoreVuoto = false;
     }
 
 
@@ -58,7 +62,7 @@ public class UploadAttivitaTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(1)
     @DisplayName("1- Costruttore base senza parametri")
     void costruttoreBase() {
@@ -117,7 +121,7 @@ public class UploadAttivitaTest extends WikiTest {
     }
 
 
-    @Test
+//    @Test
     @Order(6)
     @DisplayName("6 - Upload attività test con poche voci")
     void upload6() {
@@ -133,6 +137,19 @@ public class UploadAttivitaTest extends WikiTest {
         System.out.println("7 - Upload di una attività con sottoPagina");
         sorgente = "dogi";
         appContext.getBean(UploadAttivita.class).test().upload(sorgente);
+    }
+
+
+    @Test
+    @Order(7)
+    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
+    void beanStandardCompleta() {
+        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+        sorgente = "4 marzo";
+        super.fixBeanStandard(sorgente);
+
+        sorgente = "1967";
+        super.fixBeanStandard(sorgente);
     }
 
     /**

@@ -70,7 +70,7 @@ public class QueryRead extends AQuery {
      * @return testo della pagina
      */
     public String getText(final String wikiTitleGrezzo) {
-        return urlRequest(wikiTitleGrezzo).getContent();
+        return urlRequest(wikiTitleGrezzo).getContent().trim();
     }
 
 }

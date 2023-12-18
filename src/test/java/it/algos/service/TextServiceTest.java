@@ -217,15 +217,37 @@ public class TextServiceTest extends AlgosTest {
 
         sorgente3 = "nome";
 
-//        sorgente = "asia";
-//        continente = service.levaPunti(sorgente);
-//        assertNotNull(continente);
-//
-//        sorgente2 = "piazza";
-//        via = viaBackend.findById(sorgente2);
-//        assertNotNull(via);
+        //        sorgente = "asia";
+        //        continente = service.levaPunti(sorgente);
+        //        assertNotNull(continente);
+        //
+        //        sorgente2 = "piazza";
+        //        via = viaBackend.findById(sorgente2);
+        //        assertNotNull(via);
     }
 
+    @Test
+    @Order(6)
+    @DisplayName("6 - contains")
+    void contains() {
+        System.out.println("6 - contains");
+        System.out.println(VUOTA);
+
+        sorgente = "*[[Morti il 2 marzo|2 marzo]] - [[Tullio Gregory]], filosofo e storico della filosofia italiano (n.[[Nati nel 1929|1929]])\n" +
+                "*[[Morti il 2 marzo|2 marzo]] - [[David Held]], politologo e sociologo britannico (n.[[Nati nel 1951|1951]])\n" +
+                "*[[Morti il 2 marzo|2 marzo]] - [[Francesco Macri]], imprenditore italiano (n.[[Nati nel 1930|1930]])\n" +
+                "*[[Morti il 2 marzo|2 marzo]] - [[Keith Harvey Miller]], politico statunitense (n.[[Nati nel 1925|1925]])\n";
+        sorgente2 = "[[David Held]], politologo e sociologo britannico (n.[[Nati nel 1951|1951]])\n" +
+                "*[[Morti il 2 marzo|2 marzo]]";
+        assertTrue(sorgente.contains(sorgente2));
+
+        sorgente="*[[Morti il 1º marzo|1º marzo]] - [[Žores Ivanovič Alfërov]], fisico e politico sovietico (n.[[Nati nel 1930|1930]])\n" +
+                "*[[Morti il 1º marzo|1º marzo]] - [[Fernando Pannullo]], attore teatrale, regista teatrale e drammaturgo italiano (n.[[Nati nel 1936|1936]])\n" +
+                "*[[Morti il 1º marzo|1º marzo]] - [[Eusebio Pedroza]], pugile panamense (n.[[Nati nel 1953|1953]])\n" +
+                "*[[Morti il 1º marzo|1º marzo]] - [[Kevin Roche]], architetto irlandese (n.[[Nati nel 1922|1922]])\n";
+        sorgente2="[[Žores Ivanovič Alfërov]]";
+        assertTrue(sorgente.contains(sorgente2));
+    }
 
     /**
      * Qui passa al termine di ogni singolo test <br>
