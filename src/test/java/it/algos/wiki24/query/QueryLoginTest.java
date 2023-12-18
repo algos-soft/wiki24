@@ -147,6 +147,7 @@ public class QueryLoginTest extends QueryTest {
         printBotLogin();
 
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestHamed();
+        assertTrue(ottenutoRisultato.isValido());
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }
@@ -158,6 +159,7 @@ public class QueryLoginTest extends QueryTest {
         printBotLogin();
 
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestGac();
+        assertTrue(ottenutoRisultato.isValido());
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }
@@ -169,6 +171,7 @@ public class QueryLoginTest extends QueryTest {
         printBotLogin();
 
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestBot();
+        assertTrue(ottenutoRisultato.isValido());
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }
@@ -178,6 +181,7 @@ public class QueryLoginTest extends QueryTest {
     @DisplayName("31 - urlRequest")
     void urlRequest() {
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequest();
+        assertFalse(ottenutoRisultato.isValido());
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }

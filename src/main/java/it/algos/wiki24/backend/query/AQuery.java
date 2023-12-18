@@ -14,7 +14,6 @@ import it.algos.wiki24.backend.wrapper.*;
 import org.json.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;
 
@@ -62,7 +61,7 @@ public abstract class AQuery {
     /**
      * Tag per la costruzione del primo 'urlDomain' completo per la preliminaryRequestGet di login <br>
      */
-    protected static final String TAG_LOGIN_PRELIMINARY_REQUEST_GET = TAG_PRELIMINARY_REQUEST_GET + "&type=login";
+    public static final String TAG_LOGIN_PRELIMINARY_REQUEST_GET = TAG_PRELIMINARY_REQUEST_GET + "&type=login";
 
     /**
      * Tag per la costruzione del secondo 'urlDomain' completo per una queryWrite <br>
@@ -72,7 +71,11 @@ public abstract class AQuery {
     /**
      * Tag per la costruzione del 'urlDomain' completo per la request di login <br>
      */
-    protected static final String TAG_REQUEST_ASSERT = TAG_QUERY + "&assert=bot";
+    protected static final String TAG_REQUEST_ASSERT_BOT = TAG_QUERY + "&assert=bot";
+
+    protected static final String TAG_REQUEST_ASSERT_USER = TAG_QUERY + "&assert=user";
+
+    protected static final String TAG_REQUEST_ASSERT_ANON = TAG_QUERY + "&assert=anon";
 
     /**
      * Tag per la costruzione del 'urlDomain' completo per la ricerca dei pageIds di una categoria <br>
@@ -82,7 +85,7 @@ public abstract class AQuery {
     /**
      * Tag per la costruzione del secondo 'urlDomain' completo per la secondaryRequestPost di login <br>
      */
-    protected static final String TAG_LOGIN_SECONDARY_REQUEST_POST = TAG_FORMAT + "&action=login";
+    public static final String TAG_LOGIN_SECONDARY_REQUEST_POST = TAG_FORMAT + "&action=login";
 
 
     protected static final String CSRF_TOKEN = "csrftoken";
@@ -117,6 +120,7 @@ public abstract class AQuery {
 
     @Inject
     public JSonService jSonService;
+
     @Inject
     public ApplicationContext appContext;
 
@@ -141,7 +145,9 @@ public abstract class AQuery {
     //        public QueryAssert queryAssert;
 
     // ci metto tutti i cookies restituiti da URLConnection.responses
-    protected Map<String, String> cookies;
+    protected Map<String, String> cookiesPrimary;
+
+    protected Map<String, String> cookiesSecondary;
 
     protected LinkedHashMap<String, Object> mappaUrlResponse;
 
@@ -195,8 +201,8 @@ public abstract class AQuery {
         WResult result = WResult.valido()
                 .queryType(typeQuery)
                 .typePage(TypePage.indeterminata)
-                .userType(TypeUser.anonymous)
-                .limit(TypeUser.anonymous.getLimit());
+                .userType(TypeUser.anon)
+                .limit(TypeUser.anon.getLimit());
         String message;
 
         if (textService.isEmpty(pathQuery)) {
@@ -369,7 +375,7 @@ public abstract class AQuery {
         result.limit(max);
         result.userType(type);
         switch (type) {
-            case anonymous, user, admin -> {
+            case anon, user -> {
                 if (size > type.getLimit()) {
                     message = String.format("Sei collegato come %s e nella request ci sono %s pageIds", type, textService.format(size));
                     logger.info(new WrapLog().exception(new AlgosException(message)).usaDb());
@@ -477,12 +483,15 @@ public abstract class AQuery {
      *
      * @param urlConn connessione con la request
      */
-    protected void addPostConnection(URLConnection urlConn) throws Exception {
+    protected String addPostConnection(URLConnection urlConn) throws Exception {
+        String testoPost = VUOTA;
         if (urlConn != null) {
             PrintWriter out = new PrintWriter(urlConn.getOutputStream());
-            out.print(elaboraPost());
+            testoPost = elaboraPost();
+            out.print(testoPost);
             out.close();
         }
+        return testoPost;
     }
 
     /**

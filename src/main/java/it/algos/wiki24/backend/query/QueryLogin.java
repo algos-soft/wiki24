@@ -74,17 +74,17 @@ public class QueryLogin extends AQuery {
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_NAME = "&lgname=";
+    public static final String TAG_NAME = "&lgname=";
 
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_PASSWORD = "&lgpassword=";
+    public static final String TAG_PASSWORD = "&lgpassword=";
 
     /**
      * Tag per il testo POS da inviare nella secondaryRequestPost <br>
      */
-    private static final String TAG_TOKEN = "&lgtoken=";
+    public static final String TAG_TOKEN = "&lgtoken=";
 
 
     /**
@@ -152,7 +152,7 @@ public class QueryLogin extends AQuery {
     }
 
     public WResult urlRequestGac() {
-        typeUser = TypeUser.admin;
+        typeUser = TypeUser.user;
 
         try {
             property = "wiki24.admin.loginName";
@@ -258,8 +258,8 @@ public class QueryLogin extends AQuery {
         try {
             urlConn = this.creaGetConnection(urlDomain);
             urlResponse = sendRequest(urlConn);
-            cookies = downlodCookies(urlConn);
-            result.setCookies(cookies);
+            cookiesPrimary = downlodCookies(urlConn);
+            result.setCookies(cookiesPrimary);
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -334,14 +334,16 @@ public class QueryLogin extends AQuery {
         String urlDomain = TAG_LOGIN_SECONDARY_REQUEST_POST;
         String urlResponse = VUOTA;
         URLConnection urlConn;
+        String testoPost = VUOTA;
         result.setUrlRequest(urlDomain);
 
         try {
             urlConn = this.creaGetConnection(urlDomain);
-            uploadCookies(urlConn, result.getCookies());
-            addPostConnection(urlConn);
+            uploadCookies(urlConn, cookiesPrimary);
+            testoPost = addPostConnection(urlConn);
+            result.post(testoPost);
             urlResponse = sendRequest(urlConn);
-            result.setCookies(downlodCookies(urlConn));
+            cookiesSecondary = downlodCookies(urlConn);
         } catch (Exception unErrore) {
         }
 
@@ -416,17 +418,18 @@ public class QueryLogin extends AQuery {
 
         //--trasferisce nella istanza singleton BotLogin i cookies per essere utilizzati in tutte le query
         if (valido) {
-            String userName = result.getCookies().get("itwikiUserName");
-            String userID = result.getCookies().get("itwikiUserID");
-            cookies.put("itwikiUserName", userName);
-            cookies.put("itwikiUserID", userID);
-            botLogin.setValido(true);
-            botLogin.setBot(typeUser == TypeUser.bot);
-            botLogin.setLguserid(lguserid);
-            botLogin.setLgusername(lgusername);
-            botLogin.setUserType(typeUser);
-            botLogin.setCookies(cookies);
-            botLogin.setResult(result);
+            //            String userName = result.getCookies().get("itwikiUserName");
+            //            String userID = result.getCookies().get("itwikiUserID");
+            //            cookies.put("itwikiUserName", userName);
+            //            cookies.put("itwikiUserID", userID);
+            botLogin.setQuery(true, lguserid, lgname, TypeUser.bot, result.getResponse(), cookiesLogin(cookiesSecondary));
+            //            botLogin.setValido(true);
+            //            botLogin.setBot(typeUser == TypeUser.bot);
+            //            botLogin.setLguserid(lguserid);
+            //            botLogin.setLgusername(lgusername);
+            //            botLogin.setUserType(typeUser);
+            //            botLogin.setCookies(cookies);
+            //            botLogin.setUrlResponse(result.getResponse());
             result.setUserType(typeUser);
             result.setResponse(jsonLogin.toString());
             result.setValidMessage(String.format("%s: %d, %s: %s", LOGIN_USER_ID, lguserid, LOGIN_USER_NAME, lgusername));
@@ -446,6 +449,17 @@ public class QueryLogin extends AQuery {
         }
 
         return result;
+    }
+
+    protected Map<String, String> cookiesLogin(Map<String, String> cookies) {
+        Map<String, String> cookiesLogin = new HashMap<>();
+
+        cookiesLogin.put("ss0-itwikiSession", cookies.get("ss0-itwikiSession"));
+        cookiesLogin.put("itwikiss0-UserID", cookies.get("itwikiss0-UserID"));
+        cookiesLogin.put("centralauth_ss0-User", cookies.get("centralauth_ss0-User"));
+        cookiesLogin.put("centralauth_ss0-Token", cookies.get("centralauth_ss0-Token"));
+
+        return cookiesLogin;
     }
 
     public void reset() {

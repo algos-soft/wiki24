@@ -35,6 +35,7 @@ public class QueryAssertTest extends QueryTest {
      */
     private QueryAssert istanza;
 
+    private TypeUser type;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -67,10 +68,8 @@ public class QueryAssertTest extends QueryTest {
     void noBotLogin() {
         System.out.println(("11 - noBotLogin"));
         assertNotNull(botLogin);
-        botLogin = null;
-        assertNull(botLogin);
 
-        istanza = (QueryAssert) appContext.getBean(clazz);
+        istanza = appContext.getBean(QueryAssert.class);
         istanza.botLogin = null;
         ottenutoRisultato = istanza.urlRequest();
         assertFalse(ottenutoRisultato.isValido());
@@ -82,18 +81,16 @@ public class QueryAssertTest extends QueryTest {
         System.out.println(message);
     }
 
-
     @Test
     @Order(12)
-    @DisplayName("12 - notQueryLogin")
-    void notQueryLogin() {
-        System.out.println(("12 - notQueryLogin"));
+    @DisplayName("12 - botLoginEmpty")
+    void botLoginEmpty() {
+        System.out.println(("12 - botLoginEmpty"));
         assertNotNull(botLogin);
         botLogin.reset();
-        assertNotNull(botLogin);
+        assertFalse(botLogin.isValido());
 
-        istanza = (QueryAssert) appContext.getBean(clazz);
-        ottenutoRisultato = istanza.urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryAssert.class).urlRequest();
         assertFalse(ottenutoRisultato.isValido());
         assertEquals(ERROR_JSON_BOT_NO_QUERY, ottenutoRisultato.getErrorCode());
         System.out.println(VUOTA);
@@ -103,21 +100,17 @@ public class QueryAssertTest extends QueryTest {
         System.out.println(message);
     }
 
-
     @Test
     @Order(13)
     @DisplayName("13 - noCookies")
     void noCookies() {
         System.out.println(("13 - noCookies"));
         assertNotNull(botLogin);
+        botLogin.setUrlResponse("Solo per questo test");
+        botLogin.setCookies(null);
 
-        appContext.getBean(QueryLogin.class).urlRequestHamed();
-        previstoRisultato = botLogin.getResult();
-        previstoRisultato.setCookies(null);
-        botLogin.setResult(previstoRisultato);
-
-        istanza = (QueryAssert) appContext.getBean(clazz);
-        ottenutoRisultato = istanza.urlRequest();
+        ottenutoRisultato = appContext.getBean(QueryAssert.class).urlRequest();
+        assertFalse(ottenutoRisultato.isValido());
         assertEquals(ERROR_JSON_BOT_NO_COOKIES, ottenutoRisultato.getErrorCode());
         System.out.println(VUOTA);
         message = String.format("Nell'istanza di [%s]%s%s %s", clazzName, FORWARD, "(code) ", ottenutoRisultato.getErrorCode());
@@ -128,73 +121,63 @@ public class QueryAssertTest extends QueryTest {
 
 
     @Test
-    @Order(14)
-    @DisplayName("14 - assertBotFailed")
-    void assertBotFailed() {
-        System.out.println(("14 - assertBotFailed"));
-        assertNotNull(botLogin);
+    @Order(21)
+    @DisplayName("21 - assertHamed")
+    void assertHamed() {
+        System.out.println(("21 - assertHamed"));
+        appContext.getBean(QueryLogin.class).urlRequestHamed(); //type User
+        assertTrue(botLogin.isValido());
 
-        appContext.getBean(QueryLogin.class).urlRequestHamed();
-
-        istanza = (QueryAssert) appContext.getBean(clazz);
-        ottenutoRisultato = istanza.urlRequest();
-        assertFalse(ottenutoRisultato.isValido());
-        assertEquals(ERROR_JSON_BOT_NO_RIGHT, ottenutoRisultato.getErrorCode());
-        System.out.println(VUOTA);
-        message = String.format("Nell'istanza di [%s]%s%s %s", clazzName, FORWARD, "(code) ", ottenutoRisultato.getErrorCode());
-        System.out.println(message);
-        message = String.format("Nell'istanza di [%s]%s%s %s", clazzName, FORWARD, "(message)", ottenutoRisultato.getErrorMessage());
-        System.out.println(message);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isAnon();
+        assertFalse(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isUser();
+        assertTrue(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isBot();
+        assertFalse(ottenutoBooleano);
+        type = appContext.getBean(QueryAssert.class).getTypeUser();
+        assertEquals(TypeUser.user, type);
+        message = String.format("L'utente [%s] è regolarmente collegato come [%s]", "Hamed", type);
+        System.out.println((message));
     }
 
 
     @Test
-    @Order(15)
-    @DisplayName("15 - assertBotValid")
-    void assertBotValid() {
-        System.out.println(("15 - assertBotValid"));
-        assertNotNull(botLogin);
-
-        appContext.getBean(QueryLogin.class).urlRequestBot();
-        printBotLogin();
-
-        istanza = (QueryAssert) appContext.getBean(clazz);
-        ottenutoRisultato = istanza.urlRequest();
-        assertTrue(ottenutoRisultato.isValido());
-        assertEquals(ERROR_JSON_BOT_NO_RIGHT, ottenutoRisultato.getErrorCode());
-        System.out.println(VUOTA);
-        message = String.format("Nell'istanza di [%s]%s%s %s", clazzName, FORWARD, "(code) ", ottenutoRisultato.getCodeMessage());
-        System.out.println(message);
-        message = String.format("Nell'istanza di [%s]%s%s %s", clazzName, FORWARD, "(message)", ottenutoRisultato.getValidMessage());
-        System.out.println(message);
-    }
-
-    //    @Test
-    @Order(3)
-    @DisplayName("3 - Collegato come bot")
-    void collegatoBot() {
-        appContext.getBean(QueryLogin.class).urlRequest();
-        assertNotNull(botLogin);
+    @Order(22)
+    @DisplayName("22 - assertGac")
+    void assertGac() {
+        System.out.println(("22 - assertGac"));
+        appContext.getBean(QueryLogin.class).urlRequestGac(); //type User
         assertTrue(botLogin.isValido());
-        assertEquals(botLogin.getUserType(), TypeUser.bot);
 
-        ottenutoBooleano = appContext.getBean(QueryAssert.class).isEsiste();
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isAnon();
+        assertFalse(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isUser();
         assertTrue(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isBot();
+        assertFalse(ottenutoBooleano);
+        type = appContext.getBean(QueryAssert.class).getTypeUser();
+        assertEquals(TypeUser.user, type);
+        message = String.format("L'utente [%s] è regolarmente collegato come [%s]", "Gac", type);
+        System.out.println((message));
     }
+    @Test
+    @Order(23)
+    @DisplayName("23 - assertBiobot")
+    void assertBiobot() {
+        System.out.println(("23 - assertBiobot"));
+        appContext.getBean(QueryLogin.class).urlRequestBot(); //type User
+        assertTrue(botLogin.isValido());
 
-    /**
-     * Qui passa al termine di ogni singolo test <br>
-     */
-    @AfterEach
-    void tearDown() {
-    }
-
-
-    /**
-     * Qui passa una volta sola, chiamato alla fine di tutti i tests <br>
-     */
-    @AfterAll
-    void tearDownAll() {
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isAnon();
+        assertFalse(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isUser();
+        assertTrue(ottenutoBooleano);
+        ottenutoBooleano = appContext.getBean(QueryAssert.class).isBot();
+        assertTrue(ottenutoBooleano);
+        type = appContext.getBean(QueryAssert.class).getTypeUser();
+        assertEquals(TypeUser.bot, type);
+        message = String.format("L'utente [%s] è regolarmente collegato come [%s]", "Biobot", type);
+        System.out.println((message));
     }
 
 }

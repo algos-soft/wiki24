@@ -11,9 +11,9 @@ import static it.algos.base24.backend.boot.BaseCost.*;
  */
 public enum TypeUser {
 
-    anonymous(VUOTA, VUOTA, 50),
+    anon(VUOTA, VUOTA, 50),
     user("user", ".user", 500),
-    admin("user", ".admin", 500),
+//    admin("user", ".admin", 500),
     bot("bot", ".bot", 5000),
     ;
 

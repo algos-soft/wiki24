@@ -22,6 +22,10 @@ import java.util.*;
  * È di tipo GET <br>
  * Necessita dei cookies, recuperati da BotLogin (singleton) <br>
  * Restituisce true or false <br>
+ * https://www.mediawiki.org/wiki/API:Assert
+ * anon, user, bot
+ * assertanonfailed, assertuserfailed, assertbotfailed, assertnameduserfailed
+ * Normally, you will not need to perform a separate request like this. Instead, set the assert=user parameter on each of your requests.
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -35,9 +39,13 @@ public class QueryAssert extends AQuery {
 
     public static final String RESPONSE_NO_RIGHT = "You do not have the bot right, so the action could not be completed.";
 
+    private String tagRequestAssert = VUOTA;
+
+    private TypeUser typeUser;
 
     public QueryAssert() {
         super();
+        this.tagRequestAssert = TAG_REQUEST_ASSERT_BOT;
     }
 
 
@@ -58,11 +66,11 @@ public class QueryAssert extends AQuery {
     public WResult urlRequest() {
         WResult result = WResult.valido();
         Map<String, String> cookies;
-        String urlDomain = TAG_REQUEST_ASSERT;
+        String urlDomain = tagRequestAssert;
         String urlResponse = VUOTA;
         URLConnection urlConn;
 
-        result.setUrlRequest(TAG_REQUEST_ASSERT);
+        result.setUrlRequest(tagRequestAssert);
         result.setQueryType(TypeQuery.getLoggatoConCookies);
 
         //--se manca il botLogin
@@ -74,7 +82,7 @@ public class QueryAssert extends AQuery {
         }
 
         //--se il botLogin non ha registrato nessuna chiamata di QueryLogin
-        if (botLogin.getResult() == null) {
+        if (textService.isEmpty(botLogin.getUrlResponse())) {
             result.setValido(false);
             result.setErrorCode(ERROR_JSON_BOT_NO_QUERY);
             result.setMessage(RESPONSE_NO_QUERY);
@@ -100,14 +108,6 @@ public class QueryAssert extends AQuery {
         return elaboraResponse(result, urlResponse);
     }
 
-    /**
-     * Esistenza del botLogin valido e del collegamento come bot <br>
-     *
-     * @return esistenza del botLogin valido
-     */
-    public boolean isEsiste() {
-        return urlRequest().isValido();
-    }
 
     /**
      * Elabora la risposta <br>
@@ -131,5 +131,63 @@ public class QueryAssert extends AQuery {
         return result;
     }
 
+    /**
+     * Esistenza del botLogin valido e del collegamento come anon <br>
+     *
+     * @return esistenza del botLogin valido
+     */
+    public TypeUser getTypeUser() {
+        if (isBot()) {
+            return TypeUser.bot;
+        }
+        else {
+            if (isUser()) {
+                return TypeUser.user;
+            }
+            else {
+                return TypeUser.anon;
+            }
+        }
+    }
+
+    /**
+     * Esistenza del botLogin valido e del collegamento come anon <br>
+     *
+     * @return esistenza del botLogin valido
+     */
+    public boolean isAnon() {
+        this.typeUser = TypeUser.anon;
+        this.tagRequestAssert = TAG_REQUEST_ASSERT_ANON;
+        WResult result = urlRequest();
+        return result.isValido();
+    }
+
+    /**
+     * Esistenza del botLogin valido e del collegamento come user <br>
+     *
+     * @return esistenza del botLogin valido
+     */
+    public boolean isUser() {
+        this.typeUser = TypeUser.user;
+        this.tagRequestAssert = TAG_REQUEST_ASSERT_USER;
+        WResult result = urlRequest();
+        return result.isValido();
+    }
+
+    /**
+     * Esistenza del botLogin valido e del collegamento come bot <br>
+     *
+     * @return esistenza del botLogin valido
+     */
+    public boolean isBot() {
+        this.typeUser = TypeUser.bot;
+        this.tagRequestAssert = TAG_REQUEST_ASSERT_BOT;
+        WResult result = urlRequest();
+        return result.isValido();
+    }
+
+    public boolean isValido() {
+        return false;
+    }
 
 }

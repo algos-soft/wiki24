@@ -1538,7 +1538,7 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Userid: %d", botLogin.getUserid()));
         System.out.println(String.format("Username: %s", botLogin.getUsername()));
         System.out.println(String.format("UserType: %s", botLogin.getUserType()));
-        System.out.println(String.format("Response: %s", botLogin.getUrlResponse()));
+        System.out.println(String.format("UrlResponse: %s", botLogin.getUrlResponse()));
         System.out.print(String.format("Cookies: "));
         if (botLogin.getCookies() != null && botLogin.getCookies().size() > 0) {
             System.out.println();
@@ -1547,22 +1547,13 @@ public abstract class WikiTest extends AlgosTest {
         else {
             System.out.println(NULLO);
         }
-        System.out.print(String.format("Mappa: "));
-        if (botLogin.getMappa() != null && botLogin.getMappa().size() > 0) {
-            System.out.println();
-            printMappaTab(botLogin.getMappa());
-        }
-        else {
-            System.out.println(NULLO);
-        }
-
     }
 
 
     protected void printMappaTab(Map<String, String> mappa) {
         if (mappa != null && mappa.size() > 0) {
             for (String key : mappa.keySet()) {
-                System.out.println(String.format("%s%s %s", TAB, key, mappa.get(key)));
+                System.out.println(String.format("%s%s%s%s", TAB, key, UGUALE, mappa.get(key)));
             }
         }
     }

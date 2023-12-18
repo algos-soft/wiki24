@@ -1,11 +1,8 @@
 package it.algos.wiki24.backend.login;
 
-import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.config.*;
-import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.*;
 
 import java.util.*;
 
@@ -16,28 +13,31 @@ import java.util.*;
  * Date: gio, 08-lug-2021
  * Time: 18:31
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Service
 public class BotLogin {
+
+    private boolean valido;
 
     private boolean bot = false;
 
-    private WResult result;
 
     /**
-     * Property indispensabile ricevuta da QueryLogin <br>
+     * Property ricevuta da QueryLogin e indispensabile per ulteriori query (POST) come Bot <br>
      */
     private long lguserid;
 
     /**
-     * Property indispensabile ricevuta da QueryLogin <br>
+     * Property ricevuta da QueryLogin e indispensabile per ulteriori query (POST) come Bot <br>
      */
     private String lgusername;
 
-    private TypeUser userType = TypeUser.anonymous;
+    private TypeUser userType = TypeUser.anon;
 
-    private boolean valido;
+    private String urlResponse;
 
+    /**
+     * Property ricevuta da QueryLogin e indispensabile per ulteriori query (POST) come Bot <br>
+     */
     private Map<String, String> cookies;
 
     public BotLogin() {
@@ -59,17 +59,6 @@ public class BotLogin {
         return userType;
     }
 
-    public Map<String, String> getMappa() {
-        return result != null ? result.getMappa() : null;
-    }
-
-    public WResult getResult() {
-        return result;
-    }
-
-    public void setResult(WResult result) {
-        this.result = result;
-    }
 
     public long getUserid() {
         return lguserid;
@@ -100,7 +89,11 @@ public class BotLogin {
     }
 
     public String getUrlResponse() {
-        return result != null ? result.getResponse() : TAG_VUOTA;
+        return urlResponse;
+    }
+
+    public void setUrlResponse(String urlResponse) {
+        this.urlResponse = urlResponse;
     }
 
     public void setCookies(Map<String, String> cookies) {
@@ -111,13 +104,24 @@ public class BotLogin {
         return cookies;
     }
 
+    public void setQuery(boolean bot, long lguserid, String lgusername, TypeUser type, String urlResponse, Map<String, String> cookies) {
+        this.valido = true;
+        this.bot = bot;
+        this.lguserid = lguserid;
+        this.lgusername = lgusername;
+        this.userType = type;
+        this.urlResponse = urlResponse;
+        this.cookies = cookies;
+    }
+
     public void reset() {
         this.valido = false;
         this.bot = false;
-        this.result = null;
         this.lguserid = 0;
         this.lgusername = VUOTA;
-        this.userType = TypeUser.anonymous;
+        this.userType = TypeUser.anon;
+        this.urlResponse = VUOTA;
+        this.cookies = null;
     }
 
 }

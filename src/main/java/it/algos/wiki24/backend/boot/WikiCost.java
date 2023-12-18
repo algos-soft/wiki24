@@ -168,7 +168,7 @@ public class WikiCost {
 
     public static final String ACTION_PARSE = API_BASE + "&action=parse";
 
-    public static final String WIKI_PARSE = ACTION_PARSE + "&prop=wikitext&page=";
+//    public static final String WIKI_PARSE = ACTION_PARSE + "&prop=wikitext&page=";
 
     public static final String ACTION_QUERY = API_BASE + "&action=query";
 

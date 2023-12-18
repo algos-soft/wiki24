@@ -4,6 +4,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import org.apache.commons.lang3.StringUtils;
 import org.bson.*;
@@ -54,7 +55,7 @@ public class WikiBotService {
 
     public static final String WIKI = "https://it.wikipedia.org/w/api.php?&format=json&formatversion=2&action=query";
 
-    public static final String WIKI_QUERY = WIKI + "&rvslots=main&prop=info|revisions&rvprop=content|ids|flags|timestamp|user|userid|comment|size&titles=";
+//    public static final String WIKI_QUERY = WIKI + "&rvslots=main&prop=info|revisions&rvprop=content|ids|flags|timestamp|user|userid|comment|size&titles=";
 
     public static final String WIKI_PARSE = "https://it.wikipedia.org/w/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page=";
 
