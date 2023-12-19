@@ -89,7 +89,7 @@ public class QueryExistTest extends WikiTest {
         ottenutoRisultato = istanza.urlRequest(sorgente);
         assertNotNull(ottenutoRisultato);
         assertFalse(ottenutoRisultato.isValido());
-        assertTrue(ottenutoRisultato.getWrap() == null);
+        assertTrue(ottenutoRisultato.getWrapPage() == null);
         assertEquals(TypePage.nonEsiste, ottenutoRisultato.getTypePage());
 
         ottenutoBooleano = istanza.isEsiste(sorgente);
@@ -114,7 +114,7 @@ public class QueryExistTest extends WikiTest {
         ottenutoRisultato = istanza.urlRequest(sorgenteLong);
         assertNotNull(ottenutoRisultato);
         assertFalse(ottenutoRisultato.isValido());
-        assertTrue(ottenutoRisultato.getWrap() == null);
+        assertTrue(ottenutoRisultato.getWrapPage() == null);
         assertEquals(TypePage.nonEsiste, ottenutoRisultato.getTypePage());
 
         ottenutoBooleano = istanza.isEsiste(sorgente);
@@ -136,7 +136,7 @@ public class QueryExistTest extends WikiTest {
         ottenutoRisultato = appContext.getBean(QueryExist.class).urlRequest(sorgente);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
-        assertTrue(ottenutoRisultato.getWrap() == null);
+        assertTrue(ottenutoRisultato.getWrapPage() == null);
         assertEquals(TypePage.pagina, ottenutoRisultato.getTypePage());
 
         System.out.println(VUOTA); System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
@@ -153,7 +153,7 @@ public class QueryExistTest extends WikiTest {
         ottenutoRisultato = appContext.getBean(QueryExist.class).urlRequest(sorgente);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
-        assertTrue(ottenutoRisultato.getWrap() == null);
+        assertTrue(ottenutoRisultato.getWrapPage() == null);
         assertEquals(TypePage.categoria, ottenutoRisultato.getTypePage());
 
         System.out.println(VUOTA); System.out.println(String.format("Trovata la categoria [[%s]] su wikipedia", sorgente));
@@ -174,7 +174,7 @@ public class QueryExistTest extends WikiTest {
         ottenutoRisultato = istanza.urlRequest(sorgenteLong);
         assertNotNull(ottenutoRisultato);
         assertTrue(ottenutoRisultato.isValido());
-        assertTrue(ottenutoRisultato.getWrap() == null);
+        assertTrue(ottenutoRisultato.getWrapPage() == null);
         assertEquals(TypePage.pagina, ottenutoRisultato.getTypePage());
 
         ottenutoBooleano = istanza.isEsiste(sorgenteLong);

@@ -386,11 +386,13 @@ public class DateService {
 
         return bisestile;
     }
+
     public LocalDateTime parseWiki(String testoSorgente) {
-        String suffixWiki="Z";
-        testoSorgente=textService.levaCoda(testoSorgente,suffixWiki);
+        String suffixWiki = "Z";
+        testoSorgente = textService.levaCoda(testoSorgente, suffixWiki);
         return LocalDateTime.parse(testoSorgente);
     }
+
     public boolean divisibileEsatto(int dividendo, int divisore) {
         return dividendo % divisore == 0;
     }

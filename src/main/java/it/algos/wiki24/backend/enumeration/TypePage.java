@@ -8,6 +8,5 @@ package it.algos.wiki24.backend.enumeration;
  * Time: 07:16
  */
 public enum TypePage {
-    nonEsiste, redirect, disambigua, testoVuoto, testoSenzaTmpl, testoConTmpl, mancaTmpl, indeterminata, categoria, contienePipe, pagina,
-    login, pageIds, listWikiTitles
+    nonEsiste, redirect, disambigua, testoVuoto, testoSenzaTmpl, testoConTmpl, mancaTmpl, indeterminata, categoria, contienePipe, pagina, login, pageIds, listWikiTitles,
 }

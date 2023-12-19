@@ -189,9 +189,9 @@ public abstract class AQuery {
         }
 
         if (type != null) {
-//            if (type == TypeUser.user || type == TypeUser.bot) {
-                urlDomain += type.affermazione();
-//            }
+            //            if (type == TypeUser.user || type == TypeUser.bot) {
+            urlDomain += type.affermazione();
+            //            }
         }
 
         return urlDomain;
@@ -209,6 +209,7 @@ public abstract class AQuery {
             message = String.format("Manca il pathQuery");
             logger.error(new WrapLog().exception(new AlgosException(message)).usaDb());
             result.errorMessage(message);
+            result.setWrapPage(new WrapPage(TypePage.nonEsiste));
             result.setFine();
             return result;
         }
@@ -253,11 +254,12 @@ public abstract class AQuery {
             logger.warn(new WrapLog().exception(new AlgosException(message)));
             result.errorMessage(message);
             result.setFine();
+            result.setWrapPage(new WrapPage(TypePage.nonEsiste));
             return result;
         }
 
-        if (result.getWrap() != null) {
-            result.getWrap().title(wikiTitleGrezzo);
+        if (result.getWrapPage() != null) {
+            result.getWrapPage().title(wikiTitleGrezzo);
         }
         return result.wikiTitle(wikiTitleGrezzo);
     }
@@ -276,8 +278,8 @@ public abstract class AQuery {
             return result;
         }
 
-        if (result.getWrap() != null) {
-            result.getWrap().pageid(pageid);
+        if (result.getWrapPage() != null) {
+            result.getWrapPage().pageid(pageid);
         }
         return result.pageid(pageid);
     }
@@ -321,17 +323,17 @@ public abstract class AQuery {
         URLConnection urlConn;
         String urlResponse;
 
-//        switch (typeQuery) {
-//            case getSenzaLoginSenzaCookies -> {
-//                urlDomain = fixAssert(urlDomain);
-//                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
-//            }
-//            case getLoggatoConCookies -> {
-//                urlDomain = fixAssert(urlDomain);
-//                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
-//            }
-//            default -> {}
-//        }
+        //        switch (typeQuery) {
+        //            case getSenzaLoginSenzaCookies -> {
+        //                urlDomain = fixAssert(urlDomain);
+        //                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
+        //            }
+        //            case getLoggatoConCookies -> {
+        //                urlDomain = fixAssert(urlDomain);
+        //                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
+        //            }
+        //            default -> {}
+        //        }
         urlDomain = fixAssert(urlDomain);
         result.setCookies(botLogin != null ? botLogin.getCookies() : null);
         result.setGetRequest(urlDomain);
@@ -345,6 +347,18 @@ public abstract class AQuery {
             uploadCookies(urlConn, result.getCookies());
             urlResponse = sendRequest(urlConn);
             result = elaboraResponse(result, urlResponse);
+            if (result.getTypePage() == TypePage.nonEsiste) {
+                urlDomain = textService.levaCodaDaUltimo(urlDomain, API_TITLES);
+                urlDomain += API_PAGEIDS + result.getTarget();
+                urlConn = this.creaGetConnection(urlDomain);
+                uploadCookies(urlConn, result.getCookies());
+                urlResponse = sendRequest(urlConn);
+                result = elaboraResponse(result, urlResponse);
+                if (result.isValido()) {
+                    result.setWrapPage(result.getWrapPage().type(TypePage.pageIds));
+                    result.setTypePage(TypePage.pageIds);
+                }
+            }
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -639,6 +653,8 @@ public abstract class AQuery {
                 result.setErrorMessage(String.format("La pagina wiki '%s' non esiste", result.getWikiTitle()));
                 result.setTypePage(TypePage.nonEsiste);
                 mappaUrlResponse.put(KEY_JSON_MISSING, true);
+                result.setTypePage(TypePage.nonEsiste);
+                result.setWrapPage(new WrapPage(TypePage.nonEsiste));
                 return result;
             }
             else {
@@ -672,7 +688,6 @@ public abstract class AQuery {
         }
 
         if (query != null && query.get(KEY_JSON_PAGES) != null) {
-            Object alfa = query.get(KEY_JSON_PAGES);
             pages = (JSONArray) query.get(KEY_JSON_PAGES);
             mappaUrlResponse.put(KEY_JSON_PAGES, pages);
             mappaUrlResponse.put(KEY_JSON_NUM_PAGES, pages.size());
@@ -682,7 +697,6 @@ public abstract class AQuery {
             queryPageZero = (JSONObject) pages.get(0);
             mappaUrlResponse.put(KEY_JSON_ZERO, queryPageZero);
             result.setValido().typePage(TypePage.indeterminata);
-
         }
 
         return result;
@@ -709,22 +723,26 @@ public abstract class AQuery {
     //--estrae informazioni dalla pagina 'zero'
     //--estrae il 'content' dalla pagina 'zero'
     protected WResult fixQueryContent(WResult result) {
-        String content;
-        String wikiTitle;
-        long pageId;
+        long nameSpace = 0;
+        long pageId = 0;
+        String wikiTitle = VUOTA;
+        String timeStamp = VUOTA;
+        String content = VUOTA;
+        WrapPage wrapPage;
 
         if (mappaUrlResponse.get(KEY_JSON_ZERO) instanceof JSONObject jsonPageZero) {
-            if (jsonPageZero.get(KEY_JSON_NS) instanceof Long nameSpace) {
+            if (jsonPageZero.get(KEY_JSON_NS) instanceof Long nameSpaceObj) {
+                nameSpace = nameSpaceObj;
                 result.setNameSpace(nameSpace);
                 mappaUrlResponse.put(KEY_JSON_NS, nameSpace);
             }
 
-            if (jsonPageZero.get(KEY_JSON_PAGE_ID) instanceof Long pageid) {
-                pageId = pageid;
+            if (jsonPageZero.get(KEY_JSON_PAGE_ID) instanceof Long pageIdObj) {
+                pageId = pageIdObj;
                 result.pageid(pageId);
             }
-            if (jsonPageZero.get(KEY_JSON_TITLE) instanceof String title) {
-                wikiTitle = title;
+            if (jsonPageZero.get(KEY_JSON_TITLE) instanceof String wikiTitleObj) {
+                wikiTitle = wikiTitleObj;
                 result.wikiTitle(wikiTitle);
             }
 
@@ -737,17 +755,23 @@ public abstract class AQuery {
                             mappaUrlResponse.put(KEY_JSON_CONTENT, content);
                         }
                     }
-                    if (jsonRevZero.get(KEY_JSON_CONTENT) instanceof String contentTxt) {
-                        mappaUrlResponse.put(KEY_JSON_CONTENT, contentTxt);
-                        result.setContent(contentTxt);
+                    if (jsonRevZero.get(KEY_JSON_CONTENT) instanceof String contentObj) {
+                        content = contentObj;
+                        mappaUrlResponse.put(KEY_JSON_CONTENT, content);
+                        result.setContent(content);
                         result.setTypePage(TypePage.pagina);
                     }
-                    if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String newTimestamp) {
-                        mappaUrlResponse.put(KEY_JSON_TIMESTAMP, newTimestamp);
-                        result.setNewtimestamp(newTimestamp);
-                        result.setTimeStamp(LocalDateTime.parse(newTimestamp));
+                    if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String timeStampObj) {
+                        timeStamp = timeStampObj;
+                        mappaUrlResponse.put(KEY_JSON_TIMESTAMP, timeStamp);
+                        result.setNewtimestamp(timeStamp);
+                        result.setTimeStamp(dateService.parseWiki(timeStamp));
                     }
                 }
+            }
+            if (textService.isValid(content)) {
+                wrapPage = new WrapPage(TypePage.pagina, nameSpace, pageId, wikiTitle, timeStamp, content);
+                result.setWrapPage(wrapPage);
             }
         }
 
@@ -756,7 +780,7 @@ public abstract class AQuery {
 
 
     protected WResult fixQueryDisambiguaRedirect(WResult result) {
-        String wikiLink = VUOTA;
+        String wikiLink;
 
         if (mappaUrlResponse.get(KEY_JSON_CONTENT) instanceof String content) {
             //--contenuto inizia col tag della disambigua
@@ -764,8 +788,7 @@ public abstract class AQuery {
                 result.setValido(false);
                 result.setErrorCode("disambigua");
                 result.setErrorMessage(String.format("La pagina wiki '%s' è una disambigua", result.getWikiTitle()));
-                //                wrap = result.getWrap().valida(false).type(AETypePage.disambigua);
-                //                result.setWrap(wrap);
+                result.setWrapPage(result.getWrapPage().type(TypePage.disambigua));
                 mappaUrlResponse.put(KEY_JSON_DISAMBIGUA, true);
                 return result.typePage(TypePage.disambigua);
             }
@@ -775,8 +798,7 @@ public abstract class AQuery {
                 result.setValido(false);
                 result.setErrorCode("redirect");
                 result.setErrorMessage(String.format("La pagina wiki '%s' è un redirect", result.getWikiTitle()));
-                //                wrap = result.getWrap().valida(false).type(AETypePage.redirect);
-                //                result.setWrap(wrap);
+                result.setWrapPage(result.getWrapPage().type(TypePage.redirect));
                 mappaUrlResponse.put(KEY_JSON_REDIRECT, true);
                 wikiLink = content.substring(content.indexOf(DOPPIE_QUADRE_INI)).trim();
                 wikiLink = textService.setNoQuadre(wikiLink);
@@ -789,8 +811,8 @@ public abstract class AQuery {
     }
 
 
-    protected WrapBio getWrap(JSONObject jsonPageZero) {
-        WrapBio wrapBio;
+    protected WrapPage getWrapPage(JSONObject jsonPageZero) {
+        WrapPage wrapPage = null;
         String content = VUOTA;
         String wikiTitle = VUOTA;
         long pageId = 0L;
@@ -831,14 +853,67 @@ public abstract class AQuery {
 
         tmplBio = wikiBot.estraeTmpl(content);
         if (textService.isValid(tmplBio)) {
-            wrapBio = new WrapBio().valida(true).title(wikiTitle).pageid(pageId).type(TypePage.testoConTmpl).timeStamp(timestamp).templBio(tmplBio);
+            wrapPage = new WrapPage(TypePage.testoConTmpl, 0, pageId, wikiTitle, timestamp, content);
         }
         else {
-            wrapBio = new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(TypePage.testoSenzaTmpl).timeStamp(timestamp).templBio(tmplBio);
+            wrapPage = new WrapPage(TypePage.testoSenzaTmpl, 0, pageId, wikiTitle, timestamp, content);
+        }
+
+        return wrapPage;
+    }
+
+
+    protected WrapBio getWrapBio(JSONObject jsonPageZero) {
+        WrapBio wrapBio = null;
+        String content = VUOTA;
+        String wikiTitle = VUOTA;
+        long pageId = 0L;
+        String tmplBio;
+        LocalDateTime timestamp = ROOT_DATA_TIME;
+
+        if (jsonPageZero.get(KEY_JSON_PAGE_ID) instanceof Long pageid) {
+            pageId = pageid;
+        }
+        if (jsonPageZero.get(KEY_JSON_TITLE) instanceof String title) {
+            wikiTitle = title;
+        }
+
+        if (jsonPageZero.get(KEY_JSON_REVISIONS) instanceof JSONArray jsonRevisions) {
+            if (jsonRevisions.size() > 0) {
+                JSONObject jsonRevZero = (JSONObject) jsonRevisions.get(0);
+                if (jsonRevZero.get(KEY_JSON_SLOTS) instanceof JSONObject jsonSlots) {
+                    if (jsonSlots.get(KEY_JSON_MAIN) instanceof JSONObject jsonMain) {
+                        content = (String) jsonMain.get(KEY_JSON_CONTENT);
+                        mappaUrlResponse.put(KEY_JSON_CONTENT, content);
+                    }
+                }
+                if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String timestampText) {
+                    //                    timestamp = LocalDateTime.parse(timestampText);
+                    //                    // @todo RIMETTERE
+
+                    //                    timestamp = dateService.dateTimeFromISO(timestampText);
+                    //                    // @todo ma scherzi?
+                    //                    timestamp=LocalDateTime.of(2023,4,7,3,4);
+                    mappaUrlResponse.put(KEY_JSON_TIMESTAMP, timestamp);
+                }
+                if (jsonRevZero.get(KEY_JSON_CONTENT) instanceof String contenuto) {
+                    content = contenuto;
+                    mappaUrlResponse.put(KEY_JSON_CONTENT, content);
+                }
+            }
+        }
+
+        tmplBio = wikiBot.estraeTmpl(content);
+        if (textService.isValid(tmplBio)) {
+            //            wrapBio = new WrapBio().title(wikiTitle).pageid(pageId).type(TypePage.testoConTmpl).timeStamp(timestamp).templBio(tmplBio);
+        }
+        else {
+            //            wrapBio = new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(TypePage.testoSenzaTmpl).timeStamp(timestamp).templBio(tmplBio);
         }
 
         return wrapBio;
     }
+
 
     //--controllo del 'content'
     //--controllo l'esistenza del template bio
@@ -864,12 +939,12 @@ public abstract class AQuery {
                 result.setCodeMessage("valida");
                 result.typePage(TypePage.pagina);
                 result.setValidMessage(String.format("La pagina wiki '%s' è una biografia", wikiTitle));
-                result.setWrap(new WrapBio().valida(true).title(wikiTitle).pageid(pageId).type(TypePage.testoConTmpl).templBio(tmplBio));
+                //                result.setWrapBio(new WrapBio().title(wikiTitle).pageid(pageId).type(TypePage.testoConTmpl).templBio(tmplBio));
             }
             else {
                 result.setErrorCode("manca tmpl Bio");
                 result.setErrorMessage(String.format("La pagina wiki '%s' esiste ma non è una biografia", wikiTitle));
-                result.setWrap(new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(TypePage.testoSenzaTmpl));
+                //                result.setWrapBio(new WrapBio().valida(false).title(wikiTitle).pageid(pageId).type(TypePage.testoSenzaTmpl));
 
             }
             return result;

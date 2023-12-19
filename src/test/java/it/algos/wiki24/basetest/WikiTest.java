@@ -570,6 +570,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(VUOTA, false, false),
                 Arguments.of("Roman Protasevič", true, true),
                 Arguments.of("Louis Winslow Austin", true, true),
+                Arguments.of("4935359", true, false),
                 Arguments.of("Categoria:Nati nel 1435", true, false),
                 Arguments.of("2741616|27416167", false, false),
                 Arguments.of("Categoria:Nati nel 2387", false, false),
@@ -1437,6 +1438,7 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("User: %s", result.getUserType()));
         System.out.println(String.format("Limit: %d", result.getLimit()));
         System.out.println(String.format("Summary: %s", result.getSummary()));
+        System.out.println(String.format("Timestamp: %s", result.getTimeStamp()));
         System.out.println(String.format("Preliminary url: %s", result.getUrlPreliminary()));
         System.out.println(String.format("Secondary url: %s", result.getUrlRequest()));
         System.out.println(String.format("Get request url: %s", result.getGetRequest()));
@@ -1460,9 +1462,24 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Content value: %s", content));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.toText(result.getDurata())));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaTextEsatto(result.getInizio(), result.getFine())));
-        printWrapBio(result.getWrap());
+        printWrapPage(result.getWrapPage());
+        printWrapBio(result.getWrapBio());
     }
 
+
+    protected void printWrapPage(WrapPage wrap) {
+        if (wrap != null) {
+            System.out.println(VUOTA);
+            System.out.println(String.format("Wrap valido: %s", wrap.isValida()));
+            System.out.println(String.format("Wrap type: %s", wrap.getType()));
+            System.out.println(String.format("Wrap nameSpace: %s", wrap.getNameSpace()));
+            System.out.println(String.format("Wrap pageid: %s", wrap.getPageid()));
+            System.out.println(String.format("Wrap title: %s", wrap.getTitle()));
+            System.out.println(String.format("Wrap timeStamp: %s", wrap.getTimeStamp()));
+            System.out.println(String.format("Wrap content:"));
+            System.out.println(String.format("%s", wrap.getContent()));
+        }
+    }
 
     protected void printWrapBio(WrapBio wrap) {
         if (wrap != null) {

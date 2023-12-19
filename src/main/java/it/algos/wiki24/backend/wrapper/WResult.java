@@ -74,7 +74,8 @@ public class WResult {
 
     private int limit;
 
-    private WrapBio wrap;
+    private WrapPage wrapPage;
+    private WrapBio wrapBio;
 
     private String summary = VUOTA;
 
@@ -111,12 +112,16 @@ public class WResult {
     protected List lista = null;
 
     public WResult() {
-        this((WrapBio) null);
+        this.wrapPage = wrapPage;
+        this.wrapBio = wrapBio;
     }
 
-    private WResult(WrapBio wrap) {
-        super();
-        this.wrap = wrap;
+    private WResult(WrapPage wrapPage) {
+        this.wrapPage = wrapPage;
+        this.inizio = System.currentTimeMillis();
+    }
+    private WResult(WrapBio wrapBio) {
+        this.wrapBio = wrapBio;
         this.inizio = System.currentTimeMillis();
     }
 
@@ -401,12 +406,20 @@ public class WResult {
         return this;
     }
 
-    public WrapBio getWrap() {
-        return wrap;
+    public WrapPage getWrapPage() {
+        return wrapPage;
     }
 
-    public void setWrap(WrapBio wrap) {
-        this.wrap = wrap;
+    public void setWrapPage(WrapPage wrapPage) {
+        this.wrapPage = wrapPage;
+    }
+
+    public WrapBio getWrapBio() {
+        return wrapBio;
+    }
+
+    public void setWrapBio(WrapBio wrapBio) {
+        this.wrapBio = wrapBio;
     }
 
     public void setValido(final boolean valido) {
@@ -688,6 +701,10 @@ public class WResult {
 
     public String getValidMessage() {
         return validMessage;
+    }
+
+    public String getTarget() {
+        return target;
     }
 
 }

@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.wrapper;
 
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 
 import java.time.*;
@@ -16,13 +17,14 @@ import java.time.format.*;
  */
 public class WrapBio {
 
-    private TypePage type;
-
-    private long pageid;
-
-    private String title;
-
-    private LocalDateTime timeStamp;
+    //    private TypePage type;
+    //
+    //    private long pageid;
+    //
+    //    private String title;
+    //
+    //    private LocalDateTime timeStamp;
+    private WrapPage wrapPage;
 
     private String templBio;
 
@@ -31,56 +33,55 @@ public class WrapBio {
     public WrapBio() {
     }
 
+    //    public WrapBio type(final TypePage type) {
+    //        this.type = type;
+    //        return this;
+    //    }
+    //
+    //    public WrapBio pageid(final long pageid) {
+    //        this.pageid = pageid;
+    //        return this;
+    //    }
+    //
+    //    public WrapBio title(final String title) {
+    //        this.title = title;
+    //        return this;
+    //    }
+    //
+    //    public WrapBio timeStamp(final LocalDateTime timeStamp) {
+    //        this.timeStamp = timeStamp;
+    //        return this;
+    //    }
 
-    public WrapBio type(final TypePage type) {
-        this.type = type;
+    public WrapBio WrapPage(final WrapPage wrapPage) {
+        this.wrapPage = wrapPage;
         return this;
     }
 
-    public WrapBio pageid(final long pageid) {
-        this.pageid = pageid;
-        return this;
-    }
+    //    public WrapBio valida(final boolean valida) {
+    //        this.valida = valida;
+    //        return this;
+    //    }
 
-    public WrapBio title(final String title) {
-        this.title = title;
-        return this;
-    }
-
-    public WrapBio timeStamp(final LocalDateTime timeStamp) {
-        this.timeStamp = timeStamp;
-        return this;
-    }
-
-    public WrapBio templBio(final String templBio) {
-        this.templBio = templBio;
-        return this;
-    }
-
-    public WrapBio valida(final boolean valida) {
-        this.valida = valida;
-        return this;
-    }
-
-    public WrapBio time(final String stringTimestamp) {
-        this.timeStamp = (stringTimestamp != null && stringTimestamp.length() > 0) ? LocalDateTime.parse(stringTimestamp, DateTimeFormatter.ISO_DATE_TIME) : null;
-        return this;
-    }
+    //    public WrapBio time(final String stringTimestamp) {
+    //        this.timeStamp = (stringTimestamp != null && stringTimestamp.length() > 0) ? LocalDateTime.parse(stringTimestamp, DateTimeFormatter.ISO_DATE_TIME) : null;
+    //        return this;
+    //    }
 
     public TypePage getType() {
-        return type;
+        return wrapPage != null ? wrapPage.getType() : TypePage.indeterminata;
     }
 
     public long getPageid() {
-        return pageid;
+        return wrapPage != null ? wrapPage.getPageid() : 0;
     }
 
     public String getTitle() {
-        return title;
+        return wrapPage != null ? wrapPage.getTitle() : VUOTA;
     }
 
     public LocalDateTime getTimeStamp() {
-        return timeStamp;
+        return wrapPage != null ? wrapPage.getTimeStamp() : ROOT_DATA_TIME;
     }
 
     public String getTemplBio() {

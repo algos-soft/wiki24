@@ -1,22 +1,22 @@
 package it.algos.wiki24.backend.query;
 
-import com.vaadin.flow.spring.annotation.*;
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
- * Project wiki23
+ * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 03-Jul-2022
- * Time: 08:14
+ * Date: Tue, 19-Dec-2023
+ * Time: 07:26
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class QueryRead extends AQuery {
+public class QueryPage extends AQuery {
 
     /**
      * Request principale <br>
@@ -69,8 +69,10 @@ public class QueryRead extends AQuery {
      *
      * @return testo della pagina
      */
-    public String getContent(final String wikiTitleGrezzo) {
-        return urlRequest(wikiTitleGrezzo).getContent();
+    public WrapPage getPage(final String wikiTitleGrezzo) {
+        WResult result = urlRequest(wikiTitleGrezzo);
+        return result != null ? result.getWrapPage() : null;
     }
 
 }
+

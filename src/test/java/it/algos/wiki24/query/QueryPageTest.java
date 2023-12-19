@@ -1,29 +1,25 @@
 package it.algos.wiki24.query;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import static it.algos.wiki24.backend.boot.WikiCost.*;
-import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.query.*;
+import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.core.env.*;
-
-import javax.inject.*;
-
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
- * Project wiki23
+ * Project wiki24
  * Created by Algos
  * User: gac
- * Date: mer, 11-mag-2022
- * Time: 06:52
+ * Date: Tue, 19-Dec-2023
+ * Time: 07:31
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -32,15 +28,16 @@ import javax.inject.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("query")
-@DisplayName("Test QueryRead")
+@DisplayName("Test QueryPage")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QueryReadTest extends QueryTest {
+public class QueryPageTest extends QueryTest {
 
     /**
      * Classe principale di riferimento <br>
      */
-    private QueryRead istanza;
+    private QueryPage istanza;
 
+    private WrapPage wrapPage;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -64,6 +61,7 @@ public class QueryReadTest extends QueryTest {
     protected void setUpEach() {
         super.setUpEach();
         istanza = null;
+        wrapPage = null;
     }
 
 
@@ -71,7 +69,7 @@ public class QueryReadTest extends QueryTest {
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
-        istanza = new QueryRead();
+        istanza = new QueryPage();
         assertNotNull(istanza);
         System.out.println(("1 - Costruttore base senza parametri"));
         System.out.println(VUOTA);
@@ -92,61 +90,38 @@ public class QueryReadTest extends QueryTest {
         printRisultato(ottenutoRisultato);
     }
 
-    @Test
-    @Order(3)
-    @DisplayName("3 - Request errata. Non esiste la pagina")
-    void inesistente() {
-        System.out.println(("3 - Request errata. Non esiste la pagina"));
-        System.out.println(VUOTA);
 
-        sorgente = "Pippoz Belloz";
-        ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-        printRisultato(ottenutoRisultato);
+    @ParameterizedTest
+    @MethodSource(value = "PAGINE_E_CATEGORIE")
+    @Order(101)
+    @DisplayName("101 - Recupera wrapPage")
+        //--titolo
+        //--pagina esistente
+    void wrapPage(final String wikiTitleVoceOppureCategoria, final boolean paginaEsistente) {
+        System.out.println(("101 - Recupera wrapPage"));
+
+        sorgente = wikiTitleVoceOppureCategoria;
+        wrapPage = appContext.getBean(QueryPage.class).getPage(sorgente);
+        assertNotNull(wrapPage);
+        System.out.println(VUOTA);
+        if (paginaEsistente) {
+            if (wrapPage.isValida()) {
+                System.out.println(String.format("Trovata la pagina/categoria [[%s]] su wikipedia", sorgente));
+            }
+            else {
+                System.out.println(String.format("Errore"));
+            }
+        }
+        else {
+            if (wrapPage.isValida()) {
+                System.out.println(String.format("Bho ?"));
+            }
+            else {
+                System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", sorgente));
+            }
+        }
+        printWrapPage(wrapPage);
     }
 
-    @Test
-    @Order(4)
-    @DisplayName("4 - Request valida")
-    void valida() {
-        System.out.println(("4 - Request valida"));
-        System.out.println(VUOTA);
-
-        sorgente = "Utente:Biobot/2";
-        ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertTrue(ottenutoRisultato.isValido());
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(5)
-    @DisplayName("5 - Altra request valida")
-    void valida2() {
-        System.out.println(("5 - Altra request valida"));
-        System.out.println(VUOTA);
-
-        sorgente = "Piozzano";
-        ottenuto = appContext.getBean(QueryRead.class).getContent(sorgente);
-        assertTrue(textService.isValid(ottenuto));
-
-        ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
-        System.out.println((ottenuto));
-    }
-    @Test
-    @Order(6)
-    @DisplayName("6 - Titolo 'strano'")
-    void valida6() {
-        System.out.println(("6 - Titolo 'strano'"));
-        System.out.println(VUOTA);
-
-        sorgente = "Othon & Tomasini";
-        ottenuto = appContext.getBean(QueryRead.class).getContent(sorgente);
-        assertTrue(textService.isValid(ottenuto));
-
-        ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
-        System.out.println((ottenuto));
-    }
 
 }
