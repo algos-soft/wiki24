@@ -65,7 +65,6 @@ public class QueryLoginTest extends QueryTest {
     protected void setUpAll() {
         super.clazz = QueryLogin.class;
         super.setUpAll();
-        //        super.ammessoCostruttoreVuoto = false;
         assertNull(istanza);
     }
 

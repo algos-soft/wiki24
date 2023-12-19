@@ -35,7 +35,7 @@ import java.util.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("query")
-@DisplayName("Test QueryAssert")
+@DisplayName("Test QueryLoginAssert")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryLoginAssertTest extends WikiTest {
 

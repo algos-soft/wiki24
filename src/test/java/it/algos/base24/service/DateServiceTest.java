@@ -1,6 +1,7 @@
 package it.algos.base24.service;
 
 import it.algos.*;
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.basetest.*;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.test.context.junit.jupiter.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -36,6 +38,7 @@ public class DateServiceTest extends ServiceTest {
     @Autowired
     private TextService textService;
 
+    private LocalDateTime localDateTime;
 
     //--durata (long)
     private Stream<Arguments> milliSecondi() {
@@ -112,6 +115,8 @@ public class DateServiceTest extends ServiceTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+
+        this.localDateTime = ROOT_DATA_TIME;
     }
 
 
@@ -240,9 +245,21 @@ public class DateServiceTest extends ServiceTest {
 
         List<HashMap<String, Object>> listaGiorni = service.getAllGiorni();
         assertNotNull(listaGiorni);
-        assertEquals(NUM_GIORNI_ANNO,listaGiorni.size());
+        assertEquals(NUM_GIORNI_ANNO, listaGiorni.size());
         message = String.format("Ci sono %d giorni nell'anno. Considerando anche il 29 febbraio", listaGiorni.size());
         System.out.println(message);
+    }
+
+    @Test
+    @Order(301)
+    @DisplayName("301 - parse")
+    void parse() {
+        System.out.println(("301 - parse"));
+        System.out.println(VUOTA);
+        sorgente = "2023-05-29T13:33:34Z";
+
+        localDateTime = service.parseWiki(sorgente);
+        assertNotNull(localDateTime);
     }
 
 }

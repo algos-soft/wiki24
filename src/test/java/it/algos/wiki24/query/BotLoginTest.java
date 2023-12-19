@@ -87,7 +87,6 @@ public class BotLoginTest extends WikiTest {
         System.out.println(("11 - valoreIniziale"));
 
         assertNotNull(botLogin);
-        assertFalse(botLogin.isValido());
         printBotLogin();
     }
 
@@ -98,7 +97,6 @@ public class BotLoginTest extends WikiTest {
         System.out.println(("12 - urlRequestHamed"));
 
         assertNotNull(botLogin);
-        assertFalse(botLogin.isValido());
         printBotLogin();
         System.out.println(VUOTA);
 

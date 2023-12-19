@@ -52,7 +52,7 @@ public abstract class AlgosTest {
     protected String previsto2;
 
     protected String ottenuto;
-
+    protected long  sorgenteLong;
     protected boolean previstoBooleano;
 
     protected boolean ottenutoBooleano;

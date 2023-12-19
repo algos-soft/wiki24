@@ -334,7 +334,7 @@ public class QueryLogin extends AQuery {
         String urlDomain = TAG_LOGIN_SECONDARY_REQUEST_POST;
         String urlResponse = VUOTA;
         URLConnection urlConn;
-        String testoPost = VUOTA;
+        String testoPost;
         result.setUrlRequest(urlDomain);
 
         try {
@@ -418,18 +418,7 @@ public class QueryLogin extends AQuery {
 
         //--trasferisce nella istanza singleton BotLogin i cookies per essere utilizzati in tutte le query
         if (valido) {
-            //            String userName = result.getCookies().get("itwikiUserName");
-            //            String userID = result.getCookies().get("itwikiUserID");
-            //            cookies.put("itwikiUserName", userName);
-            //            cookies.put("itwikiUserID", userID);
             botLogin.setQuery(true, lguserid, lgname, TypeUser.bot, result.getResponse(), cookiesLogin(cookiesSecondary));
-            //            botLogin.setValido(true);
-            //            botLogin.setBot(typeUser == TypeUser.bot);
-            //            botLogin.setLguserid(lguserid);
-            //            botLogin.setLgusername(lgusername);
-            //            botLogin.setUserType(typeUser);
-            //            botLogin.setCookies(cookies);
-            //            botLogin.setUrlResponse(result.getResponse());
             result.setUserType(typeUser);
             result.setResponse(jsonLogin.toString());
             result.setValidMessage(String.format("%s: %d, %s: %s", LOGIN_USER_ID, lguserid, LOGIN_USER_NAME, lgusername));

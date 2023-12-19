@@ -11,7 +11,7 @@ import it.algos.wiki24.backend.login.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.json.JSONArray;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.*;
 import org.springframework.context.*;
@@ -189,9 +189,9 @@ public abstract class AQuery {
         }
 
         if (type != null) {
-            if (type == TypeUser.user || type == TypeUser.bot) {
+//            if (type == TypeUser.user || type == TypeUser.bot) {
                 urlDomain += type.affermazione();
-            }
+//            }
         }
 
         return urlDomain;
@@ -321,17 +321,19 @@ public abstract class AQuery {
         URLConnection urlConn;
         String urlResponse;
 
-        switch (typeQuery) {
-            case getSenzaLoginSenzaCookies -> {
-                urlDomain = fixAssert(urlDomain);
-                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
-            }
-            case getLoggatoConCookies -> {
-                urlDomain = fixAssert(urlDomain);
-                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
-            }
-            default -> {}
-        }
+//        switch (typeQuery) {
+//            case getSenzaLoginSenzaCookies -> {
+//                urlDomain = fixAssert(urlDomain);
+//                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
+//            }
+//            case getLoggatoConCookies -> {
+//                urlDomain = fixAssert(urlDomain);
+//                result.setCookies(botLogin != null ? botLogin.getCookies() : null);
+//            }
+//            default -> {}
+//        }
+        urlDomain = fixAssert(urlDomain);
+        result.setCookies(botLogin != null ? botLogin.getCookies() : null);
         result.setGetRequest(urlDomain);
 
         if (result.isErrato()) {
@@ -670,12 +672,13 @@ public abstract class AQuery {
         }
 
         if (query != null && query.get(KEY_JSON_PAGES) != null) {
+            Object alfa = query.get(KEY_JSON_PAGES);
             pages = (JSONArray) query.get(KEY_JSON_PAGES);
             mappaUrlResponse.put(KEY_JSON_PAGES, pages);
-            mappaUrlResponse.put(KEY_JSON_NUM_PAGES, pages.length());
+            mappaUrlResponse.put(KEY_JSON_NUM_PAGES, pages.size());
         }
 
-        if (pages != null && pages.length() > 0) {
+        if (pages != null && pages.size() > 0) {
             queryPageZero = (JSONObject) pages.get(0);
             mappaUrlResponse.put(KEY_JSON_ZERO, queryPageZero);
             result.setValido().typePage(TypePage.indeterminata);
@@ -726,7 +729,7 @@ public abstract class AQuery {
             }
 
             if (jsonPageZero.get(KEY_JSON_REVISIONS) instanceof JSONArray jsonRevisions) {
-                if (jsonRevisions.length() > 0) {
+                if (jsonRevisions.size() > 0) {
                     JSONObject jsonRevZero = (JSONObject) jsonRevisions.get(0);
                     if (jsonRevZero.get(KEY_JSON_SLOTS) instanceof JSONObject jsonSlots) {
                         if (jsonSlots.get(KEY_JSON_MAIN) instanceof JSONObject jsonMain) {
@@ -738,6 +741,11 @@ public abstract class AQuery {
                         mappaUrlResponse.put(KEY_JSON_CONTENT, contentTxt);
                         result.setContent(contentTxt);
                         result.setTypePage(TypePage.pagina);
+                    }
+                    if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String newTimestamp) {
+                        mappaUrlResponse.put(KEY_JSON_TIMESTAMP, newTimestamp);
+                        result.setNewtimestamp(newTimestamp);
+                        result.setTimeStamp(LocalDateTime.parse(newTimestamp));
                     }
                 }
             }
@@ -797,7 +805,7 @@ public abstract class AQuery {
         }
 
         if (jsonPageZero.get(KEY_JSON_REVISIONS) instanceof JSONArray jsonRevisions) {
-            if (jsonRevisions.length() > 0) {
+            if (jsonRevisions.size() > 0) {
                 JSONObject jsonRevZero = (JSONObject) jsonRevisions.get(0);
                 if (jsonRevZero.get(KEY_JSON_SLOTS) instanceof JSONObject jsonSlots) {
                     if (jsonSlots.get(KEY_JSON_MAIN) instanceof JSONObject jsonMain) {

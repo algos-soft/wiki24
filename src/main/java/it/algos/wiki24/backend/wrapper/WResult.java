@@ -6,6 +6,7 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
 import java.util.*;
 
 /**
@@ -79,6 +80,8 @@ public class WResult {
 
     private String newtimestamp = VUOTA;
 
+    private LocalDateTime timeStamp = null;
+
     private String newtext = VUOTA;
 
     private String post = VUOTA;
@@ -102,6 +105,7 @@ public class WResult {
     private String content = VUOTA;
 
     protected LinkedHashMap mappa = null;
+
     protected String txtValue = VUOTA;
 
     protected List lista = null;
@@ -437,6 +441,14 @@ public class WResult {
         return newrevid;
     }
 
+    public LocalDateTime getTimeStamp() {
+        return timeStamp;
+    }
+
+    public void setTimeStamp(LocalDateTime timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
     public void setNewrevid(long newrevid) {
         this.newrevid = newrevid;
     }
@@ -617,6 +629,7 @@ public class WResult {
     public void setContent(String content) {
         this.content = content;
     }
+
     public boolean isValido() {
         return valido;
     }
@@ -624,9 +637,11 @@ public class WResult {
     public String getErrorCode() {
         return errorCode;
     }
+
     public String getErrorMessage() {
         return errorMessage;
     }
+
     public LinkedHashMap getMappa() {
         return mappa;
     }
@@ -638,9 +653,11 @@ public class WResult {
     public boolean isErrato() {
         return !valido;
     }
+
     public void setTxtValue(String txtValue) {
         this.txtValue = txtValue;
     }
+
     public void setCodeMessage(String codeMessage) {
         this.codeMessage = codeMessage;
     }
@@ -652,9 +669,11 @@ public class WResult {
     public String getMessage() {
         return isValido() ? getValidMessage() : getErrorMessage();
     }
+
     public int getIntValue() {
         return intValue;
     }
+
     public String getTxtValue() {
         return txtValue;
     }

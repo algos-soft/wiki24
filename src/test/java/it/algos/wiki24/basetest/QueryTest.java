@@ -29,6 +29,8 @@ public abstract class QueryTest extends WikiTest {
 
     @Inject
     public BotLogin botLogin;
+    @Inject
+    public TextService textService;
 
     @Inject
     public LogService logger;
