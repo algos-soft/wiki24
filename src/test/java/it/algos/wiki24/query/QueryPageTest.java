@@ -97,7 +97,7 @@ public class QueryPageTest extends QueryTest {
     @DisplayName("101 - Recupera wrapPage")
         //--titolo
         //--pagina esistente
-    void wrapPage(final String wikiTitleVoceOppureCategoria, final boolean paginaEsistente) {
+    void wrapPageTitle(final String wikiTitleVoceOppureCategoria, final boolean paginaEsistente) {
         System.out.println(("101 - Recupera wrapPage"));
 
         sorgente = wikiTitleVoceOppureCategoria;
@@ -118,6 +118,38 @@ public class QueryPageTest extends QueryTest {
             }
             else {
                 System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", sorgente));
+            }
+        }
+        printWrapPage(wrapPage);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "PAGINE")
+    @Order(102)
+    @DisplayName("102 - Recupera wrapPageIds")
+        //--titolo
+        //--pagina esistente
+    void wrapPageIds(final long pageIds, final boolean paginaEsistente) {
+        System.out.println(("102 - Recupera wrapPageIds"));
+
+        wrapPage = appContext.getBean(QueryPage.class).getPage(pageIds);
+        assertNotNull(wrapPage);
+        System.out.println(VUOTA);
+        if (paginaEsistente) {
+            if (wrapPage.isValida()) {
+                System.out.println(String.format("Trovata la pagina/categoria [[%s]] su wikipedia", pageIds));
+            }
+            else {
+                System.out.println(String.format("Errore"));
+            }
+        }
+        else {
+            if (wrapPage.isValida()) {
+                System.out.println(String.format("Bho ?"));
+            }
+            else {
+                System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", pageIds));
             }
         }
         printWrapPage(wrapPage);

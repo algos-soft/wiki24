@@ -582,6 +582,22 @@ public abstract class WikiTest extends AlgosTest {
         );
     }
 
+    //--pageIds
+    //--pagina esistente
+    protected static Stream<Arguments> PAGINE() {
+        return Stream.of(
+                Arguments.of(0, false),
+                Arguments.of(8978579, true),
+                Arguments.of(4935359, true),
+                Arguments.of(2116435, true),
+                Arguments.of(1, false),
+                Arguments.of(480562, true),
+                Arguments.of(5605544, true),
+                Arguments.of(272727, false),
+                Arguments.of(621881, true)
+        );
+    }
+
     //--categoria
     //--esiste come anonymous
     //--esiste come user, admin

@@ -42,6 +42,25 @@ public class QueryPage extends AQuery {
         return result;
     }
 
+
+    /**
+     * Request principale <br>
+     * <p>
+     * Non accetta il separatore PIPE nel wikiTitoloGrezzoPaginaCategoria <br>
+     * La stringa urlDomain per la request viene elaborata <br>
+     * Si crea una connessione di tipo GET <br>
+     * Si invia la request <br>
+     * La response viene sempre elaborata per estrarre le informazioni richieste <br>
+     *
+     * @param pageIds della pagina wiki usato nella urlRequest.
+     *
+     * @return wrapper di informazioni
+     */
+    public WResult urlRequest(final long pageIds) {
+        typeQuery = TypeQuery.getSenzaLoginSenzaCookies;
+        return requestGetPageIds(WIKI_QUERY_BASE_PAGE, pageIds);
+    }
+
     /**
      * Elabora la risposta <br>
      * <p>
@@ -60,17 +79,40 @@ public class QueryPage extends AQuery {
     }
 
     /**
-     * Elabora la risposta <br>
+     * Costruisce un wrapper con le informazioni essenziali <br>
      * <p>
      * Informazioni, contenuto e validità della risposta
      * Controllo del contenuto (testo) ricevuto
      *
      * @param wikiTitleGrezzo della pagina wiki (necessita di codifica) usato nella urlRequest. Non accetta il separatore PIPE
      *
-     * @return testo della pagina
+     * @return WrapPage risultante
      */
     public WrapPage getPage(final String wikiTitleGrezzo) {
+        if (textService.isEmpty(wikiTitleGrezzo)) {
+            return WrapPage.nonValida();
+        }
+
         WResult result = urlRequest(wikiTitleGrezzo);
+        return result != null ? result.getWrapPage() : null;
+    }
+
+    /**
+     * Costruisce un wrapper con le informazioni essenziali <br>
+     * <p>
+     * Informazioni, contenuto e validità della risposta
+     * Controllo del contenuto (testo) ricevuto
+     *
+     * @param pageIds della pagina wiki usato nella urlRequest.
+     *
+     * @return testo della pagina
+     */
+    public WrapPage getPage(final long pageIds) {
+        if (pageIds == 0) {
+            return WrapPage.nonValida();
+        }
+
+        WResult result = urlRequest(pageIds);
         return result != null ? result.getWrapPage() : null;
     }
 

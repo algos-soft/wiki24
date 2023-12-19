@@ -79,7 +79,7 @@ public class QueryExist extends AQuery {
      */
     public WResult urlRequest(final long pageid) {
         typeQuery = TypeQuery.getSenzaLoginSenzaCookies;
-        return requestGetPage(WIKI_QUERY_PAGEIDS, pageid);
+        return requestGetPageIds(WIKI_QUERY_PAGEIDS, pageid);
     }
 
 

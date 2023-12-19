@@ -306,7 +306,7 @@ public abstract class AQuery {
      *
      * @return wrapper di informazioni
      */
-    protected WResult requestGetPage(final String pathQuery, final long pageid) {
+    protected WResult requestGetPageIds(final String pathQuery, final long pageid) {
         WResult result = checkIniziale(pathQuery, pageid);
         return requestGet(result, pathQuery + pageid);
     }
@@ -347,7 +347,7 @@ public abstract class AQuery {
             uploadCookies(urlConn, result.getCookies());
             urlResponse = sendRequest(urlConn);
             result = elaboraResponse(result, urlResponse);
-            if (result.getTypePage() == TypePage.nonEsiste) {
+            if (result.getTypePage() == TypePage.nonEsiste && urlDomain.contains(API_TITLES)) {
                 urlDomain = textService.levaCodaDaUltimo(urlDomain, API_TITLES);
                 urlDomain += API_PAGEIDS + result.getTarget();
                 urlConn = this.creaGetConnection(urlDomain);
@@ -596,6 +596,8 @@ public abstract class AQuery {
      * @return wrapper di informazioni
      */
     protected WResult elaboraResponse(WResult result, final String rispostaDellaQuery) {
+        WrapPage wrapPage;
+
         //--fissa durata
         result.setFine();
         result.setTypePage(TypePage.indeterminata);
@@ -654,7 +656,8 @@ public abstract class AQuery {
                 result.setTypePage(TypePage.nonEsiste);
                 mappaUrlResponse.put(KEY_JSON_MISSING, true);
                 result.setTypePage(TypePage.nonEsiste);
-                result.setWrapPage(new WrapPage(TypePage.nonEsiste));
+                wrapPage = WrapPage.nonValida().type(TypePage.nonEsiste).title(result.getTarget()).pageid(result.getPageid());
+                result.setWrapPage(wrapPage);
                 return result;
             }
             else {
