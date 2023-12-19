@@ -1478,12 +1478,12 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Content value: %s", content));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.toText(result.getDurata())));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaTextEsatto(result.getInizio(), result.getFine())));
-        printWrapPage(result.getWrapPage());
+        printWrapPage(result.getWrapPage(),false);
         printWrapBio(result.getWrapBio());
     }
 
 
-    protected void printWrapPage(WrapPage wrap) {
+    protected void printWrapPage(WrapPage wrap, boolean printContent) {
         if (wrap != null) {
             System.out.println(VUOTA);
             System.out.println(String.format("Wrap valido: %s", wrap.isValida()));
@@ -1492,23 +1492,18 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("Wrap pageid: %s", wrap.getPageid()));
             System.out.println(String.format("Wrap title: %s", wrap.getTitle()));
             System.out.println(String.format("Wrap timeStamp: %s", wrap.getTimeStamp()));
-            System.out.println(String.format("Wrap content:"));
-            System.out.println(String.format("%s", wrap.getContent()));
+            if (printContent) {
+                System.out.println(String.format("Wrap content:"));
+                System.out.println(String.format("%s", wrap.getContent()));
+            }
         }
     }
 
-    protected void printWrapBio(WrapBio wrap) {
-        if (wrap != null) {
-            System.out.println(VUOTA);
-            System.out.println(String.format("Wrap valido: %s", wrap.isValida() ? "true" : "false"));
-            System.out.println(String.format("Wrap title: %s", wrap.getTitle()));
-            System.out.println(String.format("Wrap pageid: %s", wrap.getPageid()));
-            System.out.println(String.format("Wrap type: %s", wrap.getType()));
-            System.out.println(String.format("Wrap timeStamp: %s", wrap.getTimeStamp()));
-            System.out.println(String.format("Wrap templBio: %s", textService.isValid(wrap.getTemplBio()) ? "valido" : "non esiste"));
-            if (textService.isValid(wrap.getTemplBio())) {
-                System.out.println(String.format("templBio: %s", getMax(wrap.getTemplBio())));
-            }
+    protected void printWrapBio(WrapBio wrapBio) {
+        if (wrapBio != null && wrapBio.getWrapPage() != null) {
+            printWrapPage(wrapBio.getWrapPage(), false);
+            System.out.println(String.format("Wrap tmplBio:"));
+            System.out.println(String.format("%s", wrapBio.getTemplBio()));
         }
     }
 

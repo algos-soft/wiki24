@@ -726,7 +726,7 @@ public class WikiBotService {
      *
      * @return template completo di doppie graffe iniziali e finali
      */
-    public String estraeTmpl(final String testoCompletoPagina) {
+    public String estraeTmplBio(final String testoCompletoPagina) {
         return wikiApiService.estraeTmpl(testoCompletoPagina, "Bio");
     }
 

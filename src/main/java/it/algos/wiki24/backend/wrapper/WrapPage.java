@@ -48,7 +48,7 @@ public class WrapPage {
     }
 
     public static WrapPage nonValida() {
-        return new WrapPage(TypePage.indeterminata).content(VUOTA);
+        return new WrapPage(TypePage.nonEsiste).content(VUOTA);
     }
 
     public WrapPage type(final TypePage type) {

@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.wrapper;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.bioserver.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -17,56 +18,39 @@ import java.time.format.*;
  */
 public class WrapBio {
 
-    //    private TypePage type;
-    //
-    //    private long pageid;
-    //
-    //    private String title;
-    //
-    //    private LocalDateTime timeStamp;
     private WrapPage wrapPage;
 
     private String templBio;
+    private BioServerEntity beanBioServer;
 
     private boolean valida;
 
     public WrapBio() {
     }
 
-    //    public WrapBio type(final TypePage type) {
-    //        this.type = type;
-    //        return this;
-    //    }
-    //
-    //    public WrapBio pageid(final long pageid) {
-    //        this.pageid = pageid;
-    //        return this;
-    //    }
-    //
-    //    public WrapBio title(final String title) {
-    //        this.title = title;
-    //        return this;
-    //    }
-    //
-    //    public WrapBio timeStamp(final LocalDateTime timeStamp) {
-    //        this.timeStamp = timeStamp;
-    //        return this;
-    //    }
 
     public WrapBio WrapPage(final WrapPage wrapPage) {
         this.wrapPage = wrapPage;
         return this;
     }
-
-    //    public WrapBio valida(final boolean valida) {
-    //        this.valida = valida;
-    //        return this;
-    //    }
-
-    //    public WrapBio time(final String stringTimestamp) {
-    //        this.timeStamp = (stringTimestamp != null && stringTimestamp.length() > 0) ? LocalDateTime.parse(stringTimestamp, DateTimeFormatter.ISO_DATE_TIME) : null;
-    //        return this;
-    //    }
+    public static WrapBio nonValida() {
+        return new WrapBio().wrapPage(WrapPage.nonValida());
+    }
+    public static WrapBio valida(WrapPage wrapPage) {
+        return new WrapBio().wrapPage(wrapPage).valida();
+    }
+    public WrapBio valida() {
+        this.valida = true;
+        return this;
+    }
+    public WrapBio wrapPage(final WrapPage wrapPage) {
+        this.wrapPage = wrapPage;
+        return this;
+    }
+    public WrapBio templBio(final String templBio) {
+        this.templBio = templBio;
+        return this;
+    }
 
     public TypePage getType() {
         return wrapPage != null ? wrapPage.getType() : TypePage.indeterminata;
@@ -90,6 +74,10 @@ public class WrapBio {
 
     public boolean isValida() {
         return valida;
+    }
+
+    public WrapPage getWrapPage() {
+        return wrapPage;
     }
 
 }

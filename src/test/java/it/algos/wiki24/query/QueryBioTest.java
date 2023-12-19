@@ -19,26 +19,21 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Created by Algos
  * User: gac
  * Date: Tue, 19-Dec-2023
- * Time: 07:31
- * Unit test di una classe service o backend o query <br>
- * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
- * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
- * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
+ * Time: 20:03
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("query")
 @DisplayName("Test QueryPage")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QueryPageTest extends QueryTest {
+class QueryBioTest extends QueryTest {
 
     /**
      * Classe principale di riferimento <br>
      */
-    private QueryPage istanza;
+    private QueryBio istanza;
 
-    private WrapPage wrapPage;
-
+    private WrapBio wrapBio;
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
      * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
@@ -46,7 +41,7 @@ public class QueryPageTest extends QueryTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = QueryPage.class;
+        super.clazz = QueryBio.class;
         super.setUpAll();
         assertNull(istanza);
     }
@@ -61,7 +56,7 @@ public class QueryPageTest extends QueryTest {
     protected void setUpEach() {
         super.setUpEach();
         istanza = null;
-        wrapPage = null;
+        wrapBio = null;
     }
 
 
@@ -82,20 +77,19 @@ public class QueryPageTest extends QueryTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "PAGINE_E_CATEGORIE")
+    @MethodSource(value = "PAGINE_BIO")
     @Order(101)
-    @DisplayName("101 - Recupera wrapPageTitle")
+    @DisplayName("101 - Recupera wrapBioTitle")
         //--titolo
         //--pagina esistente
-    void wrapPageTitle(final String wikiTitleVoceOppureCategoria, final boolean paginaEsistente) {
-        System.out.println(("101 - Recupera wrapPageTitle"));
+    void wrapBioTitle(final String wikiTitleVoce, final boolean paginaEsistente) {
+        System.out.println(("101 - Recupera wrapBioTitle"));
 
-        sorgente = wikiTitleVoceOppureCategoria;
-        wrapPage = appContext.getBean(QueryPage.class).getPage(sorgente);
-        assertNotNull(wrapPage);
-        System.out.println(VUOTA);
+        sorgente = wikiTitleVoce;
+        wrapBio = appContext.getBean(QueryBio.class).getPage(sorgente);
+        assertNotNull(wrapBio);
         if (paginaEsistente) {
-            if (wrapPage.isValida()) {
+            if (wrapBio.isValida()) {
                 System.out.println(String.format("Trovata la pagina/categoria [[%s]] su wikipedia", sorgente));
             }
             else {
@@ -103,47 +97,14 @@ public class QueryPageTest extends QueryTest {
             }
         }
         else {
-            if (wrapPage.isValida()) {
+            if (wrapBio.isValida()) {
                 System.out.println(String.format("Bho ?"));
             }
             else {
                 System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", sorgente));
             }
         }
-        printWrapPage(wrapPage,true);
+        printWrapBio(wrapBio);
     }
-
-
-    @ParameterizedTest
-    @MethodSource(value = "PAGINE")
-    @Order(102)
-    @DisplayName("102 - Recupera wrapPageIds")
-        //--titolo
-        //--pagina esistente
-    void wrapPageIds(final long pageIds, final boolean paginaEsistente) {
-        System.out.println(("102 - Recupera wrapPageIds"));
-
-        wrapPage = appContext.getBean(QueryPage.class).getPage(pageIds);
-        assertNotNull(wrapPage);
-        System.out.println(VUOTA);
-        if (paginaEsistente) {
-            if (wrapPage.isValida()) {
-                System.out.println(String.format("Trovata la pagina/categoria [[%s]] su wikipedia", pageIds));
-            }
-            else {
-                System.out.println(String.format("Errore"));
-            }
-        }
-        else {
-            if (wrapPage.isValida()) {
-                System.out.println(String.format("Bho ?"));
-            }
-            else {
-                System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", pageIds));
-            }
-        }
-        printWrapPage(wrapPage,true);
-    }
-
 
 }

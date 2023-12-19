@@ -46,7 +46,6 @@ public class QueryPage extends AQuery {
     /**
      * Request principale <br>
      * <p>
-     * Non accetta il separatore PIPE nel wikiTitoloGrezzoPaginaCategoria <br>
      * La stringa urlDomain per la request viene elaborata <br>
      * Si crea una connessione di tipo GET <br>
      * Si invia la request <br>
@@ -61,22 +60,6 @@ public class QueryPage extends AQuery {
         return requestGetPageIds(WIKI_QUERY_BASE_PAGE, pageIds);
     }
 
-    /**
-     * Elabora la risposta <br>
-     * <p>
-     * Informazioni, contenuto e validità della risposta <br>
-     * Controllo del contenuto (testo) ricevuto <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     *
-     * @param result
-     * @param rispostaDellaQuery in formato JSON da elaborare
-     *
-     * @return wrapper di informazioni
-     */
-    @Override
-    protected WResult elaboraResponse(WResult result, String rispostaDellaQuery) {
-        return super.elaboraResponse(result, rispostaDellaQuery);
-    }
 
     /**
      * Costruisce un wrapper con le informazioni essenziali <br>

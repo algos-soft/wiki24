@@ -854,7 +854,7 @@ public abstract class AQuery {
             }
         }
 
-        tmplBio = wikiBot.estraeTmpl(content);
+        tmplBio = wikiBot.estraeTmplBio(content);
         if (textService.isValid(tmplBio)) {
             wrapPage = new WrapPage(TypePage.testoConTmpl, 0, pageId, wikiTitle, timestamp, content);
         }
@@ -906,7 +906,7 @@ public abstract class AQuery {
             }
         }
 
-        tmplBio = wikiBot.estraeTmpl(content);
+        tmplBio = wikiBot.estraeTmplBio(content);
         if (textService.isValid(tmplBio)) {
             //            wrapBio = new WrapBio().title(wikiTitle).pageid(pageId).type(TypePage.testoConTmpl).timeStamp(timestamp).templBio(tmplBio);
         }
@@ -935,7 +935,7 @@ public abstract class AQuery {
                 return result;
             }
 
-            tmplBio = wikiBot.estraeTmpl(content);
+            tmplBio = wikiBot.estraeTmplBio(content);
             if (textService.isValid(tmplBio)) {
                 result.setErrorCode(VUOTA);
                 result.setErrorMessage(VUOTA);

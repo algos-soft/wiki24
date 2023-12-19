@@ -89,11 +89,6 @@ public abstract class QueryTest extends WikiTest {
         printIstanza(istanza);
     }
 
-    @Test
-    @Order(2)
-    @DisplayName("2 - appContext.getBean con/senza parametri")
-    void getBean() {
-    }
 
 
     protected void printIstanza(Object istanza) {
