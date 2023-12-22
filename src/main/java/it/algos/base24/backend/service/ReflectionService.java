@@ -165,6 +165,31 @@ public class ReflectionService {
         return value;
     }
 
+
+    /**
+     * Valore stringa della property corrente di una entity. <br>
+     *
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
+     *
+     * @return the string value
+     */
+    public String getPropertyValueStr(final Object entityBean, final String publicFieldName) {
+        String value = VUOTA;
+        Object objValue = getPropertyValue(entityBean, publicFieldName);
+
+        if (objValue != null) {
+            if (objValue instanceof String) {
+                value = (String) objValue;
+            }
+            else {
+                value = objValue.toString();
+            }
+        }
+
+        return value;
+    }
+
     public List<Method> getMethods(final Class clazz) {
         return clazz != null ? Arrays.stream(clazz.getDeclaredMethods()).collect(Collectors.toList()) : null;
     }

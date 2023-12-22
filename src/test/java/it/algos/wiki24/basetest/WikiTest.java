@@ -9,6 +9,7 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -494,33 +495,34 @@ public abstract class WikiTest extends AlgosTest {
 
     //--titolo
     //--pagina valida
+    //--bio valida
     protected static Stream<Arguments> PAGINE_BIO() {
         return Stream.of(
-                Arguments.of(null, false),
-                Arguments.of(VUOTA, false),
-                Arguments.of("Roberto il Forte", true),
-                Arguments.of("Claude de Chastellux", true),
-                Arguments.of("John Murphy (politico statunitense)", true),
-                Arguments.of("Meena Keshwar Kamal", true),
-                Arguments.of("Werburga", true),
-                Arguments.of("Roman Protasevič", true),
-                Arguments.of("Aldelmo di Malmesbury", true),
-                Arguments.of("Aelfric il grammatico", true),
-                Arguments.of("Bernart Arnaut d'Armagnac", true),
-                Arguments.of("Elfleda di Whitby", true),
-                Arguments.of("Gaetano Anzalone", true),
-                Arguments.of("Colin Campbell (generale)", true),
-                Arguments.of("Louis Winslow Austin", true),
-                Arguments.of("San Nicanore", true),
-                Arguments.of("Regno di Napoli (1908-1745)", false),
-                Arguments.of("Regno di Napoli (1806-1815)", false),
-                Arguments.of("Rossi", false),
-                Arguments.of("Bartolomeo Giuseppe Amico di Castell'Alfero", true),
-                Arguments.of("Lucio Anneo Seneca", true),
-                Arguments.of("Bodhidharma", true),
-                Arguments.of("Aloisio Gonzaga", true),
-                Arguments.of("Alex Bagnoli", true),
-                Arguments.of("Ashur-uballit I", true)
+                Arguments.of(null, false, false),
+                Arguments.of(VUOTA, false, false),
+                Arguments.of("Roberto il Forte", true, true),
+                Arguments.of("Claude de Chastellux", true, true),
+                Arguments.of("John Murphy (politico statunitense)", true, true),
+                Arguments.of("Meena Keshwar Kamal", true, true),
+                Arguments.of("Werburga", true, true),
+                Arguments.of("Roman Protasevič", true, true),
+                Arguments.of("Aldelmo di Malmesbury", true, true),
+                Arguments.of("Aelfric il grammatico", true, true),
+                Arguments.of("Bernart Arnaut d'Armagnac", true, true),
+                Arguments.of("Elfleda di Whitby", true, true),
+                Arguments.of("Gaetano Anzalone", true, true),
+                Arguments.of("Colin Campbell (generale)", true, true),
+                Arguments.of("Louis Winslow Austin", true, true),
+                Arguments.of("San Nicanore", true, true),
+                Arguments.of("Regno di Napoli (1908-1745)", true, false),
+                Arguments.of("Regno di Napoli (1806-1815)", true, false),
+                Arguments.of("Rossi", true, false),
+                Arguments.of("Bartolomeo Giuseppe Amico di Castell'Alfero", true, true),
+                Arguments.of("Lucio Anneo Seneca", true, true),
+                Arguments.of("Bodhidharma", true, true),
+                Arguments.of("Aloisio Gonzaga", true, true),
+                Arguments.of("Alex Bagnoli", true, true),
+                Arguments.of("Ashur-uballit I", true, true)
         );
     }
 
@@ -1478,7 +1480,7 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Content value: %s", content));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.toText(result.getDurata())));
         System.out.println(String.format("Risultato ottenuto in %s", dateService.deltaTextEsatto(result.getInizio(), result.getFine())));
-        printWrapPage(result.getWrapPage(),false);
+        printWrapPage(result.getWrapPage(), false);
         printWrapBio(result.getWrapBio());
     }
 
@@ -1486,23 +1488,41 @@ public abstract class WikiTest extends AlgosTest {
     protected void printWrapPage(WrapPage wrap, boolean printContent) {
         if (wrap != null) {
             System.out.println(VUOTA);
-            System.out.println(String.format("Wrap valido: %s", wrap.isValida()));
-            System.out.println(String.format("Wrap type: %s", wrap.getType()));
-            System.out.println(String.format("Wrap nameSpace: %s", wrap.getNameSpace()));
-            System.out.println(String.format("Wrap pageid: %s", wrap.getPageid()));
-            System.out.println(String.format("Wrap title: %s", wrap.getTitle()));
-            System.out.println(String.format("Wrap timeStamp: %s", wrap.getTimeStamp()));
+            System.out.println(String.format("WrapPage valido: %s", wrap.isValida()));
+            System.out.println(String.format("WrapPage type: %s", wrap.getType()));
+            System.out.println(String.format("WrapPage nameSpace: %s", wrap.getNameSpace()));
+            System.out.println(String.format("WrapPage pageid: %s", wrap.getPageid()));
+            System.out.println(String.format("WrapPage title: %s", wrap.getTitle()));
+            System.out.println(String.format("WrapPage timeStamp: %s", wrap.getTimeStamp()));
             if (printContent) {
-                System.out.println(String.format("Wrap content:"));
+                System.out.println(String.format("WrapPage content:"));
                 System.out.println(String.format("%s", wrap.getContent()));
             }
         }
     }
 
     protected void printWrapBio(WrapBio wrapBio) {
-        if (wrapBio != null && wrapBio.getWrapPage() != null) {
-            printWrapPage(wrapBio.getWrapPage(), false);
-            System.out.println(String.format("Wrap tmplBio:"));
+        if (wrapBio != null) {
+            System.out.println(VUOTA);
+            System.out.println(String.format("WrapBio valida: %s", wrapBio.isValida()));
+            System.out.println(String.format("WrapBio pageid: %s", wrapBio.getPageid()));
+            System.out.println(String.format("WrapBio title: %s", wrapBio.getTitle()));
+            System.out.println(String.format("WrapBio timeStamp: %s", wrapBio.getTimeStamp()));
+            System.out.println(String.format("WrapBio creataBioServer: %s", wrapBio.isCreataBioServer()));
+            System.out.println(String.format("WrapBio creataBioMongo: %s", wrapBio.isCreataBioMongo()));
+            System.out.println(String.format("WrapBio tmplBio:"));
+            System.out.println(String.format("%s", wrapBio.getTemplBio()));
+        }
+    }
+
+    protected void printBioServer(BioServerEntity bio) {
+        if (bio != null) {
+            System.out.println(VUOTA);
+            //            System.out.println(String.format("BioEntity valido: %s", bio.isValido()));
+            System.out.println(String.format("BioEntity pageId: %s", bio.getPageId()));
+            System.out.println(String.format("BioEntity wikiTitle: %s", bio.getPageId()));
+            System.out.println(String.format("BioEntity lastServer: %s", bio.getPageId()));
+            System.out.println(String.format("BioEntity tmplBio:"));
             System.out.println(String.format("%s", wrapBio.getTemplBio()));
         }
     }

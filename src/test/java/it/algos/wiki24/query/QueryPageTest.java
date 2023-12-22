@@ -65,7 +65,6 @@ public class QueryPageTest extends QueryTest {
     }
 
 
-
     @Test
     @Order(2)
     @DisplayName("2 - Request errata. Manca il wikiTitle")
@@ -83,12 +82,12 @@ public class QueryPageTest extends QueryTest {
 
     @ParameterizedTest
     @MethodSource(value = "PAGINE_E_CATEGORIE")
-    @Order(101)
-    @DisplayName("101 - Recupera wrapPageTitle")
+    @Order(51)
+    @DisplayName("51 - Recupera wrapPage dal wikiTitle")
         //--titolo
         //--pagina esistente
     void wrapPageTitle(final String wikiTitleVoceOppureCategoria, final boolean paginaEsistente) {
-        System.out.println(("101 - Recupera wrapPageTitle"));
+        System.out.println(("51 - Recupera wrapPage dal wikiTitle"));
 
         sorgente = wikiTitleVoceOppureCategoria;
         wrapPage = appContext.getBean(QueryPage.class).getPage(sorgente);
@@ -110,18 +109,18 @@ public class QueryPageTest extends QueryTest {
                 System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", sorgente));
             }
         }
-        printWrapPage(wrapPage,true);
+        printWrapPage(wrapPage, true);
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "PAGINE")
-    @Order(102)
-    @DisplayName("102 - Recupera wrapPageIds")
+    @Order(52)
+    @DisplayName("52 - Recupera wrapPage dal pageIds")
         //--titolo
         //--pagina esistente
     void wrapPageIds(final long pageIds, final boolean paginaEsistente) {
-        System.out.println(("102 - Recupera wrapPageIds"));
+        System.out.println(("52 - Recupera wrapPage dal pageIds"));
 
         wrapPage = appContext.getBean(QueryPage.class).getPage(pageIds);
         assertNotNull(wrapPage);
@@ -142,7 +141,30 @@ public class QueryPageTest extends QueryTest {
                 System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", pageIds));
             }
         }
-        printWrapPage(wrapPage,true);
+        printWrapPage(wrapPage, true);
+    }
+
+    @Test
+    @Order(101)
+    @DisplayName("101 - QueryService.getPage tramite wikiTile (text)")
+    void getPageText() {
+        System.out.println(("101 - QueryService.getPage tramite wikiTile (text)"));
+
+        sorgente = "Louis Winslow Austin";
+        wrapPage = queryService.getPage(sorgente);
+        assertNotNull(wrapPage);
+        printWrapPage(wrapPage, true);
+    }
+    @Test
+    @Order(102)
+    @DisplayName("102 - QueryService.getPage tramite pageIds (long)")
+    void getPageLong() {
+        System.out.println(("102 - QueryService.getPage tramite pageIds (long)"));
+
+        sorgenteLong = 8978579;
+        wrapPage = queryService.getPage(sorgenteLong);
+        assertNotNull(wrapPage);
+        printWrapPage(wrapPage, true);
     }
 
 

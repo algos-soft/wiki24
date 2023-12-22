@@ -149,4 +149,22 @@ public class QueryReadTest extends QueryTest {
         System.out.println((ottenuto));
     }
 
+
+    @Test
+    @Order(101)
+    @DisplayName("101 - Legge tramite QueryService")
+    void legge() {
+        System.out.println(("101 - Legge tramite QueryService"));
+        System.out.println(VUOTA);
+
+        sorgente = "Othon & Tomasini";
+        ottenuto = queryService.legge(sorgente);
+        assertTrue(textService.isValid(sorgente));
+
+        System.out.println(("Pagina e testo trovati"));
+        ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
+        System.out.println(VUOTA);
+        System.out.println((ottenuto));
+    }
+
 }

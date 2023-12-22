@@ -6,6 +6,8 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.view.*;
 import org.springframework.beans.factory.annotation.*;
 
+import javax.inject.*;
+
 /**
  * Project base24
  * Created by Algos

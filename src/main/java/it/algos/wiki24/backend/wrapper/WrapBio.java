@@ -18,66 +18,56 @@ import java.time.format.*;
  */
 public class WrapBio {
 
-    private WrapPage wrapPage;
-
-    private String templBio;
     private BioServerEntity beanBioServer;
 
     private boolean valida;
+
+    private boolean creataBioServer;
+
+    private boolean creataBioMongo;
 
     public WrapBio() {
     }
 
 
-    public WrapBio WrapPage(final WrapPage wrapPage) {
-        this.wrapPage = wrapPage;
-        return this;
-    }
-    public static WrapBio nonValida() {
-        return new WrapBio().wrapPage(WrapPage.nonValida());
-    }
-    public static WrapBio valida(WrapPage wrapPage) {
-        return new WrapBio().wrapPage(wrapPage).valida();
-    }
-    public WrapBio valida() {
-        this.valida = true;
-        return this;
-    }
-    public WrapBio wrapPage(final WrapPage wrapPage) {
-        this.wrapPage = wrapPage;
-        return this;
-    }
-    public WrapBio templBio(final String templBio) {
-        this.templBio = templBio;
-        return this;
+    public static WrapBio beanBio(final BioServerEntity beanBioServer) {
+        WrapBio wrapBio = new WrapBio();
+        wrapBio.beanBioServer = beanBioServer;
+        wrapBio.valida = true;
+        return wrapBio;
     }
 
-    public TypePage getType() {
-        return wrapPage != null ? wrapPage.getType() : TypePage.indeterminata;
-    }
 
     public long getPageid() {
-        return wrapPage != null ? wrapPage.getPageid() : 0;
+        return beanBioServer != null ? beanBioServer.getPageId() : 0;
     }
 
     public String getTitle() {
-        return wrapPage != null ? wrapPage.getTitle() : VUOTA;
+        return beanBioServer != null ? beanBioServer.getWikiTitle() : VUOTA;
     }
 
     public LocalDateTime getTimeStamp() {
-        return wrapPage != null ? wrapPage.getTimeStamp() : ROOT_DATA_TIME;
+        return beanBioServer != null ? beanBioServer.getLastServer() : ROOT_DATA_TIME;
     }
 
     public String getTemplBio() {
-        return templBio;
+        return beanBioServer != null ? beanBioServer.getTmplBio() : VUOTA;
+    }
+
+    public BioServerEntity getBeanBioServer() {
+        return beanBioServer;
     }
 
     public boolean isValida() {
         return valida;
     }
 
-    public WrapPage getWrapPage() {
-        return wrapPage;
+    public boolean isCreataBioServer() {
+        return creataBioServer;
+    }
+
+    public boolean isCreataBioMongo() {
+        return creataBioMongo;
     }
 
 }

@@ -17,7 +17,7 @@ import java.time.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "bioserver", typeList = TypeList.standard)
+@AEntity(collectionName = "bioserver", keyPropertyName = "pageId", typeList = TypeList.standard)
 public class BioServerEntity extends AbstractEntity {
 
     @Positive()
@@ -25,7 +25,7 @@ public class BioServerEntity extends AbstractEntity {
     public long pageId;
 
 
-    @NotBlank()
+    //    @NotBlank()
     @AField(type = TypeField.text, widthRem = 16)
     public String wikiTitle;
 
@@ -37,15 +37,14 @@ public class BioServerEntity extends AbstractEntity {
     @AField(type = TypeField.localDateTime)
     public LocalDateTime lastServer;
 
-
     @AField(type = TypeField.localDateTime)
     public LocalDateTime lastMongo;
 
-    /**
-     * valido se lastMongo >= timestamp
-     */
-    @AField(type = TypeField.booleano)
-    public boolean valido;
+    //    /**
+    //     * valido se lastMongo >= timestamp
+    //     */
+    //    @AField(type = TypeField.booleano)
+    //    public boolean valido;
 
     @Override
     public String toString() {

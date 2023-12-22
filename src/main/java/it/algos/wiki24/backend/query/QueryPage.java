@@ -26,6 +26,36 @@ public class QueryPage extends AQuery {
      * Si crea una connessione di tipo GET <br>
      * Si invia la request <br>
      * La response viene sempre elaborata per estrarre le informazioni richieste <br>
+     * <p>
+     * Nella risposta negativa la gerarchia è: <br>
+     * ....batchcomplete <br>
+     * ....query <br>
+     * ........normalized <br>
+     * ........pages <br>
+     * ............[0] (sempre solo uno se non si usa il PIPE) <br>
+     * ................ns <br>
+     * ................missing=true <br>
+     * ................pageid <br>
+     * ................title <br>
+     * <p>
+     * Nella risposta positiva la gerarchia è: <br>
+     * ....batchcomplete <br>
+     * ....query <br>
+     * ........normalized <br>
+     * ........pages <br>
+     * ............[0] (sempre solo uno se non si usa il PIPE) <br>
+     * ................pageid <br>
+     * ................title <br>
+     * ................revisions <br>
+     * ....................[0] (sempre solo uno con la query utilizzata) <br>
+     * ........................revid <br>
+     * ........................parentid <br>
+     * ........................timestamp <br>
+     * ........................slots <br>
+     * ............................main <br>
+     * ................................contentformat <br>
+     * ................................contentmodel <br>
+     * ................................content (da cui estrarre il tmpl bio) <br>
      *
      * @param wikiTitleGrezzo della pagina wiki (necessita di codifica) usato nella urlRequest. Non accetta il separatore PIPE
      *

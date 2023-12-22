@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import javax.inject.*;
+
 /**
  * Project wiki24
  * Created by Algos
@@ -25,7 +27,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WikiApiServiceTest extends ServiceTest {
 
-    @Autowired
+    @Inject
     private WikiApiService service;
 
 

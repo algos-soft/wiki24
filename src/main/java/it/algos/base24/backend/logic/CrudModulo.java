@@ -518,7 +518,7 @@ public abstract class CrudModulo {
 
         keyPropertyName = annotationService.getKeyPropertyName(currentCrudEntityClazz);
         if (textService.isValid(keyPropertyName) && !keyPropertyName.equals(FIELD_NAME_ID_CON)) {
-            keyPropertyValue = (String) reflectionService.getPropertyValue(newEntityBean, keyPropertyName);
+            keyPropertyValue = reflectionService.getPropertyValueStr(newEntityBean, keyPropertyName);
             if (textService.isValid(keyPropertyValue)) {
                 if (annotationService.usaIdPrimaMinuscola(currentCrudEntityClazz)) {
                     keyPropertyValue = textService.primaMinuscola(keyPropertyValue);

@@ -4,12 +4,16 @@ import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.ui.form.*;
+import it.algos.base24.ui.view.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.ui.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -26,6 +30,9 @@ public class BioServerForm extends WikiForm {
 
     @Inject
     WikiBotService wikiBotService;
+
+    @Inject
+    QueryService queryService;
 
     public BioServerForm(BioServerModulo crudModulo, BioServerEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
@@ -85,11 +92,30 @@ public class BioServerForm extends WikiForm {
     }
 
     public void download() {
-        String wikiTitle="Matteo Renzi";
-        String tmplBio = wikiBotService.getTmplBio(wikiTitle);
-        ((BioServerEntity)currentEntityModel).wikiTitle=wikiTitle;
-        ((BioServerEntity)currentEntityModel).pageId=234567;
-        ((BioServerEntity)currentEntityModel).tmplBio=tmplBio;
+        WrapBio wrap;
+        String message;
+        String wikiTitle = VUOTA;
+        if (mappaFields.containsKey(FIELD_NAME_WIKI_TITLE) && mappaFields.get(FIELD_NAME_WIKI_TITLE) != null) {
+            wikiTitle = (String) mappaFields.get(FIELD_NAME_WIKI_TITLE).getValue();
+            if (textService.isEmpty(wikiTitle)) {
+                Notifica.message("Manca il wikiTitle").error().open();
+                return;
+            }
+        }
+        else {
+            return;
+        }
+
+        if (!queryService.isEsiste(wikiTitle)) {
+            message = String.format("Manca la pagina %s", wikiTitle);
+            Notifica.message(message).error().open();
+            return;
+        }
+
+        wrap = queryService.getBio(wikiTitle);
+        if (wrap != null && wrap.isValida()) {
+            currentEntityModel = wrap.getBeanBioServer();
+        }
 
         super.binderFields();
     }

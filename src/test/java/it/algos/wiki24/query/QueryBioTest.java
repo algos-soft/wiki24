@@ -3,6 +3,7 @@ package it.algos.wiki24.query;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
@@ -34,6 +35,9 @@ class QueryBioTest extends QueryTest {
     private QueryBio istanza;
 
     private WrapBio wrapBio;
+
+    private BioServerEntity bioServerEntity;
+
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
      * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
@@ -57,8 +61,8 @@ class QueryBioTest extends QueryTest {
         super.setUpEach();
         istanza = null;
         wrapBio = null;
+        bioServerEntity = null;
     }
-
 
 
     @Test
@@ -78,31 +82,75 @@ class QueryBioTest extends QueryTest {
 
     @ParameterizedTest
     @MethodSource(value = "PAGINE_BIO")
-    @Order(101)
-    @DisplayName("101 - Recupera wrapBioTitle")
+    @Order(51)
+    @DisplayName("51 - Recupera wrapBioTitle")
         //--titolo
         //--pagina esistente
-    void wrapBioTitle(final String wikiTitleVoce, final boolean paginaEsistente) {
-        System.out.println(("101 - Recupera wrapBioTitle"));
+    void wrapBioTitle(String wikiTitleVoce, boolean paginaEsistente, boolean biografiaEsistente) {
+        System.out.println(("51 - Recupera wrapBioTitle"));
 
         sorgente = wikiTitleVoce;
-        wrapBio = appContext.getBean(QueryBio.class).getPage(sorgente);
-        assertNotNull(wrapBio);
+        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgente);
+        assertEquals(paginaEsistente, wrapBio != null);
         if (paginaEsistente) {
-            if (wrapBio.isValida()) {
-                System.out.println(String.format("Trovata la pagina/categoria [[%s]] su wikipedia", sorgente));
-            }
-            else {
-                System.out.println(String.format("Errore"));
-            }
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
         }
         else {
-            if (wrapBio.isValida()) {
-                System.out.println(String.format("Bho ?"));
-            }
-            else {
-                System.out.println(String.format("La pagina/categoria [[%s]] non esiste su wikipedia", sorgente));
-            }
+            System.out.println(String.format("La pagina [[%s]] non esiste su wikipedia", sorgente));
+        }
+        printWrapBio(wrapBio);
+    }
+
+    @Test
+    @Order(52)
+    @DisplayName("52 - Recupera wrapBioPageIds")
+    void wrapBioPageIds() {
+        System.out.println(("52 - Recupera wrapBioPageIds"));
+
+        sorgenteLong = 4935359;
+        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        if (wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        printWrapBio(wrapBio);
+
+
+        System.out.println(VUOTA);
+        sorgenteLong = 2741616;
+        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        if (wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        else {
+            System.out.println(String.format("La pagina [[%s]] non esiste su wikipedia", sorgente));
+        }
+        printWrapBio(wrapBio);
+    }
+
+
+    @Test
+    @Order(101)
+    @DisplayName("101 - QueryService.getBio tramite wikiTile (text)")
+    void getWrapBioText() {
+        System.out.println(("101 - QueryService.getBio tramite wikiTile (text)"));
+
+        sorgente="Louis Winslow Austin";
+        wrapBio= appContext.getBean(QueryBio.class).getWrapBio(sorgente);
+        if (wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        printWrapBio(wrapBio);
+    }
+    @Test
+    @Order(102)
+    @DisplayName("102 - QueryService.getBio tramite pageIds (long)")
+    void getWrapBioLong() {
+        System.out.println(("102 - QueryService.getBio tramite pageIds (long)"));
+
+        sorgenteLong=241617;
+        wrapBio= appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        if (wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
         }
         printWrapBio(wrapBio);
     }

@@ -5,6 +5,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,11 +30,15 @@ public abstract class QueryTest extends WikiTest {
 
     @Inject
     public BotLogin botLogin;
+
     @Inject
     public TextService textService;
 
     @Inject
     public LogService logger;
+
+    @Inject
+    public QueryService queryService;
 
     protected Object istanza;
 
@@ -88,7 +93,6 @@ public abstract class QueryTest extends WikiTest {
         System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
         printIstanza(istanza);
     }
-
 
 
     protected void printIstanza(Object istanza) {

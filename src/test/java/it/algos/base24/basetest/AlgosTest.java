@@ -29,6 +29,9 @@ public abstract class AlgosTest {
     @Autowired
     protected DateService dateService;
 
+    @Autowired
+    protected TextService textService;
+
     public static final String GIUSTO = "(giusto)";
 
     public static final String SBAGLIATO = "(sbagliato)";
@@ -52,7 +55,9 @@ public abstract class AlgosTest {
     protected String previsto2;
 
     protected String ottenuto;
-    protected long  sorgenteLong;
+
+    protected long sorgenteLong;
+
     protected boolean previstoBooleano;
 
     protected boolean ottenutoBooleano;
