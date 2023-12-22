@@ -475,6 +475,14 @@ public class MongoService<capture> {
         return textService.isValid(collectionName) ? mongoOp.remove(entityBean, collectionName) : null;
     }
 
+    public void deleteAll(final String collectionName) {
+        mongoOp.dropCollection(collectionName);
+    }
+
+    public void deleteAll(final Class clazz) {
+        mongoOp.dropCollection(clazz);
+    }
+
     /**
      * Regola il valore iniziale del parametro internalQueryExecMaxBlockingSortBytes
      */

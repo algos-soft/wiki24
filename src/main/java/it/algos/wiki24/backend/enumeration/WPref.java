@@ -51,6 +51,10 @@ public enum WPref implements IPref {
     usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàPlurale."),
     lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
     elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
+
+    //***************
+    categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie"),
+
     ;
 
     public PreferenzaModulo preferenzaModulo;
@@ -137,7 +141,7 @@ public enum WPref implements IPref {
 
     @Override
     public Object getCurrentValue() {
-        return preferenzaModulo.getValue(type, keyCode);
+        return preferenzaModulo.getValueCorrente(type, keyCode);
     }
 
     public String getDescrizione() {
@@ -147,14 +151,14 @@ public enum WPref implements IPref {
 
     @Override
     public void setValue(Object javaValue) {
-        preferenzaModulo.setValue(type, keyCode, javaValue);
+        preferenzaModulo.setValueCorrente(type, keyCode, javaValue);
     }
 
     public String getStr() {
         Object obj;
 
         if (type == TypePref.string) {
-            obj = preferenzaModulo.getValue(type, keyCode);
+            obj = preferenzaModulo.getValueCorrente(type, keyCode);
             if (obj instanceof String value) {
                 return value;
             }
@@ -167,7 +171,7 @@ public enum WPref implements IPref {
         Object obj;
 
         if (type == TypePref.bool) {
-            obj = preferenzaModulo.getValue(type, keyCode);
+            obj = preferenzaModulo.getValueCorrente(type, keyCode);
             if (obj instanceof Boolean value) {
                 return value;
             }
@@ -179,7 +183,7 @@ public enum WPref implements IPref {
         Object obj;
 
         if (type == TypePref.integer) {
-            obj = preferenzaModulo.getValue(type, keyCode);
+            obj = preferenzaModulo.getValueCorrente(type, keyCode);
             if (obj instanceof Integer value) {
                 return value;
             }
@@ -192,7 +196,7 @@ public enum WPref implements IPref {
         Object obj;
 
         if (type == TypePref.localdatetime) {
-            obj = preferenzaModulo.getValue(type, keyCode);
+            obj = preferenzaModulo.getValueCorrente(type, keyCode);
             if (obj instanceof LocalDateTime value) {
                 return value;
             }

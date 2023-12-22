@@ -30,6 +30,9 @@ public class BioServerModulo extends WikiModulo {
     @Inject
     WikiBotService wikiBotService;
 
+    @Inject
+    DownloadService downloadService;
+
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -47,7 +50,7 @@ public class BioServerModulo extends WikiModulo {
 
     public BioServerEntity newEntity(WrapPage wrapPage) {
         String tmplBio = wikiBotService.estraeTmplBio(wrapPage.getContent());
-        return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp(),null);
+        return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp(), null);
     }
 
     /**
@@ -57,7 +60,7 @@ public class BioServerModulo extends WikiModulo {
      */
     @Override
     public BioServerEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA, null,null);
+        return newEntity(0, VUOTA, VUOTA, null, null);
     }
 
     /**
@@ -67,7 +70,7 @@ public class BioServerModulo extends WikiModulo {
      * @param wikiTitle  (obbligatorio)
      * @param tmplBio    (facoltativo)
      * @param lastServer (facoltativo)
-     * @param lastMongo (facoltativo)
+     * @param lastMongo  (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
@@ -86,6 +89,22 @@ public class BioServerModulo extends WikiModulo {
                 .build();
 
         return (BioServerEntity) fixKey(newEntityBean);
+    }
+
+    /**
+     * Ciclo di download <br>
+     */
+    public void download() {
+        inizio = System.currentTimeMillis();
+
+        if (count() == 0) {
+            downloadService.cicloIniziale();
+        }
+        else {
+            downloadService.cicloCorrente();
+        }
+
+        super.fixDownload(inizio);
     }
 
 }// end of CrudModulo class

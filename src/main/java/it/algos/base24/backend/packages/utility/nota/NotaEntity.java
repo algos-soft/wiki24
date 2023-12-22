@@ -6,6 +6,8 @@ import it.algos.base24.backend.enumeration.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
+
 @Component
 @Data
 @NoArgsConstructor
@@ -20,6 +22,9 @@ public class NotaEntity extends AbstractEntity {
 
     @AField(type = TypeField.lungo)
     public long lungo;
+
+    @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
+    public LocalDateTime evento;
 
     @Override
     public String toString() {

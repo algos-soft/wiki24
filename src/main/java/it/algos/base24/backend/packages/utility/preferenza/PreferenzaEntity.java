@@ -24,8 +24,11 @@ public class PreferenzaEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 30)
     public String descrizione;
 
-    @AField(type = TypeField.preferenza, headerText = "Valore", widthRem = 12)
-    public byte[] value;
+    @AField(type = TypeField.preferenza,  widthRem = 12)
+    public byte[] iniziale;
+
+    @AField(type = TypeField.preferenza,  widthRem = 12)
+    public byte[] corrente;
 
 
     @Override

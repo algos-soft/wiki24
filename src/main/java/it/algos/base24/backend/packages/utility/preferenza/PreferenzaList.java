@@ -30,16 +30,6 @@ public class PreferenzaList extends CrudList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
-
-//        super.basicSortOrder = null;
-//        super.usaBottoneDeleteAll = true;
-//        super.usaBottoneResetAdd = true;
-//        super.usaBottoneResetDelete = false;
-//        this.usaBottoneNew = false;
-//        this.usaBottoneEdit = true;
-//        this.usaBottoneDeleteEntity = false;
-//        this.usaBottoneExport = false;
-//        this.usaBottoneSearch = true;
     }
 
     @Override
@@ -48,24 +38,6 @@ public class PreferenzaList extends CrudList {
         super.fixAlert();
     }
 
-    /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-//    public VerticalLayout fixAlert() {
-//        VerticalLayout layout = super.fixAlert();
-//
-//        message = String.format(TEXT_ENUM, "Pref", "Preferenza");
-//        layout.add(ASpan.text(message).verde().bold());
-//
-//        layout.add(ASpan.text(TEXT_NEWS).rosso());
-//        layout.add(ASpan.text(TEXT_RESET_STARTUP).rosso());
-//        layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
-//        message = String.format(TEXT_SEARCH, "Code");
-//        message += String.format("%sSearch ...by [%s] apre un popup", SPAZIO,"Type");
-//        layout.add(ASpan.text(String.format(message)).rosso().italic());
-//
-//        return super.addAlert(layout);
-//    }
 
     /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>

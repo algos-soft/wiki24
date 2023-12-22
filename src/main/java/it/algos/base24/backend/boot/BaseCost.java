@@ -144,6 +144,8 @@ public class BaseCost {
     public static final String FIELD_NAME_ID_LINK = ".$id";
 
     public static final String FIELD_NAME_ORDINE = "ordine";
+    public static final String FIELD_NAME_PREF_INIZIALE = "iniziale";
+    public static final String FIELD_NAME_PREF_CORRENTE = "corrente";
 
     public static final String FIELD_HEADER_ORDINE = "#";
 

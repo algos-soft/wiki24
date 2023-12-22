@@ -161,7 +161,7 @@ public class PrefTest extends EnumTest {
             System.out.print(SPAZIO);
             System.out.print(String.format("default=[%s]", e.getDefaultValue()));
             System.out.print(FORWARD);
-            System.out.println(String.format("current=[%s]", preferenzaModulo.getValue(e.getType(), e.getKeyCode())));
+            System.out.println(String.format("current=[%s]", preferenzaModulo.getValueCorrente(e.getType(), e.getKeyCode())));
         });
     }
 

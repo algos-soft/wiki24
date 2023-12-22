@@ -431,7 +431,7 @@ public abstract class CrudForm extends Dialog {
                 currentEntityModel = currentCrudModulo.insert(currentEntityModel);
                 break;
             case update:
-                currentEntityModel = currentCrudModulo.insertSave(currentEntityModel);
+                currentEntityModel = currentCrudModulo.save(currentEntityModel);
                 break;
             case delete:
                 logger.warn("Registrazione di una scheda in cancellazione");

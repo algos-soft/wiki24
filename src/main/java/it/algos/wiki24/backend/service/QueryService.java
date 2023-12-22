@@ -46,6 +46,9 @@ public class QueryService {
     public boolean isEsiste(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitleGrezzo);
     }
+    public int getSizeCat(final String wikiTitleGrezzoCategoria) {
+        return appContext.getBean(QueryInfoCat.class).getSize(wikiTitleGrezzoCategoria);
+    }
 
 
 }

@@ -49,7 +49,7 @@ public class PreferenzaModulo extends CrudModulo {
      */
     @Override
     public List<String> getPropertyNames() {
-        return Arrays.asList("code", "type", "value", "descrizione");
+        return Arrays.asList("code", "type", "iniziale", "corrente", "descrizione");
     }
 
 
@@ -100,18 +100,19 @@ public class PreferenzaModulo extends CrudModulo {
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
-     * @param code         (obbligatorio, unico)
-     * @param type         (obbligatorio)
-     * @param defaultValue (obbligatorio)
-     * @param descrizione  (facoltativo)
+     * @param code        (obbligatorio, unico)
+     * @param type        (obbligatorio)
+     * @param iniziale    (obbligatorio)
+     * @param descrizione (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public PreferenzaEntity newEntity(String code, TypePref type, Object defaultValue, String descrizione) {
+    public PreferenzaEntity newEntity(String code, TypePref type, Object iniziale, String descrizione) {
         PreferenzaEntity newEntityBean = PreferenzaEntity.builder()
                 .code(textService.isValid(code) ? code : null)
                 .type(type)
-                .value(type != null ? type.objectToBytes(defaultValue) : null)
+                .iniziale(type != null ? type.objectToBytes(iniziale) : null)
+                .corrente(type != null ? type.objectToBytes(iniziale) : null)
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
                 .build();
 
@@ -171,7 +172,7 @@ public class PreferenzaModulo extends CrudModulo {
         Object obj;
 
         if (type == TypePref.string) {
-            obj = getValue(type, keyCode);
+            obj = getValueCorrente(type, keyCode);
             if (obj instanceof String value) {
                 return value;
             }
@@ -191,9 +192,9 @@ public class PreferenzaModulo extends CrudModulo {
         Object obj;
 
         if (type == TypePref.bool) {
-            obj = getValue(type, keyCode);
+            obj = getValueCorrente(type, keyCode);
 
-            if (obj ==null) {
+            if (obj == null) {
                 message = String.format("Nel database non esiste la preferenza [%s]. Controlla che l'enumeration delle preferenze sia stata caricata", keyCode);
                 logger.error(new WrapLog().message(message));
                 return false;
@@ -217,7 +218,7 @@ public class PreferenzaModulo extends CrudModulo {
         Object obj;
 
         if (type == TypePref.integer) {
-            obj = getValue(type, keyCode);
+            obj = getValueCorrente(type, keyCode);
             if (obj instanceof Integer value) {
                 return value;
             }
@@ -237,7 +238,7 @@ public class PreferenzaModulo extends CrudModulo {
         Object obj;
 
         if (type == TypePref.localdatetime) {
-            obj = getValue(type, keyCode);
+            obj = getValueCorrente(type, keyCode);
             if (obj instanceof LocalDateTime value) {
                 return value;
             }
@@ -249,21 +250,21 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
 
-    public void setValue(TypePref type, String keyCode, Object javaValue) {
+    public void setValueCorrente(TypePref type, String keyCode, Object javaValue) {
         PreferenzaEntity preferenza = (PreferenzaEntity) mongoService.findOneById(PreferenzaEntity.class, keyCode);
 
         if (preferenza == null) {
             return;
         }
 
-        preferenza.setValue(type.objectToBytes(javaValue));
+        preferenza.setCorrente(type.objectToBytes(javaValue));
         mongoService.save(preferenza);
     }
 
-    public Object getValue(TypePref type, String keyCode) {
+    public Object getValueCorrente(TypePref type, String keyCode) {
         Object javaValue;
         PreferenzaEntity preferenza = (PreferenzaEntity) findOneById(keyCode);
-        javaValue = preferenza != null ? type.bytesToObject(preferenza.getValue()) : null;
+        javaValue = preferenza != null ? type.bytesToObject(preferenza.getCorrente()) : null;
 
         return javaValue;
     }
@@ -275,7 +276,7 @@ public class PreferenzaModulo extends CrudModulo {
         PreferenzaEntity preferenza = (PreferenzaEntity) findOneById(keyCode);
         if (preferenza != null) {
             type = preferenza.type;
-            javaValue = type.bytesToObject(preferenza.getValue());
+            javaValue = type.bytesToObject(preferenza.getCorrente());
         }
 
         return javaValue;

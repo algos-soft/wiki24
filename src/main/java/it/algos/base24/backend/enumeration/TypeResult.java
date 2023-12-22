@@ -61,6 +61,7 @@ public enum TypeResult implements Type {
     error("Errore"),
     mancaResult("Manca il Result"),
     mancaTypeLog("Manca il typeLog"),
+
     queryWriteCreata("Pagina wiki creata"),
     queryWriteEsistente("Pagina wiki esistente"),
     queryWriteModificata("Pagina wiki modificata"),

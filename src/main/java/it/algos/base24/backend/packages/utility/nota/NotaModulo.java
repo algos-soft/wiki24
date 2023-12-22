@@ -4,6 +4,8 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.logic.*;
 import org.springframework.stereotype.*;
 
+import java.time.*;
+
 /**
  * Project base24
  * Created by Algos
@@ -37,7 +39,7 @@ public class NotaModulo extends CrudModulo {
      */
     @Override
     public NotaEntity newEntity() {
-        return newEntity(VUOTA);
+        return newEntity(VUOTA,0,null);
     }
 
     /**
@@ -47,9 +49,11 @@ public class NotaModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NotaEntity newEntity(String code) {
+    public NotaEntity newEntity(String code, long lungo, LocalDateTime evento) {
         NotaEntity newEntityBean = NotaEntity.builder()
                 .code(textService.isValid(code) ? code : null)
+                .lungo(lungo)
+                .evento(evento!=null?evento:ROOT_DATA_TIME)
                 .build();
 
         return (NotaEntity) fixKey(newEntityBean);

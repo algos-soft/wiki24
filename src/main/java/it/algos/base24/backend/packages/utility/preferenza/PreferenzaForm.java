@@ -64,24 +64,24 @@ public class PreferenzaForm extends CrudForm {
             case string -> {
                 TextField textField = new TextField("Value (string)");
                 textField.setRequired(true);
-                textField.setValue(type.bytesToString(pref.getValue()));
+                textField.setValue(type.bytesToString(pref.getCorrente()));
                 yield textField;
             }
             case bool -> {
                 Checkbox boxField = new Checkbox("Value (boolean)");
-                boxField.setValue((boolean) type.bytesToObject(pref.getValue()));
+                boxField.setValue((boolean) type.bytesToObject(pref.getCorrente()));
                 yield boxField;
             }
             case integer -> {
                 IntegerField intField = new IntegerField("Value (intero)");
                 intField.setRequired(true);
-                intField.setValue((int) type.bytesToObject(pref.getValue()));
+                intField.setValue((int) type.bytesToObject(pref.getCorrente()));
                 yield intField;
             }
 
             case localdatetime -> {
                 DateTimePicker pickerField = new DateTimePicker("Data completa (giorno e orario)");
-                pickerField.setValue((LocalDateTime) type.bytesToObject(pref.getValue()));
+                pickerField.setValue((LocalDateTime) type.bytesToObject(pref.getCorrente()));
                 yield pickerField;
             }
 
@@ -213,7 +213,7 @@ public class PreferenzaForm extends CrudForm {
                 if (field != null && field instanceof TextField textField) {
                     if (textService.isValid(textField.getValue())) {
                         try {
-                            pref.setValue(type.objectToBytes(textField.getValue()));
+                            pref.setCorrente(type.objectToBytes(textField.getValue()));
                         } catch (Exception unErrore) {
                             //                            logger.error(unErrore);
                         }
@@ -226,19 +226,19 @@ public class PreferenzaForm extends CrudForm {
             }
             case bool -> {
                 if (field != null && field instanceof Checkbox checkField) {
-                    pref.setValue(type.objectToBytes(checkField.getValue()));
+                    pref.setCorrente(type.objectToBytes(checkField.getValue()));
                 }
             }
 
             case integer -> {
                 if (field != null && field instanceof IntegerField intField) {
-                    pref.setValue(type.objectToBytes(intField.getValue()));
+                    pref.setCorrente(type.objectToBytes(intField.getValue()));
                 }
             }
 
             case localdatetime -> {
                 if (field != null && field instanceof DateTimePicker pickerField) {
-                    pref.setValue(type.objectToBytes(pickerField.getValue()));
+                    pref.setCorrente(type.objectToBytes(pickerField.getValue()));
                 }
             }
 

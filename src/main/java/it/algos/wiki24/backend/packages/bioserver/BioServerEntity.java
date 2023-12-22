@@ -34,10 +34,11 @@ public class BioServerEntity extends AbstractEntity {
     public String tmplBio;
 
 
-    @AField(type = TypeField.localDateTime)
+    @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
     public LocalDateTime lastServer;
 
-    @AField(type = TypeField.localDateTime)
+
+    @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
     public LocalDateTime lastMongo;
 
     //    /**

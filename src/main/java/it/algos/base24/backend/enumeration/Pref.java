@@ -114,7 +114,7 @@ public enum Pref implements IPref {
 
     @Override
     public Object getCurrentValue() {
-        return preferenzaModulo.getValue(type, keyCode);
+        return preferenzaModulo.getValueCorrente(type, keyCode);
     }
 
     @Override
@@ -124,7 +124,7 @@ public enum Pref implements IPref {
 
     @Override
     public void setValue(Object javaValue) {
-        preferenzaModulo.setValue(type, keyCode, javaValue);
+        preferenzaModulo.setValueCorrente(type, keyCode, javaValue);
     }
 
     public String getStr() {

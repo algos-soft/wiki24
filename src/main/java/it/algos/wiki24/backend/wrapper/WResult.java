@@ -707,4 +707,8 @@ public class WResult {
         return target;
     }
 
+    public void setIntValue(int intValue) {
+        this.intValue = intValue;
+    }
+
 }

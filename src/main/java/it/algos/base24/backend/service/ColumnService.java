@@ -164,7 +164,7 @@ public class ColumnService {
             //                return new Span(obj != null ? obj.toString() : VUOTA);
             //            }));//end of lambda expressions and anonymous inner class
 
-            case preferenza -> addPreferenza(grid, modelClazz, propertyName);
+            case preferenza -> addPreferenza(grid, propertyName);
             default -> null;
         };
 
@@ -184,7 +184,9 @@ public class ColumnService {
                 colonna.setHeader(headerIcon);
             }
             else {
-                colonna.setHeader(textService.primaMaiuscola(header));
+                if (textService.isEmpty(colonna.getHeaderText())) {
+                    colonna.setHeader(textService.primaMaiuscola(header));
+                }
             }
             if (type == TypeField.ordine) {
                 colonna.setHeader("#");
@@ -351,25 +353,46 @@ public class ColumnService {
     }
 
 
-    public Grid.Column<AbstractEntity> addPreferenza(final Grid grid, Class<? extends AbstractEntity> entityClazz, final String propertyName) {
+    public Grid.Column<AbstractEntity> addPreferenza(final Grid grid, final String propertyName) {
         Grid.Column<AbstractEntity> colonna;
+        String headerText = textService.primaMaiuscola(propertyName);
+        if (propertyName.equals(FIELD_NAME_PREF_INIZIALE)) {
+            headerText = "Default";//non posso metterlo come nome della property perché 'default' è una key word per java
+        }
 
         colonna = grid.addColumn(new ComponentRenderer<>(entity -> {
             Span span = new Span();
             Icon icon;
             TypePref type;
+            byte[] bytes = null;
 
             if (entity instanceof PreferenzaEntity pref) {
                 type = pref.getType();
+                if (propertyName.equals(FIELD_NAME_PREF_INIZIALE)) {
+                    bytes = pref.getIniziale();
+                }
+                if (propertyName.equals(FIELD_NAME_PREF_CORRENTE)) {
+                    bytes = pref.getCorrente();
+                }
+                if (bytes == null) {
+                    return span;
+                }
+
                 switch (type) {
-                    case string, integer, lungo, localdate, localtime, localdatetime, email: {
-                        span.setText(type.bytesToString(pref.getValue()));
+                    case string, integer, lungo, email: {
+                        span.setText(type.bytesToString(bytes));
+                        span.getElement().getStyle().set("color", type.getColor());
+                        span.getElement().getStyle().set("fontWeight", "bold");
+                        return span;
+                    }
+                    case localdate, localtime, localdatetime: {
+                        span.setText(type.bytesToString(bytes));
                         span.getElement().getStyle().set("color", type.getColor());
                         span.getElement().getStyle().set("fontWeight", "bold");
                         return span;
                     }
                     case bool: {
-                        if ((boolean) type.bytesToObject(pref.getValue())) {
+                        if ((boolean) type.bytesToObject(bytes)) {
                             icon = new Icon(VaadinIcon.CHECK);
                             icon.setColor(COLOR_VERO);
                         }
@@ -390,7 +413,7 @@ public class ColumnService {
         }));//end of lambda expressions and anonymous inner class
 
         if (colonna != null) {
-            colonna.setKey("value").setWidth(HTML_WIDTH_UNIT + 12).setFlexGrow(0);
+            colonna.setKey(propertyName).setHeader(headerText).setWidth(HTML_WIDTH_UNIT + 12).setFlexGrow(0);
         }
 
         return colonna;

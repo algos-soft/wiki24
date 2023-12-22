@@ -24,7 +24,7 @@ public enum TypeField implements Type {
     textArea(8, 18),
     integer(6, 8),
     ordine(4, 8),
-    lungo(5, 8),
+    lungo(6, 8),
     doppio(5, 8),
     booleano(5, 4),
     localDateTime(15, 15),
