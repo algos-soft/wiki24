@@ -32,17 +32,30 @@ public abstract class WikiList extends CrudList {
     protected VerticalLayout infoPlaceHolder;
 
 
-    protected WPref lastDownload;
+    public WPref lastDownload;
 
-    protected WPref durataDownload;
+    public WPref durataDownload;
 
-    protected WPref lastElaborazione;
+    public TypeSchedule scheduledDownload;
 
-    protected WPref durataElaborazione;
+    public TypeDurata unitaMisuraDownload;
 
-    protected TypeDurata unitaMisuraDownload;
+    public WPref lastElaborazione;
 
-    protected TypeDurata unitaMisuraElaborazione;
+    public WPref durataElaborazione;
+
+    public String scheduledElaborazione;
+
+    public TypeDurata unitaMisuraElaborazione;
+
+
+    public WPref lastUpload;
+
+    public WPref durataUpload;
+
+    public String scheduledUpload;
+
+    public TypeDurata unitaMisuraUpload;
 
     private boolean usaBottoneDownload;
 
@@ -83,14 +96,18 @@ public abstract class WikiList extends CrudList {
         if (currentCrudModulo != null) {
             lastDownload = currentCrudModulo.lastDownload;
             durataDownload = currentCrudModulo.durataDownload;
+            scheduledDownload = currentCrudModulo.scheduledDownload;
             unitaMisuraDownload = currentCrudModulo.unitaMisuraDownload;
 
             lastElaborazione = currentCrudModulo.lastElaborazione;
             durataElaborazione = currentCrudModulo.durataElaborazione;
+            scheduledElaborazione = currentCrudModulo.scheduledElaborazione;
             unitaMisuraElaborazione = currentCrudModulo.unitaMisuraElaborazione;
 
-            //            crudBackend.lastUpload = lastUpload;
-            //            crudBackend.durataUpload = durataUpload;
+            lastUpload = currentCrudModulo.lastUpload;
+            durataUpload = currentCrudModulo.durataUpload;
+            scheduledUpload = currentCrudModulo.scheduledUpload;
+            unitaMisuraUpload = currentCrudModulo.unitaMisuraUpload;
         }
     }
 
@@ -111,48 +128,81 @@ public abstract class WikiList extends CrudList {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void fixInfo() {
+        String downloadTxt = VUOTA;
+        String downloadLast = VUOTA;
+        String elaboraTxt = VUOTA;
+        String elaboraLast = VUOTA;
+        String uploadTxt = VUOTA;
+        String uploadLast = VUOTA;
+
         infoPlaceHolder.removeAll();
         if (usaInfoDownload) {
-            //            if (lastReset != null && lastReset.get() instanceof LocalDateTime reset) {
-            //                if (reset.equals(ROOT_DATA_TIME)) {
-            //                    message = "Reset non ancora effettuato";
-            //                }
-            //                else {
-            //                    message = String.format("Ultimo reset effettuato il %s", dateService.get(reset));
-            //                    if (durataReset != null && durataDownload.get() instanceof Integer durata) {
-            //                        message += String.format(" in circa %d %s.", durata, "minuti");
-            //                    }
-            //                }
-            //                addSpan(ASpan.text(message).verde().small());
-            //            }
+            if (scheduledDownload != null) {
+                downloadTxt = "Scheduled download " + scheduledDownload.getDescrizione();
+            }
+            else {
+                downloadTxt = "Scheduled download non previsto.";
+            }
             if (lastDownload != null && lastDownload.getCurrentValue() instanceof LocalDateTime download) {
                 if (download.equals(ROOT_DATA_TIME)) {
-                    message = "Download non ancora effettuato";
+                    downloadLast = "Download non ancora effettuato.";
                 }
                 else {
-                    message = String.format("Ultimo download effettuato il %s", dateService.get(download));
+                    downloadLast = String.format("Ultimo download effettuato il %s", dateService.get(download));
                     if (durataDownload != null && durataDownload.getCurrentValue() instanceof Integer durata) {
                         if (durata > 0) {
-                            message += String.format(" in circa %d %s.", durata, unitaMisuraDownload);
+                            downloadLast += String.format(" in circa %d %s.", durata, unitaMisuraDownload);
                         }
                     }
                 }
-                infoPlaceHolder.add(ASpan.text(message).verde().small());
+            }
+            message = String.format("%s%s%s", downloadTxt, SPAZIO, downloadLast);
+            infoPlaceHolder.add(ASpan.text(message).verde().small());
+
+            if (textService.isValid(scheduledElaborazione)) {
+                elaboraTxt = "Scheduled elaborazione " + scheduledElaborazione;
+            }
+            else {
+                elaboraTxt = "Scheduled elaborazione non prevista.";
             }
             if (lastElaborazione != null && lastElaborazione.getCurrentValue() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
-                    message = "Elaborazione non ancora effettuata";
+                    elaboraLast = "Elaborazione non ancora effettuata.";
                 }
                 else {
-                    message = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
+                    elaboraLast = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
                     if (durataElaborazione != null && durataElaborazione.getCurrentValue() instanceof Integer durata) {
                         if (durata > 0) {
-                            message += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
+                            elaboraLast += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
                         }
                     }
                 }
-                infoPlaceHolder.add(ASpan.text(message).verde().small());
             }
+            message = String.format("%s%s%s", elaboraTxt, SPAZIO, elaboraLast);
+            infoPlaceHolder.add(ASpan.text(message).verde().small());
+
+            if (textService.isValid(scheduledUpload)) {
+                uploadTxt = "Scheduled upload " + scheduledUpload;
+            }
+            else {
+                uploadTxt = "Scheduled upload non previsto.";
+            }
+            if (lastUpload != null && lastUpload.getCurrentValue() instanceof LocalDateTime upload) {
+                if (upload.equals(ROOT_DATA_TIME)) {
+                    uploadLast = "Upload non ancora effettuato.";
+                }
+                else {
+                    uploadLast = String.format("Ultimo upload effettuato il %s", dateService.get(upload));
+                    if (durataUpload != null && durataUpload.getCurrentValue() instanceof Integer durata) {
+                        if (durata > 0) {
+                            uploadLast += String.format(" in circa %d %s.", durata, unitaMisuraUpload);
+                        }
+                    }
+                }
+            }
+            message = String.format("%s%s%s", uploadTxt, SPAZIO, uploadLast);
+            infoPlaceHolder.add(ASpan.text(message).verde().small());
+
             //
             //            if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
             //                if (statistica.equals(ROOT_DATA_TIME)) {

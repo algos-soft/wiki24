@@ -55,7 +55,12 @@ public class BioServerModulo extends WikiModulo {
 
     public BioServerEntity newEntity(WrapPage wrapPage) {
         String tmplBio = wikiBotService.estraeTmplBio(wrapPage.getContent());
-        return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp(), null);
+        if (textService.isValid(tmplBio)) {
+            return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp(), null);
+        }
+        else {
+            return null;
+        }
     }
 
     /**

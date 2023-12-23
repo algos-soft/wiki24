@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.attplurale;
 
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
@@ -46,6 +47,7 @@ public class AttPluraleModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.scheduledDownload = TypeSchedule.zeroTrenta;
         super.lastDownload = WPref.lastDownloadAttPlu;
         super.durataDownload = WPref.downloadAttPluTime;
         super.unitaMisuraDownload = TypeDurata.secondi;

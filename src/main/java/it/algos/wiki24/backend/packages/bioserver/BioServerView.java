@@ -23,7 +23,7 @@ import com.vaadin.flow.component.textfield.TextField;
  *
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
-@PageTitle("TemplateBio")
+@PageTitle("BioServer")
 @Route(value = "bioserver", layout = MainLayout.class)
 @AView(menuGroupName = "bio")
 public class BioServerView extends CrudView {

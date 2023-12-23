@@ -29,13 +29,26 @@ public abstract class WikiModulo extends CrudModulo {
 
     public WPref durataDownload;
 
+    public TypeSchedule scheduledDownload;
+
+    public TypeDurata unitaMisuraDownload;
+
     public WPref lastElaborazione;
 
     public WPref durataElaborazione;
 
-    public TypeDurata unitaMisuraDownload;
+    public String scheduledElaborazione;
 
     public TypeDurata unitaMisuraElaborazione;
+
+
+    public WPref lastUpload;
+
+    public WPref durataUpload;
+
+    public String scheduledUpload;
+
+    public TypeDurata unitaMisuraUpload;
 
     protected long inizio;
 

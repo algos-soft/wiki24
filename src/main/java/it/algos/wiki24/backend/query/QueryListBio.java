@@ -97,7 +97,9 @@ public class QueryListBio extends AQuery {
             if (jsonPages.size() > 0) {
                 for (Object obj : jsonPages) {
                     wrapBio = getWrapBio((JSONObject) obj);
-                    listaNew.add(wrapBio);
+                    if (wrapBio!=null) {
+                        listaNew.add(wrapBio);
+                    }
                 }
                 result.setCodeMessage(JSON_SUCCESS);
                 listaOld = (List<WrapBio>) result.getLista();

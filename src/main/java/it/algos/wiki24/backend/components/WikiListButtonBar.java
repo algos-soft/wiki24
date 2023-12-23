@@ -66,7 +66,7 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
-    protected void addButtons() {
+    public void addButtons() {
 
         if (usaBottoneDeleteAll) {
             this.addDeleteAll();
@@ -98,7 +98,7 @@ public class WikiListButtonBar extends ListButtonBar {
     }
 
 
-    private void addDownload() {
+    public void addDownload() {
         buttonDownload.getElement().setAttribute("theme", "primary");
         buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server");

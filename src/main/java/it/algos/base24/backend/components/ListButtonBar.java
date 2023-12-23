@@ -192,7 +192,7 @@ public class ListButtonBar extends HorizontalLayout {
         return this;
     }
 
-    protected void addButtons() {
+    public void addButtons() {
 
         if (usaBottoneDeleteAll) {
             this.addDeleteAll();
@@ -226,7 +226,7 @@ public class ListButtonBar extends HorizontalLayout {
         }
     }
 
-    protected void addDeleteAll() {
+    public void addDeleteAll() {
         buttonDeleteAll.getElement().setAttribute("theme", "primary");
         buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteAll.getElement().setProperty("title", TEXT_DELETE);
@@ -235,7 +235,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonDeleteAll);
     }
 
-    private void addResetDelete() {
+    public void addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
         buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
@@ -244,7 +244,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonResetDelete);
     }
 
-    private void addResetAdd() {
+    public void addResetAdd() {
         buttonResetAdd.getElement().setAttribute("theme", "primary");
         buttonResetAdd.getElement().setProperty("title", TEXT_RESET_ADD);
         buttonResetAdd.setIcon(new Icon(VaadinIcon.REFRESH));
@@ -253,7 +253,7 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-    private void addResetPref() {
+    public void addResetPref() {
         buttonResetPref.getElement().setAttribute("theme", "primary");
         buttonResetPref.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonResetPref.getElement().setProperty("title", TEXT_RESET_PREF);
@@ -262,7 +262,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonResetPref);
     }
 
-    private void addDownload() {
+    public void addDownload() {
         buttonDownload.getElement().setAttribute("theme", "primary");
         buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDownload.getElement().setProperty("title", TEXT_DOWNLOAD);
@@ -271,7 +271,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonDownload);
     }
 
-    protected void addNew() {
+    public void addNew() {
         buttonNew.getElement().setAttribute("theme", "primary");
         buttonNew.getElement().setProperty("title", "New: aggiunge un elemento alla collezione");
         buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
@@ -281,7 +281,7 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-    protected void addEdit() {
+    public void addEdit() {
         buttonEdit.getElement().setAttribute("theme", "primary");
         buttonEdit.getElement().setProperty("title", "Edit: modifica il singolo elemento selezionato");
         buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
@@ -290,7 +290,7 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonEdit);
     }
 
-    protected void addShows() {
+    public void addShows() {
         buttonShow.getElement().setAttribute("theme", "primary");
         buttonShow.getElement().setProperty("title", "Shows: mostra il singolo elemento selezionato");
         buttonShow.setIcon(new Icon(VaadinIcon.POINTER));
@@ -300,7 +300,7 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-    protected void addDeleteEntity() {
+    public void addDeleteEntity() {
         buttonDeleteEntity.getElement().setAttribute("theme", "primary");
         buttonDeleteEntity.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteEntity.getElement().setProperty("title", "Delete: cancella il singolo elemento selezionato");
@@ -326,7 +326,7 @@ public class ListButtonBar extends HorizontalLayout {
     //    }
 
 
-    protected void addSearchField() {
+    public void addSearchField() {
         //        searchFieldName = annotationService.getKeyPropertyName(currentCrudModelClazz);
         searchField.setPlaceholder(TAG_ALTRE_BY + searchFieldName);
         searchField.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);

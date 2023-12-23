@@ -45,6 +45,7 @@ public class NazPluraleModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.scheduledDownload = TypeSchedule.zeroQuaranta;
         super.lastDownload = WPref.lastDownloadNazPlu;
         super.durataDownload = WPref.downloadNazPluTime;
         super.unitaMisuraDownload = TypeDurata.secondi;

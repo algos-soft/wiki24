@@ -42,7 +42,7 @@ public class WrapBio {
         WrapBio wrapBio = new WrapBio();
         wrapBio.beanBioServer = beanBioServer;
         wrapBio.valida = true;
-        return wrapBio;
+        return beanBioServer != null ? wrapBio : null;
     }
 
 

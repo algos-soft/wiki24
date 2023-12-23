@@ -13,12 +13,9 @@ import org.springframework.stereotype.*;
 @Service
 public class ScheduleTaskUsingCronExpression {
 
-    private static final String ALFA = "0 * * * * ?";
-
-    @Scheduled(cron = ALFA)
-    //    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 * * * * ?")
     public void scheduleOgniMinuto() {
-        //        ogniMinuto();
+//        ogniMinuto();
     }
 
     protected void ogniMinuto() {
@@ -27,7 +24,7 @@ public class ScheduleTaskUsingCronExpression {
 
     @Scheduled(cron = "0 0 * * * ?")
     public void scheduleOgniOra() {
-        //        ogniMinuto();
+//        ogniMinuto();
     }
 
     protected void ogniOra() {
@@ -35,7 +32,7 @@ public class ScheduleTaskUsingCronExpression {
 
     @Scheduled(cron = "0 0 0 * * ?")
     public void scheduleOgniGiorno() {
-        //        ogniMinuto();
+//        ogniMinuto();
     }
 
     protected void ogniGiorno() {

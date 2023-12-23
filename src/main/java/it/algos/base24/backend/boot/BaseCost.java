@@ -144,7 +144,9 @@ public class BaseCost {
     public static final String FIELD_NAME_ID_LINK = ".$id";
 
     public static final String FIELD_NAME_ORDINE = "ordine";
+
     public static final String FIELD_NAME_PREF_INIZIALE = "iniziale";
+
     public static final String FIELD_NAME_PREF_CORRENTE = "corrente";
 
     public static final String FIELD_HEADER_ORDINE = "#";
@@ -382,6 +384,9 @@ public class BaseCost {
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
 
     public static final String MAIL_TO = "gac@algos.it";
+
+    public static final String SCHEDULED_ZERO_TRENTA = "30 0 * * *";
+    public static final String SCHEDULED_ZERO_QUARANTA = "40 0 * * *";
 
 
 }
