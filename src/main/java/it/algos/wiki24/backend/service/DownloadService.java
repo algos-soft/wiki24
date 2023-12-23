@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.service;
 
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
@@ -44,6 +45,9 @@ public class DownloadService {
     @Inject
     LogService logger;
 
+    @Inject
+    BioServerModulo bioServerModulo;
+
 
     /**
      * Ciclo iniziale di download di BioServer con un reset completo <br>
@@ -53,13 +57,7 @@ public class DownloadService {
     public void cicloIniziale() {
         long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
-        List<Long> listaPageIdsDaLeggere = null;
-        List<Long> subList;
-        List<WrapBio> listaWrapBio;
-        int dim;
-        int stock = 10000;
-        String message;
-        int numVociCreate = 0;
+        List<Long> listaPageIds;
 
         //--Cancella (drop) la collection
         mongoService.deleteAll(BioServerEntity.class);
@@ -70,25 +68,14 @@ public class DownloadService {
         //--Controlla il collegamento come bot
         //        checkBot();
 
-        //--Crea la lista di tutti i (long) pageIds della category
-        //        listaPageIdsDaLeggere = getListaPageIds(categoryTitle);
+        //--Crea la lista di tutti i pageIds (long) della category
+        listaPageIds = getListaPageIds(categoryTitle);
 
-//        dim = listaPageIdsDaLeggere!=null?listaPageIdsDaLeggere.size():0;
-//        for (int k = 0; k < dim; k = k + stock) {
-//            subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
-//
-//            //--Legge le pagine
-//            //            listaWrapBio = getListaWrapBio(subList, dim);
-//
-//            //--Crea/aggiorna le voci biografiche <br>
-//            //            numVociCreate = creaElaboraListaBio(listaWrapBio, dim);
-//
-//            message = String.format("Create %s nuove biografie in %s", textService.format(numVociCreate), dateService.deltaText(inizio));
-//            logger.info(new WrapLog().message(message).type(TypeLog.bio));
-//        }
+        //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
+        creaNewEntities(listaPageIds);
 
         //--durata del ciclo completo
-        //        fixInfoDurataReset(inizio);
+        fixInfoDurataReset(inizio);
     }
 
     /**
@@ -124,6 +111,155 @@ public class DownloadService {
         }
 
         return numPages;
+    }
+
+
+    /**
+     * Crea la lista di tutti i (long) pageIds della categoria <br>
+     * Deve riuscire a gestire una lista di circa 500.000 long per la category BioBot <br>
+     * Tempo medio previsto = circa 1 minuto (come bot la categoria legge 5.000 pagine per volta) <br>
+     * Nella listaPageIds possono esserci anche voci SENZA il tmpl BIO, che verranno scartate dopo <br>
+     *
+     * @param categoryTitle da controllare
+     *
+     * @return lista di tutti i (long) pageIds
+     */
+    public List<Long> getListaPageIds(final String categoryTitle) {
+        long inizio = System.currentTimeMillis();
+        List<Long> listaPageIds;
+        String size;
+        String time;
+        String message;
+
+        listaPageIds = queryService.getPageIds(categoryTitle);
+
+        if (listaPageIds != null && listaPageIds.size() > 0) {
+            size = textService.format(listaPageIds.size());
+            time = dateService.deltaText(inizio);
+            message = String.format("Recuperati %s pageIds (long) dalla categoria [%s]. Tempo %s", size, categoryTitle, time);
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+        }
+        else {
+            message = String.format("La categoria [%s] è vuota oppure non è corretta oppure non esiste", categoryTitle);
+            logger.info(new WrapLog().message(message));
+
+            logger.warn(new WrapLog().message(message).type(TypeLog.bio));
+        }
+
+        return listaPageIds;
+    }
+
+
+    /**
+     * Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale <br>
+     *
+     * @param listaPageIdsDaCreare tutti i (long) pageIds presenti sul server wiki e da creare
+     */
+    public void creaNewEntities(List<Long> listaPageIdsDaCreare) {
+        long inizio = System.currentTimeMillis();
+        List<WrapBio> listWrapBio = null;
+        String message;
+        String sizeNew;
+        int numVociCreate = 0;
+
+        if (listaPageIdsDaCreare != null && listaPageIdsDaCreare.size() > 0) {
+            listWrapBio = getListaWrapBio(listaPageIdsDaCreare);
+        }
+
+        if (listWrapBio != null && listWrapBio.size() > 0) {
+            for (WrapBio wrapBio : listWrapBio) {
+                bioServerModulo.insertSave(wrapBio.getBeanBioServer());
+                wrapBio.setCreataBioServer(true);
+                numVociCreate++;
+            }
+        }
+
+        if (numVociCreate > 0) {
+            sizeNew = textService.format(numVociCreate);
+            message = String.format("Create %s nuove biografie in %s", sizeNew, dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+        }
+    }
+
+
+    /**
+     * Legge tutte le pagine <br>
+     * Recupera i contenuti di tutte le voci biografiche da creare/modificare <br>
+     * Controlla che esiste il tmpl BIO <br>
+     * Nella listaWrapBio possono ci sono solo voci CON il tmpl BIO valido <br>
+     *
+     * @param listaPageIdsDaLeggere dal server wiki
+     *
+     * @return listaWrapBio
+     */
+    public List<WrapBio> getListaWrapBio(final List<Long> listaPageIdsDaLeggere) {
+        List<WrapBio> listaWrap = new ArrayList<>();
+        long inizio = System.currentTimeMillis();
+        long inizio2;
+        List<Long> subList;
+        List<WrapBio> listaWrapTmp = null;
+        String message;
+        int stock = 1000;
+        int dim;
+
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
+        if (listaPageIdsDaLeggere != null) {
+            dim = listaPageIdsDaLeggere.size();
+            for (int k = 0; k < dim; k = k + stock) {
+                subList = listaPageIdsDaLeggere.subList(k, Math.min(k + stock, dim));
+
+                inizio2 = System.currentTimeMillis();
+                listaWrapTmp = queryService.getListaBio(subList);
+                if (listaWrapTmp != null) {
+                    listaWrap.addAll(listaWrapTmp);
+                    message = String.format("Recuperati %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrapTmp.size()), dateService.deltaText(inizio2));
+                    logger.info(new WrapLog().message(message).type(TypeLog.bio));
+                }
+            }
+            message = String.format("Recuperati in totale %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrap.size()), dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+        }
+
+        return listaWrap;
+    }
+
+
+    public void fixInfoDurataReset(final long inizio) {
+        String message;
+        long fine = System.currentTimeMillis();
+        Long delta = fine - inizio;
+
+        //        if (WPref.resetBio != null) {
+        //            WPref.resetBio.setValue(LocalDateTime.now());
+        //        }
+
+        //        if (WPref.resetBioTime != null) {
+        //            delta = delta / 1000 / 60;
+        //            WPref.resetBioTime.setValue(delta.intValue());
+        //        }
+
+        //        if (WPref.downloadBio != null) {
+        //            WPref.downloadBio.setValue(LocalDateTime.now());
+        //        }
+
+        //        if (WPref.downloadBioTime != null) {
+        //            WPref.downloadBioTime.setValue(0);
+        //        }
+
+        //        if (WPref.downloadBioPrevisto != null) {
+        //            WPref.downloadBioPrevisto.setValue(ROOT_DATA_TIME);
+        //        }
+
+        //        if (WPref.elaboraBio != null) {
+        //            WPref.elaboraBio.setValue(LocalDateTime.now());
+        //        }
+
+        //        if (WPref.elaboraBioTime != null) {
+        //            WPref.elaboraBioTime.setValue(0);
+        //        }
+
+        message = String.format("Ciclo completo di reset in, %s", dateService.deltaText(inizio));
+        logger.info(new WrapLog().message(message).type(TypeLog.bio));
     }
 
 }// end of Service class

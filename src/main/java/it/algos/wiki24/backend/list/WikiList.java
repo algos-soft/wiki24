@@ -195,6 +195,9 @@ public abstract class WikiList extends CrudList {
         this.buttonBar = appContext.getBean(WikiListButtonBar.class, this);
         super.buttonBar = this.buttonBar;
 
+        if (usaBottoneDeleteAll) {
+            buttonBar.deleteAll();
+        }
         if (usaBottoneDownload) {
             buttonBar.download();
         }

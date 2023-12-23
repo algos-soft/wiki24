@@ -711,4 +711,8 @@ public class WResult {
         this.intValue = intValue;
     }
 
+    public void setLista(List lista) {
+        this.lista = lista;
+    }
+
 }

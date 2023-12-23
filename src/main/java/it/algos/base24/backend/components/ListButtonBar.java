@@ -226,7 +226,7 @@ public class ListButtonBar extends HorizontalLayout {
         }
     }
 
-    private void addDeleteAll() {
+    protected void addDeleteAll() {
         buttonDeleteAll.getElement().setAttribute("theme", "primary");
         buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteAll.getElement().setProperty("title", TEXT_DELETE);

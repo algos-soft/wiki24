@@ -9,6 +9,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -46,8 +47,26 @@ public class QueryService {
     public boolean isEsiste(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryExist.class).isEsiste(wikiTitleGrezzo);
     }
-    public int getSizeCat(final String wikiTitleGrezzoCategoria) {
-        return appContext.getBean(QueryInfoCat.class).getSize(wikiTitleGrezzoCategoria);
+
+    public int getSizeCat(final String categoryTitle) {
+        return appContext.getBean(QueryInfoCat.class).getSize(categoryTitle);
+    }
+
+//    public List<Long> getCatIdsOrdered(final String catTitleGrezzo) {
+//        if (appContext != null) {
+//            return appContext.getBean(QueryCat.class).getPageIdsOrdered(catTitleGrezzo);
+//        }
+//        else {
+//            QueryCat queryCat = new QueryCat();
+//            return queryCat.getPageIdsOrdered(catTitleGrezzo);
+//        }
+//    }
+
+    public List<Long> getPageIds(final String categoryTitle) {
+        return appContext.getBean(QueryCat.class).getPageIds(categoryTitle);
+    }
+    public List<WrapBio> getListaBio(final List<Long> listaPageids) {
+       return appContext.getBean(QueryListBio.class).getLista(listaPageids);
     }
 
 

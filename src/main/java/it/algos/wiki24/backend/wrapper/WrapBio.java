@@ -22,6 +22,14 @@ public class WrapBio {
 
     private boolean valida;
 
+    public void setCreataBioServer(boolean creataBioServer) {
+        this.creataBioServer = creataBioServer;
+    }
+
+    public void setCreataBioMongo(boolean creataBioMongo) {
+        this.creataBioMongo = creataBioMongo;
+    }
+
     private boolean creataBioServer;
 
     private boolean creataBioMongo;
@@ -30,7 +38,7 @@ public class WrapBio {
     }
 
 
-    public static WrapBio beanBio(final BioServerEntity beanBioServer) {
+    public static WrapBio bean(final BioServerEntity beanBioServer) {
         WrapBio wrapBio = new WrapBio();
         wrapBio.beanBioServer = beanBioServer;
         wrapBio.valida = true;

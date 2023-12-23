@@ -49,7 +49,7 @@ public class QueryBio extends AQuery {
             beanBioServer = bioServerModulo.newEntity(wrapPage);
         }
         if (beanBioServer != null) {
-            return WrapBio.beanBio(beanBioServer);
+            return WrapBio.bean(beanBioServer);
         }
 
         return null;
@@ -78,7 +78,7 @@ public class QueryBio extends AQuery {
             beanBioServer = bioServerModulo.newEntity(wrapPage);
         }
         if (beanBioServer != null) {
-            return WrapBio.beanBio(beanBioServer);
+            return WrapBio.bean(beanBioServer);
         }
 
         return null;

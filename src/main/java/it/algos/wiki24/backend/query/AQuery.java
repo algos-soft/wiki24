@@ -8,6 +8,7 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.packages.bioserver.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -132,6 +133,9 @@ public abstract class AQuery {
 
     @Inject
     public BotLogin botLogin;
+
+    @Inject
+    public BioServerModulo bioServerModulo;
 
     //    @Inject
     //    public BioBackend bioBackend;
@@ -782,6 +786,69 @@ public abstract class AQuery {
     }
 
 
+    //--estrae informazioni dalla pagina 'zero'
+    //--estrae il 'content' dalla pagina 'zero'
+    protected WrapPage getWrapPage(JSONObject jsonPageZero) {
+        WrapPage wrapPage = null;
+        long nameSpace = 0;
+        long pageId = 0;
+        String wikiTitle = VUOTA;
+        String timeStamp = VUOTA;
+        String content = VUOTA;
+
+        if (jsonPageZero.get(KEY_JSON_NS) instanceof Long nameSpaceObj) {
+            nameSpace = nameSpaceObj;
+            mappaUrlResponse.put(KEY_JSON_NS, nameSpace);
+        }
+
+        if (jsonPageZero.get(KEY_JSON_PAGE_ID) instanceof Long pageIdObj) {
+            pageId = pageIdObj;
+        }
+        if (jsonPageZero.get(KEY_JSON_TITLE) instanceof String wikiTitleObj) {
+            wikiTitle = wikiTitleObj;
+        }
+
+        if (jsonPageZero.get(KEY_JSON_REVISIONS) instanceof JSONArray jsonRevisions) {
+            if (jsonRevisions.size() > 0) {
+                JSONObject jsonRevZero = (JSONObject) jsonRevisions.get(0);
+                if (jsonRevZero.get(KEY_JSON_SLOTS) instanceof JSONObject jsonSlots) {
+                    if (jsonSlots.get(KEY_JSON_MAIN) instanceof JSONObject jsonMain) {
+                        content = (String) jsonMain.get(KEY_JSON_CONTENT);
+                        mappaUrlResponse.put(KEY_JSON_CONTENT, content);
+                    }
+                }
+                if (jsonRevZero.get(KEY_JSON_CONTENT) instanceof String contentObj) {
+                    content = contentObj;
+                    mappaUrlResponse.put(KEY_JSON_CONTENT, content);
+                }
+                if (jsonRevZero.get(KEY_JSON_TIMESTAMP) instanceof String timeStampObj) {
+                    timeStamp = timeStampObj;
+                    mappaUrlResponse.put(KEY_JSON_TIMESTAMP, timeStamp);
+                }
+            }
+        }
+        if (textService.isValid(content)) {
+            wrapPage = new WrapPage(TypePage.pagina, nameSpace, pageId, wikiTitle, timeStamp, content);
+        }
+
+        return wrapPage;
+    }
+
+    //--estrae informazioni dalla pagina 'zero'
+    //--estrae il 'content' dalla pagina 'zero'
+    protected WrapBio getWrapBio(JSONObject jsonPageZero) {
+        WrapBio wrapBio = null;
+        WrapPage wrapPage = getWrapPage(jsonPageZero);
+        BioServerEntity beanBio;
+
+        if (wrapPage != null && wrapPage.isValida()) {
+            beanBio = bioServerModulo.newEntity(wrapPage);
+            wrapBio = WrapBio.bean(beanBio);
+        }
+
+        return wrapBio;
+    }
+
     protected WResult fixQueryDisambiguaRedirect(WResult result) {
         String wikiLink;
 
@@ -814,7 +881,8 @@ public abstract class AQuery {
     }
 
 
-    protected WrapPage getWrapPage(JSONObject jsonPageZero) {
+    @Deprecated
+    protected WrapPage getWrapPage2(JSONObject jsonPageZero) {
         WrapPage wrapPage = null;
         String content = VUOTA;
         String wikiTitle = VUOTA;
@@ -866,7 +934,7 @@ public abstract class AQuery {
     }
 
 
-    protected WrapBio getWrapBio(JSONObject jsonPageZero) {
+    protected WrapBio getWrapBioOld(JSONObject jsonPageZero) {
         WrapBio wrapBio = null;
         String content = VUOTA;
         String wikiTitle = VUOTA;

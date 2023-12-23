@@ -55,6 +55,10 @@ public enum WPref implements IPref {
     //***************
     categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie"),
 
+    //***************
+    lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer."),
+    downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in secondi."),
+
     ;
 
     public PreferenzaModulo preferenzaModulo;

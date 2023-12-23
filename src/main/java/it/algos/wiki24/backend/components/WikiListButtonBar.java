@@ -22,12 +22,14 @@ import org.springframework.stereotype.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class WikiListButtonBar extends ListButtonBar {
 
+    protected boolean usaBottoneDeleteAll;
     private boolean usaBottoneDownload;
 
     private boolean usaBottoneElabora;
 
     private boolean usaBottoneUpload;
 
+    protected Button buttonDeleteAll = new Button();
     protected Button buttonDownload = new Button();
 
     protected Button buttonElabora = new Button();
@@ -41,6 +43,13 @@ public class WikiListButtonBar extends ListButtonBar {
         this.currentCrudList = crudList;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public ListButtonBar deleteAll() {
+        this.usaBottoneDeleteAll = true;
+        return this;
+    }
     /**
      * Fluent pattern Builder <br>
      */
@@ -59,6 +68,9 @@ public class WikiListButtonBar extends ListButtonBar {
 
     protected void addButtons() {
 
+        if (usaBottoneDeleteAll) {
+            this.addDeleteAll();
+        }
         if (usaBottoneDownload) {
             this.addDownload();
         }

@@ -17,7 +17,7 @@ import java.time.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "bioserver", keyPropertyName = "pageId", typeList = TypeList.standard)
+@AEntity(collectionName = "bioserver", keyPropertyName = "pageId", typeList = TypeList.softWiki)
 public class BioServerEntity extends AbstractEntity {
 
     @Positive()

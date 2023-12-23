@@ -62,14 +62,14 @@ public class QueryInfoCat extends AQuery {
      * ....................files <br>
      * ....................subcats <br>
      *
-     * @param wikiTitoloGrezzoCategoria della categoria wiki (necessita di codifica) usato nella urlRequest.
+     * @param categoryTitle della categoria wiki (necessita di codifica) usato nella urlRequest.
      *
      * @return wrapper di informazioni
      */
-    public WResult urlRequest(final String wikiTitoloGrezzoCategoria) {
+    public WResult urlRequest(final String categoryTitle) {
         typeQuery = TypeQuery.getSenzaLoginSenzaCookies;
-        wikiCategory = wikiTitoloGrezzoCategoria;
-        return requestGetTitle(WIKI_QUERY_CAT_INFO, CAT + wikiTitoloGrezzoCategoria);
+        wikiCategory = categoryTitle;
+        return requestGetTitle(WIKI_QUERY_CAT_INFO, CAT + categoryTitle);
     }
 
 
@@ -109,8 +109,8 @@ public class QueryInfoCat extends AQuery {
         return result;
     }
 
-    public int getSize(final String wikiTitoloGrezzoCategoria) {
-        WResult result = urlRequest(wikiTitoloGrezzoCategoria);
+    public int getSize(final String categoryTitle) {
+        WResult result = urlRequest(categoryTitle);
         if (result != null) {
             return result.getIntValue();
         }

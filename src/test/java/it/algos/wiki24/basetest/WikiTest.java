@@ -1527,6 +1527,31 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
+
+    protected void printLista(final List lista) {
+        int cont = 0;
+        System.out.println(VUOTA);
+
+        if (lista != null) {
+            if (lista.size() > 0) {
+                System.out.println(String.format("La lista contiene %d elementi", lista.size()));
+                for (Object obj : lista) {
+                    cont++;
+                    System.out.print(cont);
+                    System.out.print(PARENTESI_TONDA_END);
+                    System.out.print(SPAZIO);
+                    System.out.println(obj);
+                }
+            }
+            else {
+                System.out.println("Non ci sono elementi nella lista");
+            }
+        }
+        else {
+            System.out.println("Manca la lista");
+        }
+    }
+
     //    protected void printMiniWrap(List<WrapTime> listaMiniWrap) {
     //        if (listaMiniWrap != null) {
     //            System.out.println(VUOTA);
@@ -1974,6 +1999,18 @@ public abstract class WikiTest extends AlgosTest {
                 System.out.print(key);
                 System.out.print(FORWARD);
                 System.out.println(mappa.get(key));
+            }
+        }
+    }
+
+    protected void print(List<String> lista) {
+        int k = 1;
+        if (lista != null) {
+            for (String stringa : lista) {
+                System.out.print(k++);
+                System.out.print(PARENTESI_TONDA_END);
+                System.out.print(SPAZIO);
+                System.out.println(stringa);
             }
         }
     }
