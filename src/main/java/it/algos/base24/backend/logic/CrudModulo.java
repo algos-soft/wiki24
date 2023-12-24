@@ -11,6 +11,7 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
+import it.algos.wiki24.backend.enumeration.*;
 import jakarta.annotation.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -287,14 +288,11 @@ public abstract class CrudModulo {
         savedEntityBean = mongoService.insert(entityBean);
 
         if (entityBean != null) {
-            modifiche = jSonService.getProperties(entityBean);
-            message = String.format("Creata una nuova entity [%s.%s]", entityName, savedEntityBean.getId());
-            message = String.format("%s%s%s", message, FORWARD, modifiche);
             if (Pref.usaNotification.is()) {
+                modifiche = jSonService.getProperties(entityBean);
+                message = String.format("Creata una nuova entity [%s.%s]", entityName, savedEntityBean.getId());
+                message = String.format("%s%s%s", message, FORWARD, modifiche);
                 logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
-            }
-            else {
-                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb().senzaNotifica());
             }
         }
         else {
@@ -331,10 +329,12 @@ public abstract class CrudModulo {
         savedEntityBean = mongoService.save(modifiedEntityBean);
 
         if (savedEntityBean != null) {
-            modifiche = jSonService.getModifiche(oldEntityBean, savedEntityBean);
-            message = String.format("Modificata la entity [%s.%s]", entityName, savedEntityBean.getId());
-            message = String.format("%s%s%s", message, FORWARD, modifiche);
-            logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            if (Pref.usaNotification.is()) {
+                modifiche = jSonService.getModifiche(oldEntityBean, savedEntityBean);
+                message = String.format("Modificata la entity [%s.%s]", entityName, savedEntityBean.getId());
+                message = String.format("%s%s%s", message, FORWARD, modifiche);
+                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            }
         }
         else {
             message = String.format("Non sono riuscito a modificare la entity [%s.%s]", entityName, savedEntityBean.getId());

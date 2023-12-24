@@ -433,7 +433,7 @@ public class QueryLogin extends AQuery {
         }
 
         if (result.isValido()) {
-            message = String.format("Collegato come %s di nick '%s'", botLogin.getUserType(), botLogin.getUsername());
+            message = String.format("Collegato come [%s] di nick [%s]", botLogin.getUserType(), botLogin.getUsername());
             logger.info(new WrapLog().message(message).type(TypeLog.login));
         }
 

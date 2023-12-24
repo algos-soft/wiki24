@@ -103,7 +103,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server");
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
-        buttonDownload.addClickListener(event -> currentCrudList.download());
+        buttonDownload.addClickListener(event -> currentCrudList.download(event));
         this.add(buttonDownload);
     }
 

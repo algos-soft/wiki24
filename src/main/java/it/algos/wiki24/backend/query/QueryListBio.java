@@ -2,6 +2,8 @@ package it.algos.wiki24.backend.query;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -84,6 +86,7 @@ public class QueryListBio extends AQuery {
         List<WrapBio> listaNew = new ArrayList<>();
         List<WrapBio> listaOld;
         WrapBio wrapBio = null;
+        String message;
         result = super.elaboraResponse(result, rispostaDellaQuery);
         result.typePage(TypePage.pageIds);
         result.setWikiTitle(VUOTA);
@@ -97,8 +100,12 @@ public class QueryListBio extends AQuery {
             if (jsonPages.size() > 0) {
                 for (Object obj : jsonPages) {
                     wrapBio = getWrapBio((JSONObject) obj);
-                    if (wrapBio!=null) {
+                    if (wrapBio != null) {
                         listaNew.add(wrapBio);
+                    }
+                    else {
+                        message = String.format("La pagina [%s] non è una biografia",((JSONObject) obj).get(KEY_JSON_TITLE));
+                        logger.info(new WrapLog().message(message).type(TypeLog.bio));
                     }
                 }
                 result.setCodeMessage(JSON_SUCCESS);
@@ -115,9 +122,10 @@ public class QueryListBio extends AQuery {
             }
             else {
                 result.setErrorMessage("Qualcosa non ha funzionato");
-//                                result.setWrap(new WrapBio().valida(false).type(AETypePage.indeterminata));
+                //                                result.setWrap(new WrapBio().valida(false).type(AETypePage.indeterminata));
             }
         }
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
 
         return result;
     }

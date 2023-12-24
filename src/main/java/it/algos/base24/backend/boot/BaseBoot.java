@@ -106,7 +106,7 @@ public class BaseBoot {
         //        this.fixData();
         //        this.fixVersioni();
         //        this.fixSchedule();
-        //        this.fixLogin();
+        this.fixLogin();
 
         //        logger.setUpEnd();
     }
@@ -359,6 +359,14 @@ public class BaseBoot {
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
         }
+    }
+
+
+    /**
+     * Eventuale collegamento <br>
+     * Sviluppato nelle sottoclassi <br>
+     */
+    protected void fixLogin() {
     }
 
 }

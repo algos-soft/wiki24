@@ -8,10 +8,13 @@ import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.service.*;
 import jakarta.annotation.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -25,27 +28,31 @@ import java.util.*;
 @Component("wikiBoot")
 public class WikiBoot extends BaseBoot {
 
-    public WikiBoot() {
-        System.out.println(String.format("Costruttore (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
-        BaseVar.bootClazz = this.getClass();
-        BaseVar.bootClazzQualifier=this.getClass().getSimpleName();
-        System.out.println(String.format("Regolata bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
+    @Inject
+    QueryService queryService;
+    @Inject
+    BotLogin botLogin;
 
+    public WikiBoot() {
+        //        System.out.println(String.format("Costruttore (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
+        //        BaseVar.bootClazz = this.getClass();
+        //        BaseVar.bootClazzQualifier=this.getClass().getSimpleName();
+        //        System.out.println(String.format("Regolata bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
     }
 
-//    @PostConstruct
-//    protected void postConstruct() {
-//        System.out.println(String.format("postConstruct (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
-//        System.out.println(String.format("Adesso bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
-//        //        try {
-//        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
-//        //            System.out.println(String.format("Regolata bootClazz=[%s]",BaseVar.bootClazz.getSimpleName()));
-//        //        } catch (Exception unErrore) {
-//        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
-//        //            System.out.println(message);
-//        ////        }
-////        this.fixVariabili();
-//    }
+    //    @PostConstruct
+    //    protected void postConstruct() {
+    //        System.out.println(String.format("postConstruct (%s) mentre sono nella classe [%s]", "WikiBoot", getClass().getSimpleName()));
+    //        System.out.println(String.format("Adesso bootClazz=[%s]", BaseVar.bootClazz.getSimpleName()));
+    //        //        try {
+    //        //            BaseVar.bootClazz = resourceService.getClazzBoot(projectModulo, projectPrefix);
+    //        //            System.out.println(String.format("Regolata bootClazz=[%s]",BaseVar.bootClazz.getSimpleName()));
+    //        //        } catch (Exception unErrore) {
+    //        //            String message = String.format("Non ho trovato una delle due property %s o %s nelle risorse", projectModulo, projectPrefix);
+    //        //            System.out.println(message);
+    //        ////        }
+    ////        this.fixVariabili();
+    //    }
 
     public void inizia() {
         super.inizia();
@@ -99,7 +106,16 @@ public class WikiBoot extends BaseBoot {
         else {
             menuRouteListProject.add(AttSingolareView.class);
         }
+    }
 
+    @Override
+    protected void fixLogin() {
+        String message;
+
+        if (!queryService.logAsBot()) {
+            message = String.format("Non sono riuscito a collegarmi come [%s]", TypeUser.bot);
+            logger.warn(new WrapLog().message(message).type(TypeLog.setup));
+        }
     }
 
 }

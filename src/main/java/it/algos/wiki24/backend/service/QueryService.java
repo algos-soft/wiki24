@@ -52,22 +52,27 @@ public class QueryService {
         return appContext.getBean(QueryInfoCat.class).getSize(categoryTitle);
     }
 
-//    public List<Long> getCatIdsOrdered(final String catTitleGrezzo) {
-//        if (appContext != null) {
-//            return appContext.getBean(QueryCat.class).getPageIdsOrdered(catTitleGrezzo);
-//        }
-//        else {
-//            QueryCat queryCat = new QueryCat();
-//            return queryCat.getPageIdsOrdered(catTitleGrezzo);
-//        }
-//    }
+    //    public List<Long> getCatIdsOrdered(final String catTitleGrezzo) {
+    //        if (appContext != null) {
+    //            return appContext.getBean(QueryCat.class).getPageIdsOrdered(catTitleGrezzo);
+    //        }
+    //        else {
+    //            QueryCat queryCat = new QueryCat();
+    //            return queryCat.getPageIdsOrdered(catTitleGrezzo);
+    //        }
+    //    }
 
     public List<Long> getPageIds(final String categoryTitle) {
         return appContext.getBean(QueryCat.class).getPageIds(categoryTitle);
     }
+
     public List<WrapBio> getListaBio(final List<Long> listaPageids) {
-       return appContext.getBean(QueryListBio.class).getLista(listaPageids);
+        return appContext.getBean(QueryListBio.class).getLista(listaPageids);
     }
 
+    public boolean logAsBot() {
+        WResult result = appContext.getBean(QueryLogin.class).urlRequestBot();
+        return result != null ? result.isValido() : false;
+    }
 
 }

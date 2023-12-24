@@ -475,12 +475,19 @@ public class MongoService<capture> {
         return textService.isValid(collectionName) ? mongoOp.remove(entityBean, collectionName) : null;
     }
 
-    public void deleteAll(final String collectionName) {
-        mongoOp.dropCollection(collectionName);
+    public boolean deleteAll(final String collectionName) {
+        if (existsCollectionName(collectionName)) {
+            mongoOp.dropCollection(collectionName);
+        }
+        return !existsCollectionName(collectionName);
     }
 
-    public void deleteAll(final Class clazz) {
-        mongoOp.dropCollection(clazz);
+    public boolean deleteAll(final Class clazz) {
+        if (existsCollectionClazz(clazz)) {
+            mongoOp.dropCollection(clazz);
+        }
+
+        return !existsCollectionClazz(clazz);
     }
 
     /**

@@ -5,6 +5,7 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
@@ -40,6 +41,9 @@ public class DownloadService {
     DateService dateService;
 
     @Inject
+    AnnotationService annotationService;
+
+    @Inject
     QueryService queryService;
 
     @Inject
@@ -48,6 +52,8 @@ public class DownloadService {
     @Inject
     BioServerModulo bioServerModulo;
 
+    @Inject
+    BotLogin botLogin;
 
     /**
      * Ciclo iniziale di download di BioServer con un reset completo <br>
@@ -57,16 +63,21 @@ public class DownloadService {
     public void cicloIniziale() {
         long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
+        int numPages;
         List<Long> listaPageIds;
 
         //--Cancella (drop) la collection
-        mongoService.deleteAll(BioServerEntity.class);
+        if (!mongoService.deleteAll(BioServerEntity.class)) {
+            return;
+        }
 
         //--Controlla quante pagine ci sono nella categoria
-        checkCategoria(categoryTitle);
+        numPages = checkCategoria(categoryTitle);
 
         //--Controlla il collegamento come bot
-        //        checkBot();
+        if (!checkBot(numPages)) {
+            return;
+        }
 
         //--Crea la lista di tutti i pageIds (long) della category
         listaPageIds = getListaPageIds(categoryTitle);
@@ -115,6 +126,33 @@ public class DownloadService {
 
 
     /**
+     * Controlla il collegamento come bot <br>
+     *
+     * @return true se collegato come bot
+     */
+    public boolean checkBot(int numPages) {
+        boolean status = false;
+        String message;
+        int limit = 0;
+
+        if (botLogin != null) {
+            limit = botLogin.getUserType().getLimit();
+        }
+
+        if (numPages < limit || botLogin.isBot()) {
+            message = String.format("Regolarmente collegato come [%s] di nick [%s]", botLogin.getUserType(), botLogin.getUsername());
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+            status = true;
+        }
+        else {
+            message = String.format("Collegato come [%s] col limite di %d mentre la categoria ha %s voci", botLogin.getUserType(), limit, textService.format(numPages));
+            logger.warn(new WrapLog().message(message).type(TypeLog.bio).usaDb());
+        }
+        return status;
+    }
+
+
+    /**
      * Crea la lista di tutti i (long) pageIds della categoria <br>
      * Deve riuscire a gestire una lista di circa 500.000 long per la category BioBot <br>
      * Tempo medio previsto = circa 1 minuto (come bot la categoria legge 5.000 pagine per volta) <br>
@@ -152,8 +190,12 @@ public class DownloadService {
 
     /**
      * Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale <br>
+     * Legge tutte le pagine <br>
+     * Recupera i contenuti di tutte le voci biografiche da creare/modificare <br>
+     * Controlla che esista il tmpl BIO <br>
+     * Nella listaWrapBio possono ci sono solo voci CON il tmpl BIO valido <br>
      *
-     * @param listaPageIdsDaCreare tutti i (long) pageIds presenti sul server wiki e da creare
+     * @param listaPageIdsDaCreare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
      */
     public void creaNewEntities(List<Long> listaPageIdsDaCreare) {
         long inizio = System.currentTimeMillis();
@@ -161,6 +203,8 @@ public class DownloadService {
         String message;
         String sizeNew;
         int numVociCreate = 0;
+        boolean usaNotificationCurrentValue = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
 
         if (listaPageIdsDaCreare != null && listaPageIdsDaCreare.size() > 0) {
             listWrapBio = getListaWrapBio(listaPageIdsDaCreare);
@@ -179,6 +223,8 @@ public class DownloadService {
             message = String.format("Create %s nuove biografie in %s", sizeNew, dateService.deltaText(inizio));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
+
+        Pref.usaNotification.setValue(usaNotificationCurrentValue);
     }
 
 
@@ -199,7 +245,7 @@ public class DownloadService {
         List<Long> subList;
         List<WrapBio> listaWrapTmp = null;
         String message;
-        int stock = 1000;
+        int stock = 5000;
         int dim;
 
         logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
@@ -212,11 +258,11 @@ public class DownloadService {
                 listaWrapTmp = queryService.getListaBio(subList);
                 if (listaWrapTmp != null) {
                     listaWrap.addAll(listaWrapTmp);
-                    message = String.format("Recuperati %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrapTmp.size()), dateService.deltaText(inizio2));
+                    message = String.format("Recuperate %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrapTmp.size()), dateService.deltaText(inizio2));
                     logger.info(new WrapLog().message(message).type(TypeLog.bio));
                 }
             }
-            message = String.format("Recuperati in totale %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrap.size()), dateService.deltaText(inizio));
+            message = String.format("Recuperate in totale %s WrapBio di biografie da aggiornare in %s", textService.format(listaWrap.size()), dateService.deltaText(inizio));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
 

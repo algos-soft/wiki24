@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.list;
 
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
@@ -280,7 +281,7 @@ public abstract class WikiList extends CrudList {
     }
 
 
-    public boolean download() {
+    public boolean download(ClickEvent event) {
         currentCrudModulo.downloadNoNotification();
         refreshData();
         fixInfo();
