@@ -55,19 +55,25 @@ public class DownloadService {
     @Inject
     BotLogin botLogin;
 
+    private long inizio;
+
+    private String message;
+
     /**
      * Ciclo iniziale di download di BioServer con un reset completo <br>
      * Cancella (drop) il database 'BioServer' <br>
      * Legge tutte le pagine dal server di wikipedia, per la categoria prevista <br>
      */
     public void cicloIniziale() {
-        long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
         int numPages;
         List<Long> listaPageIds;
 
-        //--Cancella (drop) la collection
-        if (!mongoService.deleteAll(BioServerEntity.class)) {
+        //--inizio
+        this.iniziale();
+
+        //--Controlla l'esistenza/non esistenza della collection
+        if (isCollectionEsistente()) {
             return;
         }
 
@@ -97,7 +103,82 @@ public class DownloadService {
      */
     public void cicloCorrente() {
         String categoryTitle = WPref.categoriaBio.getStr();
+        int numPages;
+        List<Long> listaPageIds;
+        List<Long> listaMongoIds;
+
+        //--inizio
+        this.corrente();
+
+        //--Controlla l'esistenza/non esistenza della collection
+        if (isCollectionVuota()) {
+            return;
+        }
+
+        //--Controlla quante pagine ci sono nella categoria
+        numPages = checkCategoria(categoryTitle);
+
+        //--Controlla il collegamento come bot
+        if (!checkBot(numPages)) {
+            return;
+        }
+
+        //--Crea la lista di tutti i pageIds (long) della category
+        listaPageIds = getListaPageIds(categoryTitle);
+
+        //--Crea la lista di tutti i (long) pageIds esistenti nel database (mongo) locale
+        listaMongoIds = getListaMongoIds();
     }
+
+    /**
+     * Inizio del ciclo di download <br>
+     */
+    public void iniziale() {
+        inizio = System.currentTimeMillis();
+        message = "Inizio del cicloIniziale() di download per la collection BioServer";
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
+        logger.info(new WrapLog().message(message).type(TypeLog.bio));
+    }
+    /**
+     * Inizio del ciclo di download <br>
+     */
+    public void corrente() {
+        inizio = System.currentTimeMillis();
+        message = "Inizio del cicloCorrente() di download per la collection BioServer";
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
+        logger.info(new WrapLog().message(message).type(TypeLog.bio));
+    }
+
+
+    /**
+     * Controlla l'esistenza della collection <br>
+     * Se esiste NON esegue il cicloIniziale() <br>
+     */
+    public boolean isCollectionEsistente() {
+        boolean esiste = mongoService.existsCollectionClazz(BioServerEntity.class);
+
+        if (esiste) {
+            message = String.format("La collection [%s] esiste e non viene eseguito il [%s]","bioServer","cicloIniziale()");
+            logger.warn(new WrapLog().message(message).type(TypeLog.bio));
+        }
+
+        return esiste;
+    }
+    /**
+     * Controlla l'esistenza della collection <br>
+     * Se è vuota NON esegue il cicloCorrente() <br>
+     */
+    public boolean isCollectionVuota() {
+        boolean vuota = !mongoService.existsCollectionClazz(BioServerEntity.class);
+
+        if (vuota) {
+            message = String.format("La collection [%s] è vuota e non viene eseguito il [%s]","bioServer","cicloCorrente()");
+            logger.warn(new WrapLog().message(message).type(TypeLog.bio));
+        }
+
+        return vuota;
+    }
+
 
     /**
      * Legge (anche come anonymous) il numero di pagine di una categoria wiki <br>
@@ -113,7 +194,7 @@ public class DownloadService {
         String message;
 
         if (numPages > 0) {
-            message = String.format("La categoria [%s] esiste e ci sono %s voci", categoryTitle, textService.format(numPages));
+            message = String.format("La categoria utilizzata [%s] esiste e contiene %s voci", categoryTitle, textService.format(numPages));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
         else {
@@ -187,40 +268,87 @@ public class DownloadService {
         return listaPageIds;
     }
 
+    /**
+     * Crea la lista di tutti i (long) pageIds esistenti nel database (mongo) locale <br>
+     *
+     * @return lista di tutti i (long) pageId del database (mongo) locale
+     */
+    public List<Long> getListaMongoIds() {
+        List<Long> lista;
+        String message;
+         inizio = System.currentTimeMillis();
+        String size;
+        String time;
+
+        lista = bioBackend.findOnlyPageId();
+
+        if (lista == null || lista.size() == 0) {
+            message = "La lista bio è vuota";
+            logService.warn(new WrapLog().message(message));
+            return null;
+        }
+
+        size = textService.format(lista.size());
+        time = dateService.deltaText(inizio);
+        message = String.format("Recuperate %s entities (long) dal database (mongo). Tempo %s", size, time);
+        logService.info(new WrapLog().message(message).type(AETypeLog.bio));
+
+        return lista;
+    }
 
     /**
      * Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale <br>
      * Legge tutte le pagine <br>
      * Recupera i contenuti di tutte le voci biografiche da creare/modificare <br>
      * Controlla che esista il tmpl BIO <br>
-     * Nella listaWrapBio possono ci sono solo voci CON il tmpl BIO valido <br>
+     * Nella listaWrapBio ci sono solo voci CON il tmpl BIO valido <br>
      *
      * @param listaPageIdsDaCreare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
      */
     public void creaNewEntities(List<Long> listaPageIdsDaCreare) {
-        long inizio = System.currentTimeMillis();
-        List<WrapBio> listWrapBio = null;
+        inizio = System.currentTimeMillis();
+        long inizioBloccoPageIds;
+        long inizioBloccoWrapBio;
         String message;
-        String sizeNew;
+        int numVociBlocco = 0;
         int numVociCreate = 0;
+        int numVociTotali = listaPageIdsDaCreare.size();
+        String vociBlocco;
+        String vociCreate;
+        String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
+        int blocco = WPref.bloccoDownload.getInt();
+        List<Long> subListPageIds;
+        List<WrapBio> listaWrapBio = null;
 
-        if (listaPageIdsDaCreare != null && listaPageIdsDaCreare.size() > 0) {
-            listWrapBio = getListaWrapBio(listaPageIdsDaCreare);
-        }
-
-        if (listWrapBio != null && listWrapBio.size() > 0) {
-            for (WrapBio wrapBio : listWrapBio) {
+        message = String.format("Vengono creati [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
+        logger.info(new WrapLog().message(message).type(TypeLog.bio));
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
+        for (int k = 0; k < listaPageIdsDaCreare.size(); k = k + blocco) {
+            numVociBlocco = 0;
+            inizioBloccoPageIds = System.currentTimeMillis();
+            subListPageIds = listaPageIdsDaCreare.subList(k, Math.min(k + blocco, numVociTotali));
+            listaWrapBio = queryService.getListaBio(subListPageIds);
+            inizioBloccoWrapBio = System.currentTimeMillis();
+            for (WrapBio wrapBio : listaWrapBio) {
                 bioServerModulo.insertSave(wrapBio.getBeanBioServer());
-                wrapBio.setCreataBioServer(true);
+                numVociBlocco++;
                 numVociCreate++;
             }
+            vociBlocco = textService.format(numVociBlocco);
+            vociCreate = textService.format(numVociCreate);
+            message = String.format("Lette %s/%s/%s nuove pagine in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoPageIds), dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+            message = String.format("Create %s/%s/%s nuove biografie in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoWrapBio), dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
 
         if (numVociCreate > 0) {
-            sizeNew = textService.format(numVociCreate);
-            message = String.format("Create %s nuove biografie in %s", sizeNew, dateService.deltaText(inizio));
+            vociCreate = textService.format(numVociCreate);
+            message = String.format("Create in totale %s nuove biografie in %s", vociCreate, dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+            message = String.format("Ci sono probabilmente %s pagine della categoria [%s] che NON hanno un tmplBio valido", numVociTotali - numVociCreate, WPref.categoriaBio.getStr());
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
 

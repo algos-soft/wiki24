@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.service.*;
@@ -17,6 +18,7 @@ import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
 import java.time.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -99,6 +101,10 @@ public class BioServerModulo extends WikiModulo {
                 .build();
 
         return (BioServerEntity) fixKey(newEntityBean);
+    }
+
+    public List<Long> findOnlyPageId() {
+        return mongoService.projectionLong(BioServerEntity.class, FIELD_NAME_PAGE_ID);
     }
 
     /**

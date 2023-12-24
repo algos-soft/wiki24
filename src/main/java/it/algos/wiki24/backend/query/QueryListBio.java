@@ -125,7 +125,6 @@ public class QueryListBio extends AQuery {
                 //                                result.setWrap(new WrapBio().valida(false).type(AETypePage.indeterminata));
             }
         }
-        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
 
         return result;
     }

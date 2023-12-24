@@ -282,7 +282,7 @@ public abstract class WikiList extends CrudList {
 
 
     public boolean download(ClickEvent event) {
-        currentCrudModulo.downloadNoNotification();
+        currentCrudModulo.download();
         refreshData();
         fixInfo();
         return true;

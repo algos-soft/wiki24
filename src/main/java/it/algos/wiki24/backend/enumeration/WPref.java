@@ -54,7 +54,7 @@ public enum WPref implements IPref {
 
     //***************
     categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie"),
-    bloccoDownload("bloccoDownload", TypePref.integer, 350, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo."),
+    bloccoDownload("bloccoDownload", TypePref.integer, 50000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo."),
 
     //***************
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer."),
