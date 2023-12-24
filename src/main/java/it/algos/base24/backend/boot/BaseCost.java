@@ -161,8 +161,6 @@ public class BaseCost {
 
     public static final String FIELD_NAME_NOME = "nome";
 
-    public static final String FIELD_NAME_VALUE = "value";
-
     public static final List<String> FIELD_KEY_NAME_LIST = Arrays.asList("code", "codice", "sigla", "nome", "ordine"); // principali (solo) suggeriti
 
     public static final List<String> FIELD_SORT_NAME_LIST = Arrays.asList("ordine", "code", "codice", "sigla", "nome"); // principali (solo) suggeriti
@@ -247,7 +245,7 @@ public class BaseCost {
 
     public static String TEXT_RESET_ADD = "ResetAdd. Reinserisce elementi originali mancanti. Mantiene le modifiche ed i nuovi inserimenti.";
 
-    public static String TEXT_RESET_PREF = "ResetPref. Aggiunge nuovi (eventuali) valori della enum e aggiorna tutte le descrizioni esistenti. I valori correnti rimangono inalterati.";
+    public static String TEXT_RESET_PREF = "ResetPref. Aggiunge nuove preferenze; aggiorna i valori di default e le descrizioni esistenti; inalterati i valori correnti.";
 
     public static String TEXT_DOWNLOAD = "Download. Ricarica tutti i valori dal server.";
 
@@ -386,8 +384,8 @@ public class BaseCost {
     public static final String MAIL_TO = "gac@algos.it";
 
     public static final String SCHEDULED_ZERO_TRENTA = "30 0 * * *";
-    public static final String SCHEDULED_ZERO_QUARANTA = "40 0 * * *";
 
+    public static final String SCHEDULED_ZERO_QUARANTA = "40 0 * * *";
 
 }
 

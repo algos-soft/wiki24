@@ -53,16 +53,7 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
 
-    public PreferenzaEntity creaIfNotExists(PreferenzaEntity entityBean) {
-        if (existById(entityBean.getId())) {
-            return null;
-        }
-        else {
-            return (PreferenzaEntity) insert(entityBean);
-        }
-    }
-
-    public PreferenzaEntity updateIfExists(PreferenzaEntity newBean) {
+    public PreferenzaEntity insertAndUpdateIfExists(PreferenzaEntity newBean) {
         PreferenzaEntity oldBean = (PreferenzaEntity) findOneById(newBean.id);
 
         if (oldBean == null) {
@@ -73,6 +64,7 @@ public class PreferenzaModulo extends CrudModulo {
             return newBean;
         }
         else {
+            oldBean.iniziale = newBean.iniziale;
             oldBean.descrizione = newBean.descrizione;
             return (PreferenzaEntity) save(oldBean);
         }
@@ -120,34 +112,11 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
 
-    public RisultatoReset resetStartup() {
-        RisultatoReset typeReset = RisultatoReset.nessuno;
-
-        //        if (reflectionService.isEsisteMetodo(getClass(), METHOD_RESET_ADD)) {
-        //            typeReset = collectionNullOrEmpty() ? RisultatoReset.vuotoMaCostruito : RisultatoReset.esistenteNonModificato;
-        resetBase();
-        mappaBeans.values().stream().forEach(bean -> creaIfNotExists((PreferenzaEntity) bean));
-        //            return typeReset;
-        //        }
-        //        else {
-        //            message = String.format("La POJO [%s] ha il flag usaStartupReset=true ma manca il metodo %s() nella classe %s", currentCrudEntityClazz.getSimpleName(), METHOD_RESET_ADD, getClass().getSimpleName());
-        //            logger.warn(new WrapLog().message(message).type(TypeLog.startup));
-        //        }
-
-        return typeReset;
-    }
 
 
     @Override
-    public RisultatoReset resetAdd() {
-        RisultatoReset typeReset = super.resetAdd();
-        resetBase();
-        mappaBeans.values().stream().forEach(bean -> updateIfExists((PreferenzaEntity) bean));
-        return typeReset;
-    }
-
-
-    private void resetBase() {
+    public RisultatoReset resetPref() {
+        RisultatoReset typeReset = super.resetPref();
         PreferenzaEntity newBean;
         BaseBoot currentBoot = null;
         try {
@@ -161,6 +130,9 @@ public class PreferenzaModulo extends CrudModulo {
                 mappaBeans.put(pref.getTag(), newBean);
             }
         }
+
+        mappaBeans.values().stream().forEach(bean -> insertAndUpdateIfExists((PreferenzaEntity) bean));
+        return typeReset;
     }
 
 

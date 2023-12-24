@@ -14,11 +14,6 @@ import org.springframework.context.annotation.*;
 public class PreferenzaList extends CrudList {
 
 
-    private static String TEXT_NEWS = "Creazione automatica di tutti i valori. Non se ne possono creare di nuovi. Si può modificare la descrizione e il valore.";
-
-    private static String TEXT_RESET_STARTUP = "ResetStartup aggiunge nuovi (eventuali) valori della enum lasciando inalterati tutti i valori e le descrizioni esistenti.";
-    private static String TEXT_RESET_ADD = "ResetAdd aggiunge nuovi (eventuali) valori della enum e aggiorna tutte le descrizioni esistenti. I valori correnti rimangono inalterati.";
-
     private ComboBox comboType;
 
     private static String FIELD_TYPE = "type";

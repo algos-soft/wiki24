@@ -231,13 +231,6 @@ public abstract class CrudList extends VerticalLayout {
         this.add(alertPlaceHolder);
     }
 
-    //    /**
-    //     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-    //     */
-    //    public VerticalLayout fixAlert() {
-    //        return new SimpleVerticalLayout();
-    //    }
-
 
     /**
      * Può essere sovrascritto, invocando prima o dopo il metodo della superclasse <br>
@@ -671,13 +664,9 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean resetAdd() {
-        boolean usaNotification = Pref.usaNotification.is();
-        Pref.usaNotification.setValue(false);
-
         currentCrudModulo.resetAdd();
         refreshData();
 
-        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 
@@ -687,7 +676,7 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean resetPref() {
-        //        currentCrudModulo.dialogResetAdd();
+        currentCrudModulo.resetPref();
         refreshData();
 
         return true;
@@ -700,7 +689,7 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean download() {
-        currentCrudModulo.downloadNoNotification();
+        currentCrudModulo.download();
         refreshData();
         return true;
     }

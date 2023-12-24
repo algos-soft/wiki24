@@ -87,11 +87,7 @@ public class ContinenteModulo extends CrudModulo {
             }
         }
 
-        boolean usaNotification = Pref.usaNotification.is();
-        Pref.usaNotification.setValue(false);
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
-        Pref.usaNotification.setValue(usaNotification);
-
         return typeReset;
     }
 

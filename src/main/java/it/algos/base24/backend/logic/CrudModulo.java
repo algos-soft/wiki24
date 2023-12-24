@@ -11,7 +11,6 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
-import it.algos.wiki24.backend.enumeration.*;
 import jakarta.annotation.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -458,16 +457,10 @@ public abstract class CrudModulo {
     public RisultatoReset resetAdd() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
     }
-
-
-    public void downloadNoNotification() {
-        boolean usaNotification = Pref.usaNotification.is();
-        Pref.usaNotification.setValue(false);
-
-        download();
-
-        Pref.usaNotification.setValue(usaNotification);
+    public RisultatoReset resetPref() {
+        return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
     }
+
 
     public void download() {
     }

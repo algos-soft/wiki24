@@ -54,6 +54,7 @@ public enum TypeSchedule {
      * Descrizione: ogni giorno alle 0:30
      */
     zeroTrenta(SCHEDULED_ZERO_TRENTA, "ogni giorno alle 0:30."),
+
     /**
      * Descrizione: ogni giorno alle 0:40
      */
