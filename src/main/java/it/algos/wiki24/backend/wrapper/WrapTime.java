@@ -1,4 +1,4 @@
-package it.algos.base24.backend.wrapper;
+package it.algos.wiki24.backend.wrapper;
 
 import java.time.*;
 import java.time.format.*;

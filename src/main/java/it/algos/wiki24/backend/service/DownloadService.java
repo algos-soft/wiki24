@@ -71,6 +71,7 @@ public class DownloadService {
      * Legge tutte le pagine dal server di wikipedia, per la categoria prevista <br>
      */
     public void cicloIniziale() {
+        long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
         int numPages;
         List<Long> listaPageIdsDaCreare;
@@ -95,10 +96,10 @@ public class DownloadService {
         listaPageIdsDaCreare = getListaPageIds(categoryTitle);
 
         //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
-        creaNewEntities(listaPageIdsDaCreare);
+        creaModifica(listaPageIdsDaCreare);
 
         //--durata del ciclo completo
-        fixInfoDurataReset("cicloIniziale",inizio);
+        fixInfoDurataCiclo("cicloIniziale", inizio);
     }
 
     /**
@@ -108,6 +109,7 @@ public class DownloadService {
      * Elabora la lista di miniWrap e costruisce una lista di pageIds da leggere <br>
      */
     public void cicloCorrente() {
+        long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
         int numPages;
         List<Long> listaPageIds;
@@ -115,7 +117,7 @@ public class DownloadService {
         List<Long> listaMongoIdsDaCancellare;
         List<Long> listaPageIdsDaCreare;
         List<WrapTime> listaWrapTime;
-        List<Long> listaPageIdsDaLeggere;
+        List<Long> listaPageIdsDaModificare;
 
         //--inizio
         this.inizio("cicloCorrente");
@@ -149,26 +151,25 @@ public class DownloadService {
         listaPageIdsDaCreare = deltaCreare(listaPageIds, listaMongoIds);
 
         //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
-        creaNewEntities(listaPageIdsDaCreare);
+        creaModifica(listaPageIdsDaCreare);
 
         //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
         listaWrapTime = getListaWrapTime(listaPageIds);
 
         //--Elabora la lista di wrapTimes e costruisce una lista di pageIds da leggere
-        listaPageIdsDaLeggere = elaboraListaWrapTime(listaWrapTime);
+        listaPageIdsDaModificare = elaboraListaWrapTime(listaWrapTime);
 
         //--Legge tutte le pagine
-        creaNewEntities(listaPageIdsDaLeggere);
+        creaModifica(listaPageIdsDaModificare);
 
         //--durata del ciclo completo
-        fixInfoDurataReset("cicloCorrente",inizio);
+        fixInfoDurataCiclo("cicloCorrente", inizio);
     }
 
     /**
      * Inizio del ciclo di download <br>
      */
     public void inizio(String ciclo) {
-        inizio = System.currentTimeMillis();
         message = String.format("Inizio del %s() di download per la collection BioServer", ciclo);
         logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
@@ -330,9 +331,7 @@ public class DownloadService {
         if (listaMongoIds == null || listaPageIds == null) {
             return null;
         }
-
         delta = arrayService.deltaBinary(listaMongoIds, listaPageIds);
-
         if (delta != null && delta.size() > 0) {
             message = String.format("Nel database (mongo) sono state individuate %s biografie da cancellare. Tempo %s", delta.size(), dateService.deltaText(inizio));
         }
@@ -355,6 +354,8 @@ public class DownloadService {
         String message;
         String size;
         BioServerEntity bio;
+        boolean usaNotificationCurrentValue = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
 
         if (listaMongoIdsDaCancellare == null || listaMongoIdsDaCancellare.size() < 1) {
             return;
@@ -370,6 +371,7 @@ public class DownloadService {
         size = textService.format(listaMongoIdsDaCancellare.size());
         message = String.format("Nel database (mongo) sono state cancellate %s entities non più presenti sul server wiki. Tempo %s", size, dateService.deltaText(inizio));
         logger.info(new WrapLog().message(message).type(TypeLog.bio).usaDb());
+        Pref.usaNotification.setValue(usaNotificationCurrentValue);
     }
 
 
@@ -468,16 +470,16 @@ public class DownloadService {
      * Controlla che esista il tmpl BIO <br>
      * Nella listaWrapBio ci sono solo voci CON il tmpl BIO valido <br>
      *
-     * @param listaPageIdsDaCreare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
+     * @param listaPageIdsDaCreareModificare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
      */
-    public void creaNewEntities(List<Long> listaPageIdsDaCreare) {
+    public void creaModifica(List<Long> listaPageIdsDaCreareModificare) {
         inizio = System.currentTimeMillis();
         long inizioBloccoPageIds;
         long inizioBloccoWrapBio;
         String message;
         int numVociBlocco = 0;
         int numVociCreate = 0;
-        int numVociTotali = listaPageIdsDaCreare.size();
+        int numVociTotali = listaPageIdsDaCreareModificare.size();
         String vociBlocco;
         String vociCreate;
         String vociTotali = textService.format(numVociTotali); ;
@@ -487,13 +489,13 @@ public class DownloadService {
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio = null;
 
-        message = String.format("Vengono creati [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
+        message = String.format("Vengono creati i [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
         logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
-        for (int k = 0; k < listaPageIdsDaCreare.size(); k = k + blocco) {
+        for (int k = 0; k < listaPageIdsDaCreareModificare.size(); k = k + blocco) {
             numVociBlocco = 0;
             inizioBloccoPageIds = System.currentTimeMillis();
-            subListPageIds = listaPageIdsDaCreare.subList(k, Math.min(k + blocco, numVociTotali));
+            subListPageIds = listaPageIdsDaCreareModificare.subList(k, Math.min(k + blocco, numVociTotali));
             listaWrapBio = queryService.getListaBio(subListPageIds);
             inizioBloccoWrapBio = System.currentTimeMillis();
             for (WrapBio wrapBio : listaWrapBio) {
@@ -562,17 +564,7 @@ public class DownloadService {
         return listaWrap;
     }
 
-    /**
-     * Inizio del ciclo di download <br>
-     */
-//    public void inizio(String ciclo) {
-//        inizio = System.currentTimeMillis();
-//        message = String.format("Inizio del %s() di download per la collection BioServer", ciclo);
-//        logger.info(new WrapLog().message(VUOTA).type(TypeLog.bio));
-//        logger.info(new WrapLog().message(message).type(TypeLog.bio));
-//    }
-
-    public void fixInfoDurataReset(String ciclo,final long inizio) {
+    public void fixInfoDurataCiclo(String ciclo, final long inizio) {
         String message;
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
@@ -606,7 +598,7 @@ public class DownloadService {
         //            WPref.elaboraBioTime.setValue(0);
         //        }
 
-        message = String.format("Esecuzione del %s() in %s", ciclo,dateService.deltaText(inizio));
+        message = String.format("Esecuzione del %s() in %s", ciclo, dateService.deltaText(inizio));
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
     }
 

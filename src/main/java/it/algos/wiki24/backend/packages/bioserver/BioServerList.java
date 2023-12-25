@@ -63,7 +63,7 @@ public class BioServerList extends WikiList {
 
         message = "Qualche piccola differenza tra le pagine del server e le entities della collezione è fisiologica";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
-        message = "(Differenza dovuta alle voci della categoria che NON hanno un tmplBio valido)";
+        message = "Differenza dovuta alle voci della categoria che NON hanno un tmplBio valido";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
     }
 

@@ -269,4 +269,10 @@ public class PreferenzaModulo extends CrudModulo {
         return status;
     }
 
+    //--serve solo ad 'oscurare' il metodo sovrascritto
+    //--le funzionalità inerenti sono eseguite da download
+    public RisultatoReset resetDelete() {
+        return null;
+    }
+
 }// end of CrudModulo class

@@ -110,6 +110,13 @@ public class BioServerModulo extends WikiModulo {
         return (BioServerEntity)super.findByKey( keyPropertyValue);
     }
 
+
+    //--serve solo ad 'oscurare' il metodo sovrascritto
+    //--le funzionalità inerenti sono eseguite da download
+    public RisultatoReset resetDelete() {
+        return null;
+    }
+
     /**
      * Ciclo di download <br>
      */

@@ -363,10 +363,12 @@ public abstract class CrudModulo {
         }
 
         if (cancellato) {
-            message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
-            modifiche = jSonService.getProperties(entityBean);
-            message = String.format("%s%s%s", message, FORWARD, modifiche);
-            logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            if (Pref.usaNotification.is()) {
+                message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
+                modifiche = jSonService.getProperties(entityBean);
+                message = String.format("%s%s%s", message, FORWARD, modifiche);
+                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            }
         }
         else {
             message = String.format("Non sono riuscito a cancellare la entity [%s.%s]", entityName, entityBean);

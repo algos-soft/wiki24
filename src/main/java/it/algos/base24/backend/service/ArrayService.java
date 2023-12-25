@@ -475,17 +475,25 @@ public class ArrayService {
      *
      * @return lista dei valori di A che non sono presenti in B
      */
-    public List deltaBinary(final List arrayA, final List arrayB) {
+    public List deltaBinary(List arrayA, List arrayB) {
         List listaMancanti = new ArrayList<>();
-        Object longMaggiore;
+        Object maggiore;
         int pos;
 
-        for (int k = 0; k < arrayA.size(); k++) {
-            longMaggiore = arrayA.get(k);
-            pos = Collections.binarySearch(arrayB, arrayA.get(k));
+        Object[] alfa = arrayA.toArray();
+        Arrays.sort(alfa);
+        arrayA = Arrays.stream(alfa).toList();
+
+        Object[] beta = arrayB.toArray();
+        Arrays.sort(beta);
+        arrayB = Arrays.stream(beta).toList();
+
+        for (int k = 0; k < alfa.length; k++) {
+            maggiore = alfa[k];
+            pos = Collections.binarySearch(arrayB, maggiore);
 
             if (pos < 0) {
-                listaMancanti.add(longMaggiore);
+                listaMancanti.add(maggiore);
             }
         }
         return listaMancanti;

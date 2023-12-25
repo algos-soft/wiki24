@@ -107,7 +107,7 @@ class QueryBioTest extends QueryTest {
     void wrapBioPageIds() {
         System.out.println(("52 - Recupera wrapBioPageIds"));
 
-        sorgenteLong = 4935359;
+        sorgenteLong = 14118;
         wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
         if (wrapBio.isValida()) {
             System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
