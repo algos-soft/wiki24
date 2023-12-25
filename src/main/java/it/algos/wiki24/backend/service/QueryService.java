@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.*;
@@ -73,6 +74,10 @@ public class QueryService {
     public boolean logAsBot() {
         WResult result = appContext.getBean(QueryLogin.class).urlRequestBot();
         return result != null ? result.isValido() : false;
+    }
+
+    public List<WrapTime> getMiniWrap(final List<Long> listaPageids) {
+        return appContext.getBean(QueryTimestamp.class).getWrap(listaPageids);
     }
 
 }

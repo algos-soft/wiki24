@@ -2,12 +2,15 @@ package it.algos.base24.backend.service;
 
 import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import com.mongodb.client.result.*;
 import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.entity.*;
+import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import jakarta.annotation.*;
 import org.bson.*;
+import org.bson.conversions.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.*;
@@ -43,6 +46,9 @@ public class MongoService<capture> {
 
     @Autowired
     private ReflectionService reflectionService;
+
+    @Autowired
+    private FileService fileService;
 
     @Autowired
     private LogService logger;
@@ -436,6 +442,27 @@ public class MongoService<capture> {
         return this.mongoOp.find(query, entityClazz, collectionName);
     }
 
+    public List<Long> projectionLong(Class<? extends AbstractEntity> entityClazz, String property) {
+        List<Long> listaProperty = new ArrayList();
+        String message;
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        collection = getCollection(collectionName);
+
+        if (collection == null) {
+            message = String.format("Non esiste la collection", entityClazz.getSimpleName());
+            logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
+            return null;
+        }
+
+        Bson bSort = Sorts.ascending(property).toBsonDocument();
+        Bson projection = Projections.fields(Projections.include(property), Projections.excludeId());
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
+
+        for (var singolo : documents) {
+            listaProperty.add(singolo.get(property, Long.class));
+        }
+        return listaProperty;
+    }
 
     /**
      * Query count()
@@ -501,6 +528,49 @@ public class MongoService<capture> {
         return collezioni;
     }
 
+
+    /**
+     * Check the existence of a collection. <br>
+     *
+     * @param collectionName corrispondente ad una collection sul database mongoDB
+     *
+     * @return true if the collection exist
+     */
+    public boolean isExistsCollection(final String collectionName) {
+        if (textService.isEmpty(collectionName)) {
+            logger.info(new WrapLog().exception(new AlgosException("Manca il nome della collection")).usaDb());
+        }
+
+        String shortName = fileService.estraeClasseFinale(collectionName);
+        shortName = textService.primaMinuscola(shortName);
+
+        return mongoOp.collectionExists(shortName);
+    }
+
+    /**
+     * Collection del database. <br>
+     *
+     * @param collectionName The name of the collection or view
+     *
+     * @return collection if exist
+     */
+    public MongoCollection<Document> getCollection(final String collectionName) {
+        if (textService.isEmpty(collectionName)) {
+            return null;
+        }
+        String shortName = fileService.estraeClasseFinale(collectionName);
+        shortName = textService.primaMinuscola(shortName);
+
+        if (textService.isValid(shortName)) {
+            if (isExistsCollection(shortName)) {
+                return dataBase != null ? dataBase.getCollection(shortName) : null;
+            }
+            return null;
+        }
+        else {
+            return null;
+        }
+    }
 
     /**
      * Check generico dei parametri.

@@ -261,6 +261,14 @@ public abstract class CrudModulo {
         return !existByKey(keyPropertyValue);
     }
 
+    public AbstractEntity findById(final String idValue) {
+        return mongoService.findOneById(currentCrudEntityClazz, idValue);
+    }
+
+    public AbstractEntity findByKey(final Object keyPropertyValue) {
+        return mongoService.findOneByKey(currentCrudEntityClazz, keyPropertyValue);
+    }
+
     public List findAll() {
         String sortPropertyName = annotationService.getSortPropertyName(currentCrudEntityClazz);
         Sort sort = null;
@@ -457,6 +465,7 @@ public abstract class CrudModulo {
     public RisultatoReset resetAdd() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
     }
+
     public RisultatoReset resetPref() {
         return collectionNullOrEmpty() ? RisultatoReset.vuotoIntegrato : RisultatoReset.esistenteIntegrato;
     }

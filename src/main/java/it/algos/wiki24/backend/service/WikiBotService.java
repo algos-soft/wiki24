@@ -4,6 +4,7 @@ import com.mongodb.client.*;
 import com.mongodb.client.model.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
+import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import org.apache.commons.lang3.StringUtils;
@@ -48,6 +49,10 @@ public class WikiBotService {
 
     @Inject
     HtmlService htmlService;
+    @Inject
+    MongoService mongoService;
+    @Inject
+    DateService dateService;
 
     public static final String TAG_BIO = "Bio";
 
@@ -832,6 +837,57 @@ public class WikiBotService {
         }
 
         return templateOut;
+    }
+
+
+    public List<Long> elaboraWrapTime(final List<WrapTime> listaWrapTimesWiki) {
+        List<Long> listaPageIdsDaLeggere = new ArrayList<>();
+        long pageId;
+        WrapTime wrapMongo;
+        LocalDateTime lastWiki;
+        LocalDateTime lastMongo;
+        List<WrapTime> listaWrapTimesMongo = projectionWrapTime();
+
+        LinkedHashMap<Long, WrapTime> mappaMongo = new LinkedHashMap<>();
+        for (WrapTime wrapMongoMappa : listaWrapTimesMongo) {
+            mappaMongo.put(wrapMongoMappa.getPageid(), wrapMongoMappa);
+        }
+
+        if (listaWrapTimesWiki != null) {
+            for (WrapTime wrapWiki : listaWrapTimesWiki) {
+                pageId = wrapWiki.getPageid();
+                wrapMongo = mappaMongo.get(pageId);
+                lastWiki = wrapWiki.getLastModifica();
+                lastMongo = wrapMongo != null ? wrapMongo.getLastModifica() : ROOT_DATA_TIME;
+                if (lastWiki.isAfter(lastMongo)) {
+                    listaPageIdsDaLeggere.add(pageId);
+                }
+            }
+        }
+
+        return listaPageIdsDaLeggere;
+    }
+
+
+    public List<WrapTime> projectionWrapTime() {
+        List<WrapTime> listaWrap = new ArrayList();
+        long pageId;
+        Date dateLastServer;
+        LocalDateTime lastServer;
+        MongoCollection collection = mongoService.getCollection("bioserver");
+
+        Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastServer"), Projections.excludeId());
+        FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
+
+        for (var singolo : documents) {
+            pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
+            dateLastServer = singolo.get("lastServer", Date.class);
+            lastServer = dateService.dateToLocalDateTime(dateLastServer);
+            listaWrap.add(new WrapTime(pageId, lastServer));
+        }
+
+        return listaWrap;
     }
 
 }
