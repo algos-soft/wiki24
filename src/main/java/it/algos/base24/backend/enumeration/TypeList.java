@@ -22,6 +22,7 @@ public enum TypeList implements Type {
     hardWiki(TEXT_WIKI, TEXT_HARD, TEXT_RESET_DELETE, true, false, false, false, false, true, false, false, true, false, true, true),
     softWiki(TEXT_WIKI, TEXT_NEWS, TEXT_RESET_ADD, true, true, false, false, false, true, true, true, false, true, true, true),
     pref(TEXT_BASE + SPAZIO + TEXT_ENUM_PREF, TEXT_PREF, TEXT_RESET_PREF, true, true, false, false, true, false, false, true, false, false, false, true),
+    vuoto( VUOTA, VUOTA, VUOTA, false, false, false, false, false, false, false, false, false, false, false, false),
     ;
 
     private String infoScopo;

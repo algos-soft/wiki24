@@ -58,13 +58,11 @@ public abstract class WikiList extends CrudList {
 
     public TypeDurata unitaMisuraUpload;
 
-    private boolean usaBottoneDownload;
+    public boolean usaBottoneElabora;
 
-    private boolean usaBottoneElabora;
+    public boolean usaBottoneUpload;
 
-    private boolean usaBottoneUpload;
-
-    protected WikiModulo currentCrudModulo;
+    public WikiModulo currentCrudModulo;
 
     public WikiList(final WikiModulo crudModulo) {
         super(crudModulo);

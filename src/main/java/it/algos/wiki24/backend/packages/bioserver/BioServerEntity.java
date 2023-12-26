@@ -20,7 +20,7 @@ import java.time.*;
 @AEntity(collectionName = "bioserver", keyPropertyName = "pageId", typeList = TypeList.softWiki)
 public class BioServerEntity extends AbstractEntity {
 
-    @Positive()
+
     @AField(type = TypeField.lungo, widthRem = 7)
     public long pageId;
 

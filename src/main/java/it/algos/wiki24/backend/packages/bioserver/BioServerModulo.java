@@ -52,7 +52,7 @@ public class BioServerModulo extends WikiModulo {
 
         super.lastDownload = WPref.lastDownloadBioServer;
         super.durataDownload = WPref.downloadBioServerTime;
-        super.unitaMisuraDownload = TypeDurata.secondi;
+        super.unitaMisuraDownload = TypeDurata.minuti;
     }
 
     public BioServerEntity newEntity(WrapPage wrapPage) {
