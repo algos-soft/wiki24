@@ -285,5 +285,11 @@ public abstract class WikiList extends CrudList {
         fixInfo();
         return true;
     }
+    public boolean elabora() {
+        currentCrudModulo.elabora();
+        refreshData();
+        fixInfo();
+        return true;
+    }
 
 }

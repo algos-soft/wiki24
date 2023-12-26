@@ -23,9 +23,10 @@ import java.util.*;
  * Date: Tue, 08-Aug-2023
  * Time: 17:17
  * <p>
- * Classe di libreria; NON deve essere astratta, altrimenti SpringBoot non la costruisce <br>
+ * Classe di libreria. NON deve essere astratta, altrimenti SpringBoot non la costruisce <br>
  * L'istanza viene utilizzata con: <br>
- * 1) @Autowired public AnnotationService annotationService; <br>
+ *
+ * @Inject public AnnotationService annotationService; (iniziale minuscola) <br>
  * <p>
  * Annotated with @Service (obbligatorio, se si usa la catena @Autowired di SpringBoot) <br>
  * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>

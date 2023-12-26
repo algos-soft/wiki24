@@ -1,16 +1,12 @@
 package it.algos.wiki24.backend.packages.biomongo;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
+import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -21,6 +17,9 @@ import com.vaadin.flow.component.textfield.TextField;
  */
 @Service
 public class BioMongoModulo extends WikiModulo {
+
+    @Inject
+    ElaboraService elaboraService;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -49,6 +48,16 @@ public class BioMongoModulo extends WikiModulo {
     }
 
     /**
+     * Regola le property visibili in una lista CrudList <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
+     */
+    @Override
+    public List<String> getListPropertyNames() {
+        return Arrays.asList("wikiTitle", "nome", "cognome");
+    }
+
+    /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
      * @param code (obbligatorio)
@@ -60,6 +69,10 @@ public class BioMongoModulo extends WikiModulo {
                 .build();
 
         return (BioMongoEntity) fixKey(newEntityBean);
+    }
+
+    public void elabora() {
+        elaboraService.elaboraAll();
     }
 
 }// end of CrudModulo class

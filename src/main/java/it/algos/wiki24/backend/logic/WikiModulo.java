@@ -119,5 +119,7 @@ public abstract class WikiModulo extends CrudModulo {
         //            logger.info(new WrapLog().message(message));
         //        }
     }
+    public void elabora() {
+    }
 
 }

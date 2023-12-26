@@ -22,7 +22,6 @@ public class BioMongoList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        this.propertyListNames = currentCrudModulo.getPropertyNames();
         this.usaDataProvider = true;
         this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);

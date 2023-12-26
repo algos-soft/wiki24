@@ -23,6 +23,7 @@ import org.springframework.stereotype.*;
 public class WikiListButtonBar extends ListButtonBar {
 
     protected boolean usaBottoneDeleteAll;
+
     private boolean usaBottoneDownload;
 
     private boolean usaBottoneElabora;
@@ -30,6 +31,7 @@ public class WikiListButtonBar extends ListButtonBar {
     private boolean usaBottoneUpload;
 
     protected Button buttonDeleteAll = new Button();
+
     protected Button buttonDownload = new Button();
 
     protected Button buttonElabora = new Button();
@@ -50,6 +52,7 @@ public class WikiListButtonBar extends ListButtonBar {
         this.usaBottoneDeleteAll = true;
         return this;
     }
+
     /**
      * Fluent pattern Builder <br>
      */
@@ -111,7 +114,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.getElement().setAttribute("theme", "primary");
         buttonElabora.getElement().setProperty("title", "Elabora: tutte le funzioni del package");
         buttonElabora.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
-        //        buttonDownload.addClickListener(event -> currentCrudList.elabora());
+        buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
     }
 

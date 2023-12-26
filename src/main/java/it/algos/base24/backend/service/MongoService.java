@@ -425,6 +425,13 @@ public class MongoService<capture> {
         return this.mongoOp.find(query, entityClazz, collectionName);
     }
 
+    public List<AbstractEntity> findSkip(final Class entityClazz, int offset, int limit) {
+        String collectionName = annotationService.getCollectionName(entityClazz);
+        Query query = new Query();
+        query.skip(offset);
+        query.limit(limit);
+        return this.mongoOp.find(query, entityClazz, collectionName);
+    }
 
     /**
      * Query find()
@@ -540,7 +547,6 @@ public class MongoService<capture> {
         if (textService.isEmpty(collectionName)) {
             logger.info(new WrapLog().exception(new AlgosException("Manca il nome della collection")).usaDb());
         }
-
         String shortName = fileService.estraeClasseFinale(collectionName);
         shortName = textService.primaMinuscola(shortName);
 
