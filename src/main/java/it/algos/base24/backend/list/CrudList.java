@@ -150,7 +150,7 @@ public abstract class CrudList extends VerticalLayout {
     protected void fixPreferenze() {
         this.typeList = annotationService.getTypeList(currentCrudEntityClazz);
 
-        this.propertyListNames = currentCrudModulo.getPropertyNames();
+        this.propertyListNames = currentCrudModulo.getListPropertyNames();
         this.usaDataProvider = true;
         this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
@@ -781,7 +781,7 @@ public abstract class CrudList extends VerticalLayout {
 
     public ExcelExporter creaExcelExporter() {
         ExcelExporter exporter;
-        List<String> properties = currentCrudModulo.getPropertyNames();
+        List<String> properties = currentCrudModulo.getListPropertyNames();
         String title = String.format("Lista %s", annotationService.getMenuName(currentCrudEntityClazz));
         int width;
         double multi = 1.5;

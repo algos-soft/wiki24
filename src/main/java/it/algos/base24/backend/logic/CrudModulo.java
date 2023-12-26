@@ -76,6 +76,7 @@ public abstract class CrudModulo {
 
     protected String currentCollectionName;
 
+    public List<String> propertyListNames;
     public List<String> propertyFormNames;
 
     //    protected CrudOperation operation;
@@ -133,7 +134,8 @@ public abstract class CrudModulo {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.propertyFormNames = this.getPropertyNames();
+        this.propertyListNames = this.getListPropertyNames();
+        this.propertyFormNames = this.getFormPropertyNames();
         this.mappaBeans = new LinkedHashMap<>();
     }
 
@@ -363,12 +365,10 @@ public abstract class CrudModulo {
         }
 
         if (cancellato) {
-            if (Pref.usaNotification.is()) {
-                message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
-                modifiche = jSonService.getProperties(entityBean);
-                message = String.format("%s%s%s", message, FORWARD, modifiche);
-                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
-            }
+            message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
+            modifiche = jSonService.getProperties(entityBean);
+            message = String.format("%s%s%s", message, FORWARD, modifiche);
+            logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
         }
         else {
             message = String.format("Non sono riuscito a cancellare la entity [%s.%s]", entityName, entityBean);
@@ -572,6 +572,24 @@ public abstract class CrudModulo {
 
     public void setCurrentCrudEntityClazz(Class currentModelClazz) {
         this.currentCrudEntityClazz = currentModelClazz;
+    }
+
+    /**
+     * Regola le property visibili in una lista CrudList <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
+     */
+    public List<String> getListPropertyNames() {
+        return getPropertyNames();
+    }
+
+    /**
+     * Regola le property visibili in una scheda CrudForm <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
+     */
+    public List<String> getFormPropertyNames() {
+        return getPropertyNames();
     }
 
     /**

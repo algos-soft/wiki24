@@ -152,7 +152,7 @@ public abstract class CrudForm extends Dialog {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.propertyFormNames = currentCrudModulo.getPropertyNames();
+        this.propertyFormNames = currentCrudModulo.getFormPropertyNames();
         this.numResponsiveStepColumn = 1;
     }
 
