@@ -875,10 +875,19 @@ public class WikiApiService {
     }
 
     public void openWikiPage(String wikiTitle) {
-        String link = "\"" + TAG_WIKI + wikiTitle + "\"";
+        String link = TAG_WIKI + wikiTitle;
         UI.getCurrent().getPage().open(link);
-        //        UI.getCurrent().getPage().executeJavaScript("window.open(" + link + ");");
     }
+
+    public void editWikiPage(String wikiTitle) {
+        String  link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=edit&section=0", wikiTitle);
+        UI.getCurrent().getPage().open(link);
+    }
+    public void cronoWikiPage(String wikiTitle) {
+        String  link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=history", wikiTitle);
+        UI.getCurrent().getPage().open(link);
+    }
+
 
     /**
      * Controlla se il contenuto della pagina wiki inizia con un redirect <br>

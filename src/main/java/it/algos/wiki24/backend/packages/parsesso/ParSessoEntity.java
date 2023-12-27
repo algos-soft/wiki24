@@ -18,6 +18,9 @@ public class ParSessoEntity extends AbstractEntity {
     @AField(type = TypeField.lungo, widthRem = 7)
     public long pageId;
 
+    @AField(type = TypeField.text, widthRem = 16)
+    public String wikiTitle;
+
     @AField(type = TypeField.text)
     public String grezzo;
 

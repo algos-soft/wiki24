@@ -5,6 +5,7 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
@@ -12,9 +13,11 @@ import it.algos.base24.ui.wrapper.*;
 import it.algos.wiki24.backend.components.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.service.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import javax.inject.*;
 import java.time.*;
 
 /**
@@ -25,6 +28,9 @@ import java.time.*;
  * Time: 18:32
  */
 public abstract class WikiList extends CrudList {
+
+    @Inject
+    WikiApiService wikiApiService;
 
     protected WikiListButtonBar buttonBar;
 
@@ -306,16 +312,13 @@ public abstract class WikiList extends CrudList {
         return true;
     }
 
-    public boolean wikiView() {
-        return true;
+    public void wikiView() {
     }
 
-    public boolean wikiEdit() {
-        return true;
+    public void wikiEdit() {
     }
 
-    public boolean wikiCrono() {
-        return true;
+    public void wikiCrono() {
     }
 
 }

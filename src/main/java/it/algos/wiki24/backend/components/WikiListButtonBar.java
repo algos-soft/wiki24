@@ -168,6 +168,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiView.getElement().setAttribute("theme", "secondary");
         buttonWikiView.getElement().setProperty("title", "Wiki: pagina in visione");
         buttonWikiView.setIcon(new Icon(VaadinIcon.SEARCH));
+        buttonWikiView.setEnabled(false);
         buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
         this.add(buttonWikiView);
     }
@@ -176,6 +177,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiEdit.getElement().setAttribute("theme", "secondary");
         buttonWikiEdit.getElement().setProperty("title", "Wiki: pagina in modifica");
         buttonWikiEdit.setIcon(new Icon(VaadinIcon.PENCIL));
+        buttonWikiEdit.setEnabled(false);
         buttonWikiEdit.addClickListener(event -> currentCrudList.wikiEdit());
         this.add(buttonWikiEdit);
     }
@@ -184,6 +186,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiCrono.getElement().setAttribute("theme", "secondary");
         buttonWikiCrono.getElement().setProperty("title", "Wiki: cronistoria della pagina");
         buttonWikiCrono.setIcon(new Icon(VaadinIcon.CALENDAR));
+        buttonWikiCrono.setEnabled(false);
         buttonWikiCrono.addClickListener(event -> currentCrudList.wikiCrono());
         this.add(buttonWikiCrono);
     }

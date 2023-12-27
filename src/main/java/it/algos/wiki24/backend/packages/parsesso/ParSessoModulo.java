@@ -53,25 +53,27 @@ public class ParSessoModulo extends WikiModulo {
      */
     @Override
     public ParSessoEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA);
+        return newEntity(0, VUOTA, VUOTA, VUOTA);
     }
 
-    public ParSessoEntity newEntity(long pageId, String grezzo) {
-        return newEntity(pageId, grezzo, VUOTA);
+    public ParSessoEntity newEntity(long pageId, String wikiTitle, String grezzo) {
+        return newEntity(pageId, wikiTitle, grezzo, VUOTA);
     }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
      * @param pageId    (obbligatorio)
+     * @param wikiTitle (obbligatorio)
      * @param grezzo    (obbligatorio)
      * @param elaborato (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public ParSessoEntity newEntity(long pageId, String grezzo, String elaborato) {
+    public ParSessoEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
         ParSessoEntity newEntityBean = ParSessoEntity.builder()
                 .pageId(pageId)
+                .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .grezzo(textService.isValid(grezzo) ? grezzo : null)
                 .elaborato(textService.isValid(elaborato) ? elaborato : null)
                 .build();
@@ -85,6 +87,7 @@ public class ParSessoModulo extends WikiModulo {
         ParSessoEntity parametroSessoEntity;
         Map<String, String> mappa;
         long pageId;
+        String wikiTitle;
         String grezzo;
 
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
@@ -92,8 +95,9 @@ public class ParSessoModulo extends WikiModulo {
         for (BioServerEntity bioServerBean : lista) {
             mappa = elaboraService.estraeMappa(bioServerBean);
             pageId = bioServerBean.getPageId();
+            wikiTitle = bioServerBean.getWikiTitle();
             grezzo = mappa.get(KEY_MAPPA_SESSO);
-            parametroSessoEntity = newEntity(pageId, grezzo);
+            parametroSessoEntity = newEntity(pageId, wikiTitle, grezzo);
             parametroSessoEntity = elabora(parametroSessoEntity);
             insertSave(parametroSessoEntity);
         }

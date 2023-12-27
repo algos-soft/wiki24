@@ -80,7 +80,7 @@ public class ColumnService {
         Grid.Column<AbstractEntity> colonna = null;
         TypeField type;
         String width;
-        String header = VUOTA;
+        String headerText = VUOTA;
         VaadinIcon vaadinHeaderIcon;
         Icon headerIcon;
         Field field;
@@ -94,7 +94,7 @@ public class ColumnService {
 
         type = annotationService.getType(modelClazz, propertyName);
         width = annotationService.getWidth(modelClazz, propertyName);
-        header = annotationService.getHeaderText(modelClazz, propertyName);
+        headerText = annotationService.getHeaderText(modelClazz, propertyName);
         headerIcon = annotationService.getHeaderIcon(modelClazz, propertyName);
         field = reflectionService.getJavaField(modelClazz, propertyName);
         anchorPrefix = annotationService.getAnchorPrefix(modelClazz, propertyName);
@@ -184,9 +184,9 @@ public class ColumnService {
                 colonna.setHeader(headerIcon);
             }
             else {
-                if (textService.isEmpty(colonna.getHeaderText())) {
-                    colonna.setHeader(textService.primaMaiuscola(header));
-                }
+//                if (textService.isEmpty(colonna.getHeaderText())) {
+                    colonna.setHeader(textService.primaMaiuscola(headerText));
+//                }
             }
             if (type == TypeField.ordine) {
                 colonna.setHeader("#");
