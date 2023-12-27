@@ -2,14 +2,20 @@ package it.algos.wiki24.backend.components;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.list.*;
+import it.algos.base24.backend.service.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.stereotype.*;
+
+import javax.inject.*;
 
 /**
  * Project wiki24
@@ -22,11 +28,15 @@ import org.springframework.stereotype.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class WikiListButtonBar extends ListButtonBar {
 
+    @Inject
+    TextService textService;
+
     protected boolean usaBottoneDeleteAll;
 
     private boolean usaBottoneDownload;
 
     private boolean usaBottoneElabora;
+    private boolean usaBottoneTransfer;
 
     private boolean usaBottoneUpload;
 
@@ -36,12 +46,16 @@ public class WikiListButtonBar extends ListButtonBar {
 
     public boolean usaBottoneWikiCrono;
 
+    public boolean usaSearchPageId;
+
+    public boolean usaSearchWikiTitle;
 
     protected Button buttonDeleteAll = new Button();
 
     protected Button buttonDownload = new Button();
 
     protected Button buttonElabora = new Button();
+    protected Button buttonTransfer = new Button();
 
     protected Button buttonUpload = new Button();
 
@@ -50,6 +64,10 @@ public class WikiListButtonBar extends ListButtonBar {
     protected Button buttonWikiEdit = new Button();
 
     protected Button buttonWikiCrono = new Button();
+
+    protected TextField searchPageId = new TextField();
+
+    protected TextField searchWikiTitle = new TextField();
 
     protected WikiList currentCrudList;
 
@@ -85,6 +103,15 @@ public class WikiListButtonBar extends ListButtonBar {
     /**
      * Fluent pattern Builder <br>
      */
+    public WikiListButtonBar transfer() {
+        this.usaBottoneTransfer = true;
+        return this;
+    }
+
+
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WikiListButtonBar wikiView() {
         this.usaBottoneWikiView = true;
         return this;
@@ -106,6 +133,22 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar searchPageId() {
+        this.usaSearchPageId = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar searchWikiTitle() {
+        this.usaSearchWikiTitle = true;
+        return this;
+    }
+
     public void addButtons() {
 
         if (usaBottoneDeleteAll) {
@@ -116,6 +159,9 @@ public class WikiListButtonBar extends ListButtonBar {
         }
         if (usaBottoneElabora) {
             this.addElabora();
+        }
+        if (usaBottoneTransfer) {
+            this.addTransfer();
         }
         if (usaBottoneUpload) {
             //            this.addUpload();
@@ -144,6 +190,12 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneSearch) {
             this.addSearchField();
         }
+        if (usaSearchPageId) {
+            this.addSearchPageId();
+        }
+        if (usaSearchWikiTitle) {
+            this.addSearchWikiTitle();
+        }
     }
 
 
@@ -163,6 +215,15 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
     }
+    private void addTransfer() {
+        buttonTransfer.getElement().setAttribute("theme", "secondary");
+        buttonTransfer.getElement().setProperty("title", "Transfer: spostamento ad altro modulo");
+        buttonTransfer.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
+        buttonTransfer.setEnabled(false);
+        buttonTransfer.addClickListener(event -> currentCrudList.transfer());
+        this.add(buttonTransfer);
+    }
+
 
     private void addWikiView() {
         buttonWikiView.getElement().setAttribute("theme", "secondary");
@@ -191,6 +252,22 @@ public class WikiListButtonBar extends ListButtonBar {
         this.add(buttonWikiCrono);
     }
 
+    public void addSearchPageId() {
+        searchPageId.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_PAGE_ID);
+        searchPageId.getElement().setProperty("title", "Search: ricerca per il valore del campo " + FIELD_NAME_PAGE_ID);
+        searchPageId.setClearButtonVisible(true);
+        searchPageId.addValueChangeListener(event -> currentCrudList.sincroFiltri());
+        this.add(searchPageId);
+    }
+
+    public void addSearchWikiTitle() {
+        searchWikiTitle.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_WIKI_TITLE);
+        searchWikiTitle.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + FIELD_NAME_WIKI_TITLE);
+        searchWikiTitle.setClearButtonVisible(true);
+        searchWikiTitle.addValueChangeListener(event -> currentCrudList.sincroFiltri());
+        this.add(searchWikiTitle);
+    }
+
 
     public boolean sincroSelection(boolean singoloSelezionato) {
         buttonDeleteAll.setEnabled(!singoloSelezionato);
@@ -200,6 +277,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonDownload.setEnabled(!singoloSelezionato);
         buttonElabora.setEnabled(!singoloSelezionato);
 
+        buttonTransfer.setEnabled(singoloSelezionato);
         buttonWikiView.setEnabled(singoloSelezionato);
         buttonWikiEdit.setEnabled(singoloSelezionato);
         buttonWikiCrono.setEnabled(singoloSelezionato);
@@ -213,6 +291,32 @@ public class WikiListButtonBar extends ListButtonBar {
         }
 
         return singoloSelezionato;
+    }
+
+    public long getSearchPageIdFieldValue() {
+        long searchValue = 0;
+        String txtValue = VUOTA;
+
+        if (searchPageId != null) {
+            txtValue = searchPageId.getValue();
+            if (textService.isValid(txtValue)) {
+                searchValue = Long.valueOf(searchPageId.getValue());
+            }
+        }
+
+        return searchValue;
+    }
+
+
+    public String getSearchWikiTitleFieldValue() {
+        String searchValue = VUOTA;
+
+        if (searchWikiTitle != null) {
+            searchValue = searchWikiTitle.getValue();
+
+        }
+
+        return searchValue;
     }
 
 }

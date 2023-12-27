@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.bioserver;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
@@ -34,6 +35,9 @@ public class BioServerList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        this.usaBottoneSearch = false;
+        this.usaSearchPageId = true;
+        this.usaSearchWikiTitle = true;
         this.usaBottoneExport = false;
     }
 

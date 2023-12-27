@@ -40,6 +40,7 @@ public class ParSessoList extends WikiList {
         super.fixPreferenze();
 
         this.usaBottoneDownload = false;
+        this.usaBottoneTransfer = true;
         this.usaBottoneWikiView = true;
         this.usaBottoneWikiEdit = true;
         this.usaBottoneWikiCrono = true;

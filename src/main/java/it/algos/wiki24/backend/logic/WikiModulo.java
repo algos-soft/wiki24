@@ -123,6 +123,9 @@ public abstract class WikiModulo extends CrudModulo {
     public void elabora() {
     }
 
+    public void transfer() {
+    }
+
     public void fixElabora(final long inizio) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;

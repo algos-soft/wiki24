@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.list;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.orderedlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
@@ -10,12 +11,14 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.ui.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.components.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.data.domain.*;
 
 import javax.inject.*;
 import java.time.*;
@@ -31,6 +34,7 @@ public abstract class WikiList extends CrudList {
 
     @Inject
     WikiApiService wikiApiService;
+
 
     protected WikiListButtonBar buttonBar;
 
@@ -68,11 +72,17 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneUpload;
 
+    public boolean usaSearchPageId;
+
+    public boolean usaSearchWikiTitle;
+
     public boolean usaBottoneWikiView;
 
     public boolean usaBottoneWikiEdit;
 
     public boolean usaBottoneWikiCrono;
+
+    public boolean usaBottoneTransfer;
 
     public WikiModulo currentCrudModulo;
 
@@ -99,6 +109,10 @@ public abstract class WikiList extends CrudList {
         this.usaInfoDownload = true;
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
+        this.usaBottoneTransfer = false;
+
+        this.usaSearchPageId = false;
+        this.usaSearchWikiTitle = false;
 
         this.usaBottoneWikiView = false;
         this.usaBottoneWikiEdit = false;
@@ -269,6 +283,9 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneElabora) {
             buttonBar.elabora();
         }
+        if (usaBottoneTransfer) {
+            buttonBar.transfer();
+        }
         if (usaBottoneWikiView) {
             buttonBar.wikiView();
         }
@@ -293,6 +310,12 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
             buttonBar.searchField(searchFieldName);
         }
+        if (usaSearchPageId) {
+            buttonBar.searchPageId();
+        }
+        if (usaSearchWikiTitle) {
+            buttonBar.searchWikiTitle();
+        }
 
         topPlaceHolder.add(buttonBar.build());
     }
@@ -310,6 +333,45 @@ public abstract class WikiList extends CrudList {
         refreshData();
         fixInfo();
         return true;
+    }
+    public boolean transfer() {
+        currentCrudModulo.transfer();
+        return true;
+    }
+
+    @Override
+    protected void fixFiltri() {
+        super.fixFiltri();
+
+        long searchPageId = 0;
+        String searchWikiTitle = VUOTA;
+
+        if (usaSearchPageId) {
+            searchPageId = buttonBar.getSearchPageIdFieldValue();
+        }
+
+        if (searchPageId > 0) {
+            filtri.uguale(FIELD_NAME_PAGE_ID, searchPageId);
+            filtri.sort(Sort.Order.asc(FIELD_NAME_PAGE_ID));
+        }
+        else {
+            filtri.remove(FIELD_NAME_PAGE_ID);
+            filtri.sort(basicSortOrder);
+        }
+
+        if (usaSearchWikiTitle) {
+            searchWikiTitle = buttonBar.getSearchWikiTitleFieldValue();
+        }
+
+        if (textService.isValid(searchWikiTitle)) {
+            filtri.inizio(FIELD_NAME_WIKI_TITLE, searchWikiTitle);
+            filtri.sort(Sort.Order.asc(FIELD_NAME_WIKI_TITLE));
+        }
+        else {
+            filtri.remove(FIELD_NAME_WIKI_TITLE);
+            filtri.sort(basicSortOrder);
+        }
+
     }
 
     public void wikiView() {

@@ -7,11 +7,13 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.packages.parsesso.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.ui.*;
@@ -33,6 +35,11 @@ public class BioServerForm extends WikiForm {
 
     @Inject
     QueryService queryService;
+    @Inject
+    BioServerModulo bioServerModulo;
+
+    @Inject
+    WikiApiService wikiApiService;
 
     public BioServerForm(BioServerModulo crudModulo, BioServerEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
@@ -61,6 +68,27 @@ public class BioServerForm extends WikiForm {
         Div elasticSpace = new Div();
         elasticSpace.getStyle().set("flex-grow", "1");
 
+        Button wikiView = new Button();
+        wikiView.getElement().setAttribute("theme", "secondary");
+        wikiView.getElement().setProperty("title", "Wiki: pagina in visione");
+        wikiView.setIcon(new Icon(VaadinIcon.SEARCH));
+        wikiView.setEnabled(true);
+        wikiView.addClickListener(event -> wikiView());
+
+        Button wikiEdit = new Button();
+        wikiEdit.getElement().setAttribute("theme", "secondary");
+        wikiEdit.getElement().setProperty("title", "Wiki: pagina in modifica");
+        wikiEdit.setIcon(new Icon(VaadinIcon.PENCIL));
+        wikiEdit.setEnabled(true);
+        wikiEdit.addClickListener(event -> wikiEdit());
+
+        Button wikiCrono = new Button();
+        wikiCrono.getElement().setAttribute("theme", "secondary");
+        wikiCrono.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        wikiCrono.setIcon(new Icon(VaadinIcon.CALENDAR));
+        wikiCrono.setEnabled(true);
+        wikiCrono.addClickListener(event -> wikiCrono());
+
         Button download = new Button("Download");
         download.getElement().setAttribute("theme", "primary");
         download.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -84,7 +112,7 @@ public class BioServerForm extends WikiForm {
         registra.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         registra.addClickListener(e -> saveHandler());
 
-        buttonLayout.add(download, elasticSpace, annulla, registra);
+        buttonLayout.add(wikiView, wikiEdit, wikiCrono, elasticSpace, download, elasticSpace, annulla, registra);
         buttonLayout.getStyle().set("flex-wrap", "wrap");
         buttonLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
 
@@ -120,5 +148,39 @@ public class BioServerForm extends WikiForm {
         super.binderFields();
     }
 
+    public void wikiView() {
+        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        long pageId;
+        String wikiTitle;
+
+        if (bioServerEntity != null) {
+            pageId = bioServerEntity.pageId;
+            wikiTitle = bioServerModulo.findByKey(pageId).wikiTitle;
+            wikiApiService.openWikiPage(wikiTitle);
+        }
+    }
+
+    public void wikiEdit() {
+        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        long pageId;
+        String wikiTitle;
+
+        if (bioServerEntity != null) {
+            pageId = bioServerEntity.pageId;
+            wikiTitle = bioServerModulo.findByKey(pageId).wikiTitle;
+            wikiApiService.editWikiPage(wikiTitle);
+        }
+    }
+    public void wikiCrono() {
+        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        long pageId;
+        String wikiTitle;
+
+        if (bioServerEntity != null) {
+            pageId = bioServerEntity.pageId;
+            wikiTitle = bioServerModulo.findByKey(pageId).wikiTitle;
+            wikiApiService.cronoWikiPage(wikiTitle);
+        }
+    }
 
 }// end of CrudForm class

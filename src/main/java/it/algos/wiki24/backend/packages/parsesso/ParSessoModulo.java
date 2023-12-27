@@ -25,6 +25,8 @@ public class ParSessoModulo extends WikiModulo {
 
     @Inject
     ElaboraService elaboraService;
+    @Inject
+    BioServerModulo bioServerModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -42,7 +44,7 @@ public class ParSessoModulo extends WikiModulo {
 
         super.lastElabora = WPref.lastElaboraParSesso;
         super.durataElabora = WPref.elaboraParSessoTime;
-        super.unitaMisuraElabora = TypeDurata.secondi;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 
@@ -108,21 +110,41 @@ public class ParSessoModulo extends WikiModulo {
     public ParSessoEntity elabora(ParSessoEntity beanGrezzo) {
         ParSessoEntity beanElaborato = beanGrezzo;
         String grezzo;
+        String tag1 = "M";
+        String tag2 = "F";
 
         if (beanGrezzo.grezzo == null) {
-            message = String.format("Parametro sesso di [%s] è nullo");
-            logger.wrap(new WrapLog().message(message));
+            message = String.format("Parametro sesso di [%s] è nullo","");
+            logger.warn(new WrapLog().message(message));
+            beanElaborato.pieno = false;
             beanElaborato.valido = false;
+            return beanElaborato;
         }
-        grezzo = beanGrezzo.grezzo.trim();
 
+        grezzo = beanGrezzo.grezzo.trim();
         if (!grezzo.equals(beanGrezzo.grezzo)) {
-            message = String.format("Parametro sesso di [%s] contiene spazi vuoti non previsti");
-            logger.wrap(new WrapLog().message(message));
+            message = String.format("Parametro sesso di [%s] contiene spazi vuoti non previsti",beanGrezzo.wikiTitle);
+            logger.warn(new WrapLog().message(message));
+            beanElaborato.pieno = false;
             beanElaborato.valido = false;
+            return beanElaborato;
+        }
+
+        if (grezzo.equals(tag1) || grezzo.equals(tag2)) {
+            beanElaborato.elaborato = grezzo;
+            beanElaborato.pieno = true;
+            beanElaborato.valido = true;
+            return beanElaborato;
         }
 
         return beanElaborato;
+    }
+    public void transfer() {
+        bioServerModulo.creaForm(null, CrudOperation.shows);
+//                .annullaHandler(this::annullaHandler)
+//                .deleteHandler(this::deleteHandler)
+//                .saveHandler(this::saveHandler)
+//                .deleteHandler(this::deleteHandler);
     }
 
 }// end of CrudModulo class

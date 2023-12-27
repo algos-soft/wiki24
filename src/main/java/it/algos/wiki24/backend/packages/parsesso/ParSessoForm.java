@@ -26,4 +26,5 @@ public class ParSessoForm extends WikiForm {
         super.numResponsiveStepColumn = 1;
     }
 
+
 }// end of CrudForm class
