@@ -387,5 +387,26 @@ public class BaseCost {
 
     public static final String SCHEDULED_ZERO_QUARANTA = "40 0 * * *";
 
+
+    public static final String REF = "<ref>";
+
+    public static final String HTML = "[html";
+
+    public static final String REF_OPEN = "<ref";
+
+    public static final String REF_NAME = "<ref name=";
+
+    public static final String REF_END = "</ref>";
+
+    public static final String CIRCA = "circa";
+
+    public static final String REF_TAG = SPAZIO + "{{#tag:ref";
+    public static final String NOTE = "<!--";
+    public static final String NO_WIKI = "<nowiki>";
+    public static final String PARENTESI_TONDA_INI_REGEX = "\\(";
+
+    public static final String PARENTESI_TONDA_END_REGEX = "\\)";
+    public static final String ECC = "ecc.";
+
 }
 

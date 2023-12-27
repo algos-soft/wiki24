@@ -1,8 +1,7 @@
-package it.algos.wiki24.backend.packages.sesso;
+package it.algos.wiki24.backend.packages.parsesso;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -10,11 +9,6 @@ import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
 import java.util.*;
@@ -27,7 +21,7 @@ import java.util.*;
  * Time: 07:43
  */
 @Service
-public class ParametroSessoModulo extends WikiModulo {
+public class ParSessoModulo extends WikiModulo {
 
     @Inject
     ElaboraService elaboraService;
@@ -37,8 +31,8 @@ public class ParametroSessoModulo extends WikiModulo {
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public ParametroSessoModulo() {
-        super(ParametroSessoEntity.class, ParametroSessoList.class, ParametroSessoForm.class);
+    public ParSessoModulo() {
+        super(ParSessoEntity.class, ParSessoList.class, ParSessoForm.class);
     }
 
 
@@ -58,11 +52,11 @@ public class ParametroSessoModulo extends WikiModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public ParametroSessoEntity newEntity() {
+    public ParSessoEntity newEntity() {
         return newEntity(0, VUOTA, VUOTA);
     }
 
-    public ParametroSessoEntity newEntity(long pageId, String grezzo) {
+    public ParSessoEntity newEntity(long pageId, String grezzo) {
         return newEntity(pageId, grezzo, VUOTA);
     }
 
@@ -75,20 +69,20 @@ public class ParametroSessoModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public ParametroSessoEntity newEntity(long pageId, String grezzo, String elaborato) {
-        ParametroSessoEntity newEntityBean = ParametroSessoEntity.builder()
+    public ParSessoEntity newEntity(long pageId, String grezzo, String elaborato) {
+        ParSessoEntity newEntityBean = ParSessoEntity.builder()
                 .pageId(pageId)
                 .grezzo(textService.isValid(grezzo) ? grezzo : null)
                 .elaborato(textService.isValid(elaborato) ? elaborato : null)
                 .build();
 
-        return (ParametroSessoEntity) fixKey(newEntityBean);
+        return (ParSessoEntity) fixKey(newEntityBean);
     }
 
 
     public void elabora() {
         inizio = System.currentTimeMillis();
-        ParametroSessoEntity parametroSessoEntity;
+        ParSessoEntity parametroSessoEntity;
         Map<String, String> mappa;
         long pageId;
         String grezzo;
@@ -107,8 +101,8 @@ public class ParametroSessoModulo extends WikiModulo {
         super.fixElabora(inizio);
     }
 
-    public ParametroSessoEntity elabora(ParametroSessoEntity beanGrezzo) {
-        ParametroSessoEntity beanElaborato = beanGrezzo;
+    public ParSessoEntity elabora(ParSessoEntity beanGrezzo) {
+        ParSessoEntity beanElaborato = beanGrezzo;
         String grezzo;
 
         if (beanGrezzo.grezzo == null) {

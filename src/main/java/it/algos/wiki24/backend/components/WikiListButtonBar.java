@@ -30,6 +30,13 @@ public class WikiListButtonBar extends ListButtonBar {
 
     private boolean usaBottoneUpload;
 
+    public boolean usaBottoneWikiView;
+
+    public boolean usaBottoneWikiEdit;
+
+    public boolean usaBottoneWikiCrono;
+
+
     protected Button buttonDeleteAll = new Button();
 
     protected Button buttonDownload = new Button();
@@ -37,6 +44,12 @@ public class WikiListButtonBar extends ListButtonBar {
     protected Button buttonElabora = new Button();
 
     protected Button buttonUpload = new Button();
+
+    protected Button buttonWikiView = new Button();
+
+    protected Button buttonWikiEdit = new Button();
+
+    protected Button buttonWikiCrono = new Button();
 
     protected WikiList currentCrudList;
 
@@ -69,6 +82,30 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar wikiView() {
+        this.usaBottoneWikiView = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar wikiEdit() {
+        this.usaBottoneWikiEdit = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar wikiCrono() {
+        this.usaBottoneWikiCrono = true;
+        return this;
+    }
+
     public void addButtons() {
 
         if (usaBottoneDeleteAll) {
@@ -82,6 +119,15 @@ public class WikiListButtonBar extends ListButtonBar {
         }
         if (usaBottoneUpload) {
             //            this.addUpload();
+        }
+        if (usaBottoneWikiView) {
+            this.addWikiView();
+        }
+        if (usaBottoneWikiEdit) {
+            this.addWikiEdit();
+        }
+        if (usaBottoneWikiCrono) {
+            this.addWikiCrono();
         }
         if (usaBottoneNew) {
             this.addNew();
@@ -118,6 +164,30 @@ public class WikiListButtonBar extends ListButtonBar {
         this.add(buttonElabora);
     }
 
+    private void addWikiView() {
+        buttonWikiView.getElement().setAttribute("theme", "secondary");
+        buttonWikiView.getElement().setProperty("title", "Wiki: pagina in visione");
+        buttonWikiView.setIcon(new Icon(VaadinIcon.SEARCH));
+        buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
+        this.add(buttonWikiView);
+    }
+
+    private void addWikiEdit() {
+        buttonWikiEdit.getElement().setAttribute("theme", "secondary");
+        buttonWikiEdit.getElement().setProperty("title", "Wiki: pagina in modifica");
+        buttonWikiEdit.setIcon(new Icon(VaadinIcon.PENCIL));
+        buttonWikiEdit.addClickListener(event -> currentCrudList.wikiEdit());
+        this.add(buttonWikiEdit);
+    }
+
+    private void addWikiCrono() {
+        buttonWikiCrono.getElement().setAttribute("theme", "secondary");
+        buttonWikiCrono.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        buttonWikiCrono.setIcon(new Icon(VaadinIcon.CALENDAR));
+        buttonWikiCrono.addClickListener(event -> currentCrudList.wikiCrono());
+        this.add(buttonWikiCrono);
+    }
+
 
     public boolean sincroSelection(boolean singoloSelezionato) {
         buttonDeleteAll.setEnabled(!singoloSelezionato);
@@ -126,6 +196,11 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonResetPref.setEnabled(!singoloSelezionato);
         buttonDownload.setEnabled(!singoloSelezionato);
         buttonElabora.setEnabled(!singoloSelezionato);
+
+        buttonWikiView.setEnabled(singoloSelezionato);
+        buttonWikiEdit.setEnabled(singoloSelezionato);
+        buttonWikiCrono.setEnabled(singoloSelezionato);
+
         buttonNew.setEnabled(!singoloSelezionato);
         buttonEdit.setEnabled(singoloSelezionato);
         buttonShow.setEnabled(singoloSelezionato);

@@ -1,18 +1,17 @@
-package it.algos.wiki24.backend.packages.sesso;
+package it.algos.wiki24.backend.packages.parsesso;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.ui.form.*;
 import it.algos.wiki24.ui.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class ParametroSessoForm extends WikiForm {
+public class ParSessoForm extends WikiForm {
 
 
-    public ParametroSessoForm(ParametroSessoModulo crudModulo, ParametroSessoEntity entityBean, CrudOperation operation) {
+    public ParSessoForm(ParSessoModulo crudModulo, ParSessoEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

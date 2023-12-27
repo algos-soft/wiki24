@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.sesso;
+package it.algos.wiki24.backend.packages.parsesso;
 
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.*;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @AEntity(collectionName = "parsesso", keyPropertyName = "pageId", typeList = TypeList.vuoto)
-public class ParametroSessoEntity extends AbstractEntity {
+public class ParSessoEntity extends AbstractEntity {
 
     @AField(type = TypeField.lungo, widthRem = 7)
     public long pageId;

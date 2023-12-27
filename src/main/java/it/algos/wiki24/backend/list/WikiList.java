@@ -62,6 +62,12 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneUpload;
 
+    public boolean usaBottoneWikiView;
+
+    public boolean usaBottoneWikiEdit;
+
+    public boolean usaBottoneWikiCrono;
+
     public WikiModulo currentCrudModulo;
 
     public WikiList(final WikiModulo crudModulo) {
@@ -87,6 +93,10 @@ public abstract class WikiList extends CrudList {
         this.usaInfoDownload = true;
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
+
+        this.usaBottoneWikiView = false;
+        this.usaBottoneWikiEdit = false;
+        this.usaBottoneWikiCrono = false;
 
         this.fixPreferenzeDaModulo();
     }
@@ -253,12 +263,15 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneElabora) {
             buttonBar.elabora();
         }
-        //        if (usaBottoneResetDelete) {
-        //            buttonBar.resetDelete();
-        //        }
-        //        if (usaBottoneResetAdd) {
-        //            buttonBar.resetAdd();
-        //        }
+        if (usaBottoneWikiView) {
+            buttonBar.wikiView();
+        }
+        if (usaBottoneWikiEdit) {
+            buttonBar.wikiEdit();
+        }
+        if (usaBottoneWikiCrono) {
+            buttonBar.wikiCrono();
+        }
         if (usaBottoneNew) {
             buttonBar.add();
         }
@@ -285,10 +298,23 @@ public abstract class WikiList extends CrudList {
         fixInfo();
         return true;
     }
+
     public boolean elabora() {
         currentCrudModulo.elabora();
         refreshData();
         fixInfo();
+        return true;
+    }
+
+    public boolean wikiView() {
+        return true;
+    }
+
+    public boolean wikiEdit() {
+        return true;
+    }
+
+    public boolean wikiCrono() {
         return true;
     }
 
