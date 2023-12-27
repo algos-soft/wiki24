@@ -19,6 +19,7 @@ public class WikiCost {
     public static final String TAG_MODULO = "Modulo:Bio/";
 
     public static final String PATH_MODULO = TAG_WIKI + TAG_MODULO;
+
     public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";
 
     public static final String KEY_MAPPA_PARSE = "parse";
@@ -30,6 +31,24 @@ public class WikiCost {
     public static final String KEY_MAPPA_TEXT = "wikitext";
 
     public static final String KEY_MAPPA_DOMAIN = "domain";
+
+    public static final String KEY_MAPPA_NOME = "Nome";
+
+    public static final String KEY_MAPPA_COGNOME = "Cognome";
+
+    public static final String KEY_MAPPA_SESSO = "Sesso";
+
+    public static final String KEY_MAPPA_LUOGO_NASCITA = "LuogoNascita";
+
+    public static final String KEY_MAPPA_GIORNO_NASCITA = "GiornoMeseNascita";
+
+    public static final String KEY_MAPPA_ANNO_NASCITA = "AnnoNascita";
+
+    public static final String KEY_MAPPA_LUOGO_MORTE = "LuogoMorte";
+
+    public static final String KEY_MAPPA_GIORNO_MORTE = "GiornoMeseMorte";
+
+    public static final String KEY_MAPPA_ANNO_MORTE = "AnnoMorte";
 
 
     public static final String JSON_SUCCESS = "Success";
@@ -44,7 +63,9 @@ public class WikiCost {
     public static final String ERROR_JSON_BOT_NO_LOGIN = "noBotLogin";
 
     public static final String ERROR_JSON_BOT_NO_QUERY = "notQueryLogin";
+
     public static final String ERROR_JSON_BOT_NO_COOKIES = "noCookies";
+
     public static final String ERROR_JSON_BOT_NO_RIGHT = "assertbotfailed";
 
     public static final String JSON_NO_BOT = "assertbotfailed";
@@ -66,9 +87,10 @@ public class WikiCost {
     public static final String ATT_LOWER = ATT.toLowerCase();
 
     public static final String PATH_STATISTICHE_ATTIVITA = PATH_BIOGRAFIE + ATT;
-    public static final String PATH_STATISTICHE_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
-    public static final String STATISTICHE = "Statistiche";
 
+    public static final String PATH_STATISTICHE_NAZIONALITA = PATH_BIOGRAFIE + NAZ;
+
+    public static final String STATISTICHE = "Statistiche";
 
 
     public static final String WIKI_TITLE_DEBUG = "Utente:Biobot/2";
@@ -168,7 +190,7 @@ public class WikiCost {
 
     public static final String ACTION_PARSE = API_BASE + "&action=parse";
 
-//    public static final String WIKI_PARSE = ACTION_PARSE + "&prop=wikitext&page=";
+    //    public static final String WIKI_PARSE = ACTION_PARSE + "&prop=wikitext&page=";
 
     public static final String ACTION_QUERY = API_BASE + "&action=query";
 

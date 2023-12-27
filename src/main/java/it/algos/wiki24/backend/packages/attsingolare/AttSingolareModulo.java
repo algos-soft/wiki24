@@ -41,9 +41,9 @@ public class AttSingolareModulo extends WikiModulo {
         super.durataDownload = WPref.downloadAttSinTime;
         super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.lastElaborazione = WPref.lastElaboraAttSin;
-        super.durataElaborazione = WPref.elaboraAttSinTime;
-        super.unitaMisuraElaborazione = TypeDurata.minuti;
+        super.lastElabora = WPref.lastElaboraAttSin;
+        super.durataElabora = WPref.elaboraAttSinTime;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 

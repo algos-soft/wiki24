@@ -41,13 +41,13 @@ public abstract class WikiList extends CrudList {
 
     public TypeDurata unitaMisuraDownload;
 
-    public WPref lastElaborazione;
+    public WPref lastElabora;
 
-    public WPref durataElaborazione;
+    public WPref durataElabora;
 
-    public String scheduledElaborazione;
+    public String scheduledElabora;
 
-    public TypeDurata unitaMisuraElaborazione;
+    public TypeDurata unitaMisuraElabora;
 
 
     public WPref lastUpload;
@@ -98,10 +98,10 @@ public abstract class WikiList extends CrudList {
             scheduledDownload = currentCrudModulo.scheduledDownload;
             unitaMisuraDownload = currentCrudModulo.unitaMisuraDownload;
 
-            lastElaborazione = currentCrudModulo.lastElaborazione;
-            durataElaborazione = currentCrudModulo.durataElaborazione;
-            scheduledElaborazione = currentCrudModulo.scheduledElaborazione;
-            unitaMisuraElaborazione = currentCrudModulo.unitaMisuraElaborazione;
+            lastElabora = currentCrudModulo.lastElabora;
+            durataElabora = currentCrudModulo.durataElabora;
+            scheduledElabora = currentCrudModulo.scheduledElabora;
+            unitaMisuraElabora = currentCrudModulo.unitaMisuraElabora;
 
             lastUpload = currentCrudModulo.lastUpload;
             durataUpload = currentCrudModulo.durataUpload;
@@ -158,21 +158,21 @@ public abstract class WikiList extends CrudList {
             message = String.format("%s%s%s", downloadTxt, SPAZIO, downloadLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
 
-            if (textService.isValid(scheduledElaborazione)) {
-                elaboraTxt = "Scheduled elaborazione " + scheduledElaborazione;
+            if (textService.isValid(scheduledElabora)) {
+                elaboraTxt = "Scheduled elaborazione " + scheduledElabora;
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
             }
-            if (lastElaborazione != null && lastElaborazione.getCurrentValue() instanceof LocalDateTime elaborazione) {
+            if (lastElabora != null && lastElabora.getCurrentValue() instanceof LocalDateTime elaborazione) {
                 if (elaborazione.equals(ROOT_DATA_TIME)) {
                     elaboraLast = "Elaborazione non ancora effettuata.";
                 }
                 else {
                     elaboraLast = String.format("Ultima elaborazione effettuata il %s", dateService.get(elaborazione));
-                    if (durataElaborazione != null && durataElaborazione.getCurrentValue() instanceof Integer durata) {
+                    if (durataElabora != null && durataElabora.getCurrentValue() instanceof Integer durata) {
                         if (durata > 0) {
-                            elaboraLast += String.format(" in circa %d %s.", durata, unitaMisuraElaborazione);
+                            elaboraLast += String.format(" in circa %d %s.", durata, unitaMisuraElabora);
                         }
                     }
                 }

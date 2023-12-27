@@ -16,7 +16,7 @@ import org.springframework.stereotype.*;
 @AEntity(collectionName = "anno", typeList = TypeList.hardCode)
 public class AnnoEntity extends AbstractEntity {
 
-    @AField(type = TypeField.integer, headerText = "#", widthRem = 5, caption = "Ordine a partire dal 1.000 a.C.")
+    @AField(type = TypeField.integer, headerText = "#", widthRem = 6, caption = "Ordine a partire dal 1.000 a.C.")
     public int ordine;
 
     @AField(type = TypeField.text, widthRem = 7, caption = "Nome corrente")

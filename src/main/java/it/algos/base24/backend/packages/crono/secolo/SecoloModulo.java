@@ -21,7 +21,7 @@ import java.util.*;
 public class SecoloModulo extends CrudModulo {
     public static final String INIZIO = "inizio";
     public static final String FINE = "fine";
-    public static final String CRISTO = "anteCristo";
+    public static final String CRISTO = "dopoCristo";
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -57,17 +57,17 @@ public class SecoloModulo extends CrudModulo {
      * @param nome       descrittivo e visualizzabile
      * @param inizio     primo anno del secolo
      * @param fine       ultimo anno del secolo
-     * @param anteCristo secolo prima o dopo Cristo
+     * @param dopoCristo secolo prima o dopo Cristo
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public SecoloEntity newEntity(final int ordine, final String nome, final int inizio, final int fine, final boolean anteCristo) {
+    public SecoloEntity newEntity(final int ordine, final String nome, final int inizio, final int fine, final boolean dopoCristo) {
         SecoloEntity newEntityBean = SecoloEntity.builder()
                 .ordine(ordine == 0 ? nextOrdine() : ordine)
                 .nome(textService.isValid(nome) ? nome : null)
                 .inizio(inizio)
                 .fine(fine)
-                .anteCristo(anteCristo)
+                .dopoCristo(dopoCristo)
                 .build();
 
         return (SecoloEntity) fixKey(newEntityBean);
@@ -87,7 +87,7 @@ public class SecoloModulo extends CrudModulo {
 
         query.addCriteria(Criteria.where(INIZIO).gte(anno));
         query.addCriteria(Criteria.where(FINE).lte(anno));
-        query.addCriteria(Criteria.where(CRISTO).is(true));
+        query.addCriteria(Criteria.where(CRISTO).is(false));
         return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
     }
 
@@ -106,7 +106,7 @@ public class SecoloModulo extends CrudModulo {
 
         query.addCriteria(Criteria.where(INIZIO).lte(anno));
         query.addCriteria(Criteria.where(FINE).gte(anno));
-        query.addCriteria(Criteria.where(CRISTO).is(false));
+        query.addCriteria(Criteria.where(CRISTO).is(true));
         return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
     }
 

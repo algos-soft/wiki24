@@ -50,9 +50,9 @@ public class NazPluraleModulo extends WikiModulo {
         super.durataDownload = WPref.downloadNazPluTime;
         super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.lastElaborazione = WPref.lastElaboraNazPlu;
-        super.durataElaborazione = WPref.elaboraNazPluTime;
-        super.unitaMisuraElaborazione = TypeDurata.minuti;
+        super.lastElabora = WPref.lastElaboraNazPlu;
+        super.durataElabora = WPref.elaboraNazPluTime;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 

@@ -1,6 +1,8 @@
 package it.algos.base24.backend.packages.crono.anno;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
@@ -18,6 +20,10 @@ public class AnnoList extends CrudList {
 
     private ComboBox comboSecolo;
 
+    private IndeterminateCheckbox boxCristo;
+
+    private IndeterminateCheckbox boxBisestile;
+
     public AnnoList(final AnnoModulo crudModulo) {
         super(crudModulo);
     }
@@ -29,7 +35,7 @@ public class AnnoList extends CrudList {
 
     @Override
     public void fixAlert() {
-        super.infoScopo = String.format(typeList.getInfoScopo(), "Anno");;
+        super.infoScopo = String.format(typeList.getInfoScopo(), "Anno"); ;
         super.fixAlert();
         alertPlaceHolder.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }
@@ -43,13 +49,31 @@ public class AnnoList extends CrudList {
         super.fixTop();
 
         comboSecolo = new ComboBox<>();
-        comboSecolo.setPlaceholder( "Secoli...");
+        comboSecolo.setPlaceholder("Secoli...");
         comboSecolo.setClearButtonVisible(true);
         comboSecolo.setWidth("12rem");
         comboSecolo.setItems(secoloModulo.findAll());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
         buttonBar.add(comboSecolo);
+
+        boxCristo = new IndeterminateCheckbox();
+        boxCristo.setLabel("DopoCristo");
+        boxCristo.setIndeterminate(false);
+        boxCristo.setValue(true);
+        boxCristo.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout1 = new HorizontalLayout(boxCristo);
+        layout1.setAlignItems(Alignment.CENTER);
+        buttonBar.add(layout1);
+
+        boxBisestile = new IndeterminateCheckbox();
+        boxBisestile.setLabel("Bisestile");
+        boxBisestile.setIndeterminate(true);
+        boxBisestile.addValueChangeListener(event -> sincroFiltri());
+        HorizontalLayout layout2 = new HorizontalLayout(boxBisestile);
+        layout2.setAlignItems(Alignment.CENTER);
+        buttonBar.add(layout2);
     }
+
 
     @Override
     protected void fixFiltri() {
@@ -64,6 +88,21 @@ public class AnnoList extends CrudList {
             else {
                 filtri.remove("secolo");
             }
+        }
+
+
+        if (boxCristo != null && !boxCristo.isIndeterminate()) {
+            filtri.uguale("dopoCristo", boxCristo.getValue());
+        }
+        else {
+            filtri.remove("dopoCristo");
+        }
+
+        if (boxBisestile != null && !boxBisestile.isIndeterminate()) {
+            filtri.uguale("bisestile", boxBisestile.getValue());
+        }
+        else {
+            filtri.remove("bisestile");
         }
     }
 

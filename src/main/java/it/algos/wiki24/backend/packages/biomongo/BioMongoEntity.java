@@ -12,7 +12,7 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "biomongo", typeList = TypeList.vuoto)
+@AEntity(collectionName = "biomongo", keyPropertyName = "pageId", typeList = TypeList.vuoto)
 public class BioMongoEntity extends AbstractEntity {
 
     @AField(type = TypeField.lungo, widthRem = 7)

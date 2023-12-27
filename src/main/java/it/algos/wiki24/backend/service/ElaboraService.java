@@ -6,6 +6,7 @@ import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.boot.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.packages.biomongo.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import org.springframework.stereotype.*;
 
@@ -37,6 +38,9 @@ public class ElaboraService {
     BioServerModulo bioServerModulo;
 
     @Inject
+    BioMongoModulo bioMongoModulo;
+
+    @Inject
     MongoService mongoService;
 
     @Inject
@@ -51,10 +55,13 @@ public class ElaboraService {
      */
     public void elaboraAll() {
         int tot = bioServerModulo.count();
-        List<BioServerEntity> lista = mongoService.findSkip(BioServerEntity.class, 27, 12);
+        BioMongoEntity bioMongoEntity;
+//        List<BioServerEntity> lista = mongoService.findSkip(BioServerEntity.class, 27, 12);
+        List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
         for (BioServerEntity bioServerBean : lista) {
-            elaboraBean(bioServerBean);
+            bioMongoEntity = creaBeanMongo(bioServerBean);
+            bioMongoModulo.insertSave(bioMongoEntity);
         }
 
         message = String.format("Fin qui ci sono");
@@ -66,13 +73,54 @@ public class ElaboraService {
     /**
      * Elabora la singola entity <br>
      */
-    public void elaboraBean(BioServerEntity bioServerBean) {
-        String tmplBio = bioServerBean.getTmplBio();
-        Map<String, String> mappa = estraeMappa(tmplBio);
-        System.out.println(VUOTA);
-        System.out.println(mappa);
+    public BioMongoEntity creaBeanMongo(BioServerEntity bioServerBean) {
+        BioMongoEntity bioMongoEntity = null;
+        Map<String, String> mappa;
+
+        if (bioServerBean == null) {
+            return null;
+        }
+
+        bioMongoEntity = bioMongoModulo.newEntity(bioServerBean);
+        mappa = estraeMappa(bioServerBean);
+
+        return elaboraBean(bioMongoEntity, mappa);
     }
 
+
+    /**
+     * Elabora la singola entity <br>
+     */
+    public Map<String, String> estraeMappa(BioServerEntity bioServerBean) {
+        String tmplBio;
+
+        if (bioServerBean == null) {
+            return null;
+        }
+
+        tmplBio = bioServerBean.getTmplBio();
+        return estraeMappa(tmplBio);
+    }
+
+    /**
+     * Elabora la singola entity <br>
+     */
+    public BioMongoEntity elaboraBean(BioMongoEntity bioMongoEntity, Map<String, String> mappa) {
+        if (bioMongoEntity == null || mappa == null) {
+            return null;
+        }
+
+        bioMongoEntity.nome = setNome(mappa);
+        bioMongoEntity.cognome = setCognome(mappa);
+        bioMongoEntity.luogoNato = setLuogoNato(mappa);
+        bioMongoEntity.giornoNato = setGiornoNato(mappa);
+        bioMongoEntity.annoNato = setAnnoNato(mappa);
+        bioMongoEntity.luogoMorto = setLuogoMorto(mappa);
+        bioMongoEntity.giornoMorto = setGiornoMorto(mappa);
+        bioMongoEntity.annoMorto = setAnnoMorto(mappa);
+
+        return bioMongoEntity;
+    }
 
     /**
      * Estrae una mappa chiave-valore dal testo del template <br>
@@ -464,6 +512,183 @@ public class ElaboraService {
         mappa.put(KEY_MAP_GRAFFE_TESTO_PRECEDENTE, testoElaborato);
 
         return testoElaborato;
+    }
+
+    public String setNome(Map<String, String> mappa) {
+        String nome = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_NOME) != null) {
+            nome = mappa.get(KEY_MAPPA_NOME);
+            nome = fixElimina(nome);
+            nome = fixDopo(nome);
+        }
+        return nome;
+    }
+
+    public String setCognome(Map<String, String> mappa) {
+        String cognome = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_COGNOME) != null) {
+            cognome = mappa.get(KEY_MAPPA_COGNOME);
+            cognome = fixElimina(cognome);
+            cognome = fixDopo(cognome);
+        }
+        return cognome;
+    }
+
+    public String setSesso(Map<String, String> mappa) {
+        String sesso = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_SESSO) != null) {
+            sesso = mappa.get(KEY_MAPPA_SESSO);
+            sesso = fixElimina(sesso);
+            sesso = fixDopo(sesso);
+        }
+        return sesso;
+    }
+
+    public String setLuogoNato(Map<String, String> mappa) {
+        String luogoNato = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_LUOGO_NASCITA) != null) {
+            luogoNato = mappa.get(KEY_MAPPA_LUOGO_NASCITA);
+            luogoNato = fixElimina(luogoNato);
+            luogoNato = fixDopo(luogoNato);
+        }
+        return luogoNato;
+    }
+
+    public String setGiornoNato(Map<String, String> mappa) {
+        String giornoNato = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_GIORNO_NASCITA) != null) {
+            giornoNato = mappa.get(KEY_MAPPA_GIORNO_NASCITA);
+            giornoNato = fixElimina(giornoNato);
+            giornoNato = fixDopo(giornoNato);
+        }
+        return giornoNato;
+    }
+
+    public String setAnnoNato(Map<String, String> mappa) {
+        String annoNato = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_ANNO_NASCITA) != null) {
+            annoNato = mappa.get(KEY_MAPPA_ANNO_NASCITA);
+            annoNato = fixElimina(annoNato);
+            annoNato = fixDopo(annoNato);
+        }
+        return annoNato;
+    }
+
+    public String setLuogoMorto(Map<String, String> mappa) {
+        String luogoMorto = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_LUOGO_MORTE) != null) {
+            luogoMorto = mappa.get(KEY_MAPPA_LUOGO_MORTE);
+            luogoMorto = fixElimina(luogoMorto);
+            luogoMorto = fixDopo(luogoMorto);
+        }
+        return luogoMorto;
+    }
+
+    public String setGiornoMorto(Map<String, String> mappa) {
+        String giornoMorto = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_GIORNO_MORTE) != null) {
+            giornoMorto = mappa.get(KEY_MAPPA_GIORNO_MORTE);
+            giornoMorto = fixElimina(giornoMorto);
+            giornoMorto = fixDopo(giornoMorto);
+        }
+        return giornoMorto;
+    }
+
+    public String setAnnoMorto(Map<String, String> mappa) {
+        String annoMorto = VUOTA;
+
+        if (mappa != null && mappa.get(KEY_MAPPA_ANNO_MORTE) != null) {
+            annoMorto = mappa.get(KEY_MAPPA_ANNO_MORTE);
+            annoMorto = fixElimina(annoMorto);
+            annoMorto = fixDopo(annoMorto);
+        }
+        return annoMorto;
+    }
+
+    /**
+     * Elimina gli eventuali contenuti IN CODA che non devono essere presi in considerazione <br>
+     * Restituisce un valore GREZZO che deve essere ancora elaborato <br>
+     * <p>
+     * Tag chiave di contenuti che invalidano il valore:
+     * UGUALE = "="
+     * INTERROGATIVO = "?"
+     * ECC = "ecc."
+     *
+     * @param valorePropertyTmplBioServer testo originale proveniente dalla property tmplBioServer della entity Bio
+     *
+     * @return valore grezzo ammesso
+     */
+    public String fixElimina(String valorePropertyTmplBioServer) {
+        String valoreGrezzo = valorePropertyTmplBioServer.trim();
+
+        if (textService.isEmpty(valorePropertyTmplBioServer)) {
+            return VUOTA;
+        }
+
+        if (valoreGrezzo.endsWith(ECC)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.endsWith(UGUALE)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
+            return VUOTA;
+        }
+
+        return valoreGrezzo.trim();
+    }
+
+
+    /**
+     * Elimina gli eventuali contenuti IN CODA che non devono essere presi in considerazione <br>
+     * Restituisce un valore GREZZO che deve essere ancora elaborato <br>
+     * <p>
+     * Tag chiave di troncature sempre valide:
+     * REF = "<ref"
+     * REF = ""{{#tag:ref""
+     * NOTE = "<!--"
+     * GRAFFE = "{{"
+     * NO WIKI = "<nowiki>"
+     *
+     * @param valorePropertyTmplBioServer testo originale proveniente dalla property tmplBioServer della entity Bio
+     *
+     * @return valore grezzo troncato dopo alcuni tag chiave (<ref>, {{, ecc.) <br>
+     */
+    public String fixDopo(String valorePropertyTmplBioServer) {
+        String valoreGrezzo = valorePropertyTmplBioServer.trim();
+
+        if (textService.isEmpty(valorePropertyTmplBioServer)) {
+            return VUOTA;
+        }
+
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_OPEN);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_TAG);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NOTE);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, DOPPIE_GRAFFE_INI);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTML);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NO_WIKI);
+        valoreGrezzo = textService.setNoQuadre(valoreGrezzo);
+        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
+            valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_INI_REGEX, VUOTA);
+            valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_END_REGEX, VUOTA);
+
+        }
+        else {
+            valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, PARENTESI_TONDA_INI);
+        }
+
+        return valoreGrezzo.trim();
     }
 
 }// end of Service class

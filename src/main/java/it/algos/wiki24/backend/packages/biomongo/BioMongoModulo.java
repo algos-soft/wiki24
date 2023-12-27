@@ -1,7 +1,10 @@
 package it.algos.wiki24.backend.packages.biomongo;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -34,6 +37,10 @@ public class BioMongoModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastElabora = WPref.lastElaboraBioMongo;
+        super.durataElabora = WPref.elaboraBioMongoTime;
+        super.unitaMisuraElabora = TypeDurata.secondi;
     }
 
 
@@ -44,8 +51,37 @@ public class BioMongoModulo extends WikiModulo {
      */
     @Override
     public BioMongoEntity newEntity() {
-        return newEntity(VUOTA);
+        return newEntity(0, VUOTA);
     }
+
+
+    public BioMongoEntity newEntity(BioServerEntity bioServerBean) {
+        if (bioServerBean != null) {
+            return newEntity(bioServerBean.pageId, bioServerBean.wikiTitle);
+        }
+        else {
+            return newEntity(0, VUOTA);
+        }
+    }
+
+
+    /**
+     * Creazione in memoria di una nuova entity che NON viene salvata <br>
+     *
+     * @param pageId    (obbligatorio)
+     * @param wikiTitle (obbligatorio)
+     *
+     * @return la nuova entity appena creata (con keyID ma non salvata)
+     */
+    public BioMongoEntity newEntity(long pageId, String wikiTitle) {
+        BioMongoEntity newEntityBean = BioMongoEntity.builder()
+                .pageId(pageId)
+                .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
+                .build();
+
+        return (BioMongoEntity) fixKey(newEntityBean);
+    }
+
 
     /**
      * Regola le property visibili in una lista CrudList <br>
@@ -57,22 +93,12 @@ public class BioMongoModulo extends WikiModulo {
         return Arrays.asList("wikiTitle", "nome", "cognome");
     }
 
-    /**
-     * Creazione in memoria di una nuova entity che NON viene salvata <br>
-     *
-     * @param code (obbligatorio)
-     *
-     * @return la nuova entity appena creata (con keyID ma non salvata)
-     */
-    public BioMongoEntity newEntity(String code) {
-        BioMongoEntity newEntityBean = BioMongoEntity.builder()
-                .build();
-
-        return (BioMongoEntity) fixKey(newEntityBean);
-    }
-
     public void elabora() {
+        inizio = System.currentTimeMillis();
+
         elaboraService.elaboraAll();
+
+        super.fixElabora(inizio);
     }
 
 }// end of CrudModulo class

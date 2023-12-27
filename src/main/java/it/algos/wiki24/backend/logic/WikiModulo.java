@@ -33,13 +33,13 @@ public abstract class WikiModulo extends CrudModulo {
 
     public TypeDurata unitaMisuraDownload;
 
-    public WPref lastElaborazione;
+    public WPref lastElabora;
 
-    public WPref durataElaborazione;
+    public WPref durataElabora;
 
-    public String scheduledElaborazione;
+    public String scheduledElabora;
 
-    public TypeDurata unitaMisuraElaborazione;
+    public TypeDurata unitaMisuraElabora;
 
 
     public WPref lastUpload;
@@ -119,7 +119,47 @@ public abstract class WikiModulo extends CrudModulo {
         //            logger.info(new WrapLog().message(message));
         //        }
     }
+
     public void elabora() {
+    }
+
+    public void fixElabora(final long inizio) {
+        long fine = System.currentTimeMillis();
+        Long delta = fine - inizio;
+
+        if (lastElabora != null) {
+            lastElabora.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+            return;
+        }
+
+        if (durataElabora != null) {
+            delta = delta / 1000;
+            delta = switch (unitaMisuraElabora) {
+                case secondi -> delta;
+                case minuti -> delta / 60;
+                default -> delta;
+            };
+
+            durataElabora.setValue(delta.intValue());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataElabora è nullo")));
+            return;
+        }
+
+        //        if (textService.isValid(wikiTitle) && sizeServerWiki > 0 && sizeMongoDB > 0) {
+        //            if (sizeServerWiki == sizeMongoDB) {
+        //                message = String.format("Download di %s righe da [%s] in %d millisecondi", wikiTxt, wikiTitle, delta);
+        //            }
+        //            else {
+        //                message = String.format("Download di %s righe da [%s] convertite in %s elementi su mongoDB", wikiTxt, wikiTitle, mongoTxt);
+        //            }
+        //
+        //            logger.info(new WrapLog().message(message));
+        //        }
     }
 
 }

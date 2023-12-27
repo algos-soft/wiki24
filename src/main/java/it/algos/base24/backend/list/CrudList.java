@@ -220,6 +220,8 @@ public abstract class CrudList extends VerticalLayout {
         //--Qui costruisce sempre il contenitore (placeHolder) anche vuoto <br>
         this.addBottomPlaceHolder();
         this.fixBottom();
+
+        this.sincroFiltri();
     }
 
 
@@ -751,7 +753,7 @@ public abstract class CrudList extends VerticalLayout {
             case 1 -> String.format("%s: c'è un solo elemento", collectionName, totaleTxt);
             default -> {
                 if (elementiFiltrati == elementiTotali) {
-                    yield String.format("%s: in totale ci sono %s elementi", collectionName, totaleTxt);
+                    yield String.format("%s: in totale ci sono %s elementi non filtrati", collectionName, totaleTxt);
                 }
                 else {
                     yield String.format("%s: filtrati %s elementi sul totale di %s", collectionName, filtratiTxtTxt, totaleTxt);

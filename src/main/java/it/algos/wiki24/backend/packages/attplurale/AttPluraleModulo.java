@@ -52,9 +52,9 @@ public class AttPluraleModulo extends WikiModulo {
         super.durataDownload = WPref.downloadAttPluTime;
         super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.lastElaborazione = WPref.lastElaboraAttPlu;
-        super.durataElaborazione = WPref.elaboraAttPluTime;
-        super.unitaMisuraElaborazione = TypeDurata.minuti;
+        super.lastElabora = WPref.lastElaboraAttPlu;
+        super.durataElabora = WPref.elaboraAttPluTime;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 

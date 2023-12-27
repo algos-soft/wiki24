@@ -47,9 +47,9 @@ public class NazSingolareModulo extends WikiModulo {
         super.durataDownload = WPref.downloadNazSinTime;
         super.unitaMisuraDownload = TypeDurata.secondi;
 
-        super.lastElaborazione = WPref.lastElaboraNazSin;
-        super.durataElaborazione = WPref.elaboraNazSinTime;
-        super.unitaMisuraElaborazione = TypeDurata.minuti;
+        super.lastElabora = WPref.lastElaboraNazSin;
+        super.durataElabora = WPref.elaboraNazSinTime;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 

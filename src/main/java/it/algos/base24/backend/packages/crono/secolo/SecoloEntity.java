@@ -27,8 +27,8 @@ public class SecoloEntity extends AbstractEntity {
     @AField(type = TypeField.integer, widthRem = 6, caption = "Ultimo anno del secolo")
     public int fine;
 
-    @AField(type = TypeField.booleano, headerText = "a.C.")
-    public boolean anteCristo;
+    @AField(type = TypeField.booleano, headerText = "d.C.")
+    public boolean dopoCristo;
 
     @Override
     public String toString() {

@@ -5,6 +5,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.basetest.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.packages.biomongo.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.service.*;
@@ -51,6 +52,9 @@ public class ElaboraServiceTest extends WikiTest {
     @Inject
     private BioServerEntity bioServerEntity;
 
+    @Inject
+    private BioMongoEntity bioMongoEntity;
+
     private Map<String, String> mappaBio;
 
     /**
@@ -75,6 +79,8 @@ public class ElaboraServiceTest extends WikiTest {
         super.setUpEach();
 
         this.mappaBio = null;
+        this.bioServerEntity = null;
+        this.bioMongoEntity = null;
     }
 
 
@@ -101,23 +107,45 @@ public class ElaboraServiceTest extends WikiTest {
         System.out.println(String.format("Non si può usare appContext.getBean(%s.class)", clazzName));
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "BIOGRAFIE")
     @Order(101)
-    @DisplayName("101 - Recupera wrapBioTitle")
+    @DisplayName("101 - estraeMappa")
         //--wikiTitle
         //--numero parametri
-    void elaboraBean(String wikiTitleVoce, int numParagrafi) {
-        System.out.println(("101 - Recupera wrapBioTitle"));
+    void estraeMappa(String wikiTitleVoce, int numParametri) {
+        System.out.println(("101 - estraeMappa"));
+        sorgente = wikiTitleVoce;
+        previstoIntero = numParametri;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        if (bioServerEntity != null) {
+            assertNotNull(bioServerEntity);
+            sorgente2 = bioServerEntity.tmplBio;
+            mappaBio = service.estraeMappa(sorgente2);
+            assertNotNull(mappaBio);
+            printMappa(mappaBio);
+            assertEquals(previstoIntero, mappaBio.size());
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "BIOGRAFIE")
+    @Order(102)
+    @DisplayName("102 - creaBeanMongo")
+        //--wikiTitle
+        //--numero parametri
+    void creaBeanMongo(String wikiTitleVoce, int numParagrafi) {
+        System.out.println(("102 - creaBeanMongo"));
         sorgente = wikiTitleVoce;
         previstoIntero = numParagrafi;
 
-        bioServerEntity = (BioServerEntity)bioServerModulo.findOneByProperty(FIELD_NAME_WIKI_TITLE,sorgente);
-        assertNotNull(bioServerEntity);
-        sorgente2 = bioServerEntity.tmplBio;
-        mappaBio = service.estraeMappa(sorgente2);
-        assertNotNull(mappaBio);
-        printMappaTab(mappaBio);
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        bioMongoEntity = service.creaBeanMongo(bioServerEntity);
+        if (bioMongoEntity != null) {
+            printBioMongo(bioMongoEntity);
+        }
     }
 
 

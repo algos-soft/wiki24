@@ -60,6 +60,13 @@ public enum WPref implements IPref {
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer."),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in secondi."),
 
+    //***************
+    lastElaboraBioMongo("lastElaboraBioMongo", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di BioMongo."),
+    elaboraBioMongoTime("elaboraBioMongoTime", TypePref.integer, 0, "Durata elaborazione di BioMongo in minuti."),
+
+    //***************
+    lastElaboraParSesso("lastElaboraParSesso", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParSesso."),
+    elaboraParSessoTime("elaboraParSessoTime", TypePref.integer, 0, "Durata elaborazione di ParSesso in secondi."),
 
     ;
 

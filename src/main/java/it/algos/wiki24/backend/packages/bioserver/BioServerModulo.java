@@ -106,8 +106,13 @@ public class BioServerModulo extends WikiModulo {
     public List<Long> findOnlyPageId() {
         return mongoService.projectionLong(BioServerEntity.class, FIELD_NAME_PAGE_ID);
     }
+
     public BioServerEntity findByKey(final Object keyPropertyValue) {
-        return (BioServerEntity)super.findByKey( keyPropertyValue);
+        return (BioServerEntity) super.findByKey(keyPropertyValue);
+    }
+
+    public BioServerEntity findByWikiTitle(final String wikiTitle) {
+        return (BioServerEntity) super.findOneByProperty(FIELD_NAME_WIKI_TITLE, wikiTitle);
     }
 
 

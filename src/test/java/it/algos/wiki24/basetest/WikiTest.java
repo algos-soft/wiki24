@@ -9,6 +9,7 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.packages.biomongo.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -532,8 +533,8 @@ public abstract class WikiTest extends AlgosTest {
     protected static Stream<Arguments> BIOGRAFIE() {
         return Stream.of(
                 Arguments.of(VUOTA, 0),
-                Arguments.of("Jacques de Molay", 15),
-                Arguments.of("Roberto il Forte", 17),
+                Arguments.of("Jacques de Molay", 17),
+                Arguments.of("Roberto il Forte", 16),
                 Arguments.of("Agnese di Borgogna", 17),
                 Arguments.of("Matteo Renzi", 14),
                 Arguments.of("Hunter King", 10),
@@ -545,9 +546,9 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("Albia Dominica", 15),
                 Arguments.of("Angelo Inganni", 12),
                 Arguments.of("Andrey Guryev", 17),
-                Arguments.of("Ingen Ryūki", 16),
-                Arguments.of("Giorgio Merula", 17),
-                Arguments.of("Rob Paulsen", 13),
+                Arguments.of("Ingen Ryūki", 17),
+                Arguments.of("Giorgio Merula", 16),
+                Arguments.of("Rob Paulsen", 16),
                 Arguments.of("Aleksandr Isaevič Solženicyn", 22),
                 Arguments.of("Aloisio Gonzaga", 19),
                 Arguments.of("Alex Bagnoli", 18),
@@ -558,8 +559,8 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("Mario Tosi (fotografo)", 13),
                 Arguments.of("Giuseppe Trombone de Mier", 12),
                 Arguments.of("Herlindis di Maaseik", 17),
-                Arguments.of("Rinaldo II di Bar", 14),
-                Arguments.of("Harald II di Norvegia", 17)
+                Arguments.of("Rinaldo II di Bar", 15),
+                Arguments.of("Harald II di Norvegia", 18)
         );
     }
 
@@ -1518,12 +1519,29 @@ public abstract class WikiTest extends AlgosTest {
     protected void printBioServer(BioServerEntity bio) {
         if (bio != null) {
             System.out.println(VUOTA);
-            //            System.out.println(String.format("BioEntity valido: %s", bio.isValido()));
             System.out.println(String.format("BioEntity pageId: %s", bio.getPageId()));
-            System.out.println(String.format("BioEntity wikiTitle: %s", bio.getPageId()));
-            System.out.println(String.format("BioEntity lastServer: %s", bio.getPageId()));
+            System.out.println(String.format("BioEntity wikiTitle: %s", bio.getWikiTitle()));
+            System.out.println(String.format("BioEntity lastServer: %s", bio.getLastServer()));
             System.out.println(String.format("BioEntity tmplBio:"));
             System.out.println(String.format("%s", wrapBio.getTemplBio()));
+        }
+    }
+
+
+    protected void printBioMongo(BioMongoEntity bio) {
+        if (bio != null) {
+            System.out.println(VUOTA);
+            System.out.println(String.format("BioMongo pageId: %s", bio.getPageId()));
+            System.out.println(String.format("BioMongo wikiTitle: %s", bio.getWikiTitle()));
+            System.out.println(String.format("BioMongo nome: %s", bio.getNome()));
+            System.out.println(String.format("BioMongo cognome: %s", bio.getCognome()));
+//            System.out.println(String.format("BioMongo sesso: %s", bio.get()));
+            System.out.println(String.format("BioMongo luogo nato: %s", bio.getLuogoNato()));
+            System.out.println(String.format("BioMongo giorno nato: %s", bio.getGiornoNato()));
+            System.out.println(String.format("BioMongo anno nato: %s", bio.getAnnoNato()));
+            System.out.println(String.format("BioMongo luogo morto: %s", bio.getLuogoMorto()));
+            System.out.println(String.format("BioMongo giorno morto: %s", bio.getGiornoMorto()));
+            System.out.println(String.format("BioMongo anno morto: %s", bio.getAnnoMorto()));
         }
     }
 
@@ -1623,6 +1641,17 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
+    protected void printMappa(Map<String, String> mappa) {
+        System.out.println(VUOTA);
+        System.out.println(String.format("Mappa di %s elementi", mappa.size()));
+        System.out.println(VUOTA);
+
+        if (mappa != null && mappa.size() > 0) {
+            for (String key : mappa.keySet()) {
+                System.out.println(String.format("%s%s%s", key, UGUALE_SPAZIATO, mappa.get(key)));
+            }
+        }
+    }
     protected void printMappaTab(Map<String, String> mappa) {
         if (mappa != null && mappa.size() > 0) {
             for (String key : mappa.keySet()) {
@@ -1641,6 +1670,8 @@ public abstract class WikiTest extends AlgosTest {
             }
         }
     }
+
+
 
     protected void printString(List<String> listaString) {
         printString(listaString, listaString.size());

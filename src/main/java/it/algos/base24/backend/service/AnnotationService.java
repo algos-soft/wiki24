@@ -868,7 +868,7 @@ public class AnnotationService {
             logger.warn(message); return false;
         }
 
-        // Controlla che la classe in ingresso implementi AlgosModel
+        // Controlla che la classe in ingresso implementi AbstractEntity
         if (AbstractEntity.class.isAssignableFrom(genericClazz)) {
             entityClazz = genericClazz;
         }
