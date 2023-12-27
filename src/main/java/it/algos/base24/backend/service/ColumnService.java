@@ -184,9 +184,9 @@ public class ColumnService {
                 colonna.setHeader(headerIcon);
             }
             else {
-//                if (textService.isEmpty(colonna.getHeaderText())) {
-                    colonna.setHeader(textService.primaMaiuscola(headerText));
-//                }
+                //                if (textService.isEmpty(colonna.getHeaderText())) {
+                colonna.setHeader(textService.primaMaiuscola(headerText));
+                //                }
             }
             if (type == TypeField.ordine) {
                 colonna.setHeader("#");

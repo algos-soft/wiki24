@@ -542,8 +542,7 @@ public abstract class CrudList extends VerticalLayout {
         currentCrudModulo.creaForm(entityBeanDaRegistrare, CrudOperation.shows)
                 .annullaHandler(this::annullaHandler)
                 .deleteHandler(this::deleteHandler)
-                .saveHandler(this::saveHandler)
-                .deleteHandler(this::deleteHandler);
+                .saveHandler(this::saveHandler);
     }
 
 

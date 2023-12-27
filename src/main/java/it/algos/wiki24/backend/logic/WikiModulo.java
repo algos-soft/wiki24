@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.logic;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
@@ -123,7 +124,7 @@ public abstract class WikiModulo extends CrudModulo {
     public void elabora() {
     }
 
-    public void transfer() {
+    public void transfer(AbstractEntity crudEntityBean) {
     }
 
     public void fixElabora(final long inizio) {

@@ -335,7 +335,12 @@ public abstract class WikiList extends CrudList {
         return true;
     }
     public boolean transfer() {
-        currentCrudModulo.transfer();
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.transfer(crudEntityBean);
+        }
+
         return true;
     }
 

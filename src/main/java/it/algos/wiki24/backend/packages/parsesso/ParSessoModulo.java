@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.parsesso;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -25,6 +26,7 @@ public class ParSessoModulo extends WikiModulo {
 
     @Inject
     ElaboraService elaboraService;
+
     @Inject
     BioServerModulo bioServerModulo;
 
@@ -114,7 +116,7 @@ public class ParSessoModulo extends WikiModulo {
         String tag2 = "F";
 
         if (beanGrezzo.grezzo == null) {
-            message = String.format("Parametro sesso di [%s] è nullo","");
+            message = String.format("Parametro sesso di [%s] è nullo", "");
             logger.warn(new WrapLog().message(message));
             beanElaborato.pieno = false;
             beanElaborato.valido = false;
@@ -123,7 +125,7 @@ public class ParSessoModulo extends WikiModulo {
 
         grezzo = beanGrezzo.grezzo.trim();
         if (!grezzo.equals(beanGrezzo.grezzo)) {
-            message = String.format("Parametro sesso di [%s] contiene spazi vuoti non previsti",beanGrezzo.wikiTitle);
+            message = String.format("Parametro sesso di [%s] contiene spazi vuoti non previsti", beanGrezzo.wikiTitle);
             logger.warn(new WrapLog().message(message));
             beanElaborato.pieno = false;
             beanElaborato.valido = false;
@@ -139,12 +141,26 @@ public class ParSessoModulo extends WikiModulo {
 
         return beanElaborato;
     }
-    public void transfer() {
-        bioServerModulo.creaForm(null, CrudOperation.shows);
-//                .annullaHandler(this::annullaHandler)
-//                .deleteHandler(this::deleteHandler)
-//                .saveHandler(this::saveHandler)
-//                .deleteHandler(this::deleteHandler);
+
+    public void transfer(AbstractEntity crudEntityBean) {
+        long pageId = 0;
+        BioServerEntity bioServerEntity = null;
+
+        if (crudEntityBean != null && crudEntityBean instanceof ParSessoEntity parSessoEntity) {
+            pageId = parSessoEntity.pageId;
+        }
+        if (pageId > 0) {
+            bioServerEntity = bioServerModulo.findByKey(pageId);
+        }
+
+        if (bioServerEntity != null) {
+            bioServerModulo.creaForm(bioServerEntity, CrudOperation.shows);
+        }
+
+        //                .annullaHandler(this::annullaHandler)
+        //                .deleteHandler(this::deleteHandler)
+        //                .saveHandler(this::saveHandler)
+        //                .deleteHandler(this::deleteHandler);
     }
 
 }// end of CrudModulo class
