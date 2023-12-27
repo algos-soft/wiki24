@@ -37,6 +37,7 @@ public class WikiListButtonBar extends ListButtonBar {
 
     private boolean usaBottoneElabora;
     private boolean usaBottoneTransfer;
+    private boolean usaBottoneResetEntity;
 
     private boolean usaBottoneUpload;
 
@@ -56,6 +57,7 @@ public class WikiListButtonBar extends ListButtonBar {
 
     protected Button buttonElabora = new Button();
     protected Button buttonTransfer = new Button();
+    protected Button buttonResetEntity = new Button();
 
     protected Button buttonUpload = new Button();
 
@@ -105,6 +107,13 @@ public class WikiListButtonBar extends ListButtonBar {
      */
     public WikiListButtonBar transfer() {
         this.usaBottoneTransfer = true;
+        return this;
+    }
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar restEntity() {
+        this.usaBottoneResetEntity = true;
         return this;
     }
 
@@ -163,6 +172,10 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneTransfer) {
             this.addTransfer();
         }
+        if (usaBottoneResetEntity) {
+            this.addResetEntity();
+        }
+
         if (usaBottoneUpload) {
             //            this.addUpload();
         }
@@ -223,6 +236,14 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonTransfer.addClickListener(event -> currentCrudList.transfer());
         this.add(buttonTransfer);
     }
+    private void addResetEntity() {
+        buttonResetEntity.getElement().setAttribute("theme", "secondary");
+        buttonResetEntity.getElement().setProperty("title", "Reset: elabora la entity");
+        buttonResetEntity.setIcon(new Icon(VaadinIcon.REFRESH));
+        buttonResetEntity.setEnabled(false);
+        buttonResetEntity.addClickListener(event -> currentCrudList.resetEntity());
+        this.add(buttonResetEntity);
+    }
 
 
     private void addWikiView() {
@@ -278,6 +299,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.setEnabled(!singoloSelezionato);
 
         buttonTransfer.setEnabled(singoloSelezionato);
+        buttonResetEntity.setEnabled(singoloSelezionato);
         buttonWikiView.setEnabled(singoloSelezionato);
         buttonWikiEdit.setEnabled(singoloSelezionato);
         buttonWikiCrono.setEnabled(singoloSelezionato);

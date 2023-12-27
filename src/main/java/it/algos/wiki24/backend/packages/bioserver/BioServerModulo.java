@@ -1,12 +1,14 @@
 package it.algos.wiki24.backend.packages.bioserver;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.parsesso.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
@@ -35,6 +37,7 @@ public class BioServerModulo extends WikiModulo {
 
     @Inject
     DownloadService downloadService;
+
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -137,5 +140,13 @@ public class BioServerModulo extends WikiModulo {
 
         super.fixDownload(inizio);
     }
+
+//    @Override
+//    public AbstractEntity save(AbstractEntity modifiedEntityBean) {
+//        AbstractEntity entityBean = super.save(modifiedEntityBean);
+//
+//
+//    return entityBean;
+//    }
 
 }// end of CrudModulo class

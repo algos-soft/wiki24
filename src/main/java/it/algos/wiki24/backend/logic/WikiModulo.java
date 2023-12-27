@@ -127,6 +127,10 @@ public abstract class WikiModulo extends CrudModulo {
     public void transfer(AbstractEntity crudEntityBean) {
     }
 
+    public void resetEntity(AbstractEntity crudEntityBean) {
+    }
+
+
     public void fixElabora(final long inizio) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;

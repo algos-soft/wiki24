@@ -8,6 +8,7 @@ import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.ui.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
 import it.algos.wiki24.backend.service.*;
@@ -41,9 +42,14 @@ public class ParSessoList extends WikiList {
 
         this.usaBottoneDownload = false;
         this.usaBottoneTransfer = true;
+        this.usaBottoneResetEntity = true;
         this.usaBottoneWikiView = true;
         this.usaBottoneWikiEdit = true;
         this.usaBottoneWikiCrono = true;
+
+        this.usaBottoneSearch = false;
+        this.usaSearchPageId = true;
+        this.usaSearchWikiTitle = true;
     }
 
 
@@ -57,7 +63,7 @@ public class ParSessoList extends WikiList {
         boxValido = new IndeterminateCheckbox();
         boxValido.setLabel("Valido");
         boxValido.setIndeterminate(false);
-        boxValido.setValue(true);
+        boxValido.setValue(false);
         boxValido.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout1 = new HorizontalLayout(boxValido);
         layout1.setAlignItems(Alignment.CENTER);
@@ -66,7 +72,7 @@ public class ParSessoList extends WikiList {
         boxPieno = new IndeterminateCheckbox();
         boxPieno.setLabel("Pieno");
         boxPieno.setIndeterminate(false);
-        boxPieno.setValue(true);
+        boxPieno.setValue(false);
         boxPieno.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout2 = new HorizontalLayout(boxPieno);
         layout2.setAlignItems(Alignment.CENTER);
@@ -89,6 +95,11 @@ public class ParSessoList extends WikiList {
             filtri.uguale("pieno", boxPieno.getValue());
         }
         else {
+            filtri.remove("pieno");
+        }
+
+        if (filtri.mappaFiltri.containsKey(FIELD_NAME_PAGE_ID) || filtri.mappaFiltri.containsKey(FIELD_NAME_WIKI_TITLE)) {
+            filtri.remove("valido");
             filtri.remove("pieno");
         }
     }
@@ -116,6 +127,7 @@ public class ParSessoList extends WikiList {
             wikiApiService.editWikiPage(wikiTitle);
         }
     }
+
     public void wikiCrono() {
         AbstractEntity crudEntityBean = getSingleEntity();
         long pageId;

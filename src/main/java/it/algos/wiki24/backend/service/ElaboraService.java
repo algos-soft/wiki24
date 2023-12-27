@@ -56,7 +56,6 @@ public class ElaboraService {
     public void elaboraAll() {
         int tot = bioServerModulo.count();
         BioMongoEntity bioMongoEntity;
-//        List<BioServerEntity> lista = mongoService.findSkip(BioServerEntity.class, 27, 12);
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
         for (BioServerEntity bioServerBean : lista) {

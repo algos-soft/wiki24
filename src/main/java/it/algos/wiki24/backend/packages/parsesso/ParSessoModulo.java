@@ -88,25 +88,30 @@ public class ParSessoModulo extends WikiModulo {
 
     public void elabora() {
         inizio = System.currentTimeMillis();
+        List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
+
+        for (BioServerEntity bioServerBean : lista) {
+            elabora(bioServerBean);
+        }
+
+        super.fixElabora(inizio);
+    }
+
+    public void elabora(BioServerEntity bioServerBean) {
         ParSessoEntity parametroSessoEntity;
         Map<String, String> mappa;
         long pageId;
         String wikiTitle;
         String grezzo;
 
-        List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
+        mappa = elaboraService.estraeMappa(bioServerBean);
+        pageId = bioServerBean.getPageId();
+        wikiTitle = bioServerBean.getWikiTitle();
+        grezzo = mappa.get(KEY_MAPPA_SESSO);
+        parametroSessoEntity = newEntity(pageId, wikiTitle, grezzo);
+        parametroSessoEntity = elabora(parametroSessoEntity);
 
-        for (BioServerEntity bioServerBean : lista) {
-            mappa = elaboraService.estraeMappa(bioServerBean);
-            pageId = bioServerBean.getPageId();
-            wikiTitle = bioServerBean.getWikiTitle();
-            grezzo = mappa.get(KEY_MAPPA_SESSO);
-            parametroSessoEntity = newEntity(pageId, wikiTitle, grezzo);
-            parametroSessoEntity = elabora(parametroSessoEntity);
-            insertSave(parametroSessoEntity);
-        }
-
-        super.fixElabora(inizio);
+        insertSave(parametroSessoEntity);
     }
 
     public ParSessoEntity elabora(ParSessoEntity beanGrezzo) {
@@ -142,9 +147,26 @@ public class ParSessoModulo extends WikiModulo {
         return beanElaborato;
     }
 
+    @Override
     public void transfer(AbstractEntity crudEntityBean) {
-        long pageId = 0;
+        BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
+
+        if (bioServerEntity != null) {
+            bioServerModulo.creaForm(bioServerEntity, CrudOperation.shows);
+        }
+    }
+
+    @Override
+    public void resetEntity(AbstractEntity crudEntityBean) {
+        BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
+
+        if (bioServerEntity != null) {
+           elabora(bioServerEntity);
+        }
+    }
+    public BioServerEntity getBioServer(AbstractEntity crudEntityBean) {
         BioServerEntity bioServerEntity = null;
+        long pageId = 0;
 
         if (crudEntityBean != null && crudEntityBean instanceof ParSessoEntity parSessoEntity) {
             pageId = parSessoEntity.pageId;
@@ -153,14 +175,7 @@ public class ParSessoModulo extends WikiModulo {
             bioServerEntity = bioServerModulo.findByKey(pageId);
         }
 
-        if (bioServerEntity != null) {
-            bioServerModulo.creaForm(bioServerEntity, CrudOperation.shows);
-        }
-
-        //                .annullaHandler(this::annullaHandler)
-        //                .deleteHandler(this::deleteHandler)
-        //                .saveHandler(this::saveHandler)
-        //                .deleteHandler(this::deleteHandler);
+        return bioServerEntity;
     }
 
 }// end of CrudModulo class

@@ -46,7 +46,7 @@ public class FiltroSort {
     public ReflectionService reflectionService;
 
 
-    LinkedHashMap<String, Filtro> mappaFiltri;
+   public  LinkedHashMap<String, Filtro> mappaFiltri;
 
     Sort.Order sort = null;
 

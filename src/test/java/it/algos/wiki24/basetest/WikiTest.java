@@ -502,6 +502,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of(null, false, false),
                 Arguments.of(VUOTA, false, false),
                 Arguments.of("Roberto il Forte", true, true),
+                Arguments.of("Filareto Bracamio", true, true),
                 Arguments.of("Claude de Chastellux", true, true),
                 Arguments.of("John Murphy (politico statunitense)", true, true),
                 Arguments.of("Meena Keshwar Kamal", true, true),

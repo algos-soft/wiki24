@@ -70,6 +70,10 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneElabora;
 
+    public boolean usaBottoneTransfer;
+
+    public boolean usaBottoneResetEntity;
+
     public boolean usaBottoneUpload;
 
     public boolean usaSearchPageId;
@@ -82,7 +86,6 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneWikiCrono;
 
-    public boolean usaBottoneTransfer;
 
     public WikiModulo currentCrudModulo;
 
@@ -110,6 +113,7 @@ public abstract class WikiList extends CrudList {
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
         this.usaBottoneTransfer = false;
+        this.usaBottoneResetEntity = false;
 
         this.usaSearchPageId = false;
         this.usaSearchWikiTitle = false;
@@ -286,6 +290,9 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneTransfer) {
             buttonBar.transfer();
         }
+        if (usaBottoneResetEntity) {
+            buttonBar.restEntity();
+        }
         if (usaBottoneWikiView) {
             buttonBar.wikiView();
         }
@@ -334,6 +341,7 @@ public abstract class WikiList extends CrudList {
         fixInfo();
         return true;
     }
+
     public boolean transfer() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
@@ -343,6 +351,18 @@ public abstract class WikiList extends CrudList {
 
         return true;
     }
+
+    public boolean resetEntity() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.resetEntity(crudEntityBean);
+        }
+
+        refreshData();
+        return true;
+    }
+
 
     @Override
     protected void fixFiltri() {

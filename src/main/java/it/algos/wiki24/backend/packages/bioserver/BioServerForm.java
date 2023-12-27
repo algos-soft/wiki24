@@ -22,6 +22,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.inject.*;
+import java.util.function.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
@@ -35,11 +36,15 @@ public class BioServerForm extends WikiForm {
 
     @Inject
     QueryService queryService;
+
     @Inject
     BioServerModulo bioServerModulo;
 
     @Inject
     WikiApiService wikiApiService;
+
+    @Inject
+    ParSessoModulo parSessoModulo;
 
     public BioServerForm(BioServerModulo crudModulo, BioServerEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
@@ -121,12 +126,16 @@ public class BioServerForm extends WikiForm {
 
     public void download() {
         WrapBio wrap;
-        String message;
-        String wikiTitle = VUOTA;
-        if (mappaFields.containsKey(FIELD_NAME_WIKI_TITLE) && mappaFields.get(FIELD_NAME_WIKI_TITLE) != null) {
-            wikiTitle = (String) mappaFields.get(FIELD_NAME_WIKI_TITLE).getValue();
-            if (textService.isEmpty(wikiTitle)) {
-                Notifica.message("Manca il wikiTitle").error().open();
+        String txtValue;
+        long pageId = 0;
+
+        if (mappaFields.containsKey(FIELD_NAME_PAGE_ID) && textService.isValid(mappaFields.get(FIELD_NAME_PAGE_ID).getValue())) {
+            txtValue = (String) mappaFields.get(FIELD_NAME_PAGE_ID).getValue();
+            txtValue = txtValue.replaceAll("\\.", VUOTA);
+            pageId = Long.valueOf(txtValue);
+
+            if (pageId == 0) {
+                Notifica.message("Manca il pageId").error().open();
                 return;
             }
         }
@@ -134,13 +143,7 @@ public class BioServerForm extends WikiForm {
             return;
         }
 
-        if (!queryService.isEsiste(wikiTitle)) {
-            message = String.format("Manca la pagina %s", wikiTitle);
-            Notifica.message(message).error().open();
-            return;
-        }
-
-        wrap = queryService.getBio(wikiTitle);
+        wrap = queryService.getBio(pageId);
         if (wrap != null && wrap.isValida()) {
             currentEntityModel = wrap.getBeanBioServer();
         }
@@ -149,7 +152,7 @@ public class BioServerForm extends WikiForm {
     }
 
     public void wikiView() {
-        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        BioServerEntity bioServerEntity = (BioServerEntity) currentEntityModel;
         long pageId;
         String wikiTitle;
 
@@ -161,7 +164,7 @@ public class BioServerForm extends WikiForm {
     }
 
     public void wikiEdit() {
-        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        BioServerEntity bioServerEntity = (BioServerEntity) currentEntityModel;
         long pageId;
         String wikiTitle;
 
@@ -171,8 +174,9 @@ public class BioServerForm extends WikiForm {
             wikiApiService.editWikiPage(wikiTitle);
         }
     }
+
     public void wikiCrono() {
-        BioServerEntity bioServerEntity = (BioServerEntity)currentEntityModel;
+        BioServerEntity bioServerEntity = (BioServerEntity) currentEntityModel;
         long pageId;
         String wikiTitle;
 
@@ -181,6 +185,11 @@ public class BioServerForm extends WikiForm {
             wikiTitle = bioServerModulo.findByKey(pageId).wikiTitle;
             wikiApiService.cronoWikiPage(wikiTitle);
         }
+    }
+
+    public void saveHandler() {
+        super.saveHandler();
+        parSessoModulo.elabora((BioServerEntity) currentEntityModel);
     }
 
 }// end of CrudForm class
