@@ -1,10 +1,12 @@
 package it.algos.wiki24.backend.packages.biomongo;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.parsesso.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -23,6 +25,8 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ElaboraService elaboraService;
+    @Inject
+    BioServerModulo bioServerModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -90,7 +94,7 @@ public class BioMongoModulo extends WikiModulo {
      */
     @Override
     public List<String> getListPropertyNames() {
-        return Arrays.asList("wikiTitle", "nome", "cognome");
+        return Arrays.asList("wikiTitle", "nome", "cognome", "sesso");
     }
 
     public void elabora() {
@@ -99,6 +103,28 @@ public class BioMongoModulo extends WikiModulo {
         elaboraService.elaboraAll();
 
         super.fixElabora(inizio);
+    }
+    @Override
+    public void transfer(AbstractEntity crudEntityBean) {
+        BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
+
+        if (bioServerEntity != null) {
+            bioServerModulo.creaForm(bioServerEntity, CrudOperation.update);
+        }
+    }
+
+    public BioServerEntity getBioServer(AbstractEntity crudEntityBean) {
+        BioServerEntity bioServerEntity = null;
+        long pageId = 0;
+
+        if (crudEntityBean != null && crudEntityBean instanceof BioMongoEntity bioMongoEntity) {
+            pageId = bioMongoEntity.pageId;
+        }
+        if (pageId > 0) {
+            bioServerEntity = bioServerModulo.findByKey(pageId);
+        }
+
+        return bioServerEntity;
     }
 
 }// end of CrudModulo class

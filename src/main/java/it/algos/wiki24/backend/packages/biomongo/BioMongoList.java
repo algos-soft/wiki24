@@ -26,7 +26,11 @@ public class BioMongoList extends WikiList {
         this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
 
+        this.usaBottoneSearch = false;
+        this.usaSearchPageId = true;
+        this.usaSearchWikiTitle = true;
         this.usaBottoneDownload = false;
+        this.usaBottoneTransfer = true;
     }
 
     @Override

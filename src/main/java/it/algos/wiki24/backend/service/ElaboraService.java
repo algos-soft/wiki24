@@ -59,14 +59,8 @@ public class ElaboraService {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
         for (BioServerEntity bioServerBean : lista) {
-            bioMongoEntity = creaBeanMongo(bioServerBean);
-            bioMongoModulo.insertSave(bioMongoEntity);
+            creaBeanMongo(bioServerBean);
         }
-
-        message = String.format("Fin qui ci sono");
-        logger.info(new WrapLog().message(message));
-
-
     }
 
     /**
@@ -83,7 +77,8 @@ public class ElaboraService {
         bioMongoEntity = bioMongoModulo.newEntity(bioServerBean);
         mappa = estraeMappa(bioServerBean);
 
-        return elaboraBean(bioMongoEntity, mappa);
+        bioMongoEntity = elaboraBean(bioMongoEntity, mappa);
+        return (BioMongoEntity) bioMongoModulo.insertSave(bioMongoEntity);
     }
 
 
@@ -111,6 +106,7 @@ public class ElaboraService {
 
         bioMongoEntity.nome = setNome(mappa);
         bioMongoEntity.cognome = setCognome(mappa);
+        bioMongoEntity.sesso = setSesso(mappa);
         bioMongoEntity.luogoNato = setLuogoNato(mappa);
         bioMongoEntity.giornoNato = setGiornoNato(mappa);
         bioMongoEntity.annoNato = setAnnoNato(mappa);

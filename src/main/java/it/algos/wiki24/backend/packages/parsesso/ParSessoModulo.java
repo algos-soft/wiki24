@@ -152,8 +152,11 @@ public class ParSessoModulo extends WikiModulo {
         BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
 
         if (bioServerEntity != null) {
-            bioServerModulo.creaForm(bioServerEntity, CrudOperation.shows);
+            bioServerModulo.creaForm(bioServerEntity, CrudOperation.update);
         }
+
+        bioServerEntity = getBioServer(crudEntityBean);
+        elabora(bioServerEntity);
     }
 
     @Override

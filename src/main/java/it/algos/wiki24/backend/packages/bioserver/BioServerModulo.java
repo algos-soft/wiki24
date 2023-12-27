@@ -141,12 +141,4 @@ public class BioServerModulo extends WikiModulo {
         super.fixDownload(inizio);
     }
 
-//    @Override
-//    public AbstractEntity save(AbstractEntity modifiedEntityBean) {
-//        AbstractEntity entityBean = super.save(modifiedEntityBean);
-//
-//
-//    return entityBean;
-//    }
-
 }// end of CrudModulo class

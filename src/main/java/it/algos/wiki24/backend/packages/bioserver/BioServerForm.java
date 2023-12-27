@@ -46,6 +46,8 @@ public class BioServerForm extends WikiForm {
     @Inject
     ParSessoModulo parSessoModulo;
 
+    @Inject
+    ElaboraService elaboraService;
     public BioServerForm(BioServerModulo crudModulo, BioServerEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
@@ -189,7 +191,7 @@ public class BioServerForm extends WikiForm {
 
     public void saveHandler() {
         super.saveHandler();
-        parSessoModulo.elabora((BioServerEntity) currentEntityModel);
+        elaboraService.creaBeanMongo((BioServerEntity)currentEntityModel);
     }
 
 }// end of CrudForm class
