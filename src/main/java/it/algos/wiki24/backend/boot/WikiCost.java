@@ -348,6 +348,7 @@ public class WikiCost {
     public static final String FIELD_NAME_GREZZO = "grezzo";
 
     public static final String FIELD_NAME_ELABORATO = "elaborato";
+
     public static final String FIELD_NAME_GREZZO_VUOTO = "grezzoVuoto";
 
     public static final String FIELD_NAME_ELABORATO_VUOTO = "elaboratoVuoto";
@@ -456,5 +457,10 @@ public class WikiCost {
     public static final String ATTIVITA_PROPERTY_3 = "attivita3";
 
     public static final String DEFAULT_SORT = "{{DEFAULTSORT:";
+
+    public static final String DUBBIO_O = SPAZIO + "o" + SPAZIO;
+
+    public static final String DUBBIO_OPPURE = SPAZIO + "oppure" + SPAZIO;
+    public static final String DUBBIO_TRATTINO = SPAZIO + TRATTINO + SPAZIO;
 
 }

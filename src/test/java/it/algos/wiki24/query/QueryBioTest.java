@@ -1,9 +1,8 @@
 package it.algos.wiki24.query;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
@@ -12,8 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  * Project wiki24

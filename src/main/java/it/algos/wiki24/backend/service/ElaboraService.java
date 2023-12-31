@@ -4,10 +4,9 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
-import it.algos.wiki24.backend.boot.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
-import it.algos.wiki24.backend.packages.biomongo.*;
-import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -554,11 +553,14 @@ public class ElaboraService {
     }
 
     public String fixGiornoNato(String grezzo) {
-        String elaborato = grezzo;
+        String elaborato = grezzo != null ? grezzo.trim() : VUOTA;
+        String regex = "^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}";
+        String regex2 = "^(0[1-9]|[12][0-9]|3[01])\\/(0[1-9]|1[1,2])\\/(19|20)\\d{2}";
 
         if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
             elaborato = fixDopo(elaborato);
+            elaborato = fixElimina(elaborato);
+            elaborato = textService.setNoDoppieQuadre(elaborato);
         }
 
         return elaborato;
@@ -614,7 +616,7 @@ public class ElaboraService {
         if (textService.isValid(elaboratoForseDoppio)) {
             if (elaboratoForseDoppio.contains(SPAZIO)) {
                 elaboratoSingolo = elaboratoForseDoppio.substring(0, elaboratoForseDoppio.indexOf(SPAZIO));
-//                elaboratoSingolo = textService.levaCodaDaPrimo(elaboratoForseDoppio, SPAZIO);
+                //                elaboratoSingolo = textService.levaCodaDaPrimo(elaboratoForseDoppio, SPAZIO);
             }
         }
 
@@ -629,6 +631,7 @@ public class ElaboraService {
      * UGUALE = "="
      * INTERROGATIVO = "?"
      * ECC = "ecc."
+     * dubbio -> " o ", -> " oppure "
      *
      * @param valorePropertyTmplBioServer testo originale proveniente dalla property tmplBioServer della entity Bio
      *
@@ -651,6 +654,15 @@ public class ElaboraService {
             return VUOTA;
         }
         if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.contains(DUBBIO_O)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
+            return VUOTA;
+        }
+        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
             return VUOTA;
         }
 
@@ -680,13 +692,16 @@ public class ElaboraService {
             return VUOTA;
         }
 
+        valoreGrezzo = textService.setNoDoppieQuadre(valoreGrezzo);
+        valoreGrezzo = textService.setNoQuadre(valoreGrezzo);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_OPEN);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_TAG);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NOTE);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, DOPPIE_GRAFFE_INI);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTTP);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTML);
+        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTML_QUADRE);
         valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NO_WIKI);
-        valoreGrezzo = textService.setNoQuadre(valoreGrezzo);
         if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
             valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_INI_REGEX, VUOTA);
             valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_END_REGEX, VUOTA);

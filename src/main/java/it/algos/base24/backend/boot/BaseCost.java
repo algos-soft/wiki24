@@ -390,7 +390,11 @@ public class BaseCost {
 
     public static final String REF = "<ref>";
 
-    public static final String HTML = "[html";
+    public static final String HTTP = "http";
+
+    public static final String HTML = "html";
+
+    public static final String HTML_QUADRE = "[html";
 
     public static final String REF_OPEN = "<ref";
 
@@ -401,11 +405,15 @@ public class BaseCost {
     public static final String CIRCA = "circa";
 
     public static final String REF_TAG = SPAZIO + "{{#tag:ref";
+
     public static final String NOTE = "<!--";
+
     public static final String NO_WIKI = "<nowiki>";
+
     public static final String PARENTESI_TONDA_INI_REGEX = "\\(";
 
     public static final String PARENTESI_TONDA_END_REGEX = "\\)";
+
     public static final String ECC = "ecc.";
 
 }

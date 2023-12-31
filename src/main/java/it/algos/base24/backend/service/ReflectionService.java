@@ -132,6 +132,35 @@ public class ReflectionService {
     // @todo ATTENTION QUI
 
     /**
+     * Regola il valore della property corrente di una entity. <br>
+     *
+     * @param entityBean      oggetto su cui operare la riflessione
+     * @param publicFieldName property statica e pubblica
+     * @param value           da inserire
+     */
+    public void setPropertyValue(final Object entityBean, final String publicFieldName, final Object value) {
+        Field[] fieldsArray;
+
+        if (entityBean == null || textService.isEmpty(publicFieldName)) {
+            return;
+        }
+
+        fieldsArray = entityBean.getClass().getFields();
+
+        try {
+            for (Field field : fieldsArray) {
+                if (field.getName().equals(publicFieldName)) {
+                    field.setAccessible(true);
+                    field.set(entityBean, value);
+                }
+            }
+        } catch (Exception unErrore) {
+        }
+
+        return;
+    }
+
+    /**
      * Valore della property corrente di una entity. <br>
      *
      * @param entityBean      oggetto su cui operare la riflessione
@@ -248,6 +277,7 @@ public class ReflectionService {
     public List<Class> getSubClazzViewBase() {
         return getSubClazz(CrudView.class, BaseVar.pathModuloBase);
     }
+
     public List<Class> getSubClazzViewProgetto() {
         return getSubClazz(CrudView.class, BaseVar.pathModuloProgetto);
     }

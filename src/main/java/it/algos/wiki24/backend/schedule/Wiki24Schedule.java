@@ -1,7 +1,7 @@
 package it.algos.wiki24.backend.schedule;
 
 import it.algos.base24.backend.schedule.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

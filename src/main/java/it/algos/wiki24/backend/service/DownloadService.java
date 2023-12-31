@@ -6,7 +6,7 @@ import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
-import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 

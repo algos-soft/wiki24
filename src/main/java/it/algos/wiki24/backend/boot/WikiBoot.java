@@ -6,12 +6,10 @@ import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.ui.view.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
-import it.algos.wiki24.backend.packages.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.service.*;
-import jakarta.annotation.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

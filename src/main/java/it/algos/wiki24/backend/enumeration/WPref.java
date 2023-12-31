@@ -67,15 +67,19 @@ public enum WPref implements IPref {
 
     //***************
     lastElaboraParNome("lastElaboraParNome", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParNome."),
-    elaboraParNomeTime("elaboraParNomeTime", TypePref.integer, 0, "Durata elaborazione di ParNome in secondi."),
+    elaboraParNomeTime("elaboraParNomeTime", TypePref.integer, 0, "Durata elaborazione di ParNome in minuti."),
 
     //***************
     lastElaboraParCognome("lastElaboraParCognome", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParCognome."),
-    elaboraParCognomeTime("elaboraParCognomeTime", TypePref.integer, 0, "Durata elaborazione di ParCognome in secondi."),
+    elaboraParCognomeTime("elaboraParCognomeTime", TypePref.integer, 0, "Durata elaborazione di ParCognome in minuti."),
 
     //***************
     lastElaboraParSesso("lastElaboraParSesso", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParSesso."),
-    elaboraParSessoTime("elaboraParSessoTime", TypePref.integer, 0, "Durata elaborazione di ParSesso in secondi."),
+    elaboraParSessoTime("elaboraParSessoTime", TypePref.integer, 0, "Durata elaborazione di ParSesso in minuti."),
+
+    //***************
+    lastElaboraParGiornoNato("lastElaboraParGiornoNato", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParGiornoNato."),
+    elaboraParGiornoNatoTime("elaboraParGiornoNatoTime", TypePref.integer, 0, "Durata elaborazione di ParGiornoNato in minuti."),
 
     ;
 

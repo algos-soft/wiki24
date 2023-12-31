@@ -9,15 +9,14 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
-import it.algos.wiki24.backend.packages.biomongo.*;
-import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
 import javax.inject.*;
