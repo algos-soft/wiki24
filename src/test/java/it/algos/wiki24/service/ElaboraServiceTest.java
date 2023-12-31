@@ -78,7 +78,7 @@ public class ElaboraServiceTest extends WikiTest {
                 Arguments.of("Hinako Sugiura", "30 novembre"),
                 Arguments.of("Maurice O'Fihely", VUOTA),
                 Arguments.of("Aleksandr Michajlovič Sibirjakov", VUOTA),
-                Arguments.of("Elizaveta Andreevna Šuvalova", VUOTA),
+                Arguments.of("Elizaveta Andreevna Šuvalova", "25 luglio"),
                 Arguments.of("Rudol'f Lazarevič Samojlovič", VUOTA),
                 Arguments.of("Pak Ui-chun", VUOTA),
                 Arguments.of("Zheng Junli", "6 dicembre"),
