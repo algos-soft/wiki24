@@ -9,9 +9,9 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
 import org.reflections.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
@@ -34,10 +34,10 @@ import java.util.stream.*;
 @Service
 public class ReflectionService {
 
-    @Autowired
+    @Inject
     private TextService textService;
 
-    @Autowired
+    @Inject
     LogService logger;
 
     /**

@@ -180,7 +180,7 @@ public class TextService {
     public String levaCodaDaPrimo(final String testoIn, final String tagInterrompi) {
         String testoOut = testoIn;
 
-        if (this.isValid(testoOut) && tagInterrompi != null && !tagInterrompi.trim().equals(testoIn.trim()) && !tagInterrompi.equals(BaseCost.SPAZIO)) {
+        if (this.isValid(testoOut) && this.isValid(tagInterrompi) && !tagInterrompi.trim().equals(testoIn.trim()) && !tagInterrompi.equals(BaseCost.SPAZIO)) {
             testoOut = StringUtils.stripEnd(testoIn, BaseCost.SPAZIO);
             if (testoOut.contains(tagInterrompi)) {
                 testoOut = testoOut.substring(0, testoOut.indexOf(tagInterrompi));
