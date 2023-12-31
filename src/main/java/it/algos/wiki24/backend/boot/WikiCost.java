@@ -459,10 +459,13 @@ public class WikiCost {
     public static final String DEFAULT_SORT = "{{DEFAULTSORT:";
 
     public static final String DUBBIO_O = SPAZIO + "o" + SPAZIO;
+    public static final String DUBBIO_O_PAR = PARENTESI_TONDA_INI + "o" + SPAZIO;
 
     public static final String DUBBIO_OPPURE = SPAZIO + "oppure" + SPAZIO;
     public static final String DUBBIO_TRATTINO = SPAZIO + TRATTINO + SPAZIO;
     public static final String PRIMO_WIN = "º";
     public static final String PRIMO_MAC = "°";
+    public static final String SENZA_FONTE = "Senza fonte";
+    public static final String CALENDARIO = "calendario";
 
 }

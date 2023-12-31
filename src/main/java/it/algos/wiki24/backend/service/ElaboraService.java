@@ -556,36 +556,100 @@ public class ElaboraService {
     }
 
     public String fixGiornoNato(String grezzo) {
-        String elaboratoUno = grezzo != null ? grezzo.trim() : VUOTA;
+        String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
         String elaboratoDue = VUOTA;
         String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
         String patternPrimoDelMese = "^1°?";
+        String patternZeroUno = "^01 ";
         String patternMaiuscola = "^[1-9]?º?[0-9]? (Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
+        String patternApici = "^'.+'$";
+        String patternZero = "^0[1-9] ";
+        String patternVirgola = "^,[1-9]";
 
         if (textService.isValid(grezzo)) {
+            elaboratoUno = fixElimina(elaboratoUno);
+        }
+
+        if (elaboratoUno.contains(CALENDARIO)) {
+            if (elaboratoUno.contains(PARENTESI_TONDA_INI)) {
+                elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, PARENTESI_TONDA_INI);
+            }
+            if (elaboratoUno.contains(SMALL)) {
+                elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, SMALL);
+            }
+        }
+
+        if (textService.isValid(elaboratoUno)) {
             elaboratoUno = fixDopo(elaboratoUno);
             elaboratoUno = textService.setNoDoppieQuadre(elaboratoUno);
             elaboratoDue = regexService.getReal(elaboratoUno, pattern);
         }
+        else {
+            return VUOTA;
+        }
 
         if (textService.isEmpty(elaboratoDue)) {
-            boolean esistePrimo = regexService.isEsiste(elaboratoUno, patternPrimoDelMese);
-            if (esistePrimo) {
-                elaboratoDue = elaboratoUno.replaceAll(PRIMO_MAC,PRIMO_WIN);
+            if (regexService.isEsiste(elaboratoUno, patternPrimoDelMese)) {
+                elaboratoDue = elaboratoUno.replaceAll(PRIMO_MAC, PRIMO_WIN);
                 message = String.format("Un primo del mese da convertire%s%s", FORWARD, elaboratoUno);
                 logger.warn(new WrapLog().message(message));
+                return VUOTA;
             }
         }
 
         if (textService.isEmpty(elaboratoDue)) {
-            boolean esisteMaiuscola = regexService.isEsiste(elaboratoUno, patternMaiuscola);
-            if (esisteMaiuscola) {
+            if (regexService.isEsiste(elaboratoUno, patternMaiuscola)) {
                 elaboratoDue = elaboratoUno.toLowerCase();
                 message = String.format("Nome del mese maiuscolo da convertire%s%s", FORWARD, elaboratoUno);
                 logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
             }
         }
 
+        if (textService.isEmpty(elaboratoDue)) {
+            if (regexService.isEsiste(elaboratoUno, patternZeroUno)) {
+                elaboratoDue = elaboratoUno.replace("01", "1" + PRIMO_WIN);
+                message = String.format("Zero iniziale del primo da levare%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
+            }
+        }
+
+        if (textService.isEmpty(elaboratoDue)) {
+            if (regexService.isEsiste(elaboratoUno, patternApici)) {
+                elaboratoDue = elaboratoUno.replace("'", "");
+                message = String.format("Apici inizio-fine da levare%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
+            }
+        }
+
+        if (textService.isEmpty(elaboratoDue)) {
+            if (regexService.isEsiste(elaboratoUno, patternZero)) {
+                elaboratoDue = elaboratoUno.substring(1);
+                message = String.format("Zero iniziale da levare%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
+            }
+        }
+
+        if (textService.isEmpty(elaboratoDue)) {
+            if (regexService.isEsiste(elaboratoUno, patternVirgola)) {
+                elaboratoDue = elaboratoUno.substring(1);
+                message = String.format("Virgola iniziale da levare%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
+            }
+        }
+
+        if (textService.isEmpty(elaboratoDue)) {
+            if (elaboratoUno.contains(SPAZIO_NON_BREAKING)) {
+                elaboratoDue = elaboratoUno.replace(SPAZIO_NON_BREAKING, SPAZIO);
+                message = String.format("Spazio non-breaking da levare%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+                return elaboratoDue;
+            }
+        }
 
         return elaboratoDue;
     }
@@ -667,7 +731,6 @@ public class ElaboraService {
         if (textService.isEmpty(valorePropertyTmplBioServer)) {
             return VUOTA;
         }
-
         if (valoreGrezzo.endsWith(ECC)) {
             return VUOTA;
         }
@@ -683,12 +746,27 @@ public class ElaboraService {
         if (valoreGrezzo.contains(DUBBIO_O)) {
             return VUOTA;
         }
+        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
+            return VUOTA;
+        }
         if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
             return VUOTA;
         }
         if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
             return VUOTA;
         }
+        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
+            return VUOTA;
+        }
+        //        if (valoreGrezzo.contains(PARENTESI_TONDA_END)) {
+        //            return VUOTA;
+        //        }
+        if (valoreGrezzo.contains(SENZA_FONTE)) {
+            return VUOTA;
+        }
+        //        if (valoreGrezzo.contains(CALENDARIO)) {
+        //            return VUOTA;
+        //        }
 
         return valoreGrezzo.trim();
     }

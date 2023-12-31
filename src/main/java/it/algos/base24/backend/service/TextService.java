@@ -681,12 +681,18 @@ public class TextService {
         if (testoIn.startsWith(CAPO_SPLIT)) {
             testoIn = this.levaTesta(testoIn, CAPO_SPLIT);
         }
+        if (testoIn.startsWith(SPAZIO_NON_BREAKING)) {
+            testoIn = testoIn.substring(SPAZIO_NON_BREAKING.length());
+        }
 
         if (testoIn.endsWith(CAPO_REGEX)) {
             testoIn = this.levaCoda(testoIn, CAPO_REGEX);
         }
         if (testoIn.endsWith(CAPO_SPLIT)) {
             testoIn = this.levaCoda(testoIn, CAPO_SPLIT);
+        }
+        if (testoIn.endsWith(SPAZIO_NON_BREAKING)) {
+            testoIn = testoIn.substring(0, testoIn.length() - SPAZIO_NON_BREAKING.length());
         }
 
         return testoIn.trim();
