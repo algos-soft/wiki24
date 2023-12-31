@@ -45,6 +45,9 @@ public class ElaboraService {
     @Inject
     TextService textService;
 
+    @Inject
+    RegexService regexService;
+
     private String message;
 
 
@@ -553,17 +556,38 @@ public class ElaboraService {
     }
 
     public String fixGiornoNato(String grezzo) {
-        String elaborato = grezzo != null ? grezzo.trim() : VUOTA;
-        String regex = "^\\d{1,2}\\/\\d{1,2}\\/\\d{2,4}";
-        String regex2 = "^(0[1-9]|[12][0-9]|3[01])\\/(0[1-9]|1[1,2])\\/(19|20)\\d{2}";
+        String elaboratoUno = grezzo != null ? grezzo.trim() : VUOTA;
+        String elaboratoDue = VUOTA;
+        String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+        String patternPrimoDelMese = "^1°?";
+        String patternMaiuscola = "^[1-9]?º?[0-9]? (Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
 
         if (textService.isValid(grezzo)) {
-            elaborato = fixDopo(elaborato);
-            elaborato = fixElimina(elaborato);
-            elaborato = textService.setNoDoppieQuadre(elaborato);
+            elaboratoUno = fixDopo(elaboratoUno);
+            elaboratoUno = textService.setNoDoppieQuadre(elaboratoUno);
+            elaboratoDue = regexService.getReal(elaboratoUno, pattern);
         }
 
-        return elaborato;
+        if (textService.isEmpty(elaboratoDue)) {
+            boolean esistePrimo = regexService.isEsiste(elaboratoUno, patternPrimoDelMese);
+            if (esistePrimo) {
+                elaboratoDue = elaboratoUno.replaceAll(PRIMO_MAC,PRIMO_WIN);
+                message = String.format("Un primo del mese da convertire%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+
+        if (textService.isEmpty(elaboratoDue)) {
+            boolean esisteMaiuscola = regexService.isEsiste(elaboratoUno, patternMaiuscola);
+            if (esisteMaiuscola) {
+                elaboratoDue = elaboratoUno.toLowerCase();
+                message = String.format("Nome del mese maiuscolo da convertire%s%s", FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
+            }
+        }
+
+
+        return elaboratoDue;
     }
 
     public String fixAnnoNato(String grezzo) {

@@ -462,5 +462,7 @@ public class WikiCost {
 
     public static final String DUBBIO_OPPURE = SPAZIO + "oppure" + SPAZIO;
     public static final String DUBBIO_TRATTINO = SPAZIO + TRATTINO + SPAZIO;
+    public static final String PRIMO_WIN = "º";
+    public static final String PRIMO_MAC = "°";
 
 }

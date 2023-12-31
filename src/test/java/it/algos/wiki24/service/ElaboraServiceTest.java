@@ -60,13 +60,16 @@ public class ElaboraServiceTest extends WikiTest {
     //--previsto
     protected static Stream<Arguments> GIORNO_NATO() {
         return Stream.of(
-//                Arguments.of("Malcolm IV di Scozia", VUOTA),
-//                Arguments.of("William Dobson", "4 marzo"),
-//                Arguments.of("Carolina Matilde di Hannover", "22 luglio"),
-//                Arguments.of("Giuseppe Lillo", VUOTA),
-//                Arguments.of("Hendrick Goltzius", VUOTA),
-//                Arguments.of("Eraldo Da Roma", "1º marzo"),
-//                Arguments.of("Papa Leone II", VUOTA),
+                Arguments.of("Malcolm IV di Scozia", VUOTA),
+                Arguments.of("William Dobson", "4 marzo"),
+                Arguments.of("Carolina Matilde di Hannover", "22 luglio"),
+                Arguments.of("Giuseppe Lillo", VUOTA),
+                Arguments.of("Hendrick Goltzius", VUOTA),
+                Arguments.of("Eraldo Da Roma", "1º marzo"),
+                Arguments.of("Cecilia di York", "20 marzo"),
+                Arguments.of("Papa Leone II", VUOTA),
+                Arguments.of("Deep Roy", "1º dicembre"),
+                Arguments.of("Gabriele Oriali", "25 novembre"),
                 Arguments.of("Maurice O'Fihely", VUOTA),
                 Arguments.of("John Arbuthnot", "29 aprile"),
                 Arguments.of("Stefan Merrill Block", "26 febbraio"),
