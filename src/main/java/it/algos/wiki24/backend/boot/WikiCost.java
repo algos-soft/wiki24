@@ -333,13 +333,26 @@ public class WikiCost {
     //    public static final String TAG_DOPPIO_NOME = "doppionome";
     public static final String TAG_NOME_DOPPIO = "nomedoppio";
 
-    public static final String TAG_COGNOME = "cognome";
-
     public static final String TAG_BIO = "bio";
 
     public static final String FIELD_NAME_PAGE_ID = "pageId";
 
     public static final String FIELD_NAME_WIKI_TITLE = "wikiTitle";
+
+    public static final String FIELD_NAME_NOME = "nome";
+
+    public static final String FIELD_NAME_COGNOME = "cognome";
+
+    public static final String FIELD_NAME_SESSO = "sesso";
+
+    public static final String FIELD_NAME_GREZZO = "grezzo";
+
+    public static final String FIELD_NAME_ELABORATO = "elaborato";
+    public static final String FIELD_NAME_GREZZO_VUOTO = "grezzoVuoto";
+
+    public static final String FIELD_NAME_ELABORATO_VUOTO = "elaboratoVuoto";
+
+    public static final String FIELD_NAME_UGUALE = "uguale";
 
     public static final String KEY_JSON_QUERY = "query";
 

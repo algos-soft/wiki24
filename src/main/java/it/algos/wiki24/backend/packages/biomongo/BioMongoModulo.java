@@ -6,6 +6,8 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bioserver.*;
+import it.algos.wiki24.backend.packages.parcognome.*;
+import it.algos.wiki24.backend.packages.parnome.*;
 import it.algos.wiki24.backend.packages.parsesso.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
@@ -25,8 +27,13 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ElaboraService elaboraService;
+
     @Inject
     BioServerModulo bioServerModulo;
+    @Inject
+    ParNomeModulo parNomeModulo;
+    @Inject
+    ParCognomeModulo parCognomeModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -44,7 +51,7 @@ public class BioMongoModulo extends WikiModulo {
 
         super.lastElabora = WPref.lastElaboraBioMongo;
         super.durataElabora = WPref.elaboraBioMongoTime;
-        super.unitaMisuraElabora = TypeDurata.secondi;
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
 
@@ -102,8 +109,18 @@ public class BioMongoModulo extends WikiModulo {
 
         elaboraService.elaboraAll();
 
+        elaboraParametri();
+
         super.fixElabora(inizio);
     }
+
+    public void elaboraParametri() {
+        List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
+
+        parNomeModulo.elabora(lista);
+        parCognomeModulo.elabora(lista);
+    }
+
     @Override
     public void transfer(AbstractEntity crudEntityBean) {
         BioServerEntity bioServerEntity = getBioServer(crudEntityBean);

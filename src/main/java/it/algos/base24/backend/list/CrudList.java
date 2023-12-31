@@ -18,6 +18,8 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.view.*;
 import it.algos.base24.ui.wrapper.*;
+import it.algos.wiki24.backend.packages.par.*;
+import it.algos.wiki24.backend.packages.parnome.*;
 import jakarta.annotation.*;
 import org.springframework.context.*;
 import org.springframework.data.domain.*;

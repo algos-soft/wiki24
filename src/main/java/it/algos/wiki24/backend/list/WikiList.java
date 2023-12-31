@@ -40,6 +40,10 @@ public abstract class WikiList extends CrudList {
 
     protected boolean usaInfoDownload;
 
+    protected boolean usaInfoElabora;
+
+    protected boolean usaInfoUpload;
+
     protected VerticalLayout infoPlaceHolder;
 
 
@@ -109,7 +113,10 @@ public abstract class WikiList extends CrudList {
             this.usaBottoneExport = typeList.isUsaBottoneExport();
         }
 
-        this.usaInfoDownload = true;
+        this.usaInfoDownload = false;
+        this.usaInfoElabora = false;
+        this.usaInfoUpload = false;
+
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
         this.usaBottoneTransfer = false;
@@ -169,6 +176,7 @@ public abstract class WikiList extends CrudList {
         String uploadLast = VUOTA;
 
         infoPlaceHolder.removeAll();
+
         if (usaInfoDownload) {
             if (scheduledDownload != null) {
                 downloadTxt = "Scheduled download " + scheduledDownload.getDescrizione();
@@ -191,7 +199,9 @@ public abstract class WikiList extends CrudList {
             }
             message = String.format("%s%s%s", downloadTxt, SPAZIO, downloadLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
+        }
 
+        if (usaInfoElabora) {
             if (textService.isValid(scheduledElabora)) {
                 elaboraTxt = "Scheduled elaborazione " + scheduledElabora;
             }
@@ -213,7 +223,9 @@ public abstract class WikiList extends CrudList {
             }
             message = String.format("%s%s%s", elaboraTxt, SPAZIO, elaboraLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
+        }
 
+        if (usaInfoUpload) {
             if (textService.isValid(scheduledUpload)) {
                 uploadTxt = "Scheduled upload " + scheduledUpload;
             }
@@ -396,7 +408,6 @@ public abstract class WikiList extends CrudList {
             filtri.remove(FIELD_NAME_WIKI_TITLE);
             filtri.sort(basicSortOrder);
         }
-
     }
 
     public void wikiView() {

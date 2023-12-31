@@ -54,8 +54,6 @@ public class ElaboraService {
      * Ricava i dati prendendoli da BioServer <br>
      */
     public void elaboraAll() {
-        int tot = bioServerModulo.count();
-        BioMongoEntity bioMongoEntity;
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
         for (BioServerEntity bioServerBean : lista) {
@@ -104,15 +102,15 @@ public class ElaboraService {
             return null;
         }
 
-        bioMongoEntity.nome = setNome(mappa);
-        bioMongoEntity.cognome = setCognome(mappa);
-        bioMongoEntity.sesso = setSesso(mappa);
-        bioMongoEntity.luogoNato = setLuogoNato(mappa);
-        bioMongoEntity.giornoNato = setGiornoNato(mappa);
-        bioMongoEntity.annoNato = setAnnoNato(mappa);
-        bioMongoEntity.luogoMorto = setLuogoMorto(mappa);
-        bioMongoEntity.giornoMorto = setGiornoMorto(mappa);
-        bioMongoEntity.annoMorto = setAnnoMorto(mappa);
+        bioMongoEntity.nome = fixNome(mappa.get(KEY_MAPPA_NOME));
+        bioMongoEntity.cognome = fixCognome(mappa.get(KEY_MAPPA_COGNOME));
+        bioMongoEntity.sesso = fixSesso(mappa.get(KEY_MAPPA_SESSO));
+        bioMongoEntity.luogoNato = fixLuogoNato(mappa.get(KEY_MAPPA_LUOGO_NASCITA));
+        bioMongoEntity.giornoNato = fixGiornoNato(mappa.get(KEY_MAPPA_GIORNO_NASCITA));
+        bioMongoEntity.annoNato = fixAnnoNato(mappa.get(KEY_MAPPA_ANNO_NASCITA));
+        bioMongoEntity.luogoMorto = fixLuogoMorto(mappa.get(KEY_MAPPA_LUOGO_MORTE));
+        bioMongoEntity.giornoMorto = fixGiornoMorto(mappa.get(KEY_MAPPA_GIORNO_MORTE));
+        bioMongoEntity.annoMorto = fixAnnoMorto(mappa.get(KEY_MAPPA_ANNO_MORTE));
 
         return bioMongoEntity;
     }
@@ -509,103 +507,118 @@ public class ElaboraService {
         return testoElaborato;
     }
 
-    public String setNome(Map<String, String> mappa) {
-        String nome = VUOTA;
+    public String fixNome(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_NOME) != null) {
-            nome = mappa.get(KEY_MAPPA_NOME);
-            nome = fixElimina(nome);
-            nome = fixDopo(nome);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
+            elaborato = fixNomeSingolo(elaborato);
         }
-        return nome;
+
+        return elaborato;
     }
 
-    public String setCognome(Map<String, String> mappa) {
-        String cognome = VUOTA;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_COGNOME) != null) {
-            cognome = mappa.get(KEY_MAPPA_COGNOME);
-            cognome = fixElimina(cognome);
-            cognome = fixDopo(cognome);
+    public String fixCognome(String grezzo) {
+        String elaborato = grezzo;
+
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return cognome;
+
+        return elaborato;
     }
 
-    public String setSesso(Map<String, String> mappa) {
-        String sesso = VUOTA;
+    public String fixSesso(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_SESSO) != null) {
-            sesso = mappa.get(KEY_MAPPA_SESSO);
-            sesso = fixElimina(sesso);
-            sesso = fixDopo(sesso);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return sesso;
+
+        return elaborato;
     }
 
-    public String setLuogoNato(Map<String, String> mappa) {
-        String luogoNato = VUOTA;
+    public String fixLuogoNato(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_LUOGO_NASCITA) != null) {
-            luogoNato = mappa.get(KEY_MAPPA_LUOGO_NASCITA);
-            luogoNato = fixElimina(luogoNato);
-            luogoNato = fixDopo(luogoNato);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return luogoNato;
+
+        return elaborato;
     }
 
-    public String setGiornoNato(Map<String, String> mappa) {
-        String giornoNato = VUOTA;
+    public String fixGiornoNato(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_GIORNO_NASCITA) != null) {
-            giornoNato = mappa.get(KEY_MAPPA_GIORNO_NASCITA);
-            giornoNato = fixElimina(giornoNato);
-            giornoNato = fixDopo(giornoNato);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return giornoNato;
+
+        return elaborato;
     }
 
-    public String setAnnoNato(Map<String, String> mappa) {
-        String annoNato = VUOTA;
+    public String fixAnnoNato(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_ANNO_NASCITA) != null) {
-            annoNato = mappa.get(KEY_MAPPA_ANNO_NASCITA);
-            annoNato = fixElimina(annoNato);
-            annoNato = fixDopo(annoNato);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return annoNato;
+
+        return elaborato;
     }
 
-    public String setLuogoMorto(Map<String, String> mappa) {
-        String luogoMorto = VUOTA;
+    public String fixLuogoMorto(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_LUOGO_MORTE) != null) {
-            luogoMorto = mappa.get(KEY_MAPPA_LUOGO_MORTE);
-            luogoMorto = fixElimina(luogoMorto);
-            luogoMorto = fixDopo(luogoMorto);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return luogoMorto;
+
+        return elaborato;
     }
 
-    public String setGiornoMorto(Map<String, String> mappa) {
-        String giornoMorto = VUOTA;
+    public String fixGiornoMorto(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_GIORNO_MORTE) != null) {
-            giornoMorto = mappa.get(KEY_MAPPA_GIORNO_MORTE);
-            giornoMorto = fixElimina(giornoMorto);
-            giornoMorto = fixDopo(giornoMorto);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return giornoMorto;
+
+        return elaborato;
     }
 
-    public String setAnnoMorto(Map<String, String> mappa) {
-        String annoMorto = VUOTA;
+    public String fixAnnoMorto(String grezzo) {
+        String elaborato = grezzo;
 
-        if (mappa != null && mappa.get(KEY_MAPPA_ANNO_MORTE) != null) {
-            annoMorto = mappa.get(KEY_MAPPA_ANNO_MORTE);
-            annoMorto = fixElimina(annoMorto);
-            annoMorto = fixDopo(annoMorto);
+        if (textService.isValid(grezzo)) {
+            elaborato = fixElimina(elaborato);
+            elaborato = fixDopo(elaborato);
         }
-        return annoMorto;
+
+        return elaborato;
+    }
+
+    public String fixNomeSingolo(String elaboratoForseDoppio) {
+        String elaboratoSingolo = elaboratoForseDoppio;
+
+        if (textService.isValid(elaboratoForseDoppio)) {
+            if (elaboratoForseDoppio.contains(SPAZIO)) {
+                elaboratoSingolo = elaboratoForseDoppio.substring(0, elaboratoForseDoppio.indexOf(SPAZIO));
+//                elaboratoSingolo = textService.levaCodaDaPrimo(elaboratoForseDoppio, SPAZIO);
+            }
+        }
+
+        return elaboratoSingolo.trim();
     }
 
     /**

@@ -51,7 +51,7 @@ public class WikiListButtonBar extends ListButtonBar {
 
     public boolean usaSearchWikiTitle;
 
-    protected Button buttonDeleteAll = new Button();
+//    protected Button buttonDeleteAll = new Button();
 
     protected Button buttonDownload = new Button();
 

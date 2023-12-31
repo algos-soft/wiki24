@@ -47,6 +47,8 @@ public class ParSessoList extends WikiList {
         this.usaBottoneWikiEdit = true;
         this.usaBottoneWikiCrono = true;
 
+        super.usaInfoElabora = true;
+
         this.usaBottoneSearch = false;
         this.usaSearchPageId = true;
         this.usaSearchWikiTitle = true;

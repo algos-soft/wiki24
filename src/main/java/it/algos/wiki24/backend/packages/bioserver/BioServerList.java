@@ -35,10 +35,12 @@ public class BioServerList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        this.usaBottoneSearch = false;
-        this.usaSearchPageId = true;
-        this.usaSearchWikiTitle = true;
-        this.usaBottoneExport = false;
+        super.usaInfoDownload = true;
+        super.usaBottoneElabora=false;
+        super.usaBottoneSearch = false;
+        super.usaSearchPageId = true;
+        super.usaSearchWikiTitle = true;
+        super.usaBottoneExport = false;
     }
 
     @Override

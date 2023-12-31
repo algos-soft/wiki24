@@ -103,49 +103,18 @@ public class ParSessoModulo extends WikiModulo {
         long pageId;
         String wikiTitle;
         String grezzo;
+        String elaborato;
 
         mappa = elaboraService.estraeMappa(bioServerBean);
         pageId = bioServerBean.getPageId();
         wikiTitle = bioServerBean.getWikiTitle();
         grezzo = mappa.get(KEY_MAPPA_SESSO);
-        parametroSessoEntity = newEntity(pageId, wikiTitle, grezzo);
-        parametroSessoEntity = elabora(parametroSessoEntity);
+        elaborato = elaboraService.fixNome(grezzo);
+        parametroSessoEntity = newEntity(pageId, wikiTitle, grezzo, elaborato);
 
         insertSave(parametroSessoEntity);
     }
 
-    public ParSessoEntity elabora(ParSessoEntity beanGrezzo) {
-        ParSessoEntity beanElaborato = beanGrezzo;
-        String grezzo;
-        String tag1 = "M";
-        String tag2 = "F";
-
-        if (beanGrezzo.grezzo == null) {
-            message = String.format("Parametro sesso di [%s] è nullo", "");
-            logger.warn(new WrapLog().message(message));
-            beanElaborato.pieno = false;
-            beanElaborato.valido = false;
-            return beanElaborato;
-        }
-
-        grezzo = beanGrezzo.grezzo.trim();
-        if (!grezzo.equals(beanGrezzo.grezzo)) {
-            message = String.format("Parametro sesso di [%s] contiene spazi vuoti non previsti", beanGrezzo.wikiTitle);
-            logger.warn(new WrapLog().message(message));
-            beanElaborato.pieno = false;
-            beanElaborato.valido = false;
-            return beanElaborato;
-        }
-
-        if (grezzo.equals(tag1) || grezzo.equals(tag2)) {
-            beanElaborato.elaborato = grezzo;
-            beanElaborato.pieno = true;
-            beanElaborato.valido = true;
-            return beanElaborato;
-        }
-
-        return beanElaborato;
-    }
 
     @Override
     public void transfer(AbstractEntity crudEntityBean) {
