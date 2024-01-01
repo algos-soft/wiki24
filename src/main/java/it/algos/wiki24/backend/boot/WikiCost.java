@@ -39,6 +39,7 @@ public class WikiCost {
     public static final String KEY_MAPPA_SESSO = "Sesso";
 
     public static final String KEY_MAPPA_LUOGO_NASCITA = "LuogoNascita";
+
     public static final String KEY_MAPPA_LUOGO_NASCITA_LINK = "LuogoNascitaLink";
 
     public static final String KEY_MAPPA_GIORNO_NASCITA = "GiornoMeseNascita";
@@ -47,9 +48,21 @@ public class WikiCost {
 
     public static final String KEY_MAPPA_LUOGO_MORTE = "LuogoMorte";
 
+    public static final String KEY_MAPPA_LUOGO_MORTE_LINK = "LuogoMorteLink";
+
     public static final String KEY_MAPPA_GIORNO_MORTE = "GiornoMeseMorte";
 
     public static final String KEY_MAPPA_ANNO_MORTE = "AnnoMorte";
+
+    public static final String KEY_MAPPA_ATTIVITA = "Attività";
+
+    public static final String KEY_MAPPA_ATTIVITA_DUE = "Attività2";
+
+    public static final String KEY_MAPPA_ATTIVITA_TRE = "Attività3";
+
+    public static final String KEY_MAPPA_ATTIVITA_ALTRE = "AttivitàAltre";
+
+    public static final String KEY_MAPPA_NAZIONALITA = "Nazionalità";
 
 
     public static final String JSON_SUCCESS = "Success";
@@ -99,7 +112,9 @@ public class WikiCost {
     public static final String FIELD_NAME_SINGOLARE = "singolare";
 
     public static final String FIELD_NAME_PLURALE = "plurale";
+
     public static final String FIELD_NAME_LUOGO_NATO = "luogoNato";
+
     public static final String FIELD_NAME_LUOGO_MORTO = "luogoMorto";
 
     public static final String FIELD_NAME_GIORNO_NATO = "giornoNato";
@@ -462,12 +477,17 @@ public class WikiCost {
     public static final String DEFAULT_SORT = "{{DEFAULTSORT:";
 
     public static final String DUBBIO_O = SPAZIO + "o" + SPAZIO;
+
     public static final String DUBBIO_O_PAR = PARENTESI_TONDA_INI + "o" + SPAZIO;
 
     public static final String DUBBIO_OPPURE = SPAZIO + "oppure" + SPAZIO;
+
     public static final String DUBBIO_TRATTINO = SPAZIO + TRATTINO + SPAZIO;
+
     public static final String PRIMO_WIN = "º";
+
     public static final String PRIMO_MAC = "°";
+
     public static final String DUBBIO_CALENDARIO = "calendario";
 
 }

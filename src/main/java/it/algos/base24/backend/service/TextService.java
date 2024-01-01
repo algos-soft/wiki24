@@ -824,6 +824,16 @@ public class TextService {
         return stringaOut.trim();
     }
 
+    public String setDoppieQuadre(String stringaIn) {
+        String stringaOut = stringaIn.trim();
+
+        if (this.isValid(stringaOut)) {
+            stringaOut = QUADRA_INI + QUADRA_INI + stringaOut + QUADRA_END + QUADRA_END;
+        }
+
+        return stringaOut.trim();
+    }
+
 
     /**
      * Numero di occorrenze di un tag in un testo. <br>

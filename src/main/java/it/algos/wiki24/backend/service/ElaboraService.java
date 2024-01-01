@@ -116,6 +116,10 @@ public class ElaboraService {
         bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
         bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
+        bioMongoEntity.attivita = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA));
+        bioMongoEntity.attivita2 = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA_DUE));
+        bioMongoEntity.attivita3 = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA_TRE));
+        bioMongoEntity.nazionalita = fixNazionalita(wikiTitle, mappa.get(KEY_MAPPA_NAZIONALITA));
 
         return bioMongoEntity;
     }
@@ -548,14 +552,26 @@ public class ElaboraService {
     }
 
     public String fixLuogo(String wikiTitle, String grezzo, String linkLuogo) {
-        String elaborato = grezzo;
+        String elaborato = grezzo != null ? textService.trim(grezzo) : VUOTA;
 
-        if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
-            elaborato = fixDopo(elaborato);
+        if (textService.isValid(elaborato)) {
+            for (TypeElimina type : TypeElimina.values()) {
+                elaborato = type.get(elaborato);
+            }
         }
 
-        return elaborato;
+        if (textService.isValid(elaborato)) {
+            elaborato = fixDopo(elaborato);
+        }
+        else {
+            return VUOTA;
+        }
+
+        if (textService.isValid(linkLuogo)) {
+            elaborato = String.format("%s%s%s", linkLuogo, PIPE, elaborato);
+        }
+
+        return textService.isValid(elaborato) ? textService.setDoppieQuadre(elaborato) : VUOTA;
     }
 
     public String fixGiorno(String wikiTitle, String grezzo) {
@@ -675,6 +691,43 @@ public class ElaboraService {
         return elaboratoDue;
     }
 
+    public String fixAttivita(String wikiTitle, String grezzo) {
+        String elaborato = grezzo != null ? textService.trim(grezzo) : VUOTA;
+
+        if (textService.isValid(elaborato)) {
+            for (TypeElimina type : TypeElimina.values()) {
+                elaborato = type.get(elaborato);
+            }
+        }
+
+        if (textService.isValid(elaborato)) {
+            elaborato = fixDopo(elaborato);
+        }
+        else {
+            return VUOTA;
+        }
+
+        return textService.isValid(elaborato) ? elaborato : VUOTA;
+    }
+
+    public String fixNazionalita(String wikiTitle, String grezzo) {
+        String elaborato = grezzo != null ? textService.trim(grezzo) : VUOTA;
+
+        if (textService.isValid(elaborato)) {
+            for (TypeElimina type : TypeElimina.values()) {
+                elaborato = type.get(elaborato);
+            }
+        }
+
+        if (textService.isValid(elaborato)) {
+            elaborato = fixDopo(elaborato);
+        }
+        else {
+            return VUOTA;
+        }
+
+        return textService.isValid(elaborato) ? elaborato : VUOTA;
+    }
 
     public String fixNomeSingolo(String elaboratoForseDoppio) {
         String elaboratoSingolo = elaboratoForseDoppio;

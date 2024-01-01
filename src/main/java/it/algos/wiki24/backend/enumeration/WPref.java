@@ -103,6 +103,14 @@ public enum WPref implements IPref {
     lastElaboraParAnnoMorto("lastElaboraParAnnoMorto", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParAnnoMorto."),
     elaboraParAnnoMortoTime("elaboraParAnnoMortoTime", TypePref.integer, 0, "Durata elaborazione di ParAnnoMorto in minuti."),
 
+    //***************
+    lastElaboraParAttivita("lastElaboraParAttivita", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParAttivita."),
+    elaboraParAttivitaTime("elaboraParAttivitaTime", TypePref.integer, 0, "Durata elaborazione di ParAttivita in minuti."),
+
+    //***************
+    lastElaboraParNazionalita("lastElaboraParNazionalita", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParNazionalita."),
+    elaboraParNazionalitaTime("elaboraParNazionalitaTime", TypePref.integer, 0, "Durata elaborazione di ParNazionalita in minuti."),
+
     ;
 
     public PreferenzaModulo preferenzaModulo;

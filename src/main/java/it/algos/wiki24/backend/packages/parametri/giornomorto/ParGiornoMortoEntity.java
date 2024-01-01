@@ -24,7 +24,7 @@ public class ParGiornoMortoEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 16)
     public String grezzo;
 
-    @AField(type = TypeField.text, widthRem = 10)
+    @AField(type = TypeField.text, widthRem = 16)
     public String elaborato;
 
     @AField(type = TypeField.booleano, headerText = "GV")

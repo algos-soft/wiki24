@@ -48,6 +48,14 @@ public class ParLuogoMortoModulo extends ParModulo {
         super.keyMapName = KEY_MAPPA_LUOGO_MORTE;
     }
 
+    /**
+     * Regola le property di una ModelClazz <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     */
+    @Override
+    public List<String> getPropertyNames() {
+        return Arrays.asList("pageId", "wikiTitle", "grezzo", "linkLuogo", "elaborato", "grezzoVuoto", "elaboratoVuoto", "uguale");
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -96,9 +104,9 @@ public class ParLuogoMortoModulo extends ParModulo {
         pageId = bioServerBean.getPageId();
         wikiTitle = bioServerBean.getWikiTitle();
         grezzo = mappa.get(keyMapName);
-        linkLuogo = mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK);
+        linkLuogo = mappa.get(KEY_MAPPA_LUOGO_MORTE_LINK);
         elaborato = getElaborato(wikiTitle, grezzo, linkLuogo);
-        parametroEntity = newEntity(pageId, wikiTitle, grezzo, linkLuogo,elaborato);
+        parametroEntity = newEntity(pageId, wikiTitle, grezzo, linkLuogo, elaborato);
 
         parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
         insertSave(parametroEntity);

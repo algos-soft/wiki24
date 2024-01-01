@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.parametri.annomorto;
+package it.algos.wiki24.backend.packages.parametri.nazionalita;
 
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
@@ -12,8 +12,9 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "parannomorto", keyPropertyName = "pageId", typeList = TypeList.vuoto)
-public class ParAnnoMortoEntity extends AbstractEntity {
+@AEntity(collectionName = "parnazionalita", keyPropertyName = "pageId", typeList = TypeList.vuoto)
+public class ParNazionalitaEntity extends AbstractEntity {
+
 
     @AField(type = TypeField.lungo, widthRem = 7)
     public long pageId;

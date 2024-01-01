@@ -119,7 +119,7 @@ public class BioMongoModulo extends WikiModulo {
      */
     @Override
     public List<String> getListPropertyNames() {
-        return Arrays.asList("wikiTitle", "nome", "cognome", "sesso", "luogoNato", "giornoNato", "annoNato", "luogoMorto", "giornoMorto", "annoMorto");
+        return Arrays.asList("wikiTitle", "nome", "cognome", "sesso", "luogoNato", "giornoNato", "annoNato", "luogoMorto", "giornoMorto", "annoMorto", "attivita", "nazionalita");
     }
 
     public List<Long> findOnlyPageId() {

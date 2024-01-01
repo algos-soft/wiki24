@@ -21,10 +21,10 @@ public class ParSessoEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 16)
     public String wikiTitle;
 
-    @AField(type = TypeField.text, widthRem = 16)
+    @AField(type = TypeField.text, widthRem = 8)
     public String grezzo;
 
-    @AField(type = TypeField.text, widthRem = 10)
+    @AField(type = TypeField.text, widthRem = 8)
     public String elaborato;
 
     @AField(type = TypeField.booleano,headerText = "GV")

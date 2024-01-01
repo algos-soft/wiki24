@@ -27,7 +27,7 @@ public class ParLuogoMortoEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 16)
     public String linkLuogo;
 
-    @AField(type = TypeField.text, widthRem = 10)
+    @AField(type = TypeField.text, widthRem = 16)
     public String elaborato;
 
     @AField(type = TypeField.booleano, headerText = "GV")
