@@ -5,6 +5,7 @@ import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import org.springframework.stereotype.*;
@@ -100,19 +101,21 @@ public class ElaboraService {
      * Elabora la singola entity <br>
      */
     public BioMongoEntity elaboraBean(BioMongoEntity bioMongoEntity, Map<String, String> mappa) {
+        String wikiTitle;
         if (bioMongoEntity == null || mappa == null) {
             return null;
         }
 
+        wikiTitle = bioMongoEntity.wikiTitle;
         bioMongoEntity.nome = fixNome(mappa.get(KEY_MAPPA_NOME));
         bioMongoEntity.cognome = fixCognome(mappa.get(KEY_MAPPA_COGNOME));
         bioMongoEntity.sesso = fixSesso(mappa.get(KEY_MAPPA_SESSO));
-        bioMongoEntity.luogoNato = fixLuogoNato(mappa.get(KEY_MAPPA_LUOGO_NASCITA));
-        bioMongoEntity.giornoNato = fixGiornoNato(mappa.get(KEY_MAPPA_GIORNO_NASCITA));
-        bioMongoEntity.annoNato = fixAnnoNato(mappa.get(KEY_MAPPA_ANNO_NASCITA));
-        bioMongoEntity.luogoMorto = fixLuogoMorto(mappa.get(KEY_MAPPA_LUOGO_MORTE));
-        bioMongoEntity.giornoMorto = fixGiornoMorto(mappa.get(KEY_MAPPA_GIORNO_MORTE));
-        bioMongoEntity.annoMorto = fixAnnoMorto(mappa.get(KEY_MAPPA_ANNO_MORTE));
+        bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA));
+        bioMongoEntity.giornoNato = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_NASCITA));
+        bioMongoEntity.annoNato = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_NASCITA));
+        bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE));
+        bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
+        bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
 
         return bioMongoEntity;
     }
@@ -205,9 +208,9 @@ public class ElaboraService {
         //            mappa.put("ForzaOrdinamento", VUOTA);
         //        }
 
-        if (mappa != null && mappa.size() < 9) {
+        if (mappa != null && mappa.size() < 8) {
             message = String.format("Parametri insufficienti (%d) nella bio %s", mappa.size(), mappa.get(KEY_MAPPA_TITLE));
-            if (mappa.size() < 7) {
+            if (mappa.size() < 6) {
                 logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
             else {
@@ -544,7 +547,7 @@ public class ElaboraService {
         return elaborato;
     }
 
-    public String fixLuogoNato(String grezzo) {
+    public String fixLuogo(String wikiTitle, String grezzo) {
         String elaborato = grezzo;
 
         if (textService.isValid(grezzo)) {
@@ -555,7 +558,7 @@ public class ElaboraService {
         return elaborato;
     }
 
-    public String fixGiornoNato(String grezzo) {
+    public String fixGiorno(String wikiTitle, String grezzo) {
         String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
         String elaboratoDue = VUOTA;
         String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
@@ -566,11 +569,11 @@ public class ElaboraService {
         String patternZero = "^0[1-9] ";
         String patternVirgola = "^,[1-9]";
 
-        if (textService.isValid(grezzo)) {
-            elaboratoUno = fixElimina(elaboratoUno);
+        for (TypeElimina type : TypeElimina.values()) {
+            elaboratoUno = type.get(elaboratoUno);
         }
 
-        if (elaboratoUno.contains(CALENDARIO)) {
+        if (elaboratoUno.contains(DUBBIO_CALENDARIO)) {
             if (elaboratoUno.contains(PARENTESI_TONDA_INI)) {
                 elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, PARENTESI_TONDA_INI);
             }
@@ -597,49 +600,49 @@ public class ElaboraService {
 
         if (regexService.isEsiste(elaboratoUno, patternPrimoDelMese)) {
             elaboratoDue = elaboratoUno.replaceAll(PRIMO_MAC, PRIMO_WIN);
-            message = String.format("Un primo del mese da convertire%s%s", FORWARD, elaboratoUno);
+            message = String.format("Un primo del mese da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (regexService.isEsiste(elaboratoUno, patternMaiuscola)) {
             elaboratoDue = elaboratoUno.toLowerCase();
-            message = String.format("Nome del mese maiuscolo da convertire%s%s", FORWARD, elaboratoUno);
+            message = String.format("Nome del mese maiuscolo da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (regexService.isEsiste(elaboratoUno, patternZeroUno)) {
             elaboratoDue = elaboratoUno.replace("01", "1" + PRIMO_WIN);
-            message = String.format("Zero iniziale del primo da levare%s%s", FORWARD, elaboratoUno);
+            message = String.format("Zero iniziale del primo da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (regexService.isEsiste(elaboratoUno, patternApici)) {
             elaboratoDue = elaboratoUno.replace("'", "");
-            message = String.format("Apici inizio-fine da levare%s%s", FORWARD, elaboratoUno);
+            message = String.format("Apici inizio-fine da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (regexService.isEsiste(elaboratoUno, patternZero)) {
             elaboratoDue = elaboratoUno.substring(1);
-            message = String.format("Zero iniziale da levare%s%s", FORWARD, elaboratoUno);
+            message = String.format("Zero iniziale da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (regexService.isEsiste(elaboratoUno, patternVirgola)) {
             elaboratoDue = elaboratoUno.substring(1);
-            message = String.format("Virgola iniziale da levare%s%s", FORWARD, elaboratoUno);
+            message = String.format("Virgola iniziale da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
 
         if (elaboratoUno.contains(SPAZIO_NON_BREAKING)) {
             elaboratoDue = elaboratoUno.replace(SPAZIO_NON_BREAKING, SPAZIO);
-            message = String.format("Spazio non-breaking da levare%s%s", FORWARD, elaboratoUno);
+            message = String.format("Spazio non-breaking da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
@@ -647,49 +650,31 @@ public class ElaboraService {
         return elaboratoDue;
     }
 
-    public String fixAnnoNato(String grezzo) {
-        String elaborato = grezzo;
+    public String fixAnno(String wikiTitle, String grezzo) {
+        String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
+        String elaboratoDue = VUOTA;
+        String pattern = "^[1-9][0-9]?[0-9]?[0-9]?$";
 
-        if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
-            elaborato = fixDopo(elaborato);
+        for (TypeElimina type : TypeElimina.values()) {
+            elaboratoUno = type.get(elaboratoUno);
         }
 
-        return elaborato;
-    }
-
-    public String fixLuogoMorto(String grezzo) {
-        String elaborato = grezzo;
-
-        if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
-            elaborato = fixDopo(elaborato);
+        if (textService.isValid(elaboratoUno)) {
+            elaboratoUno = fixDopo(elaboratoUno);
+            elaboratoUno = textService.setNoDoppieQuadre(elaboratoUno);
+            elaboratoDue = regexService.getReal(elaboratoUno, pattern);
+        }
+        else {
+            return VUOTA;
         }
 
-        return elaborato;
-    }
-
-    public String fixGiornoMorto(String grezzo) {
-        String elaborato = grezzo;
-
-        if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
-            elaborato = fixDopo(elaborato);
+        if (textService.isValid(elaboratoDue)) {
+            return elaboratoDue;
         }
 
-        return elaborato;
+        return elaboratoDue;
     }
 
-    public String fixAnnoMorto(String grezzo) {
-        String elaborato = grezzo;
-
-        if (textService.isValid(grezzo)) {
-            elaborato = fixElimina(elaborato);
-            elaborato = fixDopo(elaborato);
-        }
-
-        return elaborato;
-    }
 
     public String fixNomeSingolo(String elaboratoForseDoppio) {
         String elaboratoSingolo = elaboratoForseDoppio;
@@ -724,39 +709,37 @@ public class ElaboraService {
         if (textService.isEmpty(valorePropertyTmplBioServer)) {
             return VUOTA;
         }
-        if (valoreGrezzo.endsWith(ECC)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.endsWith(UGUALE)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.contains(DUBBIO_O)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
-            return VUOTA;
-        }
-        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
-            return VUOTA;
-        }
+//        if (valoreGrezzo.endsWith(ECC)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.endsWith(UGUALE)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.contains(DUBBIO_O)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
+//            return VUOTA;
+//        }
+//        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
+//            return VUOTA;
+//        }
+
+//        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
+//            return VUOTA;
+//        }
         //        if (valoreGrezzo.contains(PARENTESI_TONDA_END)) {
         //            return VUOTA;
         //        }
-        if (valoreGrezzo.contains(SENZA_FONTE)) {
-            return VUOTA;
-        }
         //        if (valoreGrezzo.contains(CALENDARIO)) {
         //            return VUOTA;
         //        }
@@ -789,14 +772,11 @@ public class ElaboraService {
 
         valoreGrezzo = textService.setNoDoppieQuadre(valoreGrezzo);
         valoreGrezzo = textService.setNoQuadre(valoreGrezzo);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_OPEN);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, REF_TAG);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NOTE);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, DOPPIE_GRAFFE_INI);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTTP);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTML);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, HTML_QUADRE);
-        valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, NO_WIKI);
+
+        for (TypeDopo type : TypeDopo.values()) {
+            valoreGrezzo = type.get(valoreGrezzo);
+        }
+
         if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
             valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_INI_REGEX, VUOTA);
             valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_END_REGEX, VUOTA);

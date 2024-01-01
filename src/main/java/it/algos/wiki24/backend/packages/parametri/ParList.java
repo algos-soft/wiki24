@@ -55,21 +55,24 @@ public abstract class ParList extends WikiList {
 
         boxGrezzoVuoto = new IndeterminateCheckbox();
         boxGrezzoVuoto.setLabel("Grezzo");
-        boxGrezzoVuoto.setIndeterminate(true);
+        boxGrezzoVuoto.setIndeterminate(false);
+        boxGrezzoVuoto.setValue(false);
         boxGrezzoVuoto.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout1 = new HorizontalLayout(boxGrezzoVuoto);
         layout1.setAlignItems(Alignment.CENTER);
 
         boxElaboratoVuoto = new IndeterminateCheckbox();
         boxElaboratoVuoto.setLabel("Elaborato");
-        boxElaboratoVuoto.setIndeterminate(true);
+        boxElaboratoVuoto.setIndeterminate(false);
+        boxElaboratoVuoto.setValue(false);
         boxElaboratoVuoto.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout2 = new HorizontalLayout(boxElaboratoVuoto);
         layout2.setAlignItems(Alignment.CENTER);
 
         boxUguale = new IndeterminateCheckbox();
         boxUguale.setLabel("Uguale");
-        boxUguale.setIndeterminate(true);
+        boxUguale.setIndeterminate(false);
+        boxUguale.setValue(false);
         boxUguale.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout3 = new HorizontalLayout(boxUguale);
         layout3.setAlignItems(Alignment.CENTER);

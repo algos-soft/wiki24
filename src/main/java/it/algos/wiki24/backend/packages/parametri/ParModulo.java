@@ -86,14 +86,14 @@ public abstract class ParModulo extends WikiModulo {
         pageId = bioServerBean.getPageId();
         wikiTitle = bioServerBean.getWikiTitle();
         grezzo = mappa.get(keyMapName);
-        elaborato = getElaborato(grezzo);
+        elaborato = getElaborato(wikiTitle, grezzo);
         parametroEntity = newEntity(pageId, wikiTitle, grezzo, elaborato);
 
         parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
         insertSave(parametroEntity);
     }
 
-    public String getElaborato(String grezzo) {
+    public String getElaborato(String wikiTitle, String grezzo) {
         return VUOTA;
     }
 

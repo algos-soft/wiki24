@@ -57,48 +57,68 @@ public class ElaboraServiceTest extends WikiTest {
     private Map<String, String> mappaBio;
 
     //--wikiTitle
-    //--previsto
-    protected static Stream<Arguments> GIORNO_NATO() {
+    //--previsto nato
+    //--previsto morto
+    protected static Stream<Arguments> GIORNO() {
         return Stream.of(
-                Arguments.of("Malcolm IV di Scozia", VUOTA),
-                Arguments.of("William Dobson", "4 marzo"),
-                Arguments.of("Carolina Matilde di Hannover", "22 luglio"),
-                Arguments.of("Giuseppe Lillo", VUOTA),
-                Arguments.of("Hendrick Goltzius", VUOTA),
-                Arguments.of("Eraldo Da Roma", "1º marzo"),
-                Arguments.of("Marcello Barlocco", "1º marzo"),
-                Arguments.of("Orazio Capuana Yaluna", "1º marzo"),
-                Arguments.of("Cecilia di York", "20 marzo"),
-                Arguments.of("Papa Leone II", VUOTA),
-                Arguments.of("Deep Roy", "1º dicembre"),
-                Arguments.of("Nanuka Gogichaishvili", "1º maggio"),
-                Arguments.of("Yui Natsukawa", "1º giugno"),
-                Arguments.of("Max Isidor Bodenheimer", "12 marzo"),
-                Arguments.of("Gabriele Oriali", "25 novembre"),
-                Arguments.of("Hinako Sugiura", "30 novembre"),
-                Arguments.of("Maurice O'Fihely", VUOTA),
-                Arguments.of("Aleksandr Michajlovič Sibirjakov", VUOTA),
-                Arguments.of("Elizaveta Andreevna Šuvalova", "25 luglio"),
-                Arguments.of("Rudol'f Lazarevič Samojlovič", VUOTA),
-                Arguments.of("Pak Ui-chun", VUOTA),
-                Arguments.of("Zheng Junli", "6 dicembre"),
-                Arguments.of("Bradley Fuller", "5 novembre"),
-                Arguments.of("TomSka", "27 giugno"),
-                Arguments.of("Pierre Baour-Lormian", "24 marzo"),
-                Arguments.of("Angelina Lanza Damiani", "13 febbraio"),
-                Arguments.of("Torquato Nanni", "4 febbraio"),
-                Arguments.of("John Arbuthnot", "29 aprile"),
-                Arguments.of("Fabrizio Zani", "9 giugno"),
-                Arguments.of("Piera Oppezzo", "2 agosto"),
-                Arguments.of("Giovanni Silvestri (editore)", VUOTA),
-                Arguments.of("Stefan Merrill Block", "26 febbraio"),
-                Arguments.of("Maurizio Roffredi", "22 novembre"),
-                Arguments.of("Aleksandr Ivanovič Vvedenskij", "23 novembre"),
-                Arguments.of("Vincenzo Massabò", "4 novembre"),
-                Arguments.of("Sergej Nikolaevič Bulgakov", "28 luglio"),
-                Arguments.of("Sof'ja Stepanovna Razumovskaja", VUOTA),
-                Arguments.of("Aleksej Feofilaktovič Pisemskij", "22 marzo")
+//                Arguments.of("Malcolm IV di Scozia", VUOTA, "9 dicembre"),
+//                Arguments.of("William Dobson", "4 marzo", "28 ottobre"),
+//                Arguments.of("Carolina Matilde di Hannover", "22 luglio", "10 maggio"),
+//                Arguments.of("Giuseppe Lillo", VUOTA, "4 febbraio"),
+//                Arguments.of("Hendrick Goltzius", VUOTA, "1º gennaio"),
+//                Arguments.of("Eraldo Da Roma", "1º marzo", "27 marzo"),
+//                Arguments.of("Marcello Barlocco", "1º marzo", "12 novembre"),
+//                Arguments.of("Orazio Capuana Yaluna", "1º marzo", VUOTA),
+//                Arguments.of("Cecilia di York", "20 marzo", "24 agosto"),
+//                Arguments.of("Papa Leone II", VUOTA, VUOTA),
+//                Arguments.of("Deep Roy", "1º dicembre", VUOTA),
+//                Arguments.of("Nanuka Gogichaishvili", "1º maggio", VUOTA),
+//                Arguments.of("Yui Natsukawa", "1º giugno", VUOTA),
+//                Arguments.of("Max Isidor Bodenheimer", "12 marzo", "19 luglio"),
+//                Arguments.of("Gabriele Oriali", "25 novembre", VUOTA),
+//                Arguments.of("Hinako Sugiura", "30 novembre", "22 luglio"),
+//                Arguments.of("Maurice O'Fihely", VUOTA, "25 marzo"),
+                Arguments.of("Aleksandr Michajlovič Sibirjakov", VUOTA, "2 novembre"),
+                Arguments.of("Elizaveta Andreevna Šuvalova", "25 luglio", "28 luglio"),
+                Arguments.of("Rudol'f Lazarevič Samojlovič", VUOTA, "4 marzo"),
+                Arguments.of("Pak Ui-chun", VUOTA, VUOTA),
+                Arguments.of("Zheng Junli", "6 dicembre", "23 aprile"),
+                Arguments.of("Bradley Fuller", "5 novembre", VUOTA),
+                Arguments.of("TomSka", "27 giugno", VUOTA),
+                Arguments.of("Pierre Baour-Lormian", "24 marzo", "18 dicembre"),
+                Arguments.of("Angelina Lanza Damiani", "13 febbraio", "14 luglio"),
+                Arguments.of("Torquato Nanni", "4 febbraio", "22 aprile"),
+                Arguments.of("John Arbuthnot", "29 aprile", "27 febbraio"),
+                Arguments.of("Fabrizio Zani", "9 giugno", VUOTA),
+                Arguments.of("Piera Oppezzo", "2 agosto", "19 dicembre"),
+                Arguments.of("Giovanni Silvestri (editore)", VUOTA, "9 settembre"),
+                Arguments.of("Stefan Merrill Block", "26 febbraio", VUOTA),
+                Arguments.of("Maurizio Roffredi", "22 novembre", "3 maggio"),
+                Arguments.of("Aleksandr Ivanovič Vvedenskij", "23 novembre", "20 dicembre"),
+                Arguments.of("Vincenzo Massabò", "4 novembre", "20 giugno"),
+                Arguments.of("Sergej Nikolaevič Bulgakov", "28 luglio", "12 luglio"),
+                Arguments.of("Sof'ja Stepanovna Razumovskaja", VUOTA, VUOTA),
+                Arguments.of("Aleksej Feofilaktovič Pisemskij", "22 marzo", "2 febbraio")
+        );
+    }
 
+
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
+    protected static Stream<Arguments> ANNO() {
+        return Stream.of(
+                Arguments.of("Malcolm IV di Scozia", "1141", "1165"),
+                Arguments.of("William Dobson", "1610", "1646"),
+                Arguments.of("Carolina Matilde di Hannover", "1751", "1775"),
+                Arguments.of("Jacopo Palma il Vecchio", VUOTA, "1528"),
+                Arguments.of("Pietro Nolasco", VUOTA, "1256"),
+                Arguments.of("Pedro de Candia", VUOTA, "1542"),
+                Arguments.of("Marco Sciarra", VUOTA, "1593"),
+                Arguments.of("Fra Bevignate", VUOTA, VUOTA),
+                Arguments.of("Giuditta di Baviera", "800", "843"),
+                Arguments.of("Vasilij Ivanovič Baženov", VUOTA, "1799"),
+                Arguments.of("Aleksej Feofilaktovič Pisemskij", "1821", "1881")
         );
     }
 
@@ -175,12 +195,12 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "BIOGRAFIE")
     @Order(102)
     @DisplayName("102 - creaBeanMongo")
-        //--wikiTitle
-        //--numero parametri
+    //--wikiTitle
+    //--numero parametri
     void creaBeanMongo(String wikiTitleVoce, int numParagrafi) {
         System.out.println(("102 - creaBeanMongo"));
         sorgente = wikiTitleVoce;
@@ -194,12 +214,13 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNO_NATO")
+    @MethodSource(value = "GIORNO")
     @Order(504)
     @DisplayName("504 - giornoNato")
         //--wikiTitle
-        //--previsto
-    void giornoNato(String wikiTitleVoce, String giornoNato) {
+        //--previsto nato
+        //--previsto morto
+    void giornoNato(String wikiTitleVoce, String giornoNato, String nonUsato) {
         System.out.println(("504 - giornoNato"));
         sorgente = wikiTitleVoce;
         previsto = giornoNato;
@@ -207,9 +228,90 @@ public class ElaboraServiceTest extends WikiTest {
         bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
         assertNotNull(bioServerEntity);
         mappaBio = service.estraeMappa(bioServerEntity);
-        sorgente2 = mappaBio.get(KEY_MAPPA_GIORNO_NASCITA);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_GIORNO_NASCITA);
 
-        ottenuto = service.fixGiornoNato(sorgente2);
+        ottenuto = service.fixGiorno(sorgente2, sorgente3);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNO")
+    @Order(505)
+    @DisplayName("505 - giornoMorto")
+        //--wikiTitle
+        //--previsto nato
+        //--previsto morto
+    void giornoMorto(String wikiTitleVoce, String nonUsato, String giornoMorto) {
+        System.out.println(("505 - giornoMorto"));
+        sorgente = wikiTitleVoce;
+        previsto = giornoMorto;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_GIORNO_MORTE);
+
+        ottenuto = service.fixGiorno(sorgente2, sorgente3);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNO")
+    @Order(506)
+    @DisplayName("506 - annoNato")
+        //--wikiTitle
+        //--previsto nato
+        //--previsto morto
+    void annoNato(String wikiTitleVoce, String annoNato, String nonUsato) {
+        System.out.println(("506 - annoNato"));
+        sorgente = wikiTitleVoce;
+        previsto = annoNato;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_ANNO_NASCITA);
+
+        ottenuto = service.fixAnno(sorgente2, sorgente3);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "ANNO")
+    @Order(507)
+    @DisplayName("507 - annoMorto")
+        //--wikiTitle
+        //--previsto nato
+        //--previsto morto
+    void annoMorto(String wikiTitleVoce, String nonUsato, String annoMorto) {
+        System.out.println(("507 - annoMorto"));
+        sorgente = wikiTitleVoce;
+        previsto = annoMorto;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_ANNO_MORTE);
+
+        ottenuto = service.fixAnno(sorgente2, sorgente3);
         previsto = textService.isValid(previsto) ? previsto : NULLO;
         ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
         message = String.format("%s%s%s", previsto, FORWARD, ottenuto);

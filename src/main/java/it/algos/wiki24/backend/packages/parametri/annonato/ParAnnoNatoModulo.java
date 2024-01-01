@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.parametri.giornonato;
+package it.algos.wiki24.backend.packages.parametri.annonato;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
@@ -18,31 +18,30 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 31-Dec-2023
- * Time: 11:56
+ * Date: Mon, 01-Jan-2024
+ * Time: 09:35
  */
 @Service
-public class ParGiornoNatoModulo extends ParModulo {
+public class ParAnnoNatoModulo extends ParModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public ParGiornoNatoModulo() {
-        super(ParGiornoNatoEntity.class, ParGiornoNatoList.class, ParGiornoNatoForm.class);
+    public ParAnnoNatoModulo() {
+        super(ParAnnoNatoEntity.class, ParAnnoNatoList.class, ParAnnoNatoForm.class);
     }
-
 
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastElabora = WPref.lastElaboraParGiornoNato;
-        super.durataElabora = WPref.elaboraParGiornoNatoTime;
+        super.lastElabora = WPref.lastElaboraParAnnoNato;
+        super.durataElabora = WPref.elaboraParAnnoNatoTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
 
-        super.keyMapName = KEY_MAPPA_GIORNO_NASCITA;
+        super.keyMapName = KEY_MAPPA_ANNO_NASCITA;
     }
 
 
@@ -52,11 +51,11 @@ public class ParGiornoNatoModulo extends ParModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public ParGiornoNatoEntity newEntity() {
+    public ParAnnoNatoEntity newEntity() {
         return newEntity(0, VUOTA, VUOTA, VUOTA);
     }
 
-    public ParGiornoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo) {
+    public ParAnnoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo) {
         return newEntity(pageId, wikiTitle, grezzo, VUOTA);
     }
 
@@ -70,19 +69,19 @@ public class ParGiornoNatoModulo extends ParModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public ParGiornoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
-        ParGiornoNatoEntity newEntityBean = ParGiornoNatoEntity.builder()
+    public ParAnnoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
+        ParAnnoNatoEntity newEntityBean = ParAnnoNatoEntity.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .grezzo(textService.isValid(grezzo) ? grezzo : null)
                 .elaborato(textService.isValid(elaborato) ? elaborato : null)
                 .build();
 
-        return (ParGiornoNatoEntity) fixKey(newEntityBean);
+        return (ParAnnoNatoEntity) fixKey(newEntityBean);
     }
 
     public String getElaborato(String wikiTitle, String grezzo) {
-        return elaboraService.fixGiorno(wikiTitle, grezzo);
+        return elaboraService.fixAnno(wikiTitle, grezzo);
     }
 
 }// end of CrudModulo class

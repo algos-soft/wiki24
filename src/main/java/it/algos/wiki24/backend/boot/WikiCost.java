@@ -465,7 +465,6 @@ public class WikiCost {
     public static final String DUBBIO_TRATTINO = SPAZIO + TRATTINO + SPAZIO;
     public static final String PRIMO_WIN = "º";
     public static final String PRIMO_MAC = "°";
-    public static final String SENZA_FONTE = "Senza fonte";
-    public static final String CALENDARIO = "calendario";
+    public static final String DUBBIO_CALENDARIO = "calendario";
 
 }
