@@ -39,13 +39,13 @@ public class BioMongoEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String luogoNatoLink;
 
-    @AField(type = TypeField.text, headerText = "giorno", widthRem = 8)
+    @AField(type = TypeField.text, headerText = "nato", widthRem = 9)
     public String giornoNato;
 
     @AField(type = TypeField.integer)
     public int giornoNatoOrd;
 
-    @AField(type = TypeField.text, headerText = "anno", widthRem = 6)
+    @AField(type = TypeField.text, headerText = "n.", widthRem = 5)
     public String annoNato;
 
     @AField(type = TypeField.integer)
@@ -57,13 +57,13 @@ public class BioMongoEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String luogoMortoLink;
 
-    @AField(type = TypeField.text, headerText = "giorno", widthRem = 8)
+    @AField(type = TypeField.text, headerText = "Morto", widthRem = 9)
     public String giornoMorto;
 
     @AField(type = TypeField.integer)
     public int giornoMortoOrd;
 
-    @AField(type = TypeField.text, headerText = "anno", widthRem = 7)
+    @AField(type = TypeField.text, headerText = "m.", widthRem = 5)
     public String annoMorto;
 
     @AField(type = TypeField.integer)

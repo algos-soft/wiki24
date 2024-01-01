@@ -56,9 +56,6 @@ public class ParGiornoNatoModulo extends ParModulo {
         return newEntity(0, VUOTA, VUOTA, VUOTA);
     }
 
-    public ParGiornoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo) {
-        return newEntity(pageId, wikiTitle, grezzo, VUOTA);
-    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -66,7 +63,7 @@ public class ParGiornoNatoModulo extends ParModulo {
      * @param pageId    (obbligatorio)
      * @param wikiTitle (obbligatorio)
      * @param grezzo    (obbligatorio)
-     * @param elaborato (facoltativo)
+     * @param elaborato (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */

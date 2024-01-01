@@ -1,11 +1,13 @@
-package it.algos.wiki24.backend.packages.parametri.giornomorto;
+package it.algos.wiki24.backend.packages.parametri.luogonato;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.packages.parametri.*;
 import org.springframework.stereotype.*;
 
@@ -14,35 +16,36 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
+import java.util.*;
+
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
  * Date: Mon, 01-Jan-2024
- * Time: 08:53
+ * Time: 18:06
  */
 @Service
-public class ParGiornoMortoModulo extends ParModulo {
+public class ParLuogoNatoModulo extends ParModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public ParGiornoMortoModulo() {
-        super(ParGiornoMortoEntity.class, ParGiornoMortoList.class, ParGiornoMortoForm.class);
+    public ParLuogoNatoModulo() {
+        super(ParLuogoNatoEntity.class, ParLuogoNatoList.class, ParLuogoNatoForm.class);
     }
-
 
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.lastElabora = WPref.lastElaboraParGiornoMorto;
-        super.durataElabora = WPref.elaboraParGiornoMortoTime;
+        super.lastElabora = WPref.lastElaboraParLuogoNato;
+        super.durataElabora = WPref.elaboraParLuogoNatoTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
 
-        super.keyMapName = KEY_MAPPA_GIORNO_MORTE;
+        super.keyMapName = KEY_MAPPA_LUOGO_NASCITA;
     }
 
 
@@ -52,9 +55,10 @@ public class ParGiornoMortoModulo extends ParModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public ParGiornoMortoEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA, VUOTA);
+    public ParLuogoNatoEntity newEntity() {
+        return newEntity(0, VUOTA, VUOTA, VUOTA, VUOTA);
     }
+
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -62,23 +66,46 @@ public class ParGiornoMortoModulo extends ParModulo {
      * @param pageId    (obbligatorio)
      * @param wikiTitle (obbligatorio)
      * @param grezzo    (obbligatorio)
+     * @param linkLuogo (obbligatorio)
      * @param elaborato (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public ParGiornoMortoEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
-        ParGiornoMortoEntity newEntityBean = ParGiornoMortoEntity.builder()
+    public ParLuogoNatoEntity newEntity(long pageId, String wikiTitle, String grezzo, String linkLuogo, String elaborato) {
+        ParLuogoNatoEntity newEntityBean = ParLuogoNatoEntity.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .grezzo(textService.isValid(grezzo) ? grezzo : null)
+                .linkLuogo(textService.isValid(linkLuogo) ? linkLuogo : null)
                 .elaborato(textService.isValid(elaborato) ? elaborato : null)
                 .build();
 
-        return (ParGiornoMortoEntity) fixKey(newEntityBean);
+        return (ParLuogoNatoEntity) fixKey(newEntityBean);
     }
 
-    public String getElaborato(String wikiTitle, String grezzo) {
-        return elaboraService.fixGiorno(wikiTitle, grezzo);
+    public void elabora(BioServerEntity bioServerBean) {
+        AbstractEntity parametroEntity;
+        Map<String, String> mappa;
+        long pageId;
+        String wikiTitle;
+        String grezzo;
+        String linkLuogo;
+        String elaborato;
+
+        mappa = elaboraService.estraeMappa(bioServerBean);
+        pageId = bioServerBean.getPageId();
+        wikiTitle = bioServerBean.getWikiTitle();
+        grezzo = mappa.get(keyMapName);
+        linkLuogo = mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK);
+        elaborato = getElaborato(wikiTitle, grezzo, linkLuogo);
+        parametroEntity = newEntity(pageId, wikiTitle, grezzo, linkLuogo,elaborato);
+
+        parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
+        insertSave(parametroEntity);
+    }
+
+    public String getElaborato(String wikiTitle, String grezzo, String linkLuogo) {
+        return elaboraService.fixLuogo(wikiTitle, grezzo, linkLuogo);
     }
 
 }// end of CrudModulo class

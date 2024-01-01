@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.bio.biomongo;
 
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
@@ -14,11 +15,23 @@ import org.springframework.data.domain.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class BioMongoList extends WikiList {
 
-    protected TextField searchNome = new TextField();
+    protected TextField searchNome;
 
-    protected TextField searchCognome = new TextField();
+    protected TextField searchCognome;
 
-    protected TextField searchSesso = new TextField();
+    protected TextField searchSesso;
+
+    protected TextField searchLuogoNato;
+
+    protected TextField searchGiornoNato;
+
+    protected TextField searchAnnoNato;
+
+    protected TextField searchLuogoMorto;
+
+    protected TextField searchGiornoMorto;
+
+    protected TextField searchAnnoMorto;
 
     public BioMongoList(final BioMongoModulo crudModulo) {
         super(crudModulo);
@@ -49,22 +62,30 @@ public class BioMongoList extends WikiList {
     protected void fixTop() {
         super.fixTop();
 
-        searchNome.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_NOME);
-        searchNome.getElement().setProperty("title", "Search: ricerca per il valore del campo " + FIELD_NAME_NOME);
-        searchNome.setClearButtonVisible(true);
-        searchNome.addValueChangeListener(event -> this.sincroFiltri());
-
-        searchCognome.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_COGNOME);
-        searchCognome.getElement().setProperty("title", "Search: ricerca per il valore del campo " + FIELD_NAME_COGNOME);
-        searchCognome.setClearButtonVisible(true);
-        searchCognome.addValueChangeListener(event -> this.sincroFiltri());
-
-        searchSesso.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_SESSO);
-        searchSesso.getElement().setProperty("title", "Search: ricerca per il valore del campo " + FIELD_NAME_SESSO);
-        searchSesso.setClearButtonVisible(true);
-        searchSesso.addValueChangeListener(event -> this.sincroFiltri());
-
+        searchNome = creaSearch(FIELD_NAME_NOME);
+        searchCognome = creaSearch(FIELD_NAME_COGNOME);
+        searchSesso = creaSearch(FIELD_NAME_SESSO);
         buttonBar.add(searchNome, searchCognome, searchSesso);
+
+        searchLuogoNato = creaSearch(FIELD_NAME_LUOGO_NATO);
+        searchGiornoNato = creaSearch(FIELD_NAME_GIORNO_NATO);
+        searchAnnoNato = creaSearch(FIELD_NAME_ANNO_NATO);
+        searchLuogoMorto = creaSearch(FIELD_NAME_LUOGO_MORTO);
+        searchGiornoMorto = creaSearch(FIELD_NAME_GIORNO_MORTO);
+        searchAnnoMorto = creaSearch(FIELD_NAME_ANNO_MORTO);
+
+        this.add(new HorizontalLayout(searchLuogoNato, searchGiornoNato, searchAnnoNato, searchLuogoMorto, searchGiornoMorto, searchAnnoMorto));
+    }
+
+    protected TextField creaSearch(String fieldName) {
+        TextField searchField = new TextField();
+
+        searchField.setPlaceholder(TAG_ALTRE_BY + fieldName);
+        searchField.getElement().setProperty("title", "Search: ricerca per il valore del campo " + fieldName);
+        searchField.setClearButtonVisible(true);
+        searchField.addValueChangeListener(event -> this.sincroFiltri());
+
+        return searchField;
     }
 
     @Override

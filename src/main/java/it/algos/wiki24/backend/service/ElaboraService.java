@@ -110,10 +110,10 @@ public class ElaboraService {
         bioMongoEntity.nome = fixNome(mappa.get(KEY_MAPPA_NOME));
         bioMongoEntity.cognome = fixCognome(mappa.get(KEY_MAPPA_COGNOME));
         bioMongoEntity.sesso = fixSesso(mappa.get(KEY_MAPPA_SESSO));
-        bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA));
+        bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoNato = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_NASCITA));
         bioMongoEntity.annoNato = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_NASCITA));
-        bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE));
+        bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
         bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
 
@@ -547,7 +547,7 @@ public class ElaboraService {
         return elaborato;
     }
 
-    public String fixLuogo(String wikiTitle, String grezzo) {
+    public String fixLuogo(String wikiTitle, String grezzo, String linkLuogo) {
         String elaborato = grezzo;
 
         if (textService.isValid(grezzo)) {
@@ -709,34 +709,34 @@ public class ElaboraService {
         if (textService.isEmpty(valorePropertyTmplBioServer)) {
             return VUOTA;
         }
-//        if (valoreGrezzo.endsWith(ECC)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.endsWith(UGUALE)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.contains(DUBBIO_O)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
-//            return VUOTA;
-//        }
-//        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
-//            return VUOTA;
-//        }
+        //        if (valoreGrezzo.endsWith(ECC)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.endsWith(UGUALE)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.contains(DUBBIO_O)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
+        //            return VUOTA;
+        //        }
+        //        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
+        //            return VUOTA;
+        //        }
 
-//        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
-//            return VUOTA;
-//        }
+        //        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
+        //            return VUOTA;
+        //        }
         //        if (valoreGrezzo.contains(PARENTESI_TONDA_END)) {
         //            return VUOTA;
         //        }

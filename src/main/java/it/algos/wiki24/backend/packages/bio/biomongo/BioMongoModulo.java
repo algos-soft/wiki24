@@ -7,7 +7,11 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
+import it.algos.wiki24.backend.packages.parametri.annomorto.*;
+import it.algos.wiki24.backend.packages.parametri.annonato.*;
 import it.algos.wiki24.backend.packages.parametri.cognome.*;
+import it.algos.wiki24.backend.packages.parametri.giornomorto.*;
+import it.algos.wiki24.backend.packages.parametri.giornonato.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
@@ -30,10 +34,24 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     BioServerModulo bioServerModulo;
+
     @Inject
     ParNomeModulo parNomeModulo;
+
     @Inject
     ParCognomeModulo parCognomeModulo;
+
+    @Inject
+    ParGiornoNatoModulo parGiornoNatoModulo;
+
+    @Inject
+    ParGiornoMortoModulo parGiornoMortoModulo;
+
+    @Inject
+    ParAnnoNatoModulo parAnnoNatoModulo;
+
+    @Inject
+    ParAnnoMortoModulo parAnnoMortoModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -101,7 +119,7 @@ public class BioMongoModulo extends WikiModulo {
      */
     @Override
     public List<String> getListPropertyNames() {
-        return Arrays.asList("wikiTitle", "nome", "cognome", "sesso");
+        return Arrays.asList("wikiTitle", "nome", "cognome", "sesso", "luogoNato", "giornoNato", "annoNato", "luogoMorto", "giornoMorto", "annoMorto");
     }
 
     public List<Long> findOnlyPageId() {
@@ -131,6 +149,10 @@ public class BioMongoModulo extends WikiModulo {
 
         parNomeModulo.elabora(lista);
         parCognomeModulo.elabora(lista);
+        parGiornoNatoModulo.elabora(lista);
+        parGiornoMortoModulo.elabora(lista);
+        parAnnoNatoModulo.elabora(lista);
+        parAnnoMortoModulo.elabora(lista);
     }
 
     @Override

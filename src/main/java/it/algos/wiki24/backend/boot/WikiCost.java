@@ -39,6 +39,7 @@ public class WikiCost {
     public static final String KEY_MAPPA_SESSO = "Sesso";
 
     public static final String KEY_MAPPA_LUOGO_NASCITA = "LuogoNascita";
+    public static final String KEY_MAPPA_LUOGO_NASCITA_LINK = "LuogoNascitaLink";
 
     public static final String KEY_MAPPA_GIORNO_NASCITA = "GiornoMeseNascita";
 
@@ -98,6 +99,8 @@ public class WikiCost {
     public static final String FIELD_NAME_SINGOLARE = "singolare";
 
     public static final String FIELD_NAME_PLURALE = "plurale";
+    public static final String FIELD_NAME_LUOGO_NATO = "luogoNato";
+    public static final String FIELD_NAME_LUOGO_MORTO = "luogoMorto";
 
     public static final String FIELD_NAME_GIORNO_NATO = "giornoNato";
 
