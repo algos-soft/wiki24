@@ -113,7 +113,7 @@ public class ElaboraService {
         bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoNato = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_NASCITA));
         bioMongoEntity.annoNato = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_NASCITA));
-        bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
+        bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_MORTE_LINK));
         bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
         bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
         bioMongoEntity.attivita = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA));

@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.parametri.nazionalita;
+package it.algos.wiki24.backend.packages.parametri.attivita;
 
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
@@ -11,10 +11,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class ParNazionalitaList extends ParList {
+public class ParAttivitaList extends ParList {
 
 
-    public ParNazionalitaList(final ParNazionalitaModulo crudModulo) {
+    public ParAttivitaList(final ParAttivitaModulo crudModulo) {
         super(crudModulo);
     }
 

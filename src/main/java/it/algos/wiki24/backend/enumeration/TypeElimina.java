@@ -23,10 +23,13 @@ public enum TypeElimina {
     dubbioO(" o ", TypeParse.contains),
     parentesi("(o ", TypeParse.contains),
     oppure(" oppure ", TypeParse.contains),
+    floruit("Floruit", TypeParse.contains),
+    floruit2("floruit", TypeParse.contains),
     ecc("ecc.", TypeParse.endsWith),
     interrogativo("?", TypeParse.endsWith),
     uguale("=", TypeParse.endsWith),
     intTonda("?)", TypeParse.endsWith),
+
     ;
 
     private String tag;

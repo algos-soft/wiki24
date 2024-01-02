@@ -5,6 +5,7 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 
@@ -74,7 +75,7 @@ public abstract class ParModulo extends WikiModulo {
         super.fixElabora(inizio);
     }
 
-    public void elabora(BioServerEntity bioServerBean) {
+    public AbstractEntity elabora(BioServerEntity bioServerBean) {
         AbstractEntity parametroEntity;
         Map<String, String> mappa;
         long pageId;
@@ -90,7 +91,7 @@ public abstract class ParModulo extends WikiModulo {
         parametroEntity = newEntity(pageId, wikiTitle, grezzo, elaborato);
 
         parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
-        insertSave(parametroEntity);
+        return insertSave(parametroEntity);
     }
 
     public String getElaborato(String wikiTitle, String grezzo) {
@@ -118,12 +119,15 @@ public abstract class ParModulo extends WikiModulo {
 
 
     @Override
-    public void resetEntity(AbstractEntity crudEntityBean) {
+    public AbstractEntity resetEntity(AbstractEntity crudEntityBean) {
         BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
+        BioMongoEntity bioMongoEntity = null;
 
         if (bioServerEntity != null) {
-            elabora(bioServerEntity);
+            bioMongoEntity = (BioMongoEntity)elabora(bioServerEntity);
         }
+
+        return bioMongoEntity;
     }
 
     @Override

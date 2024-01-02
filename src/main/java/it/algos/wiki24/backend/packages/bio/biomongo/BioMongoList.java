@@ -51,8 +51,10 @@ public class BioMongoList extends WikiList {
         this.usaBottoneDownload = false;
         this.usaBottoneTransfer = true;
 
+        super.usaBottoneEdit = true;
         super.usaInfoElabora = true;
-        this.usaBottoneElaboraDue = true;
+        super.usaBottoneElaboraDue = true;
+        super.usaBottoneResetEntity = true;
     }
 
 

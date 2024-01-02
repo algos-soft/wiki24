@@ -123,6 +123,15 @@ public class ElaboraServiceTest extends WikiTest {
         );
     }
 
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
+    protected static Stream<Arguments> LUOGO() {
+        return Stream.of(
+                Arguments.of("Charles Yuill", "[[Greater Madawaska|Calabogie]]", "[[Barrhead (Alberta)|Barrhead]]")
+        );
+    }
+
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
      * Deve essere sovrascritto, invocando ANCHE il metodo della superclasse <br>
@@ -215,12 +224,39 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "GIORNO")
-    @Order(504)
-    @DisplayName("504 - giornoNato")
+    @MethodSource(value = "LUOGO")
+    @Order(503)
+    @DisplayName("503 - luogoNato")
         //--wikiTitle
         //--previsto nato
         //--previsto morto
+    void luogoNato(String wikiTitleVoce, String luogoNato, String nonUsato) {
+        System.out.println(("503 - luogoNato"));
+        sorgente = wikiTitleVoce;
+        previsto = luogoNato;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_LUOGO_NASCITA);
+        sorgente4 = mappaBio.get(KEY_MAPPA_LUOGO_NASCITA_LINK);
+
+        ottenuto = service.fixLuogo(sorgente2, sorgente3, sorgente4);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+    //    @ParameterizedTest
+    @MethodSource(value = "GIORNO")
+    @Order(504)
+    @DisplayName("504 - giornoNato")
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
     void giornoNato(String wikiTitleVoce, String giornoNato, String nonUsato) {
         System.out.println(("504 - giornoNato"));
         sorgente = wikiTitleVoce;
@@ -241,41 +277,15 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
-    @MethodSource(value = "GIORNO")
-    @Order(505)
-    @DisplayName("505 - giornoMorto")
-        //--wikiTitle
-        //--previsto nato
-        //--previsto morto
-    void giornoMorto(String wikiTitleVoce, String nonUsato, String giornoMorto) {
-        System.out.println(("505 - giornoMorto"));
-        sorgente = wikiTitleVoce;
-        previsto = giornoMorto;
-
-        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
-        assertNotNull(bioServerEntity);
-        mappaBio = service.estraeMappa(bioServerEntity);
-        sorgente2 = bioServerEntity.wikiTitle;
-        sorgente3 = mappaBio.get(KEY_MAPPA_GIORNO_MORTE);
-
-        ottenuto = service.fixGiorno(sorgente2, sorgente3);
-        previsto = textService.isValid(previsto) ? previsto : NULLO;
-        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
-        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
-        System.out.println(message);
-        assertEquals(previsto, ottenuto);
-    }
-
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "ANNO")
-    @Order(506)
-    @DisplayName("506 - annoNato")
-        //--wikiTitle
-        //--previsto nato
-        //--previsto morto
+    @Order(505)
+    @DisplayName("505 - annoNato")
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
     void annoNato(String wikiTitleVoce, String annoNato, String nonUsato) {
-        System.out.println(("506 - annoNato"));
+        System.out.println(("505 - annoNato"));
         sorgente = wikiTitleVoce;
         previsto = annoNato;
 
@@ -295,14 +305,69 @@ public class ElaboraServiceTest extends WikiTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "ANNO")
-    @Order(507)
-    @DisplayName("507 - annoMorto")
+    @MethodSource(value = "LUOGO")
+    @Order(506)
+    @DisplayName("506 - luogoMorto")
         //--wikiTitle
         //--previsto nato
         //--previsto morto
+    void luogoMorto(String wikiTitleVoce, String nonUsato, String luogoMorto) {
+        System.out.println(("506 - giornoMorto"));
+        sorgente = wikiTitleVoce;
+        previsto = luogoMorto;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_LUOGO_MORTE);
+        sorgente4 = mappaBio.get(KEY_MAPPA_LUOGO_MORTE_LINK);
+
+        ottenuto = service.fixLuogo(sorgente2, sorgente3, sorgente4);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+
+    //    @ParameterizedTest
+    @MethodSource(value = "GIORNO")
+    @Order(507)
+    @DisplayName("507 - giornoMorto")
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
+    void giornoMorto(String wikiTitleVoce, String nonUsato, String giornoMorto) {
+        System.out.println(("507 - giornoMorto"));
+        sorgente = wikiTitleVoce;
+        previsto = giornoMorto;
+
+        bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
+        assertNotNull(bioServerEntity);
+        mappaBio = service.estraeMappa(bioServerEntity);
+        sorgente2 = bioServerEntity.wikiTitle;
+        sorgente3 = mappaBio.get(KEY_MAPPA_GIORNO_MORTE);
+
+        ottenuto = service.fixGiorno(sorgente2, sorgente3);
+        previsto = textService.isValid(previsto) ? previsto : NULLO;
+        ottenuto = textService.isValid(ottenuto) ? ottenuto : NULLO;
+        message = String.format("%s%s%s", previsto, FORWARD, ottenuto);
+        System.out.println(message);
+        assertEquals(previsto, ottenuto);
+    }
+
+
+    //    @ParameterizedTest
+    @MethodSource(value = "ANNO")
+    @Order(508)
+    @DisplayName("508 - annoMorto")
+    //--wikiTitle
+    //--previsto nato
+    //--previsto morto
     void annoMorto(String wikiTitleVoce, String nonUsato, String annoMorto) {
-        System.out.println(("507 - annoMorto"));
+        System.out.println(("508 - annoMorto"));
         sorgente = wikiTitleVoce;
         previsto = annoMorto;
 

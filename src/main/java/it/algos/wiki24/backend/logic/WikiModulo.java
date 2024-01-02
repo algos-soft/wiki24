@@ -129,7 +129,8 @@ public abstract class WikiModulo extends CrudModulo {
     public void transfer(AbstractEntity crudEntityBean) {
     }
 
-    public void resetEntity(AbstractEntity crudEntityBean) {
+    public AbstractEntity resetEntity(AbstractEntity crudEntityBean) {
+        return crudEntityBean;
     }
 
 

@@ -9,9 +9,12 @@ import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.packages.parametri.annomorto.*;
 import it.algos.wiki24.backend.packages.parametri.annonato.*;
+import it.algos.wiki24.backend.packages.parametri.attivita.*;
 import it.algos.wiki24.backend.packages.parametri.cognome.*;
 import it.algos.wiki24.backend.packages.parametri.giornomorto.*;
 import it.algos.wiki24.backend.packages.parametri.giornonato.*;
+import it.algos.wiki24.backend.packages.parametri.luogomorto.*;
+import it.algos.wiki24.backend.packages.parametri.luogonato.*;
 import it.algos.wiki24.backend.packages.parametri.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
 import it.algos.wiki24.backend.packages.parametri.sesso.*;
@@ -45,17 +48,28 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ParSessoModulo parSessoModulo;
-    @Inject
-    ParGiornoNatoModulo parGiornoNatoModulo;
 
     @Inject
-    ParGiornoMortoModulo parGiornoMortoModulo;
+    ParLuogoNatoModulo parLuogoNatoModulo;
+
+    @Inject
+    ParGiornoNatoModulo parGiornoNatoModulo;
 
     @Inject
     ParAnnoNatoModulo parAnnoNatoModulo;
 
     @Inject
+    ParLuogoMortoModulo parLuogoMortoModulo;
+
+    @Inject
+    ParGiornoMortoModulo parGiornoMortoModulo;
+
+    @Inject
     ParAnnoMortoModulo parAnnoMortoModulo;
+
+    @Inject
+    ParAttivitaModulo parAttivitaModulo;
+
     @Inject
     ParNazionalitaModulo parNazionalitaModulo;
 
@@ -163,12 +177,16 @@ public class BioMongoModulo extends WikiModulo {
         parNomeModulo.elabora(lista);
         parCognomeModulo.elabora(lista);
         parSessoModulo.elabora(lista);
+        parLuogoNatoModulo.elabora(lista);
         parGiornoNatoModulo.elabora(lista);
-        parGiornoMortoModulo.elabora(lista);
         parAnnoNatoModulo.elabora(lista);
+        parLuogoMortoModulo.elabora(lista);
+        parGiornoMortoModulo.elabora(lista);
         parAnnoMortoModulo.elabora(lista);
+        parAttivitaModulo.elabora(lista);
         parNazionalitaModulo.elabora(lista);
     }
+
 
     @Override
     public void transfer(AbstractEntity crudEntityBean) {
@@ -177,6 +195,19 @@ public class BioMongoModulo extends WikiModulo {
         if (bioServerEntity != null) {
             bioServerModulo.creaForm(bioServerEntity, CrudOperation.update);
         }
+    }
+
+    @Override
+    public AbstractEntity resetEntity(AbstractEntity crudEntityBean) {
+        BioServerEntity bioServerEntity = getBioServer(crudEntityBean);
+        BioMongoEntity bioMongoEntity = null;
+
+        if (bioServerEntity != null) {
+            bioMongoEntity = elaboraService.creaBeanMongo(bioServerEntity);
+            bioMongoEntity = (BioMongoEntity) insertSave(bioMongoEntity);
+        }
+
+        return bioMongoEntity;
     }
 
     public BioServerEntity getBioServer(AbstractEntity crudEntityBean) {

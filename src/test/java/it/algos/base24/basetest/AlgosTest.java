@@ -49,6 +49,7 @@ public abstract class AlgosTest {
     protected String sorgente2;
 
     protected String sorgente3;
+    protected String sorgente4;
 
     protected String previsto;
 

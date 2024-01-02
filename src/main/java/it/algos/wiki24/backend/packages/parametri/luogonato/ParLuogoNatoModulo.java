@@ -91,7 +91,7 @@ public class ParLuogoNatoModulo extends ParModulo {
         return (ParLuogoNatoEntity) fixKey(newEntityBean);
     }
 
-    public void elabora(BioServerEntity bioServerBean) {
+    public AbstractEntity elabora(BioServerEntity bioServerBean) {
         AbstractEntity parametroEntity;
         Map<String, String> mappa;
         long pageId;
@@ -109,7 +109,7 @@ public class ParLuogoNatoModulo extends ParModulo {
         parametroEntity = newEntity(pageId, wikiTitle, grezzo, linkLuogo, elaborato);
 
         parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
-        insertSave(parametroEntity);
+       return  insertSave(parametroEntity);
     }
 
     public String getElaborato(String wikiTitle, String grezzo, String linkLuogo) {
