@@ -26,6 +26,7 @@ public enum TypeDopo {
     note("<!--"),
     noWiki("<nowiki>"),
     doppiaGraffa("{{"),
+    small("<small>"),
     ;
 
 

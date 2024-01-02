@@ -577,50 +577,45 @@ public class ElaboraService {
     public String fixGiorno(String wikiTitle, String grezzo) {
         String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
         String elaboratoDue = VUOTA;
-        //        String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
-        //        String pattern = "^(1°?|[2-9]|[1-2][0-9]|[30-31]) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
-//        String pattern = "^(1(º|°){2}|[2-9]|[1-2][0-9]|[30-31]) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
-        String pattern = "^(1 |1º |1° |[2-9] |[1-2][0-9] |[30-31] )(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
-        String patternPrimoDelMese = "^1 ";
-        String patternZeroUno = "^01 ";
-        String patternMaiuscola = "^(1 |1º |1° |[2-9] |[1-2][0-9] |[30-31] )(Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
+        String pattern = "^(1 |1º |1° |[2-9] |[1-2][0-9] |30 |31 )(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+        String patternUno = "^(1 |1º |1° )";
+        String patternUnoSpazio = "^1 ";
+        String patternZero = "^0";
+        String patternMaiuscola = "^(1 |1º |1° |[2-9] |[1-2][0-9] |30 |31 )(Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
         String patternApici = "^'.+'$";
-        String patternZero = "^0[1-9] ";
         String patternVirgola = "^,[1-9]";
 
-        for (TypeElimina type : TypeElimina.values()) {
-            elaboratoUno = type.get(elaboratoUno);
-        }
-
-        if (elaboratoUno.contains(DUBBIO_CALENDARIO)) {
-            if (elaboratoUno.contains(PARENTESI_TONDA_INI)) {
-                elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, PARENTESI_TONDA_INI);
-            }
-            if (elaboratoUno.contains(SMALL)) {
-                elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, SMALL);
-            }
-        }
-        if (elaboratoUno.contains(PARENTESI_TONDA_INI)) {
-            elaboratoUno = textService.levaCodaDaPrimo(elaboratoUno, PARENTESI_TONDA_INI);
-        }
-
-        if (textService.isValid(elaboratoUno)) {
-            elaboratoUno = fixDopo(elaboratoUno);
-            elaboratoUno = textService.setNoDoppieQuadre(elaboratoUno);
-            elaboratoDue = regexService.getReal(elaboratoUno, pattern);
-        }
-        else {
+        elaboratoUno = fixElimina(elaboratoUno);
+        if (textService.isEmpty(elaboratoUno)) {
             return VUOTA;
         }
 
-        if (textService.isValid(elaboratoDue)) {
-            return elaboratoDue;
+        elaboratoUno = fixDopo(elaboratoUno);
+        if (textService.isEmpty(elaboratoUno)) {
+            return VUOTA;
         }
 
-        if (regexService.isEsiste(elaboratoUno, patternPrimoDelMese)) {
-            elaboratoDue = elaboratoUno.replaceAll(PRIMO_MAC, PRIMO_WIN);
+        elaboratoUno = textService.setNoDoppieQuadre(elaboratoUno);
+
+        if (regexService.isEsiste(elaboratoUno, patternZero)) {
+            elaboratoUno = elaboratoUno.substring(1);
+            message = String.format("Zero iniziale da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
+            logger.warn(new WrapLog().message(message));
+        }
+
+        if (regexService.isEsiste(elaboratoUno, patternUno)) {
+            if (regexService.isEsiste(elaboratoUno, patternUnoSpazio)) {
+                elaboratoUno = elaboratoUno.replaceAll("1" + SPAZIO, "1" + PRIMO_WIN + SPAZIO);
+            }
+            else {
+                elaboratoUno = elaboratoUno.replace(PRIMO_MENO_OTTANTA, PRIMO_MENO_SETTANTA);
+            }
             message = String.format("Un primo del mese da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
+        }
+
+        elaboratoDue = regexService.getReal(elaboratoUno, pattern);
+        if (textService.isValid(elaboratoDue)) {
             return elaboratoDue;
         }
 
@@ -631,23 +626,9 @@ public class ElaboraService {
             return elaboratoDue;
         }
 
-        if (regexService.isEsiste(elaboratoUno, patternZeroUno)) {
-            elaboratoDue = elaboratoUno.replace("01", "1" + PRIMO_WIN);
-            message = String.format("Zero iniziale del primo da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
-            logger.warn(new WrapLog().message(message));
-            return elaboratoDue;
-        }
-
         if (regexService.isEsiste(elaboratoUno, patternApici)) {
             elaboratoDue = elaboratoUno.replace("'", "");
             message = String.format("Apici inizio-fine da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
-            logger.warn(new WrapLog().message(message));
-            return elaboratoDue;
-        }
-
-        if (regexService.isEsiste(elaboratoUno, patternZero)) {
-            elaboratoDue = elaboratoUno.substring(1);
-            message = String.format("Zero iniziale da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
         }
@@ -664,10 +645,6 @@ public class ElaboraService {
             message = String.format("Spazio non-breaking da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
-        }
-
-        if (elaboratoDue.contains(PRIMO_MENO_OTTANTA)) {
-            elaboratoDue.replace(PRIMO_MENO_OTTANTA, PRIMO_MENO_SETTANTA);
         }
 
         return elaboratoDue;
@@ -769,40 +746,10 @@ public class ElaboraService {
         if (textService.isEmpty(valorePropertyTmplBioServer)) {
             return VUOTA;
         }
-        //        if (valoreGrezzo.endsWith(ECC)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.endsWith(UGUALE)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.endsWith(PUNTO_INTERROGATIVO + PARENTESI_TONDA_END)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(DUBBIO_O)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(DUBBIO_O_PAR)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(DUBBIO_OPPURE)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(DUBBIO_TRATTINO)) {
-        //            return VUOTA;
-        //        }
 
-        //        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(PARENTESI_TONDA_END)) {
-        //            return VUOTA;
-        //        }
-        //        if (valoreGrezzo.contains(CALENDARIO)) {
-        //            return VUOTA;
-        //        }
+        for (TypeElimina type : TypeElimina.values()) {
+            valoreGrezzo = type.get(valoreGrezzo);
+        }
 
         return valoreGrezzo.trim();
     }

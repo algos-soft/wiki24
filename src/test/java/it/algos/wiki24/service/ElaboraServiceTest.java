@@ -61,12 +61,12 @@ public class ElaboraServiceTest extends WikiTest {
     //--previsto morto
     protected static Stream<Arguments> GIORNO() {
         return Stream.of(
-//                Arguments.of("Malcolm IV di Scozia", VUOTA, "9 dicembre"),
-//                Arguments.of("William Dobson", "4 marzo", "28 ottobre"),
-//                Arguments.of("Carolina Matilde di Hannover", "22 luglio", "10 maggio"),
-//                Arguments.of("Giuseppe Lillo", VUOTA, "4 febbraio"),
-//                Arguments.of("Hendrick Goltzius", VUOTA, "1º gennaio"),
-//                Arguments.of("Eraldo Da Roma", "1º marzo", "27 marzo"),
+                Arguments.of("Malcolm IV di Scozia", VUOTA, "9 dicembre"),
+                Arguments.of("William Dobson", "4 marzo", "28 ottobre"),
+                Arguments.of("Carolina Matilde di Hannover", "22 luglio", "10 maggio"),
+                Arguments.of("Giuseppe Lillo", VUOTA, "4 febbraio"),
+                Arguments.of("Hendrick Goltzius", VUOTA, "1º gennaio"),
+                Arguments.of("Eraldo Da Roma", "1º marzo", "27 marzo"),
                 Arguments.of("Marcello Barlocco", "1º marzo", "12 novembre"),
                 Arguments.of("Orazio Capuana Yaluna", "1º marzo", VUOTA),
                 Arguments.of("Cecilia di York", "20 marzo", "24 agosto"),
@@ -241,7 +241,7 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNO")
     @Order(505)
     @DisplayName("505 - giornoMorto")
