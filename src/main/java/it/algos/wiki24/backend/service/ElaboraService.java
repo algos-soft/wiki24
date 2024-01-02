@@ -606,12 +606,16 @@ public class ElaboraService {
         if (regexService.isEsiste(elaboratoUno, patternUno)) {
             if (regexService.isEsiste(elaboratoUno, patternUnoSpazio)) {
                 elaboratoUno = elaboratoUno.replaceAll("1" + SPAZIO, "1" + PRIMO_WIN + SPAZIO);
+                message = String.format("Un primo del mese da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
+                logger.warn(new WrapLog().message(message));
             }
             else {
-                elaboratoUno = elaboratoUno.replace(PRIMO_MENO_OTTANTA, PRIMO_MENO_SETTANTA);
+                if (elaboratoUno.contains(PRIMO_MENO_OTTANTA)) {
+                    elaboratoUno = elaboratoUno.replace(PRIMO_MENO_OTTANTA, PRIMO_MENO_SETTANTA);
+                    message = String.format("Un primo del mese da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
+                    logger.warn(new WrapLog().message(message));
+                }
             }
-            message = String.format("Un primo del mese da convertire: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
-            logger.warn(new WrapLog().message(message));
         }
 
         elaboratoDue = regexService.getReal(elaboratoUno, pattern);

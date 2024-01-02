@@ -73,6 +73,7 @@ public abstract class WikiList extends CrudList {
     public TypeDurata unitaMisuraUpload;
 
     public boolean usaBottoneElabora;
+    public boolean usaBottoneElaboraDue;
 
     public boolean usaBottoneTransfer;
 
@@ -115,6 +116,7 @@ public abstract class WikiList extends CrudList {
 
         this.usaInfoDownload = false;
         this.usaInfoElabora = false;
+        this.usaBottoneElaboraDue = false;
         this.usaInfoUpload = false;
 
         this.usaBottoneDownload = true;
@@ -299,6 +301,9 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneElabora) {
             buttonBar.elabora();
         }
+        if (usaBottoneElaboraDue) {
+            buttonBar.elaboraDue();
+        }
         if (usaBottoneTransfer) {
             buttonBar.transfer();
         }
@@ -349,6 +354,12 @@ public abstract class WikiList extends CrudList {
 
     public boolean elabora() {
         currentCrudModulo.elabora();
+        refreshData();
+        fixInfo();
+        return true;
+    }
+    public boolean elaboraDue() {
+        currentCrudModulo.elaboraDue();
         refreshData();
         fixInfo();
         return true;

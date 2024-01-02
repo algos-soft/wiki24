@@ -36,6 +36,7 @@ public class WikiListButtonBar extends ListButtonBar {
     private boolean usaBottoneDownload;
 
     private boolean usaBottoneElabora;
+    private boolean usaBottoneElaboraDue;
     private boolean usaBottoneTransfer;
     private boolean usaBottoneResetEntity;
 
@@ -56,6 +57,7 @@ public class WikiListButtonBar extends ListButtonBar {
     protected Button buttonDownload = new Button();
 
     protected Button buttonElabora = new Button();
+    protected Button buttonElaboraDue = new Button();
     protected Button buttonTransfer = new Button();
     protected Button buttonResetEntity = new Button();
 
@@ -99,6 +101,13 @@ public class WikiListButtonBar extends ListButtonBar {
      */
     public WikiListButtonBar elabora() {
         this.usaBottoneElabora = true;
+        return this;
+    }
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar elaboraDue() {
+        this.usaBottoneElaboraDue = true;
         return this;
     }
 
@@ -169,6 +178,9 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneElabora) {
             this.addElabora();
         }
+        if (usaBottoneElaboraDue) {
+            this.addElaboraDue();
+        }
         if (usaBottoneTransfer) {
             this.addTransfer();
         }
@@ -227,6 +239,14 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
         buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
+    }
+    private void addElaboraDue() {
+        buttonElaboraDue.getElement().setAttribute("theme", "secondary");
+        buttonElaboraDue.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonElaboraDue.getElement().setProperty("title", "Elabora: alcune funzioni del package");
+        buttonElaboraDue.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
+        buttonElaboraDue.addClickListener(event -> currentCrudList.elaboraDue());
+        this.add(buttonElaboraDue);
     }
     private void addTransfer() {
         buttonTransfer.getElement().setAttribute("theme", "secondary");

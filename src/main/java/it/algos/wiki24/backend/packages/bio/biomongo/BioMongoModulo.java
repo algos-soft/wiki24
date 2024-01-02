@@ -12,7 +12,9 @@ import it.algos.wiki24.backend.packages.parametri.annonato.*;
 import it.algos.wiki24.backend.packages.parametri.cognome.*;
 import it.algos.wiki24.backend.packages.parametri.giornomorto.*;
 import it.algos.wiki24.backend.packages.parametri.giornonato.*;
+import it.algos.wiki24.backend.packages.parametri.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
+import it.algos.wiki24.backend.packages.parametri.sesso.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -42,6 +44,8 @@ public class BioMongoModulo extends WikiModulo {
     ParCognomeModulo parCognomeModulo;
 
     @Inject
+    ParSessoModulo parSessoModulo;
+    @Inject
     ParGiornoNatoModulo parGiornoNatoModulo;
 
     @Inject
@@ -52,6 +56,8 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ParAnnoMortoModulo parAnnoMortoModulo;
+    @Inject
+    ParNazionalitaModulo parNazionalitaModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -139,6 +145,13 @@ public class BioMongoModulo extends WikiModulo {
 
         elaboraService.elaboraAll();
 
+        super.fixElabora(inizio);
+    }
+
+    public void elaboraDue() {
+        inizio = System.currentTimeMillis();
+
+        elaboraService.elaboraAll();
         elaboraParametri();
 
         super.fixElabora(inizio);
@@ -149,10 +162,12 @@ public class BioMongoModulo extends WikiModulo {
 
         parNomeModulo.elabora(lista);
         parCognomeModulo.elabora(lista);
+        parSessoModulo.elabora(lista);
         parGiornoNatoModulo.elabora(lista);
         parGiornoMortoModulo.elabora(lista);
         parAnnoNatoModulo.elabora(lista);
         parAnnoMortoModulo.elabora(lista);
+        parNazionalitaModulo.elabora(lista);
     }
 
     @Override

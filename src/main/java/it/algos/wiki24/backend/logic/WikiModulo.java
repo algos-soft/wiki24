@@ -123,6 +123,8 @@ public abstract class WikiModulo extends CrudModulo {
 
     public void elabora() {
     }
+    public void elaboraDue() {
+    }
 
     public void transfer(AbstractEntity crudEntityBean) {
     }
