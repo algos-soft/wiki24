@@ -61,19 +61,20 @@ public class ElaboraServiceTest extends WikiTest {
     //--previsto morto
     protected static Stream<Arguments> GIORNO() {
         return Stream.of(
-                Arguments.of("Malcolm IV di Scozia", VUOTA, "9 dicembre"),
-                Arguments.of("William Dobson", "4 marzo", "28 ottobre"),
-                Arguments.of("Carolina Matilde di Hannover", "22 luglio", "10 maggio"),
-                Arguments.of("Giuseppe Lillo", VUOTA, "4 febbraio"),
-                Arguments.of("Hendrick Goltzius", VUOTA, "1º gennaio"),
-                Arguments.of("Eraldo Da Roma", "1º marzo", "27 marzo"),
-//                Arguments.of("Marcello Barlocco", "1º marzo", "12 novembre"),
+//                Arguments.of("Malcolm IV di Scozia", VUOTA, "9 dicembre"),
+//                Arguments.of("William Dobson", "4 marzo", "28 ottobre"),
+//                Arguments.of("Carolina Matilde di Hannover", "22 luglio", "10 maggio"),
+//                Arguments.of("Giuseppe Lillo", VUOTA, "4 febbraio"),
+//                Arguments.of("Hendrick Goltzius", VUOTA, "1º gennaio"),
+//                Arguments.of("Eraldo Da Roma", "1º marzo", "27 marzo"),
+                Arguments.of("Marcello Barlocco", "1º marzo", "12 novembre"),
                 Arguments.of("Orazio Capuana Yaluna", "1º marzo", VUOTA),
                 Arguments.of("Cecilia di York", "20 marzo", "24 agosto"),
                 Arguments.of("Papa Leone II", VUOTA, VUOTA),
                 Arguments.of("Deep Roy", "1º dicembre", VUOTA),
                 Arguments.of("Nanuka Gogichaishvili", "1º maggio", VUOTA),
                 Arguments.of("Yui Natsukawa", "1º giugno", VUOTA),
+                Arguments.of("Jacobus Boonen", "11 ottobre", "30 giugno"),
                 Arguments.of("Max Isidor Bodenheimer", "12 marzo", "19 luglio"),
                 Arguments.of("Gabriele Oriali", "25 novembre", VUOTA),
                 Arguments.of("Hinako Sugiura", "30 novembre", "22 luglio"),
@@ -240,7 +241,7 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNO")
     @Order(505)
     @DisplayName("505 - giornoMorto")

@@ -415,6 +415,9 @@ public class BaseCost {
     public static final String PARENTESI_TONDA_END_REGEX = "\\)";
 
     public static final String ECC = "ecc.";
+    public static final String PRIMO_MENO_SETTANTA =  "º"; //wiki
+    public static final String PRIMO_MENO_OTTANTA =  "°"; //mac
+
 
 }
 

@@ -577,10 +577,13 @@ public class ElaboraService {
     public String fixGiorno(String wikiTitle, String grezzo) {
         String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
         String elaboratoDue = VUOTA;
-        String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
-        String patternPrimoDelMese = "^1°";
+        //        String pattern = "^[1-9]?º?[0-9]? (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+        //        String pattern = "^(1°?|[2-9]|[1-2][0-9]|[30-31]) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+//        String pattern = "^(1(º|°){2}|[2-9]|[1-2][0-9]|[30-31]) (gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+        String pattern = "^(1 |1º |1° |[2-9] |[1-2][0-9] |[30-31] )(gennaio|febbraio|marzo|aprile|maggio|giugno|luglio|agosto|settembre|ottobre|novembre|dicembre)$";
+        String patternPrimoDelMese = "^1 ";
         String patternZeroUno = "^01 ";
-        String patternMaiuscola = "^[1-9]?º?[0-9]? (Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
+        String patternMaiuscola = "^(1 |1º |1° |[2-9] |[1-2][0-9] |[30-31] )(Gennaio|Febbraio|Marzo|Aprile|Maggio|Giugno|Luglio|Agosto|Settembre|Ottobre|Novembre|Dicembre)$";
         String patternApici = "^'.+'$";
         String patternZero = "^0[1-9] ";
         String patternVirgola = "^,[1-9]";
@@ -661,6 +664,10 @@ public class ElaboraService {
             message = String.format("Spazio non-breaking da levare: [%s]%s%s", wikiTitle, FORWARD, elaboratoUno);
             logger.warn(new WrapLog().message(message));
             return elaboratoDue;
+        }
+
+        if (elaboratoDue.contains(PRIMO_MENO_OTTANTA)) {
+            elaboratoDue.replace(PRIMO_MENO_OTTANTA, PRIMO_MENO_SETTANTA);
         }
 
         return elaboratoDue;
