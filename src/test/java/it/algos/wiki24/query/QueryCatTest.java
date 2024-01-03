@@ -38,15 +38,6 @@ public class QueryCatTest extends WikiTest {
     private QueryCat istanza;
 
 
-    /**
-     * Qui passa una volta sola, chiamato dalle sottoclassi <br>
-     * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
-     * Si possono aggiungere regolazioni specifiche <br>
-     */
-    @BeforeAll
-    protected void setUpAll() {
-        super.setUpAll();
-    }
 
 
     /**

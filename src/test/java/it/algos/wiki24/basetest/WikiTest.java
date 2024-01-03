@@ -246,6 +246,8 @@ public abstract class WikiTest extends AlgosTest {
 
     protected String metodoDefault;
 
+    protected List<BioMongoEntity> listaBio = new ArrayList<>();
+
     //--nome della pagina
     //--esiste sul server wiki
     public static Stream<Arguments> VOCE_BIOGRAFICA() {
@@ -754,7 +756,15 @@ public abstract class WikiTest extends AlgosTest {
         //        slf4jLogger = LoggerFactory.getLogger("wiki23.admin");
 
         initMocks();
-        //        fixRiferimentiIncrociati();
+
+        listaBio.add(creaBio("Johann Schweikhard von Kronberg"));
+        listaBio.add(creaBio("Vincenzo Ferreri"));
+        listaBio.add(creaBio("Roberto Rullo"));
+        listaBio.add(creaBio("Stanley Adams (attore)"));
+        listaBio.add(creaBio("Jameson Adams"));
+        listaBio.add(creaBio("Nicola Castroceli"));
+        listaBio.add(creaBio("Jordan Adams (1981)"));
+        listaBio.add(creaBio("Marianna Saltini"));
     }
 
     /**
@@ -2087,5 +2097,8 @@ public abstract class WikiTest extends AlgosTest {
     //        System.out.println(VUOTA);
     //    }
 
+    protected BioMongoEntity creaBio(String wikiTitle) {
+        return bioMongoModulo.findByWikiTitle(wikiTitle);
+    }
 
 }

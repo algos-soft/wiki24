@@ -824,6 +824,16 @@ public class TextService {
         return stringaOut.trim();
     }
 
+    public String setTonde(String stringaIn) {
+        String stringaOut = stringaIn.trim();
+
+        if (this.isValid(stringaOut)) {
+            stringaOut = PARENTESI_TONDA_INI + stringaOut + PARENTESI_TONDA_END;
+        }
+
+        return stringaOut.trim();
+    }
+
     public String setDoppieQuadre(String stringaIn) {
         String stringaOut = stringaIn.trim();
 

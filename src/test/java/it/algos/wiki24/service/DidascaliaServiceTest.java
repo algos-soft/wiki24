@@ -23,6 +23,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
+import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -43,20 +44,7 @@ public class DidascaliaServiceTest extends WikiTest {
     @Autowired
     private DidascaliaService service;
 
-    //--biografie
-    private Stream<BioMongoEntity> biografie() {
-        return Stream.of(
-                creaBio("Johann Schweikhard von Kronberg"),
-                creaBio("Vincenzo Ferreri"),
-                creaBio("Roberto Rullo"),
-                creaBio("Stanley Adams (attore)"),
-                creaBio("Daniel Williams"),
-                creaBio("Jameson Adams"),
-                creaBio("Marianna Saltini"),
-                creaBio("Giuseppe Marchetti"),
-                creaBio("Jordan Adams (1981)")
-        );
-    }
+
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -130,22 +118,176 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(String.format("La biografia [%s] ha (%s)%s%s", sorgente, "nomeCognome", FORWARD, ottenuto));
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "biografie")
+    @Test
     @Order(11)
     @DisplayName("11 - nomeCognome")
-        //--biografia
-    void nomeCognome2(final BioMongoEntity bio) {
+    void nomeCognome2() {
         System.out.println(("11 - nomeCognome"));
         System.out.println(VUOTA);
 
-        ottenuto = service.nomeCognome(bio);
-        assertTrue(textService.isValid(ottenuto));
-        System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "nomeCognome", FORWARD, ottenuto));
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.nomeCognome(bio);
+            assertTrue(textService.isValid(ottenuto));
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "nomeCognome", FORWARD, ottenuto));
+        }
     }
 
-    protected BioMongoEntity creaBio(String wikiTitle) {
-        return bioMongoModulo.findByWikiTitle(wikiTitle);
+
+    @Test
+    @Order(20)
+    @DisplayName("20 - attivitaNazionalita")
+    void attivitaNazionalita() {
+        System.out.println(("20 - attivitaNazionalita"));
+        System.out.println(VUOTA);
+
+        sorgente = "Nicholas Geōrgiadīs";
+        sorgente2 = "scenografo";
+        sorgente3 = "costumista";
+        String sorgente4 = "pittore";
+        String sorgente5 = "greco";
+        previsto = "scenografo, costumista e pittore greco";
+        ottenuto = service.attivitaNazionalita(sorgente, sorgente2, sorgente3, sorgente4, sorgente5);
+        assertTrue(textService.isValid(ottenuto));
+        assertEquals(previsto, ottenuto);
+        System.out.println(String.format("La biografia [%s] ha (%s)%s%s", sorgente, "attivitaNazionalita", FORWARD, ottenuto));
     }
+
+
+    @Test
+    @Order(21)
+    @DisplayName("21 - attivitaNazionalita")
+    void attivitaNazionalita2() {
+        System.out.println(("21 - attivitaNazionalita"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.attivitaNazionalita(bio);
+            assertTrue(textService.isValid(ottenuto));
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "attivitaNazionalita", FORWARD, ottenuto));
+        }
+    }
+
+    @Test
+    @Order(31)
+    @DisplayName("31 - luogoNato")
+    void luogoNato() {
+        System.out.println(("31 - luogoNato"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.luogoNato(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "luogoNato", FORWARD, ottenuto));
+        }
+    }
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - luogoMorto")
+    void luogoMorto() {
+        System.out.println(("41 - luogoMorto"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.luogoMorto(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "luogoMorto", FORWARD, ottenuto));
+        }
+    }
+
+
+    @Test
+    @Order(51)
+    @DisplayName("51 - giornoNato")
+    void giornoNato() {
+        System.out.println(("51 - giornoNato"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.giornoNato(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "giornoNato", FORWARD, ottenuto));
+        }
+    }
+
+
+    @Test
+    @Order(61)
+    @DisplayName("61 - giornoMorto")
+    void giornoMorto() {
+        System.out.println(("61 - giornoMorto"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.giornoMorto(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "giornoMorto", FORWARD, ottenuto));
+        }
+    }
+
+
+    @Test
+    @Order(71)
+    @DisplayName("71 - annoNato")
+    void annoNato() {
+        System.out.println(("71 - annoNato"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.annoNato(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoNato", FORWARD, ottenuto));
+        }
+    }
+
+    @Test
+    @Order(72)
+    @DisplayName("72 - annoNatoIcona")
+    void annoNatoIcona() {
+        System.out.println(("72 - annoNatoIcona"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.annoNatoIcona(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoNatoIcona", FORWARD, ottenuto));
+        }
+    }
+
+    @Test
+    @Order(81)
+    @DisplayName("81 - annoMorto")
+    void annoMorto() {
+        System.out.println(("81 - annoMorto"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.annoMorto(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoMorto", FORWARD, ottenuto));
+        }
+    }
+
+    @Test
+    @Order(82)
+    @DisplayName("82 - annoMortoIcona")
+    void annoMortoIcona() {
+        System.out.println(("82 - annoMortoIcona"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.annoMortoIcona(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoMortoIcona", FORWARD, ottenuto));
+        }
+    }
+
+
+    @Test
+    @Order(101)
+    @DisplayName("101 - didascaliaGiornoNato")
+    void didascaliaGiornoNato() {
+        System.out.println(("101 - didascaliaGiornoNato"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.didascaliaGiornoNato(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "didascaliaGiornoNato", FORWARD, ottenuto));
+        }
+    }
+
+
 
 }
