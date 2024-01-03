@@ -183,6 +183,10 @@ public class QueryWrite extends AQuery {
         String oldTextSignificativo;
 
         oldTextAll = appContext.getBean(QueryRead.class).getText(wikiTitleGrezzo);
+        if (textService.isEmpty(oldTextAll)) {
+            return true;
+        }
+
         oldTextSignificativo = wikiBotService.getTestoSignificativo(oldTextAll);
         if (newTextSignificativo.equals(oldTextSignificativo)) {
             modificataSignificativamente = false;
