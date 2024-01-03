@@ -65,7 +65,11 @@ public abstract class WikiTest extends AlgosTest {
     public LogService logger;
 
     @Inject
-    TextService textService;
+   protected TextService textService;
+
+    @Inject
+    protected BioMongoModulo bioMongoModulo;
+
     //    @Autowired
     //    public ElaboraService elaboraService;
 
