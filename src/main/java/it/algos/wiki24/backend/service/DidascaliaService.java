@@ -260,16 +260,19 @@ public class DidascaliaService {
      */
     public String didascaliaGiornoNato(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
-        String giornoNato = giornoNato(bio);
+        String annoNato = annoNato(bio);
+        String annoMorto = annoMortoIcona(bio);
         String attivitaNazionalita = attivitaNazionalita(bio);
-        String annoMorto = annoMorto(bio);
 
-        if (textService.isEmpty(giornoNato)) {
+        if (textService.isEmpty(bio.giornoNato)) {
             return VUOTA;
         }
 
-        buffer.append(giornoNato);
-        buffer.append(SEP);
+        if (textService.isValid(annoNato)) {
+            buffer.append(annoNato);
+            buffer.append(SEP);
+        }
+
         buffer.append(getWikiTitle(bio));
 
         if (textService.isValid(attivitaNazionalita)) {
@@ -280,6 +283,128 @@ public class DidascaliaService {
         if (textService.isValid(annoMorto)) {
             buffer.append(SPAZIO);
             buffer.append(annoMorto);
+        }
+
+        return buffer.toString().trim();
+    }
+
+
+    /**
+     * Costruisce la didascalia completa per una lista di morti nel giorno <br>
+     * WikiTitle (sempre)
+     * AttivitàNazionalità (sempre)
+     * Anno di nascita (opzionale)
+     *
+     * @param bio completa
+     *
+     * @return didascalia completa
+     */
+    public String didascaliaGiornoMorto(final BioMongoEntity bio) {
+        StringBuffer buffer = new StringBuffer();
+        String annoMorto = annoMorto(bio);
+        String annoNato = annoNatoIcona(bio);
+        String attivitaNazionalita = attivitaNazionalita(bio);
+
+        if (textService.isEmpty(bio.giornoMorto)) {
+            return VUOTA;
+        }
+
+        if (textService.isValid(annoMorto)) {
+            buffer.append(annoMorto);
+            buffer.append(SEP);
+        }
+
+        buffer.append(getWikiTitle(bio));
+
+        if (textService.isValid(attivitaNazionalita)) {
+            buffer.append(VIRGOLA_SPAZIO);
+            buffer.append(attivitaNazionalita);
+        }
+
+        if (textService.isValid(annoNato)) {
+            buffer.append(SPAZIO);
+            buffer.append(annoNato);
+        }
+
+        return buffer.toString().trim();
+    }
+
+    /**
+     * Costruisce la didascalia completa per una lista di nati nel anno <br>
+     * WikiTitle (sempre)
+     * AttivitàNazionalità (sempre)
+     * Anno di morte (opzionale)
+     *
+     * @param bio completa
+     *
+     * @return didascalia completa
+     */
+    public String didascaliaAnnoNato(final BioMongoEntity bio) {
+        StringBuffer buffer = new StringBuffer();
+        String giornoNato = giornoNato(bio);
+        String annoMorto = annoMortoIcona(bio);
+        String attivitaNazionalita = attivitaNazionalita(bio);
+
+        if (textService.isEmpty(bio.annoNato)) {
+            return VUOTA;
+        }
+
+        if (textService.isValid(giornoNato)) {
+            buffer.append(giornoNato);
+            buffer.append(SEP);
+        }
+
+        buffer.append(getWikiTitle(bio));
+
+        if (textService.isValid(attivitaNazionalita)) {
+            buffer.append(VIRGOLA_SPAZIO);
+            buffer.append(attivitaNazionalita);
+        }
+
+        if (textService.isValid(annoMorto)) {
+            buffer.append(SPAZIO);
+            buffer.append(annoMorto);
+        }
+
+        return buffer.toString().trim();
+    }
+
+
+    /**
+     * Costruisce la didascalia completa per una lista di morti nel anno <br>
+     * WikiTitle (sempre)
+     * AttivitàNazionalità (sempre)
+     * Anno di nascita (opzionale)
+     *
+     * @param bio completa
+     *
+     * @return didascalia completa
+     */
+    public String didascaliaAnnoMorto(final BioMongoEntity bio) {
+        StringBuffer buffer = new StringBuffer();
+        String giornoMorto = giornoMorto(bio);
+        String annoNato = annoNatoIcona(bio);
+        String attivitaNazionalita = attivitaNazionalita(bio);
+
+        if (textService.isEmpty(bio.annoMorto)) {
+            return VUOTA;
+        }
+
+        if (textService.isValid(giornoMorto)) {
+            buffer.append(giornoMorto);
+            buffer.append(SEP);
+        }
+
+        buffer.append(getWikiTitle(bio));
+
+        if (textService.isValid(attivitaNazionalita)) {
+            buffer.append(VIRGOLA_SPAZIO);
+            buffer.append(attivitaNazionalita);
+        }
+
+        if (textService.isValid(annoNato)) {
+            buffer.append(SPAZIO);
+            buffer.append(annoNato);
         }
 
         return buffer.toString().trim();

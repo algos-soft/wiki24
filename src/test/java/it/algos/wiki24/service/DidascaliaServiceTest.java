@@ -45,7 +45,6 @@ public class DidascaliaServiceTest extends WikiTest {
     private DidascaliaService service;
 
 
-
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
      * Deve essere sovrascritto, invocando ANCHE il metodo della superclasse <br>
@@ -284,10 +283,58 @@ public class DidascaliaServiceTest extends WikiTest {
 
         for (BioMongoEntity bio : listaBio) {
             ottenuto = service.didascaliaGiornoNato(bio);
-            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "didascaliaGiornoNato", FORWARD, ottenuto));
+            previsto = textService.isValid(bio.giornoNato) ? bio.giornoNato : NULLO;
+            message = String.format("[%s] nato il giorno [%s]%s%s", bio.wikiTitle, previsto, FORWARD, ottenuto);
+            System.out.println(message);
         }
     }
 
+    @Test
+    @Order(201)
+    @DisplayName("201 - didascaliaGiornoMorto")
+    void didascaliaGiornoMorto() {
+        System.out.println(("201 - didascaliaGiornoMorto"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.didascaliaGiornoMorto(bio);
+            previsto = textService.isValid(bio.giornoMorto) ? bio.giornoMorto : NULLO;
+            message = String.format("[%s] morto il giorno [%s]%s%s", bio.wikiTitle, previsto, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
+
+
+    @Test
+    @Order(301)
+    @DisplayName("301 - didascaliaAnnoNato")
+    void didascaliaAnnoNato() {
+        System.out.println(("301 - didascaliaAnnoNato"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.didascaliaAnnoNato(bio);
+            previsto = textService.isValid(bio.annoNato) ? bio.annoNato : NULLO;
+            message = String.format("[%s] nato l'anno [%s]%s%s", bio.wikiTitle, previsto, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
+
+
+    @Test
+    @Order(401)
+    @DisplayName("401 - didascaliaAnnoMorto")
+    void didascaliaAnnoMorto() {
+        System.out.println(("401 - didascaliaAnnoMorto"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.didascaliaAnnoMorto(bio);
+            previsto = textService.isValid(bio.annoMorto) ? bio.annoMorto : NULLO;
+            message = String.format("[%s] morto l'anno [%s]%s%s", bio.wikiTitle, previsto, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
 
 
 }

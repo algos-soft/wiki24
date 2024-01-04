@@ -155,7 +155,7 @@ public class SecoloModulo extends CrudModulo {
                 }
                 nome += anteCristo ? " secolo a.C." : " secolo";
 
-                newBean = newEntity(ordine, nome, inizio, fine, anteCristo);
+                newBean = newEntity(ordine, nome, inizio, fine, !anteCristo);
                 if (newBean != null) {
                     mappaBeans.put(nome, newBean);
                 }

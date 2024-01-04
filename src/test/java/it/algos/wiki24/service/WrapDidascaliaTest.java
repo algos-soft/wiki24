@@ -2,7 +2,11 @@ package it.algos.wiki24.service;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.list.*;
+import it.algos.base24.backend.packages.anagrafica.via.*;
+import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.basetest.*;
+import it.algos.base24.ui.form.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
@@ -10,6 +14,8 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -42,6 +48,7 @@ public class WrapDidascaliaTest extends WikiTest {
     protected void setUpAll() {
         super.clazz = WrapDidascalia.class;
         super.setUpAll();
+        super.ammessoCostruttoreVuoto = true;
     }
 
 
@@ -56,32 +63,78 @@ public class WrapDidascaliaTest extends WikiTest {
         istanza = null;
     }
 
-    @Test
-    @Order(11)
-    @DisplayName("11 - wrapGiornoNato")
-    void wrapGiornoNato() {
-        System.out.println(("11 - wrapGiornoNato"));
-        System.out.println(VUOTA);
+    @ParameterizedTest
+    @MethodSource(value = "getBio")
+    @Order(101)
+    @DisplayName("101 - wrapGiornoNato")
+    void wrapGiornoNato(BioMongoEntity bio) {
+        System.out.println(("101 - wrapGiornoNato"));
         sorgente = "giornoNato";
+        WrapDidascalia wrap;
 
-        for (BioMongoEntity bio : listaBio) {
-            istanza = (WrapDidascalia) appContext.getBean(clazz, bio);
-            assertNotNull(istanza);
-            printWrap(istanza, sorgente);
-        }
-
+        istanza = ((WrapDidascalia) appContext.getBean(clazz)).giornoNascita().get(bio);
+        assertNotNull(istanza);
+        printBioMongo(bio);
+        printWrap(istanza, bio.giornoNato, sorgente);
     }
 
-    protected void printWrap(WrapDidascalia wrap, String type) {
-        System.out.println(String.format("WrapDidascalia di type: %s", type));
+
+    @ParameterizedTest
+    @MethodSource(value = "getBio")
+    @Order(201)
+    @DisplayName("201 - wrapGiornoMorto")
+    void wrapGiornoMorto(BioMongoEntity bio) {
+        System.out.println(("201 - wrapGiornoMorto"));
+        sorgente = "giornoMorto";
+        WrapDidascalia wrap;
+
+        istanza = ((WrapDidascalia) appContext.getBean(clazz)).giornoMorte().get(bio);
+        assertNotNull(istanza);
+        printBioMongo(bio);
+        printWrap(istanza, bio.giornoMorto, sorgente);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getBio")
+    @Order(301)
+    @DisplayName("301 - wrapAnnoNato")
+    void wrapAnnoNato(BioMongoEntity bio) {
+        System.out.println(("301 - wrapAnnoNato"));
+        sorgente = "annoNato";
+        WrapDidascalia wrap;
+
+        istanza = ((WrapDidascalia) appContext.getBean(clazz)).annoNascita().get(bio);
+        assertNotNull(istanza);
+        printBioMongo(bio);
+        printWrap(istanza, bio.annoNato, sorgente);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getBio")
+    @Order(401)
+    @DisplayName("401 - wrapAnnoMorte")
+    void wrapAnnoMorte(BioMongoEntity bio) {
+        System.out.println(("401 - wrapAnnoMorte"));
+        sorgente = "annoMorte";
+        WrapDidascalia wrap;
+
+        istanza = ((WrapDidascalia) appContext.getBean(clazz)).annoMorte().get(bio);
+        assertNotNull(istanza);
+        printBioMongo(bio);
+        printWrap(istanza, bio.annoMorto, sorgente);
+    }
+
+
+    protected void printWrap(WrapDidascalia wrap, String previsto, String type) {
         System.out.println(VUOTA);
-        System.out.println(String.format("Testo didascalia: %s", wrap.getDidascalia()));
+        System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
+        System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
         System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
         System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
         System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
-        System.out.println(String.format("Quaro livello: %s", wrap.getQuartoLivello()));
-        System.out.println(VUOTA);
-        System.out.println(VUOTA);
+        System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
     }
 
 }

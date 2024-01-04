@@ -17,6 +17,7 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
 import javax.inject.*;
@@ -765,6 +766,8 @@ public abstract class WikiTest extends AlgosTest {
         listaBio.add(creaBio("Nicola Castroceli"));
         listaBio.add(creaBio("Jordan Adams (1981)"));
         listaBio.add(creaBio("Marianna Saltini"));
+        listaBio.add(creaBio("Patty Farchetto"));
+
     }
 
     /**
@@ -2096,6 +2099,10 @@ public abstract class WikiTest extends AlgosTest {
     //        System.out.println(String.format("Didascalia: %s", textService.isValid(wrap.didascalia) ? wrap.didascalia : NULL));
     //        System.out.println(VUOTA);
     //    }
+
+    protected Stream<BioMongoEntity> getBio() {
+        return listaBio.stream();
+    }
 
     protected BioMongoEntity creaBio(String wikiTitle) {
         return bioMongoModulo.findByWikiTitle(wikiTitle);

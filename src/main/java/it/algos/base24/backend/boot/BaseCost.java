@@ -17,7 +17,6 @@ public class BaseCost {
 
 
     public static final String KEY_NULL = "null";
-
     public static final String TAG_INIZIALE = "http://";
 
     public static final String TAG_INIZIALE_SECURE = "https://";
