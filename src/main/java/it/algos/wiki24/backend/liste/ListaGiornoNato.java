@@ -31,6 +31,7 @@ public class ListaGiornoNato extends ListaGiorni {
         super.fixPreferenze();
 
         super.type = TypeLista.giornoNascita;
+        super.titoloPagina= wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
     }
 
 }

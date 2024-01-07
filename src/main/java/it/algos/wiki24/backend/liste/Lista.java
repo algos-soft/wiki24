@@ -317,7 +317,7 @@ public abstract class Lista implements AlgosBuilderPattern {
 
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
             for (String paragrafo : mappaDidascalie.keySet()) {
-                numVoci = mappaDidascalie.get(paragrafo).size();
+                numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(paragrafo));
                 buffer.append(wikiUtilityService.setParagrafo(paragrafo,numVoci));
 
                 buffer.append(body(mappaDidascalie.get(paragrafo)));
@@ -328,6 +328,39 @@ public abstract class Lista implements AlgosBuilderPattern {
         return buffer.toString();
     }
 
+    /**
+     * Testo della pagina suddiviso in paragrafi <br>
+     */
+    public String paragrafiConSottopagina() {
+        StringBuffer buffer = new StringBuffer();
+        int numVoci = 0;
+        String sottoPagina;
+        String vedi;
+
+        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
+            mappaDidascalie = mappaDidascalie();
+        }
+
+        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
+            for (String keyParagrafo : mappaDidascalie.keySet()) {
+                numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
+                buffer.append(wikiUtilityService.setParagrafo(keyParagrafo,numVoci));
+                if (true) {
+                    sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
+
+                    vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
+                    buffer.append(vedi + CAPO);
+
+                }
+                else {
+                    buffer.append(body(mappaDidascalie.get(keyParagrafo)));
+                }
+            }
+        }
+
+        mappaDidascalie = null;
+        return buffer.toString();
+    }
 
     /**
      * Testo del paragrafo <br>

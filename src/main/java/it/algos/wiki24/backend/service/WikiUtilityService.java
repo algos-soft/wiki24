@@ -11,6 +11,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -186,6 +187,30 @@ public class WikiUtilityService {
         buffer.append(CAPO);
 
         return buffer.toString();
+    }
+
+    public int getSize(LinkedHashMap<String, List<String>> mappa) {
+        int size = 0;
+
+        if (mappa != null) {
+            for (String key : mappa.keySet()) {
+                size += mappa.get(key).size();
+            }
+        }
+
+        return size;
+    }
+
+    public int getSizeMappa(LinkedHashMap<String,LinkedHashMap<String, List<String>>> mappa) {
+        int size = 0;
+
+        if (mappa != null) {
+            for (String key : mappa.keySet()) {
+                size += getSize(mappa.get(key));
+            }
+        }
+
+        return size;
     }
 
 }// end of Service class
