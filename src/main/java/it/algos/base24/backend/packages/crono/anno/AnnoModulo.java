@@ -7,8 +7,9 @@ import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
+
+import javax.inject.*;
 
 /**
  * Project base24
@@ -20,10 +21,10 @@ import org.springframework.stereotype.*;
 @Service
 public class AnnoModulo extends CrudModulo {
 
-    @Autowired
+    @Inject
     public SecoloModulo secoloModulo;
 
-    @Autowired
+    @Inject
     public DateService dateService;
 
     /**
@@ -108,7 +109,7 @@ public class AnnoModulo extends CrudModulo {
         int ordine = numeroProgressivo;
         String tagPrima = " a.C.";
         String nome = numeroAnno + tagPrima;
-        SecoloEntity secolo = secoloModulo.getSecoloAC(numeroAnno);
+        SecoloEntity secolo = secoloModulo.getSecolo(numeroAnno + VUOTA);
         AnnoEntity newBean;
 
         newBean = newEntity(ordine, nome, secolo, false, false);
@@ -122,7 +123,7 @@ public class AnnoModulo extends CrudModulo {
         int numeroAnno = numeroProgressivo;
         int ordine = numeroProgressivo + delta;
         String nome = numeroProgressivo + VUOTA;
-        SecoloEntity secolo = secoloModulo.getSecoloDC(numeroAnno);
+        SecoloEntity secolo = secoloModulo.getSecolo(numeroAnno + VUOTA);
         boolean bisestile = dateService.isBisestile(numeroAnno);
         AnnoEntity newBean;
 

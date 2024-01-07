@@ -36,6 +36,8 @@ public class WikiCost {
 
     public static final String KEY_MAPPA_COGNOME = "Cognome";
 
+    public static final String KEY_MAPPA_ORDINAMENTO = "ForzaOrdinamento";
+
     public static final String KEY_MAPPA_SESSO = "Sesso";
 
     public static final String KEY_MAPPA_LUOGO_NASCITA = "LuogoNascita";
@@ -113,6 +115,8 @@ public class WikiCost {
 
     public static final String FIELD_NAME_PLURALE = "plurale";
 
+    public static final String FIELD_NAME_ORDINAMENTO = "ordinamento";
+
     public static final String FIELD_NAME_LUOGO_NATO = "luogoNato";
 
     public static final String FIELD_NAME_LUOGO_MORTO = "luogoMorto";
@@ -123,9 +127,12 @@ public class WikiCost {
 
     public static final String FIELD_NAME_ANNO_NATO = "annoNato";
 
+    public static final String FIELD_NAME_ANNO_NATO_ORD = "annoNatoOrd";
+
     public static final String FIELD_NAME_ANNO_MORTO = "annoMorto";
 
-    public static final int DELTA_ORDINE_ANNI = 100;
+    public static final String FIELD_NAME_ANNO_MORTO_ORD = "annoMortoOrd";
+
 
     public static final String TAG_BOLD = "'''";
 
@@ -175,7 +182,6 @@ public class WikiCost {
 
     public static final String ANNI = "Anni";
 
-    public static final String ANNI_AC = "a.C.";
 
     public static final String DOPPI = "Nomi doppi";
 

@@ -118,7 +118,7 @@ public class NazSingolareModulo extends WikiModulo {
         return findQuery(query);
     }
 
-    private List<NazSingolareEntity> findQuery(Query query) {
+    protected List<NazSingolareEntity> findQuery(Query query) {
         String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
 
         if (textService.isValid(collectionName)) {

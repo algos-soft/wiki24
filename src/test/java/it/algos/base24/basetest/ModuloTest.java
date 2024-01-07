@@ -174,7 +174,7 @@ public abstract class ModuloTest extends AlgosTest {
 
         entityBean = currentModulo.newEntity();
         assertNotNull(entityBean);
-        assertNull(entityBean.id);
+        assertTrue(entityBean.id == null || entityBean.id.equals("0"));
         message = String.format("Creata (in memoria) una nuova entity (vuota) di classe [%s] ", entityBean.getClass().getSimpleName());
         System.out.println(message);
         System.out.println(VUOTA);

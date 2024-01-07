@@ -109,21 +109,25 @@ public class AttSingolareModulo extends WikiModulo {
     }
 
     public List<AttSingolareEntity> findAllByProperty(final String propertyName, final Object propertyValue) {
-        Query query = new Query();
-
-        if (textService.isEmpty(propertyName)) {
-            return null;
-        }
-        if (propertyValue == null) {
-            return null;
-        }
-
-        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
-
-        return findQuery(query);
+        return super.findAllBeanByProperty(propertyName,propertyValue)
+                .stream()
+                .map(bean->(AttSingolareEntity)bean)
+                .collect(Collectors.toList());
+//        Query query = new Query();
+//
+//        if (textService.isEmpty(propertyName)) {
+//            return null;
+//        }
+//        if (propertyValue == null) {
+//            return null;
+//        }
+//
+//        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+//
+//        return findQuery(query);
     }
 
-    private List<AttSingolareEntity> findQuery(Query query) {
+    protected List<AttSingolareEntity> findQuery(Query query) {
         String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
 
         if (textService.isValid(collectionName)) {

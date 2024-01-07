@@ -19,10 +19,13 @@ import it.algos.wiki24.backend.packages.parametri.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
 import it.algos.wiki24.backend.packages.parametri.sesso.*;
 import it.algos.wiki24.backend.service.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -152,6 +155,72 @@ public class BioMongoModulo extends WikiModulo {
 
     public BioMongoEntity findByWikiTitle(final String wikiTitle) {
         return (BioMongoEntity) super.findOneByProperty(FIELD_NAME_WIKI_TITLE, wikiTitle);
+    }
+
+    public List<BioMongoEntity> findAllByProperty(final String propertyName, final Object propertyValue) {
+        return super.findAllBeanByProperty(propertyName, propertyValue)
+                .stream()
+                .map(bean -> (BioMongoEntity) bean)
+                .collect(Collectors.toList());
+    }
+
+    public List<BioMongoEntity> findAllByGiornoNato(final String propertyValue) {
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO).is(propertyValue));
+        query.with(sort);
+        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+    }
+
+
+    public List<BioMongoEntity> findAllByGiornoMorto(final String propertyValue) {
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO).is(propertyValue));
+        query.with(sort);
+        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+    }
+
+
+    public List<BioMongoEntity> findAllByAnnoNato(final String propertyValue) {
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_NATO, FIELD_NAME_ORDINAMENTO);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(propertyValue));
+        query.with(sort);
+        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+    }
+
+
+    public List<BioMongoEntity> findAllByAnnoMorto(final String propertyValue) {
+        Query query = new Query();
+        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_MORTO, FIELD_NAME_ORDINAMENTO);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(propertyValue));
+        query.with(sort);
+        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
     }
 
     public void elabora() {

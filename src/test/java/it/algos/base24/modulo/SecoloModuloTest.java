@@ -3,6 +3,7 @@ package it.algos.base24.modulo;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
+import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.basetest.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +12,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
+import javax.inject.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -28,8 +30,11 @@ import java.util.stream.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class SecoloModuloTest extends ModuloTest {
 
-    @Autowired
+    @Inject
     private SecoloModulo modulo;
+
+    @Inject
+    AnnoModulo annoModulo;
 
     private SecoloEntity secoloBean;
 
@@ -52,11 +57,11 @@ public class SecoloModuloTest extends ModuloTest {
     //--secolo previsto
     private static Stream<Arguments> anniDopo() {
         return Stream.of(
-                Arguments.of(1845, "IXX secolo"),
+                Arguments.of(1845, "XIX secolo"),
                 Arguments.of(1800, "XVIII secolo"),
-                Arguments.of(1801, "IXX secolo"),
-                Arguments.of(1899, "IXX secolo"),
-                Arguments.of(1900, "IXX secolo"),
+                Arguments.of(1801, "XIX secolo"),
+                Arguments.of(1899, "XIX secolo"),
+                Arguments.of(1900, "XIX secolo"),
                 Arguments.of(1901, "XX secolo")
         );
     }
@@ -101,9 +106,13 @@ public class SecoloModuloTest extends ModuloTest {
         sorgenteIntero = (int) mat[0];
         previsto = (String) mat[1];
 
-        secoloBean = modulo.getSecoloAC(sorgenteIntero);
+        sorgente = sorgenteIntero + ANNI_AC;
+        secoloBean = modulo.getSecolo(sorgente);
         assertNotNull(secoloBean);
         assertEquals(secoloBean.nome, previsto);
+
+        message = String.format("%s%s%s", sorgenteIntero, FORWARD, secoloBean.nome);
+        System.out.println(message);
     }
 
 

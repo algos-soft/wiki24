@@ -27,8 +27,8 @@ public class BioMongoEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String cognome;
 
-    //    @AField(type = TypeField.text)
-    //    public String ordinamento;
+    @AField(type = TypeField.text)
+    public String ordinamento;
 
     @AField(type = TypeField.text, headerText = "X", widthRem = 4)
     public String sesso;

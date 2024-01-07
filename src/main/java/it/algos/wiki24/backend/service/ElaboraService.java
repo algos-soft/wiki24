@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.exception.*;
+import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -48,6 +49,9 @@ public class ElaboraService {
 
     @Inject
     RegexService regexService;
+
+    @Inject
+    AnnoModulo annoModulo;
 
     private String message;
 
@@ -109,13 +113,16 @@ public class ElaboraService {
         wikiTitle = bioMongoEntity.wikiTitle;
         bioMongoEntity.nome = fixNome(mappa.get(KEY_MAPPA_NOME));
         bioMongoEntity.cognome = fixCognome(mappa.get(KEY_MAPPA_COGNOME));
+        bioMongoEntity.ordinamento = fixOrdinamento(wikiTitle, mappa.get(KEY_MAPPA_ORDINAMENTO), mappa.get(KEY_MAPPA_NOME), mappa.get(KEY_MAPPA_COGNOME));
         bioMongoEntity.sesso = fixSesso(mappa.get(KEY_MAPPA_SESSO));
         bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoNato = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_NASCITA));
         bioMongoEntity.annoNato = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_NASCITA));
+        bioMongoEntity.annoNatoOrd = fixAnnoOrd(wikiTitle, bioMongoEntity.annoNato);
         bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_MORTE_LINK));
         bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
         bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
+        bioMongoEntity.annoMortoOrd = fixAnnoOrd(wikiTitle, bioMongoEntity.annoMorto);
         bioMongoEntity.attivita = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA));
         bioMongoEntity.attivita2 = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA_DUE));
         bioMongoEntity.attivita3 = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA_TRE));
@@ -540,6 +547,28 @@ public class ElaboraService {
         return elaborato;
     }
 
+
+    public String fixOrdinamento(String wikiTitle, String ordinamento, String nome, String cognome) {
+        String elaborato = VUOTA;
+
+        if (textService.isValid(ordinamento)) {
+            return ordinamento;
+        }
+
+        elaborato = cognome;
+        if (textService.isValid(nome)) {
+            elaborato += SPAZIO;
+            elaborato += nome;
+        }
+
+        if (textService.isEmpty(elaborato)) {
+            elaborato = wikiTitle;
+        }
+
+        return textService.isValid(elaborato) ? elaborato : VUOTA;
+    }
+
+
     public String fixSesso(String grezzo) {
         String elaborato = grezzo;
 
@@ -658,6 +687,7 @@ public class ElaboraService {
         String elaboratoUno = grezzo != null ? textService.trim(grezzo) : VUOTA;
         String elaboratoDue = VUOTA;
         String pattern = "^[1-9][0-9]?[0-9]?[0-9]?$";
+        String patternAnteCristo = "^[1-9][0-9]?[0-9]?[0-9]? a.C.$";
 
         for (TypeElimina type : TypeElimina.values()) {
             elaboratoUno = type.get(elaboratoUno);
@@ -675,9 +705,28 @@ public class ElaboraService {
         if (textService.isValid(elaboratoDue)) {
             return elaboratoDue;
         }
+        elaboratoDue = regexService.getReal(elaboratoUno, patternAnteCristo);
 
         return elaboratoDue;
     }
+
+
+    public int fixAnnoOrd(String wikiTitle, String testoAnno) {
+        int annoOrdine = MAX_ORDINE_ANNI;
+        AnnoEntity annoWiki;
+
+        if (textService.isEmpty(testoAnno)) {
+            return annoOrdine;
+        }
+
+        annoWiki = (AnnoEntity) annoModulo.findByKey(testoAnno);
+        if (annoWiki != null) {
+            annoOrdine = annoWiki.ordine;
+        }
+
+        return annoOrdine;
+    }
+
 
     public String fixAttivita(String wikiTitle, String grezzo) {
         String elaborato = grezzo != null ? textService.trim(grezzo) : VUOTA;

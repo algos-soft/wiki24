@@ -551,7 +551,7 @@ public abstract class WikiTest extends AlgosTest {
                 Arguments.of("Vincenzo Vacirca", 15),
                 Arguments.of("Ashur-uballit I", 15),
                 Arguments.of("Albia Dominica", 15),
-                Arguments.of("Angelo Inganni", 12),
+                Arguments.of("Angelo Inganni", 13),
                 Arguments.of("Andrey Guryev", 17),
                 Arguments.of("Ingen Ryūki", 17),
                 Arguments.of("Giorgio Merula", 16),
@@ -764,6 +764,7 @@ public abstract class WikiTest extends AlgosTest {
         listaBio.add(creaBio("Stanley Adams (attore)"));
         listaBio.add(creaBio("Jameson Adams"));
         listaBio.add(creaBio("Nicola Castroceli"));
+        listaBio.add(creaBio("Publio Ovidio Nasone"));
         listaBio.add(creaBio("Jordan Adams (1981)"));
         listaBio.add(creaBio("Marianna Saltini"));
         listaBio.add(creaBio("Patty Farchetto"));
@@ -2106,6 +2107,17 @@ public abstract class WikiTest extends AlgosTest {
 
     protected BioMongoEntity creaBio(String wikiTitle) {
         return bioMongoModulo.findByWikiTitle(wikiTitle);
+    }
+
+    protected void printWrap(WrapDidascalia wrap, String previsto) {
+        System.out.println(VUOTA);
+        System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
+        System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
+        System.out.println(String.format("Ordinamento: %s", wrap.getOrdinamento()));
+        System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
+        System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
+        System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
+        System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
     }
 
 }

@@ -19,9 +19,13 @@ import java.util.*;
  */
 @Service
 public class SecoloModulo extends CrudModulo {
+
     public static final String INIZIO = "inizio";
+
     public static final String FINE = "fine";
+
     public static final String CRISTO = "dopoCristo";
+
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -74,41 +78,104 @@ public class SecoloModulo extends CrudModulo {
     }
 
     /**
-     * Seleziona un secolo dall'anno indicato <br>
-     * SOLO per secoli AC <br>
+     * Seleziona un secolo dal field 'nome' dell'anno (String) <br>
      *
-     * @param anno indicato per la selezione del secolo
+     * @param nomeAnno indicato per la selezione del secolo
      *
-     * @return secolo Ante Cristo selezionato
+     * @return secolo selezionato
      */
-    public SecoloEntity getSecoloAC(final int anno) {
-        Query query = new Query();
-        String collectionName = annotationService.getCollectionName(SecoloEntity.class);
+    public SecoloEntity getSecolo(String nomeAnno) {
+        int annoInt;
+        if (textService.isEmpty(nomeAnno)) {
+            return null;
+        }
 
-        query.addCriteria(Criteria.where(INIZIO).gte(anno));
-        query.addCriteria(Criteria.where(FINE).lte(anno));
-        query.addCriteria(Criteria.where(CRISTO).is(false));
-        return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
+        if (nomeAnno.endsWith(ANNI_AC)) {
+            nomeAnno = textService.levaCoda(nomeAnno, ANNI_AC);
+            annoInt = Integer.parseInt(nomeAnno);
+            return getSecoloAC(annoInt);
+        }
+        else {
+            annoInt = Integer.parseInt(nomeAnno);
+            return getSecoloDC(annoInt);
+        }
     }
 
+    public SecoloEntity getSecoloAC(final int annoInt) {
+        return getSecolo(annoInt, false);
+    }
+
+    public SecoloEntity getSecoloDC(final int annoInt) {
+        return getSecolo(annoInt, true);
+    }
 
     /**
-     * Seleziona un secolo dall'anno indicato <br>
-     * SOLO per secoli DC <br>
+     * Seleziona un secolo dal field 'ordine' dell'anno (int) <br>
+     * L'ordine degli anni inizia con 1 per l'anno 1000 a.C. <br>
+     * Gli anni totali sono -convenzionalmente- 3030 <br>
      *
-     * @param anno indicato per la selezione del secolo
+     * @param annoInt indicato per la selezione del secolo
      *
-     * @return secolo Dopo Cristo selezionato
+     * @return secolo selezionato
      */
-    public SecoloEntity getSecoloDC(int anno) {
+    public SecoloEntity getSecolo(final int annoInt, boolean dopoCristo) {
         Query query = new Query();
         String collectionName = annotationService.getCollectionName(SecoloEntity.class);
 
-        query.addCriteria(Criteria.where(INIZIO).lte(anno));
-        query.addCriteria(Criteria.where(FINE).gte(anno));
-        query.addCriteria(Criteria.where(CRISTO).is(true));
+        if (dopoCristo) {
+            query.addCriteria(Criteria.where(INIZIO).lte(annoInt));
+            query.addCriteria(Criteria.where(FINE).gte(annoInt));
+            query.addCriteria(Criteria.where(CRISTO).is(dopoCristo));
+        }
+        else {
+            query.addCriteria(Criteria.where(INIZIO).gte(annoInt));
+            query.addCriteria(Criteria.where(FINE).lte(annoInt));
+            query.addCriteria(Criteria.where(CRISTO).is(dopoCristo));
+        }
+
         return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
     }
+
+    //    /**
+    //     * Seleziona un secolo dall'anno indicato <br>
+    //     * SOLO per secoli AC <br>
+    //     *
+    //     * @param anno indicato per la selezione del secolo
+    //     *
+    //     * @return secolo Ante Cristo selezionato
+    //     */
+    //    public SecoloEntity getSecoloAC( String anno) {
+    //        Query query = new Query();
+    //        String collectionName = annotationService.getCollectionName(SecoloEntity.class);
+    //
+    //        if (anno.endsWith(ANNI_AC)) {
+    //            anno =textService.levaCoda(anno,ANNI_AC);
+    //        }
+    //
+    //        query.addCriteria(Criteria.where(INIZIO).gte(anno));
+    //        query.addCriteria(Criteria.where(FINE).lte(anno));
+    //        query.addCriteria(Criteria.where(CRISTO).is(false));
+    //        return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
+    //    }
+
+    //    /**
+    //     * Seleziona un secolo dall'anno indicato <br>
+    //     * SOLO per secoli DC <br>
+    //     *
+    //     * @param anno indicato per la selezione del secolo
+    //     *
+    //     * @return secolo Dopo Cristo selezionato
+    //     */
+    //    public SecoloEntity getSecoloDC(String anno) {
+    //        Query query = new Query();
+    //        String collectionName = annotationService.getCollectionName(SecoloEntity.class);
+    //
+    //        query.addCriteria(Criteria.where(INIZIO).lte(anno));
+    //        query.addCriteria(Criteria.where(FINE).gte(anno));
+    //        query.addCriteria(Criteria.where(CRISTO).is(true));
+    //        Object alfa= mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
+    //        return mongoService.mongoOp.findOne(query, SecoloEntity.class, collectionName);
+    //    }
 
     @Override
     public RisultatoReset resetDelete() {

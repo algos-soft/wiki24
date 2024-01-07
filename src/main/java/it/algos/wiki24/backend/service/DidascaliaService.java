@@ -410,4 +410,51 @@ public class DidascaliaService {
         return buffer.toString().trim();
     }
 
+
+    public String getDecade(final String annoIn) {
+        String decade = VUOTA;
+        String anno;
+        char character;
+        char character2;
+
+        if (textService.isEmpty(annoIn)) {
+            return VUOTA;
+        }
+
+        anno = annoIn.trim();
+        anno = textService.levaCoda(anno, ANNI_AC);
+
+        if (anno.length() > 1) {
+            character = anno.charAt(anno.length() - 2);
+            character2 = anno.charAt(anno.length() - 1);
+            if (character2 == 48) {
+                if (character == 48) {
+                    character += 9;
+                }
+                else {
+                    character -= 1;
+                }
+            }
+        }
+        else {
+            character = 48;
+        }
+
+        decade = switch (character) {
+            case 48 -> "1-10";
+            case 49 -> "11-20";
+            case 50 -> "21-30";
+            case 51 -> "31-40";
+            case 52 -> "41-50";
+            case 53 -> "51-60";
+            case 54 -> "61-70";
+            case 55 -> "71-80";
+            case 56 -> "81-90";
+            case 57 -> "91-00";
+            default -> VUOTA;
+        };
+
+        return decade;
+    }
+
 }// end of Service class

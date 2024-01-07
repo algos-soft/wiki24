@@ -17,6 +17,7 @@ public class BaseCost {
 
 
     public static final String KEY_NULL = "null";
+
     public static final String TAG_INIZIALE = "http://";
 
     public static final String TAG_INIZIALE_SECURE = "https://";
@@ -84,6 +85,11 @@ public class BaseCost {
     public static final String TRE_PUNTI = "...";
 
     public static final String SPAZIO = " ";
+    public static final String UGUALE_SEMPLICE = "=";
+
+    public static final String UGUALE_SPAZIATO = SPAZIO + UGUALE_SEMPLICE + SPAZIO;
+
+    public static final String PARAGRAFO = UGUALE_SEMPLICE + UGUALE_SEMPLICE;
 
     public static final String SOMMA = "+";
 
@@ -100,10 +106,6 @@ public class BaseCost {
     public static final String TAB_SPAZIO = DOPPIO_SPAZIO + DOPPIO_SPAZIO;
 
     public static final String VIRGOLA_SPAZIO = VIRGOLA + SPAZIO;
-
-    public static final String UGUALE_SEMPLICE = "=";
-
-    public static final String UGUALE_SPAZIATO = SPAZIO + UGUALE_SEMPLICE + SPAZIO;
 
     public static final String PIPE_REGEX = "\\|";
 
@@ -149,6 +151,8 @@ public class BaseCost {
     public static final String FIELD_NAME_PREF_CORRENTE = "corrente";
 
     public static final String FIELD_HEADER_ORDINE = "#";
+
+    public static final String ANNI_AC = SPAZIO + "a.C.";
 
     public static final String TAG_ALTRE = "...";
 
@@ -378,6 +382,8 @@ public class BaseCost {
 
     public static final int DOPO_CRISTO_MAX = 2030;
 
+    public static final int MAX_ORDINE_ANNI = 5000;
+
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
 
     public static final String MAIL_TO = "gac@algos.it";
@@ -414,8 +420,10 @@ public class BaseCost {
     public static final String PARENTESI_TONDA_END_REGEX = "\\)";
 
     public static final String ECC = "ecc.";
-    public static final String PRIMO_MENO_SETTANTA =  "º"; //wiki
-    public static final String PRIMO_MENO_OTTANTA =  "°"; //mac
+
+    public static final String PRIMO_MENO_SETTANTA = "º"; //wiki
+
+    public static final String PRIMO_MENO_OTTANTA = "°"; //mac
 
 
 }

@@ -75,7 +75,7 @@ public class WrapDidascaliaTest extends WikiTest {
         istanza = ((WrapDidascalia) appContext.getBean(clazz)).giornoNascita().get(bio);
         assertNotNull(istanza);
         printBioMongo(bio);
-        printWrap(istanza, bio.giornoNato, sorgente);
+        printWrap(istanza, bio.giornoNato);
     }
 
 
@@ -91,7 +91,7 @@ public class WrapDidascaliaTest extends WikiTest {
         istanza = ((WrapDidascalia) appContext.getBean(clazz)).giornoMorte().get(bio);
         assertNotNull(istanza);
         printBioMongo(bio);
-        printWrap(istanza, bio.giornoMorto, sorgente);
+        printWrap(istanza, bio.giornoMorto);
     }
 
 
@@ -107,7 +107,7 @@ public class WrapDidascaliaTest extends WikiTest {
         istanza = ((WrapDidascalia) appContext.getBean(clazz)).annoNascita().get(bio);
         assertNotNull(istanza);
         printBioMongo(bio);
-        printWrap(istanza, bio.annoNato, sorgente);
+        printWrap(istanza, bio.annoNato);
     }
 
 
@@ -123,18 +123,20 @@ public class WrapDidascaliaTest extends WikiTest {
         istanza = ((WrapDidascalia) appContext.getBean(clazz)).annoMorte().get(bio);
         assertNotNull(istanza);
         printBioMongo(bio);
-        printWrap(istanza, bio.annoMorto, sorgente);
+        printWrap(istanza, bio.annoMorto);
     }
 
 
-    protected void printWrap(WrapDidascalia wrap, String previsto, String type) {
-        System.out.println(VUOTA);
-        System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
-        System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
-        System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
-        System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
-        System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
-        System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
-    }
+
+
+    //    protected void printWrap(WrapDidascalia wrap, String previsto, String type) {
+//        System.out.println(VUOTA);
+//        System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
+//        System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
+//        System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
+//        System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
+//        System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
+//        System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
+//    }
 
 }

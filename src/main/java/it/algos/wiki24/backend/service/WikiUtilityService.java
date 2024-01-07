@@ -104,4 +104,33 @@ public class WikiUtilityService {
         return natiMortiAnno("Morti", anno);
     }
 
+
+    /**
+     * Inserisce un numero in caratteri ridotti <br>
+     *
+     * @param titolo da inglobare nei tag wiki (paragrafo)
+     * @param numero da visualizzare (maggiore di zero)
+     *
+     * @return testo coi tag html
+     */
+    public String setParagrafo(final String titolo, final int numero) {
+        StringBuffer buffer = new StringBuffer();
+        String titoloUpperCase = textService.primaMaiuscola(titolo);
+
+        buffer.append(CAPO);
+        buffer.append(PARAGRAFO);
+        buffer.append(SPAZIO);
+        buffer.append(titoloUpperCase);
+
+        if (numero > 0) {
+            buffer.append(SPAZIO);
+//            buffer.append(smallNumero(numero));
+        }
+        buffer.append(SPAZIO);
+        buffer.append(PARAGRAFO);
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
 }// end of Service class

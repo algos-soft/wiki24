@@ -115,6 +115,7 @@ public class ElaboraServiceTest extends WikiTest {
                 Arguments.of("Jacopo Palma il Vecchio", VUOTA, "1528"),
                 Arguments.of("Pietro Nolasco", VUOTA, "1256"),
                 Arguments.of("Pedro de Candia", VUOTA, "1542"),
+                Arguments.of("Publio Ovidio Nasone", "43 a.C.", VUOTA),
                 Arguments.of("Marco Sciarra", VUOTA, "1593"),
                 Arguments.of("Fra Bevignate", VUOTA, VUOTA),
                 Arguments.of("Giuditta di Baviera", "800", "843"),
@@ -182,12 +183,12 @@ public class ElaboraServiceTest extends WikiTest {
         System.out.println(String.format("Non si può usare appContext.getBean(%s.class)", clazzName));
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "BIOGRAFIE")
     @Order(101)
     @DisplayName("101 - estraeMappa")
-    //--wikiTitle
-    //--numero parametri
+        //--wikiTitle
+        //--numero parametri
     void estraeMappa(String wikiTitleVoce, int numParametri) {
         System.out.println(("101 - estraeMappa"));
         sorgente = wikiTitleVoce;
@@ -277,7 +278,7 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "ANNO")
     @Order(505)
     @DisplayName("505 - annoNato")

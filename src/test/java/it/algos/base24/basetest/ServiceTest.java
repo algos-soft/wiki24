@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -16,14 +17,13 @@ import java.util.*;
  * Date: Tue, 08-Aug-2023
  * Time: 18:27
  */
-public abstract class ServiceTest extends AlgosTest{
+public abstract class ServiceTest extends AlgosTest {
 
-    @Autowired
+    @Inject
     protected ApplicationContext applicationContext;
 
-    @Autowired
+    @Inject
     protected LogService logger;
-
 
 
     /**
@@ -33,6 +33,7 @@ public abstract class ServiceTest extends AlgosTest{
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazzName = clazz != null ? clazz.getSimpleName() : VUOTA;
     }
 
     /**
@@ -98,8 +99,6 @@ public abstract class ServiceTest extends AlgosTest{
         message = String.format("header%s%s", FORWARD, annotation.headerText());
         System.out.println(message);
     }
-
-
 
 
     /**

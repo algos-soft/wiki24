@@ -9,6 +9,7 @@ import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -25,7 +26,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class AnnoModuloTest extends ModuloTest {
 
-    @Autowired
+    @Inject
     private AnnoModulo modulo;
 
 

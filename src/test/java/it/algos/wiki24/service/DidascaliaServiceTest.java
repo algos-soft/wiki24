@@ -44,6 +44,36 @@ public class DidascaliaServiceTest extends WikiTest {
     @Autowired
     private DidascaliaService service;
 
+    //--anno
+    //--decade
+    private Stream<Arguments> decadi() {
+        return Stream.of(
+                Arguments.of(VUOTA, VUOTA),
+                Arguments.of("1803", "1-10"),
+                Arguments.of("1413", "11-20"),
+                Arguments.of("525", "21-30"),
+                Arguments.of("834", "31-40"),
+                Arguments.of("750", "41-50"),
+                Arguments.of("1151", "51-60"),
+                Arguments.of("269", "61-70"),
+                Arguments.of("874", "71-80"),
+                Arguments.of("1588", "81-90"),
+                Arguments.of("1800", "91-00"),
+                Arguments.of("43", "41-50"),
+                Arguments.of("80", "71-80"),
+                Arguments.of("81", "81-90"),
+                Arguments.of("481", "81-90"),
+                Arguments.of("1781", "81-90"),
+                Arguments.of("4", "1-10"),
+                Arguments.of("9", "1-10"),
+                Arguments.of("10", "1-10"),
+                Arguments.of(" 4 ", "1-10"),
+                Arguments.of("40", "31-40"),
+                Arguments.of("460 a.C.", "51-60"),
+                Arguments.of("8 a.C.", "1-10"),
+                Arguments.of("04", "1-10")
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -334,6 +364,33 @@ public class DidascaliaServiceTest extends WikiTest {
             message = String.format("[%s] morto l'anno [%s]%s%s", bio.wikiTitle, previsto, FORWARD, ottenuto);
             System.out.println(message);
         }
+    }
+
+
+    @Test
+    @Order(501)
+    @DisplayName("501 - getDecade")
+    void getDecade() {
+        System.out.println("501 - getDecade");
+        System.out.println(VUOTA);
+
+        //--anno
+        //--decade
+        decadi().forEach(this::fixDecade);
+    }
+
+    //--anno
+    //--decade
+    void fixDecade(Arguments arg) {
+        Object[] mat = arg.get();
+        sorgente = (String) mat[0];
+        previsto = (String) mat[1];
+
+        ottenuto = service.getDecade(sorgente);
+        assertEquals(textService.isValid(previsto),textService.isValid(ottenuto));
+        assertEquals(previsto, ottenuto);
+        message = String.format("L'anno '%s' ricade nella decade -> [%s]", sorgente, ottenuto);
+        System.out.println(message);
     }
 
 

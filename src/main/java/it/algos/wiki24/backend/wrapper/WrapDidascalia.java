@@ -53,7 +53,17 @@ public class WrapDidascalia {
 
     private TypeLista type;
 
+    int ordinamento;
+
     public WrapDidascalia() {
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WrapDidascalia type(TypeLista type) {
+        this.type = type;
+        return this;
     }
 
     /**
@@ -99,7 +109,7 @@ public class WrapDidascalia {
             default -> VUOTA;
         };
 
-
+        fixOrdinamento(bio);
         fixPrimoLivello(bio);
         fixSecondoLivello(bio);
         fixTerzoLivello(bio);
@@ -107,6 +117,15 @@ public class WrapDidascalia {
         return this;
     }
 
+    public void fixOrdinamento(BioMongoEntity bio) {
+        ordinamento = switch (type) {
+            case giornoNascita -> bio.annoNatoOrd;
+            case giornoMorte -> bio.annoMortoOrd;
+            case annoNascita -> 0;
+            case annoMorte -> 0;
+            default -> 0;
+        };
+    }
     public void fixPrimoLivello(BioMongoEntity bio) {
         primoLivello = switch (type) {
             case giornoNascita -> getSecoloNato(bio);
@@ -119,8 +138,8 @@ public class WrapDidascalia {
 
     public void fixSecondoLivello(BioMongoEntity bio) {
         secondoLivello = switch (type) {
-            case giornoNascita -> VUOTA;
-            case giornoMorte -> VUOTA;
+            case giornoNascita -> didascaliaService.getDecade(bio.annoNato);
+            case giornoMorte -> didascaliaService.getDecade(bio.annoMorto);
             case annoNascita, annoMorte -> VUOTA;
             default -> VUOTA;
         };
@@ -128,8 +147,8 @@ public class WrapDidascalia {
 
     public void fixTerzoLivello(BioMongoEntity bio) {
         terzoLivello = switch (type) {
-            case giornoNascita -> bio.annoMorto;
-            case giornoMorte -> bio.annoNato;
+            case giornoNascita -> bio.annoNato;
+            case giornoMorte -> bio.annoMorto;
             case annoNascita -> bio.giornoNato;
             case annoMorte -> bio.giornoMorto;
             default -> VUOTA;
@@ -150,14 +169,12 @@ public class WrapDidascalia {
         String secoloTxt = "Senza anno specificato";
         SecoloEntity secoloBean;
         String anno = bio.annoNato;
-        int annoNum;
 
         if (textService.isEmpty(anno)) {
             return secoloTxt;
         }
 
-        annoNum = Integer.decode(anno);
-        secoloBean = secoloModulo.getSecoloDC(annoNum);
+        secoloBean = secoloModulo.getSecolo(anno);
         return secoloBean != null ? secoloBean.nome : secoloTxt;
     }
 
@@ -166,14 +183,12 @@ public class WrapDidascalia {
         String secoloTxt = "Senza anno specificato";
         SecoloEntity secoloBean;
         String anno = bio.annoMorto;
-        int annoNum;
 
         if (textService.isEmpty(anno)) {
             return secoloTxt;
         }
 
-        annoNum = Integer.decode(anno);
-        secoloBean = secoloModulo.getSecoloDC(annoNum);
+        secoloBean = secoloModulo.getSecolo(anno);
         return secoloBean != null ? secoloBean.nome : secoloTxt;
     }
 
@@ -215,6 +230,16 @@ public class WrapDidascalia {
         return meseTxt;
     }
 
+
+
+    public TypeLista getType() {
+        return type;
+    }
+
+    public String getDidascalia() {
+        return didascalia;
+    }
+
     public String getPrimoLivello() {
         return primoLivello;
     }
@@ -231,12 +256,8 @@ public class WrapDidascalia {
         return quartoLivello;
     }
 
-    public String getDidascalia() {
-        return didascalia;
-    }
-
-    public TypeLista getType() {
-        return type;
+    public int getOrdinamento() {
+        return ordinamento;
     }
 
 }

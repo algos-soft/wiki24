@@ -287,6 +287,31 @@ public abstract class CrudModulo {
         }
     }
 
+    public List<AbstractEntity> findAllBeanByProperty(final String propertyName, final Object propertyValue) {
+        Query query = new Query();
+
+        if (textService.isEmpty(propertyName)) {
+            return null;
+        }
+        if (propertyValue == null) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+
+        return findQuery(query);
+    }
+    private List<AbstractEntity> findQuery(Query query) {
+        String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
+
+        if (textService.isValid(collectionName)) {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz, collectionName);
+        }
+        else {
+            return mongoService.mongoOp.find(query, currentCrudEntityClazz);
+        }
+    }
+
 
     public AbstractEntity insert(AbstractEntity entityBean) {
         String entityName = textService.primaMaiuscola(currentCollectionName);
