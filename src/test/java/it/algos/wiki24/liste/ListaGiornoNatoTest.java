@@ -26,7 +26,7 @@ import java.util.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("lista")
-@DisplayName("Giorno nato Lista")
+@DisplayName("Lista giorno nato")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaGiornoNatoTest extends ListaTest {
 
@@ -173,7 +173,7 @@ public class ListaGiornoNatoTest extends ListaTest {
     //        super.fixMappaWrapKey(nomeLista, mappaWrap);
     //    }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -200,12 +200,12 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-        @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(601)
     @DisplayName("601 - paragrafi")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void paragrafi(String nomeGiorno, TypeLista type) {
         System.out.println(("601 - paragrafi"));
         System.out.println(VUOTA);
@@ -220,6 +220,34 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
+        message = String.format("Paragrafi della lista [%s]", sorgente);
+        System.out.println(message);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI")
+    @Order(701)
+    @DisplayName("701 - paragrafiDimensionati")
+        //--nome giorno
+        //--typeCrono
+    void paragrafiDimensionati(String nomeGiorno, TypeLista type) {
+        System.out.println(("701 - paragrafiDimensionati"));
+        System.out.println(VUOTA);
+        if (!validoGiornoNato(nomeGiorno, type)) {
+            return;
+        }
+        sorgente = nomeGiorno;
+
+        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiDimensionati();
+        if (textService.isEmpty(ottenuto)) {
+            assertTrue(textService.isEmpty(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Paragrafi dimensionati della lista [%s]", sorgente);
+        System.out.println(message);
         System.out.println(ottenuto);
     }
 

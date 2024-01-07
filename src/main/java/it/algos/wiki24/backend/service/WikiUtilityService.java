@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -31,8 +32,10 @@ public class WikiUtilityService {
 
     @Inject
     TextService textService;
+
     @Inject
     RegexService regexService;
+
     /**
      * I numeri che iniziano (parlato) con vocale richiedono l'apostrofo  <br>
      * Sono:
@@ -94,16 +97,46 @@ public class WikiUtilityService {
     public String wikiTitleNatiGiorno(String giorno) {
         return natiMortiGiorno("Nati", giorno);
     }
+
     public String wikiTitleMortiGiorno(String giorno) {
         return natiMortiGiorno("Morti", giorno);
     }
+
     public String wikiTitleNatiAnno(String anno) {
         return natiMortiAnno("Nati", anno);
     }
+
     public String wikiTitleMortiAnno(String anno) {
         return natiMortiAnno("Morti", anno);
     }
 
+    /**
+     * Inserisce un numero in caratteri ridotti <br>
+     *
+     * @param numero da visualizzare
+     *
+     * @return testo coi tag html
+     */
+    public String smallNumero(final int numero) {
+        String testo = VUOTA;
+
+        testo += "<span style=\"font-size:70%\">(";
+        testo += numero;
+        testo += ")</span>";
+
+        return testo;
+    }
+
+    /**
+     * Inserisce un numero in caratteri ridotti <br>
+     *
+     * @param titolo da inglobare nei tag wiki (paragrafo)
+     *
+     * @return testo coi tag html
+     */
+    public String setParagrafo(final String titolo) {
+        return setParagrafo(titolo, 0);
+    }
 
     /**
      * Inserisce un numero in caratteri ridotti <br>
@@ -124,10 +157,32 @@ public class WikiUtilityService {
 
         if (numero > 0) {
             buffer.append(SPAZIO);
-//            buffer.append(smallNumero(numero));
+            buffer.append(smallNumero(numero));
         }
         buffer.append(SPAZIO);
         buffer.append(PARAGRAFO);
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
+    public String setParagrafoIncludeOnly(final String titolo, final int numero) {
+        StringBuffer buffer = new StringBuffer();
+        String titoloUpperCase = textService.primaMaiuscola(titolo);
+
+        buffer.append(CAPO);
+        buffer.append(PARAGRAFO_INCLUDE_INI);
+        buffer.append(SPAZIO);
+        buffer.append(titoloUpperCase);
+
+        if (numero > 0) {
+            buffer.append(SPAZIO);
+            buffer.append(NO_INCLUDE_INI);
+            buffer.append(smallNumero(numero));
+            buffer.append(NO_INCLUDE_END);
+        }
+        buffer.append(SPAZIO);
+        buffer.append(PARAGRAFO_INCLUDE_END);
         buffer.append(CAPO);
 
         return buffer.toString();

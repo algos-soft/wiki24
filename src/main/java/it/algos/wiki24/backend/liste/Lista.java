@@ -42,6 +42,9 @@ public abstract class Lista implements AlgosBuilderPattern {
     @Inject
     AnnotationService annotationService;
 
+    @Inject
+    WikiUtilityService wikiUtilityService;
+
     protected TypeLista type;
 
     protected String nomeLista;
@@ -288,28 +291,62 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
-            for (String primoLivello : mappaDidascalie.keySet()) {
-                buffer.append(primoLivello);
-                buffer.append(CAPO);
+            for (String paragrafo : mappaDidascalie.keySet()) {
+                wikiUtilityService.setParagrafo(paragrafo);
+                buffer.append(wikiUtilityService.setParagrafo(paragrafo));
 
-                for (String secondoLivello : mappaDidascalie.get(primoLivello).keySet()) {
-                    buffer.append(secondoLivello);
-                    buffer.append(CAPO);
+                buffer.append(body(mappaDidascalie.get(paragrafo)));
+            }
+        }
 
-                    for (String terzoLivello : mappaDidascalie.get(primoLivello).get(secondoLivello).keySet()) {
-                        buffer.append(terzoLivello);
+        mappaDidascalie = null;
+        return buffer.toString();
+    }
+
+
+    /**
+     * Testo della pagina suddiviso in paragrafi <br>
+     */
+    public String paragrafiDimensionati() {
+        StringBuffer buffer = new StringBuffer();
+        int numVoci = 0;
+
+        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
+            mappaDidascalie = mappaDidascalie();
+        }
+
+        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
+            for (String paragrafo : mappaDidascalie.keySet()) {
+                numVoci = mappaDidascalie.get(paragrafo).size();
+                buffer.append(wikiUtilityService.setParagrafo(paragrafo,numVoci));
+
+                buffer.append(body(mappaDidascalie.get(paragrafo)));
+            }
+        }
+
+        mappaDidascalie = null;
+        return buffer.toString();
+    }
+
+
+    /**
+     * Testo del paragrafo <br>
+     */
+    public String body(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo) {
+        StringBuffer buffer = new StringBuffer();
+
+        if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
+            for (String secondoLivello : mappaParagrafo.keySet()) {
+                for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
+                    for (String didascalia : mappaParagrafo.get(secondoLivello).get(terzoLivello)) {
+                        buffer.append(ASTERISCO);
+                        buffer.append(didascalia);
                         buffer.append(CAPO);
-
-                        for (String didascalia : mappaDidascalie.get(primoLivello).get(secondoLivello).get(terzoLivello)) {
-                            buffer.append(didascalia);
-                            buffer.append(CAPO);
-                        }
                     }
                 }
             }
         }
 
-        mappaDidascalie = null;
         return buffer.toString();
     }
 
