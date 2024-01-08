@@ -495,5 +495,7 @@ public class WikiCost {
     public static final String PRIMO_MAC = "°";
 
     public static final String DUBBIO_CALENDARIO = "calendario";
+    public static final String DIV_INI = "{{Div col}}";
+    public static final String DIV_END = "{{Div col end}}";
 
 }

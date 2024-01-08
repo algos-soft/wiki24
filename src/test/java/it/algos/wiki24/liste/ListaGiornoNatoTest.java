@@ -255,24 +255,24 @@ public class ListaGiornoNatoTest extends ListaTest {
     @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(801)
-    @DisplayName("801 - paragrafiConSottopagina")
+    @DisplayName("801 - paragrafiElaborati")
         //--nome giorno
         //--typeCrono
-    void paragrafiConSottopagina(String nomeGiorno, TypeLista type) {
-        System.out.println(("801 - paragrafiConSottopagina"));
+    void paragrafiElaborati(String nomeGiorno, TypeLista type) {
+        System.out.println(("801 - paragrafiElaborati"));
         System.out.println(VUOTA);
         if (!validoGiornoNato(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiConSottopagina();
+        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiElaborati();
         if (textService.isEmpty(ottenuto)) {
             assertTrue(textService.isEmpty(ottenuto));
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista [%s] con eventuali sottopagine", sorgente);
+        message = String.format("Paragrafi della lista [%s] con eventuali sottopagine e divisori colonne", sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }

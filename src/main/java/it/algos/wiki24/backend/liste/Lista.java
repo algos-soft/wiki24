@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
@@ -318,7 +319,7 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
             for (String paragrafo : mappaDidascalie.keySet()) {
                 numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(paragrafo));
-                buffer.append(wikiUtilityService.setParagrafo(paragrafo,numVoci));
+                buffer.append(wikiUtilityService.setParagrafo(paragrafo, numVoci));
 
                 buffer.append(body(mappaDidascalie.get(paragrafo)));
             }
@@ -331,11 +332,12 @@ public abstract class Lista implements AlgosBuilderPattern {
     /**
      * Testo della pagina suddiviso in paragrafi <br>
      */
-    public String paragrafiConSottopagina() {
+    public String paragrafiElaborati() {
         StringBuffer buffer = new StringBuffer();
         int numVoci = 0;
         String sottoPagina;
         String vedi;
+        int maxVociPerParagrafo = 50;
 
         if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
             mappaDidascalie = mappaDidascalie();
@@ -344,8 +346,8 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
             for (String keyParagrafo : mappaDidascalie.keySet()) {
                 numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
-                buffer.append(wikiUtilityService.setParagrafo(keyParagrafo,numVoci));
-                if (true) {
+                buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVoci));
+                if (numVoci > maxVociPerParagrafo) {
                     sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
 
                     vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
@@ -367,16 +369,34 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     public String body(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo) {
         StringBuffer buffer = new StringBuffer();
+        int maxVociPerUnaColonna = 5;
+        int numVociParagrafo;
+        boolean usaDiv;
 
         if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
+            numVociParagrafo = wikiUtilityService.getSizeMappa(mappaParagrafo);
+            usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
+
+            if (usaDiv) {
+                buffer.append(DIV_INI);
+                buffer.append(CAPO);
+            }
+
             for (String secondoLivello : mappaParagrafo.keySet()) {
                 for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
+
+
                     for (String didascalia : mappaParagrafo.get(secondoLivello).get(terzoLivello)) {
                         buffer.append(ASTERISCO);
                         buffer.append(didascalia);
                         buffer.append(CAPO);
                     }
                 }
+            }
+
+            if (usaDiv) {
+                buffer.append(DIV_END);
+                buffer.append(CAPO);
             }
         }
 
