@@ -3,6 +3,8 @@ package it.algos.wiki24.basetest;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -13,6 +15,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import javax.inject.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -25,8 +28,16 @@ import java.util.stream.*;
  */
 public abstract class ListaTest extends WikiTest {
 
+    @Inject
+    protected GiornoModulo giornoModulo;
+
+    @Inject
+    protected AnnoModulo annoModulo;
+
     protected List<WrapDidascalia> listaWrap;
-    protected  LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
+
+    protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
+
     //--nome giorno
     //--typeCrono
     protected static Stream<Arguments> GIORNI() {
@@ -42,6 +53,27 @@ public abstract class ListaTest extends WikiTest {
                 Arguments.of("23 marzo", TypeLista.annoMorte),
                 Arguments.of("29 febbraio", TypeLista.giornoNascita),
                 Arguments.of("29 febbraio", TypeLista.giornoMorte)
+        );
+    }
+
+    //--nome anno
+    //--typeCrono
+    protected static Stream<Arguments> ANNI() {
+        return Stream.of(
+                Arguments.of(VUOTA, TypeLista.annoNascita),
+                Arguments.of(VUOTA, TypeLista.annoMorte),
+                Arguments.of("2002", TypeLista.annoMorte),
+                Arguments.of("37 a.C.", TypeLista.annoNascita),
+                Arguments.of("37 a.C.", TypeLista.annoMorte),
+                Arguments.of("37 A.C.", TypeLista.annoMorte),
+                Arguments.of("4 gennaio", TypeLista.annoNascita),
+                Arguments.of("1985", TypeLista.nazionalitaSingolare),
+                Arguments.of("1º gennaio", TypeLista.annoMorte),
+                Arguments.of("1467", TypeLista.giornoNascita),
+                Arguments.of("406 a.C.", TypeLista.annoMorte),
+                Arguments.of("1467", TypeLista.annoNascita),
+                Arguments.of("1984", TypeLista.annoNascita),
+                Arguments.of("560", TypeLista.annoMorte)
         );
     }
 
@@ -111,7 +143,7 @@ public abstract class ListaTest extends WikiTest {
         int endB = tot;
 
         if (listaBio != null) {
-            message = String.format("Faccio vedere una lista delle prime e delle ultime %d biografie su un totale di %s", max,listaBio.size());
+            message = String.format("Faccio vedere una lista delle prime e delle ultime %d biografie su un totale di %s", max, listaBio.size());
             System.out.println(message);
             message = "Ordinate per forzaOrdinamento";
             System.out.println(message);
@@ -178,6 +210,102 @@ public abstract class ListaTest extends WikiTest {
             printWrap(wrap, sorgente);
             System.out.println(SPAZIO);
         }
+    }
+
+
+    protected void printMappa(String tipo, String nome, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa) {
+        if (mappa == null || mappa.size() == 0) {
+            message = String.format("La mappa di didascalie per la lista [%s] è vuota", sorgente);
+            System.out.println(message);
+            return;
+        }
+
+        message = String.format("Ci sono [%s] suddivisioni (ordinate) di 1° livello (paragrafi) per la mappa didascalie dei %s il [%s]", mappa.size(), tipo, nome);
+        System.out.println(message);
+        for (String primoLivello : mappa.keySet()) {
+            System.out.println(primoLivello);
+
+            for (String secondoLivello : mappa.get(primoLivello).keySet()) {
+                System.out.print(TAB);
+                System.out.println(textService.isValid(secondoLivello) ? secondoLivello : NULLO);
+
+                for (String terzoLivello : mappa.get(primoLivello).get(secondoLivello).keySet()) {
+                    System.out.print(TAB);
+                    System.out.print(TAB);
+                    System.out.println(textService.isValid(terzoLivello) ? terzoLivello : NULLO);
+
+                    for (String didascalia : mappa.get(primoLivello).get(secondoLivello).get(terzoLivello)) {
+                        System.out.print(TAB);
+                        System.out.print(TAB);
+                        System.out.print(TAB);
+                        System.out.println(didascalia);
+                    }
+                }
+            }
+        }
+    }
+
+    protected boolean validoGiornoNato(final String nomeGiorno, final TypeLista type) {
+        return validoGiorno(nomeGiorno, type, TypeLista.giornoNascita);
+    }
+
+
+    protected boolean validoGiornoMorto(final String nomeGiorno, final TypeLista type) {
+        return validoGiorno(nomeGiorno, type, TypeLista.giornoMorte);
+    }
+
+
+    protected boolean validoGiorno(final String nomeGiorno, final TypeLista typeOttenuto, final TypeLista typePrevisto) {
+        if (textService.isEmpty(nomeGiorno)) {
+            System.out.println("Manca il nome del giorno");
+            return false;
+        }
+
+        if (typeOttenuto != typePrevisto) {
+            message = String.format("Il type 'TypeLista.%s' indicato è incompatibile con metodo [%s]", typeOttenuto, "nomeGiorno");
+            System.out.println(message);
+            return false;
+        }
+
+        if (giornoModulo.findByKey(nomeGiorno) == null) {
+            message = String.format("Il giorno [%s] indicato NON esiste", nomeGiorno);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
+    }
+
+
+    protected boolean validoAnnoNato(final String nomeAnno, final TypeLista type) {
+        return validoAnno(nomeAnno, type, TypeLista.annoNascita);
+    }
+
+
+    protected boolean validoAnnoMorto(final String nomeAnno, final TypeLista type) {
+        return validoAnno(nomeAnno, type, TypeLista.annoMorte);
+    }
+
+
+    protected boolean validoAnno(final String nomeAnno, final TypeLista typeOttenuto, final TypeLista typePrevisto) {
+        if (textService.isEmpty(nomeAnno)) {
+            System.out.println("Manca il nome dell'anno");
+            return false;
+        }
+
+        if (typeOttenuto != typePrevisto) {
+            message = String.format("Il type 'TypeLista.%s' indicato è incompatibile con metodo [%s]", typeOttenuto, "nomeAnno");
+            System.out.println(message);
+            return false;
+        }
+
+        if (annoModulo.findByKey(nomeAnno) == null) {
+            message = String.format("L'anno [%s] indicato NON esiste", nomeAnno);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

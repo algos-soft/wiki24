@@ -1,17 +1,19 @@
 package it.algos.wiki24.liste;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
+import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 import java.util.*;
@@ -20,25 +22,25 @@ import java.util.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Fri, 05-Jan-2024
- * Time: 17:33
+ * Date: Mon, 08-Jan-2024
+ * Time: 07:51
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("lista")
-@DisplayName("Lista giorno nato")
+@DisplayName("Lista giorno morto")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaGiornoNatoTest extends ListaTest {
+public class ListaGiornoMortoTest extends ListaTest {
 
 
-    private ListaGiornoNato istanza;
+    private ListaGiornoMorto istanza;
 
     /**
      * Qui passa una volta sola <br>
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = ListaGiornoNato.class;
+        super.clazz = ListaGiornoMorto.class;
         super.setUpAll();
         super.ammessoCostruttoreVuoto = false;
     }
@@ -59,12 +61,12 @@ public class ListaGiornoNatoTest extends ListaTest {
     void listaBio(String nomeGiorno, TypeLista type) {
         System.out.println(("101 - listaBio"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        listaBio = appContext.getBean(ListaGiornoNato.class, sorgente).listaBio();
+        listaBio = appContext.getBean(ListaGiornoMorto.class, sorgente).listaBio();
         if (textService.isEmpty(sorgente)) {
             assertNull(listaBio);
             return;
@@ -74,21 +76,21 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void listaWrapDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("201 - listaWrapDidascalie"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        listaWrap = appContext.getBean(ListaGiornoNato.class, sorgente).listaWrapDidascalie();
+        listaWrap = appContext.getBean(ListaGiornoMorto.class, sorgente).listaWrapDidascalie();
         if (textService.isEmpty(sorgente)) {
             assertNull(listaWrap);
             return;
@@ -98,21 +100,21 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void listaTestoDidascalia(String nomeGiorno, TypeLista type) {
         System.out.println(("301 - listaTestoDidascalia"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        listaStr = appContext.getBean(ListaGiornoNato.class, sorgente).listaTestoDidascalie();
+        listaStr = appContext.getBean(ListaGiornoMorto.class, sorgente).listaTestoDidascalie();
         if (textService.isEmpty(sorgente)) {
             assertNull(listaStr);
             return;
@@ -122,45 +124,45 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void mappaDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("401 - mappaDidascalie"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        mappaDidascalie = appContext.getBean(ListaGiornoNato.class, sorgente).mappaDidascalie();
+        mappaDidascalie = appContext.getBean(ListaGiornoMorto.class, sorgente).mappaDidascalie();
         if (textService.isEmpty(sorgente)) {
             assertNull(mappaDidascalie);
             return;
         }
         assertNotNull(mappaDidascalie);
-        printMappa("nati", sorgente, mappaDidascalie);
+        printMappa("morti", sorgente, mappaDidascalie);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(501)
     @DisplayName("501 - key della mappa")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void keyMappa(String nomeGiorno, TypeLista type) {
         System.out.println(("501 - key della mappa (paragrafi)"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        listaStr = appContext.getBean(ListaGiornoNato.class, sorgente).keyMappa();
+        listaStr = appContext.getBean(ListaGiornoMorto.class, sorgente).keyMappa();
         if (textService.isEmpty(sorgente)) {
             assertNull(listaStr);
             return;
@@ -173,21 +175,21 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(601)
     @DisplayName("601 - paragrafi")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void paragrafi(String nomeGiorno, TypeLista type) {
         System.out.println(("601 - paragrafi"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafi();
+        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafi();
         if (textService.isEmpty(ottenuto)) {
             assertTrue(textService.isEmpty(ottenuto));
             return;
@@ -208,12 +210,12 @@ public class ListaGiornoNatoTest extends ListaTest {
     void paragrafiDimensionati(String nomeGiorno, TypeLista type) {
         System.out.println(("701 - paragrafiDimensionati"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiDimensionati();
+        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiDimensionati();
         if (textService.isEmpty(ottenuto)) {
             assertTrue(textService.isEmpty(ottenuto));
             return;
@@ -234,12 +236,12 @@ public class ListaGiornoNatoTest extends ListaTest {
     void paragrafiElaborati(String nomeGiorno, TypeLista type) {
         System.out.println(("801 - paragrafiElaborati"));
         System.out.println(VUOTA);
-        if (!validoGiornoNato(nomeGiorno, type)) {
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
         sorgente = nomeGiorno;
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiElaborati();
+        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiElaborati();
         if (textService.isEmpty(ottenuto)) {
             assertTrue(textService.isEmpty(ottenuto));
             return;
@@ -260,16 +262,14 @@ public class ListaGiornoNatoTest extends ListaTest {
         sorgente = "29 febbraio";
         sorgente = "20 marzo";
 
-        mappaDidascalie = appContext.getBean(ListaGiornoNato.class, sorgente).mappaDidascalie();
+        mappaDidascalie = appContext.getBean(ListaGiornoMorto.class, sorgente).mappaDidascalie();
         if (textService.isEmpty(sorgente)) {
             assertNull(mappaDidascalie);
             return;
         }
         assertNotNull(mappaDidascalie);
-        printMappa("nati", sorgente, mappaDidascalie);
+        printMappa("morti", sorgente, mappaDidascalie);
     }
 
+
 }
-
-
-
