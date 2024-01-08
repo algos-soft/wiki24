@@ -92,19 +92,6 @@ public abstract class ListaTest extends WikiTest {
     //--nome giorno
     //--typeCrono per il test
     protected Stream<Arguments> getListeStream() {
-//        return Stream.of(
-//                Arguments.of(VUOTA, TypeLista.giornoNascita),
-//                Arguments.of(VUOTA, TypeLista.giornoMorte),
-//                Arguments.of("1857", TypeLista.giornoNascita),
-//                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
-//                Arguments.of("20 marzo", TypeLista.giornoNascita),
-//                Arguments.of("21 febbraio", TypeLista.giornoMorte),
-//                Arguments.of("34 febbraio", TypeLista.giornoMorte),
-//                Arguments.of("1º gennaio", TypeLista.giornoNascita),
-//                Arguments.of("23 marzo", TypeLista.annoMorte),
-//                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-//                Arguments.of("29 febbraio", TypeLista.giornoMorte)
-//        );
         return null;
     }
 
@@ -129,42 +116,18 @@ public abstract class ListaTest extends WikiTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value ="getListeStream()")
+    @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
     void listaBio(String nomeLista, TypeLista typeSuggerito) {
-        //        if (streamCollection != null) {
-        //            streamCollection.forEach(parameters -> this.fixListaBio(parameters));
-        //        }
-        //        else {
-        //            message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
-        //            logger.warn(new WrapLog().message(message));
-        //        }
-        //    }
-
-        //    protected void fixListaBio(String nomeLista, TypeLista typeSuggerito) {
-        //        Object[] mat = arg.get();
-        //        String nomeLista=VUOTA;
-        //        TypeLista typeSuggerito=null;
-        //        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
-        //            nomeLista = keyValue;
-        //        }
-        //        else {
-        //            assertTrue(false);
-        //        }
-        //        if (mat != null && mat.length > 1 && mat[1] instanceof TypeLista type) {
-        //            typeSuggerito = type;
-        //        }
-        //        else {
-        //            assertTrue(false);
-        //        }
-
         System.out.println(("101 - listaBio"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
         }
+
         listaBio = ((Lista) appContext.getBean(clazz, nomeLista)).listaBio();
+
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaBio);
             return;
@@ -175,6 +138,176 @@ public abstract class ListaTest extends WikiTest {
         System.out.println(VUOTA);
         printBioLista(listaBio);
     }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(201)
+    @DisplayName("201 - listaWrapDidascalie")
+    void listaWrapDidascalie(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("201 - listaWrapDidascalie"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        listaWrap = ((Lista) appContext.getBean(clazz, nomeLista)).listaWrapDidascalie();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaWrap);
+            return;
+        }
+        assertNotNull(listaWrap);
+        message = String.format("Lista dei [%d] wrap di type%s[%s] per il giorno [%s]", listaWrap.size(), FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        printWrapDidascalie(listaWrap, sorgente);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(301)
+    @DisplayName("301 - listaTestoDidascalia")
+    void listaTestoDidascalia(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("301 - listaTestoDidascalia"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        listaStr = ((Lista) appContext.getBean(clazz, nomeLista)).listaTestoDidascalie();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        assertNotNull(listaStr);
+        message = String.format("Lista delle [%d] didascalie di type%s[%s] per il giorno [%s]", listaStr.size(), FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        print(listaStr);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(401)
+    @DisplayName("401 - mappaDidascalie")
+    void mappaDidascalie(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("401 - mappaDidascalie"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        mappaDidascalie = ((Lista) appContext.getBean(clazz, nomeLista)).mappaDidascalie();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(mappaDidascalie);
+            return;
+        }
+        assertNotNull(mappaDidascalie);
+        printMappa(typeSuggerito.getTag(), nomeLista, mappaDidascalie);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(501)
+    @DisplayName("501 - key della mappa")
+    void keyMappa(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("501 - key della mappa (paragrafi)"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        listaStr = ((Lista) appContext.getBean(clazz, nomeLista)).keyMappa();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        assertNotNull(listaStr);
+        message = String.format("La mappa della lista di type%s[%s] per il giorno [%s] ha %d chiavi (paragrafi)", FORWARD, typeSuggerito.name(), nomeLista, listaStr.size());
+        System.out.println(message);
+        System.out.println(VUOTA);
+        print(listaStr);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(601)
+    @DisplayName("601 - paragrafi")
+    void paragrafi(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("601 - paragrafi"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafi();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(701)
+    @DisplayName("701 - paragrafiDimensionati")
+    void paragrafiDimensionati(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("701 - paragrafiDimensionati"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafiDimensionati();
+
+        if (textService.isEmpty(ottenuto)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Paragrafi dimensionati della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(801)
+    @DisplayName("801 - paragrafiElaborati")
+    void paragrafiElaborati(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("801 - paragrafiElaborati"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafiElaborati();
+
+        if (textService.isEmpty(ottenuto)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(ottenuto);
+    }
+
 
     protected void fixCheckIniziale() {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");

@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
+import java.util.stream.*;
+
 /**
  * Project wiki24
  * Created by Algos
@@ -28,6 +30,10 @@ public class ListaAnnoMortoTest extends ListaTest {
 
 
     private ListaAnnoMorto istanza;
+
+    protected Stream<Arguments> getListeStream() {
+        return ANNI();
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -47,11 +53,4 @@ public class ListaAnnoMortoTest extends ListaTest {
         istanza = null;
     }
 
-//    @ParameterizedTest
-//    @MethodSource(value="ANNI")
-//    @Order(101)
-//    @DisplayName("101 - listaBio")
-//    void listaBio(String nomeLista, TypeLista typeSuggerito) {
-//        super.fixListaBio(nomeLista, typeSuggerito);
-//    }
 }

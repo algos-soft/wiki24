@@ -17,6 +17,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -34,6 +35,10 @@ public class ListaGiornoMortoTest extends ListaTest {
 
 
     private ListaGiornoMorto istanza;
+
+    protected Stream<Arguments> getListeStream() {
+        return GIORNI();
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -53,14 +58,6 @@ public class ListaGiornoMortoTest extends ListaTest {
         istanza = null;
     }
 
-
-//    @ParameterizedTest
-//    @MethodSource(value = "GIORNI")
-//    @Order(101)
-//    @DisplayName("101 - listaBio")
-//    void listaBio(String nomeLista, TypeLista typeSuggerito) {
-//        super.fixListaBio(nomeLista, typeSuggerito);
-//    }
 
 
     //    @ParameterizedTest
