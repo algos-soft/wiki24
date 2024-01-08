@@ -122,8 +122,10 @@ public class WikiCost {
     public static final String FIELD_NAME_LUOGO_MORTO = "luogoMorto";
 
     public static final String FIELD_NAME_GIORNO_NATO = "giornoNato";
+    public static final String FIELD_NAME_GIORNO_NATO_ORD = "giornoNatoOrd";
 
     public static final String FIELD_NAME_GIORNO_MORTO = "giornoMorto";
+    public static final String FIELD_NAME_GIORNO_MORTO_ORD = "giornoMortoOrd";
 
     public static final String FIELD_NAME_ANNO_NATO = "annoNato";
 
@@ -497,5 +499,6 @@ public class WikiCost {
     public static final String DUBBIO_CALENDARIO = "calendario";
     public static final String DIV_INI = "{{Div col}}";
     public static final String DIV_END = "{{Div col end}}";
+
 
 }

@@ -14,8 +14,6 @@ import javax.inject.*;
  * Date: Mon, 08-Jan-2024
  * Time: 08:20
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public abstract class ListaAnni extends Lista {
 
     @Inject

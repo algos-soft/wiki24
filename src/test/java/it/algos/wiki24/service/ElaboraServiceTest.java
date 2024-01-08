@@ -206,7 +206,7 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "BIOGRAFIE")
     @Order(102)
     @DisplayName("102 - creaBeanMongo")

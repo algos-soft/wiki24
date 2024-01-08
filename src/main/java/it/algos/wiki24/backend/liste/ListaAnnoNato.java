@@ -30,7 +30,7 @@ public class ListaAnnoNato extends ListaAnni {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.type = TypeLista.giornoNascita;
+        super.type = TypeLista.annoNascita;
         super.titoloPagina = wikiUtilityService.wikiTitleNatiAnno(nomeLista);
     }
 

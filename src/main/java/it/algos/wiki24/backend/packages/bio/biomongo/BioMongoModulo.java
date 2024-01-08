@@ -197,7 +197,7 @@ public class BioMongoModulo extends WikiModulo {
     public List<BioMongoEntity> findAllByAnnoNato(final String propertyValue) {
         Query query = new Query();
         String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
-        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_NATO, FIELD_NAME_ORDINAMENTO);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
             return null;
@@ -212,7 +212,7 @@ public class BioMongoModulo extends WikiModulo {
     public List<BioMongoEntity> findAllByAnnoMorto(final String propertyValue) {
         Query query = new Query();
         String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
-        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_MORTO, FIELD_NAME_ORDINAMENTO);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
             return null;

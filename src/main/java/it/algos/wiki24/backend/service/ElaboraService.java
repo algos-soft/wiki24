@@ -117,10 +117,12 @@ public class ElaboraService {
         bioMongoEntity.sesso = fixSesso(mappa.get(KEY_MAPPA_SESSO));
         bioMongoEntity.luogoNato = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_NASCITA), mappa.get(KEY_MAPPA_LUOGO_NASCITA_LINK));
         bioMongoEntity.giornoNato = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_NASCITA));
+        bioMongoEntity.giornoNatoOrd = fixGiornoOrd(wikiTitle, bioMongoEntity.giornoNato);
         bioMongoEntity.annoNato = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_NASCITA));
         bioMongoEntity.annoNatoOrd = fixAnnoOrd(wikiTitle, bioMongoEntity.annoNato);
         bioMongoEntity.luogoMorto = fixLuogo(wikiTitle, mappa.get(KEY_MAPPA_LUOGO_MORTE), mappa.get(KEY_MAPPA_LUOGO_MORTE_LINK));
         bioMongoEntity.giornoMorto = fixGiorno(wikiTitle, mappa.get(KEY_MAPPA_GIORNO_MORTE));
+        bioMongoEntity.giornoMortoOrd = fixGiornoOrd(wikiTitle, bioMongoEntity.giornoMorto);
         bioMongoEntity.annoMorto = fixAnno(wikiTitle, mappa.get(KEY_MAPPA_ANNO_MORTE));
         bioMongoEntity.annoMortoOrd = fixAnnoOrd(wikiTitle, bioMongoEntity.annoMorto);
         bioMongoEntity.attivita = fixAttivita(wikiTitle, mappa.get(KEY_MAPPA_ATTIVITA));
@@ -710,6 +712,22 @@ public class ElaboraService {
         return elaboratoDue;
     }
 
+
+    public int fixGiornoOrd(String wikiTitle, String testoGiorno) {
+        int giornoOrdine = MAX_ORDINE_ANNI;
+        AnnoEntity annoWiki;
+
+        if (textService.isEmpty(testoAnno)) {
+            return annoOrdine;
+        }
+
+        annoWiki = (AnnoEntity) annoModulo.findByKey(testoAnno);
+        if (annoWiki != null) {
+            annoOrdine = annoWiki.ordine;
+        }
+
+        return annoOrdine;
+    }
 
     public int fixAnnoOrd(String wikiTitle, String testoAnno) {
         int annoOrdine = MAX_ORDINE_ANNI;

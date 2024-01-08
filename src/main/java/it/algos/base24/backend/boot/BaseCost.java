@@ -382,7 +382,8 @@ public class BaseCost {
 
     public static final int DOPO_CRISTO_MAX = 2030;
 
-    public static final int MAX_ORDINE_ANNI = 5000;
+    public static final int MAX_ORDINE_GIORNI = 400; //per essere sicuro che sia MAGGIORE di 365/366
+    public static final int MAX_ORDINE_ANNI = 4000; //per essere sicuro che sia MAGGIORE dei 3030 utilizzati
 
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
 

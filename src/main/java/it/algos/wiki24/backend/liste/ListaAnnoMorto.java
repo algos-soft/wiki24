@@ -13,7 +13,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Time: 08:19
  */
 @SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ListaAnnoMorto extends ListaAnni {
 
 

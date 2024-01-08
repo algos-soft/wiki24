@@ -72,6 +72,9 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertNotNull(listaBio);
+        message = String.format("Lista delle [%d] biografie di type%s[%s] per il giorno [%s]", listaBio.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         printBioLista(listaBio);
     }
 
@@ -96,6 +99,9 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertNotNull(listaWrap);
+        message = String.format("Lista dei [%d] wrap di type%s[%s] per il giorno [%s]", listaWrap.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         printWrapDidascalie(listaWrap, sorgente);
     }
 
@@ -120,6 +126,9 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertNotNull(listaStr);
+        message = String.format("Lista delle [%d] didascalie di type%s[%s] per il giorno [%s]", listaStr.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         print(listaStr);
     }
 
@@ -168,7 +177,7 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertNotNull(listaStr);
-        message = String.format("La mappa della lista [%s] ha %d chiavi (paragrafi)", sorgente, listaStr.size());
+        message = String.format("La mappa della lista di type%s[%s] per il giorno [%s] ha %d chiavi (paragrafi)", FORWARD, type.name(), sorgente, listaStr.size());
         System.out.println(message);
         System.out.println(VUOTA);
         print(listaStr);
@@ -195,7 +204,7 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista [%s]", sorgente);
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s]", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
@@ -221,7 +230,7 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi dimensionati della lista [%s]", sorgente);
+        message = String.format("Paragrafi dimensionati della lista di type%s[%s] per il giorno [%s]", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
@@ -247,29 +256,33 @@ public class ListaGiornoMortoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista [%s] con eventuali sottopagine e divisori colonne", sorgente);
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s] con eventuali sottopagine e divisori colonne", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
 
-    //    @Test
-    @Order(1401)
-    @DisplayName("1401 - mappaDidascalie")
-    void mappaDidascalie2() {
-        System.out.println(("1401 - mappaDidascalie"));
-        System.out.println(VUOTA);
-        sorgente = "1º gennaio";
-        sorgente = "29 febbraio";
-        sorgente = "20 marzo";
 
-        mappaDidascalie = appContext.getBean(ListaGiornoMorto.class, sorgente).mappaDidascalie();
-        if (textService.isEmpty(sorgente)) {
-            assertNull(mappaDidascalie);
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI")
+    @Order(9001)
+    @DisplayName("9001 - print")
+        //--nome giorno
+        //--typeCrono
+    void print(String nomeGiorno, TypeLista type) {
+        System.out.println(("9001 - print"));
+        System.out.println(VUOTA);
+        if (!validoGiornoMorto(nomeGiorno, type)) {
             return;
         }
-        assertNotNull(mappaDidascalie);
-        printMappa("morti", sorgente, mappaDidascalie);
-    }
+        sorgente = nomeGiorno;
 
+        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiElaborati();
+        if (textService.isEmpty(ottenuto)) {
+            assertTrue(textService.isEmpty(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        printBodyLista(VUOTA);
+    }
 
 }

@@ -261,9 +261,25 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         listaWrapDidascalie = null;
-        return mappaDidascalie;
+        return fixAltreInCoda(mappaDidascalie);
     }
 
+    /**
+     * Sposta in coda alla mappa il paragrafo 'Altre...' (eventuale) <br>
+     */
+    public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> fixAltreInCoda(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa) {
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaAltre;
+
+        for (TypeInesistente type : TypeInesistente.values()) {
+            if (mappa.containsKey(type.getTag())) {
+                mappaAltre = mappa.get(type.getTag());
+                mappa.remove(type.getTag());
+                mappa.put(type.getTag(), mappaAltre);
+            }
+        }
+
+        return mappa;
+    }
 
     public List<String> keyMappa() {
         List<String> keyList = null;
@@ -384,7 +400,6 @@ public abstract class Lista implements AlgosBuilderPattern {
 
             for (String secondoLivello : mappaParagrafo.keySet()) {
                 for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
-
 
                     for (String didascalia : mappaParagrafo.get(secondoLivello).get(terzoLivello)) {
                         buffer.append(ASTERISCO);

@@ -70,16 +70,19 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertNotNull(listaBio);
+        message = String.format("Lista delle [%d] biografie di type%s[%s] per il giorno [%s]", listaBio.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         printBioLista(listaBio);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void listaWrapDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("201 - listaWrapDidascalie"));
         System.out.println(VUOTA);
@@ -94,16 +97,19 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertNotNull(listaWrap);
+        message = String.format("Lista dei [%d] wrap di type%s[%s] per il giorno [%s]", listaWrap.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         printWrapDidascalie(listaWrap, sorgente);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void listaTestoDidascalia(String nomeGiorno, TypeLista type) {
         System.out.println(("301 - listaTestoDidascalia"));
         System.out.println(VUOTA);
@@ -118,16 +124,19 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertNotNull(listaStr);
+        message = String.format("Lista delle [%d] didascalie di type%s[%s] per il giorno [%s]", listaStr.size(), FORWARD, type.name(), sorgente);
+        System.out.println(message);
+        System.out.println(VUOTA);
         print(listaStr);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void mappaDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("401 - mappaDidascalie"));
         System.out.println(VUOTA);
@@ -146,12 +155,12 @@ public class ListaGiornoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(501)
     @DisplayName("501 - key della mappa")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void keyMappa(String nomeGiorno, TypeLista type) {
         System.out.println(("501 - key della mappa (paragrafi)"));
         System.out.println(VUOTA);
@@ -166,19 +175,19 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertNotNull(listaStr);
-        message = String.format("La mappa della lista [%s] ha %d chiavi (paragrafi)", sorgente, listaStr.size());
+        message = String.format("La mappa della lista di type%s[%s] per il giorno [%s] ha %d chiavi (paragrafi)", FORWARD, type.name(), sorgente, listaStr.size());
         System.out.println(message);
         System.out.println(VUOTA);
         print(listaStr);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(601)
     @DisplayName("601 - paragrafi")
-    //--nome giorno
-    //--typeCrono
+        //--nome giorno
+        //--typeCrono
     void paragrafi(String nomeGiorno, TypeLista type) {
         System.out.println(("601 - paragrafi"));
         System.out.println(VUOTA);
@@ -193,7 +202,7 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista [%s]", sorgente);
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s]", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
@@ -219,7 +228,7 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi dimensionati della lista [%s]", sorgente);
+        message = String.format("Paragrafi dimensionati della lista di type%s[%s] per il giorno [%s]", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
@@ -245,28 +254,33 @@ public class ListaGiornoNatoTest extends ListaTest {
             return;
         }
         assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista [%s] con eventuali sottopagine e divisori colonne", sorgente);
+        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s] con eventuali sottopagine e divisori colonne", FORWARD, type.name(), sorgente);
         System.out.println(message);
         System.out.println(ottenuto);
     }
 
-    //    @Test
-    @Order(1401)
-    @DisplayName("1401 - mappaDidascalie")
-    void mappaDidascalie2() {
-        System.out.println(("1401 - mappaDidascalie"));
-        System.out.println(VUOTA);
-        sorgente = "1º gennaio";
-        sorgente = "29 febbraio";
-        sorgente = "20 marzo";
 
-        mappaDidascalie = appContext.getBean(ListaGiornoNato.class, sorgente).mappaDidascalie();
-        if (textService.isEmpty(sorgente)) {
-            assertNull(mappaDidascalie);
+    @ParameterizedTest
+    @MethodSource(value = "GIORNI")
+    @Order(9001)
+    @DisplayName("9001 - print")
+        //--nome giorno
+        //--typeCrono
+    void print(String nomeGiorno, TypeLista type) {
+        System.out.println(("9001 - print"));
+        System.out.println(VUOTA);
+        if (!validoGiornoNato(nomeGiorno, type)) {
             return;
         }
-        assertNotNull(mappaDidascalie);
-        printMappa("nati", sorgente, mappaDidascalie);
+        sorgente = nomeGiorno;
+
+        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiElaborati();
+        if (textService.isEmpty(ottenuto)) {
+            assertTrue(textService.isEmpty(ottenuto));
+            return;
+        }
+        assertTrue(textService.isValid(ottenuto));
+        printBodyLista(VUOTA);
     }
 
 }

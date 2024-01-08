@@ -8,6 +8,7 @@ import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
@@ -33,6 +34,8 @@ public abstract class ListaTest extends WikiTest {
 
     @Inject
     protected AnnoModulo annoModulo;
+    @Inject
+    protected QueryService queryService;
 
     protected List<WrapDidascalia> listaWrap;
 
@@ -63,16 +66,15 @@ public abstract class ListaTest extends WikiTest {
                 Arguments.of(VUOTA, TypeLista.annoNascita),
                 Arguments.of(VUOTA, TypeLista.annoMorte),
                 Arguments.of("2002", TypeLista.annoMorte),
-                Arguments.of("37 a.C.", TypeLista.annoNascita),
-                Arguments.of("37 a.C.", TypeLista.annoMorte),
-                Arguments.of("37 A.C.", TypeLista.annoMorte),
+                Arguments.of("38 a.C.", TypeLista.annoNascita),
+                Arguments.of("38 a.C.", TypeLista.annoMorte),
+                Arguments.of("38 A.C.", TypeLista.annoNascita),
                 Arguments.of("4 gennaio", TypeLista.annoNascita),
                 Arguments.of("1985", TypeLista.nazionalitaSingolare),
                 Arguments.of("1º gennaio", TypeLista.annoMorte),
                 Arguments.of("1467", TypeLista.giornoNascita),
                 Arguments.of("406 a.C.", TypeLista.annoMorte),
                 Arguments.of("1467", TypeLista.annoNascita),
-                Arguments.of("1984", TypeLista.annoNascita),
                 Arguments.of("560", TypeLista.annoMorte)
         );
     }
@@ -193,9 +195,8 @@ public abstract class ListaTest extends WikiTest {
         int endB = tot;
 
         if (wrap != null) {
-            message = String.format("Faccio vedere una lista delle prime e delle ultime %d wrap", max);
+            message = String.format("Faccio vedere una lista dei primi e degli ultimi %d wrap", max);
             System.out.println(message);
-            System.out.println(VUOTA);
 
             printWrapBase(wrap.subList(iniA, endA), iniA, sorgente);
             System.out.println(TRE_PUNTI);
@@ -208,7 +209,6 @@ public abstract class ListaTest extends WikiTest {
 
         for (WrapDidascalia wrap : listaWrap) {
             printWrap(wrap, sorgente);
-            System.out.println(SPAZIO);
         }
     }
 
@@ -262,7 +262,7 @@ public abstract class ListaTest extends WikiTest {
         }
 
         if (typeOttenuto != typePrevisto) {
-            message = String.format("Il type 'TypeLista.%s' indicato è incompatibile con metodo [%s]", typeOttenuto, "nomeGiorno");
+            message = String.format("Il type indicato%s[%s] è incompatibile col type previsto%s[%s]", FORWARD,typeOttenuto,FORWARD, typePrevisto);
             System.out.println(message);
             return false;
         }
@@ -294,7 +294,7 @@ public abstract class ListaTest extends WikiTest {
         }
 
         if (typeOttenuto != typePrevisto) {
-            message = String.format("Il type 'TypeLista.%s' indicato è incompatibile con metodo [%s]", typeOttenuto, "nomeAnno");
+            message = String.format("Il type indicato%s[%s] è incompatibile col type previsto%s[%s]", FORWARD,typeOttenuto,FORWARD, typePrevisto);
             System.out.println(message);
             return false;
         }
@@ -306,6 +306,13 @@ public abstract class ListaTest extends WikiTest {
         }
 
         return true;
+    }
+
+    protected void printBodyLista(final String bodyText) {
+        if (textService.isEmpty(bodyText)) {
+            System.out.println("Manca il testo da stampare");
+            return ;
+        }
     }
 
 }
