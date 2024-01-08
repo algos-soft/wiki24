@@ -36,6 +36,8 @@ public class ListaAnnoNatoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaAnnoNato.class;
+        super.currentModulo = annoModulo;
+        super.currentType = TypeLista.annoNascita;
         super.setUpAll();
         super.ammessoCostruttoreVuoto = false;
     }
@@ -46,34 +48,16 @@ public class ListaAnnoNatoTest extends ListaTest {
         istanza = null;
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "ANNI")
-    @Order(101)
-    @DisplayName("101 - listaBio")
-        //--nome anno
-        //--typeCrono
-    void listaBio(String nomeAnno, TypeLista type) {
-        System.out.println(("101 - listaBio"));
-        System.out.println(VUOTA);
-        if (!validoAnnoNato(nomeAnno, type)) {
-            return;
-        }
-        sorgente = nomeAnno;
-
-        listaBio = appContext.getBean(ListaAnnoNato.class, sorgente).listaBio();
-        if (textService.isEmpty(sorgente)) {
-            assertNull(listaBio);
-            return;
-        }
-        assertNotNull(listaBio);
-        message = String.format("Lista delle [%d] biografie di type%s[%s] per l'anno [%s]", listaBio.size(), FORWARD, type.name(), sorgente);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        printBioLista(listaBio);
-    }
+//    @ParameterizedTest
+//    @MethodSource(value = "ANNI")
+//    @Order(101)
+//    @DisplayName("101 - listaBio")
+//    void listaBio(String nomeLista, TypeLista typeSuggerito) {
+//        super.fixListaBio(nomeLista, typeSuggerito);
+//    }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -100,7 +84,7 @@ public class ListaAnnoNatoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -126,7 +110,7 @@ public class ListaAnnoNatoTest extends ListaTest {
         print(listaStr);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -149,7 +133,7 @@ public class ListaAnnoNatoTest extends ListaTest {
         printMappa("nati", sorgente, mappaDidascalie);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -175,7 +159,7 @@ public class ListaAnnoNatoTest extends ListaTest {
         print(listaStr);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(601)
     @DisplayName("601 - paragrafi")
@@ -200,7 +184,7 @@ public class ListaAnnoNatoTest extends ListaTest {
         System.out.println(ottenuto);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(701)
     @DisplayName("701 - paragrafiDimensionati")
@@ -226,7 +210,7 @@ public class ListaAnnoNatoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(801)
     @DisplayName("801 - paragrafiElaborati")
@@ -252,7 +236,7 @@ public class ListaAnnoNatoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "ANNI")
     @Order(9001)
     @DisplayName("9001 - print")

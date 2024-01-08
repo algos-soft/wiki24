@@ -3,15 +3,18 @@ package it.algos.wiki24.basetest;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -34,15 +37,22 @@ public abstract class ListaTest extends WikiTest {
 
     @Inject
     protected AnnoModulo annoModulo;
+
+    protected CrudModulo currentModulo;
+
+    protected TypeLista currentType;
+
     @Inject
     protected QueryService queryService;
+
+    protected Stream<Arguments> streamCollection;
 
     protected List<WrapDidascalia> listaWrap;
 
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
     //--nome giorno
-    //--typeCrono
+    //--typeCrono per il test
     protected static Stream<Arguments> GIORNI() {
         return Stream.of(
                 Arguments.of(VUOTA, TypeLista.giornoNascita),
@@ -60,7 +70,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
     //--nome anno
-    //--typeCrono
+    //--typeCrono per il test
     protected static Stream<Arguments> ANNI() {
         return Stream.of(
                 Arguments.of(VUOTA, TypeLista.annoNascita),
@@ -77,6 +87,25 @@ public abstract class ListaTest extends WikiTest {
                 Arguments.of("1467", TypeLista.annoNascita),
                 Arguments.of("560", TypeLista.annoMorte)
         );
+    }
+
+    //--nome giorno
+    //--typeCrono per il test
+    protected Stream<Arguments> getListeStream() {
+//        return Stream.of(
+//                Arguments.of(VUOTA, TypeLista.giornoNascita),
+//                Arguments.of(VUOTA, TypeLista.giornoMorte),
+//                Arguments.of("1857", TypeLista.giornoNascita),
+//                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
+//                Arguments.of("20 marzo", TypeLista.giornoNascita),
+//                Arguments.of("21 febbraio", TypeLista.giornoMorte),
+//                Arguments.of("34 febbraio", TypeLista.giornoMorte),
+//                Arguments.of("1º gennaio", TypeLista.giornoNascita),
+//                Arguments.of("23 marzo", TypeLista.annoMorte),
+//                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+//                Arguments.of("29 febbraio", TypeLista.giornoMorte)
+//        );
+        return null;
     }
 
     /**
@@ -99,6 +128,53 @@ public abstract class ListaTest extends WikiTest {
         this.fixCheckIniziale();
     }
 
+    @ParameterizedTest
+    @MethodSource(value ="getListeStream()")
+    @Order(101)
+    @DisplayName("101 - listaBio")
+    void listaBio(String nomeLista, TypeLista typeSuggerito) {
+        //        if (streamCollection != null) {
+        //            streamCollection.forEach(parameters -> this.fixListaBio(parameters));
+        //        }
+        //        else {
+        //            message = String.format("Nel metodo setUpEach() di %s non è stata regolata la property '%s'", this.getClass().getSimpleName(), "streamCollection");
+        //            logger.warn(new WrapLog().message(message));
+        //        }
+        //    }
+
+        //    protected void fixListaBio(String nomeLista, TypeLista typeSuggerito) {
+        //        Object[] mat = arg.get();
+        //        String nomeLista=VUOTA;
+        //        TypeLista typeSuggerito=null;
+        //        if (mat != null && mat.length > 0 && mat[0] instanceof String keyValue) {
+        //            nomeLista = keyValue;
+        //        }
+        //        else {
+        //            assertTrue(false);
+        //        }
+        //        if (mat != null && mat.length > 1 && mat[1] instanceof TypeLista type) {
+        //            typeSuggerito = type;
+        //        }
+        //        else {
+        //            assertTrue(false);
+        //        }
+
+        System.out.println(("101 - listaBio"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+        listaBio = ((Lista) appContext.getBean(clazz, nomeLista)).listaBio();
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaBio);
+            return;
+        }
+        assertNotNull(listaBio);
+        message = String.format("Lista delle [%d] biografie di type%s[%s] per il giorno [%s]", listaBio.size(), FORWARD, typeSuggerito.name(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        printBioLista(listaBio);
+    }
 
     protected void fixCheckIniziale() {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");
@@ -245,30 +321,22 @@ public abstract class ListaTest extends WikiTest {
         }
     }
 
-    protected boolean validoGiornoNato(final String nomeGiorno, final TypeLista type) {
-        return validoGiorno(nomeGiorno, type, TypeLista.giornoNascita);
-    }
 
-
-    protected boolean validoGiornoMorto(final String nomeGiorno, final TypeLista type) {
-        return validoGiorno(nomeGiorno, type, TypeLista.giornoMorte);
-    }
-
-
-    protected boolean validoGiorno(final String nomeGiorno, final TypeLista typeOttenuto, final TypeLista typePrevisto) {
-        if (textService.isEmpty(nomeGiorno)) {
-            System.out.println("Manca il nome del giorno");
-            return false;
-        }
-
-        if (typeOttenuto != typePrevisto) {
-            message = String.format("Il type indicato%s[%s] è incompatibile col type previsto%s[%s]", FORWARD,typeOttenuto,FORWARD, typePrevisto);
+    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+        if (textService.isEmpty(nomeLista)) {
+            message = String.format("Manca il nome del giorno/anno per un'istanza di type%s[%s]", FORWARD, currentType.name());
             System.out.println(message);
             return false;
         }
 
-        if (giornoModulo.findByKey(nomeGiorno) == null) {
-            message = String.format("Il giorno [%s] indicato NON esiste", nomeGiorno);
+        if (currentModulo.findByKey(nomeLista) == null) {
+            message = String.format("Il giorno/anno [%s] indicato NON esiste per un'istanza di type%s[%s]", nomeLista, FORWARD, currentType.name());
+            System.out.println(message);
+            return false;
+        }
+
+        if (currentType != typeSuggerito) {
+            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
             System.out.println(message);
             return false;
         }
@@ -294,7 +362,7 @@ public abstract class ListaTest extends WikiTest {
         }
 
         if (typeOttenuto != typePrevisto) {
-            message = String.format("Il type indicato%s[%s] è incompatibile col type previsto%s[%s]", FORWARD,typeOttenuto,FORWARD, typePrevisto);
+            message = String.format("Il type indicato%s[%s] è incompatibile col type previsto%s[%s]", FORWARD, typeOttenuto, FORWARD, typePrevisto);
             System.out.println(message);
             return false;
         }
@@ -311,7 +379,7 @@ public abstract class ListaTest extends WikiTest {
     protected void printBodyLista(final String bodyText) {
         if (textService.isEmpty(bodyText)) {
             System.out.println("Manca il testo da stampare");
-            return ;
+            return;
         }
     }
 

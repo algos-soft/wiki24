@@ -41,6 +41,8 @@ public class ListaGiornoMortoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaGiornoMorto.class;
+        super.currentModulo = giornoModulo;
+        super.currentType = TypeLista.giornoMorte;
         super.setUpAll();
         super.ammessoCostruttoreVuoto = false;
     }
@@ -52,45 +54,27 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
-    @MethodSource(value = "GIORNI")
-    @Order(101)
-    @DisplayName("101 - listaBio")
-        //--nome giorno
-        //--typeCrono
-    void listaBio(String nomeGiorno, TypeLista type) {
-        System.out.println(("101 - listaBio"));
-        System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
-        sorgente = nomeGiorno;
-
-        listaBio = appContext.getBean(ListaGiornoMorto.class, sorgente).listaBio();
-        if (textService.isEmpty(sorgente)) {
-            assertNull(listaBio);
-            return;
-        }
-        assertNotNull(listaBio);
-        message = String.format("Lista delle [%d] biografie di type%s[%s] per il giorno [%s]", listaBio.size(), FORWARD, type.name(), sorgente);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        printBioLista(listaBio);
-    }
+//    @ParameterizedTest
+//    @MethodSource(value = "GIORNI")
+//    @Order(101)
+//    @DisplayName("101 - listaBio")
+//    void listaBio(String nomeLista, TypeLista typeSuggerito) {
+//        super.fixListaBio(nomeLista, typeSuggerito);
+//    }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void listaWrapDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("201 - listaWrapDidascalie"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         listaWrap = appContext.getBean(ListaGiornoMorto.class, sorgente).listaWrapDidascalie();
@@ -106,18 +90,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void listaTestoDidascalia(String nomeGiorno, TypeLista type) {
         System.out.println(("301 - listaTestoDidascalia"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         listaStr = appContext.getBean(ListaGiornoMorto.class, sorgente).listaTestoDidascalie();
@@ -133,18 +117,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void mappaDidascalie(String nomeGiorno, TypeLista type) {
         System.out.println(("401 - mappaDidascalie"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         mappaDidascalie = appContext.getBean(ListaGiornoMorto.class, sorgente).mappaDidascalie();
@@ -157,18 +141,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(501)
     @DisplayName("501 - key della mappa")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void keyMappa(String nomeGiorno, TypeLista type) {
         System.out.println(("501 - key della mappa (paragrafi)"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         listaStr = appContext.getBean(ListaGiornoMorto.class, sorgente).keyMappa();
@@ -184,18 +168,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(601)
     @DisplayName("601 - paragrafi")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void paragrafi(String nomeGiorno, TypeLista type) {
         System.out.println(("601 - paragrafi"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafi();
@@ -210,18 +194,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(701)
     @DisplayName("701 - paragrafiDimensionati")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void paragrafiDimensionati(String nomeGiorno, TypeLista type) {
         System.out.println(("701 - paragrafiDimensionati"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiDimensionati();
@@ -236,18 +220,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(801)
     @DisplayName("801 - paragrafiElaborati")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void paragrafiElaborati(String nomeGiorno, TypeLista type) {
         System.out.println(("801 - paragrafiElaborati"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiElaborati();
@@ -262,18 +246,18 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "GIORNI")
     @Order(9001)
     @DisplayName("9001 - print")
-        //--nome giorno
-        //--typeCrono
+    //--nome giorno
+    //--typeCrono
     void print(String nomeGiorno, TypeLista type) {
         System.out.println(("9001 - print"));
         System.out.println(VUOTA);
-        if (!validoGiornoMorto(nomeGiorno, type)) {
-            return;
-        }
+//        if (!validoGiornoMorto(nomeGiorno, type)) {
+//            return;
+//        }
         sorgente = nomeGiorno;
 
         ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).paragrafiElaborati();

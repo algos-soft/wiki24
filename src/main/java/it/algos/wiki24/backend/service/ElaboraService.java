@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.service;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -49,6 +50,9 @@ public class ElaboraService {
 
     @Inject
     RegexService regexService;
+
+    @Inject
+    GiornoModulo giornoModulo;
 
     @Inject
     AnnoModulo annoModulo;
@@ -714,32 +718,32 @@ public class ElaboraService {
 
 
     public int fixGiornoOrd(String wikiTitle, String testoGiorno) {
-        int giornoOrdine = MAX_ORDINE_ANNI;
-        AnnoEntity annoWiki;
+        int giornoOrdine = MAX_ORDINE_GIORNI;
+        GiornoEntity giornoBean;
 
-        if (textService.isEmpty(testoAnno)) {
-            return annoOrdine;
+        if (textService.isEmpty(testoGiorno)) {
+            return giornoOrdine;
         }
 
-        annoWiki = (AnnoEntity) annoModulo.findByKey(testoAnno);
-        if (annoWiki != null) {
-            annoOrdine = annoWiki.ordine;
+        giornoBean = (GiornoEntity) giornoModulo.findByKey(testoGiorno);
+        if (giornoBean != null) {
+            giornoOrdine = giornoBean.ordine;
         }
 
-        return annoOrdine;
+        return giornoOrdine;
     }
 
     public int fixAnnoOrd(String wikiTitle, String testoAnno) {
         int annoOrdine = MAX_ORDINE_ANNI;
-        AnnoEntity annoWiki;
+        AnnoEntity annoBean;
 
         if (textService.isEmpty(testoAnno)) {
             return annoOrdine;
         }
 
-        annoWiki = (AnnoEntity) annoModulo.findByKey(testoAnno);
-        if (annoWiki != null) {
-            annoOrdine = annoWiki.ordine;
+        annoBean = (AnnoEntity) annoModulo.findByKey(testoAnno);
+        if (annoBean != null) {
+            annoOrdine = annoBean.ordine;
         }
 
         return annoOrdine;
