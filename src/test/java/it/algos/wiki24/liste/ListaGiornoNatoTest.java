@@ -2,19 +2,14 @@ package it.algos.wiki24.liste;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
-import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
-import javax.inject.*;
-import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -87,7 +82,7 @@ public class ListaGiornoNatoTest extends ListaTest {
 //        }
         sorgente = nomeGiorno;
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).paragrafiElaborati();
+        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).testoBody();
         if (textService.isEmpty(ottenuto)) {
             assertTrue(textService.isEmpty(ottenuto));
             return;

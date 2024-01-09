@@ -10,7 +10,6 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
-import org.checkerframework.checker.units.qual.*;
 import org.springframework.context.*;
 
 import javax.inject.*;
@@ -73,6 +72,12 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     protected String message;
 
+    boolean usaDimensioneParagrafi;
+
+    boolean usaInclude;
+
+    boolean usaSottopaginaOltreMax;
+
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
@@ -98,6 +103,33 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     protected void fixPreferenze() {
         this.type = TypeLista.nessunaLista;
+        this.usaDimensioneParagrafi = true;
+        this.usaInclude = false;
+        this.usaSottopaginaOltreMax = true;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista nonUsaDimensioneParagrafi() {
+        this.usaDimensioneParagrafi = false;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista nonUsaSottoPagina() {
+        this.usaSottopaginaOltreMax = false;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista includeNeiParagrafi() {
+        this.usaInclude = true;
+        return this;
     }
 
     protected void checkValiditaCostruttore() {
@@ -300,57 +332,14 @@ public abstract class Lista implements AlgosBuilderPattern {
     /**
      * Testo della pagina suddiviso in paragrafi <br>
      */
-    public String paragrafi() {
+    public String testoBody() {
         StringBuffer buffer = new StringBuffer();
-
-        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
-            mappaDidascalie = mappaDidascalie();
-        }
-
-        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
-            for (String paragrafo : mappaDidascalie.keySet()) {
-                wikiUtilityService.setParagrafo(paragrafo);
-                buffer.append(wikiUtilityService.setParagrafo(paragrafo));
-
-                buffer.append(body(mappaDidascalie.get(paragrafo)));
-            }
-        }
-
-        mappaDidascalie = null;
-        return buffer.toString();
-    }
-
-
-    /**
-     * Testo della pagina suddiviso in paragrafi <br>
-     */
-    public String paragrafiDimensionati() {
-        StringBuffer buffer = new StringBuffer();
-        int numVoci = 0;
-
-        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
-            mappaDidascalie = mappaDidascalie();
-        }
-
-        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
-            for (String paragrafo : mappaDidascalie.keySet()) {
-                numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(paragrafo));
-                buffer.append(wikiUtilityService.setParagrafo(paragrafo, numVoci));
-
-                buffer.append(body(mappaDidascalie.get(paragrafo)));
-            }
-        }
-
-        mappaDidascalie = null;
-        return buffer.toString();
-    }
-
-    /**
-     * Testo della pagina suddiviso in paragrafi <br>
-     */
-    public String paragrafiElaborati() {
-        StringBuffer buffer = new StringBuffer();
-        int numVoci = 0;
+        int numMinParagrafi = 4; //@todo passare a preferenza
+        int numChiaviMappa; //paragrafi effettivi
+        boolean usaParagrafi = false;
+        int numVociParagrafo;
+        int maxVociPerUnaColonna = 5;
+        boolean usaDiv;
         String sottoPagina;
         String vedi;
         int maxVociPerParagrafo = 50;
@@ -360,18 +349,51 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
-            for (String keyParagrafo : mappaDidascalie.keySet()) {
-                numVoci = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
-                buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVoci));
-                if (numVoci > maxVociPerParagrafo) {
-                    sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
+            numChiaviMappa = mappaDidascalie.size();
+            usaParagrafi = numChiaviMappa > numMinParagrafi;
 
-                    vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
-                    buffer.append(vedi + CAPO);
+            if (usaParagrafi) {
+                for (String keyParagrafo : mappaDidascalie.keySet()) {
+                    numVociParagrafo = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
+                    usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
 
+                    //titolo con/senza dimensione
+                    //titolo con/senza includeOnly
+                    if (usaDimensioneParagrafi) {
+                        buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                    }
+                    else {
+                        buffer.append(wikiUtilityService.setParagrafo(keyParagrafo));
+                    }
+
+                    //corpo con/senza sottopagine
+                    if (usaSottopaginaOltreMax && numVociParagrafo > maxVociPerParagrafo) {
+                        sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
+
+                        vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
+                        buffer.append(vedi + CAPO);
+                    }
+                    else {
+                        if (usaDiv) {
+                            buffer.append(DIV_INI_CAPO);
+                        }
+                        buffer.append(bodyParagrafo(mappaDidascalie.get(keyParagrafo)));
+                        if (usaDiv) {
+                            buffer.append(DIV_END_CAPO);
+                        }
+                    }
                 }
-                else {
-                    buffer.append(body(mappaDidascalie.get(keyParagrafo)));
+            }
+            else {
+                //corpo unico senza paragrafi e senza sottopagine
+                numVociParagrafo = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
+                usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
+                if (usaDiv) {
+                    buffer.append(DIV_INI_CAPO);
+                }
+                buffer.append(bodyAll(mappaDidascalie));
+                if (usaDiv) {
+                    buffer.append(DIV_END_CAPO);
                 }
             }
         }
@@ -380,24 +402,27 @@ public abstract class Lista implements AlgosBuilderPattern {
         return buffer.toString();
     }
 
+
+    /**
+     * Testo della pagina <br>
+     */
+    public String bodyAll(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaParagrafo) {
+        StringBuffer buffer = new StringBuffer();
+
+        for (String paragrafo : mappaParagrafo.keySet()) {
+            buffer.append(bodyParagrafo(mappaParagrafo.get(paragrafo)));
+        }
+
+        return buffer.toString();
+    }
+
     /**
      * Testo del paragrafo <br>
      */
-    public String body(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo) {
+    public String bodyParagrafo(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo) {
         StringBuffer buffer = new StringBuffer();
-        int maxVociPerUnaColonna = 5;
-        int numVociParagrafo;
-        boolean usaDiv;
 
         if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
-            numVociParagrafo = wikiUtilityService.getSizeMappa(mappaParagrafo);
-            usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
-
-            if (usaDiv) {
-                buffer.append(DIV_INI);
-                buffer.append(CAPO);
-            }
-
             for (String secondoLivello : mappaParagrafo.keySet()) {
                 for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
 
@@ -407,11 +432,6 @@ public abstract class Lista implements AlgosBuilderPattern {
                         buffer.append(CAPO);
                     }
                 }
-            }
-
-            if (usaDiv) {
-                buffer.append(DIV_END);
-                buffer.append(CAPO);
             }
         }
 

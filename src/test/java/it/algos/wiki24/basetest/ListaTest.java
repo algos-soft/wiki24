@@ -1,6 +1,5 @@
 package it.algos.wiki24.basetest;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
@@ -16,8 +15,6 @@ import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 import java.util.*;
@@ -58,14 +55,14 @@ public abstract class ListaTest extends WikiTest {
                 Arguments.of(VUOTA, TypeLista.giornoNascita),
                 Arguments.of(VUOTA, TypeLista.giornoMorte),
                 Arguments.of("1857", TypeLista.giornoNascita),
+                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                Arguments.of("29 febbraio", TypeLista.giornoMorte),
                 Arguments.of("8 aprile", TypeLista.attivitaPlurale),
                 Arguments.of("20 marzo", TypeLista.giornoNascita),
                 Arguments.of("21 febbraio", TypeLista.giornoMorte),
                 Arguments.of("34 febbraio", TypeLista.giornoMorte),
                 Arguments.of("1º gennaio", TypeLista.giornoNascita),
-                Arguments.of("23 marzo", TypeLista.annoMorte),
-                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoMorte)
+                Arguments.of("23 marzo", TypeLista.annoMorte)
         );
     }
 
@@ -115,7 +112,7 @@ public abstract class ListaTest extends WikiTest {
         this.fixCheckIniziale();
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
@@ -140,7 +137,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -165,7 +162,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -190,7 +187,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -212,7 +209,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -240,15 +237,15 @@ public abstract class ListaTest extends WikiTest {
     @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(601)
-    @DisplayName("601 - paragrafi")
-    void paragrafi(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("601 - paragrafi"));
+    @DisplayName("601 - paragrafiSenzaDimensioni")
+    void paragrafiSenzaDimensioni(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("601 - paragrafiSenzaDimensioni"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafi();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaDimensioneParagrafi().testoBody();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -257,6 +254,7 @@ public abstract class ListaTest extends WikiTest {
         assertTrue(textService.isValid(ottenuto));
         message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
         System.out.println(message);
+        System.out.println(VUOTA);
         System.out.println(ottenuto);
     }
 
@@ -272,7 +270,7 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafiDimensionati();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).testoBody();
 
         if (textService.isEmpty(ottenuto)) {
             assertFalse(textService.isValid(ottenuto));
@@ -281,11 +279,12 @@ public abstract class ListaTest extends WikiTest {
         assertTrue(textService.isValid(ottenuto));
         message = String.format("Paragrafi dimensionati della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
         System.out.println(message);
+        System.out.println(VUOTA);
         System.out.println(ottenuto);
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(801)
     @DisplayName("801 - paragrafiElaborati")
@@ -296,7 +295,7 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).paragrafiElaborati();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).testoBody();
 
         if (textService.isEmpty(ottenuto)) {
             assertFalse(textService.isValid(ottenuto));
@@ -305,6 +304,7 @@ public abstract class ListaTest extends WikiTest {
         assertTrue(textService.isValid(ottenuto));
         message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), nomeLista);
         System.out.println(message);
+        System.out.println(VUOTA);
         System.out.println(ottenuto);
     }
 

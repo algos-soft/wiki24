@@ -201,12 +201,24 @@ public class WikiUtilityService {
         return size;
     }
 
-    public int getSizeMappa(LinkedHashMap<String,LinkedHashMap<String, List<String>>> mappa) {
+    public int getSizeMappa(LinkedHashMap<String,LinkedHashMap<String, List<String>>> mappa2) {
         int size = 0;
 
-        if (mappa != null) {
-            for (String key : mappa.keySet()) {
-                size += getSize(mappa.get(key));
+        if (mappa2 != null) {
+            for (String key : mappa2.keySet()) {
+                size += getSize(mappa2.get(key));
+            }
+        }
+
+        return size;
+    }
+
+    public int getSizeMappaMappa(LinkedHashMap<String,LinkedHashMap<String,LinkedHashMap<String, List<String>>>> mappa3) {
+        int size = 0;
+
+        if (mappa3 != null) {
+            for (String key : mappa3.keySet()) {
+                size += getSizeMappa(mappa3.get(key));
             }
         }
 
