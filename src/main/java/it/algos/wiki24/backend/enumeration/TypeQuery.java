@@ -15,6 +15,7 @@ public enum TypeQuery {
     post("POST senza loginCookies"),
     postPiuCookies("POST con loginCookies"),
     login("preliminary GET + POST"),
+    uploadSostanzialmenteUguale(""),
     ;
 
     private String tag;

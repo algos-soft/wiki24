@@ -61,6 +61,7 @@ public class WikiApiService {
     public static final String QUERY = "query";
 
     public static final String EDIT = "edit";
+    public static final String NEW = "new";
 
     public static final String NEW_REV_ID = "newrevid";
 
