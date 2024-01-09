@@ -563,6 +563,7 @@ public class ElaboraService {
 
         elaborato = cognome;
         if (textService.isValid(nome)) {
+            elaborato += VIRGOLA;
             elaborato += SPAZIO;
             elaborato += nome;
         }

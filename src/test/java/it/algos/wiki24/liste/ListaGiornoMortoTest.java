@@ -52,27 +52,38 @@ public class ListaGiornoMortoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
-    @MethodSource(value = "GIORNI")
+//    @Test
     @Order(9001)
-    @DisplayName("9001 - print")
-    //--nome giorno
-    //--typeCrono
-    void print(String nomeGiorno, TypeLista type) {
-        System.out.println(("9001 - print"));
+    @DisplayName("9001 - print (da disabilitare)")
+    void print() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9001 - print (da disabilitare)"));
         System.out.println(VUOTA);
-        //        if (!validoGiornoMorto(nomeGiorno, type)) {
-        //            return;
-        //        }
-        sorgente = nomeGiorno;
+        sorgente = "29 febbraio";
+
+        listaStr = appContext.getBean(ListaGiornoMorto.class, sorgente).listaTestoDidascalie();
+        assertNotNull(listaStr);
+        StringBuffer buffer = new StringBuffer();
+        for (String riga : listaStr) {
+            buffer.append(ASTERISCO);
+            buffer.append(riga);
+            buffer.append(CAPO);
+        }
+        queryService.write(wikiTitle, buffer.toString());
+    }
+
+//    @Test
+    @Order(9002)
+    @DisplayName("9002 - print (da disabilitare)")
+    void print2() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9002 - print (da disabilitare)"));
+        System.out.println(VUOTA);
+        sorgente = "29 febbraio";
 
         ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).testoBody();
-        if (textService.isEmpty(ottenuto)) {
-            assertTrue(textService.isEmpty(ottenuto));
-            return;
-        }
         assertTrue(textService.isValid(ottenuto));
-        printBodyLista(VUOTA);
+        queryService.write(wikiTitle, ottenuto);
     }
 
 }

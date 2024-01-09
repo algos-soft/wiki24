@@ -80,5 +80,13 @@ public class QueryService {
         return appContext.getBean(QueryTimestamp.class).getWrap(listaPageids);
     }
 
+    public WResult write(final String wikiTitleGrezzo, final String newTesto) {
+        return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleGrezzo, newTesto);
+    }
+
+    public WResult write(final String wikiTitleGrezzo, final String newTesto, final String summary) {
+        return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleGrezzo, newTesto, summary);
+    }
+
 
 }

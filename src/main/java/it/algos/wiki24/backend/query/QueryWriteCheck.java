@@ -1,7 +1,6 @@
 package it.algos.wiki24.backend.query;
 
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
@@ -27,13 +26,12 @@ import java.util.*;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class QueryWrite extends AQuery {
+public class QueryWriteCheck extends AQuery {
 
     public static final TypeQuery QUERY_TYPE = TypeQuery.postPiuCookies;
 
     // token di controllo recuperato dalla urlResponse della primaryRequestGet
     private String csrftoken;
-
 
     /**
      * Request al software mediawiki composta di tre passaggi:
@@ -106,6 +104,91 @@ public class QueryWrite extends AQuery {
         return result;
     }
 
+    /**
+     * Request condizionata al contenuto pre-esistente <br>
+     * Se cambia SOLO la parte 'modificabile' iniziale e non quella 'significativa', la query NON deve scrivere <br>
+     * Se cambia ANCHE la parte 'significativa' finale, la query DEVE scrivere <br>
+     *
+     * @param wikiTitleGrezzo      della pagina wiki (necessita di codifica) usato nella urlRequest
+     * @param newText              complessivo da inserire
+     * @param newTextSignificativo successivo alla parte iniziale che può variare senza che la pagina venga riscritta
+     *
+     * @return wrapper di informazioni
+     */
+    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newText, final String newTextSignificativo) {
+        return urlRequestCheck(wikiTitleGrezzo, newText, newTextSignificativo, VUOTA);
+    }
+
+    /**
+     * Request condizionata al contenuto pre-esistente <br>
+     * Se cambia SOLO la parte 'modificabile' iniziale e non quella 'significativa', la query NON deve scrivere <br>
+     * Se cambia ANCHE la parte 'significativa' finale, la query DEVE scrivere <br>
+     *
+     * @param wikiTitleGrezzo      della pagina wiki (necessita di codifica) usato nella urlRequest
+     * @param newTextAll           complessivo da inserire
+     * @param newTextSignificativo successivo alla parte iniziale che può variare senza che la pagina venga riscritta
+     * @param summary              oggetto della modifica (facoltativo)
+     *
+     * @return wrapper di informazioni
+     */
+    public WResult urlRequestCheck(final String wikiTitleGrezzo, final String newTextAll, final String newTextSignificativo, final String summary) {
+        WResult result = checkWrite(wikiTitleGrezzo, newTextAll, summary);
+        if (result.isErrato()) {
+            return result;
+        }
+
+        if (textService.isEmpty(newTextSignificativo)) {
+            return (WResult) result.errorMessage("Manca il newTextSignificativo");
+        }
+
+        if (!newTextAll.endsWith(newTextSignificativo)) {
+            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
+        }
+
+        //--confronto della parte 'significativa' per decidere se registrare
+        if (isModificataSignificativamente(wikiTitleGrezzo, newTextAll, newTextSignificativo)) {
+            //--La prima request è di tipo GET
+            //--Indispensabile aggiungere i cookies del botLogin
+            result = this.primaryRequestGet(result);
+
+            //--La seconda request è di tipo POST
+            //--Indispensabile aggiungere i cookies
+            //--Indispensabile aggiungere il testo POST
+            return this.secondaryRequestPost(result);
+        }
+        else {
+            result.setModificata(false);
+            result.typeResult(TypeResult.uploadSostanzialmenteUguale);
+            result.setValidMessage("Nessuna modifica sostanziale ai contenuti");
+            return result;
+        }
+    }
+
+    /**
+     * confronto della parte 'significativa' per decidere se scriverla <br>
+     * <p>
+     * recupera la precedente esistente revisione della pagina <br>
+     * confronto le due parti 'significative' del testo <br>
+     *
+     * @param wikiTitleGrezzo      della pagina wiki (necessita di codifica) usato nella urlRequest
+     * @param newTextAll           complessivo da inserire
+     * @param newTextSignificativo successivo alla parte iniziale che può variare senza che la pagina venga riscritta
+     *
+     * @return true se significativamente cambiata e deve essere scritta
+     */
+    public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextAll, final String newTextSignificativo) {
+        boolean modificataSignificativamente = true;
+        String oldTextAll;
+
+        oldTextAll = appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
+        if (textService.isValid(oldTextAll)) {
+            if (oldTextAll.endsWith(newTextSignificativo)) {
+                modificataSignificativamente = false;
+            }
+        }
+
+        return modificataSignificativamente;
+    }
 
     public WResult urlRequest(final String wikiTitleGrezzo, final String newText) {
         return urlRequest(wikiTitleGrezzo, newText, VUOTA);

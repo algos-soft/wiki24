@@ -51,27 +51,40 @@ public class ListaAnnoNatoTest extends ListaTest {
     }
 
 
-    //    @ParameterizedTest
-    @MethodSource(value = "ANNI")
+    //    @Test
     @Order(9001)
-    @DisplayName("9001 - print")
-    //--nome anno
-    //--typeCrono
-    void print(String nomeAnno, TypeLista type) {
-        System.out.println(("9001 - print"));
+    @DisplayName("9001 - print (da disabilitare)")
+    void print() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9001 - print (da disabilitare)"));
         System.out.println(VUOTA);
-        if (!validoAnnoNato(nomeAnno, type)) {
-            return;
+        sorgente = "38 a.C.";
+        sorgente = "1467";
+
+        listaStr = appContext.getBean(ListaAnnoNato.class, sorgente).listaTestoDidascalie();
+        assertNotNull(listaStr);
+        StringBuffer buffer = new StringBuffer();
+        for (String riga : listaStr) {
+            buffer.append(ASTERISCO);
+            buffer.append(riga);
+            buffer.append(CAPO);
         }
-        sorgente = nomeAnno;
+        queryService.write(wikiTitle, buffer.toString());
+    }
+
+//    @Test
+    @Order(9002)
+    @DisplayName("9002 - print (da disabilitare)")
+    void print2() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9002 - print (da disabilitare)"));
+        System.out.println(VUOTA);
+        sorgente = "38 a.C.";
+        sorgente = "1467";
 
         ottenuto = appContext.getBean(ListaAnnoNato.class, sorgente).testoBody();
-        if (textService.isEmpty(ottenuto)) {
-            assertTrue(textService.isEmpty(ottenuto));
-            return;
-        }
         assertTrue(textService.isValid(ottenuto));
-        printBodyLista(VUOTA);
+        queryService.write(wikiTitle, ottenuto);
     }
 
 }

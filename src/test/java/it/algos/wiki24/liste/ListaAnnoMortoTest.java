@@ -1,16 +1,14 @@
 package it.algos.wiki24.liste;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.basetest.*;
+import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.stream.*;
 
@@ -40,7 +38,7 @@ public class ListaAnnoMortoTest extends ListaTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = ListaAnnoNato.class;
+        super.clazz = ListaAnnoMorto.class;
         super.currentModulo = annoModulo;
         super.currentType = TypeLista.annoMorte;
         super.setUpAll();
@@ -51,6 +49,44 @@ public class ListaAnnoMortoTest extends ListaTest {
     protected void setUpEach() {
         super.setUpEach();
         istanza = null;
+    }
+
+
+//    @Test
+    @Order(9001)
+    @DisplayName("9001 - print (da disabilitare)")
+    void print() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9001 - print (da disabilitare)"));
+        System.out.println(VUOTA);
+        sorgente = "38 a.C.";
+        sorgente = "1467";
+
+        listaStr = appContext.getBean(ListaAnnoMorto.class, sorgente).listaTestoDidascalie();
+        assertNotNull(listaStr);
+        StringBuffer buffer = new StringBuffer();
+        for (String riga : listaStr) {
+            buffer.append(ASTERISCO);
+            buffer.append(riga);
+            buffer.append(CAPO);
+        }
+        queryService.write(wikiTitle, buffer.toString());
+    }
+
+
+    @Test
+    @Order(9002)
+    @DisplayName("9002 - print (da disabilitare)")
+    void print2() {
+        String wikiTitle = "Utente:Biobot/2";
+        System.out.println(("9002 - print (da disabilitare)"));
+        System.out.println(VUOTA);
+        sorgente = "38 a.C.";
+        sorgente = "1467";
+
+        ottenuto = appContext.getBean(ListaAnnoMorto.class, sorgente).testoBody();
+        assertTrue(textService.isValid(ottenuto));
+        queryService.write(wikiTitle, ottenuto);
     }
 
 }
