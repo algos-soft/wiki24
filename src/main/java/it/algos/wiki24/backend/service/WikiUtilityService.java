@@ -201,7 +201,7 @@ public class WikiUtilityService {
         return size;
     }
 
-    public int getSizeMappa(LinkedHashMap<String,LinkedHashMap<String, List<String>>> mappa2) {
+    public int getSizeMappa(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappa2) {
         int size = 0;
 
         if (mappa2 != null) {
@@ -213,7 +213,7 @@ public class WikiUtilityService {
         return size;
     }
 
-    public int getSizeMappaMappa(LinkedHashMap<String,LinkedHashMap<String,LinkedHashMap<String, List<String>>>> mappa3) {
+    public int getSizeMappaMappa(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa3) {
         int size = 0;
 
         if (mappa3 != null) {

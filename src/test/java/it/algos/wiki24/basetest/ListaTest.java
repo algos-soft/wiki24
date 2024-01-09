@@ -112,7 +112,7 @@ public abstract class ListaTest extends WikiTest {
         this.fixCheckIniziale();
     }
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
@@ -130,14 +130,19 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
         assertNotNull(listaBio);
-        message = String.format("Lista delle [%d] biografie di type%s[%s] per il giorno [%s]", listaBio.size(), FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        printBioLista(listaBio);
+        if (listaBio.size() > 0) {
+            message = String.format("Lista delle [%d] biografie di type%s[%s] per %s [%s]", listaBio.size(), FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printBioLista(listaBio);
+        }
+        else {
+            printMancanoBio("La listaBio", nomeLista, typeSuggerito);
+        }
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -155,14 +160,19 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
         assertNotNull(listaWrap);
-        message = String.format("Lista dei [%d] wrap di type%s[%s] per il giorno [%s]", listaWrap.size(), FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        printWrapDidascalie(listaWrap, sorgente);
+        if (listaWrap.size() > 0) {
+            message = String.format("Lista dei [%d] wrap di type%s[%s] per %s [%s]", listaWrap.size(), FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            printWrapDidascalie(listaWrap, sorgente);
+        }
+        else {
+            printMancanoBio("La listaWrap", nomeLista, typeSuggerito);
+        }
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -180,14 +190,19 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
         assertNotNull(listaStr);
-        message = String.format("Lista delle [%d] didascalie di type%s[%s] per il giorno [%s]", listaStr.size(), FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        print(listaStr);
+        if (listaStr.size() > 0) {
+            message = String.format("Lista delle [%d] didascalie di type%s[%s] per %s [%s]", listaStr.size(), FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            printMancanoBio("Le lista delle didascalie", nomeLista, typeSuggerito);
+        }
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -205,11 +220,16 @@ public abstract class ListaTest extends WikiTest {
             return;
         }
         assertNotNull(mappaDidascalie);
-        printMappa(typeSuggerito.getTag(), nomeLista, mappaDidascalie);
+        if (mappaDidascalie.size() > 0) {
+            printMappa(typeSuggerito.getTag(), nomeLista, mappaDidascalie);
+        }
+        else {
+            printMancanoBio("La mappa delle didascalie", nomeLista, typeSuggerito);
+        }
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -226,20 +246,24 @@ public abstract class ListaTest extends WikiTest {
             assertNull(listaStr);
             return;
         }
-        assertNotNull(listaStr);
-        message = String.format("La mappa della lista di type%s[%s] per il giorno [%s] ha %d chiavi (paragrafi)", FORWARD, typeSuggerito.name(), nomeLista, listaStr.size());
-        System.out.println(message);
-        System.out.println(VUOTA);
-        print(listaStr);
+        if (listaStr != null) {
+            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d chiavi (paragrafi)", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            printMancanoBio("Le mappa della lista", nomeLista, typeSuggerito);
+        }
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(601)
-    @DisplayName("601 - paragrafiSenzaDimensioni")
-    void paragrafiSenzaDimensioni(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("601 - paragrafiSenzaDimensioni"));
+    @DisplayName("601 - nonUsaDimensioneParagrafi")
+    void nonUsaDimensioneParagrafi(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("601 - nonUsaDimensioneParagrafi"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
@@ -251,45 +275,84 @@ public abstract class ListaTest extends WikiTest {
             assertFalse(textService.isValid(ottenuto));
             return;
         }
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        if (textService.isValid(ottenuto)) {
+            message = String.format("Paragrafi della lista di type%s[%s] per %s [%s]", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println("Paragrafi senza dimensioni");
+            System.out.println(VUOTA);
+            System.out.println(ottenuto);
+        }
+        else {
+            printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
+        }
     }
 
 
     @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(701)
-    @DisplayName("701 - paragrafiDimensionati")
-    void paragrafiDimensionati(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("701 - paragrafiDimensionati"));
+    @DisplayName("701 - nonUsaSottoPagina")
+    void nonUsaSottoPagina(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("701 - nonUsaSottoPagina"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).testoBody();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaSottoPagina().testoBody();
 
-        if (textService.isEmpty(ottenuto)) {
+        if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
             return;
         }
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi dimensionati della lista di type%s[%s] per il giorno [%s]", FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        if (textService.isValid(ottenuto)) {
+            message = String.format("Paragrafi dimensionati della lista di type%s[%s] per %s [%s]", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println("Paragrafi senza sottopagine");
+            System.out.println(VUOTA);
+            System.out.println(ottenuto);
+        }
+        else {
+            printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
+        }
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(801)
-    @DisplayName("801 - paragrafiElaborati")
-    void paragrafiElaborati(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("801 - paragrafiElaborati"));
+    @DisplayName("801 - nonUsaIncludeNeiParagrafi")
+    void nonUsaIncludeNeiParagrafi(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("801 - nonUsaIncludeNeiParagrafi"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaIncludeNeiParagrafi().testoBody();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        if (textService.isValid(ottenuto)) {
+            message = String.format("Paragrafi della lista di type%s[%s] per %s [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println("Paragrafi senza includeOnly");
+            System.out.println(ottenuto);
+        }
+        else {
+            printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(901)
+    @DisplayName("901 - paragrafi")
+    void paragrafi(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("901 - paragrafi"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
@@ -297,15 +360,20 @@ public abstract class ListaTest extends WikiTest {
 
         ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).testoBody();
 
-        if (textService.isEmpty(ottenuto)) {
+        if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
             return;
         }
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Paragrafi della lista di type%s[%s] per il giorno [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), nomeLista);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        if (textService.isValid(ottenuto)) {
+            message = String.format("Paragrafi della lista di type%s[%s] per %s [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            System.out.println("Paragrafi normali con dimensioni(sempre), sottopagine(if) e include(if)");
+            System.out.println(VUOTA);
+            System.out.println(ottenuto);
+        }
+        else {
+            printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
+        }
     }
 
 
@@ -454,16 +522,22 @@ public abstract class ListaTest extends WikiTest {
         }
     }
 
+    protected void printMancanoBio(String manca, String nomeLista, TypeLista typeSuggerito) {
+        message = String.format("%s di type%s[%s] per %s [%s] è vuoto/a", manca, FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+        System.out.println(message);
+        System.out.println("Probabilmente non ci sono biografie valide");
+    }
+
 
     protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
         if (textService.isEmpty(nomeLista)) {
-            message = String.format("Manca il nome del giorno/anno per un'istanza di type%s[%s]", FORWARD, currentType.name());
+            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
             System.out.println(message);
             return false;
         }
 
         if (currentModulo.findByKey(nomeLista) == null) {
-            message = String.format("Il giorno/anno [%s] indicato NON esiste per un'istanza di type%s[%s]", nomeLista, FORWARD, currentType.name());
+            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
             System.out.println(message);
             return false;
         }

@@ -74,7 +74,7 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     boolean usaDimensioneParagrafi;
 
-    boolean usaInclude;
+    boolean usaIncludeSottoMax;
 
     boolean usaSottopaginaOltreMax;
 
@@ -104,7 +104,7 @@ public abstract class Lista implements AlgosBuilderPattern {
     protected void fixPreferenze() {
         this.type = TypeLista.nessunaLista;
         this.usaDimensioneParagrafi = true;
-        this.usaInclude = false;
+        this.usaIncludeSottoMax = true;
         this.usaSottopaginaOltreMax = true;
     }
 
@@ -127,8 +127,8 @@ public abstract class Lista implements AlgosBuilderPattern {
     /**
      * Pattern Builder <br>
      */
-    public Lista includeNeiParagrafi() {
-        this.usaInclude = true;
+    public Lista nonUsaIncludeNeiParagrafi() {
+        this.usaIncludeSottoMax = false;
         return this;
     }
 
@@ -335,6 +335,8 @@ public abstract class Lista implements AlgosBuilderPattern {
     public String testoBody() {
         StringBuffer buffer = new StringBuffer();
         int numMinParagrafi = 4; //@todo passare a preferenza
+        int minVociInclude = 200; //@todo passare a preferenza
+        int numVociLista; //voci totali
         int numChiaviMappa; //paragrafi effettivi
         boolean usaParagrafi = false;
         int numVociParagrafo;
@@ -342,13 +344,14 @@ public abstract class Lista implements AlgosBuilderPattern {
         boolean usaDiv;
         String sottoPagina;
         String vedi;
-        int maxVociPerParagrafo = 50;
+        int maxVociPerParagrafo = 50; //@todo passare a preferenza
 
         if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
             mappaDidascalie = mappaDidascalie();
         }
 
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
+            numVociLista = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
             numChiaviMappa = mappaDidascalie.size();
             usaParagrafi = numChiaviMappa > numMinParagrafi;
 
@@ -358,9 +361,14 @@ public abstract class Lista implements AlgosBuilderPattern {
                     usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
 
                     //titolo con/senza dimensione
-                    //titolo con/senza includeOnly
                     if (usaDimensioneParagrafi) {
-                        buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                        //titolo con/senza includeOnly
+                        if (usaIncludeSottoMax && numVociLista < minVociInclude) {
+                            buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, numVociParagrafo));
+                        }
+                        else {
+                            buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                        }
                     }
                     else {
                         buffer.append(wikiUtilityService.setParagrafo(keyParagrafo));
