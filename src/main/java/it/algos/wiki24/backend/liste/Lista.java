@@ -47,9 +47,6 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     protected TypeLista type;
 
-    protected String nomeLista;
-
-    protected String titoloPagina;
 
     /**
      * Lista ordinata (per cognome) delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
@@ -63,10 +60,14 @@ public abstract class Lista implements AlgosBuilderPattern {
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
     protected boolean costruttoreValido = false;
+    protected boolean patternCompleto = false;
+
+    protected String nomeLista;
+
+    protected String titoloPagina;
 
     protected CrudModulo moduloCorrente;
 
-    protected boolean patternCompleto = false;
 
     protected String collectionName;
 
@@ -80,13 +81,13 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaNomi.class, nomeLista) <br>
-     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     * Not annotated with @Autowired annotation, classe astratta <br>
+     * La classe usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public Lista(String nomeLista) {
         this.nomeLista = nomeLista;
     }// end of constructor not @Autowired and used
+
 
     @PostConstruct
     protected void postConstruct() {

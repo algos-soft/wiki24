@@ -35,9 +35,9 @@ public abstract class ListaTest extends WikiTest {
     @Inject
     protected AnnoModulo annoModulo;
 
-    protected CrudModulo currentModulo;
-
-    protected TypeLista currentType;
+//    protected CrudModulo currentModulo;
+//
+//    protected TypeLista currentType;
 
     @Inject
     protected QueryService queryService;
@@ -86,7 +86,7 @@ public abstract class ListaTest extends WikiTest {
         );
     }
 
-    //--nome giorno
+    //--nome giorno/anno
     //--typeCrono per il test
     protected Stream<Arguments> getListeStream() {
         return null;
@@ -381,7 +381,7 @@ public abstract class ListaTest extends WikiTest {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e prima di invocare super.setUpAll() ", clazzTestName));
+        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e PRIMA di invocare super.setUpAll() ", clazzTestName));
 
         if (clazz == null) {
             message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazz", clazzTestName);
@@ -402,7 +402,7 @@ public abstract class ListaTest extends WikiTest {
         logger.info(new WrapLog().message(message).type(TypeLog.test));
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e dopo aver invocato super.setUpAll() ", clazzTestName));
+        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e DOPO aver invocato super.setUpAll() ", clazzTestName));
 
         message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
         logger.info(new WrapLog().message(message).type(TypeLog.test));
@@ -529,27 +529,27 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
-        if (textService.isEmpty(nomeLista)) {
-            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
-            System.out.println(message);
-            return false;
-        }
-
-        if (currentModulo.findByKey(nomeLista) == null) {
-            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
-            System.out.println(message);
-            return false;
-        }
-
-        if (currentType != typeSuggerito) {
-            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
-            System.out.println(message);
-            return false;
-        }
-
-        return true;
-    }
+//    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+//        if (textService.isEmpty(nomeLista)) {
+//            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
+//            System.out.println(message);
+//            return false;
+//        }
+//
+//        if (currentModulo.findByKey(nomeLista) == null) {
+//            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
+//            System.out.println(message);
+//            return false;
+//        }
+//
+//        if (currentType != typeSuggerito) {
+//            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
+//            System.out.println(message);
+//            return false;
+//        }
+//
+//        return true;
+//    }
 
 
     protected boolean validoAnnoNato(final String nomeAnno, final TypeLista type) {

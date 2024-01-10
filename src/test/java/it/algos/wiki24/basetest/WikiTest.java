@@ -17,7 +17,6 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
 import javax.inject.*;
@@ -66,7 +65,7 @@ public abstract class WikiTest extends AlgosTest {
     public LogService logger;
 
     @Inject
-   protected TextService textService;
+    protected TextService textService;
 
     @Inject
     protected BioMongoModulo bioMongoModulo;
@@ -229,7 +228,7 @@ public abstract class WikiTest extends AlgosTest {
 
     //    protected WrapLista wrapLista;
 
-    protected String backendClazzName;
+    protected String moduloClazzName;
 
     protected String collectionName;
 
@@ -248,6 +247,11 @@ public abstract class WikiTest extends AlgosTest {
     protected String metodoDefault;
 
     protected List<BioMongoEntity> listaBio = new ArrayList<>();
+
+    protected TypeLista currentType;
+
+    protected CrudModulo currentModulo;
+
 
     //--nome della pagina
     //--esiste sul server wiki
@@ -755,6 +759,7 @@ public abstract class WikiTest extends AlgosTest {
     protected void setUpAll() {
         MockitoAnnotations.openMocks(this);
         //        slf4jLogger = LoggerFactory.getLogger("wiki23.admin");
+        clazzName = clazz != null ? clazz.getSimpleName() : NULLO;
 
         initMocks();
 
@@ -777,7 +782,6 @@ public abstract class WikiTest extends AlgosTest {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void initMocks() {
-        clazzName = clazz != null ? clazz.getSimpleName() : NULLO;
         clazzTestName = this.getClass().getSimpleName();
     }
 
@@ -975,7 +979,7 @@ public abstract class WikiTest extends AlgosTest {
                 message = String.format("Come previsto appContext.getBean(%s.class) funziona", clazzName);
                 logger.info(new WrapLog().message(message).type(TypeLog.test));
 
-                message = String.format("Il flag '%s' nel metodo setUpAll() di questa classe [%s] è corretto", "ammessoCostruttoreVuoto", this.getClass().getSimpleName());
+                message = String.format("Il flag '%s' nel metodo setUpAll() di questa classe [%s] è corretto", "ammessoCostruttoreVuoto=false", this.getClass().getSimpleName());
                 logger.info(new WrapLog().message(message).type(TypeLog.test));
 
                 message = String.format("Nella classe [%s] o in una sua superclasse esiste un costruttore senza parametri", clazzName);
@@ -1085,7 +1089,7 @@ public abstract class WikiTest extends AlgosTest {
         logger.info(new WrapLog().message(message).type(TypeLog.test));
         message = String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, check);
         logger.info(new WrapLog().message(message).type(TypeLog.test));
-        message = String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, funzione, valore);
+        message = String.format("Funzione%s%s.%s(%s)", FORWARD, moduloClazzName, funzione, valore);
         logger.info(new WrapLog().message(message).type(TypeLog.test));
         System.out.println(VUOTA);
 
@@ -1239,7 +1243,7 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(VUOTA);
 
         System.out.println(String.format("Controllo nel metodo %s.%s, invocato da  @PostConstruct", clazzName, check));
-        System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, backendClazzName, funzione, sorgente));
+        System.out.println(String.format("Funzione%s%s.%s(%s)", FORWARD, moduloClazzName, funzione, sorgente));
         message = String.format("Il valore '%s' non è accettabile per un'istanza valida di classe [%s]", valore, clazzName);
         logger.warn(new WrapLog().message(message));
     }
@@ -1553,7 +1557,7 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("BioMongo wikiTitle: %s", bio.getWikiTitle()));
             System.out.println(String.format("BioMongo nome: %s", bio.getNome()));
             System.out.println(String.format("BioMongo cognome: %s", bio.getCognome()));
-//            System.out.println(String.format("BioMongo sesso: %s", bio.get()));
+            //            System.out.println(String.format("BioMongo sesso: %s", bio.get()));
             System.out.println(String.format("BioMongo luogo nato: %s", bio.getLuogoNato()));
             System.out.println(String.format("BioMongo giorno nato: %s", bio.getGiornoNato()));
             System.out.println(String.format("BioMongo anno nato: %s", bio.getAnnoNato()));
@@ -1670,6 +1674,7 @@ public abstract class WikiTest extends AlgosTest {
             }
         }
     }
+
     protected void printMappaTab(Map<String, String> mappa) {
         if (mappa != null && mappa.size() > 0) {
             for (String key : mappa.keySet()) {
@@ -1688,7 +1693,6 @@ public abstract class WikiTest extends AlgosTest {
             }
         }
     }
-
 
 
     protected void printString(List<String> listaString) {
@@ -2118,6 +2122,28 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
         System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
         System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
+    }
+
+    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+        if (textService.isEmpty(nomeLista)) {
+            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
+            System.out.println(message);
+            return false;
+        }
+
+        if (currentModulo.findByKey(nomeLista) == null) {
+            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
+            System.out.println(message);
+            return false;
+        }
+
+        if (currentType != typeSuggerito) {
+            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
     }
 
 }

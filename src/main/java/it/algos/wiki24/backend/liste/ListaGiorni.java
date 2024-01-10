@@ -24,8 +24,7 @@ public abstract class ListaGiorni extends Lista {
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
-     * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaNomi.class, nomeLista) <br>
+     * Not annotated with @Autowired annotation, classe astratta <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaGiorni(String nomeLista) {

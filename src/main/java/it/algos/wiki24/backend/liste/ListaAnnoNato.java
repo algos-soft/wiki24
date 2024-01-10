@@ -20,7 +20,7 @@ public class ListaAnnoNato extends ListaAnni {
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, per creare l'istanza SOLO come SCOPE_PROTOTYPE <br>
-     * Uso: getBean(ListaNomi.class, nomeLista) <br>
+     * Uso: getBean(ListaAnnoNato.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
     public ListaAnnoNato(String nomeLista) {
