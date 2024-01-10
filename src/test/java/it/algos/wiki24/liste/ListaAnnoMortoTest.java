@@ -74,7 +74,7 @@ public class ListaAnnoMortoTest extends ListaTest {
     }
 
 
-    @Test
+//    @Test
     @Order(9002)
     @DisplayName("9002 - print (da disabilitare)")
     void print2() {
