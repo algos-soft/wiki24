@@ -2,6 +2,7 @@ package it.algos.wiki24.liste;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.basetest.*;
@@ -40,10 +41,9 @@ public class ListaGiornoNatoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaGiornoNato.class;
-//        super.currentModulo = giornoModulo;
-//        super.currentType = TypeLista.giornoNascita;
         super.setUpAll();
-//        super.ammessoCostruttoreVuoto = false;
+        super.currentModulo = giornoModulo;
+        super.currentType = TypeLista.giornoNascita;
     }
 
     @BeforeEach
@@ -73,7 +73,7 @@ public class ListaGiornoNatoTest extends ListaTest {
         queryService.write(wikiTitle, buffer.toString());
     }
 
-//    @Test
+    //    @Test
     @Order(9002)
     @DisplayName("9002 - print (da disabilitare)")
     void print2() {

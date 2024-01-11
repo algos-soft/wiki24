@@ -61,6 +61,9 @@ public abstract class ListaTest extends WikiStreamTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
+        super.usaCollectionName = false;
+        super.usaCurrentModulo = true;
+        super.usaTypeLista = true;
     }
 
     @BeforeEach
@@ -69,7 +72,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
@@ -99,7 +102,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -129,7 +132,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -159,7 +162,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -186,7 +189,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -215,7 +218,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(601)
     @DisplayName("601 - nonUsaDimensioneParagrafi")
@@ -245,7 +248,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(701)
     @DisplayName("701 - nonUsaSottoPagina")
@@ -275,7 +278,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(801)
     @DisplayName("801 - nonUsaIncludeNeiParagrafi")
@@ -304,7 +307,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(901)
     @DisplayName("901 - paragrafi")

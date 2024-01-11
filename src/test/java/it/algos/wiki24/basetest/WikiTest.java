@@ -247,7 +247,11 @@ public abstract class WikiTest extends AlgosTest {
 
     protected List<BioMongoEntity> listaBio = new ArrayList<>();
 
+    protected boolean usaTypeLista;
+
     protected TypeLista currentType;
+
+    protected boolean usaCurrentModulo;
 
     protected CrudModulo currentModulo;
 
@@ -261,9 +265,14 @@ public abstract class WikiTest extends AlgosTest {
      */
     protected void setUpAll() {
         MockitoAnnotations.openMocks(this);
-        clazzName = clazz != null ? clazz.getSimpleName() : NULLO;
+        clazzName = clazz != null ? clazz.getSimpleName() : VUOTA;
         clazzTestName = this.getClass().getSimpleName();
         usaCollectionName = false;
+        collectionName = VUOTA;
+        usaCurrentModulo = false;
+        currentModulo = null;
+        usaTypeLista = false;
+        currentType = TypeLista.nessunaLista;
         setUpAllEffettuato = true;
 
         listaBio.add(creaBio("Johann Schweikhard von Kronberg"));
@@ -302,6 +311,7 @@ public abstract class WikiTest extends AlgosTest {
         typeUser = null;
         pageId = 0L;
         //        wrapLista = null;
+        message = VUOTA;
     }
 
     @Test
@@ -318,42 +328,28 @@ public abstract class WikiTest extends AlgosTest {
         }
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e PRIMA di invocare il metodo super.setUpAll() ", clazzTestName));
+        message = String.format("Nella classe [%s] nel metodo setUpAll() e PRIMA di invocare il metodo super.setUpAll()", clazzTestName);
+        System.out.println(message);
 
-        if (clazz == null) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazz", clazzTestName);
-            logger.error(new WrapLog().message(message).type(TypeLog.test));
-            assertTrue(false);
+        if (mancaClazz()) {
             return;
         }
-        message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() del test [%s]", "clazz", clazz, clazzTestName);
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
-
-        if (textService.isEmpty(clazzName)) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazzName", clazzTestName);
-            logger.error(new WrapLog().message(message).type(TypeLog.test));
-            assertTrue(false);
+        if (mancaClazzName()) {
             return;
         }
-        message = String.format("Il flag '%s' è stato regolato (=%s) nel metodo setUpAll() della classe [%s]", "clazzName", clazzName, "WikiTest");
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e DOPO aver invocato il metodo super.setUpAll() ", clazzTestName));
+        message = String.format("Nella classe [%s] nel metodo setUpAll() e DOPO aver invocato il metodo super.setUpAll() ", clazzTestName);
+        System.out.println(message);
 
-        if (usaCollectionName) {
-            if (textService.isEmpty(collectionName)) {
-                message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "collectionName", clazzTestName);
-                logger.error(new WrapLog().message(message).type(TypeLog.test));
-                assertTrue(false);
-                return;
-            }
-            message = String.format("Il flag '%s' è regolato (=false) nel metodo setUpAll() della classe [%s]", "usaCollectionName", collectionName, "WikiTest");
-            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        if (mancaCollectionName()) {
+            return;
         }
-        else {
-            message = String.format("Non usa '%s' e il flag è regolato (%s=false) nel metodo setUpAll() della classe [%s]", "collectionName", "usaCollectionName", "WikiTest");
-            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        if (mancaCurrentModulo()) {
+            return;
+        }
+        if (mancaCurrentType()) {
+            return;
         }
 
         //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
@@ -364,6 +360,90 @@ public abstract class WikiTest extends AlgosTest {
         //
         //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "istanzaValidaSubitoDopoCostruttore", istanzaValidaSubitoDopoCostruttore, clazzTestName);
         //        logger.info(new WrapLog().message(message).type(TypeLog.test));
+    }
+
+    private boolean mancaClazz() {
+        if (clazz == null) {
+            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazz", this.getClass().getSimpleName());
+            logger.error(new WrapLog().message(message).type(TypeLog.test));
+            assertTrue(false);
+            return true;
+        }
+        message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() del test [%s]", "clazz", clazz, clazzTestName);
+        logger.info(new WrapLog().message(message).type(TypeLog.test));
+        return false;
+    }
+
+    private boolean mancaClazzName() {
+        if (textService.isEmpty(clazzName)) {
+            message = String.format("Manca la regolazione del flag '%s' nel metodo setUpAll() della classe [%s]", "clazzName", "WikiTest");
+            logger.error(new WrapLog().message(message).type(TypeLog.test));
+            assertTrue(false);
+            return true;
+        }
+        message = String.format("Il flag '%s' è stato regolato (=%s) nel metodo setUpAll() della classe [%s]", "clazzName", clazzName, "WikiTest");
+        logger.info(new WrapLog().message(message).type(TypeLog.test));
+        return false;
+    }
+
+    private boolean mancaCollectionName() {
+        if (usaCollectionName) {
+            if (textService.isEmpty(collectionName)) {
+                message = String.format("Usa '%s' e il flag è regolato (%s=true) nel metodo setUpAll() di una sottoclasse (astratta) di [%s]", "collectionName", "usaCollectionName", "WikiTest");
+                logger.info(new WrapLog().message(message).type(TypeLog.test));
+                message = String.format("Manca il flag '%s' nel metodo setUpAll() di una sottoclasse (astratta) di [%s]", "collectionName", clazzTestName);
+                logger.error(new WrapLog().message(message).type(TypeLog.test));
+                assertTrue(false);
+                return true;
+            }
+            message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() del test [%s]", "collectionName", collectionName, clazzTestName);
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        else {
+            message = String.format("Non usa '%s' e il flag è regolato (%s=false) nel metodo setUpAll() della classe [%s]", "collectionName", "usaCollectionName", "WikiTest");
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        return false;
+    }
+
+    private boolean mancaCurrentModulo() {
+        if (usaCurrentModulo) {
+            if (currentModulo == null) {
+                message = String.format("Usa '%s' e il flag è regolato (%s=true) nel metodo setUpAll() di una sottoclasse (astratta) di [%s]", "currentModulo", "usaCurrentModulo", "WikiTest");
+                logger.info(new WrapLog().message(message).type(TypeLog.test));
+                message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "currentModulo", clazzTestName);
+                logger.error(new WrapLog().message(message).type(TypeLog.test));
+                assertTrue(false);
+                return true;
+            }
+            message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() del test [%s]", "currentModulo", currentModulo.getClass().getSimpleName(), clazzTestName);
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        else {
+            message = String.format("Non usa '%s' e il flag è regolato (%s=false) nel metodo setUpAll() della classe [%s]", "currentModulo", "usaCurrentModulo", "WikiTest");
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        return false;
+    }
+
+    private boolean mancaCurrentType() {
+        if (usaTypeLista) {
+            if (currentType == null || currentType == TypeLista.nessunaLista) {
+                message = String.format("Usa '%s' e il flag è regolato (%s=true) nel metodo setUpAll() di una sottoclasse (astratta) di [%s]", "currentType", "usaTypeLista", "WikiTest");
+                logger.info(new WrapLog().message(message).type(TypeLog.test));
+                message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "currentType", clazzTestName);
+                logger.error(new WrapLog().message(message).type(TypeLog.test));
+                assertTrue(false);
+                return true;
+            }
+            message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() del test [%s]", "currentType", currentType.name(), clazzTestName);
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        else {
+            message = String.format("Non usa '%s' e il flag è regolato (%s=false) nel metodo setUpAll() della classe [%s]", "currentType", "usaTypeLista", "WikiTest");
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        return false;
     }
 
     @Test
@@ -1637,7 +1717,7 @@ public abstract class WikiTest extends AlgosTest {
 
     protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
         if (textService.isEmpty(nomeLista)) {
-            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
+            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, typeSuggerito.name());
             System.out.println(message);
             return false;
         }
