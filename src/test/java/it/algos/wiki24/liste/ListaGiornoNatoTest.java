@@ -40,10 +40,10 @@ public class ListaGiornoNatoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaGiornoNato.class;
-        super.currentModulo = giornoModulo;
-        super.currentType = TypeLista.giornoNascita;
+//        super.currentModulo = giornoModulo;
+//        super.currentType = TypeLista.giornoNascita;
         super.setUpAll();
-        super.ammessoCostruttoreVuoto = false;
+//        super.ammessoCostruttoreVuoto = false;
     }
 
     @BeforeEach

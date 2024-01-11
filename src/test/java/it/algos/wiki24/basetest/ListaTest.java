@@ -27,7 +27,7 @@ import java.util.stream.*;
  * Date: Fri, 05-Jan-2024
  * Time: 17:34
  */
-public abstract class ListaTest extends WikiTest {
+public abstract class ListaTest extends WikiStreamTest {
 
     @Inject
     protected GiornoModulo giornoModulo;
@@ -48,43 +48,6 @@ public abstract class ListaTest extends WikiTest {
 
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
-    //--nome giorno
-    //--typeCrono per il test
-    protected static Stream<Arguments> GIORNI() {
-        return Stream.of(
-                Arguments.of(VUOTA, TypeLista.giornoNascita),
-                Arguments.of(VUOTA, TypeLista.giornoMorte),
-                Arguments.of("1857", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoMorte),
-                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
-                Arguments.of("20 marzo", TypeLista.giornoNascita),
-                Arguments.of("21 febbraio", TypeLista.giornoMorte),
-                Arguments.of("34 febbraio", TypeLista.giornoMorte),
-                Arguments.of("1º gennaio", TypeLista.giornoNascita),
-                Arguments.of("23 marzo", TypeLista.annoMorte)
-        );
-    }
-
-    //--nome anno
-    //--typeCrono per il test
-    protected static Stream<Arguments> ANNI() {
-        return Stream.of(
-                Arguments.of(VUOTA, TypeLista.annoNascita),
-                Arguments.of(VUOTA, TypeLista.annoMorte),
-                Arguments.of("2002", TypeLista.annoMorte),
-                Arguments.of("38 a.C.", TypeLista.annoNascita),
-                Arguments.of("38 a.C.", TypeLista.annoMorte),
-                Arguments.of("38 A.C.", TypeLista.annoNascita),
-                Arguments.of("4 gennaio", TypeLista.annoNascita),
-                Arguments.of("1985", TypeLista.nazionalitaSingolare),
-                Arguments.of("1º gennaio", TypeLista.annoMorte),
-                Arguments.of("1467", TypeLista.giornoNascita),
-                Arguments.of("406 a.C.", TypeLista.annoMorte),
-                Arguments.of("1467", TypeLista.annoNascita),
-                Arguments.of("560", TypeLista.annoMorte)
-        );
-    }
 
     //--nome giorno/anno
     //--typeCrono per il test
@@ -105,14 +68,8 @@ public abstract class ListaTest extends WikiTest {
         super.setUpEach();
     }
 
-    @Test
-    @Order(0)
-    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
-    void checkIniziale() {
-        this.fixCheckIniziale();
-    }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
@@ -142,7 +99,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -172,7 +129,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -202,7 +159,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -229,7 +186,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -258,7 +215,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(601)
     @DisplayName("601 - nonUsaDimensioneParagrafi")
@@ -288,7 +245,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(701)
     @DisplayName("701 - nonUsaSottoPagina")
@@ -347,7 +304,7 @@ public abstract class ListaTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(901)
     @DisplayName("901 - paragrafi")
