@@ -216,6 +216,11 @@ public abstract class WikiTest extends AlgosTest {
     public static final String SINGOLARE = "singolare";
 
     public static final String PLURALE = "pluraleLista";
+    protected static String PARAMETRO = "nomeLista";
+
+    protected static String CHECK = "checkValidita()";
+
+    protected static String FUNZIONE = "isExistByKey";
 
     //    protected LinkedHashMap<String, List<WrapLista>> mappaWrap;
 
@@ -351,15 +356,9 @@ public abstract class WikiTest extends AlgosTest {
         if (mancaCurrentType()) {
             return;
         }
-
-        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
-        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
-
-        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
-        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
-        //
-        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "istanzaValidaSubitoDopoCostruttore", istanzaValidaSubitoDopoCostruttore, clazzTestName);
-        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
+        if (costruttoreNonValido()) {
+            return;
+        }
     }
 
     private boolean mancaClazz() {
@@ -446,6 +445,19 @@ public abstract class WikiTest extends AlgosTest {
         return false;
     }
 
+    private boolean costruttoreNonValido() {
+        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
+        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
+
+        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
+        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
+        //
+        //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "istanzaValidaSubitoDopoCostruttore", istanzaValidaSubitoDopoCostruttore, clazzTestName);
+        //        logger.info(new WrapLog().message(message).type(TypeLog.test));
+
+        return true;
+    }
+
     @Test
     @Order(1)
     @DisplayName("1 - Costruttore base con/senza parametri")
@@ -479,7 +491,7 @@ public abstract class WikiTest extends AlgosTest {
     @Order(2)
     @DisplayName("2 - appContext.getBean con/senza parametri")
     void getBean() {
-        Object istanzaGenerica = null;
+        Object istanzaGenerica ;
 
         if (this.ammessoCostruttoreVuoto) {
             System.out.println(String.format("2 - appContext.getBean(%s.class) SENZA parametri", clazzName));
@@ -540,9 +552,10 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-    // 5 - senzaParametroNelCostruttore
+    // 3 - senzaParametroNelCostruttore
+
     protected void fixSenzaParametroNelCostruttore() {
-        System.out.println("5 - senzaParametroNelCostruttore");
+        System.out.println("3 - senzaParametroNelCostruttore");
         System.out.println("Prova a costruire un'istanza senza parametri");
         System.out.println(VUOTA);
         boolean istanzaCostruitaSenzaParametri = false;
@@ -641,7 +654,7 @@ public abstract class WikiTest extends AlgosTest {
 
 
     protected void fixCheckParametroNelCostruttore(String parametro, String valore, String check, String funzione) {
-        System.out.println("6 - checkParametroNelCostruttore");
+        System.out.println("4 - checkParametroNelCostruttore");
         System.out.println(String.format("Costruisce un'istanza con un parametro farlocco (tipo '%s')", valore));
         System.out.println(VUOTA);
         Object istanza = null;
@@ -697,7 +710,7 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     protected void fixBeanStandard(String nomeParametroCostruttore, String valore, String metodiEseguibili, String metodoDaRegolare, String metodiBuilderPattern) {
-        System.out.println(String.format("7 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName));
+        System.out.println(String.format("5 - Istanza della classe [%s] costruita col solo parametro e SENZA altre regolazioni", clazzName));
         System.out.println(VUOTA);
         Object istanza = null;
         boolean isCostruttoreValido;
@@ -806,7 +819,7 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     protected void fixBeanStandard(final Object istanza, String valore, String metodiEseguibili, String metodoDaRegolare, String metodiBuilderPattern) {
-        System.out.println(String.format("8 - Istanza valida della classe [%s] costruita col parametro SENZA altre regolazioni", clazzName));
+        System.out.println(String.format("7 - Istanza valida della classe [%s] costruita col parametro SENZA altre regolazioni", clazzName));
         System.out.println(VUOTA);
         System.out.println(String.format("L'istanza della classe [%s] è stata creata con '%s' come parametro nel costruttore", clazzName, valore));
 

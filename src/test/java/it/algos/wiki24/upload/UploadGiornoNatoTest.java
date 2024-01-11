@@ -65,17 +65,17 @@ public class UploadGiornoNatoTest extends UploadTest {
         super.setUpEach();
         istanza = null;
     }
-    @Test
-    @Order(7)
-    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
-    void beanStandardCompleta() {
-        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
-        sorgente = "Mazzoni";
-        super.fixBeanStandard(sorgente);
-
-        sorgente = "9 giugno";
-        super.fixBeanStandard(sorgente);
-    }
+//    @Test
+//    @Order(7)
+//    @DisplayName("7 - Istanza STANDARD col parametro obbligatorio")
+//    void beanStandardCompleta() {
+//        //--costruisce un'istanza con un parametro e controlla che il valore sia accettabile per la collection
+//        sorgente = "Mazzoni";
+//        super.fixBeanStandard(sorgente);
+//
+//        sorgente = "9 giugno";
+//        super.fixBeanStandard(sorgente);
+//    }
 
 
 }

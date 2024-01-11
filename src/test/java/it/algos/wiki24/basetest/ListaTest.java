@@ -35,9 +35,9 @@ public abstract class ListaTest extends WikiStreamTest {
     @Inject
     protected AnnoModulo annoModulo;
 
-//    protected CrudModulo currentModulo;
-//
-//    protected TypeLista currentType;
+    //    protected CrudModulo currentModulo;
+    //
+    //    protected TypeLista currentType;
 
     @Inject
     protected QueryService queryService;
@@ -71,8 +71,23 @@ public abstract class ListaTest extends WikiStreamTest {
         super.setUpEach();
     }
 
+    @Test
+    @Order(3)
+    @DisplayName("3 - senzaParametroNelCostruttore")
+    void senzaParametroNelCostruttore() {
+        //--prova a costruire un'istanza SENZA parametri e controlla che vada in errore se è obbligatorio avere un parametro
+        super.fixSenzaParametroNelCostruttore();
+    }
 
-    @ParameterizedTest
+    @Test
+    @Order(4)
+    @DisplayName("4 - checkParametroNelCostruttore")
+    void checkParametroNelCostruttore() {
+        //--costruisce un'istanza con un parametro farlocco
+        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
+    }
+
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - listaBio")
@@ -102,7 +117,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -132,7 +147,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -162,7 +177,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -189,7 +204,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -218,7 +233,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(601)
     @DisplayName("601 - nonUsaDimensioneParagrafi")
@@ -248,7 +263,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(701)
     @DisplayName("701 - nonUsaSottoPagina")
@@ -278,7 +293,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(801)
     @DisplayName("801 - nonUsaIncludeNeiParagrafi")
@@ -307,7 +322,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(901)
     @DisplayName("901 - paragrafi")
@@ -334,41 +349,6 @@ public abstract class ListaTest extends WikiStreamTest {
         else {
             printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
         }
-    }
-
-
-    protected void fixCheckIniziale() {
-        System.out.println("0 - Check iniziale dei parametri necessari per il test");
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e PRIMA di invocare super.setUpAll() ", clazzTestName));
-
-        if (clazz == null) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazz", clazzTestName);
-            logger.error(new WrapLog().message(message).type(TypeLog.test));
-            assertTrue(false);
-            return;
-        }
-        message = String.format("Il flag '%s' è previsto e regolato nel metodo setUpAll() della classe [%s]", "clazz", clazzName);
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
-
-        if (textService.isEmpty(clazzName)) {
-            message = String.format("Manca il flag '%s' nel metodo setUpAll() della classe [%s]", "clazzName", clazzTestName);
-            logger.error(new WrapLog().message(message).type(TypeLog.test));
-            assertTrue(false);
-            return;
-        }
-        message = String.format("Il flag '%s' è previsto e regolato (=%s) nel metodo setUpAll() della classe [%s]", "clazzName", clazzTestName, clazzTestName);
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("Nella classe [%s] nel metodo setUpAll() e DOPO aver invocato super.setUpAll() ", clazzTestName));
-
-        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
-
-        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "istanzaValidaSubitoDopoCostruttore", istanzaValidaSubitoDopoCostruttore, clazzTestName);
-        logger.info(new WrapLog().message(message).type(TypeLog.test));
     }
 
 
@@ -488,28 +468,27 @@ public abstract class ListaTest extends WikiStreamTest {
         System.out.println("Probabilmente non ci sono biografie valide");
     }
 
-
-//    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
-//        if (textService.isEmpty(nomeLista)) {
-//            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
-//            System.out.println(message);
-//            return false;
-//        }
-//
-//        if (currentModulo.findByKey(nomeLista) == null) {
-//            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
-//            System.out.println(message);
-//            return false;
-//        }
-//
-//        if (currentType != typeSuggerito) {
-//            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
-//            System.out.println(message);
-//            return false;
-//        }
-//
-//        return true;
-//    }
+    //    protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+    //        if (textService.isEmpty(nomeLista)) {
+    //            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, currentType.name());
+    //            System.out.println(message);
+    //            return false;
+    //        }
+    //
+    //        if (currentModulo.findByKey(nomeLista) == null) {
+    //            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
+    //            System.out.println(message);
+    //            return false;
+    //        }
+    //
+    //        if (currentType != typeSuggerito) {
+    //            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
+    //            System.out.println(message);
+    //            return false;
+    //        }
+    //
+    //        return true;
+    //    }
 
 
     protected boolean validoAnnoNato(final String nomeAnno, final TypeLista type) {

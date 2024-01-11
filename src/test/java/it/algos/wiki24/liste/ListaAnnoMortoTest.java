@@ -38,14 +38,11 @@ public class ListaAnnoMortoTest extends ListaTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        assertNull(istanza);
         super.clazz = ListaAnnoMorto.class;
+        super.setUpAll();
         super.currentModulo = annoModulo;
         super.currentType = TypeLista.annoMorte;
-        super.setUpAll();
-        super.ammessoCostruttoreVuoto = false;
     }
-
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();

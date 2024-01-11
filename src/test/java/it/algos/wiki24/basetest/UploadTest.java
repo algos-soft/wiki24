@@ -34,12 +34,6 @@ public abstract class UploadTest extends WikiTest {
     @Inject
     protected AnnoModulo annoModulo;
 
-    protected static String PARAMETRO = "nomeLista";
-
-    protected static String CHECK = "checkValidita()";
-
-    protected static String FUNZIONE = "isExistByKey";
-
 
     //--nome giorno
     //--typeCrono per il test
@@ -74,7 +68,7 @@ public abstract class UploadTest extends WikiTest {
     //--typeCrono per il test
     protected static Stream<Arguments> ANNO_MORTO() {
         return Stream.of(
-//                Arguments.of("2002", TypeLista.annoMorte),
+                //                Arguments.of("2002", TypeLista.annoMorte),
                 Arguments.of("406 a.C.", TypeLista.annoMorte),
                 Arguments.of("560", TypeLista.annoMorte)
         );
@@ -92,6 +86,9 @@ public abstract class UploadTest extends WikiTest {
     @BeforeAll
     protected void setUpAll() {
         super.setUpAll();
+        //        super.usaCollectionName = true;
+        //        super.usaCurrentModulo = true;
+        //        super.usaTypeLista = true;
     }
 
     @BeforeEach
@@ -99,24 +96,18 @@ public abstract class UploadTest extends WikiTest {
         super.setUpEach();
     }
 
-    @Test
-    @Order(0)
-    @DisplayName("0 - Check iniziale dei parametri necessari per il test")
-    void checkIniziale() {
-        this.fixCheckIniziale();
-    }
 
     @Test
-    @Order(5)
-    @DisplayName("5 - senzaParametroNelCostruttore")
+    @Order(3)
+    @DisplayName("3 - senzaParametroNelCostruttore")
     void senzaParametroNelCostruttore() {
         //--prova a costruire un'istanza SENZA parametri e controlla che vada in errore se è obbligatorio avere un parametro
         super.fixSenzaParametroNelCostruttore();
     }
 
     @Test
-    @Order(6)
-    @DisplayName("6 - checkParametroNelCostruttore")
+    @Order(4)
+    @DisplayName("4 - checkParametroNelCostruttore")
     void checkParametroNelCostruttore() {
         //--costruisce un'istanza con un parametro farlocco
         super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
@@ -131,35 +122,34 @@ public abstract class UploadTest extends WikiTest {
         System.out.println(VUOTA);
     }
 
-
-//    @ParameterizedTest
-//    @MethodSource(value = "getListeStream()")
-//    @Order(101)
-//    @DisplayName("101 - listaBio")
-//    void listaBio(String nomeLista, TypeLista typeSuggerito) {
-//        System.out.println(("101 - listaBio"));
-//        System.out.println(VUOTA);
-//        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
-//            return;
-//        }
-//
-//        Object alfa=  ((Upload) appContext.getBean(clazz, nomeLista));
-//
-//        if (textService.isEmpty(nomeLista)) {
-//            assertNull(listaBio);
-//            return;
-//        }
-//        assertNotNull(listaBio);
-//        if (listaBio.size() > 0) {
-//            message = String.format("Lista delle [%d] biografie di type%s[%s] per %s [%s]", listaBio.size(), FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
-//            System.out.println(message);
-//            System.out.println(VUOTA);
-////            printBioLista(listaBio);
-//        }
-//        else {
-////            printMancanoBio("La listaBio", nomeLista, typeSuggerito);
-//        }
-//    }
+    //    @ParameterizedTest
+    //    @MethodSource(value = "getListeStream()")
+    //    @Order(101)
+    //    @DisplayName("101 - listaBio")
+    //    void listaBio(String nomeLista, TypeLista typeSuggerito) {
+    //        System.out.println(("101 - listaBio"));
+    //        System.out.println(VUOTA);
+    //        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+    //            return;
+    //        }
+    //
+    //        Object alfa=  ((Upload) appContext.getBean(clazz, nomeLista));
+    //
+    //        if (textService.isEmpty(nomeLista)) {
+    //            assertNull(listaBio);
+    //            return;
+    //        }
+    //        assertNotNull(listaBio);
+    //        if (listaBio.size() > 0) {
+    //            message = String.format("Lista delle [%d] biografie di type%s[%s] per %s [%s]", listaBio.size(), FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+    //            System.out.println(message);
+    //            System.out.println(VUOTA);
+    ////            printBioLista(listaBio);
+    //        }
+    //        else {
+    ////            printMancanoBio("La listaBio", nomeLista, typeSuggerito);
+    //        }
+    //    }
 
     protected void fixCheckIniziale() {
         System.out.println("0 - Check iniziale dei parametri necessari per il test");

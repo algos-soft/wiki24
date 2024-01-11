@@ -38,10 +38,9 @@ public class ListaAnnoNatoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaAnnoNato.class;
+        super.setUpAll();
         super.currentModulo = annoModulo;
         super.currentType = TypeLista.annoNascita;
-        super.setUpAll();
-        super.ammessoCostruttoreVuoto = false;
     }
 
     @BeforeEach

@@ -39,10 +39,9 @@ public class ListaGiornoMortoTest extends ListaTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = ListaGiornoMorto.class;
+        super.setUpAll();
         super.currentModulo = giornoModulo;
         super.currentType = TypeLista.giornoMorte;
-        super.setUpAll();
-        super.ammessoCostruttoreVuoto = false;
     }
 
     @BeforeEach
