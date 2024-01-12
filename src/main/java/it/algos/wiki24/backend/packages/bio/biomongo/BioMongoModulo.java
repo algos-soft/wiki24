@@ -165,15 +165,11 @@ public class BioMongoModulo extends WikiModulo {
     }
 
     public int countAllByGiornoNato(final String propertyValue) {
-        Query query = queryByGiornoNato(propertyValue);
-        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
-        return (int) mongoService.mongoOp.count(query, BioMongoEntity.class, collectionName);
+        return mongoService.count(queryByGiornoNato(propertyValue), BioMongoEntity.class);
     }
 
     public List<BioMongoEntity> findAllByGiornoNato(final String propertyValue) {
-        Query query = queryByGiornoNato(propertyValue);
-        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
-        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+        return mongoService.find(queryByGiornoNato(propertyValue), BioMongoEntity.class);
     }
 
     public Query queryByGiornoNato(final String propertyValue) {
@@ -190,9 +186,16 @@ public class BioMongoModulo extends WikiModulo {
     }
 
 
+    public int countAllByGiornoMorto(final String propertyValue) {
+        return mongoService.count(queryByGiornoMorto(propertyValue), BioMongoEntity.class);
+    }
+
     public List<BioMongoEntity> findAllByGiornoMorto(final String propertyValue) {
+        return mongoService.find(queryByGiornoMorto(propertyValue), BioMongoEntity.class);
+    }
+
+    public Query queryByGiornoMorto(final String propertyValue) {
         Query query = new Query();
-        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
@@ -201,13 +204,20 @@ public class BioMongoModulo extends WikiModulo {
 
         query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO).is(propertyValue));
         query.with(sort);
-        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+        return query;
     }
 
 
+    public int countAllByAnnoNato(final String propertyValue) {
+        return mongoService.count(queryByAnnoNato(propertyValue), BioMongoEntity.class);
+    }
+
     public List<BioMongoEntity> findAllByAnnoNato(final String propertyValue) {
+        return mongoService.find(queryByAnnoNato(propertyValue), BioMongoEntity.class);
+    }
+
+    public Query queryByAnnoNato(final String propertyValue) {
         Query query = new Query();
-        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
@@ -216,13 +226,20 @@ public class BioMongoModulo extends WikiModulo {
 
         query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(propertyValue));
         query.with(sort);
-        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+        return query;
     }
 
 
+    public int countAllByAnnoMorto(final String propertyValue) {
+        return mongoService.count(queryByAnnoMorto(propertyValue), BioMongoEntity.class);
+    }
+
     public List<BioMongoEntity> findAllByAnnoMorto(final String propertyValue) {
+        return mongoService.find(queryByAnnoMorto(propertyValue), BioMongoEntity.class);
+    }
+
+    public Query queryByAnnoMorto(final String propertyValue) {
         Query query = new Query();
-        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
@@ -231,7 +248,7 @@ public class BioMongoModulo extends WikiModulo {
 
         query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(propertyValue));
         query.with(sort);
-        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+        return query;
     }
 
     public void elabora() {

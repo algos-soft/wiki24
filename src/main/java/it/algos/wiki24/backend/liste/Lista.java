@@ -193,9 +193,9 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (checkValiditaPattern()) {
             return switch (type) {
                 case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
-                case giornoMorte -> 0;
-                case annoNascita -> 0;
-                case annoMorte -> 0;
+                case giornoMorte ->  bioMongoModulo.countAllByGiornoMorto(nomeLista);
+                case annoNascita ->  bioMongoModulo.countAllByAnnoNato(nomeLista);
+                case annoMorte ->  bioMongoModulo.countAllByAnnoMorto(nomeLista);
                 default -> 0;
             };
         }

@@ -115,7 +115,7 @@ public abstract class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(102)
     @DisplayName("102 - listaBio")

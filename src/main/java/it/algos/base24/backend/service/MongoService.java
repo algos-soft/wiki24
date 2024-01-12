@@ -446,7 +446,13 @@ public class MongoService<capture> {
 
     public List<AbstractEntity> find(Query query, Class entityClazz) {
         String collectionName = annotationService.getCollectionName(entityClazz);
-        return this.mongoOp.find(query, entityClazz, collectionName);
+
+        if (textService.isValid(collectionName)) {
+            return this.mongoOp.find(query, entityClazz, collectionName);
+        }
+        else {
+            return null;
+        }
     }
 
     public List<Long> projectionLong(Class<? extends AbstractEntity> entityClazz, String property) {
