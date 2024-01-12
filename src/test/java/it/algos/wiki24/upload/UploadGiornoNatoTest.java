@@ -36,6 +36,7 @@ public class UploadGiornoNatoTest extends UploadTest {
      */
     private UploadGiornoNato istanza;
 
+
     protected Stream<Arguments> getListeStream() {
         return GIORNO_NATO();
     }
@@ -48,10 +49,9 @@ public class UploadGiornoNatoTest extends UploadTest {
     @BeforeAll
     protected void setUpAll() {
         super.clazz = UploadGiornoNato.class;
+        super.setUpAll();
         super.currentModulo = giornoModulo;
         super.currentType = TypeLista.giornoNascita;
-        super.setUpAll();
-        super.ammessoCostruttoreVuoto = false;
     }
 
 

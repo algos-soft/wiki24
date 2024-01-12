@@ -60,11 +60,13 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected String message;
 
-    public String headerText;
+    protected String headerText;
 
-    public String bodyText;
+    protected String bodyText;
 
-    public String uploadText;
+    protected String bottomText;
+
+    protected String uploadText;
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -93,6 +95,10 @@ public abstract class Upload implements AlgosBuilderPattern {
         //        this.usaDimensioneParagrafi = true;
         //        this.usaIncludeSottoMax = true;
         //        this.usaSottopaginaOltreMax = true;
+        this.headerText = VUOTA;
+        this.bodyText = VUOTA;
+        this.bottomText = VUOTA;
+        this.uploadText = VUOTA;
     }
 
 
@@ -132,6 +138,9 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
 
+    /**
+     * Pattern Builder <br>
+     */
     public Upload esegue() {
         StringBuffer buffer = new StringBuffer();
         String message;
@@ -159,6 +168,9 @@ public abstract class Upload implements AlgosBuilderPattern {
         //        }
 
         return this;
+    }
+    public boolean fixMappaWrap() {
+        return false;
     }
 
     protected void checkValiditaCostruttore() {
@@ -211,6 +223,26 @@ public abstract class Upload implements AlgosBuilderPattern {
     @Override
     public String getNome() {
         return this.nomeLista;
+    }
+
+    public String getHeaderText() {
+        if (textService.isEmpty(headerText)) {
+            this.fixMappaWrap();
+        }
+
+        return headerText;
+    }
+
+    public String getBodyText() {
+        return bodyText;
+    }
+
+    public String getBottomText() {
+        return bottomText;
+    }
+
+    public String getUploadText() {
+        return uploadText;
     }
 
 }

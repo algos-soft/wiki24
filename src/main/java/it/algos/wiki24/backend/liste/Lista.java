@@ -138,7 +138,7 @@ public abstract class Lista implements AlgosBuilderPattern {
             this.costruttoreValido = moduloCorrente.existByKey(textService.primaMaiuscola(nomeLista)) || moduloCorrente.existByKey(textService.primaMinuscola(nomeLista));
         }
         else {
-            message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
+            message = String.format("Manca il modulo in fixPreferenze() di %s", this.getClass().getSimpleName());
             logger.error(new WrapLog().message(message));
             this.costruttoreValido = false;
         }
@@ -186,6 +186,23 @@ public abstract class Lista implements AlgosBuilderPattern {
         return this.nomeLista;
     }
 
+    /**
+     * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     */
+    public int numBio() {
+        if (checkValiditaPattern()) {
+            return switch (type) {
+                case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
+                case giornoMorte -> 0;
+                case annoNascita -> 0;
+                case annoMorte -> 0;
+                default -> 0;
+            };
+        }
+        else {
+            return 0;
+        }
+    }
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>

@@ -164,9 +164,20 @@ public class BioMongoModulo extends WikiModulo {
                 .collect(Collectors.toList());
     }
 
-    public List<BioMongoEntity> findAllByGiornoNato(final String propertyValue) {
-        Query query = new Query();
+    public int countAllByGiornoNato(final String propertyValue) {
+        Query query = queryByGiornoNato(propertyValue);
         String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        return (int) mongoService.mongoOp.count(query, BioMongoEntity.class, collectionName);
+    }
+
+    public List<BioMongoEntity> findAllByGiornoNato(final String propertyValue) {
+        Query query = queryByGiornoNato(propertyValue);
+        String collectionName = annotationService.getCollectionName(BioMongoEntity.class);
+        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+    }
+
+    public Query queryByGiornoNato(final String propertyValue) {
+        Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
 
         if (textService.isEmpty(propertyValue)) {
@@ -175,7 +186,7 @@ public class BioMongoModulo extends WikiModulo {
 
         query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO).is(propertyValue));
         query.with(sort);
-        return mongoService.mongoOp.find(query, BioMongoEntity.class, collectionName);
+        return query;
     }
 
 

@@ -74,6 +74,7 @@ public abstract class UploadTest extends WikiTest {
         );
     }
 
+
     //--nome giorno/anno
     //--typeCrono per il test
     protected Stream<Arguments> getListeStream() {
@@ -120,6 +121,22 @@ public abstract class UploadTest extends WikiTest {
         super.fixBeanStandard(nomeParametro, valore, metodiEseguibili, metodiDaRegolare, metodiBuilderPattern);
         //        this.debug(valore, "forse", "pippoz", true, false);
         System.out.println(VUOTA);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(20)
+    @DisplayName("20 - getHeaderText")
+    void getHeaderText(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("20 - getHeaderText"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Upload) appContext.getBean(clazz, nomeLista)).getHeaderText();
+        System.out.println(ottenuto);
     }
 
     //    @ParameterizedTest

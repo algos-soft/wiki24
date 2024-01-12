@@ -87,12 +87,40 @@ public abstract class ListaTest extends WikiStreamTest {
         super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    //    @ParameterizedTest
+
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
-    @DisplayName("101 - listaBio")
+    @DisplayName("101 - numBio")
+    void numBio(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("101 - numBio"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenutoIntero = ((Lista) appContext.getBean(clazz, nomeLista)).numBio();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertFalse(ottenutoIntero > 0);
+            return;
+        }
+        if (ottenutoIntero > 0) {
+            ottenuto = textService.format(ottenutoIntero);
+            message = String.format("Le biografie di type%s[%s] per %s [%s] sono [%s]", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista, ottenuto);
+            System.out.println(message);
+        }
+        else {
+            printMancanoBio("La listaBio", nomeLista, typeSuggerito);
+        }
+    }
+
+//    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(102)
+    @DisplayName("102 - listaBio")
     void listaBio(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("101 - listaBio"));
+        System.out.println(("102 - listaBio"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
@@ -117,7 +145,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
