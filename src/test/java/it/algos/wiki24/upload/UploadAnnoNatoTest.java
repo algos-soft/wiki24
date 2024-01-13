@@ -1,14 +1,15 @@
 package it.algos.wiki24.upload;
 
+import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import java.util.stream.*;
 
@@ -16,8 +17,8 @@ import java.util.stream.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 10-Jan-2024
- * Time: 09:40
+ * Date: Sat, 13-Jan-2024
+ * Time: 07:31
  * Unit test di una classe service o backend o query <br>
  * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
  * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
@@ -26,19 +27,18 @@ import java.util.stream.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("upload")
-@DisplayName("UploadGiornoNatoTest")
+@DisplayName("UploadAnnoNatoTest")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadGiornoNatoTest extends UploadTest {
-
+public class UploadAnnoNatoTest extends UploadTest {
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadGiornoNato istanza;
+    private UploadAnnoNato istanza;
 
 
     protected Stream<Arguments> getListeStream() {
-        return GIORNO_NATO();
+        return ANNO_NATO();
     }
 
     /**
@@ -48,10 +48,10 @@ public class UploadGiornoNatoTest extends UploadTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = UploadGiornoNato.class;
+        super.clazz = UploadAnnoNato.class;
         super.setUpAll();
-        super.currentModulo = giornoModulo;
-        super.currentType = TypeLista.giornoNascita;
+        super.currentModulo = annoModulo;
+        super.currentType = TypeLista.annoNascita;
     }
 
 

@@ -36,6 +36,7 @@ public abstract class ListaGiorni extends Lista {
 
         super.moduloCorrente = this.moduloCorrente;
         super.patternCompleto = true;
+        super.usaSottopaginaOltreMax = false; //per adesso - eventualmente un flag
     }
 
 }

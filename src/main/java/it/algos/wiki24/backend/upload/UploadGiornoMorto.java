@@ -10,13 +10,12 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 10-Jan-2024
- * Time: 09:27
+ * Date: Sat, 13-Jan-2024
+ * Time: 06:30
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class UploadGiornoNato extends UploadGiorni {
-
+public class UploadGiornoMorto extends UploadGiorni {
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -24,16 +23,16 @@ public class UploadGiornoNato extends UploadGiorni {
      * Uso: getBean(UploadGiornoNato.class, nomeLista) <br>
      * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public UploadGiornoNato(String nomeLista) {
+    public UploadGiornoMorto(String nomeLista) {
         super(nomeLista);
     }// end of constructor not @Autowired and used
 
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.type = TypeLista.giornoNascita;
-        super.clazzLista = ListaGiornoNato.class;
-        super.titoloPagina = wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
+        super.type = TypeLista.giornoMorte;
+        super.clazzLista = ListaGiornoMorto.class;
+        super.titoloPagina = wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
     }
 
 }

@@ -5,8 +5,6 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
@@ -16,29 +14,25 @@ import java.util.stream.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Wed, 10-Jan-2024
- * Time: 09:40
- * Unit test di una classe service o backend o query <br>
- * Estende la classe astratta AlgosTest che contiene le regolazioni essenziali <br>
- * Nella superclasse AlgosTest vengono iniettate (@InjectMocks) tutte le altre classi di service <br>
- * Nella superclasse AlgosTest vengono regolati tutti i link incrociati tra le varie classi singleton di service <br>
+ * Date: Sat, 13-Jan-2024
+ * Time: 06:32
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("upload")
-@DisplayName("UploadGiornoNatoTest")
+@DisplayName("UploadGiornoMortoTest")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UploadGiornoNatoTest extends UploadTest {
+class UploadGiornoMortoTest extends UploadTest {
 
 
     /**
      * Classe principale di riferimento <br>
      */
-    private UploadGiornoNato istanza;
+    private UploadGiornoMorto istanza;
 
 
     protected Stream<Arguments> getListeStream() {
-        return GIORNO_NATO();
+        return GIORNO_MORTO();
     }
 
     /**
@@ -48,10 +42,10 @@ public class UploadGiornoNatoTest extends UploadTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = UploadGiornoNato.class;
+        super.clazz = UploadGiornoMorto.class;
         super.setUpAll();
         super.currentModulo = giornoModulo;
-        super.currentType = TypeLista.giornoNascita;
+        super.currentType = TypeLista.giornoMorte;
     }
 
 

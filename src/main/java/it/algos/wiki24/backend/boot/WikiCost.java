@@ -508,5 +508,4 @@ public class WikiCost {
 
     public static final String DIV_END_CAPO = DIV_END + CAPO;
 
-
 }

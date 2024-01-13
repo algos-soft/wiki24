@@ -1,21 +1,25 @@
 package it.algos.wiki24.backend.upload;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.*;
 
 import javax.inject.*;
+import java.time.*;
+import java.time.format.*;
 
 /**
  * Project wiki24
@@ -28,6 +32,9 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     @Inject
     TextService textService;
+
+    @Inject
+    ApplicationContext appContext;
 
     @Inject
     AnnotationService annotationService;
@@ -43,6 +50,9 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     @Inject
     AnnoModulo annoModulo;
+
+    @Inject
+    QueryService queryService;
 
     protected String titoloPagina;
 
@@ -68,6 +78,12 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected String uploadText;
 
+    protected int numBio;
+
+    protected Class clazzLista;
+
+    protected boolean uploadTest;
+
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, classe astratta <br>
@@ -81,7 +97,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
-        this.patternCompleto = type != TypeLista.nessunaLista;
+        this.patternCompleto = type != TypeLista.nessunaLista && clazzLista != null;
         this.checkValiditaCostruttore();
     }
 
@@ -92,15 +108,24 @@ public abstract class Upload implements AlgosBuilderPattern {
      */
     protected void fixPreferenze() {
         this.type = TypeLista.nessunaLista;
+
         //        this.usaDimensioneParagrafi = true;
         //        this.usaIncludeSottoMax = true;
         //        this.usaSottopaginaOltreMax = true;
+        this.uploadTest = false;
         this.headerText = VUOTA;
         this.bodyText = VUOTA;
         this.bottomText = VUOTA;
         this.uploadText = VUOTA;
     }
 
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload test() {
+        this.uploadTest = true;
+        return this;
+    }
 
     public WResult upload() {
         String message;
@@ -126,15 +151,33 @@ public abstract class Upload implements AlgosBuilderPattern {
             return null;
         }
 
-        if (textService.isValid(uploadText)) {
-            //            this.esegue();
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
         }
+
         if (textService.isEmpty(uploadText)) {
             return WResult.errato();
         }
 
-        //        return registra(uploadText);
-        return null;
+        return registra();
+    }
+
+    protected WResult registra() {
+        String tag = "progetto=biografie";
+        String wikiTitle = VUOTA;
+
+        if (textService.isEmpty(titoloPagina)) {
+            logger.error(new WrapLog().message("Manca il titolo della pagina"));
+        }
+        if (textService.isEmpty(uploadText)) {
+            logger.error(new WrapLog().message("Manca l' uploadText della pagina"));
+        }
+
+        if (uploadTest) {
+            wikiTitle = "Utente:Biobot/" + titoloPagina;
+        }
+
+        return queryService.write(wikiTitle, uploadText, "test");
     }
 
 
@@ -144,6 +187,9 @@ public abstract class Upload implements AlgosBuilderPattern {
     public Upload esegue() {
         StringBuffer buffer = new StringBuffer();
         String message;
+        if (!checkValiditaPattern()) {
+            return this;
+        }
         if (textService.isValid(uploadText)) {
             return this;
         }
@@ -157,20 +203,196 @@ public abstract class Upload implements AlgosBuilderPattern {
             return null;
         }
 
-        //        this.fixMappaWrap();
-        //
-        //        if (mappaWrap != null && mappaWrap.size() > 0) {
-        //            buffer.append(creaHader());
-        //            buffer.append(creaBodyLayer());
-        //            buffer.append(creaBottom(buffer.toString().trim()));
-        //
-        //            this.uploadText = buffer.toString().trim();
-        //        }
+        buffer.append(creaHeader());
+        buffer.append(creaBody());
+        buffer.append(creaBottom());
+        this.uploadText = buffer.toString().trim();
 
         return this;
     }
-    public boolean fixMappaWrap() {
-        return false;
+
+
+    public String creaHeader() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(avviso());
+        buffer.append(include());
+        buffer.append(incipit());
+        buffer.append(CAPO);
+
+        this.headerText = buffer.toString();
+        return headerText;
+    }
+
+    protected String avviso() {
+        return "<!-- NON MODIFICATE DIRETTAMENTE QUESTA PAGINA - GRAZIE -->";
+    }
+
+    protected String include() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(includeIni());
+        buffer.append(fixToc());
+        buffer.append(fixUnConnected());
+        buffer.append(fixUnEditableSection());
+        buffer.append(torna());
+        buffer.append(tmpListaBio());
+        buffer.append(includeEnd());
+
+        return buffer.toString();
+    }
+
+    protected String incipit() {
+        return VUOTA;
+    }
+
+
+    protected String fixToc() {
+        return TypeToc.nessuno.get();
+    }
+
+    protected String fixUnConnected() {
+        return UNCONNECTED;
+    }
+
+    protected String fixUnEditableSection() {
+        return NOEDITSECTION;
+    }
+
+
+    protected String torna() {
+        return switch (type) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+            default -> VUOTA;
+        };
+    }
+
+    protected String tmpListaBio() {
+        if (numBio == 0) {
+            numBio = ((Lista) appContext.getBean(clazzLista, nomeLista)).numBio();
+        }
+        String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
+        String progetto = "biografie";
+        String txtVoci = textService.format(numBio);
+
+        return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
+    }
+
+
+    protected String creaBody() {
+        StringBuffer buffer = new StringBuffer();
+        Lista istanza = ((Lista) appContext.getBean(clazzLista, nomeLista));
+        if (istanza.getType() == type) {
+            bodyText = istanza.bodyText();
+        }
+        else {
+            message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanza.getType().getTag(), type.getTag());
+            logger.error(new WrapLog().exception(new AlgosException(message)));
+            return VUOTA;
+        }
+
+        //        if (isSottopagina) {
+        //            buffer.append(creaBody());
+        //        }
+        //        else {
+        buffer.append(getListaIni());
+        buffer.append(bodyText);
+        buffer.append(DOPPIE_GRAFFE_END);
+        //        }
+
+        this.bodyText = buffer.toString();
+        return this.bodyText;
+    }
+
+    protected String getListaIni() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append("{{Lista persone per giorno");
+        buffer.append(CAPO);
+        buffer.append("|titolo=");
+        buffer.append(switch (type) {
+            case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
+            case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
+            default -> VUOTA;
+        });
+        buffer.append(CAPO);
+        buffer.append("|voci=");
+        buffer.append(numBio);
+        buffer.append(CAPO);
+        buffer.append("|testo=<nowiki></nowiki>");
+        buffer.append(CAPO);
+
+        return buffer.toString();
+    }
+
+
+    public String creaBottom() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(note("textDaEsaminare"));
+        buffer.append(correlate());
+
+        buffer.append(includeIni());
+        buffer.append(interprogetto());
+        buffer.append(portale());
+        buffer.append(categorie());
+        buffer.append(includeEnd());
+
+        this.bottomText = buffer.toString();
+        return bottomText;
+    }
+
+    protected String note(String textDaEsaminare) {
+        StringBuffer buffer = new StringBuffer();
+        String tag = "</ref>";
+
+        if (textDaEsaminare.contains(tag)) {
+            return note();
+        }
+        else {
+            return buffer.toString();
+        }
+    }
+
+    protected String note() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(CAPO);
+        buffer.append(wikiUtilityService.setParagrafo("Note"));
+        buffer.append("<references/>");
+
+        return buffer.toString();
+    }
+
+
+    protected String correlate() {
+        return VUOTA;
+    }
+
+    protected String interprogetto() {
+        return VUOTA;
+    }
+
+    protected String portale() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(CAPO);
+        buffer.append("{{Portale|biografie}}");
+
+        return buffer.toString();
+    }
+
+
+    protected String categorie() {
+        return VUOTA;
+    }
+
+    protected String includeIni() {
+        return "<noinclude>";
+    }
+
+    protected String includeEnd() {
+        return "</noinclude>";
     }
 
     protected void checkValiditaCostruttore() {
@@ -204,6 +426,10 @@ public abstract class Upload implements AlgosBuilderPattern {
             if (!patternCompleto) {
                 message = String.format("Pattern non completo di %s", this.getClass().getSimpleName());
                 logger.error(new WrapLog().message(message));
+                if (clazzLista == null) {
+                    message = String.format("Manca la classe della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
+                    logger.info(new WrapLog().message(message));
+                }
             }
 
             return false;
@@ -227,21 +453,33 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     public String getHeaderText() {
         if (textService.isEmpty(headerText)) {
-            this.fixMappaWrap();
+            this.esegue();
         }
 
         return headerText;
     }
 
     public String getBodyText() {
+        if (textService.isEmpty(bodyText)) {
+            this.esegue();
+        }
+
         return bodyText;
     }
 
     public String getBottomText() {
+        if (textService.isEmpty(bottomText)) {
+            this.esegue();
+        }
+
         return bottomText;
     }
 
     public String getUploadText() {
+        if (textService.isEmpty(uploadText)) {
+            this.esegue();
+        }
+
         return uploadText;
     }
 

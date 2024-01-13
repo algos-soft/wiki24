@@ -27,6 +27,7 @@ public class ListaAnnoNato extends ListaAnni {
         super(nomeLista);
     }// end of constructor not @Autowired and used
 
+
     protected void fixPreferenze() {
         super.fixPreferenze();
 

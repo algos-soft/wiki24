@@ -27,6 +27,7 @@ public class ListaGiornoMorto extends ListaGiorni {
         super(nomeLista);
     }// end of constructor not @Autowired and used
 
+
     protected void fixPreferenze() {
         super.fixPreferenze();
 

@@ -126,17 +126,111 @@ public abstract class UploadTest extends WikiTest {
 
     @ParameterizedTest
     @MethodSource(value = "getListeStream()")
-    @Order(20)
-    @DisplayName("20 - getHeaderText")
+    @Order(10)
+    @DisplayName("10 - getHeaderText")
     void getHeaderText(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("20 - getHeaderText"));
+        System.out.println(("10 - getHeaderText"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;
         }
 
         ottenuto = ((Upload) appContext.getBean(clazz, nomeLista)).getHeaderText();
+        message = String.format("Header di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
         System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(20)
+    @DisplayName("20 - getBodyText")
+    void getBodyText(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("20 - getBodyText"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Upload) appContext.getBean(clazz, nomeLista)).getBodyText();
+        message = String.format("Body di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(30)
+    @DisplayName("30 - getBottomText")
+    void getBottomText(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("30 - getBottomText"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Upload) appContext.getBean(clazz, nomeLista)).getBottomText();
+        message = String.format("Bottom di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(40)
+    @DisplayName("40 - getUploadText")
+    void getUploadText(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("40 - getUploadText"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenuto = ((Upload) appContext.getBean(clazz, nomeLista)).getUploadText();
+        message = String.format("UploadText di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(50)
+    @DisplayName("50 - uploadTest")
+    void uploadTest(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("50 - uploadTest"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenutoRisultato = ((Upload) appContext.getBean(clazz, nomeLista)).test().upload();
+        message = String.format("Upload pagina di test di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
+    }
+
+
+//    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(60)
+    @DisplayName("60 - uploadReal")
+    void uploadReal(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("60 - uploadReal"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenutoRisultato = ((Upload) appContext.getBean(clazz, nomeLista)).upload();
+        message = String.format("Upload reale di '%s' per [%s]", typeSuggerito.getCategoria(), nomeLista);
+        System.out.println(message);
     }
 
     //    @ParameterizedTest

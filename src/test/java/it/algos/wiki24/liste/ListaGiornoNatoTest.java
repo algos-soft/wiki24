@@ -2,7 +2,6 @@ package it.algos.wiki24.liste;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.basetest.*;
@@ -82,7 +81,7 @@ public class ListaGiornoNatoTest extends ListaTest {
         System.out.println(VUOTA);
         sorgente = "29 febbraio";
 
-        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).testoBody();
+        ottenuto = appContext.getBean(ListaGiornoNato.class, sorgente).bodyText();
         assertTrue(textService.isValid(ottenuto));
         queryService.write(wikiTitle, ottenuto);
     }

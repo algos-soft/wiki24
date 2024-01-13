@@ -350,7 +350,7 @@ public abstract class Lista implements AlgosBuilderPattern {
     /**
      * Testo della pagina suddiviso in paragrafi <br>
      */
-    public String testoBody() {
+    public String bodyText() {
         StringBuffer buffer = new StringBuffer();
         int numMinParagrafi = 4; //@todo passare a preferenza
         int minVociInclude = 200; //@todo passare a preferenza
@@ -382,7 +382,8 @@ public abstract class Lista implements AlgosBuilderPattern {
                     if (usaDimensioneParagrafi) {
                         //titolo con/senza includeOnly
                         if (usaIncludeSottoMax && numVociLista < minVociInclude) {
-                            buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, numVociParagrafo));
+                            //per i titoli dei paragrafi che vengono 'inclusi', meglio non mettere le dimensioni
+                            buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, 0));
                         }
                         else {
                             buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
@@ -462,6 +463,10 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         return buffer.toString();
+    }
+
+    public TypeLista getType() {
+        return type;
     }
 
 }

@@ -81,7 +81,7 @@ public class ListaAnnoNatoTest extends ListaTest {
         sorgente = "38 a.C.";
         sorgente = "1467";
 
-        ottenuto = appContext.getBean(ListaAnnoNato.class, sorgente).testoBody();
+        ottenuto = appContext.getBean(ListaAnnoNato.class, sorgente).bodyText();
         assertTrue(textService.isValid(ottenuto));
         queryService.write(wikiTitle, ottenuto);
     }

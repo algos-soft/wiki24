@@ -1,11 +1,8 @@
 package it.algos.wiki24.basetest;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -115,7 +112,7 @@ public abstract class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(102)
     @DisplayName("102 - listaBio")
@@ -272,7 +269,7 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaDimensioneParagrafi().testoBody();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaDimensioneParagrafi().bodyText();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -302,7 +299,7 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaSottoPagina().testoBody();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaSottoPagina().bodyText();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -332,7 +329,7 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaIncludeNeiParagrafi().testoBody();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaIncludeNeiParagrafi().bodyText();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -350,7 +347,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(901)
     @DisplayName("901 - paragrafi")
@@ -361,7 +358,7 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).testoBody();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).bodyText();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));

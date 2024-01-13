@@ -80,7 +80,7 @@ public class ListaGiornoMortoTest extends ListaTest {
         System.out.println(VUOTA);
         sorgente = "29 febbraio";
 
-        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).testoBody();
+        ottenuto = appContext.getBean(ListaGiornoMorto.class, sorgente).bodyText();
         assertTrue(textService.isValid(ottenuto));
         queryService.write(wikiTitle, ottenuto);
     }

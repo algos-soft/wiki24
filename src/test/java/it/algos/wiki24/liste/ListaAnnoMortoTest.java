@@ -82,7 +82,7 @@ public class ListaAnnoMortoTest extends ListaTest {
         sorgente = "38 a.C.";
         sorgente = "1467";
 
-        ottenuto = appContext.getBean(ListaAnnoMorto.class, sorgente).testoBody();
+        ottenuto = appContext.getBean(ListaAnnoMorto.class, sorgente).bodyText();
         assertTrue(textService.isValid(ottenuto));
         queryService.write(wikiTitle, ottenuto);
     }
