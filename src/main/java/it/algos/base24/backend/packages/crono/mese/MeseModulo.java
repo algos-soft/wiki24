@@ -13,6 +13,12 @@ import java.util.*;
  * User: gac
  * Date: Sun, 05-Nov-2023
  * Time: 18:38
+ * Service di una entityClazz specifica e di un package <br>
+ * Garantisce i metodi di collegamento per accedere al database <br>
+ * Non mantiene lo stato di una istanza entityBean <br>
+ * Mantiene lo stato della entityClazz <br>
+ * NOT annotated with @SpringComponent (inutile, esiste già @Service) <br>
+ * NOT annotated with @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) (inutile, esiste già @Service) <br>
  */
 @Service
 public class MeseModulo extends CrudModulo {
