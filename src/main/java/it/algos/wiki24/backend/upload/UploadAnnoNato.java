@@ -31,7 +31,7 @@ public class UploadAnnoNato extends UploadAnni {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.type = TypeLista.annoNascita;
+        super.typeLista = TypeLista.annoNascita;
         super.clazzLista = ListaAnnoNato.class;
         super.titoloPagina = wikiUtilityService.wikiTitleNatiAnno(nomeLista);
     }

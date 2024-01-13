@@ -11,7 +11,6 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
@@ -64,7 +63,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected String nomeLista;
 
-    protected TypeLista type;
+    protected TypeLista typeLista;
 
     protected String collectionName;
 
@@ -84,6 +83,8 @@ public abstract class Upload implements AlgosBuilderPattern {
 
     protected boolean uploadTest;
 
+    protected TypeSummary typeSummary;
+
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, classe astratta <br>
@@ -97,7 +98,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
-        this.patternCompleto = type != TypeLista.nessunaLista && clazzLista != null;
+        this.patternCompleto = typeLista != TypeLista.nessunaLista && clazzLista != null;
         this.checkValiditaCostruttore();
     }
 
@@ -107,7 +108,8 @@ public abstract class Upload implements AlgosBuilderPattern {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.type = TypeLista.nessunaLista;
+        this.typeLista = TypeLista.nessunaLista;
+        this.typeSummary = TypeSummary.nessuno;
 
         //        this.usaDimensioneParagrafi = true;
         //        this.usaIncludeSottoMax = true;
@@ -124,13 +126,14 @@ public abstract class Upload implements AlgosBuilderPattern {
      */
     public Upload test() {
         this.uploadTest = true;
+        this.typeSummary = TypeSummary.test;
         return this;
     }
 
     public WResult upload() {
         String message;
 
-        if (type == null || type == TypeLista.nessunaLista) {
+        if (typeLista == null || typeLista == TypeLista.nessunaLista) {
             System.out.println(VUOTA);
             message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "upload", collectionName, nomeLista);
             logger.info(new WrapLog().message(message));
@@ -163,8 +166,7 @@ public abstract class Upload implements AlgosBuilderPattern {
     }
 
     protected WResult registra() {
-        String tag = "progetto=biografie";
-        String wikiTitle = VUOTA;
+        String wikiTitle = titoloPagina;
 
         if (textService.isEmpty(titoloPagina)) {
             logger.error(new WrapLog().message("Manca il titolo della pagina"));
@@ -177,7 +179,7 @@ public abstract class Upload implements AlgosBuilderPattern {
             wikiTitle = "Utente:Biobot/" + titoloPagina;
         }
 
-        return queryService.write(wikiTitle, uploadText, "test");
+        return queryService.write(wikiTitle, uploadText,typeSummary.get());
     }
 
 
@@ -194,7 +196,7 @@ public abstract class Upload implements AlgosBuilderPattern {
             return this;
         }
 
-        if (type == null || type == TypeLista.nessunaLista) {
+        if (typeLista == null || typeLista == TypeLista.nessunaLista) {
             System.out.println(VUOTA);
             message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "esegue", collectionName, nomeLista);
             logger.info(new WrapLog().message(message));
@@ -261,7 +263,7 @@ public abstract class Upload implements AlgosBuilderPattern {
 
 
     protected String torna() {
-        return switch (type) {
+        return switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
             default -> VUOTA;
         };
@@ -282,11 +284,11 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected String creaBody() {
         StringBuffer buffer = new StringBuffer();
         Lista istanza = ((Lista) appContext.getBean(clazzLista, nomeLista));
-        if (istanza.getType() == type) {
+        if (istanza.getType() == typeLista) {
             bodyText = istanza.bodyText();
         }
         else {
-            message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanza.getType().getTag(), type.getTag());
+            message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanza.getType().getTag(), typeLista.getTag());
             logger.error(new WrapLog().exception(new AlgosException(message)));
             return VUOTA;
         }
@@ -307,12 +309,15 @@ public abstract class Upload implements AlgosBuilderPattern {
     protected String getListaIni() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append("{{Lista persone per giorno");
+        buffer.append("{{");
+        buffer.append(typeLista.getPersone());
         buffer.append(CAPO);
         buffer.append("|titolo=");
-        buffer.append(switch (type) {
+        buffer.append(switch (typeLista) {
             case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
             case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
+            case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
+            case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
             default -> VUOTA;
         });
         buffer.append(CAPO);
@@ -405,7 +410,7 @@ public abstract class Upload implements AlgosBuilderPattern {
             this.costruttoreValido = false;
         }
 
-        if (this.type == TypeLista.nessunaLista) {
+        if (this.typeLista == TypeLista.nessunaLista) {
             message = String.format("Manca il type della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
             logger.error(new WrapLog().message(message));
             this.costruttoreValido = false;

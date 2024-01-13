@@ -31,7 +31,7 @@ public class UploadAnnoMorto extends UploadAnni {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.type = TypeLista.annoMorte;
+        super.typeLista = TypeLista.annoMorte;
         super.clazzLista = ListaAnnoMorto.class;
         super.titoloPagina = wikiUtilityService.wikiTitleMortiAnno(nomeLista);
     }

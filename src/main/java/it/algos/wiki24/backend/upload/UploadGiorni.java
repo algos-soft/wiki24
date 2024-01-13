@@ -1,11 +1,9 @@
 package it.algos.wiki24.backend.upload;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import it.algos.wiki24.backend.enumeration.*;
 
 /**
  * Project wiki24
@@ -27,6 +25,7 @@ public abstract class UploadGiorni extends Upload {
 
     protected void fixPreferenze() {
         super.fixPreferenze();
+        super.typeSummary = TypeSummary.giorniBio;
         this.moduloCorrente = this.giornoModulo;
     }
 
@@ -55,7 +54,7 @@ public abstract class UploadGiorni extends Upload {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(type.getCategoria());
+        buffer.append(typeLista.getCategoria());
         buffer.append("|");
         buffer.append(SPAZIO);
         buffer.append(posCat);

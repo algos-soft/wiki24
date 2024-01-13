@@ -1,5 +1,6 @@
 package it.algos.base24.backend.service;
 
+import com.vaadin.flow.component.sidenav.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.functional.*;
@@ -497,6 +498,29 @@ public class ArrayService {
             }
         }
         return listaMancanti;
+    }
+
+    public LinkedHashMap<String, List<SideNavItem>> orderMap(LinkedHashMap<String, List<SideNavItem>> mappaIn) {
+        for (List<SideNavItem> lista : mappaIn.values()) {
+            orderList(lista);
+        }
+
+        return mappaIn;
+    }
+
+    public List<SideNavItem> orderList(List<SideNavItem> lista) {
+        Map<String, SideNavItem> mappa = new HashMap<>();
+
+        for (SideNavItem item : lista) {
+            mappa.put(item.getLabel(), item);
+        }
+        mappa= sortVuota(mappa);
+        lista.removeAll(lista);
+        for (Object key : mappa.keySet()) {
+            lista.add(mappa.get(key));
+        }
+
+        return lista;
     }
 
 

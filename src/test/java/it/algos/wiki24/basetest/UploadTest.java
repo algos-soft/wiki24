@@ -59,7 +59,8 @@ public abstract class UploadTest extends WikiTest {
     protected static Stream<Arguments> ANNO_NATO() {
         return Stream.of(
                 Arguments.of("38 a.C.", TypeLista.annoNascita),
-                Arguments.of("1467", TypeLista.annoNascita)
+//                Arguments.of("1467", TypeLista.annoNascita),
+                Arguments.of("1567", TypeLista.annoNascita)
         );
     }
 
@@ -217,7 +218,7 @@ public abstract class UploadTest extends WikiTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(60)
     @DisplayName("60 - uploadReal")

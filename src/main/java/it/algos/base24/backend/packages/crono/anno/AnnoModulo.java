@@ -109,7 +109,7 @@ public class AnnoModulo extends CrudModulo {
         int ordine = numeroProgressivo;
         String tagPrima = " a.C.";
         String nome = numeroAnno + tagPrima;
-        SecoloEntity secolo = secoloModulo.getSecolo(numeroAnno + VUOTA);
+        SecoloEntity secolo = secoloModulo.getSecolo(nome);
         AnnoEntity newBean;
 
         newBean = newEntity(ordine, nome, secolo, false, false);
@@ -123,7 +123,7 @@ public class AnnoModulo extends CrudModulo {
         int numeroAnno = numeroProgressivo;
         int ordine = numeroProgressivo + delta;
         String nome = numeroProgressivo + VUOTA;
-        SecoloEntity secolo = secoloModulo.getSecolo(numeroAnno + VUOTA);
+        SecoloEntity secolo = secoloModulo.getSecolo(nome);
         boolean bisestile = dateService.isBisestile(numeroAnno);
         AnnoEntity newBean;
 

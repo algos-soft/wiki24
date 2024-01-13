@@ -74,7 +74,7 @@ public class DidascaliaService {
         }
         else {
             // se il titolo NON contiene la parentesi, il nome non va messo perché coincide col titolo della voce
-            if (wikiTitle.contains(tagPar)&&!wikiTitle.contains(PIPE)) {
+            if (wikiTitle.contains(tagPar) && !wikiTitle.contains(PIPE)) {
                 nomePrimaDellaParentesi = wikiTitle.substring(0, wikiTitle.indexOf(tagPar));
                 nomeCognome = wikiTitle + tagPipe + nomePrimaDellaParentesi;
             }
@@ -215,7 +215,7 @@ public class DidascaliaService {
 
     public String annoNatoIcona(final BioMongoEntity bio) {
         String annoNatoLinkato = annoNato(bio);
-        String tagNato = "n. ";
+        String tagNato = "n." + SPAZIO_NON_BREAKING;
 
         if (textService.isEmpty(annoNatoLinkato)) {
             return VUOTA;
@@ -238,7 +238,7 @@ public class DidascaliaService {
 
     public String annoMortoIcona(final BioMongoEntity bio) {
         String annoMortoLinkato = annoMorto(bio);
-        String tagMorto = "† ";
+        String tagMorto = "†" + SPAZIO_NON_BREAKING;
 
         if (textService.isEmpty(annoMortoLinkato)) {
             return VUOTA;

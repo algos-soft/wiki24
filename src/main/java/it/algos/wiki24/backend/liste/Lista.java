@@ -60,6 +60,7 @@ public abstract class Lista implements AlgosBuilderPattern {
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
     protected boolean costruttoreValido = false;
+
     protected boolean patternCompleto = false;
 
     protected String nomeLista;
@@ -193,9 +194,9 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (checkValiditaPattern()) {
             return switch (type) {
                 case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
-                case giornoMorte ->  bioMongoModulo.countAllByGiornoMorto(nomeLista);
-                case annoNascita ->  bioMongoModulo.countAllByAnnoNato(nomeLista);
-                case annoMorte ->  bioMongoModulo.countAllByAnnoMorto(nomeLista);
+                case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
+                case annoNascita -> bioMongoModulo.countAllByAnnoNato(nomeLista);
+                case annoMorte -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
                 default -> 0;
             };
         }
@@ -371,19 +372,19 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
             numVociLista = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
             numChiaviMappa = mappaDidascalie.size();
-            usaParagrafi = numChiaviMappa > numMinParagrafi;
+            usaParagrafi = numChiaviMappa > numMinParagrafi && numVociLista > maxVociPerParagrafo;
 
             if (usaParagrafi) {
                 for (String keyParagrafo : mappaDidascalie.keySet()) {
                     numVociParagrafo = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
-                    usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
+                    usaDiv = numVociParagrafo > maxVociPerUnaColonna;
 
                     //titolo con/senza dimensione
                     if (usaDimensioneParagrafi) {
                         //titolo con/senza includeOnly
                         if (usaIncludeSottoMax && numVociLista < minVociInclude) {
                             //per i titoli dei paragrafi che vengono 'inclusi', meglio non mettere le dimensioni
-                            buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, 0));
+                            buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, numVociParagrafo));
                         }
                         else {
                             buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));

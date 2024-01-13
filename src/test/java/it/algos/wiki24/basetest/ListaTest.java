@@ -112,7 +112,7 @@ public abstract class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(102)
     @DisplayName("102 - listaBio")
@@ -142,7 +142,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -172,7 +172,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -202,7 +202,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -229,7 +229,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -347,7 +347,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(901)
     @DisplayName("901 - paragrafi")
@@ -367,7 +367,15 @@ public abstract class ListaTest extends WikiStreamTest {
         if (textService.isValid(ottenuto)) {
             message = String.format("Paragrafi della lista di type%s[%s] per %s [%s] con eventuali sottopagine e divisori colonne", FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
             System.out.println(message);
-            System.out.println("Paragrafi normali con dimensioni(sempre), sottopagine(if) e include(if)");
+            System.out.println("Paragrafi(if) normali con dimensioni(if), sottopagine(if) e include(if)");
+            message = String.format("Paragrafi(if)%sPagine con più di %s voci", FORWARD, 50);
+            System.out.println(message);
+            message = String.format("Dimensioni(if)%sPagine giorni/anni con meno di %s voci", FORWARD, 200);
+            System.out.println(message);
+            message = String.format("Sottopagine(if)%sPagine giorni/anni con meno di %s voci", FORWARD, 200);
+            System.out.println(message);
+            message = String.format("Include(if)%sPagine giorni/anni con meno di %s voci", FORWARD, 200);
+            System.out.println(message);
             System.out.println(VUOTA);
             System.out.println(ottenuto);
         }

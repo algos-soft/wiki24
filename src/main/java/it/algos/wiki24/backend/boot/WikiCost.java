@@ -507,5 +507,6 @@ public class WikiCost {
     public static final String DIV_END = "{{Div col end}}";
 
     public static final String DIV_END_CAPO = DIV_END + CAPO;
+    public static final int MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI = 100;
 
 }

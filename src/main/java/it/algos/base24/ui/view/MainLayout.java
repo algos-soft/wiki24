@@ -30,6 +30,8 @@ public class MainLayout extends AppLayout {
     @Inject
     private TextService textService;
 
+    @Inject
+    ArrayService arrayService;
     private H2 viewTitle;
 
     public MainLayout() {
@@ -114,6 +116,8 @@ public class MainLayout extends AppLayout {
         }
 
         mappa = fixOrderMappa(mappa);
+        mappa = arrayService.orderMap(mappa);
+
         if (mappa != null) {
             for (String key : mappa.keySet()) {
                 if (textService.isValid(key)) {

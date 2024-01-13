@@ -31,7 +31,7 @@ public class UploadGiornoNato extends UploadGiorni {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.type = TypeLista.giornoNascita;
+        super.typeLista = TypeLista.giornoNascita;
         super.clazzLista = ListaGiornoNato.class;
         super.titoloPagina = wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
     }

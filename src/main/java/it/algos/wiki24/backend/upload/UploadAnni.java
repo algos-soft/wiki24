@@ -1,11 +1,9 @@
 package it.algos.wiki24.backend.upload;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import it.algos.wiki24.backend.enumeration.*;
 
 /**
  * Project wiki24
@@ -27,32 +25,33 @@ public abstract class UploadAnni extends Upload {
 
     protected void fixPreferenze() {
         super.fixPreferenze();
+        super.typeSummary = TypeSummary.anniBio;
         this.moduloCorrente = this.annoModulo;
     }
 
 
     protected String categorie() {
         StringBuffer buffer = new StringBuffer();
-//        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
+        //        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
         String nomeAnno;
-        AnnoEntity anno ;
-        int posCat ;
+        AnnoEntity anno;
+        int posCat;
 
-        String secolo ;
+        String secolo;
         String nomeCat;
 
-//        if (isSottopagina) {
-//            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
-//            posCat += ordineCategoriaSottopagina;
-//        }
-//        else {
-//            nomeCat = titoloPagina;
-//        }
+        //        if (isSottopagina) {
+        //            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
+        //            posCat += ordineCategoriaSottopagina;
+        //        }
+        //        else {
+        //            nomeCat = titoloPagina;
+        //        }
         nomeAnno = nomeLista;
-        anno = (AnnoEntity)annoModulo.findByKey(nomeAnno);
+        anno = (AnnoEntity) annoModulo.findByKey(nomeAnno);
         secolo = anno.getSecolo().nome;
         nomeCat = titoloPagina;
-        posCat = anno.getOrdine();
+        posCat = anno.getOrdine() * MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI;
 
         buffer.append(CAPO);
         buffer.append("*");
@@ -60,7 +59,7 @@ public abstract class UploadAnni extends Upload {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(type.getCategoria());
+        buffer.append(typeLista.getCategoria());
         buffer.append(secolo);
         buffer.append("|");
         buffer.append(SPAZIO);
