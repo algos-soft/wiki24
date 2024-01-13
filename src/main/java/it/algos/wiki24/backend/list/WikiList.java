@@ -295,6 +295,9 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneDeleteAll) {
             buttonBar.deleteAll();
         }
+        if (usaBottoneResetDelete) {
+            buttonBar.resetDelete();
+        }
         if (usaBottoneDownload) {
             buttonBar.download();
         }
@@ -344,6 +347,16 @@ public abstract class WikiList extends CrudList {
         topPlaceHolder.add(buttonBar.build());
     }
 
+    public boolean resetDelete() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
+        currentCrudModulo.resetDelete();
+        refreshData();
+
+        Pref.usaNotification.setValue(usaNotification);
+        return true;
+    }
 
     public boolean download(ClickEvent event) {
         currentCrudModulo.download();

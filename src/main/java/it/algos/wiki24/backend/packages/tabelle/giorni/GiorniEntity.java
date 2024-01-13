@@ -3,7 +3,9 @@ package it.algos.wiki24.backend.packages.tabelle.giorni;
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import lombok.*;
+import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 @Component
@@ -12,15 +14,45 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "giorno", typeList = TypeList.standard)
+@AEntity(collectionName = "giorni", keyPropertyName = "nome", typeList = TypeList.hardWiki)
 public class GiorniEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text)
-    public String code;
+    @AField(type = TypeField.integer, headerText = "#", widthRem = 3, caption = "Ordinamento")
+    public int ordine;
+
+    @AField(type = TypeField.text, widthRem = 9, caption = "Nome corrente")
+    public String nome;
+
+    @AField(type = TypeField.linkDBRef, widthRem = 7)
+    public MeseEntity mese;
+
+    @AField(type = TypeField.integer, headerText = "nati", caption = "Numero di biografie che utilizzano i nati in questo giorno", widthRem = 6)
+    public int bioNati;
+
+    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Giorno di nascita")
+    public String pageNati;
+
+    @AField(type = TypeField.booleano,headerText = "is")
+    public boolean esistePaginaNati;
+
+    @AField(type = TypeField.booleano, typeBool = TypeBool.checkIcon, headerText = "ok")
+    public boolean natiOk;
+
+    @AField(type = TypeField.integer, headerText = "morti", caption = "Numero di biografie che utilizzano i morti in questo giorno", widthRem = 6)
+    public int bioMorti;
+
+    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Giorno di morte")
+    public String pageMorti;
+
+    @AField(type = TypeField.booleano,headerText = "is")
+    public boolean esistePaginaMorti;
+
+    @AField(type = TypeField.booleano, typeBool = TypeBool.checkIcon, headerText = "ok")
+    public boolean mortiOk;
 
     @Override
     public String toString() {
-        return code;
+        return nome;
     }
 
 }// end of Entity class

@@ -83,8 +83,15 @@ public class WikiListButtonBar extends ListButtonBar {
     /**
      * Fluent pattern Builder <br>
      */
-    public ListButtonBar deleteAll() {
+    public WikiListButtonBar deleteAll() {
         this.usaBottoneDeleteAll = true;
+        return this;
+    }
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar resetDelete() {
+        this.usaBottoneResetDelete = true;
         return this;
     }
 
@@ -172,6 +179,9 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneDeleteAll) {
             this.addDeleteAll();
         }
+        if (usaBottoneResetDelete) {
+            this.addResetDelete();
+        }
         if (usaBottoneDownload) {
             this.addDownload();
         }
@@ -231,6 +241,14 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
         buttonDownload.addClickListener(event -> currentCrudList.download(event));
         this.add(buttonDownload);
+    }
+    public void addResetDelete() {
+        buttonResetDelete.getElement().setAttribute("theme", "primary");
+        buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
+        buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
+        buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
+        this.add(buttonResetDelete);
     }
 
     private void addElabora() {
