@@ -56,6 +56,44 @@ public class ElaboraServiceTest extends WikiTest {
 
     private Map<String, String> mappaBio;
 
+
+    //--wikiTitle
+    //--numero parametri
+    protected static Stream<Arguments> BIOGRAFIE() {
+        return Stream.of(
+                Arguments.of(VUOTA, 0),
+                Arguments.of("Junior Mapuku", 17),
+                Arguments.of("Jacques de Molay", 17),
+                Arguments.of("Roberto il Forte", 16),
+                Arguments.of("Agnese di Borgogna", 17),
+                Arguments.of("Matteo Renzi", 14),
+                Arguments.of("Hunter King", 10),
+                Arguments.of("Laura Mancinelli", 17),
+                Arguments.of("Johann Georg Kastner", 14),
+                Arguments.of("Meirchion Gul", 15),
+                Arguments.of("Vincenzo Vacirca", 15),
+                Arguments.of("Ashur-uballit I", 15),
+                Arguments.of("Albia Dominica", 15),
+                Arguments.of("Angelo Inganni", 13),
+                Arguments.of("Andrey Guryev", 17),
+                Arguments.of("Ingen Ryūki", 17),
+                Arguments.of("Giorgio Merula", 16),
+                Arguments.of("Rob Paulsen", 16),
+                Arguments.of("Aleksandr Isaevič Solženicyn", 22),
+                Arguments.of("Aloisio Gonzaga", 19),
+                Arguments.of("Alex Bagnoli", 18),
+                Arguments.of("Harry Fielder", 15),
+                Arguments.of("Yehudai Gaon", 16),
+                Arguments.of("Kaku Takagawa", 13),
+                Arguments.of("Filippo Tornielli", 12),
+                Arguments.of("Mario Tosi (fotografo)", 13),
+                Arguments.of("Giuseppe Trombone de Mier", 12),
+                Arguments.of("Herlindis di Maaseik", 17),
+                Arguments.of("Rinaldo II di Bar", 15),
+                Arguments.of("Harald II di Norvegia", 18)
+        );
+    }
+
     //--wikiTitle
     //--previsto nato
     //--previsto morto
@@ -206,12 +244,12 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "BIOGRAFIE")
     @Order(102)
     @DisplayName("102 - creaBeanMongo")
-    //--wikiTitle
-    //--numero parametri
+        //--wikiTitle
+        //--numero parametri
     void creaBeanMongo(String wikiTitleVoce, int numParagrafi) {
         System.out.println(("102 - creaBeanMongo"));
         sorgente = wikiTitleVoce;
@@ -278,13 +316,13 @@ public class ElaboraServiceTest extends WikiTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "ANNO")
     @Order(505)
     @DisplayName("505 - annoNato")
-    //--wikiTitle
-    //--previsto nato
-    //--previsto morto
+        //--wikiTitle
+        //--previsto nato
+        //--previsto morto
     void annoNato(String wikiTitleVoce, String annoNato, String nonUsato) {
         System.out.println(("505 - annoNato"));
         sorgente = wikiTitleVoce;

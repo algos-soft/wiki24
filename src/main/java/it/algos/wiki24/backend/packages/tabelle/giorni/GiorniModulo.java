@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.packages.tabelle.giorni;
 
 import it.algos.base24.backend.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
@@ -12,6 +13,8 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -76,7 +79,7 @@ public class GiorniModulo extends WikiModulo {
      * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
      */
     public List<String> getFormPropertyNames() {
-        return Arrays.asList("ordine", "nome","bioNati", "pageNati", "bioMorti", "pageMorti");
+        return Arrays.asList("ordine", "nome", "bioNati", "pageNati", "bioMorti", "pageMorti");
     }
 
     /**
@@ -167,5 +170,25 @@ public class GiorniModulo extends WikiModulo {
         super.fixElabora(inizio);
     }
 
+
+    @Override
+    public boolean testPaginaNati(AbstractEntity giornoBean) {
+        return appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    }
+
+    @Override
+    public boolean testPaginaMorti(AbstractEntity giornoBean) {
+        return appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    }
+
+    @Override
+    public boolean uploadPaginaNati(AbstractEntity giornoBean) {
+        return appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    }
+
+    @Override
+    public boolean uploadPaginaMorti(AbstractEntity giornoBean) {
+        return appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    }
 
 }// end of CrudModulo class

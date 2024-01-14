@@ -133,6 +133,30 @@ public abstract class WikiModulo extends CrudModulo {
         return crudEntityBean;
     }
 
+    public void wikiView() {
+    }
+
+    public void wikiEdit() {
+    }
+
+    public void wikiCrono() {
+    }
+
+    public boolean testPaginaNati(AbstractEntity crudEntityBean) {
+        return true;
+    }
+
+    public boolean testPaginaMorti(AbstractEntity crudEntityBean) {
+        return true;
+    }
+
+    public boolean uploadPaginaNati(AbstractEntity crudEntityBean) {
+        return true;
+    }
+
+    public boolean uploadPaginaMorti(AbstractEntity crudEntityBean) {
+        return true;
+    }
 
     public void fixElabora(final long inizio) {
         long fine = System.currentTimeMillis();

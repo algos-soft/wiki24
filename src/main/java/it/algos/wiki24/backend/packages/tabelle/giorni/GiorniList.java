@@ -38,7 +38,13 @@ public class GiorniList extends WikiList {
         this.usaBottoneSearch = typeList.isUsaBottoneSearch();
         this.usaBottoneExport = false;
         this.usaInfoElabora = true;
-        super.usaVariantCompact=true;
+        super.usaVariantCompact = true;
+
+        super.usaBottoneWikiView = true;
+        super.usaBottoneTest1 = true;
+        super.usaBottoneTest2 = true;
+        super.usaBottoneUpload1 = true;
+        super.usaBottoneUpload2 = true;
     }
 
     /**
@@ -49,7 +55,7 @@ public class GiorniList extends WikiList {
         super.fixTop();
 
         comboMese = new ComboBox<>();
-        comboMese.setPlaceholder( "Mesi...");
+        comboMese.setPlaceholder("Mesi...");
         comboMese.setClearButtonVisible(true);
         comboMese.setWidth("12rem");
         comboMese.setItems(meseModulo.findAll());

@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
@@ -215,7 +216,7 @@ public class DidascaliaService {
 
     public String annoNatoIcona(final BioMongoEntity bio) {
         String annoNatoLinkato = annoNato(bio);
-        String tagNato = "n." + SPAZIO_NON_BREAKING;
+        String tagNato = WPref.iconaNato.getStr();
 
         if (textService.isEmpty(annoNatoLinkato)) {
             return VUOTA;
@@ -238,7 +239,7 @@ public class DidascaliaService {
 
     public String annoMortoIcona(final BioMongoEntity bio) {
         String annoMortoLinkato = annoMorto(bio);
-        String tagMorto = "†" + SPAZIO_NON_BREAKING;
+        String tagMorto = WPref.iconaMorto.getStr();
 
         if (textService.isEmpty(annoMortoLinkato)) {
             return VUOTA;

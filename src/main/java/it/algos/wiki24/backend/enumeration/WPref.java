@@ -120,6 +120,12 @@ public enum WPref implements IPref {
     usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàPlurale."),
     lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
     elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
+
+
+    //***************
+    iconaNato("iconaNato", TypePref.string, "n." + SPAZIO_NON_BREAKING, "Icona con spazio per le date di nascita"),
+    iconaMorto("iconaMorto", TypePref.string, "†" + SPAZIO_NON_BREAKING, "Icona con spazio per le date di morte"),
+
     ;
 
     public PreferenzaModulo preferenzaModulo;

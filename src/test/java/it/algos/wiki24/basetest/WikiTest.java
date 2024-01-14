@@ -280,6 +280,7 @@ public abstract class WikiTest extends AlgosTest {
         currentType = TypeLista.nessunaLista;
         setUpAllEffettuato = true;
 
+        listaBio.add(creaBio("Junior Mapuku"));
         listaBio.add(creaBio("Johann Schweikhard von Kronberg"));
         listaBio.add(creaBio("Vincenzo Ferreri"));
         listaBio.add(creaBio("Roberto Rullo"));
@@ -290,6 +291,8 @@ public abstract class WikiTest extends AlgosTest {
         listaBio.add(creaBio("Jordan Adams (1981)"));
         listaBio.add(creaBio("Marianna Saltini"));
         listaBio.add(creaBio("Patty Farchetto"));
+        listaBio.add(creaBio("Gianangelo Bof"));
+
     }
 
 

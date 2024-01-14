@@ -427,7 +427,7 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         mappaDidascalie = null;
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
 

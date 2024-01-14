@@ -73,6 +73,7 @@ public abstract class WikiList extends CrudList {
     public TypeDurata unitaMisuraUpload;
 
     public boolean usaBottoneElabora;
+
     public boolean usaBottoneElaboraDue;
 
     public boolean usaBottoneTransfer;
@@ -91,6 +92,13 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneWikiCrono;
 
+    public boolean usaBottoneTest1;
+
+    public boolean usaBottoneTest2;
+
+    public boolean usaBottoneUpload1;
+
+    public boolean usaBottoneUpload2;
 
     public WikiModulo currentCrudModulo;
 
@@ -130,6 +138,11 @@ public abstract class WikiList extends CrudList {
         this.usaBottoneWikiView = false;
         this.usaBottoneWikiEdit = false;
         this.usaBottoneWikiCrono = false;
+
+        this.usaBottoneTest1 = false;
+        this.usaBottoneTest2 = false;
+        this.usaBottoneUpload1 = false;
+        this.usaBottoneUpload2 = false;
 
         this.fixPreferenzeDaModulo();
     }
@@ -289,7 +302,7 @@ public abstract class WikiList extends CrudList {
      * Può essere sovrascritto <br>
      */
     protected void fixTop() {
-        this.buttonBar = appContext.getBean(WikiListButtonBar.class, this);
+        this.buttonBar = appContext.getBean(WikiListButtonBar.class, currentCrudModulo, this);
         super.buttonBar = this.buttonBar;
 
         if (usaBottoneDeleteAll) {
@@ -322,6 +335,20 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneWikiCrono) {
             buttonBar.wikiCrono();
         }
+
+        if (usaBottoneTest1) {
+            buttonBar.test1();
+        }
+        if (usaBottoneTest2) {
+            buttonBar.test2();
+        }
+        if (usaBottoneUpload1) {
+            buttonBar.upload1();
+        }
+        if (usaBottoneUpload2) {
+            buttonBar.upload2();
+        }
+
         if (usaBottoneNew) {
             buttonBar.add();
         }
@@ -371,6 +398,7 @@ public abstract class WikiList extends CrudList {
         fixInfo();
         return true;
     }
+
     public boolean elaboraDue() {
         currentCrudModulo.elaboraDue();
         refreshData();
@@ -387,6 +415,7 @@ public abstract class WikiList extends CrudList {
 
         return true;
     }
+
 
     public boolean resetEntity() {
         AbstractEntity crudEntityBean = getSingleEntity();
@@ -434,13 +463,40 @@ public abstract class WikiList extends CrudList {
         }
     }
 
-    public void wikiView() {
+    public boolean testPaginaNati() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.testPaginaNati(crudEntityBean);
+        }
+        return true;
     }
 
-    public void wikiEdit() {
+    public boolean testPaginaMorti() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.testPaginaMorti(crudEntityBean);
+        }
+        return true;
     }
 
-    public void wikiCrono() {
+    public boolean uploadPaginaNati() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.uploadPaginaNati(crudEntityBean);
+        }
+        return true;
+    }
+
+    public boolean uploadPaginaMorti() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.uploadPaginaMorti(crudEntityBean);
+        }
+        return true;
     }
 
 }

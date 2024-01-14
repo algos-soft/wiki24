@@ -10,6 +10,7 @@ import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
+import it.algos.wiki24.backend.logic.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -31,16 +32,21 @@ public class WikiListButtonBar extends ListButtonBar {
     @Inject
     TextService textService;
 
+    public WikiModulo currentCrudModulo;
+
     protected boolean usaBottoneDeleteAll;
 
     private boolean usaBottoneDownload;
 
     private boolean usaBottoneElabora;
+
     private boolean usaBottoneElaboraDue;
+
     private boolean usaBottoneTransfer;
+
     private boolean usaBottoneResetEntity;
 
-    private boolean usaBottoneUpload;
+    private boolean usaBottoneUploadAll;
 
     public boolean usaBottoneWikiView;
 
@@ -48,20 +54,32 @@ public class WikiListButtonBar extends ListButtonBar {
 
     public boolean usaBottoneWikiCrono;
 
+    public boolean usaBottoneTest1;
+
+    public boolean usaBottoneTest2;
+
+    public boolean usaBottoneUpload1;
+
+    public boolean usaBottoneUpload2;
+
+
     public boolean usaSearchPageId;
 
     public boolean usaSearchWikiTitle;
 
-//    protected Button buttonDeleteAll = new Button();
+    //    protected Button buttonDeleteAll = new Button();
 
     protected Button buttonDownload = new Button();
 
     protected Button buttonElabora = new Button();
+
     protected Button buttonElaboraDue = new Button();
+
     protected Button buttonTransfer = new Button();
+
     protected Button buttonResetEntity = new Button();
 
-    protected Button buttonUpload = new Button();
+    protected Button buttonUploadAll = new Button();
 
     protected Button buttonWikiView = new Button();
 
@@ -69,14 +87,23 @@ public class WikiListButtonBar extends ListButtonBar {
 
     protected Button buttonWikiCrono = new Button();
 
+    protected Button buttonTest1 = new Button();
+
+    protected Button buttonTest2 = new Button();
+
+    protected Button buttonUpload1 = new Button();
+
+    protected Button buttonUpload2 = new Button();
+
     protected TextField searchPageId = new TextField();
 
     protected TextField searchWikiTitle = new TextField();
 
     protected WikiList currentCrudList;
 
-    public WikiListButtonBar(final WikiList crudList) {
+    public WikiListButtonBar(final WikiModulo crudModulo, final WikiList crudList) {
         super(crudList);
+        this.currentCrudModulo = crudModulo;
         this.currentCrudList = crudList;
     }
 
@@ -87,6 +114,7 @@ public class WikiListButtonBar extends ListButtonBar {
         this.usaBottoneDeleteAll = true;
         return this;
     }
+
     /**
      * Fluent pattern Builder <br>
      */
@@ -110,6 +138,7 @@ public class WikiListButtonBar extends ListButtonBar {
         this.usaBottoneElabora = true;
         return this;
     }
+
     /**
      * Fluent pattern Builder <br>
      */
@@ -125,6 +154,7 @@ public class WikiListButtonBar extends ListButtonBar {
         this.usaBottoneTransfer = true;
         return this;
     }
+
     /**
      * Fluent pattern Builder <br>
      */
@@ -133,6 +163,13 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar uploadAll() {
+        this.usaBottoneUploadAll = true;
+        return this;
+    }
 
     /**
      * Fluent pattern Builder <br>
@@ -155,6 +192,38 @@ public class WikiListButtonBar extends ListButtonBar {
      */
     public WikiListButtonBar wikiCrono() {
         this.usaBottoneWikiCrono = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar test1() {
+        this.usaBottoneTest1 = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar test2() {
+        this.usaBottoneTest2 = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar upload1() {
+        this.usaBottoneUpload1 = true;
+        return this;
+    }
+
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar upload2() {
+        this.usaBottoneUpload2 = true;
         return this;
     }
 
@@ -198,7 +267,7 @@ public class WikiListButtonBar extends ListButtonBar {
             this.addResetEntity();
         }
 
-        if (usaBottoneUpload) {
+        if (usaBottoneUploadAll) {
             //            this.addUpload();
         }
         if (usaBottoneWikiView) {
@@ -222,6 +291,23 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneDeleteEntity) {
             this.addDeleteEntity();
         }
+
+        if (usaBottoneTest1) {
+            this.addTest1();
+        }
+
+        if (usaBottoneTest2) {
+            this.addTest2();
+        }
+
+        if (usaBottoneUpload1) {
+            this.addUpload1();
+        }
+
+        if (usaBottoneUpload2) {
+            this.addUpload2();
+        }
+
         if (usaBottoneSearch) {
             this.addSearchField();
         }
@@ -242,6 +328,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonDownload.addClickListener(event -> currentCrudList.download(event));
         this.add(buttonDownload);
     }
+
     public void addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
         buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -258,6 +345,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
     }
+
     private void addElaboraDue() {
         buttonElaboraDue.getElement().setAttribute("theme", "secondary");
         buttonElaboraDue.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -266,6 +354,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElaboraDue.addClickListener(event -> currentCrudList.elaboraDue());
         this.add(buttonElaboraDue);
     }
+
     private void addTransfer() {
         buttonTransfer.getElement().setAttribute("theme", "secondary");
         buttonTransfer.getElement().setProperty("title", "Transfer: spostamento ad altro modulo");
@@ -274,6 +363,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonTransfer.addClickListener(event -> currentCrudList.transfer());
         this.add(buttonTransfer);
     }
+
     private void addResetEntity() {
         buttonResetEntity.getElement().setAttribute("theme", "secondary");
         buttonResetEntity.getElement().setProperty("title", "Reset: elabora la entity");
@@ -283,13 +373,12 @@ public class WikiListButtonBar extends ListButtonBar {
         this.add(buttonResetEntity);
     }
 
-
     private void addWikiView() {
         buttonWikiView.getElement().setAttribute("theme", "secondary");
         buttonWikiView.getElement().setProperty("title", "Wiki: pagina in visione");
         buttonWikiView.setIcon(new Icon(VaadinIcon.SEARCH));
         buttonWikiView.setEnabled(false);
-        buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
+        buttonWikiView.addClickListener(event -> currentCrudModulo.wikiView());
         this.add(buttonWikiView);
     }
 
@@ -298,7 +387,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiEdit.getElement().setProperty("title", "Wiki: pagina in modifica");
         buttonWikiEdit.setIcon(new Icon(VaadinIcon.PENCIL));
         buttonWikiEdit.setEnabled(false);
-        buttonWikiEdit.addClickListener(event -> currentCrudList.wikiEdit());
+        buttonWikiEdit.addClickListener(event -> currentCrudModulo.wikiEdit());
         this.add(buttonWikiEdit);
     }
 
@@ -307,8 +396,47 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiCrono.getElement().setProperty("title", "Wiki: cronistoria della pagina");
         buttonWikiCrono.setIcon(new Icon(VaadinIcon.CALENDAR));
         buttonWikiCrono.setEnabled(false);
-        buttonWikiCrono.addClickListener(event -> currentCrudList.wikiCrono());
+        buttonWikiCrono.addClickListener(event -> currentCrudModulo.wikiCrono());
         this.add(buttonWikiCrono);
+    }
+
+
+    private void addTest1() {
+        buttonTest1.getElement().setAttribute("theme", "secondary");
+        buttonTest1.getElement().setProperty("title", "Test: scrittura di una voce nati su Utente:Biobot");
+        buttonTest1.setIcon(new Icon(VaadinIcon.SERVER));
+        buttonTest1.setEnabled(false);
+        buttonTest1.addClickListener(event -> currentCrudList.testPaginaNati());
+        this.add(buttonTest1);
+    }
+
+    private void addTest2() {
+        buttonTest2.getElement().setAttribute("theme", "secondary");
+        buttonTest2.getElement().setProperty("title", "Test: scrittura di una voce morti su Utente:Biobot");
+        buttonTest2.setIcon(new Icon(VaadinIcon.SERVER));
+        buttonTest2.setEnabled(false);
+        buttonTest2.addClickListener(event -> currentCrudList.testPaginaMorti());
+        this.add(buttonTest2);
+    }
+
+    private void addUpload1() {
+        buttonUpload1.getElement().setAttribute("theme", "primary");
+        buttonUpload1.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonUpload1.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        buttonUpload1.setIcon(new Icon(VaadinIcon.UPLOAD));
+        buttonUpload1.setEnabled(false);
+        buttonUpload1.addClickListener(event -> currentCrudList.uploadPaginaNati());
+        this.add(buttonUpload1);
+    }
+
+    private void addUpload2() {
+        buttonUpload2.getElement().setAttribute("theme", "primary");
+        buttonUpload2.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonUpload2.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        buttonUpload2.setIcon(new Icon(VaadinIcon.UPLOAD));
+        buttonUpload2.setEnabled(false);
+        buttonUpload2.addClickListener(event -> currentCrudList.uploadPaginaMorti());
+        this.add(buttonUpload2);
     }
 
     public void addSearchPageId() {
@@ -341,6 +469,10 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiView.setEnabled(singoloSelezionato);
         buttonWikiEdit.setEnabled(singoloSelezionato);
         buttonWikiCrono.setEnabled(singoloSelezionato);
+        buttonTest1.setEnabled(singoloSelezionato);
+        buttonTest2.setEnabled(singoloSelezionato);
+        buttonUpload1.setEnabled(singoloSelezionato);
+        buttonUpload2.setEnabled(singoloSelezionato);
 
         buttonNew.setEnabled(!singoloSelezionato);
         buttonEdit.setEnabled(singoloSelezionato);

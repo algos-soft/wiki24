@@ -767,7 +767,7 @@ public class ElaboraService {
             return VUOTA;
         }
 
-        return textService.isValid(elaborato) ? elaborato : VUOTA;
+        return textService.isValid(elaborato) ? textService.primaMinuscola(elaborato) : VUOTA;
     }
 
     public String fixNazionalita(String wikiTitle, String grezzo) {
@@ -786,7 +786,7 @@ public class ElaboraService {
             return VUOTA;
         }
 
-        return textService.isValid(elaborato) ? elaborato : VUOTA;
+        return textService.isValid(elaborato) ? textService.primaMinuscola(elaborato) : VUOTA;
     }
 
     public String fixNomeSingolo(String elaboratoForseDoppio) {
