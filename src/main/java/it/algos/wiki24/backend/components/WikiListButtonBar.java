@@ -266,19 +266,6 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneResetEntity) {
             this.addResetEntity();
         }
-
-        if (usaBottoneUploadAll) {
-            //            this.addUpload();
-        }
-        if (usaBottoneWikiView) {
-            this.addWikiView();
-        }
-        if (usaBottoneWikiEdit) {
-            this.addWikiEdit();
-        }
-        if (usaBottoneWikiCrono) {
-            this.addWikiCrono();
-        }
         if (usaBottoneNew) {
             this.addNew();
         }
@@ -291,23 +278,30 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneDeleteEntity) {
             this.addDeleteEntity();
         }
-
+        if (usaBottoneUploadAll) {
+            this.addUploadAll();
+        }
+        if (usaBottoneWikiView) {
+            this.addWikiView();
+        }
+        if (usaBottoneWikiEdit) {
+            this.addWikiEdit();
+        }
+        if (usaBottoneWikiCrono) {
+            this.addWikiCrono();
+        }
         if (usaBottoneTest1) {
             this.addTest1();
         }
-
         if (usaBottoneTest2) {
             this.addTest2();
         }
-
         if (usaBottoneUpload1) {
             this.addUpload1();
         }
-
         if (usaBottoneUpload2) {
             this.addUpload2();
         }
-
         if (usaBottoneSearch) {
             this.addSearchField();
         }
@@ -331,7 +325,6 @@ public class WikiListButtonBar extends ListButtonBar {
 
     public void addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
-        buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
         buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
@@ -373,12 +366,22 @@ public class WikiListButtonBar extends ListButtonBar {
         this.add(buttonResetEntity);
     }
 
+    private void addUploadAll() {
+        buttonUploadAll.getElement().setAttribute("theme", "primary");
+        buttonUploadAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonUploadAll.getElement().setProperty("title", "Upload di tutte le pagine");
+        buttonUploadAll.setIcon(new Icon(VaadinIcon.UPLOAD));
+        buttonUploadAll.setEnabled(true);
+        buttonUploadAll.addClickListener(event -> currentCrudModulo.uploadAll());
+        this.add(buttonUploadAll);
+    }
+
     private void addWikiView() {
-        buttonWikiView.getElement().setAttribute("theme", "secondary");
+        buttonWikiView.getElement().setAttribute("theme", "primary");
         buttonWikiView.getElement().setProperty("title", "Wiki: pagina in visione");
-        buttonWikiView.setIcon(new Icon(VaadinIcon.SEARCH));
+        buttonWikiView.setIcon(new Icon(VaadinIcon.POINTER));
         buttonWikiView.setEnabled(false);
-        buttonWikiView.addClickListener(event -> currentCrudModulo.wikiView());
+        buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
         this.add(buttonWikiView);
     }
 
@@ -422,7 +425,7 @@ public class WikiListButtonBar extends ListButtonBar {
     private void addUpload1() {
         buttonUpload1.getElement().setAttribute("theme", "primary");
         buttonUpload1.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        buttonUpload1.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        buttonUpload1.getElement().setProperty("title", "Upload della singola pagina (nati)");
         buttonUpload1.setIcon(new Icon(VaadinIcon.UPLOAD));
         buttonUpload1.setEnabled(false);
         buttonUpload1.addClickListener(event -> currentCrudList.uploadPaginaNati());
@@ -432,7 +435,7 @@ public class WikiListButtonBar extends ListButtonBar {
     private void addUpload2() {
         buttonUpload2.getElement().setAttribute("theme", "primary");
         buttonUpload2.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        buttonUpload2.getElement().setProperty("title", "Wiki: cronistoria della pagina");
+        buttonUpload2.getElement().setProperty("title", "Upload della singola pagina (morti)");
         buttonUpload2.setIcon(new Icon(VaadinIcon.UPLOAD));
         buttonUpload2.setEnabled(false);
         buttonUpload2.addClickListener(event -> currentCrudList.uploadPaginaMorti());
@@ -463,6 +466,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonResetPref.setEnabled(!singoloSelezionato);
         buttonDownload.setEnabled(!singoloSelezionato);
         buttonElabora.setEnabled(!singoloSelezionato);
+        buttonUploadAll.setEnabled(!singoloSelezionato);
 
         buttonTransfer.setEnabled(singoloSelezionato);
         buttonResetEntity.setEnabled(singoloSelezionato);

@@ -291,9 +291,9 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
     public void addShows() {
-        buttonShow.getElement().setAttribute("theme", "primary");
+        buttonShow.getElement().setAttribute("theme", "secondary");
         buttonShow.getElement().setProperty("title", "Shows: mostra il singolo elemento selezionato");
-        buttonShow.setIcon(new Icon(VaadinIcon.POINTER));
+        buttonShow.setIcon(new Icon(VaadinIcon.SEARCH));
         buttonShow.setEnabled(false);
         buttonShow.addClickListener(event -> currentCrudList.showItem());
         this.add(buttonShow);

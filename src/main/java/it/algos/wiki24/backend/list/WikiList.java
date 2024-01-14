@@ -80,7 +80,7 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneResetEntity;
 
-    public boolean usaBottoneUpload;
+    public boolean usaBottoneUploadAll;
 
     public boolean usaSearchPageId;
 
@@ -129,6 +129,7 @@ public abstract class WikiList extends CrudList {
 
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
+        this.usaBottoneUploadAll = false;
         this.usaBottoneTransfer = false;
         this.usaBottoneResetEntity = false;
 
@@ -320,6 +321,9 @@ public abstract class WikiList extends CrudList {
         if (usaBottoneElaboraDue) {
             buttonBar.elaboraDue();
         }
+        if (usaBottoneUploadAll) {
+            buttonBar.uploadAll();
+        }
         if (usaBottoneTransfer) {
             buttonBar.transfer();
         }
@@ -429,6 +433,7 @@ public abstract class WikiList extends CrudList {
     }
 
 
+
     @Override
     protected void fixFiltri() {
         super.fixFiltri();
@@ -463,40 +468,45 @@ public abstract class WikiList extends CrudList {
         }
     }
 
-    public boolean testPaginaNati() {
+
+    public void wikiView() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.wikiView(crudEntityBean);
+        }
+    }
+
+    public void testPaginaNati() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
         if (crudEntityBean != null) {
             currentCrudModulo.testPaginaNati(crudEntityBean);
         }
-        return true;
     }
 
-    public boolean testPaginaMorti() {
+    public void testPaginaMorti() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
         if (crudEntityBean != null) {
             currentCrudModulo.testPaginaMorti(crudEntityBean);
         }
-        return true;
     }
 
-    public boolean uploadPaginaNati() {
+    public void uploadPaginaNati() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
         if (crudEntityBean != null) {
             currentCrudModulo.uploadPaginaNati(crudEntityBean);
         }
-        return true;
     }
 
-    public boolean uploadPaginaMorti() {
+    public void uploadPaginaMorti() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
         if (crudEntityBean != null) {
             currentCrudModulo.uploadPaginaMorti(crudEntityBean);
         }
-        return true;
     }
 
 }

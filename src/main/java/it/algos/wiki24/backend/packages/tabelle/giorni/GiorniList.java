@@ -32,12 +32,14 @@ public class GiorniList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        this.usaBottoneResetDelete = true;
-        this.usaBottoneDownload = false;
-        this.usaBottoneElabora = true;
-        this.usaBottoneSearch = typeList.isUsaBottoneSearch();
-        this.usaBottoneExport = false;
-        this.usaInfoElabora = true;
+        super.usaBottoneResetDelete = true;
+        super.usaBottoneDownload = false;
+        super.usaBottoneElabora = true;
+        super.usaBottoneUploadAll = true;
+        super.usaBottoneSearch = typeList.isUsaBottoneSearch();
+        super.usaBottoneExport = false;
+        super.usaInfoElabora = true;
+        this.usaInfoUpload = true;
         super.usaVariantCompact = true;
 
         super.usaBottoneWikiView = true;

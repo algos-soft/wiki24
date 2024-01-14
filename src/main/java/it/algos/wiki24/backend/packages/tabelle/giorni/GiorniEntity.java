@@ -29,26 +29,15 @@ public class GiorniEntity extends AbstractEntity {
     @AField(type = TypeField.integer, headerText = "nati", caption = "Numero di biografie che utilizzano i nati in questo giorno", widthRem = 6)
     public int bioNati;
 
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Giorno di nascita")
+    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per giorno di nascita")
     public String pageNati;
-
-//    @AField(type = TypeField.booleano,headerText = "is")
-//    public boolean esistePaginaNati;
-
-//    @AField(type = TypeField.booleano, typeBool = TypeBool.checkIcon, headerText = "ok")
-//    public boolean natiOk;
 
     @AField(type = TypeField.integer, headerText = "morti", caption = "Numero di biografie che utilizzano i morti in questo giorno", widthRem = 6)
     public int bioMorti;
 
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Giorno di morte")
+    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per giorno di morte")
     public String pageMorti;
 
-//    @AField(type = TypeField.booleano,headerText = "is")
-//    public boolean esistePaginaMorti;
-
-//    @AField(type = TypeField.booleano, typeBool = TypeBool.checkIcon, headerText = "ok")
-//    public boolean mortiOk;
 
     @Override
     public String toString() {

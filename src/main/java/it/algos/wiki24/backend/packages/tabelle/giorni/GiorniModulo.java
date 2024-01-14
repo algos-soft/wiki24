@@ -15,6 +15,7 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -61,6 +62,9 @@ public class GiorniModulo extends WikiModulo {
         super.lastElabora = WPref.lastElaboraGiorni;
         super.durataElabora = WPref.elaboraGiorniTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
+        super.lastUpload = WPref.lastUploadGiorni;
+        super.durataUpload = WPref.uploadGiorniTime;
+        super.unitaMisuraUpload = TypeDurata.secondi;
     }
 
 
@@ -129,6 +133,7 @@ public class GiorniModulo extends WikiModulo {
         return super.findAll();
     }
 
+
     @Override
     public RisultatoReset resetDelete() {
         RisultatoReset typeReset = super.resetDelete();
@@ -158,6 +163,7 @@ public class GiorniModulo extends WikiModulo {
         return null;
     }
 
+    @Override
     public void elabora() {
         inizio = System.currentTimeMillis();
 
@@ -170,25 +176,41 @@ public class GiorniModulo extends WikiModulo {
         super.fixElabora(inizio);
     }
 
-
     @Override
-    public boolean testPaginaNati(AbstractEntity giornoBean) {
-        return appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    public void uploadAll() {
+        inizio = System.currentTimeMillis();
+
+        for (GiorniEntity giornoBean : findAll().subList(17, 18)) {
+            uploadPaginaNati(giornoBean);
+            uploadPaginaMorti(giornoBean);
+        }
+
+        super.fixUpload(inizio);
     }
 
     @Override
-    public boolean testPaginaMorti(AbstractEntity giornoBean) {
-        return appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    public void wikiView(AbstractEntity giornoBean) {
+        wikiApiService.openWikiPage(((GiorniEntity) giornoBean).nome);
     }
 
     @Override
-    public boolean uploadPaginaNati(AbstractEntity giornoBean) {
-        return appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    public void testPaginaNati(AbstractEntity giornoBean) {
+         appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
     }
 
     @Override
-    public boolean uploadPaginaMorti(AbstractEntity giornoBean) {
-        return appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    public void testPaginaMorti(AbstractEntity giornoBean) {
+         appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    }
+
+    @Override
+    public void uploadPaginaNati(AbstractEntity giornoBean) {
+         appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    }
+
+    @Override
+    public void uploadPaginaMorti(AbstractEntity giornoBean) {
+         appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
     }
 
 }// end of CrudModulo class

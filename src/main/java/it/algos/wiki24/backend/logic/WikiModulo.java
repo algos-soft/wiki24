@@ -133,7 +133,7 @@ public abstract class WikiModulo extends CrudModulo {
         return crudEntityBean;
     }
 
-    public void wikiView() {
+    public void wikiView(AbstractEntity crudEntityBean) {
     }
 
     public void wikiEdit() {
@@ -141,21 +141,18 @@ public abstract class WikiModulo extends CrudModulo {
 
     public void wikiCrono() {
     }
-
-    public boolean testPaginaNati(AbstractEntity crudEntityBean) {
-        return true;
+    public void uploadAll() {
+    }
+    public void testPaginaNati(AbstractEntity crudEntityBean) {
     }
 
-    public boolean testPaginaMorti(AbstractEntity crudEntityBean) {
-        return true;
+    public void testPaginaMorti(AbstractEntity crudEntityBean) {
     }
 
-    public boolean uploadPaginaNati(AbstractEntity crudEntityBean) {
-        return true;
+    public void uploadPaginaNati(AbstractEntity crudEntityBean) {
     }
 
-    public boolean uploadPaginaMorti(AbstractEntity crudEntityBean) {
-        return true;
+    public void uploadPaginaMorti(AbstractEntity crudEntityBean) {
     }
 
     public void fixElabora(final long inizio) {
@@ -184,17 +181,35 @@ public abstract class WikiModulo extends CrudModulo {
             logger.warn(new WrapLog().exception(new AlgosException("durataElabora è nullo")));
             return;
         }
+    }
 
-        //        if (textService.isValid(wikiTitle) && sizeServerWiki > 0 && sizeMongoDB > 0) {
-        //            if (sizeServerWiki == sizeMongoDB) {
-        //                message = String.format("Download di %s righe da [%s] in %d millisecondi", wikiTxt, wikiTitle, delta);
-        //            }
-        //            else {
-        //                message = String.format("Download di %s righe da [%s] convertite in %s elementi su mongoDB", wikiTxt, wikiTitle, mongoTxt);
-        //            }
-        //
-        //            logger.info(new WrapLog().message(message));
-        //        }
+
+    public void fixUpload(final long inizio) {
+        long fine = System.currentTimeMillis();
+        Long delta = fine - inizio;
+
+        if (lastUpload != null) {
+            lastUpload.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
+            return;
+        }
+
+        if (durataUpload != null) {
+            delta = delta / 1000;
+            delta = switch (unitaMisuraUpload) {
+                case secondi -> delta;
+                case minuti -> delta / 60;
+                default -> delta;
+            };
+
+            durataUpload.setValue(delta.intValue());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
+            return;
+        }
     }
 
 }

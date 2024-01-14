@@ -13,29 +13,19 @@ import org.springframework.stereotype.*;
 @Service
 public class ScheduleTaskUsingCronExpression {
 
-    @Scheduled(cron = "0 * * * * ?")
+    //    @Scheduled(cron = "0 * * * * ?")
     public void scheduleOgniMinuto() {
-//        ogniMinuto();
-    }
-
-    protected void ogniMinuto() {
     }
 
 
-    @Scheduled(cron = "0 0 * * * ?")
+    //    @Scheduled(cron = "0 0 * * * ?")
     public void scheduleOgniOra() {
-//        ogniMinuto();
     }
 
-    protected void ogniOra() {
-    }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    //    @Scheduled(cron = "0 0 0 * * ?")
     public void scheduleOgniGiorno() {
-//        ogniMinuto();
     }
 
-    protected void ogniGiorno() {
-    }
 
 }
