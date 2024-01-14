@@ -124,6 +124,8 @@ public abstract class CrudList extends VerticalLayout {
 
     protected String message;
 
+    protected boolean usaVariantCompact;
+
     public CrudList() {
     }
 
@@ -154,6 +156,7 @@ public abstract class CrudList extends VerticalLayout {
         this.usaDataProvider = true;
         this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
+        this.usaVariantCompact = false;
 
         if (typeList != null) {
             this.usaBottoneDeleteAll = typeList.isUsaBottoneDeleteAll();
@@ -423,6 +426,10 @@ public abstract class CrudList extends VerticalLayout {
         grid.setSizeUndefined();
         this.setMinHeight("50rem");
         this.setMaxHeight("50rem");
+
+        if (usaVariantCompact) {
+            grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+        }
 
         this.add(grid);
     }

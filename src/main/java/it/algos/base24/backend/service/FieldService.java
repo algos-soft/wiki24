@@ -114,6 +114,8 @@ public class FieldService {
                 yield new DatePicker(caption);
             case localTime:
                 yield new TimePicker(caption);
+            case linkWiki:
+                yield new TextField(caption);
             case linkDBRef:
                 combo = new ComboBox<>(caption);
                 try {

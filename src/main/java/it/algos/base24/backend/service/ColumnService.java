@@ -118,9 +118,10 @@ public class ColumnService {
                 }
 
                 if (obj != null && obj instanceof String wikiTitle) {
-                    anchor = new Anchor(anchorPrefix + wikiTitle, textService.setQuadre(wikiTitle));
+//                    anchor = new Anchor(anchorPrefix + wikiTitle, textService.setQuadre(wikiTitle));
+                    anchor = new Anchor(anchorPrefix + wikiTitle, wikiTitle);
                     anchor.getElement().getStyle().set("color", "blue");
-                    anchor.getElement().getStyle().set("fontWeight", "bold");
+//                    anchor.getElement().getStyle().set("fontWeight", "bold");
                     //                    anchor.getElement().getStyle().set("font-style", "italic");
 
                     return new Span(anchor);
