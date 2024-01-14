@@ -8,7 +8,9 @@ import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -36,6 +38,9 @@ public class GiorniModulo extends WikiModulo {
     @Inject
     WikiUtilityService wikiUtilityService;
 
+    @Inject
+    BioMongoModulo bioMongoModulo;
+
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -49,15 +54,29 @@ public class GiorniModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastElabora = WPref.lastElaboraGiorni;
+        super.durataElabora = WPref.elaboraGiorniTime;
+        super.unitaMisuraElabora = TypeDurata.minuti;
+    }
+
+
+    /**
+     * Regola le property visibili in una lista CrudList <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
+     */
+    public List<String> getListPropertyNames() {
+        return Arrays.asList("ordine", "bioNati", "pageNati", "bioMorti", "pageMorti");
     }
 
     /**
-     * Regola le property di una ModelClazz <br>
+     * Regola le property visibili in una scheda CrudForm <br>
      * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
      */
-    @Override
-    public List<String> getPropertyNames() {
-        return Arrays.asList("ordine", "bioNati", "pageNati", "esistePaginaNati", "natiOk", "bioMorti", "pageMorti", "esistePaginaMorti", "mortiOk");
+    public List<String> getFormPropertyNames() {
+        return Arrays.asList("ordine", "nome","bioNati", "pageNati", "bioMorti", "pageMorti");
     }
 
     /**
@@ -93,15 +112,19 @@ public class GiorniModulo extends WikiModulo {
                 .bioMorti(0)
                 .pageNati(textService.isValid(pageNati) ? pageNati : null)
                 .pageMorti(textService.isValid(pageMorti) ? pageMorti : null)
-                .esistePaginaNati(false)
-                .esistePaginaMorti(false)
-                .natiOk(false)
-                .mortiOk(false)
+                //                .esistePaginaNati(false)
+                //                .esistePaginaMorti(false)
+                //                .natiOk(false)
+                //                .mortiOk(false)
                 .build();
 
         return (GiorniEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public List<GiorniEntity> findAll() {
+        return super.findAll();
+    }
 
     @Override
     public RisultatoReset resetDelete() {
@@ -131,5 +154,18 @@ public class GiorniModulo extends WikiModulo {
 
         return null;
     }
+
+    public void elabora() {
+        inizio = System.currentTimeMillis();
+
+        for (GiorniEntity giornoBean : findAll()) {
+            giornoBean.bioNati = bioMongoModulo.countAllByGiornoNato(giornoBean.nome);
+            giornoBean.bioMorti = bioMongoModulo.countAllByGiornoMorto(giornoBean.nome);
+            save(giornoBean);
+        }
+
+        super.fixElabora(inizio);
+    }
+
 
 }// end of CrudModulo class

@@ -24,14 +24,10 @@ public class GiorniList extends WikiList {
 
         this.usaBottoneResetDelete = true;
         this.usaBottoneDownload = false;
-        this.usaBottoneElabora = false;
+        this.usaBottoneElabora = true;
         this.usaBottoneSearch = typeList.isUsaBottoneSearch();
+        this.usaInfoElabora = true;
     }
 
-    @Override
-    public void fixAlert() {
-        VerticalLayout layout = new SimpleVerticalLayout();
-        layout.add(ASpan.text(String.format("Prova")).verde());
-    }
 
 }// end of CrudList class

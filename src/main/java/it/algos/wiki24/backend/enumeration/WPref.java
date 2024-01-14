@@ -20,37 +20,6 @@ import java.util.stream.*;
  * Time: 10:53
  */
 public enum WPref implements IPref {
-    usaTaskAttSin("usaTaskAttSin", TypePref.bool, true, "Flag per usare la task di download AttivitàSingolare."),
-    lastDownloadAttSin("lastDownloadAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàSingolare."),
-    downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in secondi."),
-    usaElaboraAttSin("usaElaboraAttSin", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàSingolare."),
-    lastElaboraAttSin("lastElaboraAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàSingolare."),
-    elaboraAttSinTime("elaboraAttSinTime", TypePref.integer, 0, "Durata elaborazione di AttivitàSingolare in minuti."),
-
-    //***************
-    usaTaskAttPlu("usaTaskAttPlu", TypePref.bool, true, "Flag per usare la task di download AttivitàPlurale."),
-    lastDownloadAttPlu("lastDownloadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàPlurale."),
-    downloadAttPluTime("downloadAttPluTime", TypePref.integer, 0, "Durata download di AttivitàPlurale in secondi."),
-    usaElaboraAttPlu("usaElaboraAttPlu", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàPlurale."),
-    lastElaboraAttPlu("lastElaboraAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàPlurale."),
-    elaboraAttPluTime("elaboraAttPluTime", TypePref.integer, 0, "Durata elaborazione di AttivitàPlurale in minuti."),
-
-    //***************
-
-    usaTaskNazSin("usaTaskNazSin", TypePref.bool, true, "Flag per usare la task di download NazionalitàSingolare."),
-    lastDownloadNazSin("lastDownloadNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàSingolare."),
-    downloadNazSinTime("downloadNazSinTime", TypePref.integer, 0, "Durata download di NazionalitàSingolare in minuti."),
-    usaElaboraNazSin("usaElaboraNazSin", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàSingolare."),
-    lastElaboraNazSin("lastElaboraNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàSingolare."),
-    elaboraNazSinTime("elaboraNazSinTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàSingolare in minuti."),
-
-    //***************
-    usaTaskNazPlu("usaTaskNazPlu", TypePref.bool, true, "Flag per usare la task di download NazionalitàPlurale."),
-    lastDownloadNazPlu("lastDownloadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàPlurale."),
-    downloadNazPluTime("downloadNazPluTime", TypePref.integer, 0, "Durata download di NazionalitàPlurale in secondi."),
-    usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàPlurale."),
-    lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
-    elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
 
     //***************
     categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie"),
@@ -111,6 +80,46 @@ public enum WPref implements IPref {
     lastElaboraParNazionalita("lastElaboraParNazionalita", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParNazionalita."),
     elaboraParNazionalitaTime("elaboraParNazionalitaTime", TypePref.integer, 0, "Durata elaborazione di ParNazionalita in minuti."),
 
+    //***************
+    usaElaboraGiorni("usaElaboraGiorni", TypePref.bool, true, "Flag per usare la task di elaborazione di Giorni."),
+    lastElaboraGiorni("lastElaboraGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Giorni."),
+    elaboraGiorniTime("elaboraGiorniTime", TypePref.integer, 0, "Durata elaborazione di Giorni in minuti."),
+    usaUploadGiorni("usaUploadGiorni", TypePref.bool, true, "Flag per usare la task di upload Giorni."),
+    lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni."),
+    uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in secondi."),
+
+    //***************
+    usaTaskAttSin("usaTaskAttSin", TypePref.bool, true, "Flag per usare la task di download AttivitàSingolare."),
+    lastDownloadAttSin("lastDownloadAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàSingolare."),
+    downloadAttSinTime("downloadAttSinTime", TypePref.integer, 0, "Durata download di AttivitàSingolare in secondi."),
+    usaElaboraAttSin("usaElaboraAttSin", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàSingolare."),
+    lastElaboraAttSin("lastElaboraAttSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàSingolare."),
+    elaboraAttSinTime("elaboraAttSinTime", TypePref.integer, 0, "Durata elaborazione di AttivitàSingolare in minuti."),
+
+    //***************
+    usaTaskAttPlu("usaTaskAttPlu", TypePref.bool, true, "Flag per usare la task di download AttivitàPlurale."),
+    lastDownloadAttPlu("lastDownloadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di AttivitàPlurale."),
+    downloadAttPluTime("downloadAttPluTime", TypePref.integer, 0, "Durata download di AttivitàPlurale in secondi."),
+    usaElaboraAttPlu("usaElaboraAttPlu", TypePref.bool, true, "Flag per usare l'elaborazione di AttivitàPlurale."),
+    lastElaboraAttPlu("lastElaboraAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàPlurale."),
+    elaboraAttPluTime("elaboraAttPluTime", TypePref.integer, 0, "Durata elaborazione di AttivitàPlurale in minuti."),
+
+    //***************
+
+    usaTaskNazSin("usaTaskNazSin", TypePref.bool, true, "Flag per usare la task di download NazionalitàSingolare."),
+    lastDownloadNazSin("lastDownloadNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàSingolare."),
+    downloadNazSinTime("downloadNazSinTime", TypePref.integer, 0, "Durata download di NazionalitàSingolare in minuti."),
+    usaElaboraNazSin("usaElaboraNazSin", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàSingolare."),
+    lastElaboraNazSin("lastElaboraNazSin", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàSingolare."),
+    elaboraNazSinTime("elaboraNazSinTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàSingolare in minuti."),
+
+    //***************
+    usaTaskNazPlu("usaTaskNazPlu", TypePref.bool, true, "Flag per usare la task di download NazionalitàPlurale."),
+    lastDownloadNazPlu("lastDownloadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàPlurale."),
+    downloadNazPluTime("downloadNazPluTime", TypePref.integer, 0, "Durata download di NazionalitàPlurale in secondi."),
+    usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, true, "Flag per usare l'elaborazione di NazionalitàPlurale."),
+    lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
+    elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
     ;
 
     public PreferenzaModulo preferenzaModulo;
