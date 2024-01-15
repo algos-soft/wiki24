@@ -313,7 +313,7 @@ public class BaseBoot {
                     .toList();
             if (listaVar != null) {
                 logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
-                message = "Variabili globali di BaseVar";
+                message = "Variabili globali";
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 message = Strings.repeat(TRATTINO, message.length());
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
