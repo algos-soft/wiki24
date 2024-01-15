@@ -5,9 +5,13 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
+import jakarta.annotation.*;
 import org.slf4j.*;
-import org.springframework.beans.factory.annotation.*;
+import org.springframework.core.env.*;
 import org.springframework.stereotype.*;
+
+import javax.inject.*;
+import java.util.*;
 
 /**
  * Project base2023
@@ -26,11 +30,17 @@ import org.springframework.stereotype.*;
 @Service
 public class LogService {
 
-    @Autowired
+    @Inject
+    public Environment environment;
+
+    @Inject
     TextService textService;
 
-    @Autowired
+    @Inject
     UtilityService utilityService;
+
+    // Riferimento al logger usato <br>
+    public Logger slf4jLogger;
 
     /**
      * Riferimento al logger usato <br>
@@ -38,7 +48,19 @@ public class LogService {
      * Deve essere creato subito dalla factory class LoggerFactory <br>
      * Va selezionato un appender da usare e che sia presente nel file di configurazione <br>
      */
-    public Logger slf4jLogger = LoggerFactory.getLogger(TAG_LOG_ADMIN_DEFAULT);
+    @PostConstruct
+    private void postConstruct() {
+        String fileAppender;
+        String property = "logging.algos.admin";
+
+        try {
+            fileAppender = Objects.requireNonNull(environment.getProperty(property));
+            slf4jLogger = LoggerFactory.getLogger(fileAppender);
+        } catch (Exception unErrore) {
+            String message = String.format("Non ho trovato la property %s nelle risorse", property);
+            System.out.println(message);
+        }
+    }
 
     public void debug(final String message) {
         //        if (Pref.debug.is()) { @todo ATTENTION QUI

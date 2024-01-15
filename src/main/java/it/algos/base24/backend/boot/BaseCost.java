@@ -275,8 +275,6 @@ public class BaseCost {
 
     public static final String FALSO = "false";
 
-    public static final String TAG_LOG_ADMIN_DEFAULT = "base24.admin";
-
     public static final String FORM_TAG_NEW = "Nuovo/a";//"new"
 
     public static final String FORM_TAG_SHOW = "Mostra";//"Show"
