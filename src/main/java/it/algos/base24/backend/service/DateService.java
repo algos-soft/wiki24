@@ -201,7 +201,12 @@ public class DateService {
     }
 
     public String get(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern("d-MMM-yy H:mm", Locale.ITALIAN));
+        if (localDateTime.isEqual(ROOT_DATA_TIME) || localDateTime.isEqual(ERROR_DATA_TIME)) {
+            return NULLO;
+        }
+        else {
+            return localDateTime.format(DateTimeFormatter.ofPattern("d-MMM-yy H:mm", Locale.ITALIAN));
+        }
     }
 
     /**
@@ -386,11 +391,13 @@ public class DateService {
 
         return bisestile;
     }
+
     public LocalDateTime parseWiki(String testoSorgente) {
-        String suffixWiki="Z";
-        testoSorgente=textService.levaCoda(testoSorgente,suffixWiki);
+        String suffixWiki = "Z";
+        testoSorgente = textService.levaCoda(testoSorgente, suffixWiki);
         return LocalDateTime.parse(testoSorgente);
     }
+
     public boolean divisibileEsatto(int dividendo, int divisore) {
         return dividendo % divisore == 0;
     }

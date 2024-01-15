@@ -4,6 +4,7 @@ import com.vaadin.flow.router.*;
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.view.*;
+import it.algos.wiki24.ui.*;
 import jakarta.annotation.security.*;
 import org.springframework.beans.factory.annotation.*;
 import org.vaadin.lineawesome.*;

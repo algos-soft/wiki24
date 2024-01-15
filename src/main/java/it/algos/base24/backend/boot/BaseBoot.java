@@ -315,28 +315,25 @@ public class BaseBoot {
                     .filter(element -> !element.getName().equals("prefList"))
                     .toList();
             if (listaVar != null) {
-                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
                 message = "Variabili globali";
+                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+                logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
                 logger.info(new WrapLog().message(message).type(TypeLog.startup));
-                message = Strings.repeat(TRATTINO, message.length());
-                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
 
                 for (Field field : listaVar) {
                     value = reflectionService.getPropertyValue(baseVar, field.getName());
                     message = String.format("%s%s%s", field.getName(), FORWARD, value);
                     logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 }
-                message = Strings.repeat(TRATTINO, message.length());
-                logger.info(new WrapLog().message(message).type(TypeLog.startup));
             }
         }
 
         if (Pref.debug.is()) {
-            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
             message = "Valori correnti (default) delle preferenze più rilevanti";
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
-            message = Strings.repeat(TRATTINO, message.length());
-            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
 
             for (IPref pref : prefList) {
                 if (pref.isCritical()) {
@@ -348,23 +345,17 @@ public class BaseBoot {
                     logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 }
             }
-            message = Strings.repeat(TRATTINO, message.length());
-            logger.info(new WrapLog().message(message).type(TypeLog.startup));
         }
 
         if (Pref.debug.is()) {
-            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
             message = "Moduli controllo del resetStartup";
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
-            message = Strings.repeat(TRATTINO, message.length());
-            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
 
             for (CrudModulo modulo : BaseVar.crudModuloListVaadin) {
                 modulo.checkReset();
             }
-            message = Strings.repeat(TRATTINO, message.length());
-            logger.info(new WrapLog().message(message).type(TypeLog.startup));
-            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
         }
     }
 

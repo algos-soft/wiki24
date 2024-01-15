@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.query;
 
+import com.google.common.base.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
@@ -20,6 +21,7 @@ import org.springframework.core.env.*;
 import javax.inject.*;
 import java.net.*;
 import java.util.*;
+import java.util.Objects;
 
 /**
  * Project vaadwiki
@@ -386,6 +388,7 @@ public class QueryLogin extends AQuery {
         JSONObject jsonLogin = (JSONObject) mappaUrlResponse.get(KEY_JSON_LOGIN);
         String jsonResult = null;
         String message;
+int messageLength;
 
         if (jsonLogin != null) {
             result.setResponse(jsonLogin.toString());
@@ -434,7 +437,10 @@ public class QueryLogin extends AQuery {
 
         if (result.isValido()) {
             message = String.format("Collegato come [%s] di nick [%s]", botLogin.getUserType(), botLogin.getUsername());
-            logger.info(new WrapLog().message(message).type(TypeLog.login));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
         }
 
         return result;
