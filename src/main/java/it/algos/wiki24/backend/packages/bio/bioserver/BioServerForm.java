@@ -186,7 +186,7 @@ public class BioServerForm extends WikiForm {
 
     public void saveHandler() {
         super.saveHandler();
-        elaboraService.creaBeanMongo((BioServerEntity)currentEntityModel);
+        elaboraService.creaModificaBeanMongo((BioServerEntity)currentEntityModel);
     }
 
 }// end of CrudForm class

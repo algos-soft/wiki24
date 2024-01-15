@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.bio.biomongo;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
@@ -42,6 +43,9 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     BioServerModulo bioServerModulo;
+
+    @Inject
+    ArrayService arrayService;
 
     @Inject
     ParNomeModulo parNomeModulo;
@@ -146,7 +150,7 @@ public class BioMongoModulo extends WikiModulo {
     }
 
     public List<Long> findOnlyPageId() {
-        return mongoService.projectionLong(BioServerEntity.class, FIELD_NAME_PAGE_ID);
+        return mongoService.projectionLong(BioMongoEntity.class, FIELD_NAME_PAGE_ID);
     }
 
     public BioMongoEntity findByKey(final Object keyPropertyValue) {
@@ -255,6 +259,7 @@ public class BioMongoModulo extends WikiModulo {
         inizio = System.currentTimeMillis();
 
         elaboraService.elaboraAll();
+        this.eliminaMongoCancellatiDaServer();
 
         super.fixElabora(inizio);
     }
@@ -263,7 +268,7 @@ public class BioMongoModulo extends WikiModulo {
         inizio = System.currentTimeMillis();
 
         elaboraService.elaboraAll();
-        elaboraParametri();
+        this.elaboraParametri();
 
         super.fixElabora(inizio);
     }
@@ -284,6 +289,23 @@ public class BioMongoModulo extends WikiModulo {
         parNazionalitaModulo.elabora(lista);
     }
 
+    public void eliminaMongoCancellatiDaServer() {
+        List<Long> listaServerIds = bioServerModulo.findOnlyPageId();
+        List<Long> listaMongoIds = this.findOnlyPageId();
+        List<Long> delta = null;
+        BioMongoEntity mongoBean;
+
+        if (listaMongoIds.size() > listaServerIds.size()) {
+            delta = arrayService.deltaBinary(listaMongoIds, listaServerIds);
+        }
+
+        if (delta != null) {
+            for (Long pageId : delta) {
+                mongoBean = this.findByKey(pageId);
+                delete(mongoBean);
+            }
+        }
+    }
 
     @Override
     public void transfer(AbstractEntity crudEntityBean) {
@@ -300,7 +322,7 @@ public class BioMongoModulo extends WikiModulo {
         BioMongoEntity bioMongoEntity = null;
 
         if (bioServerEntity != null) {
-            bioMongoEntity = elaboraService.creaBeanMongo(bioServerEntity);
+            bioMongoEntity = elaboraService.creaModificaBeanMongo(bioServerEntity);
             bioMongoEntity = (BioMongoEntity) insertSave(bioMongoEntity);
         }
 

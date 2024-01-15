@@ -68,14 +68,14 @@ public class ElaboraService {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
         for (BioServerEntity bioServerBean : lista) {
-            creaBeanMongo(bioServerBean);
+            creaModificaBeanMongo(bioServerBean);
         }
     }
 
     /**
      * Elabora la singola entity <br>
      */
-    public BioMongoEntity creaBeanMongo(BioServerEntity bioServerBean) {
+    public BioMongoEntity creaModificaBeanMongo(BioServerEntity bioServerBean) {
         BioMongoEntity bioMongoEntity = null;
         Map<String, String> mappa;
 

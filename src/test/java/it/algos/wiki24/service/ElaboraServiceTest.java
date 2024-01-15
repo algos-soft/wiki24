@@ -256,7 +256,7 @@ public class ElaboraServiceTest extends WikiTest {
         previstoIntero = numParagrafi;
 
         bioServerEntity = bioServerModulo.findByWikiTitle(sorgente);
-        bioMongoEntity = service.creaBeanMongo(bioServerEntity);
+        bioMongoEntity = service.creaModificaBeanMongo(bioServerEntity);
         if (bioMongoEntity != null) {
             printBioMongo(bioMongoEntity);
         }

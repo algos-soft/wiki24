@@ -86,7 +86,7 @@ public class BioMongoForm extends WikiForm {
 
     public AbstractEntity resetEntity() {
         BioServerEntity bioServerEntity = ((BioMongoModulo) currentCrudModulo).getBioServer(currentEntityModel);
-        currentEntityModel = elaboraService.creaBeanMongo(bioServerEntity);
+        currentEntityModel = elaboraService.creaModificaBeanMongo(bioServerEntity);
         super.binderFields();
 
         return currentEntityModel;
