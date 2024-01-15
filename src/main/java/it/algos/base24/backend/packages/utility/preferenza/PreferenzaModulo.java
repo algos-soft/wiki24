@@ -49,7 +49,7 @@ public class PreferenzaModulo extends CrudModulo {
      */
     @Override
     public List<String> getPropertyNames() {
-        return Arrays.asList("code", "type", "iniziale", "corrente", "descrizione");
+        return Arrays.asList("code", "type", "iniziale", "corrente", "descrizione", "critical", "dinamica", "base24");
     }
 
 
@@ -72,7 +72,7 @@ public class PreferenzaModulo extends CrudModulo {
     }
 
     public PreferenzaEntity newEntity() {
-        return newEntity(VUOTA, null, null, VUOTA);
+        return newEntity(VUOTA, null, null, VUOTA, false, false, true);
     }
 
     /**
@@ -85,8 +85,11 @@ public class PreferenzaModulo extends CrudModulo {
         TypePref type = pref.getType();
         Object defaultValue = pref.getDefaultValue();
         String descrizione = pref.getDescrizione();
+        boolean critical = pref.isCritical();
+        boolean dinamica = pref.isDinamica();
+        boolean base24 = pref.isBase();
 
-        return newEntity(keyCode, type, defaultValue, descrizione);
+        return newEntity(keyCode, type, defaultValue, descrizione, critical, dinamica, base24);
     }
 
     /**
@@ -99,19 +102,20 @@ public class PreferenzaModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public PreferenzaEntity newEntity(String code, TypePref type, Object iniziale, String descrizione) {
+    public PreferenzaEntity newEntity(String code, TypePref type, Object iniziale, String descrizione, boolean critical, boolean dinamica, boolean base24) {
         PreferenzaEntity newEntityBean = PreferenzaEntity.builder()
                 .code(textService.isValid(code) ? code : null)
                 .type(type)
                 .iniziale(type != null ? type.objectToBytes(iniziale) : null)
                 .corrente(type != null ? type.objectToBytes(iniziale) : null)
                 .descrizione(textService.isValid(descrizione) ? descrizione : null)
+                .critical(critical)
+                .dinamica(dinamica)
+                .base24(base24)
                 .build();
 
         return (PreferenzaEntity) fixKey(newEntityBean);
     }
-
-
 
 
     @Override

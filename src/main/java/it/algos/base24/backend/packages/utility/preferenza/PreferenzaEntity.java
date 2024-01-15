@@ -1,5 +1,6 @@
 package it.algos.base24.backend.packages.utility.preferenza;
 
+import com.vaadin.flow.component.icon.*;
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
@@ -24,12 +25,20 @@ public class PreferenzaEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 30)
     public String descrizione;
 
-    @AField(type = TypeField.preferenza,  widthRem = 12)
+    @AField(type = TypeField.preferenza, widthRem = 12)
     public byte[] iniziale;
 
-    @AField(type = TypeField.preferenza,  widthRem = 12)
+    @AField(type = TypeField.preferenza, widthRem = 12)
     public byte[] corrente;
 
+    @AField(type = TypeField.booleano,  headerIcon = VaadinIcon.FIRE)
+    public boolean critical;
+
+    @AField(type = TypeField.booleano,  headerIcon = VaadinIcon.ASTERISK)
+    public boolean dinamica;
+
+    @AField(type = TypeField.booleano,  headerIcon = VaadinIcon.HOME)
+    public boolean base24;
 
     @Override
     public String toString() {

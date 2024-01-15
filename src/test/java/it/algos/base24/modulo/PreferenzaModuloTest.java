@@ -61,9 +61,9 @@ public class PreferenzaModuloTest extends ModuloTest {
         PreferenzaEntity obj2;
         PreferenzaEntity obj3;
 
-        obj1 = modulo.newEntity( "alfa", TypePref.bool,null,"alfaalfa");
-        obj2 = modulo.newEntity( "alfa", TypePref.bool,null,"alfaalfa");
-        obj3 = modulo.newEntity( "beta", TypePref.bool,null,"betabeta");
+        obj1 = modulo.newEntity( "alfa", TypePref.bool,null,"alfaalfa",false,false,true);
+        obj2 = modulo.newEntity( "alfa", TypePref.bool,null,"alfaalfa",false,false,true);
+        obj3 = modulo.newEntity( "beta", TypePref.bool,null,"betabeta",false,false,true);
 
         super.fixEquals(obj1, obj2, obj3);
     }
