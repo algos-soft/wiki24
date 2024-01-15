@@ -17,6 +17,7 @@ import org.springframework.stereotype.*;
 
 import javax.inject.*;
 import java.lang.reflect.*;
+import java.time.*;
 import java.util.Objects;
 import java.util.*;
 
@@ -54,6 +55,9 @@ public class BaseBoot {
 
     @Inject
     public AnnotationService annotationService;
+
+    @Inject
+    public DateService dateService;
 
     private String property;
 
@@ -106,7 +110,7 @@ public class BaseBoot {
         //        this.fixData();
         //        this.fixVersioni();
         //        this.fixSchedule();
-                this.fixLogin();
+        this.fixLogin();
 
         //        logger.setUpEnd();
     }
@@ -300,7 +304,6 @@ public class BaseBoot {
         List<Field> listaVar;
         Object value;
         Object currentValue;
-        Object defaultValue;
         String message;
 
         if (Pref.debug.is()) {
@@ -330,16 +333,20 @@ public class BaseBoot {
 
         if (Pref.debug.is()) {
             logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
-            message = "Valori correnti (default) delle preferenze";
+            message = "Valori correnti (default) delle preferenze più rilevanti";
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             message = Strings.repeat(TRATTINO, message.length());
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
 
             for (IPref pref : prefList) {
-                currentValue = pref.getCurrentValue();
-                defaultValue = pref.getDefaultValue();
-                message = String.format("%s%s%s (%s)", pref.getKeyCode(), FORWARD, currentValue, defaultValue);
-                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                if (pref.isCritical()) {
+                    currentValue = pref.getType() == TypePref.localdatetime ? dateService.get((LocalDateTime) pref.getCurrentValue()) : pref.getCurrentValue();
+                    message = String.format("%s%s%s", pref.getKeyCode(), FORWARD, currentValue);
+                    if (!pref.isDinamica()) {
+                        message += String.format("%s(%s)", SPAZIO, pref.getDefaultValue());
+                    }
+                    logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                }
             }
             message = Strings.repeat(TRATTINO, message.length());
             logger.info(new WrapLog().message(message).type(TypeLog.startup));

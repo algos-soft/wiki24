@@ -311,7 +311,6 @@ public class ListButtonBar extends HorizontalLayout {
     }
 
 
-
     public void addSearchField() {
         //        searchFieldName = annotationService.getKeyPropertyName(currentCrudModelClazz);
         searchField.setPlaceholder(TAG_ALTRE_BY + searchFieldName);

@@ -1,6 +1,5 @@
 package it.algos.base24.backend.schedule;
 
-import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
 
 /**
@@ -13,17 +12,18 @@ import org.springframework.stereotype.*;
 @Service
 public class ScheduleTaskUsingCronExpression {
 
-    //    @Scheduled(cron = "0 * * * * ?")
+//    @Scheduled(cron = "0 * * * * ?")
     public void scheduleOgniMinuto() {
     }
 
 
-    //    @Scheduled(cron = "0 0 * * * ?")
+
+//    @Scheduled(cron = "0 0 * * * ?")
     public void scheduleOgniOra() {
     }
 
 
-    //    @Scheduled(cron = "0 0 0 * * ?")
+//    @Scheduled(cron = "0 0 0 * * ?")
     public void scheduleOgniGiorno() {
     }
 

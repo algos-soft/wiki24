@@ -16,14 +16,14 @@ import java.util.stream.*;
  * Time: 10:53
  */
 public enum Pref implements IPref {
-    debug("debug", TypePref.bool, true, "Flag generale di debug"),
+    debug("debug", TypePref.bool, true, "Flag generale di debug", true, false),
     usaBackgroundColor("usaBackgroundColor", TypePref.bool, true, "Uso dello sfondo [background] colorato."),
     nonBreaking("nonBreaking", TypePref.string, SPAZIO_NON_BREAKING, "Spazio non-breaking."),
     rilascio("rilascio", TypePref.localdatetime, ROOT_DATA_TIME, "Rilascio della versione."),
     usaNotification("usaNotification", TypePref.bool, true, "Usa i messaggi di avviso [Notification] in basso a sinistra."),
     durataNotification("durataNotification", TypePref.integer, 2, "Durata (secondi) del messaggio di avviso [Notification]."),
-    usaMenuAutomatici("usaMenuAutomatici", TypePref.bool, true, "Creazione automatica dei menu per tutte le istanze di [xxxView]."),
-    usaConfermaCancellazione("usaConfermaCancellazione", TypePref.bool, true, "Dialogo di conferma per il bottone [Delete]."),
+    usaMenuAutomatici("usaMenuAutomatici", TypePref.bool, true, "Creazione automatica dei menu per tutte le istanze di [xxxView].", true, false),
+    usaConfermaCancellazione("usaConfermaCancellazione", TypePref.bool, true, "Dialogo di conferma per il bottone [Delete].", true, false),
     ;
 
     public PreferenzaModulo preferenzaModulo;
@@ -44,20 +44,41 @@ public enum Pref implements IPref {
     //--Tipo TypePref per TypePref.enumerationType
     private TypePref typeEnum;
 
-    //--preferenza che necessita di un riavvio del programma per avere effetto
-    private boolean needRiavvio;
-
     private Class<?> enumClazz;
+
+    //--preferenza rilevante mostrata in avvio programma
+    private boolean critical;
 
     //--descrizione aggiuntiva eventuale
     private String note;
 
+    //--preferenza che mantiene valori dinamici sempre variabili
+    private boolean dinamica;
+
+    //--preferenza che necessita di un riavvio del programma per avere effetto
+    private boolean needRiavvio; // @todo da implementare
+
+    //--preferenze del programma base
+    private boolean base24; // @todo da implementare
+
+    //--preferenze singole per ogni company; usa un prefisso col codice della company
+    private boolean usaCompany; // @todo da implementare
+
+    //--preferenze visibile agli admin se l'applicazione è usaSecurity=true
+    private boolean visibileAdmin; // @todo da implementare
 
     Pref(final String keyCode, final TypePref type, final Object defaultValue, final String descrizione) {
+        this(keyCode, type, defaultValue, descrizione, false, false);
+    }// fine del costruttore
+
+    Pref(final String keyCode, final TypePref type, final Object defaultValue, final String descrizione, final boolean critical, final boolean dinamica) {
         this.keyCode = keyCode;
         this.type = type;
         this.defaultValue = defaultValue;
         this.descrizione = descrizione;
+        this.critical = critical;
+        this.dinamica = dinamica;
+        this.base24 = true;
     }// fine del costruttore
 
 
@@ -146,6 +167,21 @@ public enum Pref implements IPref {
     @Override
     public void setPreferenzaModulo(PreferenzaModulo preferenzaModulo) {
         this.preferenzaModulo = preferenzaModulo;
+    }
+
+    @Override
+    public boolean isBase() {
+        return base24;
+    }
+
+    @Override
+    public boolean isCritical() {
+        return critical;
+    }
+
+    @Override
+    public boolean isDinamica() {
+        return dinamica;
     }
 
 }

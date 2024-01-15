@@ -36,5 +36,11 @@ public interface IPref extends Type {
 
     void setPreferenzaModulo(PreferenzaModulo preferenzaModulo);
 
+    boolean isBase();
+
+    boolean isCritical();
+
+    boolean isDinamica();
+
 }// end of interface
 
