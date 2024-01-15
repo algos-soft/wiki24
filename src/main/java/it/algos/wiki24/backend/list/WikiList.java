@@ -59,7 +59,7 @@ public abstract class WikiList extends CrudList {
 
     public WPref durataElabora;
 
-    public String scheduledElabora;
+    public TypeSchedule scheduledElabora;
 
     public TypeDurata unitaMisuraElabora;
 
@@ -68,7 +68,7 @@ public abstract class WikiList extends CrudList {
 
     public WPref durataUpload;
 
-    public String scheduledUpload;
+    public TypeSchedule scheduledUpload;
 
     public TypeDurata unitaMisuraUpload;
 
@@ -150,16 +150,19 @@ public abstract class WikiList extends CrudList {
 
     protected void fixPreferenzeDaModulo() {
         if (currentCrudModulo != null) {
+            scheduledDownload = currentCrudModulo.scheduledDownload;
             lastDownload = currentCrudModulo.lastDownload;
             durataDownload = currentCrudModulo.durataDownload;
             scheduledDownload = currentCrudModulo.scheduledDownload;
             unitaMisuraDownload = currentCrudModulo.unitaMisuraDownload;
 
+            scheduledElabora = currentCrudModulo.scheduledElabora;
             lastElabora = currentCrudModulo.lastElabora;
             durataElabora = currentCrudModulo.durataElabora;
             scheduledElabora = currentCrudModulo.scheduledElabora;
             unitaMisuraElabora = currentCrudModulo.unitaMisuraElabora;
 
+            scheduledUpload = currentCrudModulo.scheduledUpload;
             lastUpload = currentCrudModulo.lastUpload;
             durataUpload = currentCrudModulo.durataUpload;
             scheduledUpload = currentCrudModulo.scheduledUpload;
@@ -184,14 +187,17 @@ public abstract class WikiList extends CrudList {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     public void fixInfo() {
-        String downloadTxt = VUOTA;
-        String downloadLast = VUOTA;
-        String elaboraTxt = VUOTA;
-        String elaboraLast = VUOTA;
-        String uploadTxt = VUOTA;
-        String uploadLast = VUOTA;
-
         infoPlaceHolder.removeAll();
+
+        this.fixInfoDownload();
+        this.fixInfoElabora();
+        this.fixInfoUpload();
+    }
+
+
+    public void fixInfoDownload() {
+        String downloadTxt;
+        String downloadLast = VUOTA;
 
         if (usaInfoDownload) {
             if (scheduledDownload != null) {
@@ -216,10 +222,16 @@ public abstract class WikiList extends CrudList {
             message = String.format("%s%s%s", downloadTxt, SPAZIO, downloadLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
         }
+    }
+
+
+    public void fixInfoElabora() {
+        String elaboraTxt;
+        String elaboraLast = VUOTA;
 
         if (usaInfoElabora) {
-            if (textService.isValid(scheduledElabora)) {
-                elaboraTxt = "Scheduled elaborazione " + scheduledElabora;
+            if (scheduledElabora != null) {
+                elaboraTxt = "Scheduled elaborazione " + scheduledElabora.getDescrizione();
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
@@ -240,10 +252,15 @@ public abstract class WikiList extends CrudList {
             message = String.format("%s%s%s", elaboraTxt, SPAZIO, elaboraLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
         }
+    }
+
+    public void fixInfoUpload() {
+        String uploadTxt;
+        String uploadLast = VUOTA;
 
         if (usaInfoUpload) {
-            if (textService.isValid(scheduledUpload)) {
-                uploadTxt = "Scheduled upload " + scheduledUpload;
+            if (scheduledUpload != null) {
+                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
             }
             else {
                 uploadTxt = "Scheduled upload non previsto.";
@@ -263,33 +280,6 @@ public abstract class WikiList extends CrudList {
             }
             message = String.format("%s%s%s", uploadTxt, SPAZIO, uploadLast);
             infoPlaceHolder.add(ASpan.text(message).verde().small());
-
-            //
-            //            if (lastStatistica != null && lastStatistica.get() instanceof LocalDateTime statistica) {
-            //                if (statistica.equals(ROOT_DATA_TIME)) {
-            //                    message = "Statistiche non ancora registrate sul server";
-            //                }
-            //                else {
-            //                    message = String.format("Ultime statistiche registrate il %s", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(statistica));
-            //                }
-            //                addSpan(ASpan.text(message).verde().small());
-            //            }
-            //
-            //            if (lastUpload != null && lastUpload.get() instanceof LocalDateTime upload) {
-            //                if (upload.equals(ROOT_DATA_TIME)) {
-            //                    message = "Upload non ancora effettuato";
-            //                }
-            //                else {
-            //                    message = String.format("Ultimo upload effettuato il %s", dateService.get(upload));
-            //                    if (durataUpload != null && durataUpload.get() instanceof Integer durata) {
-            //                        message += String.format(" in circa %d %s.", durata, unitaMisuraUpload);
-            //                    }
-            //                    if (nextUpload != null && nextUpload.get() instanceof LocalDateTime next) {
-            //                        message += String.format(" Prossimo upload previsto %s.", DateTimeFormatter.ofPattern("EEE, d MMM yyy 'alle' HH:mm").format(next));
-            //                    }
-            //                }
-            //                addSpan(ASpan.text(message).verde().small());
-            //            }
         }
     }
 
@@ -431,7 +421,6 @@ public abstract class WikiList extends CrudList {
         refreshData();
         return true;
     }
-
 
 
     @Override

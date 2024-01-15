@@ -59,9 +59,12 @@ public class GiorniModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.scheduledElabora = TypeSchedule.dieciGiovedi;
         super.lastElabora = WPref.lastElaboraGiorni;
         super.durataElabora = WPref.elaboraGiorniTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
+
+        super.scheduledUpload = TypeSchedule.dieciVenerdi;
         super.lastUpload = WPref.lastUploadGiorni;
         super.durataUpload = WPref.uploadGiorniTime;
         super.unitaMisuraUpload = TypeDurata.secondi;
@@ -195,22 +198,22 @@ public class GiorniModulo extends WikiModulo {
 
     @Override
     public void testPaginaNati(AbstractEntity giornoBean) {
-         appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+        appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
     }
 
     @Override
     public void testPaginaMorti(AbstractEntity giornoBean) {
-         appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+        appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
     }
 
     @Override
     public void uploadPaginaNati(AbstractEntity giornoBean) {
-         appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+        appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
     }
 
     @Override
     public void uploadPaginaMorti(AbstractEntity giornoBean) {
-         appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+        appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
     }
 
 }// end of CrudModulo class

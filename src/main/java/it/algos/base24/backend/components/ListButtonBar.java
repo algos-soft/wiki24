@@ -310,20 +310,6 @@ public class ListButtonBar extends HorizontalLayout {
         this.add(buttonDeleteEntity);
     }
 
-    //    private void addExport() {
-    //        buttonExport.getElement().setAttribute("theme", "primary");
-    //        buttonExport.getElement().setProperty("title", "Export: esporta l'intera lista");
-    //        buttonExport.setIcon(new Icon(VaadinIcon.LEVEL_RIGHT_BOLD));
-    //        buttonExport.setEnabled(true);
-    //        buttonExport.addClickListener(event -> currentCrudList.export());
-    //
-    //
-    //        Anchor downloadAnchor = new DownloadAnchor(new StreamResource("Vie_.xlsx", () -> currentCrudList.creaExcelExporter().getInputStream()), "Esporta");
-    //        downloadAnchor.getStyle().set("margin-left", "0.4rem");
-    //
-    //
-    ////        this.add(downloadAnchor);
-    //    }
 
 
     public void addSearchField() {

@@ -38,7 +38,7 @@ public abstract class WikiModulo extends CrudModulo {
 
     public WPref durataElabora;
 
-    public String scheduledElabora;
+    public TypeSchedule scheduledElabora;
 
     public TypeDurata unitaMisuraElabora;
 
@@ -47,7 +47,7 @@ public abstract class WikiModulo extends CrudModulo {
 
     public WPref durataUpload;
 
-    public String scheduledUpload;
+    public TypeSchedule scheduledUpload;
 
     public TypeDurata unitaMisuraUpload;
 
@@ -76,6 +76,19 @@ public abstract class WikiModulo extends CrudModulo {
         if (BaseVar.nameModuloListProject != null) {
             BaseVar.nameModuloListProject.add(simpleName);
         }
+    }
+
+    /**
+     * Preferenze usate da questa classe <br>
+     * Primo metodo chiamato dopo init() (implicito del costruttore) e postConstruct() (facoltativo) <br>
+     * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixPreferenze() {
+        super.fixPreferenze();
+
+        this.scheduledDownload = null;
+        this.scheduledElabora = null;
+        this.scheduledUpload = null;
     }
 
     public void download() {
@@ -123,6 +136,7 @@ public abstract class WikiModulo extends CrudModulo {
 
     public void elabora() {
     }
+
     public void elaboraDue() {
     }
 
@@ -141,8 +155,10 @@ public abstract class WikiModulo extends CrudModulo {
 
     public void wikiCrono() {
     }
+
     public void uploadAll() {
     }
+
     public void testPaginaNati(AbstractEntity crudEntityBean) {
     }
 
