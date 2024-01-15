@@ -330,7 +330,7 @@ public class BaseBoot {
         }
 
         if (Pref.debug.is()) {
-            message = "Valori correnti (default) delle preferenze più rilevanti";
+            message = "Valori correnti [default)] delle preferenze più rilevanti";
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
@@ -340,7 +340,7 @@ public class BaseBoot {
                     currentValue = pref.getType() == TypePref.localdatetime ? dateService.get((LocalDateTime) pref.getCurrentValue()) : pref.getCurrentValue();
                     message = String.format("%s%s%s", pref.getKeyCode(), FORWARD, currentValue);
                     if (!pref.isDinamica()) {
-                        message += String.format("%s(%s)", SPAZIO, pref.getDefaultValue());
+                        message += String.format("%s[%s]", SPAZIO, pref.getDefaultValue());
                     }
                     logger.info(new WrapLog().message(message).type(TypeLog.startup));
                 }
