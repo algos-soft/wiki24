@@ -241,15 +241,21 @@ public class DateService {
      */
     public String get(LocalDateTime localDateTime, TypeDate pattern) {
         return get(localDateTime, pattern.getPattern());
-
-        //        if (pattern.isSenzaTime()) {
-        //            return VUOTA;
-        //        }
-        //        else {
-        //            return get(localDateTime, pattern.getPattern());
-        //        }
     }
 
+    /**
+     * Restituisce la data nella forma del pattern ricevuto. <br>
+     * <p>
+     * Returns a string representation of the date <br>
+     *
+     * @param localDate da rappresentare
+     * @param pattern   per la formattazione
+     *
+     * @return la data sotto forma di stringa
+     */
+    public String get(LocalDate localDate, TypeDate pattern) {
+        return localDate.format(DateTimeFormatter.ofPattern(pattern.getPattern(), LOCALE));
+    }
     /**
      * Restituisce la data nella forma del pattern ricevuto. <br>
      * <p>

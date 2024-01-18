@@ -103,4 +103,6 @@ public @interface AField {
      */
     String anchorPrefix() default VUOTA;
 
+    boolean focus() default false;
+
 }

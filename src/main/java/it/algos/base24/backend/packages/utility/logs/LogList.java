@@ -1,40 +1,32 @@
-package it.algos.base24.backend.packages.utility.nota;
+package it.algos.base24.backend.packages.utility.logs;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
-import it.algos.base24.ui.wrapper.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NotaList extends CrudList {
+public class LogList extends CrudList {
+
     private ComboBox comboTypeLog;
     private ComboBox comboTypeLevel;
 
-
-    public NotaList(final NotaModulo crudModulo) {
+    public LogList(final LogModulo crudModulo) {
         super(crudModulo);
     }
 
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaBottoneDownload = false;
+        super.usaBottoneNew = false;
+        super.usaBottoneEdit = false;
+        super.usaBottoneShows = true;
     }
-
-    @Override
-    public void fixAlert() {
-        super.infoScopo = "Appunti liberi";
-        super.fixAlert();
-        message="Data iniziale proposta quella attuale ma modificabile. Data finale inserita automaticamente col flag fatto=true.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
-        message="Filtri selezione per typeLog e typeLevel. Ordinamento decrescente per data iniziale. Descrizione libera.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
-
-    }
-
     @Override
     protected void fixTop() {
         super.fixTop();

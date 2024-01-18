@@ -347,6 +347,9 @@ public abstract class CrudForm extends Dialog {
         Button registra = new Button(BUTTON_REGISTRA);
         registra.setIcon(new Icon(VaadinIcon.CHECK));
         registra.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        if (Pref.usaShortcut.is()) {
+            registra.addClickShortcut(Key.ENTER);
+        }
         registra.addClickListener(e -> saveHandler());
 
         switch (crudOperation) {

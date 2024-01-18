@@ -41,11 +41,6 @@ public class BioServerEntity extends AbstractEntity {
     @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
     public LocalDateTime lastMongo;
 
-    //    /**
-    //     * valido se lastMongo >= timestamp
-    //     */
-    //    @AField(type = TypeField.booleano)
-    //    public boolean valido;
 
     @Override
     public String toString() {

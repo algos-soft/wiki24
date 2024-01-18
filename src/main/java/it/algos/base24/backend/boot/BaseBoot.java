@@ -330,7 +330,7 @@ public class BaseBoot {
         }
 
         if (Pref.debug.is()) {
-            message = "Valori correnti [default)] delle preferenze più rilevanti";
+            message = "Valori correnti [default] delle preferenze più rilevanti";
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));

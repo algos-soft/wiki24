@@ -85,6 +85,7 @@ public class BaseCost {
     public static final String TRE_PUNTI = "...";
 
     public static final String SPAZIO = " ";
+
     public static final String UGUALE_SEMPLICE = "=";
 
     public static final String UGUALE_SPAZIATO = SPAZIO + UGUALE_SEMPLICE + SPAZIO;
@@ -381,6 +382,7 @@ public class BaseCost {
     public static final int DOPO_CRISTO_MAX = 2030;
 
     public static final int MAX_ORDINE_GIORNI = 400; //per essere sicuro che sia MAGGIORE di 365/366
+
     public static final int MAX_ORDINE_ANNI = 4000; //per essere sicuro che sia MAGGIORE dei 3030 utilizzati
 
     public static final String QUALIFIER_LIST_BUTTON_BAR = "listButtonBar";
@@ -423,6 +425,10 @@ public class BaseCost {
     public static final String PRIMO_MENO_SETTANTA = "º"; //wiki
 
     public static final String PRIMO_MENO_OTTANTA = "°"; //mac
+
+    public static final int APPENDER_MAX = 1000;
+
+    public static final int APPENDER_OFFSET = 100;
 
 
 }

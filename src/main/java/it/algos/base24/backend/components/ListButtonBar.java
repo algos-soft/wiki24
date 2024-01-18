@@ -1,18 +1,20 @@
 package it.algos.base24.backend.components;
 
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.service.*;
 import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
-import org.springframework.stereotype.*;
+import org.springframework.stereotype.Component;
 
 /**
  * Project base2023
@@ -276,6 +278,9 @@ public class ListButtonBar extends HorizontalLayout {
         buttonNew.getElement().setProperty("title", "New: aggiunge un elemento alla collezione");
         buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
         buttonNew.setEnabled(true);
+        if (Pref.usaShortcut.is()) {
+            buttonNew.addClickShortcut(Key.KEY_N, KeyModifier.SHIFT);
+        }
         buttonNew.addClickListener(event -> currentCrudList.newItem());
         this.add(buttonNew);
     }

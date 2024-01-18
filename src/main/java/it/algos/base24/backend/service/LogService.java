@@ -3,14 +3,19 @@ package it.algos.base24.backend.service;
 import com.vaadin.flow.component.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.utility.logs.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
 import jakarta.annotation.*;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.core.env.*;
+import org.springframework.data.mongodb.core.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -39,8 +44,19 @@ public class LogService {
     @Inject
     UtilityService utilityService;
 
+
     // Riferimento al logger usato <br>
     public Logger slf4jLogger;
+
+    public MongoOperations mongoOp;
+
+    private String dataBaseName;
+
+    @Autowired
+    public LogService(MongoTemplate mongoOp, @Value("${spring.data.mongodb.database}") String dataBaseName) {
+        this.mongoOp = mongoOp;
+        this.dataBaseName = dataBaseName;
+    }
 
     /**
      * Riferimento al logger usato <br>
@@ -133,6 +149,15 @@ public class LogService {
             message = String.format("%s%s", DUE_PUNTI_SPAZIO, message);
         }
 
+        //--5) Inserimento opzionale nella collection di mongoDB
+        if (wrap.isUsaDB()) {
+            this.crea(wrap);
+        }
+
+        //--6) Invio opzionale di una mail
+        //        if (flagUsaMail) {
+        //        }
+
         // logback-spring.xml
         switch (livello) {
             case info -> slf4jLogger.info(message);
@@ -157,6 +182,44 @@ public class LogService {
             } ;
         }
 
+    }
+
+    public void crea(final WrapLog wrap) {
+        LogEntity newEntityBean;
+        TypeLog typeLog = wrap.getType();
+        LogLevel typeLevel = wrap.getLivello();
+        String descrizione = wrap.getMessage();
+
+        newEntityBean = newEntity(typeLog, typeLevel, descrizione);
+        if (newEntityBean != null) {
+            mongoOp.insert(newEntityBean, "logger");
+            afterInsert();
+        }
+
+    }
+
+    public LogEntity newEntity(TypeLog typeLog, LogLevel typeLevel, String descrizione) {
+        return LogEntity.builder()
+                .typeLog(typeLog == null ? TypeLog.system : typeLog)
+                .typeLevel(typeLevel == null ? LogLevel.info : typeLevel)
+                .evento(LocalDateTime.now())
+                .descrizione(textService.isValid(descrizione) ? descrizione : null)
+                .build();
+    }
+
+    public void afterInsert() {
+        int appenderMax = APPENDER_MAX;
+        int appenderOffset = APPENDER_OFFSET;
+        int numEntities = ((Long) this.mongoOp.count(new Query(), LogEntity.class, "logger")).intValue();
+        List<LogEntity> listOrdinata = this.mongoOp.findAll(LogEntity.class,"logger");
+        appenderMax = 70;
+        appenderOffset = 5;
+
+        if (numEntities > appenderMax) {
+            for (LogEntity bean : listOrdinata.subList(0, appenderOffset)) {
+                this.mongoOp.remove(bean,"logger");
+            }
+        }
     }
 
 }// end of Service class

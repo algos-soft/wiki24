@@ -248,6 +248,33 @@ public class AnnotationService {
 
 
     /**
+     * Get the value of sortDiscendente flag.
+     *
+     * @param entityClazz di riferimento
+     *
+     * @return value of sortDiscendente flag
+     */
+    @Deprecated
+    public boolean isSortDiscendente(final Class entityClazz) {
+        boolean sortDiscendente = false;
+        AEntity annotation;
+        TypeList typeList;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, "isSortDiscendente")) {
+            return sortDiscendente;
+        }
+
+        annotation = this.getEntityAnnotation(entityClazz);
+        if (annotation != null) {
+            sortDiscendente = annotation.sortDiscendente();
+        }
+
+        return sortDiscendente;
+    }
+
+
+    /**
      * Get the typeReset for buttons in list <br>.
      *
      * @param entityClazz di riferimento
@@ -850,6 +877,36 @@ public class AnnotationService {
 
         return enumClazz != Object.class ? enumClazz : null;
     }
+
+
+    /**
+     * Get the property.
+     *
+     * @param entityClazz  the class of type AbstractEntity
+     * @param propertyName the property name
+     *
+     * @return the property
+     */
+    public boolean hasFocus(final Class entityClazz, final String propertyName) {
+        boolean hasFocus = false;
+        AField annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, propertyName, "isFocus")) {
+            return false;
+        }
+
+        annotation = this.getFieldAnnotation(entityClazz, propertyName);
+        if (annotation != null) {
+            hasFocus = annotation.focus();
+        }
+
+        return hasFocus;
+    }
+
+    //==========================================================================
+    // Check
+    //==========================================================================
 
     /**
      * Check generico dei parametri.

@@ -6,9 +6,14 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.sidenav.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.*;
+import static it.algos.base24.backend.boot.BaseVar.*;
+import it.algos.base24.backend.service.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
+import jakarta.annotation.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+
+import javax.inject.*;
 
 /**
  * Project wiki24
@@ -19,17 +24,28 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  */
 public class AlternativeMainLayout extends AppLayout {
 
+    @Inject
+    private AnnotationService annotationService;
 
-    public AlternativeMainLayout() {
+    private H2 viewTitle;
+
+    @PostConstruct
+    private void postConstruct() {
         DrawerToggle toggle = new DrawerToggle();
+        SideNavItem itemSection;
+        String menuName;
 
         H1 title = new H1("MyApp");
-        title.getStyle().set("font-size", "var(--lumo-font-size-l)")
-                .set("margin", "0");
 
         SideNav nav = new SideNav();
-        SideNavItem itemSection=new SideNavItem("Pippoz", GiorniView.class);
-        nav.addItem(itemSection);
+        for (Class clazz : menuRouteListVaadin) {
+            menuName = annotationService.getMenuName(clazz);
+            itemSection = new SideNavItem(menuName, clazz);
+            nav.addItem(itemSection);
+        }
+
+        //        SideNavItem itemSection=new SideNavItem("Pippoz", GiorniView.class);
+        //        nav.addItem(itemSection);
 
         Scroller scroller = new Scroller(nav);
         scroller.setClassName(LumoUtility.Padding.SMALL);
@@ -37,4 +53,5 @@ public class AlternativeMainLayout extends AppLayout {
         addToDrawer(scroller);
         addToNavbar(toggle, title);
     }
+
 }

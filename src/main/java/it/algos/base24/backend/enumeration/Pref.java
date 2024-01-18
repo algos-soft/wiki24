@@ -24,7 +24,10 @@ public enum Pref implements IPref {
     durataNotification("durataNotification", TypePref.integer, 2, "Durata (secondi) del messaggio di avviso [Notification]."),
     usaMenuAutomatici("usaMenuAutomatici", TypePref.bool, true, "Creazione automatica dei menu per tutte le istanze di [xxxView].", true, false),
     usaConfermaCancellazione("usaConfermaCancellazione", TypePref.bool, true, "Dialogo di conferma per il bottone [Delete].", true, false),
-    ;
+    usaShortcut("usaShortcut", TypePref.bool, true, "Tasti shortcut. KeyModifier.SHIFT", true, false),
+
+
+      ;
 
     public PreferenzaModulo preferenzaModulo;
 

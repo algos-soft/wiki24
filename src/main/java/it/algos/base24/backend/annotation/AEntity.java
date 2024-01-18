@@ -40,14 +40,20 @@ public @interface AEntity {
      */
     String sortPropertyName() default VUOTA;
 
-//    /**
-//     * (Optional) usa il metodo resetStartup() alla creazione della classe xxxModulo <br>
-//     * Di default false <br>
-//     *
-//     * @return the status
-//     */
-//    @Deprecated
-//    boolean usaStartupReset() default false;
+    /**
+     * (Optional) sort order property <br>
+     * Di default false = ascendente <br>
+     */
+    boolean sortDiscendente() default false;
+
+    //    /**
+    //     * (Optional) usa il metodo resetStartup() alla creazione della classe xxxModulo <br>
+    //     * Di default false <br>
+    //     *
+    //     * @return the status
+    //     */
+    //    @Deprecated
+    //    boolean usaStartupReset() default false;
 
 
     /**

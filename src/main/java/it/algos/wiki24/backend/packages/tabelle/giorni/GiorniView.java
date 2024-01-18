@@ -25,7 +25,7 @@ import com.vaadin.flow.component.textfield.TextField;
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
 @PageTitle("Giorni")
-@Route(value = "giorni", layout = MainLayout.class)
+@Route(value = "giorni", layout = AlternativeMainLayout.class)
 @AView(menuGroupName = "tabelle")
 public class GiorniView extends CrudView {
 

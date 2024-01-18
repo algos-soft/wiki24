@@ -23,7 +23,7 @@ public class AnnoEntity extends AbstractEntity {
     public String nome;
 
     //    @DBRef
-    @AField(type = TypeField.linkDBRef, widthRem = 10)
+    @AField(type = TypeField.linkDBRef, widthRem = 10, linkClazz = SecoloEntity.class)
     public SecoloEntity secolo;
 
     @AField(type = TypeField.booleano, headerText = "d.C.")

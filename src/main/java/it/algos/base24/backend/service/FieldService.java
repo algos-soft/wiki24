@@ -87,10 +87,10 @@ public class FieldService {
         String caption = annotationService.getCaption(modelClazz, propertyName);
         Class linkClazz = annotationService.getLinkClazz(modelClazz, propertyName);
         Class enumClazz = annotationService.getEnumClazz(modelClazz, propertyName);
+        boolean hasFocus = annotationService.hasFocus(modelClazz, propertyName);
         ComboBox combo;
         List items = null;
         List enumObjects;
-
         if (reflectionJavaField == null) {
             return null;
         }
@@ -149,6 +149,16 @@ public class FieldService {
 
         if (field != null) {
             field.getElement().setAttribute(KEY_TAG_PROPERTY_KEY, key);
+            if (field instanceof TextField textField) {
+                if (hasFocus) {
+                    textField.focus();
+                }
+            }
+            if (field instanceof IntegerField intField) {
+                if (hasFocus) {
+                    intField.focus();
+                }
+            }
         }
 
         return field;

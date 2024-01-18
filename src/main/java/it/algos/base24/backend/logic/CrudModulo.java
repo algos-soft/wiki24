@@ -6,6 +6,7 @@ import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
+import it.algos.base24.backend.packages.utility.logs.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
@@ -77,6 +78,7 @@ public abstract class CrudModulo {
     protected String currentCollectionName;
 
     public List<String> propertyListNames;
+
     public List<String> propertyFormNames;
 
     //    protected CrudOperation operation;
@@ -301,6 +303,7 @@ public abstract class CrudModulo {
 
         return findQuery(query);
     }
+
     private List<AbstractEntity> findQuery(Query query) {
         String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
 
@@ -319,12 +322,15 @@ public abstract class CrudModulo {
         String message;
         AbstractEntity savedEntityBean;
         entityBean = fixKey(entityBean);
+
+        entityBean = beforeInsert(entityBean);
         savedEntityBean = mongoService.insert(entityBean);
+        savedEntityBean = afterInsert(savedEntityBean);
 
         if (entityBean != null) {
             if (Pref.usaNotification.is()) {
                 modifiche = jSonService.getProperties(entityBean);
-                message = String.format("Creata una nuova entity [%s.%s]", entityName, savedEntityBean.getId());
+                message = String.format("Creata una nuova entity [%s.%s]", entityName, savedEntityBean);
                 message = String.format("%s%s%s", message, FORWARD, modifiche);
                 logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
             }
@@ -360,12 +366,14 @@ public abstract class CrudModulo {
             return null;
         }
 
+        modifiedEntityBean = beforeSave(modifiedEntityBean);
         savedEntityBean = mongoService.save(modifiedEntityBean);
+        savedEntityBean = afterSave(savedEntityBean);
 
         if (savedEntityBean != null) {
             if (Pref.usaNotification.is()) {
                 modifiche = jSonService.getModifiche(oldEntityBean, savedEntityBean);
-                message = String.format("Modificata la entity [%s.%s]", entityName, savedEntityBean.getId());
+                message = String.format("Modificata la entity [%s.%s]", entityName, savedEntityBean);
                 message = String.format("%s%s%s", message, FORWARD, modifiche);
                 logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
             }
@@ -376,6 +384,21 @@ public abstract class CrudModulo {
         }
 
         return savedEntityBean;
+    }
+
+    public AbstractEntity beforeInsert(AbstractEntity entityBean) {
+        return entityBean;
+    }
+    public AbstractEntity afterInsert(AbstractEntity entityBean) {
+        return entityBean;
+    }
+
+
+    public AbstractEntity beforeSave(AbstractEntity entityBean) {
+        return entityBean;
+    }
+    public AbstractEntity afterSave(AbstractEntity entityBean) {
+        return entityBean;
     }
 
     public boolean delete(AbstractEntity entityBean) {
@@ -390,10 +413,16 @@ public abstract class CrudModulo {
         }
 
         if (cancellato) {
-            message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
-            modifiche = jSonService.getProperties(entityBean);
-            message = String.format("%s%s%s", message, FORWARD, modifiche);
-            logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            if (this instanceof LogModulo) {
+                message = "Cancellata una entity di log (senza registrazione su se stessa)";
+                System.out.println(message);
+            }
+            else {
+                message = String.format("Cancellata la entity [%s.%s]", entityName, entityBean);
+                modifiche = jSonService.getProperties(entityBean);
+                message = String.format("%s%s%s", message, FORWARD, modifiche);
+                logger.wrap(WrapLog.crea(message).success().type(TypeLog.mongo).usaDb());
+            }
         }
         else {
             message = String.format("Non sono riuscito a cancellare la entity [%s.%s]", entityName, entityBean);
@@ -564,16 +593,21 @@ public abstract class CrudModulo {
 
     public Sort.Order getBasicSortOrder() {
         Sort.Order sortOrder = null;
-        String sortPropertyName;
+        String sortPropertyName = annotationService.getSortPropertyName(currentCrudEntityClazz);
+        boolean sortDiscendente = annotationService.isSortDiscendente(currentCrudEntityClazz);
         String keyPropertyName;
 
-        if (reflectionService.isEsiste(currentCrudEntityClazz, FIELD_NAME_ORDINE)) {
-            sortOrder = Sort.Order.asc(FIELD_NAME_ORDINE);
+        if (textService.isValid(sortPropertyName)) {
+            if (sortDiscendente) {
+                sortOrder = Sort.Order.desc(sortPropertyName);
+            }
+            else {
+                sortOrder = Sort.Order.asc(sortPropertyName);
+            }
         }
         else {
-            sortPropertyName = annotationService.getSortPropertyName(currentCrudEntityClazz);
-            if (textService.isValid(sortPropertyName)) {
-                sortOrder = Sort.Order.asc(sortPropertyName);
+            if (reflectionService.isEsiste(currentCrudEntityClazz, FIELD_NAME_ORDINE)) {
+                sortOrder = Sort.Order.asc(FIELD_NAME_ORDINE);
             }
             else {
                 keyPropertyName = annotationService.getKeyPropertyName(currentCrudEntityClazz);

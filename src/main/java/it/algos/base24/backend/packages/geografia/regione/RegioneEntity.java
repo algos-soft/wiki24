@@ -26,13 +26,13 @@ public class RegioneEntity extends AbstractEntity {
     public String nome;
 
     //    @DBRef //@todo perché non funziona?
-    @AField(type = TypeField.linkDBRef, widthRem = 14)
+    @AField(type = TypeField.linkDBRef, widthRem = 14, linkClazz = StatoEntity.class)
     public StatoEntity stato;
 
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.text, widthRem = 20)
+    @AField(type = TypeField.enumType, enumClazz = TypeRegione.class, widthRem = 20)
     public TypeRegione type;
 
     @Override

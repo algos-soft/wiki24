@@ -2,11 +2,14 @@ package it.algos.base24.backend.service;
 
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.datatype.jsr310.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
-import org.springframework.beans.factory.annotation.*;
+import it.algos.base24.backend.exception.*;
+import it.algos.base24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -27,20 +30,22 @@ import java.util.*;
 @Service
 public class JSonService {
 
-    @Autowired
+    @Inject
     private TextService textService;
+
+    @Inject
+    LogService logger;
 
     public Map<String, Object> getMappa(AbstractEntity entityBean) {
         Map<String, Object> mappa = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JSR310Module());
 
         try {
-            mappa = mapper.convertValue(entityBean, new TypeReference<Map<String, Object>>() {});
+            mappa = objectMapper.convertValue(entityBean, new TypeReference<Map<String, Object>>() {});
         } catch (Exception unErrore) {
-//            logService.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
-            int a=87;
+            logger.error(new WrapLog().exception(new AlgosException(unErrore)).usaDb());
         }
-
 
         return mappa;
     }

@@ -31,14 +31,14 @@ public class StatoEntity extends AbstractEntity {
     @AField(type = TypeField.text, widthRem = 6)
     public String alfa2;
 
-    @AField(type = TypeField.text, headerText = "cod.",widthRem = 6)
+    @AField(type = TypeField.text, headerText = "cod.", widthRem = 6)
     public String numerico;
 
     @AField(type = TypeField.linkWiki)
     public String divisioni;
 
     //    @DBRef //@todo perché non funziona?
-    @AField(type = TypeField.linkDBRef, widthRem = 14)
+    @AField(type = TypeField.linkDBRef, widthRem = 14, linkClazz = ContinenteEntity.class)
     public ContinenteEntity continente;
 
 

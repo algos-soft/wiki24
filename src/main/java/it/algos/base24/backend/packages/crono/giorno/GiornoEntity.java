@@ -24,7 +24,7 @@ public class GiornoEntity extends AbstractEntity {
     public String nome;
 
     //    @DBRef
-    @AField(type = TypeField.linkDBRef)
+    @AField(type = TypeField.linkDBRef, linkClazz = MeseEntity.class)
     public MeseEntity mese;
 
     @AField(type = TypeField.integer, widthRem = 6, headerIcon = VaadinIcon.STEP_BACKWARD, caption = "Progressivo da inizio anno")

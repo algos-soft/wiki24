@@ -340,6 +340,9 @@ public class ColumnService {
                 if (value instanceof LocalDateTime dateTime) {
                     span.setText(dateService.get(dateTime, typeDate));
                 }
+                if (value instanceof LocalDate date) {
+                    span.setText(dateService.get(date, typeDate));
+                }
                 if (value instanceof LocalTime time) {
                     span.setText(dateService.get(time, typeDate));
                 }
