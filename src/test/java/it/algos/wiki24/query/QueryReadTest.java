@@ -68,21 +68,10 @@ public class QueryReadTest extends QueryTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new QueryRead();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
-
-    @Test
     @Order(2)
-    @DisplayName("2 - Request errata. Manca il wikiTitle")
-    void manca() {
-        System.out.println(("2 - Request errata. Manca il wikiTitle"));
+    @DisplayName("2 - Request (prevista) errata. Manca il wikiTitle")
+    void getBean() {
+        System.out.println(("2 - Request (prevista) errata. Manca il wikiTitle"));
         System.out.println(VUOTA);
 
         ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
@@ -94,9 +83,9 @@ public class QueryReadTest extends QueryTest {
 
     @Test
     @Order(3)
-    @DisplayName("3 - Request errata. Non esiste la pagina")
+    @DisplayName("3 - Request (prevista) errata. Non esiste la pagina")
     void inesistente() {
-        System.out.println(("3 - Request errata. Non esiste la pagina"));
+        System.out.println(("3 - Request (prevista) errata. Non esiste la pagina"));
         System.out.println(VUOTA);
 
         sorgente = "Pippoz Belloz";

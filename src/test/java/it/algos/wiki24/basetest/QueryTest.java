@@ -42,8 +42,6 @@ public abstract class QueryTest extends WikiTest {
 
     protected Object istanza;
 
-    protected Class clazz;
-
     protected WResult previstoRisultato;
 
     protected WResult ottenutoRisultato;
@@ -73,13 +71,13 @@ public abstract class QueryTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(0)
-    @DisplayName("0")
-    void partenza() {
-        System.out.println(VUOTA);
-        System.out.println(VUOTA);
-    }
+//    @Test
+//    @Order(0)
+//    @DisplayName("0")
+//    void partenza() {
+//        System.out.println(VUOTA);
+//        System.out.println(VUOTA);
+//    }
 
 
     @Test

@@ -188,6 +188,10 @@ public abstract class AQuery {
     protected String fixAssert(String urlDomain) {
         TypeUser type = null;
 
+        if (typeQuery == TypeQuery.getSenzaLoginSenzaCookies) {
+            return urlDomain;
+        }
+
         if (botLogin != null && botLogin.isValido()) {
             type = botLogin.getUserType();
         }
