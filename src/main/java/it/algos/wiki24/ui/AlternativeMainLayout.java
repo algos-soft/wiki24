@@ -7,6 +7,7 @@ import com.vaadin.flow.component.sidenav.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import com.vaadin.flow.theme.lumo.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.service.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import jakarta.annotation.*;
@@ -35,22 +36,23 @@ public class AlternativeMainLayout extends AppLayout {
         SideNavItem itemSection;
         String menuName;
 
-        H1 title = new H1("MyApp");
+        H1 title = new H1("Ultima");
 
-        SideNav nav = new SideNav();
-        for (Class clazz : menuRouteListVaadin) {
-            menuName = annotationService.getMenuName(clazz);
-            itemSection = new SideNavItem(menuName, clazz);
-            nav.addItem(itemSection);
-        }
+        SideNav nav = new SideNav("Forse");
+//        for (Class clazz : menuRouteListVaadin) {
+//            menuName = annotationService.getMenuName(clazz);
+//            itemSection = new SideNavItem(menuName, clazz);
+//            nav.addItem(itemSection);
+//        }
 
-        //        SideNavItem itemSection=new SideNavItem("Pippoz", GiorniView.class);
-        //        nav.addItem(itemSection);
+        itemSection = new SideNavItem("Pippoz", MeseView.class);
+        nav.addItem(itemSection);
 
-        Scroller scroller = new Scroller(nav);
-        scroller.setClassName(LumoUtility.Padding.SMALL);
+//        Scroller scroller = new Scroller(nav);
+//        scroller.setClassName(LumoUtility.Padding.SMALL);
 
-        addToDrawer(scroller);
+//        addToDrawer(scroller);
+        addToDrawer(nav);
         addToNavbar(toggle, title);
     }
 

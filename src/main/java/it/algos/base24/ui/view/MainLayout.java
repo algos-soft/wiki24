@@ -9,6 +9,18 @@ import com.vaadin.flow.theme.lumo.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.anagrafica.via.*;
+import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
+import it.algos.base24.backend.packages.crono.mese.*;
+import it.algos.base24.backend.packages.crono.secolo.*;
+import it.algos.base24.backend.packages.geografia.continente.*;
+import it.algos.base24.backend.packages.geografia.regione.*;
+import it.algos.base24.backend.packages.geografia.stato.*;
+import it.algos.base24.backend.packages.utility.logs.*;
+import it.algos.base24.backend.packages.utility.nota.*;
+import it.algos.base24.backend.packages.utility.preferenza.*;
+import it.algos.base24.backend.packages.utility.role.*;
 import it.algos.base24.backend.service.*;
 import jakarta.annotation.*;
 import org.vaadin.lineawesome.*;
@@ -32,6 +44,7 @@ public class MainLayout extends AppLayout {
 
     @Inject
     ArrayService arrayService;
+
     private H2 viewTitle;
 
     public MainLayout() {
@@ -102,38 +115,56 @@ public class MainLayout extends AppLayout {
         SideNavItem sideItem;
         SideNavItem itemSection;
 
-        if (lista != null && lista.size() > 0) {
-            for (Class clazz : lista) {
-                menuGroup = annotationService.getMenuGroupName(clazz);
-                menuName = annotationService.getMenuName(clazz);
-                icon = annotationService.getMenuIcon(clazz);
-                sideItem = new SideNavItem(menuName, clazz, icon.create());
-                if (!mappa.containsKey(menuGroup)) {
-                    mappa.put(menuGroup, new ArrayList<SideNavItem>());
-                }
-                mappa.get(menuGroup).add(sideItem);
-            }
+        lista = new ArrayList<>();
+        lista.add(ViaView.class);
+        lista.add(GiornoView.class);
+        lista.add(MeseView.class);
+        lista.add(AnnoView.class);
+        lista.add(SecoloView.class);
+        lista.add(ContinenteView.class);
+        lista.add(StatoView.class);
+        lista.add(RegioneView.class);
+        lista.add(NotaView.class);
+        lista.add(RoleView.class);
+        lista.add(LogView.class);
+        lista.add(PreferenzaView.class);
+        for (Class clazz : lista) {
+            menuName = annotationService.getMenuName(clazz);
+            nav.addItem(new SideNavItem(menuName,clazz));
         }
 
-        mappa = fixOrderMappa(mappa);
-        mappa = arrayService.orderMap(mappa);
-
-        if (mappa != null) {
-            for (String key : mappa.keySet()) {
-                if (textService.isValid(key)) {
-                    itemSection = new SideNavItem(key);
-                    for (SideNavItem item : mappa.get(key)) {
-                        itemSection.addItem(item);
-                    }
-                    nav.addItem(itemSection);
-                }
-                else {
-                    for (SideNavItem item : mappa.get(key)) {
-                        nav.addItem(item);
-                    }
-                }
-            }
-        }
+        //        if (lista != null && lista.size() > 0) {
+        //            for (Class clazz : lista) {
+        //                menuGroup = annotationService.getMenuGroupName(clazz);
+        //                menuName = annotationService.getMenuName(clazz);
+        //                icon = annotationService.getMenuIcon(clazz);
+        //                sideItem = new SideNavItem(menuName, clazz, icon.create());
+        //                if (!mappa.containsKey(menuGroup)) {
+        //                    mappa.put(menuGroup, new ArrayList<SideNavItem>());
+        //                }
+        //                mappa.get(menuGroup).add(sideItem);
+        //            }
+        //        }
+        //
+        //        mappa = fixOrderMappa(mappa);
+        //        mappa = arrayService.orderMap(mappa);
+        //
+        //        if (mappa != null) {
+        //            for (String key : mappa.keySet()) {
+        //                if (textService.isValid(key)) {
+        //                    itemSection = new SideNavItem(key);
+        //                    for (SideNavItem item : mappa.get(key)) {
+        //                        itemSection.addItem(item);
+        //                    }
+        //                    nav.addItem(itemSection);
+        //                }
+        //                else {
+        //                    for (SideNavItem item : mappa.get(key)) {
+        //                        nav.addItem(item);
+        //                    }
+        //                }
+        //            }
+        //        }
 
         return nav;
     }
