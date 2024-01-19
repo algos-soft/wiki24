@@ -2142,7 +2142,12 @@ public class WikiBotService extends WAbstractService {
 
         posIni = newText.indexOf(tagIni) + tagIni.length();
         posEnd = newText.lastIndexOf(tagEnd);
-        newTextSignificativo = newText.substring(posIni, posEnd);
+        try {
+            newTextSignificativo = newText.substring(posIni, posEnd);
+        } catch (Exception unErrore) {
+            logService.error(new WrapLog().exception(unErrore).usaDb());
+        }
+
 
         return newTextSignificativo;
     }
