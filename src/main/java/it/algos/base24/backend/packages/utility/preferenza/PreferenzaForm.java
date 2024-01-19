@@ -51,6 +51,9 @@ public class PreferenzaForm extends CrudForm {
 
         mappaFields.get("code").setEnabled(false);
         mappaFields.get("type").setEnabled(false);
+        mappaFields.get("critical").setEnabled(false);
+        mappaFields.get("dinamica").setEnabled(false);
+        mappaFields.get("base24").setEnabled(false);
         mappaFields.get("iniziale").setEnabled(false);
     }
 

@@ -64,9 +64,14 @@ public class PreferenzaModulo extends CrudModulo {
             return newBean;
         }
         else {
-            oldBean.iniziale = newBean.iniziale;
-            oldBean.descrizione = newBean.descrizione;
-            return (PreferenzaEntity) save(oldBean);
+            if (oldBean.isDinamica()) {
+                return oldBean;
+            }
+            else {
+                oldBean.iniziale = newBean.iniziale;
+                oldBean.descrizione = newBean.descrizione;
+                return (PreferenzaEntity) save(oldBean);
+            }
         }
 
     }

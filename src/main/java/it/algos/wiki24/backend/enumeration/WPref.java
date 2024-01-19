@@ -22,16 +22,16 @@ import java.util.stream.*;
 public enum WPref implements IPref {
 
     //***************
-    categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie",true, false),
-    bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo."),
+    categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie", true, false),
+    bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
-    lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.",true, true),
+    lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.", true, true),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in secondi."),
 
 
     //***************
-    lastElaboraBioMongo("lastElaboraBioMongo", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di BioMongo.",true, true),
+    lastElaboraBioMongo("lastElaboraBioMongo", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di BioMongo.", true, true),
     elaboraBioMongoTime("elaboraBioMongoTime", TypePref.integer, 0, "Durata elaborazione di BioMongo in minuti."),
 
     //***************
@@ -85,7 +85,7 @@ public enum WPref implements IPref {
     lastElaboraGiorni("lastElaboraGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Giorni."),
     elaboraGiorniTime("elaboraGiorniTime", TypePref.integer, 0, "Durata elaborazione di Giorni in minuti."),
     usaUploadGiorni("usaUploadGiorni", TypePref.bool, true, "Flag per usare la task di upload Giorni."),
-    lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni.",true, true),
+    lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni.", true, true),
     uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in secondi."),
 
     //***************
@@ -123,8 +123,8 @@ public enum WPref implements IPref {
 
 
     //***************
-    iconaNato("iconaNato", TypePref.string, "n." + SPAZIO_NON_BREAKING, "Icona con spazio per le date di nascita"),
-    iconaMorto("iconaMorto", TypePref.string, "†" + SPAZIO_NON_BREAKING, "Icona con spazio per le date di morte"),
+    iconaNato("iconaNato", TypePref.string, "n." + SPAZIO_NON_BREAKING, "Icona con spazio per le date di nascita", false, false),
+    iconaMorto("iconaMorto", TypePref.string, "†" + SPAZIO_NON_BREAKING, "Icona con spazio per le date di morte", false, false),
 
     ;
 
@@ -171,7 +171,7 @@ public enum WPref implements IPref {
 
 
     WPref(final String keyCode, final TypePref type, final Object defaultValue, final String descrizione) {
-        this(keyCode, type, defaultValue, descrizione, false, false);
+        this(keyCode, type, defaultValue, descrizione, false, true);
     }// fine del costruttore
 
     WPref(final String keyCode, final TypePref type, final Object defaultValue, final String descrizione, final boolean critical, final boolean dinamica) {
@@ -180,7 +180,7 @@ public enum WPref implements IPref {
         this.defaultValue = defaultValue;
         this.descrizione = descrizione;
         this.critical = critical;
-        this.dinamica = dinamica;
+        this.dinamica = type == TypePref.bool ? false : dinamica;
         this.base24 = false;
     }// fine del costruttore
 
