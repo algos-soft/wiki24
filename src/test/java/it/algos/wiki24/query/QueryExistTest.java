@@ -26,8 +26,7 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryExist")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryExistTest extends WikiTest {

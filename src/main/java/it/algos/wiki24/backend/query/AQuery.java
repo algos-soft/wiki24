@@ -157,6 +157,9 @@ public abstract class AQuery {
 
     Map<String, String> mappaStringhe = new HashMap<>();
 
+    public WResult urlRequest(final String wikiTitleGrezzo) {
+        return WResult.errato();
+    }
 
     /**
      * Controlla l'esistenza e la validità del collegamento come bot <br>
@@ -355,18 +358,18 @@ public abstract class AQuery {
             uploadCookies(urlConn, result.getCookies());
             urlResponse = sendRequest(urlConn);
             result = elaboraResponse(result, urlResponse);
-            if (result.getTypePage() == TypePage.nonEsiste && urlDomain.contains(API_TITLES)) {
-                urlDomain = textService.levaCodaDaUltimo(urlDomain, API_TITLES);
-                urlDomain += API_PAGEIDS + result.getTarget();
-                urlConn = this.creaGetConnection(urlDomain);
-                uploadCookies(urlConn, result.getCookies());
-                urlResponse = sendRequest(urlConn);
-                result = elaboraResponse(result, urlResponse);
-                if (result.isValido()) {
-                    result.setWrapPage(result.getWrapPage().type(TypePage.pageIds));
-                    result.setTypePage(TypePage.pageIds);
-                }
-            }
+//            if (result.getTypePage() == TypePage.nonEsiste && urlDomain.contains(API_TITLES)) {
+//                urlDomain = textService.levaCodaDaUltimo(urlDomain, API_TITLES);
+//                urlDomain += API_PAGEIDS + result.getTarget();
+//                urlConn = this.creaGetConnection(urlDomain);
+//                uploadCookies(urlConn, result.getCookies());
+//                urlResponse = sendRequest(urlConn);
+//                result = elaboraResponse(result, urlResponse);
+//                if (result.isValido()) {
+//                    result.setWrapPage(result.getWrapPage().type(TypePage.pageIds));
+//                    result.setTypePage(TypePage.pageIds);
+//                }
+//            }
         } catch (Exception unErrore) {
             logger.error(new WrapLog().exception(unErrore).usaDb());
         }
@@ -684,6 +687,11 @@ public abstract class AQuery {
 
         //--regola le pagine di disambigua e redirect
         result = fixQueryDisambiguaRedirect(result);
+
+        if (result.getWrapPage()==null) {
+            wrapPage = WrapPage.nonValida().type(result.getTypePage()).title(result.getTarget()).pageid(result.getPageid());
+            result.setWrapPage(wrapPage);
+        }
 
         return result;
     }

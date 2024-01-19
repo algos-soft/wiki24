@@ -5,6 +5,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -23,7 +24,7 @@ import javax.inject.*;
  * Date: Fri, 15-Dec-2023
  * Time: 21:04
  */
-public abstract class QueryTest extends WikiTest {
+public abstract class QueryTest extends WikiStreamTest {
 
     @Inject
     public ApplicationContext appContext;
@@ -71,27 +72,71 @@ public abstract class QueryTest extends WikiTest {
     }
 
 
-//    @Test
-//    @Order(0)
-//    @DisplayName("0")
-//    void partenza() {
-//        System.out.println(VUOTA);
-//        System.out.println(VUOTA);
-//    }
-
-
     @Test
     @Order(1)
     @DisplayName("1 - Costruttore base senza parametri")
     void costruttoreBase() {
         istanza = appContext.getBean(clazz);
-        assertNotNull(istanza);
         System.out.println(("1 - Costruttore base (standard di ogni query) senza parametri"));
         System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-        printIstanza(istanza);
+        if (ammessoCostruttoreVuoto) {
+            message = String.format("La classe [%s] prevede il costruttore vuoto", clazzName);
+            assertNotNull(istanza);
+        }
+        else {
+            message = String.format("La classe [%s] NON ammette il costruttore vuoto", clazzName);
+        }
+        System.out.println(message);
     }
 
+
+    @Test
+    @Order(2)
+    @DisplayName("2 - Request (prevista) errata. Manca il wikiTitle")
+    void getBean() {
+        if (ammessoCostruttoreVuoto) {
+            System.out.println(("2 - Request (prevista) errata."));
+            message = String.format("La classe [%s] prevede il costruttore vuoto", clazzName);
+            System.out.println(message);
+            message = String.format("Non è previsto il metodo %s.%s(...) con un solo parametro", clazzName, "urlRequest");
+            System.out.println(message);
+        }
+        else {
+            System.out.println(("2 - Request (prevista) errata."));
+            System.out.println(VUOTA);
+
+            ottenutoRisultato = ((AQuery) appContext.getBean(clazz)).urlRequest(sorgente);
+            assertNotNull(ottenutoRisultato);
+            assertFalse(ottenutoRisultato.isValido());
+            System.out.println(VUOTA);
+            printRisultato(ottenutoRisultato);
+        }
+    }
+
+
+    @Test
+    @Order(3)
+    @DisplayName("3 - Request (prevista) errata. Non esiste la pagina")
+    void paginaMancante() {
+        if (ammessoCostruttoreVuoto) {
+            System.out.println(("2 - Request (prevista) errata."));
+            message = String.format("La classe [%s] prevede il costruttore vuoto", clazzName);
+            System.out.println(message);
+            message = String.format("Non è previsto il metodo %s.%s(...) con un solo parametro", clazzName, "urlRequest");
+            System.out.println(message);
+        }
+        else {
+            sorgente = "Pippoz Belloz";
+            message = String.format("3 - Request (prevista) errata. Non esiste la pagina [%s]", sorgente);
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            ottenutoRisultato = ((AQuery) appContext.getBean(clazz)).urlRequest(sorgente);
+            assertNotNull(ottenutoRisultato);
+            assertFalse(ottenutoRisultato.isValido());
+            printRisultato(ottenutoRisultato);
+        }
+    }
 
     protected void printIstanza(Object istanza) {
     }

@@ -68,34 +68,6 @@ public class QueryReadTest extends QueryTest {
 
 
     @Test
-    @Order(2)
-    @DisplayName("2 - Request (prevista) errata. Manca il wikiTitle")
-    void getBean() {
-        System.out.println(("2 - Request (prevista) errata. Manca il wikiTitle"));
-        System.out.println(VUOTA);
-
-        ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(3)
-    @DisplayName("3 - Request (prevista) errata. Non esiste la pagina")
-    void inesistente() {
-        System.out.println(("3 - Request (prevista) errata. Non esiste la pagina"));
-        System.out.println(VUOTA);
-
-        sorgente = "Pippoz Belloz";
-        ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
     @Order(4)
     @DisplayName("4 - Request valida")
     void valida() {
@@ -123,6 +95,7 @@ public class QueryReadTest extends QueryTest {
         ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
         System.out.println((ottenuto));
     }
+
     @Test
     @Order(6)
     @DisplayName("6 - Titolo 'strano'")
@@ -138,16 +111,48 @@ public class QueryReadTest extends QueryTest {
         System.out.println((ottenuto));
     }
 
+    @Test
+    @Order(7)
+    @DisplayName("7 - PageId")
+    void pageId() {
+        System.out.println(("7 - PageId"));
+        System.out.println(VUOTA);
+
+        sorgenteLong = 3100691L;
+        ottenuto = appContext.getBean(QueryRead.class).getContent(sorgenteLong);
+        assertTrue(textService.isValid(ottenuto));
+
+        ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
+        System.out.println((ottenuto));
+    }
+
 
     @Test
     @Order(101)
-    @DisplayName("101 - Legge tramite QueryService")
-    void legge() {
-        System.out.println(("101 - Legge tramite QueryService"));
+    @DisplayName("101 - Legge tramite QueryService (wikiTitle)")
+    void leggeTitle() {
+        System.out.println(("101 - Legge tramite QueryService (wikiTitle)"));
         System.out.println(VUOTA);
 
         sorgente = "Othon & Tomasini";
         ottenuto = queryService.legge(sorgente);
+        assertTrue(textService.isValid(sorgente));
+
+        System.out.println(("Pagina e testo trovati"));
+        ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
+        System.out.println(VUOTA);
+        System.out.println((ottenuto));
+    }
+
+    @Test
+    @Order(102)
+    @DisplayName("102 - Legge tramite QueryService (pageId)")
+    void leggePageId() {
+        System.out.println(("102 - Legge tramite QueryService (pageId)"));
+        System.out.println(VUOTA);
+
+        sorgenteLong = 3100691L;
+        ottenuto = queryService.legge(sorgenteLong);
         assertTrue(textService.isValid(sorgente));
 
         System.out.println(("Pagina e testo trovati"));

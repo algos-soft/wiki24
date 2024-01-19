@@ -26,8 +26,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("integration")
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryListBio")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryListBioTest extends WikiTest {

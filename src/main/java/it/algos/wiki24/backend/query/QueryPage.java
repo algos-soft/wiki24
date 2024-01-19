@@ -87,7 +87,7 @@ public class QueryPage extends AQuery {
      */
     public WResult urlRequest(final long pageIds) {
         typeQuery = TypeQuery.getSenzaLoginSenzaCookies;
-        return requestGetPageIds(WIKI_QUERY_BASE_PAGE, pageIds);
+        return requestGetPageIds(QUERY_PAGEIDS, pageIds);
     }
 
 

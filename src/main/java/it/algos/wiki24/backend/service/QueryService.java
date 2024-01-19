@@ -28,6 +28,9 @@ public class QueryService {
     public String legge(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
     }
+    public String legge(final long pageIds) {
+        return appContext.getBean(QueryRead.class).getContent(pageIds);
+    }
 
     public WrapPage getPage(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryPage.class).getPage(wikiTitleGrezzo);

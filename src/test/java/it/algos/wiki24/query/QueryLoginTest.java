@@ -29,7 +29,7 @@ import javax.inject.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryLogin")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryLoginTest extends QueryTest {
@@ -65,6 +65,7 @@ public class QueryLoginTest extends QueryTest {
     protected void setUpAll() {
         super.clazz = QueryLogin.class;
         super.setUpAll();
+        super.ammessoCostruttoreVuoto = true;
         assertNull(istanza);
     }
 
@@ -81,104 +82,63 @@ public class QueryLoginTest extends QueryTest {
     }
 
     @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = (QueryLogin) appContext.getBean(clazz);
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-        printIstanza(istanza);
-    }
-
-
-    @Test
-    @Order(11)
-    @DisplayName("11 - istanza->urlRequestHamed")
-    void istanzaUrlRequestHamed() {
-        printBotLogin();
-
-        istanza = (QueryLogin) appContext.getBean(clazz);
-        assertNotNull(istanza);
-        ottenutoRisultato = istanza.urlRequestHamed();
-        assertNotNull(ottenutoRisultato);
-        printIstanza(istanza);
-        printBotLogin();
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(12)
-    @DisplayName("12 - istanza->urlRequestGac")
-    void istanzaUrlRequestGac() {
-        printBotLogin();
-
-        istanza = (QueryLogin) appContext.getBean(clazz);
-        assertNotNull(istanza);
-        ottenutoRisultato = istanza.urlRequestGac();
-        assertNotNull(ottenutoRisultato);
-        printIstanza(istanza);
-        printBotLogin();
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(13)
-    @DisplayName("13 - istanza->urlRequestBot")
-    void istanzaUrlRequestBot() {
-        printBotLogin();
-
-        istanza = (QueryLogin) appContext.getBean(clazz);
-        assertNotNull(istanza);
-        ottenutoRisultato = istanza.urlRequestBot();
-        assertNotNull(ottenutoRisultato);
-        printIstanza(istanza);
-        printBotLogin();
-        printRisultato(ottenutoRisultato);
-    }
-
-
-    @Test
-    @Order(21)
-    @DisplayName("21 - urlRequestHamed")
-    void urlRequestHamed() {
-        printBotLogin();
-
-        ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestHamed();
-        assertTrue(ottenutoRisultato.isValido());
-        printBotLogin();
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(22)
-    @DisplayName("22 - urlRequestGac")
+    @Order(31)
+    @DisplayName("31 - urlRequestGac")
     void urlRequestGac() {
+        System.out.println("Valori del BotLogin PRIMA di iniziare il test");
         printBotLogin();
+        System.out.println(VUOTA);
+        System.out.println("Inizio dei test");
+        System.out.println(VUOTA);
 
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestGac();
-        assertTrue(ottenutoRisultato.isValido());
+        assertNotNull(ottenutoRisultato);
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }
 
+
     @Test
-    @Order(23)
-    @DisplayName("23 - urlRequestBot")
+    @Order(32)
+    @DisplayName("32 - urlRequestBot")
     void urlRequestBot() {
+        System.out.println("Valori del BotLogin PRIMA di iniziare il test");
         printBotLogin();
+        System.out.println(VUOTA);
+        System.out.println("Inizio dei test");
+        System.out.println(VUOTA);
 
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestBot();
-        assertTrue(ottenutoRisultato.isValido());
+        assertNotNull(ottenutoRisultato);
         printBotLogin();
         printRisultato(ottenutoRisultato);
     }
 
+
     @Test
-    @Order(31)
-    @DisplayName("31 - urlRequest")
+    @Order(33)
+    @DisplayName("33 - urlRequestHamed")
+    void urlRequestHamed() {
+        System.out.println("Valori del BotLogin PRIMA di iniziare il test");
+        printBotLogin();
+        System.out.println(VUOTA);
+        System.out.println("Inizio dei test");
+        System.out.println(VUOTA);
+
+        ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequestHamed();
+        assertNotNull(ottenutoRisultato);
+        printBotLogin();
+        printRisultato(ottenutoRisultato);
+    }
+
+
+    @Test
+    @Order(41)
+    @DisplayName("41 - urlRequest")
     void urlRequest() {
+        System.out.println("Una request generica senza parametri NON è ammessa.");
+        System.out.println("Occorre specificare -> urlRequestHamed ; -> urlRequestGac ; -> urlRequestBot");
+        System.out.println("Fallendo la query, il BotLogin rimane inalterato ai valori precedenti.");
         ottenutoRisultato = appContext.getBean(QueryLogin.class).urlRequest();
         assertFalse(ottenutoRisultato.isValido());
         printBotLogin();

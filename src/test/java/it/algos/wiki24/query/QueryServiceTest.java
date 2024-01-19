@@ -25,7 +25,7 @@ import javax.inject.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryService")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryServiceTest extends ServiceTest {

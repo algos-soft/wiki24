@@ -216,6 +216,7 @@ public abstract class WikiTest extends AlgosTest {
     public static final String SINGOLARE = "singolare";
 
     public static final String PLURALE = "pluraleLista";
+
     protected static String PARAMETRO = "nomeLista";
 
     protected static String CHECK = "checkValidita()";
@@ -236,7 +237,7 @@ public abstract class WikiTest extends AlgosTest {
 
     protected String collectionName;
 
-    protected boolean ammessoCostruttoreVuoto = false;
+    protected boolean ammessoCostruttoreVuoto;
 
     protected boolean istanzaValidaSubitoDopoCostruttore = false;
 
@@ -279,6 +280,7 @@ public abstract class WikiTest extends AlgosTest {
         usaTypeLista = false;
         currentType = TypeLista.nessunaLista;
         setUpAllEffettuato = true;
+        ammessoCostruttoreVuoto = false;
 
         listaBio.add(creaBio("Junior Mapuku"));
         listaBio.add(creaBio("Johann Schweikhard von Kronberg"));
@@ -449,6 +451,18 @@ public abstract class WikiTest extends AlgosTest {
     }
 
     private boolean costruttoreNonValido() {
+
+        if (ammessoCostruttoreVuoto) {
+            message = String.format("Il flag '%s' è regolato (=%s) nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto",
+                    ammessoCostruttoreVuoto, clazzTestName
+            );
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+        else {
+            message = String.format("Il flag '%s' è regolato (=%s) nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, "WikiTest");
+            logger.info(new WrapLog().message(message).type(TypeLog.test));
+        }
+
         //        message = String.format("Il flag '%s' è = %s nel metodo setUpAll() della classe [%s]", "ammessoCostruttoreVuoto", ammessoCostruttoreVuoto, clazzTestName);
         //        logger.info(new WrapLog().message(message).type(TypeLog.test));
 
@@ -494,7 +508,7 @@ public abstract class WikiTest extends AlgosTest {
     @Order(2)
     @DisplayName("2 - appContext.getBean con/senza parametri")
     void getBean() {
-        Object istanzaGenerica ;
+        Object istanzaGenerica;
 
         if (this.ammessoCostruttoreVuoto) {
             System.out.println(String.format("2 - appContext.getBean(%s.class) SENZA parametri", clazzName));
@@ -553,7 +567,6 @@ public abstract class WikiTest extends AlgosTest {
             assertNull(istanzaGenerica);
         }
     }
-
 
     // 3 - senzaParametroNelCostruttore
 

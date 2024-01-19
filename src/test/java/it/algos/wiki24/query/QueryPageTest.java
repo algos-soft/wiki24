@@ -32,6 +32,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryPageTest extends QueryTest {
 
+
     /**
      * Classe principale di riferimento <br>
      */
@@ -62,21 +63,6 @@ public class QueryPageTest extends QueryTest {
         super.setUpEach();
         istanza = null;
         wrapPage = null;
-    }
-
-
-    @Test
-    @Order(2)
-    @DisplayName("2 - Request errata. Manca il wikiTitle")
-    void manca() {
-        System.out.println(("2 - Request errata. Manca il wikiTitle"));
-        System.out.println(VUOTA);
-
-        ottenutoRisultato = appContext.getBean(QueryRead.class).urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-        System.out.println(VUOTA);
-        printRisultato(ottenutoRisultato);
     }
 
 
@@ -155,6 +141,7 @@ public class QueryPageTest extends QueryTest {
         assertNotNull(wrapPage);
         printWrapPage(wrapPage, true);
     }
+
     @Test
     @Order(102)
     @DisplayName("102 - QueryService.getPage tramite pageIds (long)")

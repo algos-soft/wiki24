@@ -397,7 +397,7 @@ public abstract class WikiStreamTest extends WikiTest {
     //--titolo
     //--pagina esistente
     //--biografia esistente
-    protected static Stream<Arguments> PAGINE_E_CATEGORIE() {
+    public  Stream<Arguments> PAGINE_E_CATEGORIE() {
         return Stream.of(
                 Arguments.of(null, false, false),
                 Arguments.of(VUOTA, false, false),

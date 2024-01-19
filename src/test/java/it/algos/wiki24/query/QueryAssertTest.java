@@ -24,7 +24,7 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryAssert")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryAssertTest extends QueryTest {

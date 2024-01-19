@@ -20,7 +20,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryRead")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class QueryWriteTest extends QueryTest {

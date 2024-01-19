@@ -388,7 +388,6 @@ public class QueryLogin extends AQuery {
         JSONObject jsonLogin = (JSONObject) mappaUrlResponse.get(KEY_JSON_LOGIN);
         String jsonResult = null;
         String message;
-int messageLength;
 
         if (jsonLogin != null) {
             result.setResponse(jsonLogin.toString());
@@ -421,7 +420,7 @@ int messageLength;
 
         //--trasferisce nella istanza singleton BotLogin i cookies per essere utilizzati in tutte le query
         if (valido) {
-            botLogin.setQuery(true, lguserid, lgname, TypeUser.bot, result.getResponse(), cookiesLogin(cookiesSecondary));
+            botLogin.setQuery(typeUser==TypeUser.bot, lguserid, lgname, typeUser, result.getResponse(), cookiesLogin(cookiesSecondary));
             result.setUserType(typeUser);
             result.setResponse(jsonLogin.toString());
             result.setValidMessage(String.format("%s: %d, %s: %s", LOGIN_USER_ID, lguserid, LOGIN_USER_NAME, lgusername));
@@ -449,10 +448,15 @@ int messageLength;
     protected Map<String, String> cookiesLogin(Map<String, String> cookies) {
         Map<String, String> cookiesLogin = new HashMap<>();
 
-        cookiesLogin.put("ss0-itwikiSession", cookies.get("ss0-itwikiSession"));
-        cookiesLogin.put("itwikiss0-UserID", cookies.get("itwikiss0-UserID"));
-        cookiesLogin.put("centralauth_ss0-User", cookies.get("centralauth_ss0-User"));
-        cookiesLogin.put("centralauth_ss0-Token", cookies.get("centralauth_ss0-Token"));
+        cookiesLogin.put("ss0-itwikiSession", cookies.get("itwikiSession"));
+        cookiesLogin.put("itwikiss0-UserID", cookies.get("itwikiUserID"));
+        cookiesLogin.put("centralauth_ss0-User", cookies.get("centralauth_User"));
+        cookiesLogin.put("centralauth_ss0-Token", cookies.get("centralauth_Token"));
+
+        cookiesLogin.put("itwikiSession", cookies.get("itwikiSession"));
+        cookiesLogin.put("itwikiUserID", cookies.get("itwikiUserID"));
+        cookiesLogin.put("centralauth_User", cookies.get("centralauth_User"));
+        cookiesLogin.put("centralauth_Token", cookies.get("centralauth_Token"));
 
         return cookiesLogin;
     }

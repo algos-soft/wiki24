@@ -68,7 +68,7 @@ public class QueryListBio extends AQuery {
      * @return wrapper di informazioni
      */
     public WResult urlRequest(final List<Long> listaPageids) {
-        return urlRequestCiclica(listaPageids, WIKI_QUERY_BASE_PAGE);
+        return urlRequestCiclica(listaPageids, "");
     }
 
 

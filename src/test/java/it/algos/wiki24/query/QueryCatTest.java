@@ -26,10 +26,10 @@ import javax.inject.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryCat")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QueryCatTest extends WikiTest {
+public class QueryCatTest extends QueryTest {
 
 
     /**
@@ -38,6 +38,17 @@ public class QueryCatTest extends WikiTest {
     private QueryCat istanza;
 
 
+    /**
+     * Qui passa una volta sola, chiamato dalle sottoclassi <br>
+     * Invocare PRIMA il metodo setUpStartUp() della superclasse <br>
+     * Si possono aggiungere regolazioni specifiche <br>
+     */
+    @BeforeAll
+    protected void setUpAll() {
+        super.clazz = QueryCat.class;
+        super.setUpAll();
+        assertNull(istanza);
+    }
 
 
     /**
@@ -52,41 +63,13 @@ public class QueryCatTest extends WikiTest {
     }
 
 
-    @Test
-    @Order(1)
-    @DisplayName("1 - Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new QueryCat();
-        assertNotNull(istanza);
-        System.out.println(("1 - Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
+
 
     @Test
-    @Order(2)
-    @DisplayName("2 - Test per una categoria inesistente")
-    void nonEsiste() {
-        System.out.println(("2 - Test per una categoria inesistente"));
-        assertTrue(istanza == null);
-        istanza = appContext.getBean(QueryCat.class);
-        assertNotNull(istanza);
-
-        sorgente = CATEGORIA_INESISTENTE;
-        ottenutoRisultato = istanza.urlRequest(sorgente);
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("La categoria [[%s]] non esiste su wikipedia", sorgente));
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(3)
-    @DisplayName("3 - Categoria (istanza) -> ids")
+    @Order(4)
+    @DisplayName("4 - Categoria (istanza) -> ids")
     void istanzaIds() {
-        System.out.println(("3 - Categoria (istanza) -> ids"));
+        System.out.println(("4 - Categoria (istanza) -> ids"));
         assertTrue(istanza == null);
         istanza = appContext.getBean(QueryCat.class);
         assertNotNull(istanza);
@@ -102,10 +85,10 @@ public class QueryCatTest extends WikiTest {
     }
 
     @Test
-    @Order(4)
-    @DisplayName("4 - Categoria (istanza) -> title")
+    @Order(5)
+    @DisplayName("5 - Categoria (istanza) -> title")
     void istanzaTitle() {
-        System.out.println(("4 - Categoria (istanza) -> title"));
+        System.out.println(("5 - Categoria (istanza) -> title"));
         assertTrue(istanza == null);
         istanza = appContext.getBean(QueryCat.class).title();
         assertNotNull(istanza);
@@ -122,10 +105,10 @@ public class QueryCatTest extends WikiTest {
 
 
     @Test
-    @Order(5)
-    @DisplayName("5 - Categoria (urlRequest) -> ids")
+    @Order(6)
+    @DisplayName("6 - Categoria (urlRequest) -> ids")
     void urlRequestIds() {
-        System.out.println(("5 - Categoria (urlRequest) -> ids"));
+        System.out.println(("6 - Categoria (urlRequest) -> ids"));
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
         ottenutoRisultato = appContext.getBean(QueryCat.class).urlRequest(sorgente);
@@ -138,10 +121,10 @@ public class QueryCatTest extends WikiTest {
     }
 
     @Test
-    @Order(6)
-    @DisplayName("6 - Categoria (urlRequest) -> title")
+    @Order(7)
+    @DisplayName("7 - Categoria (urlRequest) -> title")
     void urlRequestTitle() {
-        System.out.println(("6 - Categoria (urlRequest) -> title"));
+        System.out.println(("7 - Categoria (urlRequest) -> title"));
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;
         ottenutoRisultato = appContext.getBean(QueryCat.class).title().urlRequest(sorgente);
@@ -155,10 +138,10 @@ public class QueryCatTest extends WikiTest {
 
 
     @Test
-    @Order(7)
-    @DisplayName("7 - Categoria (getListaPageIds) -> ids")
+    @Order(8)
+    @DisplayName("8 - Categoria (getListaPageIds) -> ids")
     void getListaPageIds() {
-        System.out.println(("7 - Categoria (getListaPageIds) -> ids"));
+        System.out.println(("8 - Categoria (getListaPageIds) -> ids"));
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
         listaPageIds = appContext.getBean(QueryCat.class).getPageIds(sorgente);
@@ -170,10 +153,10 @@ public class QueryCatTest extends WikiTest {
     }
 
     @Test
-    @Order(8)
-    @DisplayName("8 - Categoria (getListaTitles) -> title")
+    @Order(9)
+    @DisplayName("9 - Categoria (getListaTitles) -> title")
     void getListaTitles() {
-        System.out.println(("8 - Categoria (getListaTitles) -> title"));
+        System.out.println(("9 - Categoria (getListaTitles) -> title"));
 
         sorgente = CATEGORIA_ESISTENTE_BREVE;
         listaStr = appContext.getBean(QueryCat.class).getTitles(sorgente);
@@ -185,10 +168,10 @@ public class QueryCatTest extends WikiTest {
     }
 
     @Test
-    @Order(9)
-    @DisplayName("9 - Categoria titolo errato rimediabile")
+    @Order(10)
+    @DisplayName("10 - Categoria titolo errato rimediabile")
     void getListaTitles2() {
-        System.out.println(("9 - Categoria titolo errato rimediabile"));
+        System.out.println(("10 - Categoria titolo errato rimediabile"));
 
         sorgente = "Categoria:" + CATEGORIA_ESISTENTE_BREVE;
         listaStr = appContext.getBean(QueryCat.class).getTitles(sorgente);
@@ -201,10 +184,10 @@ public class QueryCatTest extends WikiTest {
 
 
     //    @Test
-    @Order(10)
-    @DisplayName("10 - Categoria esistente login come user")
+    @Order(11)
+    @DisplayName("11 - Categoria esistente login come user")
     void esisteUser() {
-        System.out.println(("10 - Categoria esistente login come user"));
+        System.out.println(("11 - Categoria esistente login come user"));
         appContext.getBean(QueryLogin.class).urlRequest();
 
         sorgente = CATEGORIA_ESISTENTE_MEDIA;

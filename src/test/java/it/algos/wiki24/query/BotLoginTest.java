@@ -25,7 +25,7 @@ import javax.inject.*;
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test BotLogin ")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class BotLoginTest extends WikiTest {

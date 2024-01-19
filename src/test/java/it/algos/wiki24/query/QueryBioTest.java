@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Tag("query")
+//@Tag("query")
 @DisplayName("Test QueryPage")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QueryBioTest extends QueryTest {

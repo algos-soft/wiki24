@@ -203,10 +203,9 @@ public class WikiCost {
 
     public static final String TAG_NO_MESE = "Mese inesistente";
 
+    //    public static final String PATH_WIKI_EDIT = "https://it.wikipedia.org/w/index.php?title=";
 
     public static final String PATH_WIKI = "https://it.wikipedia.org/wiki/";
-
-    public static final String PATH_WIKI_EDIT = "https://it.wikipedia.org/w/index.php?title=";
 
     public static final String TAG_EDIT = "&action=edit";
 
@@ -216,11 +215,21 @@ public class WikiCost {
 
     public static final String API_BASE = "https://it.wikipedia.org/w/api.php?&format=json&formatversion=2";
 
+    public static final String ACTION_QUERY = API_BASE + "&action=query";
+
+    public static final String QUERY_BASE = ACTION_QUERY + "&prop=revisions&rvprop=timestamp|content";
+
+    public static final String API_TITLES = "&titles=";
+
+    public static final String API_PAGEIDS = "&pageids=";
+
+    public static final String QUERY_TITLES = QUERY_BASE + API_TITLES;
+
+    public static final String QUERY_PAGEIDS = QUERY_BASE + API_PAGEIDS;
+
     public static final String ACTION_PARSE = API_BASE + "&action=parse";
 
     //    public static final String WIKI_PARSE = ACTION_PARSE + "&prop=wikitext&page=";
-
-    public static final String ACTION_QUERY = API_BASE + "&action=query";
 
 
     public static final String WIKI_QUERY_LIST = ACTION_QUERY + "&list=allpages&aplimit=500&apprefix=";
@@ -229,9 +238,6 @@ public class WikiCost {
 
     public static final String LIST_NAME_SPACE = "&apnamespace=";
 
-    public static final String API_TITLES = "&titles=";
-
-    public static final String API_PAGEIDS = "&pageids=";
 
     //    public static final String CAT = "Category:";
     public static final String CAT = "Categoria:";
@@ -256,7 +262,7 @@ public class WikiCost {
 
     public static final String WIKI_QUERY_BASE_TITLE = ACTION_QUERY + QUERY_INFO + API_TITLES;
 
-    public static final String WIKI_QUERY_BASE_PAGE = ACTION_QUERY + QUERY_INFO + API_PAGEIDS;
+    public static final String WIKI_QUERY_BASE_PAGEIDS = ACTION_QUERY + QUERY_INFO + API_PAGEIDS;
 
     public static final String WIKI_QUERY_TIMESTAMP = ACTION_QUERY + QUERY_TIMESTAMP + API_PAGEIDS;
 
@@ -507,6 +513,7 @@ public class WikiCost {
     public static final String DIV_END = "{{Div col end}}";
 
     public static final String DIV_END_CAPO = DIV_END + CAPO;
+
     public static final int MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI = 100;
 
 }
