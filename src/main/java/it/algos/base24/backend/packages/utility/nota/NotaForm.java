@@ -1,5 +1,6 @@
 package it.algos.base24.backend.packages.utility.nota;
 
+import com.vaadin.flow.component.checkbox.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.form.*;
@@ -10,6 +11,9 @@ import org.springframework.context.annotation.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class NotaForm extends CrudForm {
 
+    public NotaForm() {
+        super();
+    }
 
     public NotaForm(NotaModulo crudModulo, NotaEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
@@ -26,5 +30,23 @@ public class NotaForm extends CrudForm {
         super.numResponsiveStepColumn = 1;
     }
 
+    /**
+     * Aggiunge i componenti grafici al layout
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void addFields() {
+        super.addFields();
+
+        if (crudOperation == CrudOperation.add) {
+            mappaFields.get("fatto").setEnabled(false);
+        }
+        else {
+            mappaFields.get("typeLog").setEnabled(false);
+            mappaFields.get("typeLevel").setEnabled(false);
+            mappaFields.get("inizio").setEnabled(false);
+            mappaFields.get("typeLog").setEnabled(false);
+            mappaFields.get("descrizione").setEnabled(!((Checkbox) mappaFields.get("fatto")).getValue());
+        }
+    }
 
 }// end of CrudForm class

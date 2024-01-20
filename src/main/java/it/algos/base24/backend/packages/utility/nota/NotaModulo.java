@@ -78,8 +78,13 @@ public class NotaModulo extends CrudModulo {
     public AbstractEntity beforeSave(AbstractEntity entityBean) {
         NotaEntity notaBean = (NotaEntity) entityBean;
 
-        if (notaBean.fatto && notaBean.fine == null) {
-            notaBean.fine = LocalDate.now();
+        if (notaBean.fatto ) {
+            if (notaBean.fine == null) {
+                notaBean.fine = LocalDate.now();
+            }
+        }
+        else {
+            notaBean.fine = null;
         }
 
         return super.beforeSave(notaBean);

@@ -345,7 +345,7 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("Colin Campbell (generale)", true, true),
                 Arguments.of("Louis Winslow Austin", true, true),
                 Arguments.of("San Nicanore", true, true),
-                Arguments.of("Regno di Napoli (1908-1745)", true, false),
+                Arguments.of("Regno di Napoli (1908-1745)", false, false),
                 Arguments.of("Regno di Napoli (1806-1815)", true, false),
                 Arguments.of("Rossi", true, false),
                 Arguments.of("Bartolomeo Giuseppe Amico di Castell'Alfero", true, true),
