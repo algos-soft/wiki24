@@ -67,6 +67,7 @@ public abstract class QueryTest extends WikiStreamTest {
      * Si possono aggiungere regolazioni specifiche <br>
      */
     protected void setUpEach() {
+        super.setUpEach();
         this.previstoRisultato = null;
         this.ottenutoRisultato = null;
     }

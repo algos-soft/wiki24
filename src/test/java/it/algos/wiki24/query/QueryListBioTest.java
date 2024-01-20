@@ -26,13 +26,11 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-//@Tag("query")
+@Tag("query")
 @DisplayName("Test QueryListBio")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class QueryListBioTest extends WikiTest {
+public class QueryListBioTest extends QueryTest {
 
-    @Inject
-    QueryService queryService;
 
     /**
      * Classe principale di riferimento <br>
@@ -47,6 +45,7 @@ public class QueryListBioTest extends WikiTest {
      */
     @BeforeAll
     protected void setUpAll() {
+        super.clazz = QueryListBio.class;
         super.setUpAll();
         assertNull(istanza);
     }
@@ -65,44 +64,12 @@ public class QueryListBioTest extends WikiTest {
 
 
     @Test
-    @Order(1)
-    @DisplayName("1- Costruttore base senza parametri")
-    void costruttoreBase() {
-        istanza = new QueryListBio();
-        assertNotNull(istanza);
-        System.out.println(("1- Costruttore base senza parametri"));
-        System.out.println(VUOTA);
-        System.out.println(String.format("Costruttore base senza parametri per un'istanza di %s", istanza.getClass().getSimpleName()));
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("2- Test per una pagina inesistente")
-    void nonEsiste() {
-        System.out.println(("2- Test per una pagina inesistente"));
-        assertTrue(istanza == null);
-        istanza = appContext.getBean(QueryListBio.class);
-        assertNotNull(istanza);
-
-        sorgenteLong = 13257755L;
-        ottenutoRisultato = istanza.urlRequest(List.of(sorgenteLong));
-        assertNotNull(ottenutoRisultato);
-        assertFalse(ottenutoRisultato.isValido());
-
-        listWrapBio = istanza.getLista(List.of(sorgenteLong));
-        assertNull(listWrapBio);
-
-        System.out.println(VUOTA);
-        System.out.println(String.format("La pagina [[%d]] non esiste su wikipedia", sorgenteLong));
-        printRisultato(ottenutoRisultato);
-    }
-
-    @Test
-    @Order(3)
-    @DisplayName("3- Test per una singola biografia esistente (urlRequest)")
+    @Order(4)
+    @DisplayName("4 - Test per una singola biografia esistente (urlRequest)")
     void urlRequest() {
-        System.out.println(("3- Test per una singola biografia esistente (urlRequest)"));
+        System.out.println(("4 - Test per una singola biografia esistente (urlRequest)"));
 
+        sorgente = "Matteo Salvini";
         listWrapBio = appContext.getBean(QueryListBio.class).getLista(List.of(132555L));
         assertNotNull(listWrapBio);
         assertTrue(listWrapBio.size() > 0);
@@ -115,11 +82,12 @@ public class QueryListBioTest extends WikiTest {
 
 
     @Test
-    @Order(4)
-    @DisplayName("4 - Test per due biografie esistenti (urlRequest)")
+    @Order(5)
+    @DisplayName("5 - Test per due biografie esistenti (urlRequest)")
     void urlRequestLista() {
-        System.out.println(("4 - Test per due biografie esistenti (urlRequest)"));
+        System.out.println(("5 - Test per due biografie esistenti (urlRequest)"));
 
+        sorgente = "Salvini + Renzi";
         listaPageIds = new ArrayList<>();
         listaPageIds.add(132555L);
         listaPageIds.add(134246L);
@@ -128,7 +96,7 @@ public class QueryListBioTest extends WikiTest {
         assertTrue(listWrapBio.size() == 2);
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Lista di biografie (%d)", listWrapBio.size()));
+        System.out.println(String.format("Lista di biografie (%d)%s%s", listWrapBio.size(), FORWARD, sorgente));
 
         for (WrapBio wrapBio : listWrapBio) {
             printWrapBio(wrapBio);
@@ -137,11 +105,12 @@ public class QueryListBioTest extends WikiTest {
 
 
     @Test
-    @Order(5)
-    @DisplayName("5 - Test per altre due biografie esistenti (urlRequest)")
+    @Order(6)
+    @DisplayName("6 - Test per altre due biografie esistenti (urlRequest)")
     void urlRequestLista2() {
-        System.out.println(("5 - Test per altre due biografie esistenti (urlRequest)"));
+        System.out.println(("6 - Test per altre due biografie esistenti (urlRequest)"));
 
+        sorgente = "Salvini + Renzi";
         listaPageIds = new ArrayList<>();
         listaPageIds.add(106234L);
         listaPageIds.add(105803L);
@@ -150,7 +119,7 @@ public class QueryListBioTest extends WikiTest {
         assertTrue(listWrapBio.size() == 2);
 
         System.out.println(VUOTA);
-        System.out.println(String.format("Lista di biografie (%d)", listWrapBio.size()));
+        System.out.println(String.format("Lista di biografie (%d)%s%s", listWrapBio.size(), FORWARD, sorgente));
 
         for (WrapBio wrapBio : listWrapBio) {
             printWrapBio(wrapBio);
@@ -170,7 +139,7 @@ public class QueryListBioTest extends WikiTest {
         assertNotNull(listWrapBio);
         assertTrue(listWrapBio.size() > 0);
 
-//        message = String.format("Lista di %d biografie della categoria [%s] recuperate in %s", listWrapBio.size(), sorgente, getTime());
+        message = String.format("Lista di %d biografie della categoria [%s] recuperate in %s", listWrapBio.size(), sorgente, dateService.deltaText(inizio));
         System.out.println(message);
 
         for (WrapBio wrapBio : listWrapBio.subList(0, Math.min(10, listWrapBio.size()))) {
@@ -178,11 +147,12 @@ public class QueryListBioTest extends WikiTest {
         }
     }
 
-    //    @Test
+//    @Test
     @Order(30)
     @DisplayName("30 - Categoria lunga")
     void urlRequestListaCat2() {
         System.out.println(("30 - Categoria lunga"));
+
         sorgente = CATEGORIA_ESISTENTE_LUNGA;
         listaPageIds = queryService.getPageIds(sorgente);
 
@@ -208,14 +178,14 @@ public class QueryListBioTest extends WikiTest {
 
         sorgente = "Nati nel 1782";
         listaPageIds = queryService.getPageIds(sorgente);
-//        listBio = appContext.getBean(QueryWrapBio.class).getBio(listaPageIds);
-//        assertNotNull(listBio);
-//        assertTrue(listBio.size() > 0);
-//
-//        message = String.format("Lista di %d biografie della categoria [%s] recuperate in %s", listBio.size(), sorgente, getTime());
-//        System.out.println(message);
-//
-//        printBio(listBio.subList(0, Math.min(10, listBio.size())));
+        //        listBio = appContext.getBean(QueryWrapBio.class).getBio(listaPageIds);
+        //        assertNotNull(listBio);
+        //        assertTrue(listBio.size() > 0);
+        //
+        //        message = String.format("Lista di %d biografie della categoria [%s] recuperate in %s", listBio.size(), sorgente, getTime());
+        //        System.out.println(message);
+        //
+        //        printBio(listBio.subList(0, Math.min(10, listBio.size())));
     }
 
 

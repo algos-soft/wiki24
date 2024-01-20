@@ -136,7 +136,7 @@ public class QueryReadTest extends QueryTest {
 
         sorgente = "Othon & Tomasini";
         ottenuto = queryService.legge(sorgente);
-        assertTrue(textService.isValid(sorgente));
+        assertTrue(textService.isValid(ottenuto));
 
         System.out.println(("Pagina e testo trovati"));
         ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));
@@ -153,7 +153,7 @@ public class QueryReadTest extends QueryTest {
 
         sorgenteLong = 3100691L;
         ottenuto = queryService.legge(sorgenteLong);
-        assertTrue(textService.isValid(sorgente));
+        assertTrue(textService.isValid(ottenuto));
 
         System.out.println(("Pagina e testo trovati"));
         ottenuto = ottenuto.length() < MAX ? ottenuto : ottenuto.substring(0, Math.min(MAX, ottenuto.length()));

@@ -22,7 +22,7 @@ import org.springframework.boot.test.context.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("query")
-@DisplayName("Test QueryPage")
+@DisplayName("Test QueryBio")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class QueryBioTest extends QueryTest {
 
@@ -89,21 +89,33 @@ class QueryBioTest extends QueryTest {
     void wrapBioPageIds() {
         System.out.println(("52 - Recupera wrapBioPageIds"));
 
+        sorgente = "Hedy Lamarr";
         sorgenteLong = 14118;
         wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
-        if (wrapBio.isValida()) {
-            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
-        }
-        printWrapBio(wrapBio);
-
-        System.out.println(VUOTA);
-        sorgenteLong = 2741616;
-        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
-        if (wrapBio.isValida()) {
+        if (wrapBio != null && wrapBio.isValida()) {
             System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
         }
         else {
-            System.out.println(String.format("La pagina [[%s]] non esiste su wikipedia", sorgente));
+            System.out.println(String.format("La pagina [[%s]] (se esiste) non è una biografia", sorgente));
+        }
+        printWrapBio(wrapBio);
+    }
+
+
+    @Test
+    @Order(53)
+    @DisplayName("53 - Recupera wrapBioPageIds")
+    void wrapBioPageIds2() {
+        System.out.println(("53 - Recupera wrapBioPageIds"));
+
+        sorgente = "Piozzano";
+        sorgenteLong = 2741616;
+        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        if (wrapBio != null && wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        else {
+            System.out.println(String.format("La pagina [[%s]] (se esiste) non è una biografia", sorgente));
         }
         printWrapBio(wrapBio);
     }
@@ -116,9 +128,12 @@ class QueryBioTest extends QueryTest {
         System.out.println(("101 - QueryService.getBio tramite wikiTile (text)"));
 
         sorgente = "Louis Winslow Austin";
-        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgente);
-        if (wrapBio.isValida()) {
+        wrapBio = queryService.getBio(sorgente);
+        if (wrapBio != null && wrapBio.isValida()) {
             System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        else {
+            System.out.println(String.format("La pagina [[%s]] (se esiste) non è una biografia", sorgente));
         }
         printWrapBio(wrapBio);
     }
@@ -129,10 +144,14 @@ class QueryBioTest extends QueryTest {
     void getWrapBioLong() {
         System.out.println(("102 - QueryService.getBio tramite pageIds (long)"));
 
+        sorgente = "Roberto il Forte";
         sorgenteLong = 241617;
-        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
-        if (wrapBio.isValida()) {
+        wrapBio = queryService.getBio(sorgenteLong);
+        if (wrapBio != null && wrapBio.isValida()) {
             System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        else {
+            System.out.println(String.format("La pagina [[%s]] (se esiste) non è una biografia", sorgente));
         }
         printWrapBio(wrapBio);
     }

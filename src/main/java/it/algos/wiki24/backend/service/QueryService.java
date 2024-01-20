@@ -80,7 +80,7 @@ public class QueryService {
     }
 
     public List<WrapTime> getMiniWrap(final List<Long> listaPageids) {
-        return appContext.getBean(QueryTimestamp.class).getWrap(listaPageids);
+        return appContext.getBean(QueryTimestamp.class).getLista(listaPageids);
     }
 
     public WResult write(final String wikiTitleGrezzo, final String newTesto) {

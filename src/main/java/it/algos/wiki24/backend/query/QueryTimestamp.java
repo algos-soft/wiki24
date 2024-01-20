@@ -39,7 +39,7 @@ public class QueryTimestamp extends AQuery {
      *
      * @return lista di wraps delle pagine
      */
-    public List<WrapTime> getWrap(final List<Long> listaPageids) {
+    public List<WrapTime> getLista(final List<Long> listaPageids) {
         return urlRequest(listaPageids).getLista();
     }
 

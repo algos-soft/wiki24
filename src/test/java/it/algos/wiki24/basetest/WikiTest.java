@@ -167,6 +167,8 @@ public abstract class WikiTest extends AlgosTest {
 
     protected WrapBio wrapBio;
 
+    protected WrapTime wrapTime;
+
     //    protected Bio bio;
 
     protected List<Long> listaPageIds;
@@ -179,7 +181,7 @@ public abstract class WikiTest extends AlgosTest {
 
     //    protected List<WrapLista> listWrapLista;
 
-    //    protected List<WrapTime> listMiniWrap;
+    protected List<WrapTime> listWrapTime;
 
     //    protected LinkedHashMap<String, LinkedHashMap<String, List<WrapDidascalia>>> mappaLista;
 
@@ -304,14 +306,16 @@ public abstract class WikiTest extends AlgosTest {
      * Si possono aggiungere regolazioni specifiche <br>
      */
     protected void setUpEach() {
-        //        super.setUpEach();
+        super.setUpEach();
 
         previstoRisultato = null;
         ottenutoRisultato = null;
         wrapBio = null;
+        wrapTime = null;
         //        bio = null;
         listaPageIds = null;
         listWrapBio = null;
+        listWrapTime = null;
         //        listBio = null;
         //        listWrapDidascalia = null;
         //        listWrapLista = null;
@@ -1155,6 +1159,16 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(String.format("WrapBio creataBioMongo: %s", wrapBio.isCreataBioMongo()));
             System.out.println(String.format("WrapBio tmplBio:"));
             System.out.println(String.format("%s", wrapBio.getTemplBio()));
+        }
+    }
+
+    protected void printWrapTime(WrapTime wrapTime) {
+        if (wrapTime != null) {
+            System.out.println(VUOTA);
+            System.out.println(String.format("WrapTime pageId: %s", wrapTime.getPageid()));
+            System.out.println(String.format("WrapTime wikiTitle: %s", wrapTime.getWikiTitle()));
+            System.out.println(String.format("WrapTime timestamp (originale): %s", wrapTime.getLastModifica()));
+            System.out.println(String.format("WrapTime last (formattato): %s", dateService.get(wrapTime.getLastModifica())));
         }
     }
 

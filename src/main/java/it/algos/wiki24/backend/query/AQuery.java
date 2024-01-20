@@ -137,6 +137,9 @@ public abstract class AQuery {
     @Inject
     public BioServerModulo bioServerModulo;
 
+    @Inject
+    MathService mathService;
+
     //    @Inject
     //    public BioBackend bioBackend;
 
@@ -429,13 +432,12 @@ public abstract class AQuery {
 
             if (Pref.debug.is()) {
                 num += max;
-                //                if (mathService.multiploEsatto(50000, num)) {
-                //                    String time = dateService.deltaText(inizio);
-                //                    message = String.format("Finora creati %s wrapTimes in %s (la categoria ha %s voci)", textService.format(num), time,
-                //                            textService.format(size)
-                //                    );
-                //                    logger.info(new WrapLog().message(message).type(TypeLog.bio));
-                //                }
+                if (mathService.multiploEsatto(50000, num)) {
+                    String time = dateService.deltaText(inizio);
+                    message = String.format("Finora creati %s wrapTimes in %s (la categoria ha %s voci)", textService.format(num), time,
+                            textService.format(size));
+                    logger.info(new WrapLog().message(message).type(TypeLog.bio));
+                }
             }
         }
 

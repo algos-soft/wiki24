@@ -69,6 +69,10 @@ public class QueryInfoCat extends AQuery {
     public WResult urlRequest(final String categoryTitle) {
         typeQuery = TypeQuery.getSenzaLoginSenzaCookies;
         wikiCategory = categoryTitle;
+        if (textService.isEmpty(categoryTitle)) {
+            return WResult.errato().typePage(TypePage.nonEsiste);
+        }
+
         return requestGetTitle(WIKI_QUERY_CAT_INFO, CAT + categoryTitle);
     }
 

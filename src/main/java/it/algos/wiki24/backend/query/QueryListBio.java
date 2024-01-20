@@ -36,24 +36,6 @@ public class QueryListBio extends AQuery {
         return urlRequest(listaPageids).getLista();
     }
 
-    //    /**
-    //     * Pagine biografiche <br>
-    //     *
-    //     * @param listaPageids lista dei pageIds delle pagine wiki da controllare
-    //     *
-    //     * @return lista di bio
-    //     */
-    //    public List<BioServerEntity> getBio(final List<Long> listaPageids) {
-    //        List<BioServerEntity> listaBio = new ArrayList<>();
-    //        List<WrapBio> listaWrap = urlRequest(listaPageids).getLista();
-    //
-    //        for (WrapBio wrap : listaWrap) {
-    //            listaBio.add(bioBackend.newEntity(wrap));
-    //        }
-    //
-    //        return listaBio;
-    //    }
-
 
     /**
      * Request principale <br>
