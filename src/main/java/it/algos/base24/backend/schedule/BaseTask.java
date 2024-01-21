@@ -40,19 +40,16 @@ public abstract class BaseTask extends Task {
      * Iniettata automaticamente dal framework SpringBoot con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
-    @Autowired
+    @Inject
     public ApplicationContext appContext;
 
-    /**
-     * Istanza unica di una classe @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON) di servizio <br>
-     * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
-     * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
-     */
-    @Autowired
+    @Inject
     protected LogService logger;
 
     @Inject
     MailService mailService;
+    @Inject
+    DateService dateService;
 
     /**
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
@@ -94,6 +91,7 @@ public abstract class BaseTask extends Task {
     public String getPatternSimple() {
         return typeSchedule.getPatternSimple();
     }
+
     public String getPatternQuadre() {
         return typeSchedule.getPatternQuadre();
     }
@@ -113,46 +111,50 @@ public abstract class BaseTask extends Task {
     }
 
     public void logTaskEseguito(String risultato) {
-        String message = descrizioneTask + CAPO + risultato;
-        mailService.send(BaseVar.projectCurrent, message);
+        String message;
+        String clazzName = this.getClass().getSimpleName();
+
+        if (Pref.usaSendMail.is()) {
+            message = clazzName;
+            message += CAPO;
+            message += typeSchedule.getPatternQuadre();
+            message += CAPO;
+            message += String.format("%s=acceso", flagAttivazione);
+            message += CAPO;
+            message += descrizioneTask + CAPO + risultato;
+            mailService.send(BaseVar.projectCurrent, message);
+        }
     }
 
     public void logTaskEseguito() {
-        long fine = System.currentTimeMillis();
         String message;
-        String clazzName;
-        long delta = fine - inizio;
-        delta = delta / 1000 / 60;
-
-        clazzName = this.getClass().getSimpleName();
-        message = String.format("%s%s%s %s eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPatternQuadre(), delta);
-
+        String clazzName = this.getClass().getSimpleName();
+        message = String.format("%s%s%s %s eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPatternQuadre(), dateService.deltaText(inizio));
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
+
         if (Pref.usaSendMail.is()) {
-            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPatternQuadre(), delta);
+            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPatternQuadre(), dateService.deltaText(inizio));
             mailService.send(getClass().getSimpleName(), message);
         }
     }
 
     public void logTaskNonEseguito() {
         String message;
-        String clazzName;
-
-        clazzName = this.getClass().getSimpleName();
+        String clazzName = this.getClass().getSimpleName();
         message = String.format("%s%s%s %s non eseguita per flag disabilitato", clazzName, FORWARD, descrizioneTask, getPatternQuadre());
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
 
         if (Pref.usaSendMail.is()) {
-            message = this.getClass().getSimpleName();
+            message = clazzName;
             message += CAPO;
             message += typeSchedule.getPatternQuadre();
             message += CAPO;
             message += String.format("%s=spento", flagAttivazione);
+            message += CAPO;
             message += descrizioneTask;
+            message += CAPO;
+            message += "Non eseguita per flag disabilitato";
             mailService.send(BaseVar.projectCurrent, message);
-
-            //            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
-            //            mailService.send(BaseVar.projectCurrent, message);
         }
     }
 

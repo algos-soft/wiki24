@@ -64,7 +64,7 @@ public enum TypeSchedule {
      * Descrizione: ogni giorno alle sei
      */
     alba("0 6 * * *", "ogni giorno alle sei."),
-    //    pomeriggio("53 13 * * *", "solo oggi alle 13:40"),
+        pomeriggio("19 19 * * *", "solo oggi alle 15:05"),
 
     /**
      * Pattern: 5 0 * * mon

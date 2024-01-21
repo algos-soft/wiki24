@@ -32,7 +32,7 @@ public class TaskDownloadBioServer extends BaseTask {
     public TaskDownloadBioServer() {
         super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
 //        super.typeSchedule = TypeSchedule.zeroCinqueNoLunedi;
-        super.typeSchedule =  TypeSchedule.minuto;
+        super.typeSchedule =  TypeSchedule.pomeriggio;
 
 
         super.flagAttivazione = WPref.usaDownloadBioServer;

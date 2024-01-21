@@ -1,7 +1,9 @@
 package it.algos.wiki24.backend.packages.bio.bioserver;
 
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
@@ -28,6 +30,8 @@ public class BioServerModulo extends WikiModulo {
 
     @Inject
     DownloadService downloadService;
+    @Inject
+    MailService mailService;
 
 
     /**
@@ -120,14 +124,16 @@ public class BioServerModulo extends WikiModulo {
      * Ciclo di download <br>
      */
     public void download() {
+        String risultato = VUOTA;
         inizio = System.currentTimeMillis();
 
         if (count() == 0) {
-            downloadService.cicloIniziale();
+            risultato = downloadService.cicloIniziale();
         }
         else {
-            downloadService.cicloCorrente();
+            risultato = downloadService.cicloCorrente();
         }
+        mailService.send(BaseVar.projectCurrent, risultato);
 
         super.fixDownload(inizio);
     }

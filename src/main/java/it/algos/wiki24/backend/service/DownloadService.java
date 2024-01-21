@@ -73,7 +73,8 @@ public class DownloadService {
      * Cancella (drop) il database 'BioServer' <br>
      * Legge tutte le pagine dal server di wikipedia, per la categoria prevista <br>
      */
-    public void cicloIniziale() {
+    public String cicloIniziale() {
+        String risultato = "Download iniziale di tutte le biografie";
         long inizio = System.currentTimeMillis();
         String categoryTitle = WPref.categoriaBio.getStr();
         int numPages;
@@ -84,15 +85,16 @@ public class DownloadService {
 
         //--Controlla l'esistenza/non esistenza della collection
         if (isCollectionEsistente()) {
-            return;
+            return VUOTA;
         }
 
         //--Controlla quante pagine ci sono nella categoria
         numPages = checkCategoria(categoryTitle);
+        risultato += String.format("%sNella categoria [%s] ci sono [%s] pagine. ", CAPO, categoryTitle, textService.format(numPages));
 
         //--Controlla il collegamento come bot
         if (!checkBot(numPages)) {
-            return;
+            return VUOTA;
         }
 
         //--Crea la lista di tutti i pageIds (long) della category
@@ -100,9 +102,13 @@ public class DownloadService {
 
         //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
         creaModifica(listaPageIdsDaCreare);
+        risultato += String.format("%sCreate [%s] nuove voci. ", CAPO, textService.format(listaPageIdsDaCreare.size()));
 
         //--durata del ciclo completo
         fixInfoDurataCiclo("cicloIniziale", inizio);
+        risultato += String.format("%sCiclo iniziale eseguito in %s", CAPO, dateService.deltaText(inizio));
+
+        return risultato;
     }
 
     /**
@@ -134,7 +140,6 @@ public class DownloadService {
         //--Controlla quante pagine ci sono nella categoria
         numPages = checkCategoria(categoryTitle);
         risultato += String.format("Nella categoria [%s] ci sono [%s] pagine. ", categoryTitle, textService.format(numPages));
-        logger.info(new WrapLog().message(risultato).type(TypeLog.bio));
 
         //--Controlla il collegamento come bot
         if (!checkBot(numPages)) {
@@ -153,7 +158,6 @@ public class DownloadService {
         //--Cancella dal database (mongo) locale le entities non più presenti nella category <br>
         cancellaEntitiesNonInCategory(listaMongoIdsDaCancellare);
         risultato += String.format("%sCancellate [%s] entities dal database (mongo). ", CAPO, textService.format(listaMongoIdsDaCancellare.size()));
-        logger.info(new WrapLog().message(risultato).type(TypeLog.bio));
 
         //--Recupera i (long) pageIds presenti nella category e non ancora esistenti nel database (mongo) locale e da creare
         listaPageIdsDaCreare = deltaCreare(listaPageIds, listaMongoIds);
@@ -161,7 +165,6 @@ public class DownloadService {
         //--Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale
         creaModifica(listaPageIdsDaCreare);
         risultato += String.format("%sCreate [%s] nuove voci. ", CAPO, textService.format(listaPageIdsDaCreare.size()));
-        logger.info(new WrapLog().message(risultato).type(TypeLog.bio));
 
         //--Usa la lista di pageIds della categoria e recupera una lista (stessa lunghezza) di wrapTimes con l'ultima modifica sul server
         listaWrapTime = getListaWrapTime(listaPageIds);
@@ -172,12 +175,10 @@ public class DownloadService {
         //--Legge tutte le pagine
         creaModifica(listaPageIdsDaModificare);
         risultato += String.format("%sModificate [%s] voci esistenti. ", CAPO, textService.format(listaPageIdsDaModificare.size()));
-        logger.info(new WrapLog().message(risultato).type(TypeLog.bio));
 
         //--durata del ciclo completo
         fixInfoDurataCiclo("cicloCorrente", inizio);
         risultato += String.format("%sCiclo corrente eseguito in %s", CAPO, dateService.deltaText(inizio));
-        logger.info(new WrapLog().message(risultato).type(TypeLog.bio));
 
         return risultato;
     }
