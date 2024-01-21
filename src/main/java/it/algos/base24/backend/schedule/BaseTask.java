@@ -91,8 +91,11 @@ public abstract class BaseTask extends Task {
         //        }
     }
 
-    public String getPattern() {
-        return typeSchedule.getPattern();
+    public String getPatternSimple() {
+        return typeSchedule.getPatternSimple();
+    }
+    public String getPatternQuadre() {
+        return typeSchedule.getPatternQuadre();
     }
 
 
@@ -122,11 +125,11 @@ public abstract class BaseTask extends Task {
         delta = delta / 1000 / 60;
 
         clazzName = this.getClass().getSimpleName();
-        message = String.format("%s%s%s [%s] eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPattern(), delta);
+        message = String.format("%s%s%s %s eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPatternQuadre(), delta);
 
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
         if (Pref.usaSendMail.is()) {
-            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPattern(), delta);
+            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPatternQuadre(), delta);
             mailService.send(getClass().getSimpleName(), message);
         }
     }
@@ -136,13 +139,13 @@ public abstract class BaseTask extends Task {
         String clazzName;
 
         clazzName = this.getClass().getSimpleName();
-        message = String.format("%s%s%s [%s] non eseguita per flag disabilitato", clazzName, FORWARD, descrizioneTask, getPattern());
+        message = String.format("%s%s%s %s non eseguita per flag disabilitato", clazzName, FORWARD, descrizioneTask, getPatternQuadre());
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
 
         if (Pref.usaSendMail.is()) {
             message = this.getClass().getSimpleName();
             message += CAPO;
-            message += typeSchedule.getPattern();
+            message += typeSchedule.getPatternQuadre();
             message += CAPO;
             message += String.format("%s=spento", flagAttivazione);
             message += descrizioneTask;
@@ -159,10 +162,10 @@ public abstract class BaseTask extends Task {
         String clazzName = this.getClass().getSimpleName();
         String desc = this.getDescrizioneTask();
         TypeSchedule type = this.getTypeSchedule();
-        String pattern = type.getPattern();
+        String pattern = type.getPatternQuadre();
         String nota = type.getNota();
 
-        message = String.format("%s [%s] %s %s %s", clazzName, pattern, FORWARD, desc, nota);
+        message = String.format("%s %s %s %s %s", clazzName, pattern, FORWARD, desc, nota);
         return message;
     }
 
@@ -172,7 +175,7 @@ public abstract class BaseTask extends Task {
         String clazzName = this.getClass().getSimpleName();
         String desc = this.getDescrizioneTask();
         TypeSchedule type = this.getTypeSchedule();
-        String pattern = type.getPattern();
+        String pattern = type.getPatternQuadre();
         String nota = type.getNota();
         //        int nextDays = this.getTypeSchedule().getGiorniNext();
         IPref flagTask = this.getFlagAttivazione();

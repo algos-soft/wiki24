@@ -30,7 +30,7 @@ public  class BaseSchedule extends Scheduler {
 
         if (BaseVar.taskList != null && BaseVar.taskList.size() > 0) {
             for (BaseTask task : BaseVar.taskList) {
-                schedule(task.getPattern(), task);
+                schedule(task.getPatternSimple(), task);
             }
         }
     }

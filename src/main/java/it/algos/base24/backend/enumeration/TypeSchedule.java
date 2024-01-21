@@ -280,11 +280,15 @@ public enum TypeSchedule {
     public static List<String> getAllPattern() {
         List<String> listaTags = new ArrayList<>();
 
-        getAllEnums().forEach(type -> listaTags.add(type.getPattern()));
+        getAllEnums().forEach(type -> listaTags.add(type.getPatternQuadre()));
         return listaTags;
     }
 
-    public String getPattern() {
+    public String getPatternSimple() {
+        return pattern;
+    }
+
+    public String getPatternQuadre() {
         return QUADRA_INI + pattern + QUADRA_END;
     }
 
