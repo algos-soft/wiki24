@@ -74,18 +74,18 @@ public abstract class BaseTask extends Task {
 
 
     protected void fixNext() {
-//        int nextDays;
-//        LocalDateTime adesso = LocalDateTime.now();
-//        LocalDateTime prossimo = null;
-//
-//        if (typeSchedule != null) {
-//            nextDays = typeSchedule.getGiorniNext();
-//            prossimo = adesso.plusDays(nextDays);
-//        }
-//
-//        if (flagPrevisione != null && prossimo != null) {
-//            flagPrevisione.setValue(prossimo);
-//        }
+        //        int nextDays;
+        //        LocalDateTime adesso = LocalDateTime.now();
+        //        LocalDateTime prossimo = null;
+        //
+        //        if (typeSchedule != null) {
+        //            nextDays = typeSchedule.getGiorniNext();
+        //            prossimo = adesso.plusDays(nextDays);
+        //        }
+        //
+        //        if (flagPrevisione != null && prossimo != null) {
+        //            flagPrevisione.setValue(prossimo);
+        //        }
     }
 
     public String getPattern() {
@@ -150,7 +150,7 @@ public abstract class BaseTask extends Task {
         TypeSchedule type = this.getTypeSchedule();
         String pattern = type.getPattern();
         String nota = type.getNota();
-//        int nextDays = this.getTypeSchedule().getGiorniNext();
+        //        int nextDays = this.getTypeSchedule().getGiorniNext();
         IPref flagTask = this.getFlagAttivazione();
         if (flagTask != null) {
             if (flagTask.is()) {
@@ -161,7 +161,7 @@ public abstract class BaseTask extends Task {
             }
         }
 
-        message = String.format("%s [%s] %s %s Eseguita %s %s", clazzName, pattern, flagText, FORWARD, nota, desc);
+        message = String.format("%s [%s] %s%s%s %s", clazzName, pattern, flagText, FORWARD, nota, desc);
         return message;
     }
 
