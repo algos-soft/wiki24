@@ -148,8 +148,8 @@ public abstract class BaseTask extends Task {
             message += descrizioneTask;
             mailService.send(BaseVar.projectCurrent, message);
 
-//            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
-//            mailService.send(BaseVar.projectCurrent, message);
+            //            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
+            //            mailService.send(BaseVar.projectCurrent, message);
         }
     }
 

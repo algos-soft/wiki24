@@ -30,9 +30,6 @@ public class MailService {
     @Inject
     TextService textService;
 
-//    @Inject
-//    LogService logger;
-
     String mailHost;
 
     String mailPort;
