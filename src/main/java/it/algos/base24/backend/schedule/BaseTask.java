@@ -11,6 +11,7 @@ import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
+import javax.inject.*;
 import java.util.*;
 
 /**
@@ -50,6 +51,8 @@ public abstract class BaseTask extends Task {
     @Autowired
     protected LogService logger;
 
+    @Inject
+    MailService mailService;
 
     /**
      * Deve essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
@@ -67,7 +70,7 @@ public abstract class BaseTask extends Task {
             return true;
         }
         else {
-            this.loggerNoTask();
+            this.logTaskNonEseguito();
             return false;
         }
     }
@@ -106,7 +109,7 @@ public abstract class BaseTask extends Task {
         return flagAttivazione;
     }
 
-    public void loggerTask() {
+    public void logTaskEseguito() {
         long fine = System.currentTimeMillis();
         String message;
         String clazzName;
@@ -117,16 +120,24 @@ public abstract class BaseTask extends Task {
         message = String.format("%s%s%s [%s] eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPattern(), delta);
 
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
+        if (Pref.usaSendMail.is()) {
+            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPattern(), delta);
+            mailService.send(getClass().getSimpleName(), message);
+        }
     }
 
-    public void loggerNoTask() {
+    public void logTaskNonEseguito() {
         String message;
         String clazzName;
 
         clazzName = this.getClass().getSimpleName();
         message = String.format("%s%s%s [%s] non eseguita per flag disabilitato", clazzName, FORWARD, descrizioneTask, getPattern());
 
-        logger.info(new WrapLog().type(TypeLog.task).message(message));
+        logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
+        if (Pref.usaSendMail.is()) {
+            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
+            mailService.send(getClass().getSimpleName(), message);
+        }
     }
 
 

@@ -44,6 +44,8 @@ public class LogService {
     @Inject
     UtilityService utilityService;
 
+    @Inject
+    MailService mailService;
 
     // Riferimento al logger usato <br>
     public Logger slf4jLogger;
@@ -122,6 +124,7 @@ public class LogService {
         TypeLog type = wrap.getType();
         TypeNotifica notifica = wrap.getNotifica();
         String typeTag = textService.fixSizeQuadre(wrap.getTag(), PAD_TYPE);
+        boolean flagUsaMail = Pref.usaSendMail.is();
 
         //--1) Inserimento fisso iniziale del type merceologico - se manca di default usa 'system'
         message = typeTag;
@@ -155,8 +158,9 @@ public class LogService {
         }
 
         //--6) Invio opzionale di una mail
-        //        if (flagUsaMail) {
-        //        }
+        if (flagUsaMail&& wrap.isUsaMail()) {
+            mailService.send(wrap.getMailObject(),message);
+        }
 
         // logback-spring.xml
         switch (livello) {
@@ -211,13 +215,13 @@ public class LogService {
         int appenderMax = APPENDER_MAX;
         int appenderOffset = APPENDER_OFFSET;
         int numEntities = ((Long) this.mongoOp.count(new Query(), LogEntity.class, "logger")).intValue();
-        List<LogEntity> listOrdinata = this.mongoOp.findAll(LogEntity.class,"logger");
+        List<LogEntity> listOrdinata = this.mongoOp.findAll(LogEntity.class, "logger");
         appenderMax = 70;
         appenderOffset = 5;
 
         if (numEntities > appenderMax) {
             for (LogEntity bean : listOrdinata.subList(0, appenderOffset)) {
-                this.mongoOp.remove(bean,"logger");
+                this.mongoOp.remove(bean, "logger");
             }
         }
     }

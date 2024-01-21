@@ -33,6 +33,7 @@ public class WrapLog {
     private String userName;
 
     private String addressIP;
+    private String mailObject;
 
     private AlgosException exception;
 
@@ -108,12 +109,6 @@ public class WrapLog {
         return this.livello(LogLevel.error);
     }
 
-    /**
-     * Fluent pattern Builder <br>
-     */
-    public WrapLog mail() {
-        return this.livello(LogLevel.mail);
-    }
 
     /**
      * Fluent pattern Builder <br>
@@ -190,8 +185,10 @@ public class WrapLog {
         return this;
     }
 
-    public WrapLog usaMail() {
+    public WrapLog usaMail(String mailObject) {
         this.usaMail = true;
+        this.mailObject = mailObject;
+        this.livello(LogLevel.mail);
         return this;
     }
 
@@ -274,6 +271,10 @@ public class WrapLog {
 
     public String getTag() {
         return type != null ? type.getTag() : TypeLog.system.getTag();
+    }
+
+    public String getMailObject() {
+        return mailObject;
     }
 
 }

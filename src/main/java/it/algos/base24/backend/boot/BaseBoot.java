@@ -12,6 +12,7 @@ import it.algos.base24.backend.packages.utility.role.*;
 import it.algos.base24.backend.schedule.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.backend.schedule.*;
 import jakarta.annotation.*;
 import org.springframework.context.*;
 import org.springframework.core.env.*;

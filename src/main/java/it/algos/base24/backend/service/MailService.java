@@ -1,7 +1,6 @@
 package it.algos.base24.backend.service;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.wrapper.*;
 import jakarta.annotation.*;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
@@ -31,8 +30,8 @@ public class MailService {
     @Inject
     TextService textService;
 
-    @Inject
-    LogService logger;
+//    @Inject
+//    LogService logger;
 
     String mailHost;
 
@@ -142,7 +141,7 @@ public class MailService {
 
     private void logError(Exception unErrore, String property) {
         String message = String.format("Non ho trovato la property %s nelle risorse", property);
-        logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+//        logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
     }
 
 }
