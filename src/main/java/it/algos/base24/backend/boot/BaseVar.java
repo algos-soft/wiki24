@@ -2,6 +2,7 @@ package it.algos.base24.backend.boot;
 
 import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.logic.*;
+import it.algos.base24.backend.schedule.*;
 import it.algos.base24.ui.view.*;
 import org.springframework.stereotype.*;
 
@@ -179,5 +180,11 @@ public class BaseVar {
      * Regolata in [bootClazz.addPreferenze()] per le preferenze del [progettoCorrente] <br>
      */
     public static List<IPref> prefList = new ArrayList<>();
+
+    /**
+     * Lista delle (eventuali) task per gli eventi Schedule. <br>
+     * Deve essere regolato in VaadSchedule o in una sua sottoclasse <br>
+     */
+    public static List<BaseTask> taskList = new ArrayList<>();
 
 }

@@ -9,6 +9,7 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
@@ -104,6 +105,12 @@ public class WikiBoot extends BaseBoot {
         else {
             menuRouteListProject.add(AttSingolareView.class);
         }
+    }
+
+    @Override
+    protected void fixTask() {
+        BaseVar.taskList.add(appContext.getBean(TaskProva.class));
+        super.fixTask();
     }
 
     @Override

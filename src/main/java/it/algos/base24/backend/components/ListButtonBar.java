@@ -11,10 +11,11 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.service.*;
-import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import javax.inject.*;
 
 /**
  * Project base2023
@@ -27,7 +28,7 @@ import org.springframework.stereotype.Component;
 @Scope(value = SCOPE_PROTOTYPE)
 public class ListButtonBar extends HorizontalLayout {
 
-    @Autowired
+    @Inject
     AnnotationService annotationService;
 
     protected CrudList currentCrudList;

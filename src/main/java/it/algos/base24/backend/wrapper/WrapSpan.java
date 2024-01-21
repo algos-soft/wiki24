@@ -1,9 +1,6 @@
 package it.algos.base24.backend.wrapper;
 
-import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
-import org.springframework.beans.factory.config.*;
-import org.springframework.context.annotation.Scope;
 
 /**
  * Project vaadin23
@@ -16,8 +13,6 @@ import org.springframework.context.annotation.Scope;
  * -weight (AETypeWeight) grassetto
  * -color (AETypeColor) colore
  */
-@SpringComponent
-@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WrapSpan {
 
     private String message;
@@ -32,38 +27,56 @@ public class WrapSpan {
 
     private FontStyle style;
 
-    public WrapSpan() {
-    }
-
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan(String message) {
         this.message = message;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan message(String message) {
         this.message = message;
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan weight(FontWeight weight) {
         this.weight = weight;
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan color(TypeColor color) {
         this.color = color;
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan lineHeight(LineHeight lineHeight) {
         this.lineHeight = lineHeight;
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan fontHeight(FontSize fontHeight) {
         this.fontHeight = fontHeight;
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WrapSpan style(FontStyle style) {
         this.style = style;
         return this;

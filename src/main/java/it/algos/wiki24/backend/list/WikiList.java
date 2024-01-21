@@ -196,12 +196,12 @@ public abstract class WikiList extends CrudList {
 
 
     public void fixInfoDownload() {
-        String downloadTxt;
+        String downloadTxt=VUOTA;
         String downloadLast = VUOTA;
 
         if (usaInfoDownload) {
             if (scheduledDownload != null) {
-                downloadTxt = "Scheduled download " + scheduledDownload.getDescrizione();
+//                downloadTxt = "Scheduled download " + scheduledDownload.getDescrizione();
             }
             else {
                 downloadTxt = "Scheduled download non previsto.";
@@ -226,12 +226,12 @@ public abstract class WikiList extends CrudList {
 
 
     public void fixInfoElabora() {
-        String elaboraTxt;
+        String elaboraTxt= VUOTA;
         String elaboraLast = VUOTA;
 
         if (usaInfoElabora) {
             if (scheduledElabora != null) {
-                elaboraTxt = "Scheduled elaborazione " + scheduledElabora.getDescrizione();
+//                elaboraTxt = "Scheduled elaborazione " + scheduledElabora.getDescrizione();
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
@@ -255,12 +255,12 @@ public abstract class WikiList extends CrudList {
     }
 
     public void fixInfoUpload() {
-        String uploadTxt;
+        String uploadTxt= VUOTA;
         String uploadLast = VUOTA;
 
         if (usaInfoUpload) {
             if (scheduledUpload != null) {
-                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
+//                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
             }
             else {
                 uploadTxt = "Scheduled upload non previsto.";

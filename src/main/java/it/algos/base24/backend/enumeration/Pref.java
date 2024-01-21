@@ -25,9 +25,9 @@ public enum Pref implements IPref {
     usaMenuAutomatici("usaMenuAutomatici", TypePref.bool, true, "Creazione automatica dei menu per tutte le istanze di [xxxView].", true, false),
     usaConfermaCancellazione("usaConfermaCancellazione", TypePref.bool, true, "Dialogo di conferma per il bottone [Delete].", true, false),
     usaShortcut("usaShortcut", TypePref.bool, true, "Tasti shortcut. KeyModifier.SHIFT", true, false),
+    usaSendMail("usaSendMail", TypePref.bool, true, "Onvio delle mail di controllo.", true, false),
 
-
-      ;
+    ;
 
     public PreferenzaModulo preferenzaModulo;
 

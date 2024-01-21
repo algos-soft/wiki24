@@ -260,16 +260,16 @@ public enum TypeSchedule {
     /**
      * Nota esplicativa da inserire nei log
      */
-    private String descrizione;
+    private String nota;
 
 
     /**
      * @param pattern     di schedulazione di tipo 'UNIX'
-     * @param descrizione esplicativa da inserire nei log
+     * @param nota esplicativa da inserire nei log
      */
-    TypeSchedule(String pattern, String descrizione) {
+    TypeSchedule(String pattern, String nota) {
         this.pattern = pattern;
-        this.descrizione = descrizione;
+        this.nota = nota;
     }
 
     public static List<TypeSchedule> getAllEnums() {
@@ -292,8 +292,8 @@ public enum TypeSchedule {
         this.pattern = pattern;
     }
 
-
-    public String getDescrizione() {
-        return "previsto " + descrizione;
+    public String getNota() {
+        return "Eseguita " + nota;
     }
+
 }// end of enum

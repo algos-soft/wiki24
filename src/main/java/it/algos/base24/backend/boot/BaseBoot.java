@@ -9,9 +9,11 @@ import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.anagrafica.via.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
 import it.algos.base24.backend.packages.utility.role.*;
+import it.algos.base24.backend.schedule.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import jakarta.annotation.*;
+import org.springframework.context.*;
 import org.springframework.core.env.*;
 import org.springframework.stereotype.*;
 
@@ -34,6 +36,8 @@ public class BaseBoot {
 
     @Inject
     public Environment environment;
+    @Inject
+    public ApplicationContext appContext;
 
     @Inject
     public BaseVar baseVar;
@@ -106,10 +110,10 @@ public class BaseBoot {
 
         //        this.fixVariabiliRiferimentoIstanzeGenerali();
         this.fixMenuRoutes();
+        this.fixTask();
         this.printInfo();
         //        this.fixData();
         //        this.fixVersioni();
-        //        this.fixSchedule();
         this.fixLogin();
 
         //        logger.setUpEnd();
@@ -300,34 +304,53 @@ public class BaseBoot {
         logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
     }
 
+    protected void fixTask() {
+//        BaseVar.taskList.add(appContext.getBean(TaskProva.class));
+        appContext.getBean(BaseSchedule.class).start();
+    }
+
     private void printInfo() {
+        if (Pref.debug.is()) {
+            this.printInfoVariabili();
+            this.printInfoPreferenze();
+            this.printInfoModuli();
+            this.printInfoTask();
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+        }
+    }
+
+
+    private void printInfoVariabili() {
         List<Field> listaVar;
         Object value;
-        Object currentValue;
         String message;
 
-        if (Pref.debug.is()) {
-            listaVar = Arrays.stream(BaseVar.class.getFields())
-                    .filter(element -> !element.getName().equals("menuRouteListVaadin"))
-                    .filter(element -> !element.getName().equals("menuRouteListProject"))
-                    .filter(element -> !element.getName().equals("crudModuloListVaadin"))
-                    .filter(element -> !element.getName().equals("crudModuloListProject"))
-                    .filter(element -> !element.getName().equals("prefList"))
-                    .toList();
-            if (listaVar != null) {
-                message = "Variabili globali";
-                logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
-                logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
-                logger.info(new WrapLog().message(message).type(TypeLog.startup));
-                logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+        listaVar = Arrays.stream(BaseVar.class.getFields())
+                .filter(element -> !element.getName().equals("menuRouteListVaadin"))
+                .filter(element -> !element.getName().equals("menuRouteListProject"))
+                .filter(element -> !element.getName().equals("crudModuloListVaadin"))
+                .filter(element -> !element.getName().equals("crudModuloListProject"))
+                .filter(element -> !element.getName().equals("prefList"))
+                .toList();
+        if (listaVar != null) {
+            message = "Variabili globali";
+            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
 
-                for (Field field : listaVar) {
-                    value = reflectionService.getPropertyValue(baseVar, field.getName());
-                    message = String.format("%s%s%s", field.getName(), FORWARD, value);
-                    logger.info(new WrapLog().message(message).type(TypeLog.startup));
-                }
+            for (Field field : listaVar) {
+                value = reflectionService.getPropertyValue(baseVar, field.getName());
+                message = String.format("%s%s%s", field.getName(), FORWARD, value);
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
             }
         }
+    }
+
+
+    private void printInfoPreferenze() {
+        Object currentValue;
+        String message;
 
         if (Pref.debug.is()) {
             message = "Valori correnti [default] delle preferenze più rilevanti";
@@ -346,16 +369,37 @@ public class BaseBoot {
                 }
             }
         }
+    }
 
-        if (Pref.debug.is()) {
-            message = "Moduli controllo del resetStartup";
+    private void printInfoModuli() {
+        String message = "Moduli controllo del resetStartup";
+        logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+        logger.info(new WrapLog().message(message).type(TypeLog.startup));
+        logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+
+        for (CrudModulo modulo : BaseVar.crudModuloListVaadin) {
+            modulo.checkReset();
+        }
+    }
+
+    private void printInfoTask() {
+        String message;
+
+        if (BaseVar.taskList != null && BaseVar.taskList.size() > 0) {
+            message = "Task previste (scheduled)";
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
-
-            for (CrudModulo modulo : BaseVar.crudModuloListVaadin) {
-                modulo.checkReset();
+            for (BaseTask task : BaseVar.taskList) {
+                message = String.format("%s%s%s", task.getPattern(), FORWARD, task.getDescrizioneTask());
+                logger.info(new WrapLog().message(message).type(TypeLog.startup));
             }
+        }
+        else {
+            message = String.format("Nel progetto [%s] non sono previste task (scheduled)", projectCurrent);
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
+            logger.info(new WrapLog().message(message).type(TypeLog.startup));
+            logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
         }
     }
 

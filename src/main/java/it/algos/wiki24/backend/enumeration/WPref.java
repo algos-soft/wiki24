@@ -26,11 +26,13 @@ public enum WPref implements IPref {
     bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
+    usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, true, "Flag per usare il download di BioServer.",true,false),
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.", true, true),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in secondi."),
 
 
     //***************
+    usaElaboraBioMongo("usaElaboraBioMongo", TypePref.bool, true, "Flag per usare la task di elaborazione di BioMongo.",true,false),
     lastElaboraBioMongo("lastElaboraBioMongo", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di BioMongo.", true, true),
     elaboraBioMongoTime("elaboraBioMongoTime", TypePref.integer, 0, "Durata elaborazione di BioMongo in minuti."),
 
