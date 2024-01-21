@@ -143,25 +143,25 @@ public abstract class BaseTask extends Task {
     }
 
     public String infoFlag() {
-        String message=VUOTA;
-//        String flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
-//        String clazzName = this.getClass().getSimpleName();
-//        String desc = this.getDescrizioneTask();
-//        AESchedule type = this.getTypeSchedule();
-//        String pattern = type.getPattern();
-//        String nota = type.getNota();
+        String message;
+        String flagText = TASK_NO_FLAG + TASK_FLAG_SEMPRE_ATTIVA;
+        String clazzName = this.getClass().getSimpleName();
+        String desc = this.getDescrizioneTask();
+        TypeSchedule type = this.getTypeSchedule();
+        String pattern = type.getPattern();
+        String nota = type.getNota();
 //        int nextDays = this.getTypeSchedule().getGiorniNext();
-//        AIGenPref flagTask = this.getFlagAttivazione();
-//        if (flagTask != null && flagTask.getPreferenceService() != null) {
-//            if (flagTask.is()) {
-//                flagText = flagTask.getKeyCode() + TASK_FLAG_ATTIVA;
-//            }
-//            else {
-//                flagText = flagTask.getKeyCode() + TASK_FLAG_DISATTIVA;
-//            }
-//        }
+        IPref flagTask = this.getFlagAttivazione();
+        if (flagTask != null) {
+            if (flagTask.is()) {
+                flagText = flagTask.getKeyCode() + TASK_FLAG_ATTIVA;
+            }
+            else {
+                flagText = flagTask.getKeyCode() + TASK_FLAG_DISATTIVA;
+            }
+        }
 
-//        message = String.format("%s [%s] %s (+%s)%s Eseguita %s %s", clazzName, pattern, flagText, nextDays, FORWARD, nota, desc);
+        message = String.format("%s [%s] %s %s Eseguita %s %s", clazzName, pattern, flagText, FORWARD, nota, desc);
         return message;
     }
 

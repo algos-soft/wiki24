@@ -109,7 +109,7 @@ public class WikiBoot extends BaseBoot {
 
     @Override
     protected void fixTask() {
-        BaseVar.taskList.add(appContext.getBean(TaskProva.class));
+        BaseVar.taskList.add(appContext.getBean(TaskDownloadBioServer.class));
         super.fixTask();
     }
 

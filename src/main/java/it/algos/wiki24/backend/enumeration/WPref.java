@@ -26,7 +26,7 @@ public enum WPref implements IPref {
     bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
-    usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, true, "Flag per usare il download di BioServer.",true,false),
+    usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, true, "Download calendarizzato di tutte le biografie.",true,false),
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.", true, true),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in secondi."),
 

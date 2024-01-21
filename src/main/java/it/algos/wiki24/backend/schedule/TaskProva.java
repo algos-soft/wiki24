@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.schedule;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.schedule.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
@@ -25,7 +26,7 @@ public class TaskProva extends BaseTask {
         super.descrizioneTask = "Task di prova";
         super.typeSchedule = TypeSchedule.minuto;
 
-        //        super.flagAttivazione = WPref.usaTaskGiorni;
+        super.flagAttivazione = WPref.usaDownloadBioServer;
         //        super.flagPrevisione = WPref.uploadGiorniPrevisto;
     }
 

@@ -430,6 +430,13 @@ public class BaseCost {
 
     public static final int APPENDER_OFFSET = 100;
 
+    public static final String TASK_NO_FLAG = "Senza flag";
+
+    public static final String TASK_FLAG_SEMPRE_ATTIVA = "=sempre acceso";
+
+    public static final String TASK_FLAG_ATTIVA = "=acceso";
+
+    public static final String TASK_FLAG_DISATTIVA = "=spento";
 
 }
 

@@ -305,7 +305,6 @@ public class BaseBoot {
     }
 
     protected void fixTask() {
-//        BaseVar.taskList.add(appContext.getBean(TaskProva.class));
         appContext.getBean(BaseSchedule.class).start();
     }
 
@@ -315,7 +314,6 @@ public class BaseBoot {
             this.printInfoPreferenze();
             this.printInfoModuli();
             this.printInfoTask();
-            logger.info(new WrapLog().message(VUOTA).type(TypeLog.startup));
         }
     }
 
@@ -391,8 +389,7 @@ public class BaseBoot {
             logger.info(new WrapLog().message(message).type(TypeLog.startup));
             logger.info(new WrapLog().message(Strings.repeat(TRATTINO, message.length())).type(TypeLog.startup));
             for (BaseTask task : BaseVar.taskList) {
-                message = String.format("%s%s%s", task.getPattern(), FORWARD, task.getDescrizioneTask());
-                logger.info(new WrapLog().message(message).type(TypeLog.startup));
+                logger.info(new WrapLog().message(task.infoFlag()).type(TypeLog.startup));
             }
         }
         else {
