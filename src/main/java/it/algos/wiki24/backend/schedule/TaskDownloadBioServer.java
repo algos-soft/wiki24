@@ -31,18 +31,21 @@ public class TaskDownloadBioServer extends BaseTask {
 
     public TaskDownloadBioServer() {
         super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
-        super.typeSchedule = TypeSchedule.zeroCinqueNoLunedi;
+//        super.typeSchedule = TypeSchedule.zeroCinqueNoLunedi;
+        super.typeSchedule =  TypeSchedule.minuto;
+
+
         super.flagAttivazione = WPref.usaDownloadBioServer;
-//        super.flagPrevisione = WPref.downloadBioPrevisto;
+        //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
+        String risultato;
+
         if (super.execute()) {
-
-//            downloadService.cicloCorrente();
-
-            super.logTaskEseguito();
+            risultato = downloadService.cicloCorrente();
+            super.logTaskEseguito(risultato);
         }
     }
 

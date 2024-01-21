@@ -57,7 +57,7 @@ public class PreferenzaModulo extends CrudModulo {
         PreferenzaEntity oldBean = (PreferenzaEntity) findOneById(newBean.id);
 
         if (oldBean == null) {
-            return (PreferenzaEntity) insert(newBean);
+            return (PreferenzaEntity) mongoService.insert(newBean);
         }
 
         if (oldBean.equals(newBean)) {
@@ -66,7 +66,7 @@ public class PreferenzaModulo extends CrudModulo {
         else {
             oldBean.iniziale = newBean.iniziale;
             oldBean.descrizione = newBean.descrizione;
-            return (PreferenzaEntity) save(oldBean);
+            return (PreferenzaEntity) mongoService.save(oldBean);
         }
 
     }

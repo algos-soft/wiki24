@@ -64,6 +64,7 @@ public enum TypeSchedule {
      * Descrizione: ogni giorno alle sei
      */
     alba("0 6 * * *", "ogni giorno alle sei."),
+    //    pomeriggio("53 13 * * *", "solo oggi alle 13:40"),
 
     /**
      * Pattern: 5 0 * * mon
@@ -264,8 +265,8 @@ public enum TypeSchedule {
 
 
     /**
-     * @param pattern     di schedulazione di tipo 'UNIX'
-     * @param nota esplicativa da inserire nei log
+     * @param pattern di schedulazione di tipo 'UNIX'
+     * @param nota    esplicativa da inserire nei log
      */
     TypeSchedule(String pattern, String nota) {
         this.pattern = pattern;
@@ -284,7 +285,7 @@ public enum TypeSchedule {
     }
 
     public String getPattern() {
-        return pattern;
+        return QUADRA_INI + pattern + QUADRA_END;
     }
 
 

@@ -109,6 +109,11 @@ public abstract class BaseTask extends Task {
         return flagAttivazione;
     }
 
+    public void logTaskEseguito(String risultato) {
+        String message = descrizioneTask + CAPO + risultato;
+        mailService.send(BaseVar.projectCurrent, message);
+    }
+
     public void logTaskEseguito() {
         long fine = System.currentTimeMillis();
         String message;
@@ -132,11 +137,19 @@ public abstract class BaseTask extends Task {
 
         clazzName = this.getClass().getSimpleName();
         message = String.format("%s%s%s [%s] non eseguita per flag disabilitato", clazzName, FORWARD, descrizioneTask, getPattern());
-
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
+
         if (Pref.usaSendMail.is()) {
-            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
-            mailService.send(getClass().getSimpleName(), message);
+            message = this.getClass().getSimpleName();
+            message += CAPO;
+            message += typeSchedule.getPattern();
+            message += CAPO;
+            message += String.format("%s=spento", flagAttivazione);
+            message += descrizioneTask;
+            mailService.send(BaseVar.projectCurrent, message);
+
+//            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
+//            mailService.send(BaseVar.projectCurrent, message);
         }
     }
 
@@ -172,7 +185,7 @@ public abstract class BaseTask extends Task {
             }
         }
 
-        message = String.format("%s [%s] %s%s%s %s", clazzName, pattern, flagText, FORWARD, nota, desc);
+        message = String.format("%s %s %s%s%s %s", clazzName, pattern, flagText, FORWARD, nota, desc);
         return message;
     }
 
