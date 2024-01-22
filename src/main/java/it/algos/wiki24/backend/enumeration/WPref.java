@@ -86,7 +86,7 @@ public enum WPref implements IPref {
     usaElaboraGiorni("usaElaboraGiorni", TypePref.bool, false, "Flag per usare la task di elaborazione di Giorni."),
     lastElaboraGiorni("lastElaboraGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Giorni."),
     elaboraGiorniTime("elaboraGiorniTime", TypePref.integer, 0, "Durata elaborazione di Giorni in minuti."),
-    usaUploadGiorni("usaUploadGiorni", TypePref.bool, false, "Flag per usare la task di upload Giorni."),
+    usaUploadGiorni("usaUploadGiorni", TypePref.bool, false, "Upload delle pagine dei Giorni."),
     lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni.", true, true),
     uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in minuti."),
 
@@ -94,9 +94,17 @@ public enum WPref implements IPref {
     usaElaboraAnni("usaElaboraAnni", TypePref.bool, false, "Flag per usare la task di elaborazione di Anni."),
     lastElaboraAnni("lastElaboraAnni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Anni."),
     elaboraAnniTime("elaboraAnniTime", TypePref.integer, 0, "Durata elaborazione di Anni in minuti."),
-    usaUploadAnni("usaUploadAnni", TypePref.bool, false, "Flag per usare la task di upload Anni."),
+    usaUploadAnni("usaUploadAnni", TypePref.bool, false, "Upload delle pagine degli Anni."),
     lastUploadAnni("lastUploadAnni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Anni.", true, true),
     uploadAnniTime("uploadAnniTime", TypePref.integer, 0, "Durata upload di Anni in minuti."),
+
+
+    //***************
+    usaUploadMortiAnnoCorrente("usaUploadMortiAnnoCorrente", TypePref.bool, false, "Upload della pagina dei morti dell'anno corrente."),
+    lastUploadMortiAnnoCorrente("lastUploadMortiAnnoCorrente", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time " +
+            "della pagina dei morti dell'anno corrente.", true, true),
+    uploadMortiAnnoCorrenteTime("uploadMortiAnnoCorrenteTime", TypePref.integer, 0, "Durata upload della pagina dei morti dell'anno corrente in minuti."),
+
 
     //***************
     usaTaskAttSin("usaTaskAttSin", TypePref.bool, false, "Flag per usare la task di download AttivitàSingolare."),

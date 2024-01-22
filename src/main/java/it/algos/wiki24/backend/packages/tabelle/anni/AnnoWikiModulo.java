@@ -10,11 +10,14 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -69,6 +72,7 @@ public class AnnoWikiModulo extends WikiModulo {
     public List<String> getListPropertyNames() {
         return Arrays.asList("ordine", "bioNati", "pageNati", "bioMorti", "pageMorti");
     }
+
     /**
      * Regola le property visibili in una scheda CrudForm <br>
      * Di default prende tutti i fields della ModelClazz specifica <br>
@@ -96,7 +100,7 @@ public class AnnoWikiModulo extends WikiModulo {
      *
      * @param ordine    di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome      corrente
-     * @param secolo      di appartenenza
+     * @param secolo    di appartenenza
      * @param pageNati  anchorLink
      * @param pageMorti anchorLink
      *
@@ -113,8 +117,6 @@ public class AnnoWikiModulo extends WikiModulo {
                 .pageMorti(textService.isValid(pageMorti) ? pageMorti : null)
                 //                .esistePaginaNati(false)
                 //                .esistePaginaMorti(false)
-                //                .natiOk(false)
-                //                .mortiOk(false)
                 .build();
 
         return (AnnoWikiEntity) fixKey(newEntityBean);
@@ -125,6 +127,15 @@ public class AnnoWikiModulo extends WikiModulo {
         return super.findAll();
     }
 
+    public List<AnnoWikiEntity> findAllReverse() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "ordine");
+        return mongoService.findAll(currentCrudEntityClazz, sort);
+    }
+
+    @Override
+    public AnnoWikiEntity findByKey(final Object keyPropertyValue) {
+        return (AnnoWikiEntity) super.findByKey(keyPropertyValue);
+    }
 
     @Override
     public RisultatoReset resetDelete() {
@@ -165,17 +176,26 @@ public class AnnoWikiModulo extends WikiModulo {
             save(annoBean);
         }
 
-       return super.fixElabora(inizio);
+        return super.fixElabora(inizio);
     }
 
     @Override
     public String uploadAll() {
         inizio = System.currentTimeMillis();
 
-        for (AnnoWikiEntity annoBean : findAll().subList(17, 18)) {
+        for (AnnoWikiEntity annoBean : findAllReverse()) {
             uploadPaginaNati(annoBean);
             uploadPaginaMorti(annoBean);
         }
+
+        return super.fixUpload(inizio);
+    }
+
+    public String uploadMortiAnnoCorrente() {
+        inizio = System.currentTimeMillis();
+        String annoCorrente = LocalDateTime.now().getYear() + VUOTA;
+
+        uploadService.annoMorto(annoCorrente);
 
         return super.fixUpload(inizio);
     }
@@ -187,22 +207,22 @@ public class AnnoWikiModulo extends WikiModulo {
 
     @Override
     public void testPaginaNati(AbstractEntity annoBean) {
-        appContext.getBean(UploadAnnoNato.class, ((AnnoWikiEntity) annoBean).nome).test().upload().isValido();
+        uploadService.annoNatoTest((AnnoWikiEntity) annoBean);
     }
 
     @Override
     public void testPaginaMorti(AbstractEntity annoBean) {
-        appContext.getBean(UploadAnnoMorto.class, ((AnnoWikiEntity) annoBean).nome).test().upload().isValido();
+        uploadService.annoMortoTest((AnnoWikiEntity) annoBean);
     }
 
     @Override
     public void uploadPaginaNati(AbstractEntity annoBean) {
-        appContext.getBean(UploadAnnoNato.class, ((AnnoWikiEntity) annoBean).nome).upload().isValido();
+        uploadService.annoNato((AnnoWikiEntity) annoBean);
     }
 
     @Override
     public void uploadPaginaMorti(AbstractEntity annoBean) {
-        appContext.getBean(UploadAnnoMorto.class, ((AnnoWikiEntity) annoBean).nome).upload().isValido();
+        uploadService.annoMorto((AnnoWikiEntity) annoBean);
     }
 
 }// end of CrudModulo class

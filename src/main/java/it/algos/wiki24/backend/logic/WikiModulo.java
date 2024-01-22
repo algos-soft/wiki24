@@ -66,6 +66,8 @@ public abstract class WikiModulo extends CrudModulo {
 
     @Inject
     protected WikiApiService wikiApiService;
+    @Inject
+    protected UploadService uploadService;
 
     /**
      * Regola la modelClazz associata a questo Modulo <br>

@@ -8,6 +8,9 @@ import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.tabelle.anni.*;
+import it.algos.wiki24.backend.packages.tabelle.giorni.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
 import static org.junit.Assert.*;
 import org.junit.jupiter.api.*;
@@ -29,11 +32,17 @@ import java.util.stream.*;
 public abstract class UploadTest extends WikiTest {
 
     @Inject
-    protected GiornoModulo giornoModulo;
+    protected GiornoWikiModulo giornoWikiModulo;
 
     @Inject
-    protected AnnoModulo annoModulo;
+    protected AnnoWikiModulo annoWikiModulo;
 
+    @Inject
+    protected UploadService uploadService;
+
+    protected GiornoWikiEntity giornoBean;
+
+    protected AnnoWikiEntity annoBean;
 
     //--nome giorno
     //--typeCrono per il test
@@ -59,7 +68,7 @@ public abstract class UploadTest extends WikiTest {
     protected static Stream<Arguments> ANNO_NATO() {
         return Stream.of(
                 Arguments.of("38 a.C.", TypeLista.annoNascita),
-//                Arguments.of("1467", TypeLista.annoNascita),
+                //                Arguments.of("1467", TypeLista.annoNascita),
                 Arguments.of("1567", TypeLista.annoNascita)
         );
     }
@@ -96,6 +105,8 @@ public abstract class UploadTest extends WikiTest {
     @BeforeEach
     protected void setUpEach() {
         super.setUpEach();
+        giornoBean = null;
+        annoBean = null;
     }
 
 
@@ -201,7 +212,7 @@ public abstract class UploadTest extends WikiTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(50)
     @DisplayName("50 - uploadTest")
@@ -218,7 +229,7 @@ public abstract class UploadTest extends WikiTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(60)
     @DisplayName("60 - uploadReal")

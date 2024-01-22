@@ -2,10 +2,13 @@ package it.algos.wiki24.upload;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.context.annotation.Scope;
@@ -50,7 +53,7 @@ public class UploadAnnoNatoTest extends UploadTest {
     protected void setUpAll() {
         super.clazz = UploadAnnoNato.class;
         super.setUpAll();
-        super.currentModulo = annoModulo;
+        super.currentModulo = annoWikiModulo;
         super.currentType = TypeLista.annoNascita;
     }
 
@@ -64,6 +67,40 @@ public class UploadAnnoNatoTest extends UploadTest {
     protected void setUpEach() {
         super.setUpEach();
         istanza = null;
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(101)
+    @DisplayName("101 - Upload tramite QueryService (wikiTitle)")
+    void uploadServiceTitle(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("101 - Legge tramite QueryService (wikiTitle)"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        ottenutoBooleano = uploadService.annoNatoTest(nomeLista);
+        assertTrue(ottenutoBooleano);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(102)
+    @DisplayName("102 - Upload tramite QueryService (giornoBean)")
+    void uploadServiceGiorno(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("102 - Legge tramite QueryService (giornoBean)"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        annoBean = annoWikiModulo.findByKey(nomeLista);
+        assertNotNull(annoBean);
+        ottenutoBooleano = uploadService.annoNatoTest(annoBean);
+        assertTrue(ottenutoBooleano);
     }
 
 }
