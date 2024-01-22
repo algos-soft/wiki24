@@ -171,15 +171,17 @@ public class GiornoWikiModulo extends WikiModulo {
     }
 
     @Override
-    public void uploadAll() {
+    public String uploadAll() {
         inizio = System.currentTimeMillis();
 
         for (GiornoWikiEntity giornoBean : findAll().subList(17, 18)) {
-            uploadPaginaNati(giornoBean);
-            uploadPaginaMorti(giornoBean);
+            testPaginaNati(giornoBean);
+            testPaginaMorti(giornoBean);
+            //            uploadPaginaNati(giornoBean);
+            //            uploadPaginaMorti(giornoBean);
         }
 
-        super.fixUpload(inizio);
+        return super.fixUpload(inizio);
     }
 
     @Override

@@ -169,7 +169,7 @@ public class AnnoWikiModulo extends WikiModulo {
     }
 
     @Override
-    public void uploadAll() {
+    public String uploadAll() {
         inizio = System.currentTimeMillis();
 
         for (AnnoWikiEntity annoBean : findAll().subList(17, 18)) {
@@ -177,7 +177,7 @@ public class AnnoWikiModulo extends WikiModulo {
             uploadPaginaMorti(annoBean);
         }
 
-        super.fixUpload(inizio);
+        return super.fixUpload(inizio);
     }
 
     @Override

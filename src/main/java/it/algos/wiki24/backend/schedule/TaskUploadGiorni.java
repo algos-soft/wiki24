@@ -3,40 +3,34 @@ package it.algos.wiki24.backend.schedule;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.schedule.*;
-import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
-import it.algos.wiki24.backend.service.*;
+import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
-import java.time.*;
 
 /**
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sun, 21-Jan-2024
- * Time: 07:53
+ * Date: Mon, 22-Jan-2024
+ * Time: 18:19
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TaskDownloadBioServer extends BaseTask {
+public class TaskUploadGiorni extends BaseTask {
 
-    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.everyZeroTrenta;
-
-    @Inject
-    private BioServerModulo bioServerModulo;
+    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.lunediGiovediSei;
 
     @Inject
-    private DownloadService downloadService;
+    private GiornoWikiModulo giornoWikiModulo;
 
-
-    public TaskDownloadBioServer() {
-        super.flagAttivazione = WPref.usaDownloadBioServer;
-        super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
+    public TaskUploadGiorni() {
+        super.flagAttivazione = WPref.usaUploadGiorni;
+        super.descrizioneTask = WPref.usaUploadGiorni.getDescrizione();
         super.typeSchedule = TYPE_SCHEDULE;
         //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
@@ -46,12 +40,7 @@ public class TaskDownloadBioServer extends BaseTask {
         String risultato;
 
         if (super.execute()) {
-            if (bioServerModulo.count() == 0) {
-                risultato = downloadService.cicloIniziale();
-            }
-            else {
-                risultato = downloadService.cicloCorrente();
-            }
+            risultato = giornoWikiModulo.uploadAll();
             super.logTaskEseguito(risultato);
         }
     }

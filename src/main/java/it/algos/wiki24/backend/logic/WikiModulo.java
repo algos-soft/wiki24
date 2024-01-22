@@ -170,7 +170,8 @@ public abstract class WikiModulo extends CrudModulo {
     public void wikiCrono() {
     }
 
-    public void uploadAll() {
+    public String uploadAll() {
+        return VUOTA;
     }
 
     public void testPaginaNati(AbstractEntity crudEntityBean) {
@@ -215,7 +216,8 @@ public abstract class WikiModulo extends CrudModulo {
     }
 
 
-    public void fixUpload(final long inizio) {
+    public String fixUpload(final long inizio) {
+        String risultato;
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
 
@@ -224,7 +226,7 @@ public abstract class WikiModulo extends CrudModulo {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastUpload è nullo")));
-            return;
+            return VUOTA;
         }
 
         if (durataUpload != null) {
@@ -239,8 +241,10 @@ public abstract class WikiModulo extends CrudModulo {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("durataUpload è nullo")));
-            return;
+            return VUOTA;
         }
+
+        return VUOTA;
     }
 
 }
