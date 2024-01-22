@@ -5,7 +5,6 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.*;
 import org.springframework.stereotype.*;
 
 @Component
@@ -15,7 +14,7 @@ import org.springframework.stereotype.*;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @AEntity(collectionName = "giorni", keyPropertyName = "nome", typeList = TypeList.hardWiki)
-public class GiorniEntity extends AbstractEntity {
+public class GiornoWikiEntity extends AbstractEntity {
 
     @AField(type = TypeField.integer, headerText = "#", widthRem = 3, caption = "Ordinamento")
     public int ordine;

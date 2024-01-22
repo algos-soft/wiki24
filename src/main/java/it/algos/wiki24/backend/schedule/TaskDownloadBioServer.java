@@ -5,6 +5,7 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.schedule.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.sauronsoftware.cron4j.*;
 import org.springframework.context.annotation.Scope;
@@ -26,13 +27,15 @@ public class TaskDownloadBioServer extends BaseTask {
 
 
     @Inject
+    private BioServerModulo bioServerModulo;
+    @Inject
     private DownloadService downloadService;
 
 
     public TaskDownloadBioServer() {
         super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
 //        super.typeSchedule = TypeSchedule.zeroCinqueNoLunedi;
-        super.typeSchedule =  TypeSchedule.pomeriggio;
+        super.typeSchedule =  TypeSchedule.zeroTrenta;
 
 
         super.flagAttivazione = WPref.usaDownloadBioServer;
@@ -44,7 +47,12 @@ public class TaskDownloadBioServer extends BaseTask {
         String risultato;
 
         if (super.execute()) {
-            risultato = downloadService.cicloCorrente();
+            if (bioServerModulo.count() == 0) {
+                risultato = downloadService.cicloIniziale();
+            }
+            else {
+                risultato = downloadService.cicloCorrente();
+            }
             super.logTaskEseguito(risultato);
         }
     }

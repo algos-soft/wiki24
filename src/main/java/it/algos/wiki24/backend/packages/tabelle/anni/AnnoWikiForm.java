@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.tabelle.giorni;
+package it.algos.wiki24.backend.packages.tabelle.anni;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class GiorniForm extends CrudForm {
+public class AnnoWikiForm extends CrudForm {
 
 
-    public GiorniForm(GiorniModulo crudModulo, GiorniEntity entityBean, CrudOperation operation) {
+    public AnnoWikiForm(AnnoWikiModulo crudModulo, AnnoWikiEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

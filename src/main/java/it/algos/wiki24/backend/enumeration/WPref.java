@@ -88,7 +88,15 @@ public enum WPref implements IPref {
     elaboraGiorniTime("elaboraGiorniTime", TypePref.integer, 0, "Durata elaborazione di Giorni in minuti."),
     usaUploadGiorni("usaUploadGiorni", TypePref.bool, false, "Flag per usare la task di upload Giorni."),
     lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni.", true, true),
-    uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in secondi."),
+    uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in minuti."),
+
+    //***************
+    usaElaboraAnni("usaElaboraAnni", TypePref.bool, false, "Flag per usare la task di elaborazione di Anni."),
+    lastElaboraAnni("lastElaboraAnni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Anni."),
+    elaboraAnniTime("elaboraAnniTime", TypePref.integer, 0, "Durata elaborazione di Anni in minuti."),
+    usaUploadAnni("usaUploadAnni", TypePref.bool, false, "Flag per usare la task di upload Anni."),
+    lastUploadAnni("lastUploadAnni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Anni.", true, true),
+    uploadAnniTime("uploadAnniTime", TypePref.integer, 0, "Durata upload di Anni in minuti."),
 
     //***************
     usaTaskAttSin("usaTaskAttSin", TypePref.bool, false, "Flag per usare la task di download AttivitàSingolare."),

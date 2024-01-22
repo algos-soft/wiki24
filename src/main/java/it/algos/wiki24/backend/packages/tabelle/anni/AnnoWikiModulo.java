@@ -1,27 +1,18 @@
-package it.algos.wiki24.backend.packages.tabelle.giorni;
+package it.algos.wiki24.backend.packages.tabelle.anni;
 
-import it.algos.base24.backend.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.packages.crono.mese.*;
+import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
-import it.algos.wiki24.backend.wrapper.*;
-import org.springframework.scheduling.annotation.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
 import java.util.*;
@@ -30,14 +21,14 @@ import java.util.*;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 13-Jan-2024
- * Time: 17:08
+ * Date: Mon, 22-Jan-2024
+ * Time: 07:47
  */
 @Service
-public class GiorniModulo extends WikiModulo {
+public class AnnoWikiModulo extends WikiModulo {
 
     @Inject
-    GiornoModulo giornoModulo;
+    AnnoModulo annoModulo;
 
     @Inject
     WikiUtilityService wikiUtilityService;
@@ -50,8 +41,8 @@ public class GiorniModulo extends WikiModulo {
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public GiorniModulo() {
-        super(GiorniEntity.class, GiorniList.class, GiorniForm.class);
+    public AnnoWikiModulo() {
+        super(AnnoWikiEntity.class, AnnoWikiList.class, AnnoWikiForm.class);
     }
 
 
@@ -59,17 +50,16 @@ public class GiorniModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.scheduledElabora = TypeSchedule.dieciGiovedi;
-        super.lastElabora = WPref.lastElaboraGiorni;
-        super.durataElabora = WPref.elaboraGiorniTime;
+        super.scheduledElabora = TypeSchedule.dieciVenerdi;
+        super.lastElabora = WPref.lastElaboraAnni;
+        super.durataElabora = WPref.elaboraAnniTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
 
-        super.scheduledUpload = TypeSchedule.dieciVenerdi;
-        super.lastUpload = WPref.lastUploadGiorni;
-        super.durataUpload = WPref.uploadGiorniTime;
-        super.unitaMisuraUpload = TypeDurata.secondi;
+        super.scheduledUpload = TypeSchedule.dieciDomenica;
+        super.lastUpload = WPref.lastUploadAnni;
+        super.durataUpload = WPref.uploadAnniTime;
+        super.unitaMisuraUpload = TypeDurata.minuti;
     }
-
 
     /**
      * Regola le property visibili in una lista CrudList <br>
@@ -79,7 +69,6 @@ public class GiorniModulo extends WikiModulo {
     public List<String> getListPropertyNames() {
         return Arrays.asList("ordine", "bioNati", "pageNati", "bioMorti", "pageMorti");
     }
-
     /**
      * Regola le property visibili in una scheda CrudForm <br>
      * Di default prende tutti i fields della ModelClazz specifica <br>
@@ -95,7 +84,7 @@ public class GiorniModulo extends WikiModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public GiorniEntity newEntity() {
+    public AnnoWikiEntity newEntity() {
         return newEntity(0, VUOTA, null, VUOTA, VUOTA);
     }
 
@@ -107,17 +96,17 @@ public class GiorniModulo extends WikiModulo {
      *
      * @param ordine    di presentazione nel popup/combobox (obbligatorio, unico)
      * @param nome      corrente
-     * @param mese      di appartenenza
+     * @param secolo      di appartenenza
      * @param pageNati  anchorLink
      * @param pageMorti anchorLink
      *
      * @return la nuova entity appena creata (non salvata e senza keyID)
      */
-    public GiorniEntity newEntity(final int ordine, final String nome, final MeseEntity mese, String pageNati, String pageMorti) {
-        GiorniEntity newEntityBean = GiorniEntity.builder()
+    public AnnoWikiEntity newEntity(final int ordine, final String nome, final SecoloEntity secolo, String pageNati, String pageMorti) {
+        AnnoWikiEntity newEntityBean = AnnoWikiEntity.builder()
                 .ordine(ordine == 0 ? nextOrdine() : ordine)
                 .nome(textService.isValid(nome) ? nome : null)
-                .mese(mese)
+                .secolo(secolo)
                 .bioNati(0)
                 .bioMorti(0)
                 .pageNati(textService.isValid(pageNati) ? pageNati : null)
@@ -128,11 +117,11 @@ public class GiorniModulo extends WikiModulo {
                 //                .mortiOk(false)
                 .build();
 
-        return (GiorniEntity) fixKey(newEntityBean);
+        return (AnnoWikiEntity) fixKey(newEntityBean);
     }
 
     @Override
-    public List<GiorniEntity> findAll() {
+    public List<AnnoWikiEntity> findAll() {
         return super.findAll();
     }
 
@@ -140,26 +129,26 @@ public class GiorniModulo extends WikiModulo {
     @Override
     public RisultatoReset resetDelete() {
         RisultatoReset typeReset = super.resetDelete();
-        List<GiornoEntity> giorniBase;
-        GiorniEntity newBean;
+        List<AnnoEntity> anniBase;
+        AnnoWikiEntity newBean;
         int ordine;
         String nome;
-        MeseEntity mese;
+        SecoloEntity secolo;
         String pageNati;
         String pageMorti;
-        giorniBase = giornoModulo.findAll();
-        if (giorniBase == null || giorniBase.size() < 1) {
-            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Giorno'")));
+        anniBase = annoModulo.findAll();
+        if (anniBase == null || anniBase.size() < 1) {
+            logger.error(new WrapLog().exception(new AlgosException("Manca la collezione 'Anno'")));
             return null;
         }
 
-        for (GiornoEntity giorno : giorniBase) {
-            nome = giorno.nome;
-            ordine = giorno.ordine;
-            mese = giorno.mese;
-            pageNati = wikiUtilityService.wikiTitleNatiGiorno(nome);
-            pageMorti = wikiUtilityService.wikiTitleMortiGiorno(nome);
-            newBean = newEntity(ordine, nome, mese, pageNati, pageMorti);
+        for (AnnoEntity anno : anniBase) {
+            nome = anno.nome;
+            ordine = anno.ordine;
+            secolo = anno.secolo;
+            pageNati = wikiUtilityService.wikiTitleNatiAnno(nome);
+            pageMorti = wikiUtilityService.wikiTitleMortiAnno(nome);
+            newBean = newEntity(ordine, nome, secolo, pageNati, pageMorti);
             insertSave(newBean);
         }
 
@@ -170,10 +159,10 @@ public class GiorniModulo extends WikiModulo {
     public void elabora() {
         inizio = System.currentTimeMillis();
 
-        for (GiorniEntity giornoBean : findAll()) {
-            giornoBean.bioNati = bioMongoModulo.countAllByGiornoNato(giornoBean.nome);
-            giornoBean.bioMorti = bioMongoModulo.countAllByGiornoMorto(giornoBean.nome);
-            save(giornoBean);
+        for (AnnoWikiEntity annoBean : findAll()) {
+            annoBean.bioNati = bioMongoModulo.countAllByAnnoNato(annoBean.nome);
+            annoBean.bioMorti = bioMongoModulo.countAllByAnnoMorto(annoBean.nome);
+            save(annoBean);
         }
 
         super.fixElabora(inizio);
@@ -183,37 +172,38 @@ public class GiorniModulo extends WikiModulo {
     public void uploadAll() {
         inizio = System.currentTimeMillis();
 
-        for (GiorniEntity giornoBean : findAll().subList(17, 18)) {
-            uploadPaginaNati(giornoBean);
-            uploadPaginaMorti(giornoBean);
+        for (AnnoWikiEntity annoBean : findAll().subList(17, 18)) {
+            uploadPaginaNati(annoBean);
+            uploadPaginaMorti(annoBean);
         }
 
         super.fixUpload(inizio);
     }
 
     @Override
-    public void wikiView(AbstractEntity giornoBean) {
-        wikiApiService.openWikiPage(((GiorniEntity) giornoBean).nome);
+    public void wikiView(AbstractEntity annoBean) {
+        wikiApiService.openWikiPage(((AnnoWikiEntity) annoBean).nome);
     }
 
     @Override
-    public void testPaginaNati(AbstractEntity giornoBean) {
-        appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    public void testPaginaNati(AbstractEntity annoBean) {
+        appContext.getBean(UploadAnnoNato.class, ((AnnoWikiEntity) annoBean).nome).test().upload().isValido();
     }
 
     @Override
-    public void testPaginaMorti(AbstractEntity giornoBean) {
-        appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).test().upload().isValido();
+    public void testPaginaMorti(AbstractEntity annoBean) {
+        appContext.getBean(UploadAnnoMorto.class, ((AnnoWikiEntity) annoBean).nome).test().upload().isValido();
     }
 
     @Override
-    public void uploadPaginaNati(AbstractEntity giornoBean) {
-        appContext.getBean(UploadGiornoNato.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    public void uploadPaginaNati(AbstractEntity annoBean) {
+        appContext.getBean(UploadAnnoNato.class, ((AnnoWikiEntity) annoBean).nome).upload().isValido();
     }
 
     @Override
-    public void uploadPaginaMorti(AbstractEntity giornoBean) {
-        appContext.getBean(UploadGiornoMorto.class, ((GiorniEntity) giornoBean).nome).upload().isValido();
+    public void uploadPaginaMorti(AbstractEntity annoBean) {
+        appContext.getBean(UploadAnnoMorto.class, ((AnnoWikiEntity) annoBean).nome).upload().isValido();
     }
 
 }// end of CrudModulo class
+
