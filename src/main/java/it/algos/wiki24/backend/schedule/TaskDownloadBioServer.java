@@ -25,19 +25,18 @@ import java.time.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskDownloadBioServer extends BaseTask {
 
+    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.zeroTrenta;
 
     @Inject
     private BioServerModulo bioServerModulo;
+
     @Inject
     private DownloadService downloadService;
 
 
     public TaskDownloadBioServer() {
         super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
-//        super.typeSchedule = TypeSchedule.zeroCinqueNoLunedi;
-        super.typeSchedule =  TypeSchedule.zeroTrenta;
-
-
+        super.typeSchedule = TYPE_SCHEDULE;
         super.flagAttivazione = WPref.usaDownloadBioServer;
         //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }

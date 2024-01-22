@@ -30,7 +30,7 @@ public class BioServerList extends WikiList {
         super.fixPreferenze();
 
         super.usaInfoDownload = true;
-        super.usaBottoneElabora=false;
+        super.usaBottoneElabora = false;
         super.usaBottoneSearch = false;
         super.usaSearchPageId = true;
         super.usaSearchWikiTitle = true;
@@ -61,9 +61,8 @@ public class BioServerList extends WikiList {
 
         alertPlaceHolder.add(new Span(biografie, anchor, contiene));
 
-        message = "Qualche piccola differenza tra le pagine del server e le entities della collezione è fisiologica";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
-        message = "Differenza dovuta alle voci della categoria che NON hanno un tmplBio valido";
+        message = "Una piccola differenza tra le pagine del server e gli elementi del DB è fisiologica e dovuta alle voci della " +
+                "categoria che NON hanno un tmplBio valido";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
     }
 

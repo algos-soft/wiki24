@@ -7,6 +7,7 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
+import it.algos.base24.backend.schedule.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
@@ -26,30 +27,38 @@ import java.time.*;
  */
 public abstract class WikiModulo extends CrudModulo {
 
+    public WPref flagDownload;
+
+    public TypeSchedule scheduledDownload;
+
     public WPref lastDownload;
 
     public WPref durataDownload;
 
-    public TypeSchedule scheduledDownload;
-
     public TypeDurata unitaMisuraDownload;
+
+
+    public WPref flagElabora;
+
+    public TypeSchedule scheduledElabora;
 
     public WPref lastElabora;
 
     public WPref durataElabora;
 
-    public TypeSchedule scheduledElabora;
-
     public TypeDurata unitaMisuraElabora;
 
+
+    public WPref flagUpload;
+
+    public TypeSchedule scheduledUpload;
 
     public WPref lastUpload;
 
     public WPref durataUpload;
 
-    public TypeSchedule scheduledUpload;
-
     public TypeDurata unitaMisuraUpload;
+
 
     protected long inizio;
 
@@ -85,6 +94,10 @@ public abstract class WikiModulo extends CrudModulo {
      */
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        this.flagDownload = null;
+        this.flagElabora = null;
+        this.flagUpload = null;
 
         this.scheduledDownload = null;
         this.scheduledElabora = null;
@@ -134,7 +147,8 @@ public abstract class WikiModulo extends CrudModulo {
         //        }
     }
 
-    public void elabora() {
+    public String elabora() {
+        return VUOTA;
     }
 
     public void elaboraDue() {
@@ -171,7 +185,7 @@ public abstract class WikiModulo extends CrudModulo {
     public void uploadPaginaMorti(AbstractEntity crudEntityBean) {
     }
 
-    public void fixElabora(final long inizio) {
+    public String fixElabora(final long inizio) {
         long fine = System.currentTimeMillis();
         Long delta = fine - inizio;
 
@@ -180,7 +194,7 @@ public abstract class WikiModulo extends CrudModulo {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
-            return;
+            return VUOTA;
         }
 
         if (durataElabora != null) {
@@ -195,8 +209,9 @@ public abstract class WikiModulo extends CrudModulo {
         }
         else {
             logger.warn(new WrapLog().exception(new AlgosException("durataElabora è nullo")));
-            return;
+            return VUOTA;
         }
+        return VUOTA;
     }
 
 

@@ -153,19 +153,16 @@ public abstract class WikiList extends CrudList {
             scheduledDownload = currentCrudModulo.scheduledDownload;
             lastDownload = currentCrudModulo.lastDownload;
             durataDownload = currentCrudModulo.durataDownload;
-            scheduledDownload = currentCrudModulo.scheduledDownload;
             unitaMisuraDownload = currentCrudModulo.unitaMisuraDownload;
 
             scheduledElabora = currentCrudModulo.scheduledElabora;
             lastElabora = currentCrudModulo.lastElabora;
             durataElabora = currentCrudModulo.durataElabora;
-            scheduledElabora = currentCrudModulo.scheduledElabora;
             unitaMisuraElabora = currentCrudModulo.unitaMisuraElabora;
 
             scheduledUpload = currentCrudModulo.scheduledUpload;
             lastUpload = currentCrudModulo.lastUpload;
             durataUpload = currentCrudModulo.durataUpload;
-            scheduledUpload = currentCrudModulo.scheduledUpload;
             unitaMisuraUpload = currentCrudModulo.unitaMisuraUpload;
         }
     }
@@ -196,12 +193,14 @@ public abstract class WikiList extends CrudList {
 
 
     public void fixInfoDownload() {
-        String downloadTxt=VUOTA;
+        String downloadTxt = VUOTA;
         String downloadLast = VUOTA;
+        WPref flagDownload = currentCrudModulo.flagDownload;
+        String status = flagDownload != null ? flagDownload.is() ? "acceso" : "spento" : "indefinito";
 
         if (usaInfoDownload) {
             if (scheduledDownload != null) {
-//                downloadTxt = "Scheduled download " + scheduledDownload.getDescrizione();
+                downloadTxt = String.format("Download (%s=%s). Task %s", flagDownload, status, textService.primaMinuscola(scheduledDownload.getNota()));
             }
             else {
                 downloadTxt = "Scheduled download non previsto.";
@@ -226,12 +225,15 @@ public abstract class WikiList extends CrudList {
 
 
     public void fixInfoElabora() {
-        String elaboraTxt= VUOTA;
+        String elaboraTxt = VUOTA;
         String elaboraLast = VUOTA;
+        WPref flagElabora = currentCrudModulo.flagElabora;
+        String status = flagElabora != null ? flagElabora.is() ? "acceso" : "spento" : "indefinito";
 
         if (usaInfoElabora) {
             if (scheduledElabora != null) {
-//                elaboraTxt = "Scheduled elaborazione " + scheduledElabora.getDescrizione();
+                elaboraTxt = String.format("Elabora (%s=%s). Task %s", flagElabora, status,
+                        textService.primaMinuscola(scheduledElabora.getNota()));
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
@@ -255,12 +257,12 @@ public abstract class WikiList extends CrudList {
     }
 
     public void fixInfoUpload() {
-        String uploadTxt= VUOTA;
+        String uploadTxt = VUOTA;
         String uploadLast = VUOTA;
 
         if (usaInfoUpload) {
             if (scheduledUpload != null) {
-//                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
+                //                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
             }
             else {
                 uploadTxt = "Scheduled upload non previsto.";

@@ -158,7 +158,7 @@ public class GiornoWikiModulo extends WikiModulo {
     }
 
     @Override
-    public void elabora() {
+    public String elabora() {
         inizio = System.currentTimeMillis();
 
         for (GiornoWikiEntity giornoBean : findAll()) {
@@ -167,7 +167,7 @@ public class GiornoWikiModulo extends WikiModulo {
             save(giornoBean);
         }
 
-        super.fixElabora(inizio);
+        return super.fixElabora(inizio);
     }
 
     @Override

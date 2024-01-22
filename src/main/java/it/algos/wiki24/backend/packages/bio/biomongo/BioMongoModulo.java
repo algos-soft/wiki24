@@ -19,6 +19,7 @@ import it.algos.wiki24.backend.packages.parametri.luogonato.*;
 import it.algos.wiki24.backend.packages.parametri.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
 import it.algos.wiki24.backend.packages.parametri.sesso.*;
+import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
@@ -94,6 +95,8 @@ public class BioMongoModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.flagElabora = WPref.usaElaboraBioMongo;
+        super.scheduledElabora = TaskElaboraBioMongo.TYPE_SCHEDULE;
         super.lastElabora = WPref.lastElaboraBioMongo;
         super.durataElabora = WPref.elaboraBioMongoTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
@@ -255,13 +258,14 @@ public class BioMongoModulo extends WikiModulo {
         return query;
     }
 
-    public void elabora() {
+    public String elabora() {
         inizio = System.currentTimeMillis();
 
         elaboraService.elaboraAll();
         this.eliminaMongoCancellatiDaServer();
 
         super.fixElabora(inizio);
+        return VUOTA;
     }
 
     public void elaboraDue() {

@@ -58,9 +58,10 @@ public abstract class ParModulo extends WikiModulo {
         return null;
     }
 
-    public void elabora() {
+    public String elabora() {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
         elabora(lista);
+        return VUOTA;
     }
 
     public void elabora(List<BioServerEntity> lista) {
@@ -124,7 +125,7 @@ public abstract class ParModulo extends WikiModulo {
         BioMongoEntity bioMongoEntity = null;
 
         if (bioServerEntity != null) {
-            bioMongoEntity = (BioMongoEntity)elabora(bioServerEntity);
+            bioMongoEntity = (BioMongoEntity) elabora(bioServerEntity);
         }
 
         return bioMongoEntity;

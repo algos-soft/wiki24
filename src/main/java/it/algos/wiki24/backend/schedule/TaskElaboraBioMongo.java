@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.schedule.*;
 import it.algos.wiki24.backend.enumeration.*;
@@ -23,25 +24,29 @@ import javax.inject.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskElaboraBioMongo extends BaseTask {
 
+    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.dueNoLunedi;
+
     @Inject
     private BioMongoModulo bioMongoModulo;
 
 
     public TaskElaboraBioMongo() {
         super.descrizioneTask = WPref.usaElaboraBioMongo.getDescrizione();
-        super.typeSchedule = TypeSchedule.dueNoLunedi;
+        super.typeSchedule = TYPE_SCHEDULE;
         super.flagAttivazione = WPref.usaElaboraBioMongo;
         //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 
     @Override
     public void execute(TaskExecutionContext taskExecutionContext) throws RuntimeException {
+        String risultato = VUOTA;
+
         if (super.execute()) {
-
-            //            bioMongoModulo.cicloCorrente();
-
+            risultato = bioMongoModulo.elabora();
             super.logTaskEseguito();
         }
+
+        super.logTaskEseguito(risultato);
     }
 
 }

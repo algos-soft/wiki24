@@ -1,11 +1,15 @@
 package it.algos.wiki24.backend.packages.bio.biomongo;
 
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.boot.WikiCost.FIELD_NAME_NOME;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -55,6 +59,23 @@ public class BioMongoList extends WikiList {
         super.usaInfoElabora = true;
         super.usaBottoneElaboraDue = true;
         super.usaBottoneResetEntity = true;
+    }
+    @Override
+    public void fixAlert() {
+        String category = WPref.categoriaBio.getStr();
+        Span biografie;
+        Span contiene;
+        String numPagine;
+        String categoria = TAG_WIKI + CAT + WPref.categoriaBio.getStr();
+
+        Anchor anchor = new Anchor(categoria, textService.setQuadre(category));
+        anchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+
+        message = "Biografie con i parametri significativi. Elaborati da BioServer";
+        biografie = new Span(message);
+        biografie.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        biografie.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+        alertPlaceHolder.add(new Span(biografie));
     }
 
 

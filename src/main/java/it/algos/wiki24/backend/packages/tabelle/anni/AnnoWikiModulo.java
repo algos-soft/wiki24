@@ -156,7 +156,7 @@ public class AnnoWikiModulo extends WikiModulo {
     }
 
     @Override
-    public void elabora() {
+    public String elabora() {
         inizio = System.currentTimeMillis();
 
         for (AnnoWikiEntity annoBean : findAll()) {
@@ -165,7 +165,7 @@ public class AnnoWikiModulo extends WikiModulo {
             save(annoBean);
         }
 
-        super.fixElabora(inizio);
+       return super.fixElabora(inizio);
     }
 
     @Override
