@@ -349,10 +349,10 @@ public abstract class ListaTest extends WikiStreamTest {
 
     @ParameterizedTest
     @MethodSource(value = "getListeStream()")
-    @Order(901)
-    @DisplayName("901 - paragrafi")
+    @Order(601)
+    @DisplayName("601 - paragrafi")
     void paragrafi(String nomeLista, TypeLista typeSuggerito) {
-        System.out.println(("901 - paragrafi"));
+        System.out.println(("601 - paragrafi"));
         System.out.println(VUOTA);
         if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
             return;

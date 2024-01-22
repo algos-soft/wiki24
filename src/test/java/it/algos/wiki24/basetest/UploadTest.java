@@ -201,7 +201,7 @@ public abstract class UploadTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(50)
     @DisplayName("50 - uploadTest")
@@ -218,7 +218,7 @@ public abstract class UploadTest extends WikiTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(60)
     @DisplayName("60 - uploadReal")

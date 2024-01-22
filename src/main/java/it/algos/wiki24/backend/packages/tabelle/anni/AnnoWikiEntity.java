@@ -13,10 +13,10 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "anni", keyPropertyName = "nome", typeList = TypeList.hardWiki)
+@AEntity(collectionName = "anni", keyPropertyName = "nome", sortPropertyName = "ordine", sortDiscendente = true, typeList = TypeList.hardWiki)
 public class AnnoWikiEntity extends AbstractEntity {
 
-    @AField(type = TypeField.integer, headerText = "#", widthRem = 3, caption = "Ordinamento")
+    @AField(type = TypeField.integer, headerText = "#", widthRem = 4, caption = "Ordinamento")
     public int ordine;
 
     @AField(type = TypeField.text, widthRem = 9, caption = "Anno")
