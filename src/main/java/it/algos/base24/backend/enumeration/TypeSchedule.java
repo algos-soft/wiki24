@@ -50,21 +50,26 @@ public enum TypeSchedule {
      */
     minuto("* * * * *", "ogni minuto."),
 
+    everyZeroTrenta(SCHEDULED_EVERY_ZERO_TRENTA, "ogni giorno a mezzanotte e mezzo (0:30)."),
+    everyTre(SCHEDULED_EVERY_TRE, "ogni giorno alle tre (3:00)."),
+    everyCinqueTrenta(SCHEDULED_EVERY_CINQUE_TRENTA, "ogni giorno alle cinque e mezzo (5:30)."),
+    lunediGiovediSei(SCHEDULED_LUNEDI_GIOVEDI_SEI, "lunedì e giovedì alle sei (6:00)."),
+    martediVenerdiSei(SCHEDULED_MARTEDI_VENERDI_SEI, "martedì e venerdì alle sei (6:00)."),
     /**
      * Descrizione: ogni giorno alle 0:30
      */
-    zeroTrenta(SCHEDULED_ZERO_TRENTA, "ogni giorno alle 0:30."),
+    zeroTrenta(SCHEDULED_EVERY_ZERO_TRENTA, "ogni giorno alle 0:30."),
 
     /**
      * Descrizione: ogni giorno alle 0:40
      */
-    zeroQuaranta(SCHEDULED_ZERO_QUARANTA, "ogni giorno alle 0:40."),
+    zeroQuaranta(SCHEDULED_EVERY_ZERO_QUARANTA, "ogni giorno alle 0:40."),
 
     /**
      * Descrizione: ogni giorno alle sei
      */
     alba("0 6 * * *", "ogni giorno alle sei."),
-        pomeriggio("19 19 * * *", "solo oggi alle 15:05"),
+    //    pomeriggio("53 13 * * *", "solo oggi alle 13:40"),
 
     /**
      * Pattern: 5 0 * * mon

@@ -389,9 +389,17 @@ public class BaseCost {
 
     public static final String MAIL_TO = "gac@algos.it";
 
-    public static final String SCHEDULED_ZERO_TRENTA = "30 0 * * *";
+    public static final String SCHEDULED_EVERY_ZERO_TRENTA = "30 0 * * *";
 
-    public static final String SCHEDULED_ZERO_QUARANTA = "40 0 * * *";
+    public static final String SCHEDULED_EVERY_ZERO_QUARANTA = "40 0 * * *";
+
+    public static final String SCHEDULED_EVERY_TRE = "0 3 * * *";
+
+    public static final String SCHEDULED_EVERY_CINQUE_TRENTA = "30 5 * * *";
+
+    public static final String SCHEDULED_LUNEDI_GIOVEDI_SEI = "0 6 * * sun,thu";
+
+    public static final String SCHEDULED_MARTEDI_VENERDI_SEI = "0 6 * * tue,fri";
 
 
     public static final String REF = "<ref>";
