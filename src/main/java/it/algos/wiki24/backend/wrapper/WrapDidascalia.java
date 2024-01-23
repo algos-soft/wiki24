@@ -208,7 +208,7 @@ public class WrapDidascalia {
             return meseTxt;
         }
 
-        return meseTxt;
+        return textService.primaMaiuscola(meseTxt);
     }
 
 
@@ -227,7 +227,7 @@ public class WrapDidascalia {
             return meseTxt;
         }
 
-        return meseTxt;
+        return textService.primaMaiuscola(meseTxt);
     }
 
 
