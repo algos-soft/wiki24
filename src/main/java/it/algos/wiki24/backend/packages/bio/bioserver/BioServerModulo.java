@@ -2,11 +2,13 @@ package it.algos.wiki24.backend.packages.bio.bioserver;
 
 import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -34,6 +36,10 @@ public class BioServerModulo extends WikiModulo {
     @Inject
     MailService mailService;
 
+    @Inject
+    ElaboraService elaboraService;
+    @Inject
+    BioMongoModulo bioMongoModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -49,7 +55,7 @@ public class BioServerModulo extends WikiModulo {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.flagDownload= WPref.usaDownloadBioServer;
+        super.flagDownload = WPref.usaDownloadBioServer;
         super.scheduledDownload = TaskDownloadBioServer.TYPE_SCHEDULE;
         super.lastDownload = WPref.lastDownloadBioServer;
         super.durataDownload = WPref.downloadBioServerTime;
@@ -139,6 +145,14 @@ public class BioServerModulo extends WikiModulo {
         mailService.send(BaseVar.projectCurrent, risultato);
 
         super.fixDownload(inizio);
+    }
+
+    public AbstractEntity insertSave(AbstractEntity newModifiedServerBean) {
+        BioServerEntity bioServerBean = (BioServerEntity)super.insertSave(newModifiedServerBean);
+
+        elaboraService.creaModificaBeanMongo(bioServerBean);
+
+        return bioServerBean;
     }
 
 }// end of CrudModulo class

@@ -118,6 +118,7 @@ public class MailService {
         boolean status;
         MimeMessage message = this.mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+
         try {
             if (textService.isValid(from)) {
                 mimeMessageHelper.setFrom(from);

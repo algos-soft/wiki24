@@ -64,6 +64,8 @@ public class BioServerList extends WikiList {
         message = "Una piccola differenza tra le pagine del server e gli elementi del DB è fisiologica e dovuta alle voci della " +
                 "categoria che NON hanno un tmplBio valido";
         alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        message = "Download: effettua anche l'elaborazione di ogni singola BioMongo modificata.";
+        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
     }
 
 }// end of CrudList class

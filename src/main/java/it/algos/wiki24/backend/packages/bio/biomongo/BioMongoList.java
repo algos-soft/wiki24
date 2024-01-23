@@ -76,6 +76,9 @@ public class BioMongoList extends WikiList {
         biografie.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         biografie.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
         alertPlaceHolder.add(new Span(biografie));
+
+        message = "Elabora: ricontrolla tutta la collection. La singola elaborazione viene effettuata dal download di BioServer.";
+        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
     }
 
 
