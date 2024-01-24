@@ -192,12 +192,18 @@ public class AnnoWikiModulo extends WikiModulo {
     }
 
     public String uploadMortiAnnoCorrente() {
+        String risultato;
+        int numMorti;
         inizio = System.currentTimeMillis();
         String annoCorrente = LocalDateTime.now().getYear() + VUOTA;
 
         uploadService.annoMorto(annoCorrente);
+        numMorti = uploadService.numMortiAnno(annoCorrente);
+        risultato = String.format("Nella pagina [Morti nel %s] ci sono [%s] biografie. ", annoCorrente,
+                textService.format(numMorti));
 
-        return super.fixUpload(inizio);
+        super.fixUpload(inizio);
+        return risultato;
     }
 
     @Override

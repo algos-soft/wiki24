@@ -78,7 +78,7 @@ public abstract class UploadTest extends WikiTest {
     //--typeCrono per il test
     protected static Stream<Arguments> ANNO_MORTO() {
         return Stream.of(
-                //                Arguments.of("2002", TypeLista.annoMorte),
+                Arguments.of("2024", TypeLista.annoMorte),
                 Arguments.of("406 a.C.", TypeLista.annoMorte),
                 Arguments.of("560", TypeLista.annoMorte)
         );

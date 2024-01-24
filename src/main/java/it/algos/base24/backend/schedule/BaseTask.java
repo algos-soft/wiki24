@@ -113,7 +113,7 @@ public abstract class BaseTask extends Task {
     }
 
     public void logTaskEseguito(String risultato) {
-        String message = descrizioneTask + CAPO + risultato;
+        String message = getClass().getSimpleName() + CAPO + risultato;
         mailService.send(BaseVar.projectCurrent, message);
     }
 
@@ -128,9 +128,21 @@ public abstract class BaseTask extends Task {
         message = String.format("%s%s%s %s eseguita in %s minuti", clazzName, FORWARD, descrizioneTask, getPatternQuadre(), delta);
 
         logger.info(new WrapLog().type(TypeLog.task).message(message).usaDb());
+
         if (Pref.usaSendMail.is()) {
-            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPatternQuadre(), delta);
-            mailService.send(getClass().getSimpleName(), message);
+            message = this.getClass().getSimpleName();
+            message += CAPO;
+            message += descrizioneTask;
+            message += CAPO;
+            message += typeSchedule.getPatternQuadre();
+            message += CAPO;
+            message += String.format("%s=spento", flagAttivazione);
+            message += CAPO;
+            message += "Task eseguita in %s minuti";
+            mailService.send(BaseVar.projectCurrent, message);
+
+//            message = String.format("%s %s eseguita in %s minuti", descrizioneTask, getPatternQuadre(), delta);
+//            mailService.send(getClass().getSimpleName(), message);
         }
     }
 
@@ -145,14 +157,14 @@ public abstract class BaseTask extends Task {
         if (Pref.usaSendMail.is()) {
             message = this.getClass().getSimpleName();
             message += CAPO;
+            message += descrizioneTask;
+            message += CAPO;
             message += typeSchedule.getPatternQuadre();
             message += CAPO;
             message += String.format("%s=spento", flagAttivazione);
-            message += descrizioneTask;
+            message += CAPO;
+            message += "Task non eseguita per flag disabilitato";
             mailService.send(BaseVar.projectCurrent, message);
-
-            //            message = String.format("%s %s non eseguita per flag disabilitato", descrizioneTask, getPattern());
-            //            mailService.send(BaseVar.projectCurrent, message);
         }
     }
 

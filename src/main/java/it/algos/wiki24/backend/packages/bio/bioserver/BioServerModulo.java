@@ -9,6 +9,7 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -33,11 +34,13 @@ public class BioServerModulo extends WikiModulo {
 
     @Inject
     DownloadService downloadService;
+
     @Inject
     MailService mailService;
 
     @Inject
     ElaboraService elaboraService;
+
     @Inject
     BioMongoModulo bioMongoModulo;
 
@@ -110,6 +113,15 @@ public class BioServerModulo extends WikiModulo {
         return (BioServerEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public List<BioServerEntity> findAll() {
+        return super.findAll();
+    }
+
+    public BioServerEntity findOneById(String idValue) {
+        return (BioServerEntity) super.findOneById(idValue);
+    }
+
     public List<Long> findOnlyPageId() {
         return mongoService.projectionLong(BioServerEntity.class, FIELD_NAME_PAGE_ID);
     }
@@ -133,7 +145,7 @@ public class BioServerModulo extends WikiModulo {
      * Ciclo di download <br>
      */
     public void download() {
-        String risultato = VUOTA;
+        String risultato;
         inizio = System.currentTimeMillis();
 
         if (count() == 0) {
@@ -142,13 +154,20 @@ public class BioServerModulo extends WikiModulo {
         else {
             risultato = downloadService.cicloCorrente();
         }
+        //        message = String.format("%s (%s)", "BioServer", "download");
+        //        message += CAPO;
+        //        message += String.format("%s (%s)", "BioMongo", "elabora");
+        //        message += CAPO;
+        //        message += WPref.usaDownloadBioServer.getDescrizione();
+        //        message += CAPO;
+        //        message += risultato;
         mailService.send(BaseVar.projectCurrent, risultato);
 
         super.fixDownload(inizio);
     }
 
     public AbstractEntity insertSave(AbstractEntity newModifiedServerBean) {
-        BioServerEntity bioServerBean = (BioServerEntity)super.insertSave(newModifiedServerBean);
+        BioServerEntity bioServerBean = (BioServerEntity) super.insertSave(newModifiedServerBean);
 
         elaboraService.creaModificaBeanMongo(bioServerBean);
 

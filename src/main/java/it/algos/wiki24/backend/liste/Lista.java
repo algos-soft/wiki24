@@ -353,7 +353,7 @@ public abstract class Lista implements AlgosBuilderPattern {
      */
     public String bodyText() {
         StringBuffer buffer = new StringBuffer();
-        int numMinParagrafi = 4; //@todo passare a preferenza
+        int numMinParagrafi = 2; //@todo passare a preferenza
         int minVociInclude = 200; //@todo passare a preferenza
         int numVociLista; //voci totali
         int numChiaviMappa; //paragrafi effettivi
@@ -372,7 +372,7 @@ public abstract class Lista implements AlgosBuilderPattern {
         if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
             numVociLista = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
             numChiaviMappa = mappaDidascalie.size();
-            usaParagrafi = numChiaviMappa > numMinParagrafi && numVociLista > maxVociPerParagrafo;
+            usaParagrafi = numVociLista > maxVociPerParagrafo && numChiaviMappa > numMinParagrafi;
 
             if (usaParagrafi) {
                 for (String keyParagrafo : mappaDidascalie.keySet()) {

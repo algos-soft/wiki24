@@ -12,6 +12,7 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
+import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import jakarta.annotation.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -315,6 +316,22 @@ public abstract class CrudModulo {
         }
     }
 
+    public boolean isModificato(final AbstractEntity newBean) {
+        boolean modificato = false;
+        AbstractEntity oldBean = null;
+        String idValue;
+
+        if (newBean != null) {
+            idValue = newBean.getId();
+            oldBean = findOneById(idValue);
+        }
+
+        if (oldBean != null) {
+            modificato = !oldBean.equals(newBean);
+        }
+
+        return modificato;
+    }
 
     public AbstractEntity insert(AbstractEntity entityBean) {
         String entityName = textService.primaMaiuscola(currentCollectionName);

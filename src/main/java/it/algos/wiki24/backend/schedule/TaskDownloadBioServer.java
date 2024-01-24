@@ -38,6 +38,8 @@ public class TaskDownloadBioServer extends BaseTask {
         super.flagAttivazione = WPref.usaDownloadBioServer;
         super.descrizioneTask = WPref.usaDownloadBioServer.getDescrizione();
         super.typeSchedule = TYPE_SCHEDULE;
+//        super.typeSchedule = TypeSchedule.pomeriggio;
+
         //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 

@@ -113,6 +113,7 @@ public class WikiBoot extends BaseBoot {
         BaseVar.taskList.add(appContext.getBean(TaskElaboraBioMongo.class));
         BaseVar.taskList.add(appContext.getBean(TaskUploadGiorni.class));
         BaseVar.taskList.add(appContext.getBean(TaskUploadAnni.class));
+        BaseVar.taskList.add(appContext.getBean(TaskUploadMortiAnnoCorrente.class));
         super.fixTask();
     }
 

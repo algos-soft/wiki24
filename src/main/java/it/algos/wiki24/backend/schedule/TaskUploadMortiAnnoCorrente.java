@@ -30,6 +30,8 @@ public class TaskUploadMortiAnnoCorrente extends BaseTask {
         super.flagAttivazione = WPref.usaUploadMortiAnnoCorrente;
         super.descrizioneTask = WPref.usaUploadMortiAnnoCorrente.getDescrizione();
         super.typeSchedule = TYPE_SCHEDULE;
+//        super.typeSchedule = TypeSchedule.pomeriggio;
+
         //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 

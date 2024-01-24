@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.entity.*;
+import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.tabelle.anni.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.query.*;
@@ -89,6 +90,10 @@ public class UploadService {
 
     public boolean annoMortoTest(final String nomeAnno) {
         return appContext.getBean(UploadAnnoMorto.class, nomeAnno).test().upload().isValido();
+    }
+
+    public int numMortiAnno(final String nomeAnno) {
+        return appContext.getBean(ListaAnnoMorto.class, nomeAnno).numBio();
     }
 
 }

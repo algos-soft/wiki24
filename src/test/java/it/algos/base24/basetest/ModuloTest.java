@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;
 
+import javax.inject.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -23,17 +24,17 @@ import java.util.*;
  */
 public abstract class ModuloTest extends AlgosTest {
 
-    @Autowired
+    @Inject
     protected TextService textService;
 
 
-    @Autowired
+    @Inject
     protected ReflectionService reflectionService;
 
-    @Autowired
+    @Inject
     protected MongoService mongoService;
 
-    @Autowired
+    @Inject
     protected LogService logger;
 
     public static final String TAG_RESET_ONLY = "resetOnlyEmpty";
@@ -70,7 +71,7 @@ public abstract class ModuloTest extends AlgosTest {
 
     protected TypeList typeList;
 
-    private CrudList listaView;
+    protected CrudList listaView;
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -413,7 +414,7 @@ public abstract class ModuloTest extends AlgosTest {
             }
             if (listaView.usaBottoneResetAdd) {
                 typeResetPrevisto = RisultatoReset.esistenteNonModificato;
-//                typeResetPrevisto = RisultatoReset.esistenteIntegrato;
+                //                typeResetPrevisto = RisultatoReset.esistenteIntegrato;
             }
             message = String.format("La collection [%s] è piena come previsto per effettuare il test di %s che prevede %s%s", collectionName, METHOD_RESET_STARTUP, FORWARD, typeResetPrevisto);
             logger.info(new WrapLog().message(message).type(TypeLog.test));

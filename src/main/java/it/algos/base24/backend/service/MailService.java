@@ -91,7 +91,7 @@ public class MailService {
      * @param title soggetto
      * @param body  testo della mail
      */
-    public boolean send( String title, String body) {
+    public boolean send(String title, String body) {
         return send(mailUser, MAIL_TO, title, body);
     }
 
@@ -118,6 +118,9 @@ public class MailService {
         boolean status;
         MimeMessage message = this.mailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(message);
+        Map env = System.getenv();
+        String home = (String)env.get("HOME");
+        body += CAPO + PARENTESI_TONDA_INI + home + PARENTESI_TONDA_END;
 
         try {
             if (textService.isValid(from)) {
@@ -139,7 +142,7 @@ public class MailService {
 
     private void logError(Exception unErrore, String property) {
         String message = String.format("Non ho trovato la property %s nelle risorse", property);
-//        logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+        //        logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
     }
 
 }

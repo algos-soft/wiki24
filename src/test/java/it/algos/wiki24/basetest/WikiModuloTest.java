@@ -2,12 +2,16 @@ package it.algos.wiki24.basetest;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
+import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -68,6 +72,35 @@ public abstract class WikiModuloTest extends ModuloTest {
                 Arguments.of("1425", TypeLista.annoNascita),
                 Arguments.of("29 febbraio", TypeLista.giornoMorte)
         );
+    }
+
+    @Test
+    @Order(50)
+    @DisplayName("50 - resetStartup")
+    void resetStartup() {
+        System.out.println("50 - resetStartup");
+        System.out.println(VUOTA);
+        System.out.println("Non eseguita per questo modulo");
+    }
+
+
+    @Test
+    @Order(60)
+    @DisplayName("60 - resetDelete")
+    void resetDelete() {
+        System.out.println("60 - resetDelete");
+        System.out.println(VUOTA);
+        System.out.println("Non eseguita per questo modulo");
+    }
+
+
+    @Test
+    @Order(70)
+    @DisplayName("70 - resetAdd")
+    void resetAdd() {
+        System.out.println("70 - resetAdd");
+        System.out.println(VUOTA);
+        System.out.println("Non eseguita per questo modulo");
     }
 
 
@@ -162,7 +195,7 @@ public abstract class WikiModuloTest extends ModuloTest {
             System.out.print(PARENTESI_TONDA_END);
             System.out.print(SPAZIO);
 
-            System.out.print(bio.ordinamento!=null?textService.setQuadre(bio.ordinamento):VUOTA);
+            System.out.print(bio.ordinamento != null ? textService.setQuadre(bio.ordinamento) : VUOTA);
             System.out.print(SPAZIO);
 
             System.out.print(textService.setQuadre(bio.wikiTitle));
