@@ -39,8 +39,8 @@ public class WrapBio {
     public static WrapBio bean(final BioServerEntity beanBioServer) {
         WrapBio wrapBio = new WrapBio();
         wrapBio.beanBioServer = beanBioServer;
-        wrapBio.valida = true;
-        return beanBioServer != null ? wrapBio : null;
+        wrapBio.valida = beanBioServer != null;
+        return  wrapBio;
     }
 
 
@@ -53,7 +53,7 @@ public class WrapBio {
     }
 
     public LocalDateTime getTimeStamp() {
-        return beanBioServer != null ? beanBioServer.getLastServer() : ROOT_DATA_TIME;
+        return beanBioServer != null ? beanBioServer.getLastWiki() : ROOT_DATA_TIME;
     }
 
     public String getTemplBio() {

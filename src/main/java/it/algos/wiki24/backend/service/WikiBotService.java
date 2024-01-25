@@ -854,8 +854,8 @@ public class WikiBotService {
             for (WrapTime wrapWiki : listaWrapTimesWiki) {
                 pageId = wrapWiki.getPageid();
                 wrapMongo = mappaMongo.get(pageId);
-                lastWiki = wrapWiki.getLastModifica();
-                lastMongo = wrapMongo != null ? wrapMongo.getLastModifica() : ROOT_DATA_TIME;
+                lastWiki = wrapWiki.getLastWikiModifica();
+                lastMongo = wrapMongo != null ? wrapMongo.getLastWikiModifica() : ROOT_DATA_TIME;
                 if (lastWiki.isAfter(lastMongo)) {
                     listaPageIdsDaLeggere.add(pageId);
                 }
@@ -874,12 +874,12 @@ public class WikiBotService {
         MongoCollection collection = mongoService.getCollection("bioserver");
 
         Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
-        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastServer"), Projections.excludeId());
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastWiki"), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
         for (var singolo : documents) {
             pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
-            dateLastServer = singolo.get("lastServer", Date.class);
+            dateLastServer = singolo.get("lastWiki", Date.class);
             lastServer = dateService.dateToLocalDateTime(dateLastServer);
             listaWrap.add(new WrapTime(pageId, lastServer));
         }

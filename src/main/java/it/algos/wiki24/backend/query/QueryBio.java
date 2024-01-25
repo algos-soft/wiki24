@@ -73,11 +73,11 @@ public class QueryBio extends AQuery {
         if (wrapPage != null) {
             beanBioServer = bioServerModulo.newEntity(wrapPage);
         }
-        if (beanBioServer != null) {
-            return WrapBio.bean(beanBioServer);
-        }
+//        if (beanBioServer != null) {
+//            return WrapBio.bean(beanBioServer);
+//        }
 
-        return null;
+        return WrapBio.bean(beanBioServer);
     }
 
 

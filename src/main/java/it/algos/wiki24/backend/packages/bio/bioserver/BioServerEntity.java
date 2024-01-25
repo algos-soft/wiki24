@@ -35,7 +35,7 @@ public class BioServerEntity extends AbstractEntity {
 
 
     @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
-    public LocalDateTime lastServer;
+    public LocalDateTime lastWiki;
 
 
     @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)

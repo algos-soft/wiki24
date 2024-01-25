@@ -18,24 +18,24 @@ public class WrapTime implements Comparable {
 
     private String wikiTitle;
 
-    private LocalDateTime lastModifica;
+    private LocalDateTime lastWikiModifica;
 
 
     public WrapTime(final long pageid, final String wikiTitle, final String lastModificaString) {
         this.pageid = pageid;
         this.wikiTitle = wikiTitle;
-        this.lastModifica = (lastModificaString != null && lastModificaString.length() > 0) ? LocalDateTime.parse(lastModificaString, DateTimeFormatter.ISO_DATE_TIME) : null;
+        this.lastWikiModifica = (lastModificaString != null && lastModificaString.length() > 0) ? LocalDateTime.parse(lastModificaString, DateTimeFormatter.ISO_DATE_TIME) : null;
     }
 
     public WrapTime(final long pageid, final LocalDateTime lastModifica) {
         this.pageid = pageid;
-        this.lastModifica = lastModifica;
+        this.lastWikiModifica = lastModifica;
     }
 
     public WrapTime(final long pageid, final String wikiTitle, final LocalDateTime lastModifica) {
         this.pageid = pageid;
         this.wikiTitle = wikiTitle;
-        this.lastModifica = lastModifica;
+        this.lastWikiModifica = lastModifica;
     }
 
     public long getPageid() {
@@ -46,8 +46,8 @@ public class WrapTime implements Comparable {
         return wikiTitle;
     }
 
-    public LocalDateTime getLastModifica() {
-        return lastModifica;
+    public LocalDateTime getLastWikiModifica() {
+        return lastWikiModifica;
     }
 
 

@@ -90,7 +90,7 @@ public class BioServerModuloTest extends WikiModuloTest {
         assertFalse(ottenutoBooleano);
         System.out.println(ottenutoBooleano);
 
-        bioServerBean.wikiTitle="Xyz";
+        bioServerBean.wikiTitle = "Xyz";
         ottenutoBooleano = modulo.isModificato(bioServerBean);
         assertTrue(ottenutoBooleano);
         System.out.println(ottenutoBooleano);

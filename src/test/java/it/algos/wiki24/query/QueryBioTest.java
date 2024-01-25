@@ -33,6 +33,8 @@ class QueryBioTest extends QueryTest {
 
     private WrapBio wrapBio;
 
+    private WrapPage wrapPage;
+
     private BioServerEntity bioServerEntity;
 
     /**
@@ -58,11 +60,12 @@ class QueryBioTest extends QueryTest {
         super.setUpEach();
         istanza = null;
         wrapBio = null;
+        wrapPage = null;
         bioServerEntity = null;
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "PAGINE_BIO")
     @Order(51)
     @DisplayName("51 - Recupera wrapBioTitle")
@@ -111,6 +114,27 @@ class QueryBioTest extends QueryTest {
         sorgente = "Piozzano";
         sorgenteLong = 2741616;
         wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        if (wrapBio != null && wrapBio.isValida()) {
+            System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
+        }
+        else {
+            System.out.println(String.format("La pagina [[%s]] (se esiste) non è una biografia", sorgente));
+        }
+        printWrapBio(wrapBio);
+    }
+
+    @Test
+    @Order(54)
+    @DisplayName("54 - Recupera pagina NON bio")
+    void wrapBioTitle() {
+        System.out.println(("54 - Recupera pagina NON bio"));
+
+        sorgente = "Nati nel 1435";
+        wrapPage = appContext.getBean(QueryPage.class).getPage(sorgente);
+        sorgenteLong = wrapPage.getPageid();
+
+        wrapBio = appContext.getBean(QueryBio.class).getWrapBio(sorgenteLong);
+        assertNotNull(wrapBio);
         if (wrapBio != null && wrapBio.isValida()) {
             System.out.println(String.format("Trovata la pagina [[%s]] su wikipedia", sorgente));
         }

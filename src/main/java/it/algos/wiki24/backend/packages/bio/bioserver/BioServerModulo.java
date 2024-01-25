@@ -91,7 +91,7 @@ public class BioServerModulo extends WikiModulo {
      * @param pageId     (obbligatorio)
      * @param wikiTitle  (obbligatorio)
      * @param tmplBio    (facoltativo)
-     * @param lastServer (facoltativo)
+     * @param lastWiki (facoltativo)
      * @param lastMongo  (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
@@ -100,13 +100,13 @@ public class BioServerModulo extends WikiModulo {
             long pageId,
             String wikiTitle,
             String tmplBio,
-            LocalDateTime lastServer,
+            LocalDateTime lastWiki,
             LocalDateTime lastMongo) {
         BioServerEntity newEntityBean = BioServerEntity.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .tmplBio(textService.isValid(tmplBio) ? tmplBio : null)
-                .lastServer(lastServer != null ? lastServer : ROOT_DATA_TIME)
+                .lastWiki(lastWiki != null ? lastWiki : ROOT_DATA_TIME)
                 .lastMongo(lastMongo != null ? lastMongo : LocalDateTime.now())
                 .build();
 
@@ -139,6 +139,12 @@ public class BioServerModulo extends WikiModulo {
     //--le funzionalità inerenti sono eseguite da download
     public RisultatoReset resetDelete() {
         return null;
+    }
+
+    @Override
+    public RisultatoDelete deleteAll() {
+        super.deleteAll();
+        return bioMongoModulo.deleteAll();
     }
 
     /**

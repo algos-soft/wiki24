@@ -1167,8 +1167,8 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(VUOTA);
             System.out.println(String.format("WrapTime pageId: %s", wrapTime.getPageid()));
             System.out.println(String.format("WrapTime wikiTitle: %s", wrapTime.getWikiTitle()));
-            System.out.println(String.format("WrapTime timestamp (originale): %s", wrapTime.getLastModifica()));
-            System.out.println(String.format("WrapTime last (formattato): %s", dateService.get(wrapTime.getLastModifica())));
+            System.out.println(String.format("WrapTime timestamp (originale): %s", wrapTime.getLastWikiModifica()));
+            System.out.println(String.format("WrapTime last (formattato): %s", dateService.get(wrapTime.getLastWikiModifica())));
         }
     }
 
@@ -1177,7 +1177,7 @@ public abstract class WikiTest extends AlgosTest {
             System.out.println(VUOTA);
             System.out.println(String.format("BioEntity pageId: %s", bio.getPageId()));
             System.out.println(String.format("BioEntity wikiTitle: %s", bio.getWikiTitle()));
-            System.out.println(String.format("BioEntity lastServer: %s", bio.getLastServer()));
+            System.out.println(String.format("BioEntity lastWiki: %s", bio.getLastWiki()));
             System.out.println(String.format("BioEntity tmplBio:"));
             System.out.println(String.format("%s", wrapBio.getTemplBio()));
         }

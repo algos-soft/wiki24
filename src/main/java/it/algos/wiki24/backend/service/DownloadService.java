@@ -6,11 +6,13 @@ import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -56,6 +58,9 @@ public class DownloadService {
     BioServerModulo bioServerModulo;
 
     @Inject
+    BioServerModulo bioMongoModulo;
+
+    @Inject
     BotLogin botLogin;
 
     @Inject
@@ -63,6 +68,9 @@ public class DownloadService {
 
     @Inject
     MailService mailService;
+
+    @Inject
+    ElaboraService elaboraService;
 
     private long inizio;
 
@@ -377,7 +385,8 @@ public class DownloadService {
 
         if (listaMongoIdsDaCancellare == null || listaMongoIdsDaCancellare.size() < 1) {
             return String.format("%sNel database non ci sono pagine da cancellare. ", CAPO,
-                    textService.format(listaMongoIdsDaCancellare.size()));
+                    textService.format(listaMongoIdsDaCancellare.size())
+            );
         }
 
         for (Long pageId : listaMongoIdsDaCancellare) {
@@ -393,7 +402,8 @@ public class DownloadService {
         Pref.usaNotification.setValue(usaNotificationCurrentValue);
 
         return String.format("%sCancellate [%s] entities dal database (mongo). ", CAPO,
-                textService.format(listaMongoIdsDaCancellare.size()));
+                textService.format(listaMongoIdsDaCancellare.size())
+        );
     }
 
 
@@ -464,7 +474,7 @@ public class DownloadService {
      * Vengono usati quelli che hanno un miniWrap.pageid senza corrispondente bio.pageid nel mongoDb <br>
      * Vengono usati quelli che hanno miniWrap.lastModifica maggiore di bio.lastModifica <br>
      * A regime deve probabilmente gestire una lista di circa 10.000 miniWrap
-     * si tratta delle voci nuove e di quelle modificate nelle ultime 24 ore <br>
+     * si tratta delle voci nuove e di quelle modificate nelle ultime 24 (?) ore <br>
      * Nella listaPageIdsDaLeggere possono esserci anche voci SENZA il tmpl BIO, che verranno scartate dopo <br>
      *
      * @param listaWrapTimes con il pageIds e lastModifica
@@ -495,22 +505,26 @@ public class DownloadService {
      * @param listaPageIdsDaCreare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
      */
     public String creaNuoveVoci(List<Long> listaPageIdsDaCreare) {
-        String risultato;
+        String risultato = VUOTA;
         inizio = System.currentTimeMillis();
         long inizioBloccoPageIds;
         long inizioBloccoWrapBio;
         String message;
-        int numVociBlocco = 0;
+        BioServerEntity bioServerBean;
+        BioMongoEntity bioMongoBean;
+        int numVociBlocco;
         int numVociCreate = 0;
+        int numVociNonBio = 0;
         int numVociTotali = listaPageIdsDaCreare.size();
         String vociBlocco;
         String vociCreate;
+        String vociNonBio;
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
         int blocco = WPref.bloccoDownload.getInt();
         List<Long> subListPageIds;
-        List<WrapBio> listaWrapBio = null;
+        List<WrapBio> listaWrapBio;
 
         message = String.format("Vengono creati i [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
@@ -522,9 +536,19 @@ public class DownloadService {
             listaWrapBio = queryService.getListaBio(subListPageIds);
             inizioBloccoWrapBio = System.currentTimeMillis();
             for (WrapBio wrapBio : listaWrapBio) {
-                bioServerModulo.insert(wrapBio.getBeanBioServer());
-                numVociBlocco++;
-                numVociCreate++;
+                if (wrapBio.isValida()) {
+                    bioServerBean = wrapBio.getBeanBioServer();
+                    bioServerModulo.insert(bioServerBean);
+                    elaboraService.creaModificaBeanMongo(bioServerBean);
+                    numVociBlocco++;
+                    numVociCreate++;
+                }
+                else {
+                    if (Pref.debug.is()) {
+                        // la pagina NON è una biografia
+                        numVociNonBio++;
+                    }
+                }
             }
             vociBlocco = textService.format(numVociBlocco);
             vociCreate = textService.format(numVociCreate);
@@ -544,7 +568,13 @@ public class DownloadService {
 
         Pref.usaNotification.setValue(usaNotificationCurrentValue);
 
-        return String.format("%sCreate [%s] nuove voci di BioServer e BioMongo. ", CAPO, textService.format(listaPageIdsDaCreare.size()));
+        vociNonBio = textService.format(numVociNonBio);
+        vociCreate = textService.format(numVociCreate);
+        risultato += String.format("%sControllate eventuali [%s] nuove voci presenti nella categoria. ", CAPO, vociTotali);
+        risultato += String.format("%sTrovate [%s] pagine che NON sono pagine biografiche (templBio). ", CAPO, vociNonBio);
+        risultato += String.format("%sCreate [%s] nuove voci di BioServer e BioMongo. ", CAPO, vociCreate);
+
+        return risultato;
     }
 
 
@@ -558,22 +588,37 @@ public class DownloadService {
      * @param listaPageIdsDaModificare tutti i pageIds (long) presenti sul server wiki e da creare/modificare
      */
     public String modificaVociEsistenti(List<Long> listaPageIdsDaModificare) {
-        String risultato;
+        String risultato = VUOTA;
         inizio = System.currentTimeMillis();
         long inizioBloccoPageIds;
         long inizioBloccoWrapBio;
         String message;
-        int numVociBlocco = 0;
+        BioServerEntity bioServerBean;
+        BioMongoEntity bioMongoBean;
+        int numVociBlocco;
         int numVociCreate = 0;
+        int numVociNonBio = 0;
         int numVociTotali = listaPageIdsDaModificare.size();
+        int bioWikiModificate = listaPageIdsDaModificare.size();
+        int bioServerModificate = 0;
+        int bioMongoModificate = 0;
+        int bioMongoNuove = 0;
         String vociBlocco;
         String vociCreate;
+        String vociNonBio;
+        String vociWikiModificate;
+        String vociServerModificate;
+        String vociMongoModificate;
+        String vociMongoNuove;
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
         int blocco = WPref.bloccoDownload.getInt();
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio = null;
+        LocalDateTime ultimoCheck = WPref.lastDownloadBioServer.getDateTime();
+        LocalDateTime adesso = LocalDateTime.now();
+        int giorni = adesso.getDayOfYear() - ultimoCheck.getDayOfYear();
 
         message = String.format("Vengono creati i [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
@@ -585,9 +630,33 @@ public class DownloadService {
             listaWrapBio = queryService.getListaBio(subListPageIds);
             inizioBloccoWrapBio = System.currentTimeMillis();
             for (WrapBio wrapBio : listaWrapBio) {
-                bioServerModulo.insertSave(wrapBio.getBeanBioServer());
-                numVociBlocco++;
-                numVociCreate++;
+                //                                bioServerModulo.insertSave(wrapBio.getBeanBioServer());
+                if (wrapBio.isValida()) {
+                    bioServerBean = wrapBio.getBeanBioServer();
+                    if (bioServerModulo.isModificato(bioServerBean)) {
+                        bioServerModulo.save(bioServerBean);
+                        bioServerModificate++;
+                        bioMongoBean = elaboraService.creaBeanMongo(bioServerBean);
+                        if (bioMongoModulo.isModificato(bioMongoBean)) {
+                            bioMongoModulo.save(bioMongoBean);
+                            bioMongoModificate++;
+                        }
+                    }
+                    else {
+                        if (!bioMongoModulo.existById(bioServerBean.getId())) {
+                            elaboraService.creaModificaBeanMongo(bioServerBean);
+                            bioMongoNuove++;
+                        }
+                    }
+                    numVociBlocco++;
+                    numVociCreate++;
+                }
+                else {
+                    if (Pref.debug.is()) {
+                        // la pagina NON è una biografia
+                        numVociNonBio++;
+                    }
+                }
             }
             vociBlocco = textService.format(numVociBlocco);
             vociCreate = textService.format(numVociCreate);
@@ -607,7 +676,22 @@ public class DownloadService {
 
         Pref.usaNotification.setValue(usaNotificationCurrentValue);
 
-        return String.format("%sModificate [%s] voci esistenti. ", CAPO, textService.format(listaPageIdsDaModificare.size()));
+        vociNonBio = textService.format(numVociNonBio);
+        vociCreate = textService.format(numVociCreate);
+        vociWikiModificate = textService.format(bioWikiModificate - numVociNonBio);
+        vociServerModificate = textService.format(bioServerModificate);
+        vociMongoModificate = textService.format(bioMongoModificate);
+        vociMongoNuove = textService.format(bioMongoNuove);
+
+        risultato += String.format("%sTrovate [%s] pagine che NON sono pagine biografiche (templBio). ", CAPO, vociNonBio);
+        risultato += String.format("%sWiki: Pagine wiki modificate [%s] negli ultimi [%s] giorni. ", CAPO, vociWikiModificate,giorni);
+        risultato += String.format("%sBioServer: Property tmplBio di BioServer modificate: [%s]. ", CAPO, vociServerModificate);
+        risultato += String.format("%sBioMongo: Parametri di BioMongo modificate: [%s]. ", CAPO, vociMongoModificate);
+        if (bioMongoNuove > 0) {
+            risultato += String.format("%sBioMongo: Create nuove voci mancanti: [%s]. ", CAPO, vociMongoNuove);
+        }
+
+        return risultato;
     }
 
 

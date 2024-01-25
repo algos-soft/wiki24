@@ -75,8 +75,8 @@ public class ElaboraService {
     /**
      * Elabora la singola entity <br>
      */
-    public BioMongoEntity creaModificaBeanMongo(BioServerEntity bioServerBean) {
-        BioMongoEntity bioMongoEntity = null;
+    public BioMongoEntity creaBeanMongo(BioServerEntity bioServerBean) {
+        BioMongoEntity bioMongoEntity;
         Map<String, String> mappa;
 
         if (bioServerBean == null) {
@@ -87,6 +87,14 @@ public class ElaboraService {
         mappa = estraeMappa(bioServerBean);
 
         bioMongoEntity = elaboraBean(bioMongoEntity, mappa);
+        return bioMongoEntity;
+    }
+
+    /**
+     * Elabora e modifica la singola entity <br>
+     */
+    public BioMongoEntity creaModificaBeanMongo(BioServerEntity bioServerBean) {
+        BioMongoEntity bioMongoEntity = creaBeanMongo(bioServerBean);
         return (BioMongoEntity) bioMongoModulo.insertSave(bioMongoEntity);
     }
 
