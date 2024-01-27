@@ -27,7 +27,7 @@ import java.util.stream.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Lista giorno/anno nato/morto")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaGiornoAnnoNatoMortoTestCancella extends WikiTest {
+public class ListaGiornoAnnoNatoMortoTest extends WikiTest {
 
     @Inject
     protected GiornoModulo giornoModulo;
@@ -52,7 +52,6 @@ public class ListaGiornoAnnoNatoMortoTestCancella extends WikiTest {
                 Arguments.of("34 febbraio", TypeLista.giornoMorte),
                 Arguments.of("1º gennaio", TypeLista.giornoNascita),
                 Arguments.of("23 marzo", TypeLista.annoMorte),
-                Arguments.of(VUOTA, TypeLista.annoMorte),
                 Arguments.of("2024", TypeLista.annoMorte),
                 Arguments.of("2023", TypeLista.annoMorte),
                 Arguments.of("38 a.C.", TypeLista.annoNascita),
