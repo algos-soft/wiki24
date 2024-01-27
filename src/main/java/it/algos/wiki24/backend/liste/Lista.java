@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.liste;
 
+import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.service.*;
@@ -10,7 +11,10 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
+import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
+import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Scope;
 
 import javax.inject.*;
 import java.util.*;
@@ -22,7 +26,10 @@ import java.util.*;
  * Date: Fri, 05-Jan-2024
  * Time: 07:40
  */
-public abstract class Lista implements AlgosBuilderPattern {
+@SpringComponent
+@Primary()
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public  class Lista implements AlgosBuilderPattern {
 
     @Inject
     ApplicationContext appContext;

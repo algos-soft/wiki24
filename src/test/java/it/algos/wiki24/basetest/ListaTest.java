@@ -96,7 +96,8 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenutoIntero = ((Lista) appContext.getBean(clazz, nomeLista)).numBio();
+        //        ottenutoIntero = ((Lista) appContext.getBean(clazz, nomeLista)).numBio();
+        ottenutoIntero = appContext.getBean(Lista.class, nomeLista).numBio();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
