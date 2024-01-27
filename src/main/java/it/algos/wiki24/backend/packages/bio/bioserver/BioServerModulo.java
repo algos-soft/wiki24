@@ -68,7 +68,7 @@ public class BioServerModulo extends WikiModulo {
     public BioServerEntity newEntity(WrapPage wrapPage) {
         String tmplBio = wikiBotService.estraeTmplBio(wrapPage.getContent());
         if (textService.isValid(tmplBio)) {
-            return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp(), null);
+            return newEntity(wrapPage.getPageid(), wrapPage.getTitle(), tmplBio, wrapPage.getTimeStamp());
         }
         else {
             return null;
@@ -82,7 +82,7 @@ public class BioServerModulo extends WikiModulo {
      */
     @Override
     public BioServerEntity newEntity() {
-        return newEntity(0, VUOTA, VUOTA, null, null);
+        return newEntity(0, VUOTA, VUOTA, null);
     }
 
     /**
@@ -91,8 +91,7 @@ public class BioServerModulo extends WikiModulo {
      * @param pageId     (obbligatorio)
      * @param wikiTitle  (obbligatorio)
      * @param tmplBio    (facoltativo)
-     * @param lastWiki (facoltativo)
-     * @param lastMongo  (facoltativo)
+     * @param timestamp (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
@@ -100,14 +99,12 @@ public class BioServerModulo extends WikiModulo {
             long pageId,
             String wikiTitle,
             String tmplBio,
-            LocalDateTime lastWiki,
-            LocalDateTime lastMongo) {
+            LocalDateTime timestamp) {
         BioServerEntity newEntityBean = BioServerEntity.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .tmplBio(textService.isValid(tmplBio) ? tmplBio : null)
-                .lastWiki(lastWiki != null ? lastWiki : ROOT_DATA_TIME)
-                .lastMongo(lastMongo != null ? lastMongo : LocalDateTime.now())
+                .timestamp(timestamp != null ? timestamp : ROOT_DATA_TIME)
                 .build();
 
         return (BioServerEntity) fixKey(newEntityBean);

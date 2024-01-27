@@ -112,7 +112,7 @@ public abstract class ListaTest extends WikiStreamTest {
         }
     }
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(102)
     @DisplayName("102 - listaBio")
@@ -142,7 +142,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(201)
     @DisplayName("201 - listaWrapDidascalie")
@@ -172,7 +172,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(301)
     @DisplayName("301 - listaTestoDidascalia")
@@ -202,7 +202,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(401)
     @DisplayName("401 - mappaDidascalie")
@@ -229,7 +229,7 @@ public abstract class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(501)
     @DisplayName("501 - key della mappa")
@@ -381,6 +381,27 @@ public abstract class ListaTest extends WikiStreamTest {
         }
         else {
             printMancanoBio("Il testoBody della lista", nomeLista, typeSuggerito);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "getListeStream()")
+    @Order(701)
+    @DisplayName("701 - listaSottopagine")
+    void listaSottopagine(String nomeLista, TypeLista typeSuggerito) {
+        System.out.println(("701 - paragrafi"));
+        System.out.println(VUOTA);
+        if (!validoGiornoAnno(nomeLista, typeSuggerito)) {
+            return;
+        }
+
+        listaStr = ((Lista) appContext.getBean(clazz, nomeLista)).listaSottopagine();
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr != null && listaStr.size() > 0) {
+            print(listaStr);
         }
     }
 

@@ -13,6 +13,7 @@ import org.springframework.stereotype.*;
 
 import javax.inject.*;
 import java.time.*;
+import java.time.temporal.*;
 import java.util.*;
 
 /**
@@ -570,7 +571,7 @@ public class DownloadService {
 
         vociNonBio = textService.format(numVociNonBio);
         vociCreate = textService.format(numVociCreate);
-        risultato += String.format("%sControllate eventuali [%s] nuove voci presenti nella categoria. ", CAPO, vociTotali);
+        risultato += String.format("%sTrovate [%s] nuove voci presenti nella categoria e non nel database (mongo). ", CAPO, vociTotali);
         risultato += String.format("%sTrovate [%s] pagine che NON sono pagine biografiche (templBio). ", CAPO, vociNonBio);
         risultato += String.format("%sCreate [%s] nuove voci di BioServer e BioMongo. ", CAPO, vociCreate);
 
@@ -618,7 +619,7 @@ public class DownloadService {
         List<WrapBio> listaWrapBio = null;
         LocalDateTime ultimoCheck = WPref.lastDownloadBioServer.getDateTime();
         LocalDateTime adesso = LocalDateTime.now();
-        int giorni = adesso.getDayOfYear() - ultimoCheck.getDayOfYear();
+        long hours = ChronoUnit.HOURS.between(ultimoCheck, adesso);
 
         message = String.format("Vengono creati i [%s] e salvate le entities [%s] in blocchi di [%d] pagine per volta", "WrapBio", "BioServer", blocco);
         logger.info(new WrapLog().message(message).type(TypeLog.bio));
@@ -630,7 +631,6 @@ public class DownloadService {
             listaWrapBio = queryService.getListaBio(subListPageIds);
             inizioBloccoWrapBio = System.currentTimeMillis();
             for (WrapBio wrapBio : listaWrapBio) {
-                //                                bioServerModulo.insertSave(wrapBio.getBeanBioServer());
                 if (wrapBio.isValida()) {
                     bioServerBean = wrapBio.getBeanBioServer();
                     if (bioServerModulo.isModificato(bioServerBean)) {
@@ -684,7 +684,7 @@ public class DownloadService {
         vociMongoNuove = textService.format(bioMongoNuove);
 
         risultato += String.format("%sTrovate [%s] pagine che NON sono pagine biografiche (templBio). ", CAPO, vociNonBio);
-        risultato += String.format("%sWiki: Pagine wiki modificate [%s] negli ultimi [%s] giorni. ", CAPO, vociWikiModificate,giorni);
+        risultato += String.format("%sWiki: Pagine wiki modificate [%s] nelle ultime [%d] ore. ", CAPO, vociWikiModificate, hours);
         risultato += String.format("%sBioServer: Property tmplBio di BioServer modificate: [%s]. ", CAPO, vociServerModificate);
         risultato += String.format("%sBioMongo: Parametri di BioMongo modificate: [%s]. ", CAPO, vociMongoModificate);
         if (bioMongoNuove > 0) {

@@ -370,7 +370,7 @@ public class WikiCost {
     public static final String TAG_BIO = "bio";
 
     public static final String FIELD_NAME_PAGE_ID = "pageId";
-
+    public static final String FIELD_NAME_TIMESTAMP = "timestamp";
     public static final String FIELD_NAME_WIKI_TITLE = "wikiTitle";
 
     public static final String FIELD_NAME_NOME = "nome";

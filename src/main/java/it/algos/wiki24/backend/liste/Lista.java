@@ -57,7 +57,11 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     protected List<WrapDidascalia> listaWrapDidascalie;
 
-    protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
+    protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaCompleta;
+
+    protected String bodyText;
+
+    protected  List<String> listaSottopagine;
 
     protected boolean costruttoreValido = false;
 
@@ -271,7 +275,7 @@ public abstract class Lista implements AlgosBuilderPattern {
 
 
     public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie() {
-        mappaDidascalie = new LinkedHashMap<>();
+        mappaCompleta = new LinkedHashMap<>();
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaPrima;
         LinkedHashMap<String, List<String>> mappaSeconda;
         List<String> listaTerza;
@@ -285,14 +289,14 @@ public abstract class Lista implements AlgosBuilderPattern {
         for (WrapDidascalia wrap : listaWrapDidascalie) {
             //--primo livello - paragrafi
             keyUno = wrap.getPrimoLivello();
-            if (!mappaDidascalie.containsKey(keyUno)) {
+            if (!mappaCompleta.containsKey(keyUno)) {
                 mappaPrima = new LinkedHashMap<>();
-                mappaDidascalie.put(keyUno, mappaPrima);
+                mappaCompleta.put(keyUno, mappaPrima);
             }
 
             //--secondo livello - decade/lettera alfabetica iniziale
             keyDue = wrap.getSecondoLivello();
-            mappaPrima = mappaDidascalie.get(keyUno);
+            mappaPrima = mappaCompleta.get(keyUno);
             if (!mappaPrima.containsKey(keyDue)) {
                 mappaSeconda = new LinkedHashMap<>();
                 mappaPrima.put(keyDue, mappaSeconda);
@@ -312,7 +316,7 @@ public abstract class Lista implements AlgosBuilderPattern {
         }
 
         listaWrapDidascalie = null;
-        return fixAltreInCoda(mappaDidascalie);
+        return fixAltreInCoda(mappaCompleta);
     }
 
     /**
@@ -334,13 +338,13 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     public List<String> keyMappa() {
         List<String> keyList = null;
-        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
-            mappaDidascalie = mappaDidascalie();
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
         }
 
-        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
+        if (mappaCompleta != null && mappaCompleta.size() > 0) {
             keyList = new ArrayList<>();
-            for (String key : mappaDidascalie.keySet()) {
+            for (String key : mappaCompleta.keySet()) {
                 keyList.add(key);
             }
         }
@@ -364,19 +368,20 @@ public abstract class Lista implements AlgosBuilderPattern {
         String sottoPagina;
         String vedi;
         int maxVociPerParagrafo = 50; //@todo passare a preferenza
+        listaSottopagine = new ArrayList<>();
 
-        if (mappaDidascalie == null || mappaDidascalie.size() == 0) {
-            mappaDidascalie = mappaDidascalie();
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
         }
 
-        if (mappaDidascalie != null && mappaDidascalie.size() > 0) {
-            numVociLista = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
-            numChiaviMappa = mappaDidascalie.size();
+        if (mappaCompleta != null && mappaCompleta.size() > 0) {
+            numVociLista = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
+            numChiaviMappa = mappaCompleta.size();
             usaParagrafi = numVociLista > maxVociPerParagrafo && numChiaviMappa > numMinParagrafi;
 
             if (usaParagrafi) {
-                for (String keyParagrafo : mappaDidascalie.keySet()) {
-                    numVociParagrafo = wikiUtilityService.getSizeMappa(mappaDidascalie.get(keyParagrafo));
+                for (String keyParagrafo : mappaCompleta.keySet()) {
+                    numVociParagrafo = wikiUtilityService.getSizeMappa(mappaCompleta.get(keyParagrafo));
                     usaDiv = numVociParagrafo > maxVociPerUnaColonna;
 
                     //titolo con/senza dimensione
@@ -400,12 +405,14 @@ public abstract class Lista implements AlgosBuilderPattern {
 
                         vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                         buffer.append(vedi + CAPO);
+
+                        listaSottopagine.add(keyParagrafo);
                     }
                     else {
                         if (usaDiv) {
                             buffer.append(DIV_INI_CAPO);
                         }
-                        buffer.append(bodyParagrafo(mappaDidascalie.get(keyParagrafo)));
+                        buffer.append(bodyParagrafo(keyParagrafo));
                         if (usaDiv) {
                             buffer.append(DIV_END_CAPO);
                         }
@@ -414,31 +421,32 @@ public abstract class Lista implements AlgosBuilderPattern {
             }
             else {
                 //corpo unico senza paragrafi e senza sottopagine
-                numVociParagrafo = wikiUtilityService.getSizeMappaMappa(mappaDidascalie);
+                numVociParagrafo = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
                 usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
                 if (usaDiv) {
                     buffer.append(DIV_INI_CAPO);
                 }
-                buffer.append(bodyAll(mappaDidascalie));
+                buffer.append(bodyAll());
                 if (usaDiv) {
                     buffer.append(DIV_END_CAPO);
                 }
             }
         }
 
-        mappaDidascalie = null;
-        return buffer.toString().trim();
+        mappaCompleta = null;
+        bodyText = buffer.toString().trim();
+        return bodyText;
     }
 
 
     /**
      * Testo della pagina <br>
      */
-    public String bodyAll(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaParagrafo) {
+    public String bodyAll() {
         StringBuffer buffer = new StringBuffer();
 
-        for (String paragrafo : mappaParagrafo.keySet()) {
-            buffer.append(bodyParagrafo(mappaParagrafo.get(paragrafo)));
+        for (String keyParagrafo : mappaCompleta.keySet()) {
+            buffer.append(bodyParagrafo(keyParagrafo));
         }
 
         return buffer.toString();
@@ -447,7 +455,8 @@ public abstract class Lista implements AlgosBuilderPattern {
     /**
      * Testo del paragrafo <br>
      */
-    public String bodyParagrafo(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo) {
+    public String bodyParagrafo(String keyParagrafo) {
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo = mappaCompleta.get(keyParagrafo);
         StringBuffer buffer = new StringBuffer();
 
         if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
@@ -468,6 +477,21 @@ public abstract class Lista implements AlgosBuilderPattern {
 
     public TypeLista getType() {
         return type;
+    }
+
+    public List<String> listaSottopagine() {
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+        return listaSottopagine;
+    }
+
+    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keyParagrafo) {
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+
+        return mappaCompleta.get(keyParagrafo);
     }
 
 }

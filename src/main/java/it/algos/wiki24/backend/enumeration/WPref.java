@@ -26,8 +26,7 @@ public enum WPref implements IPref {
     bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
-    usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, false, "Download ed elaborazione di tutte le biografie nuove/modificate.",
-            true,false),
+    usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, false, "Download ed elaborazione di tutte le biografie nuove/modificate.", true,false),
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.", true, true),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in minuti."),
 
@@ -101,9 +100,9 @@ public enum WPref implements IPref {
 
 
     //***************
-    usaUploadMortiAnnoCorrente("usaUploadMortiAnnoCorrente", TypePref.bool, false, "Upload della pagina dei morti dell'anno corrente."),
-    lastUploadMortiAnnoCorrente("lastUploadMortiAnnoCorrente", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time " +
-            "della pagina dei morti dell'anno corrente.", true, true),
+    usaUploadMortiAnnoCorrente("usaUploadMortiAnnoCorrente", TypePref.bool, false, "Upload della pagina dei morti dell'anno corrente.",
+            true,false),
+    lastUploadMortiAnnoCorrente("lastUploadMortiAnnoCorrente", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time della pagina dei morti dell'anno corrente.", true, true),
     uploadMortiAnnoCorrenteTime("uploadMortiAnnoCorrenteTime", TypePref.integer, 0, "Durata upload della pagina dei morti dell'anno corrente in minuti."),
 
 

@@ -46,8 +46,10 @@ public class WikiBotService {
 
     @Inject
     HtmlService htmlService;
+
     @Inject
     MongoService mongoService;
+
     @Inject
     DateService dateService;
 
@@ -57,7 +59,7 @@ public class WikiBotService {
 
     public static final String WIKI = "https://it.wikipedia.org/w/api.php?&format=json&formatversion=2&action=query";
 
-//    public static final String WIKI_QUERY = WIKI + "&rvslots=main&prop=info|revisions&rvprop=content|ids|flags|timestamp|user|userid|comment|size&titles=";
+    //    public static final String WIKI_QUERY = WIKI + "&rvslots=main&prop=info|revisions&rvprop=content|ids|flags|timestamp|user|userid|comment|size&titles=";
 
     public static final String WIKI_PARSE = "https://it.wikipedia.org/w/api.php?action=parse&prop=wikitext&formatversion=2&format=json&page=";
 
@@ -874,12 +876,12 @@ public class WikiBotService {
         MongoCollection collection = mongoService.getCollection("bioserver");
 
         Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
-        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, "lastWiki"), Projections.excludeId());
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, FIELD_NAME_TIMESTAMP), Projections.excludeId());
         FindIterable<Document> documents = collection.find().projection(projection).sort(bSort);
 
         for (var singolo : documents) {
             pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
-            dateLastServer = singolo.get("lastWiki", Date.class);
+            dateLastServer = singolo.get(FIELD_NAME_TIMESTAMP, Date.class);
             lastServer = dateService.dateToLocalDateTime(dateLastServer);
             listaWrap.add(new WrapTime(pageId, lastServer));
         }

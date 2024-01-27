@@ -53,7 +53,7 @@ public class WrapBio {
     }
 
     public LocalDateTime getTimeStamp() {
-        return beanBioServer != null ? beanBioServer.getLastWiki() : ROOT_DATA_TIME;
+        return beanBioServer != null ? beanBioServer.getTimestamp() : ROOT_DATA_TIME;
     }
 
     public String getTemplBio() {
