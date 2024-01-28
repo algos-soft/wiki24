@@ -61,6 +61,12 @@ public class Lista implements AlgosBuilderPattern {
     @Inject
     protected AnnoModulo annoModulo;
 
+    @Inject
+    ArrayService arrayService;
+
+    @Inject
+    MathService mathService;
+
     protected TypeLista type;
 
 
@@ -188,22 +194,6 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     protected void checkValiditaCostruttore() {
-        //        if (moduloCorrente != null) {
-        //            this.costruttoreValido = moduloCorrente.existByKey(textService.primaMaiuscola(nomeLista)) || moduloCorrente.existByKey(textService.primaMinuscola(nomeLista));
-        //        }
-        //        else {
-        //            message = String.format("Manca il modulo in fixPreferenze() di %s", this.getClass().getSimpleName());
-        //            logger.error(new WrapLog().message(message));
-        //            this.costruttoreValido = false;
-        //        }
-        //
-        //        if (this.type == TypeLista.nessunaLista) {
-        //            message = String.format("Manca il type della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
-        //            logger.error(new WrapLog().message(message));
-        //            this.costruttoreValido = false;
-        //        }
-        //
-        //        this.collectionName = costruttoreValido ? annotationService.getCollectionName(BioMongoEntity.class) : VUOTA;
         costruttoreValido = textService.isValid(nomeLista);
     }
 
@@ -467,13 +457,13 @@ public class Lista implements AlgosBuilderPattern {
                         listaSottopagine.add(keyParagrafo);
                     }
                     else {
-                        if (usaDiv) {
-                            buffer.append(DIV_INI_CAPO);
-                        }
-                        buffer.append(bodyParagrafo(keyParagrafo));
-                        if (usaDiv) {
-                            buffer.append(DIV_END_CAPO);
-                        }
+                        //                        if (usaDiv) {
+                        //                            buffer.append(DIV_INI_CAPO);
+                        //                        }
+                        buffer.append(bodyParagrafo(keyParagrafo, true));
+                        //                        if (usaDiv) {
+                        //                            buffer.append(DIV_END_CAPO);
+                        //                        }
                     }
                 }
             }
@@ -481,13 +471,13 @@ public class Lista implements AlgosBuilderPattern {
                 //corpo unico senza paragrafi e senza sottopagine
                 numVociParagrafo = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
                 usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
-                if (usaDiv) {
-                    buffer.append(DIV_INI_CAPO);
-                }
+                //                if (usaDiv) {
+                //                    buffer.append(DIV_INI_CAPO);
+                //                }
                 buffer.append(bodyAll());
-                if (usaDiv) {
-                    buffer.append(DIV_END_CAPO);
-                }
+                //                if (usaDiv) {
+                //                    buffer.append(DIV_END_CAPO);
+                //                }
             }
         }
 
@@ -501,9 +491,18 @@ public class Lista implements AlgosBuilderPattern {
      */
     public String bodyAll() {
         StringBuffer buffer = new StringBuffer();
+        int maxVociPerUnaColonna = 5;
+        int numVociTotali = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
+        boolean usaDiv = numVociTotali > maxVociPerUnaColonna;
 
+        if (usaDiv) {
+            buffer.append(DIV_INI_CAPO);
+        }
         for (String keyParagrafo : mappaCompleta.keySet()) {
-            buffer.append(bodyParagrafo(keyParagrafo));
+            buffer.append(bodyParagrafo(keyParagrafo, false));
+        }
+        if (usaDiv) {
+            buffer.append(DIV_END_CAPO);
         }
 
         return buffer.toString();
@@ -512,18 +511,30 @@ public class Lista implements AlgosBuilderPattern {
     /**
      * Testo del paragrafo <br>
      */
-    public String bodyParagrafo(String keyParagrafo) {
+    public String bodyParagrafo(String keyParagrafo, boolean usaDivisori) {
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo = mappaCompleta.get(keyParagrafo);
         StringBuffer buffer = new StringBuffer();
+        int maxVociPerUnaColonna = 5;
+        int numVociParagrafo;
+        boolean usaDiv;
 
         if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
             for (String secondoLivello : mappaParagrafo.keySet()) {
                 for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
 
+                    numVociParagrafo = mappaParagrafo.get(secondoLivello).get(terzoLivello).size();
+                    usaDiv = usaDivisori && numVociParagrafo > maxVociPerUnaColonna;
+
+                    if (usaDiv) {
+                        buffer.append(DIV_INI_CAPO);
+                    }
                     for (String didascalia : mappaParagrafo.get(secondoLivello).get(terzoLivello)) {
                         buffer.append(ASTERISCO);
                         buffer.append(didascalia);
                         buffer.append(CAPO);
+                    }
+                    if (usaDiv) {
+                        buffer.append(DIV_END_CAPO);
                     }
                 }
             }
@@ -545,8 +556,6 @@ public class Lista implements AlgosBuilderPattern {
 
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {
-        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina = null;
-
         if (textService.isEmpty(bodyText)) {
             bodyText();
         }
@@ -554,11 +563,26 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     public String getTestoSottopagina(String keySottopagina) {
+        StringBuffer buffer = new StringBuffer();
+        int maxVociPerUnaColonna = 5;
+        int numVociSottopagina;
+        boolean usaDiv;
+
         if (textService.isEmpty(bodyText)) {
             bodyText();
         }
+        numVociSottopagina = wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
+        usaDiv = numVociSottopagina > maxVociPerUnaColonna;
 
-        return bodyParagrafo(keySottopagina);
+        if (usaDiv) {
+            buffer.append(DIV_INI_CAPO);
+        }
+        buffer.append(bodyParagrafo(keySottopagina, false));
+        if (usaDiv) {
+            buffer.append(DIV_END_CAPO);
+        }
+
+        return buffer.toString();
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {
