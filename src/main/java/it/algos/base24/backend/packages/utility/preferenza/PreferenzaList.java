@@ -8,6 +8,7 @@ import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
+import it.algos.base24.ui.wrapper.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
@@ -36,6 +37,8 @@ public class PreferenzaList extends CrudList {
     public void fixAlert() {
         super.infoScopo = String.format(typeList.getInfoScopo());
         super.fixAlert();
+        message="Di default ordinate per &#8593;critical, &#8593;base24 e &#8595;code";
+        alertPlaceHolder.add(ASpan.text(message).rosso());
     }
 
 

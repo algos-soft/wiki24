@@ -120,7 +120,7 @@ public class PreferenzaModulo extends CrudModulo {
 
     @Override
     public Sort getBasicSort() {
-        return Sort.by(Sort.Order.desc("base24"), Sort.Order.desc("critical"), Sort.Order.asc("code"));
+        return Sort.by(Sort.Order.desc("critical"), Sort.Order.desc("base24"), Sort.Order.asc("code"));
     }
 
     @Override
