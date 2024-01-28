@@ -438,11 +438,11 @@ public abstract class WikiList extends CrudList {
 
         if (searchPageId > 0) {
             filtri.uguale(FIELD_NAME_PAGE_ID, searchPageId);
-            filtri.sort(Sort.Order.asc(FIELD_NAME_PAGE_ID));
+            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_PAGE_ID));
         }
         else {
             filtri.remove(FIELD_NAME_PAGE_ID);
-            filtri.sort(basicSortOrder);
+            filtri.sort(basicSort);
         }
 
         if (usaSearchWikiTitle) {
@@ -451,11 +451,11 @@ public abstract class WikiList extends CrudList {
 
         if (textService.isValid(searchWikiTitle)) {
             filtri.inizio(FIELD_NAME_WIKI_TITLE, searchWikiTitle);
-            filtri.sort(Sort.Order.asc(FIELD_NAME_WIKI_TITLE));
+            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_WIKI_TITLE));
         }
         else {
             filtri.remove(FIELD_NAME_WIKI_TITLE);
-            filtri.sort(basicSortOrder);
+            filtri.sort(basicSort);
         }
     }
 

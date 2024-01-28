@@ -90,11 +90,11 @@ public class NazSingolareList extends WikiList {
 
         if (textService.isValid(pluraleValue)) {
             filtri.inizio(propertyPlurale, pluraleValue);
-            filtri.sort(Sort.Order.asc(propertyPlurale));
+            filtri.sort(Sort.by(Sort.Direction.ASC,propertyPlurale));
         }
         else {
             filtri.remove(propertyPlurale);
-            filtri.sort(basicSortOrder);
+            filtri.sort(basicSort);
         }
     }
 

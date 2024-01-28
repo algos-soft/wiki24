@@ -104,26 +104,26 @@ public class AttSingolareList extends WikiList {
 
         if (textService.isValid(pluraleValue)) {
             filtri.inizio(propertyPlurale, pluraleValue);
-            filtri.sort(Sort.Order.asc(propertyPlurale));
+            filtri.sort(Sort.by(Sort.Direction.ASC,propertyPlurale));
         }
         else {
             filtri.remove(propertyPlurale);
-            filtri.sort(basicSortOrder);
+            filtri.sort(basicSort);
         }
 
         String propertyEx = "ex";
         if (checkEx != null) {
             if (checkEx.isIndeterminate()) {
                 filtri.remove(propertyEx);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
             else if (checkEx.getValue()) {
                 filtri.add(propertyEx, true);
-                filtri.sort(Sort.Order.asc(propertyEx));
+                filtri.sort(Sort.by(Sort.Direction.ASC,propertyEx));
             }
             else {
                 filtri.add(propertyEx, false);
-                filtri.sort(Sort.Order.asc(propertyEx));
+                filtri.sort(Sort.by(Sort.Direction.ASC,propertyEx));
             }
         }
     }

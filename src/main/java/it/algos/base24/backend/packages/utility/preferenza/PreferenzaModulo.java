@@ -7,6 +7,7 @@ import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import org.springframework.context.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -117,6 +118,10 @@ public class PreferenzaModulo extends CrudModulo {
         return (PreferenzaEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public Sort getBasicSort() {
+        return Sort.by(Sort.Order.desc("base24"), Sort.Order.desc("critical"), Sort.Order.asc("code"));
+    }
 
     @Override
     public RisultatoReset resetPref() {

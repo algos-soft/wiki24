@@ -46,7 +46,7 @@ public class BioMongoList extends WikiList {
         super.fixPreferenze();
 
         this.usaDataProvider = true;
-        this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
+        this.basicSort = currentCrudModulo.getBasicSort();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
 
         this.usaBottoneSearch = false;
@@ -123,11 +123,11 @@ public class BioMongoList extends WikiList {
             String nome = searchNome.getValue();
             if (textService.isValid(nome)) {
                 filtri.inizio(FIELD_NAME_NOME, nome);
-                filtri.sort(Sort.Order.asc(FIELD_NAME_NOME));
+                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_NOME));
             }
             else {
                 filtri.remove(FIELD_NAME_NOME);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
         }
 
@@ -135,11 +135,11 @@ public class BioMongoList extends WikiList {
             String cognome = searchCognome.getValue();
             if (textService.isValid(cognome)) {
                 filtri.inizio(FIELD_NAME_COGNOME, cognome);
-                filtri.sort(Sort.Order.asc(FIELD_NAME_COGNOME));
+                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_COGNOME));
             }
             else {
                 filtri.remove(FIELD_NAME_COGNOME);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
         }
 
@@ -147,11 +147,11 @@ public class BioMongoList extends WikiList {
             String sesso = searchSesso.getValue();
             if (textService.isValid(sesso)) {
                 filtri.uguale(FIELD_NAME_SESSO, sesso);
-                filtri.sort(Sort.Order.asc(FIELD_NAME_SESSO));
+                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_SESSO));
             }
             else {
                 filtri.remove(FIELD_NAME_SESSO);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
         }
     }

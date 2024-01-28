@@ -12,7 +12,6 @@ import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.form.*;
 import it.algos.base24.ui.view.*;
-import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import jakarta.annotation.*;
 import org.bson.types.*;
 import org.springframework.beans.factory.annotation.*;
@@ -406,6 +405,7 @@ public abstract class CrudModulo {
     public AbstractEntity beforeInsert(AbstractEntity entityBean) {
         return entityBean;
     }
+
     public AbstractEntity afterInsert(AbstractEntity entityBean) {
         return entityBean;
     }
@@ -414,6 +414,7 @@ public abstract class CrudModulo {
     public AbstractEntity beforeSave(AbstractEntity entityBean) {
         return entityBean;
     }
+
     public AbstractEntity afterSave(AbstractEntity entityBean) {
         return entityBean;
     }
@@ -608,33 +609,37 @@ public abstract class CrudModulo {
         return newEntityBean;
     }
 
-    public Sort.Order getBasicSortOrder() {
-        Sort.Order sortOrder = null;
+    public Sort getBasicSort() {
+        Sort sort = null;
         String sortPropertyName = annotationService.getSortPropertyName(currentCrudEntityClazz);
         boolean sortDiscendente = annotationService.isSortDiscendente(currentCrudEntityClazz);
         String keyPropertyName;
 
         if (textService.isValid(sortPropertyName)) {
             if (sortDiscendente) {
-                sortOrder = Sort.Order.desc(sortPropertyName);
+                //                sortOrder = Sort.Order.desc(sortPropertyName);
+                sort = Sort.by(Sort.Direction.DESC, sortPropertyName);
             }
             else {
-                sortOrder = Sort.Order.asc(sortPropertyName);
+                //                sortOrder = Sort.Order.asc(sortPropertyName);
+                sort = Sort.by(Sort.Direction.ASC, sortPropertyName);
             }
         }
         else {
             if (reflectionService.isEsiste(currentCrudEntityClazz, FIELD_NAME_ORDINE)) {
-                sortOrder = Sort.Order.asc(FIELD_NAME_ORDINE);
+                //                sortOrder = Sort.Order.asc(FIELD_NAME_ORDINE);
+                sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE);
             }
             else {
                 keyPropertyName = annotationService.getKeyPropertyName(currentCrudEntityClazz);
                 if (textService.isValid(keyPropertyName)) {
-                    sortOrder = Sort.Order.asc(keyPropertyName);
+                    //                    sortOrder = Sort.Order.asc(keyPropertyName);
+                    sort = Sort.by(Sort.Direction.ASC, keyPropertyName);
                 }
             }
         }
 
-        return sortOrder;
+        return sort;
     }
 
     public boolean resetEffettivo() {

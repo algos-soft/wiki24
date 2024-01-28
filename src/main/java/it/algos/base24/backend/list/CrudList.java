@@ -116,7 +116,7 @@ public abstract class CrudList extends VerticalLayout {
 
     protected ListButtonBar buttonBar;
 
-    public Sort.Order basicSortOrder;
+    public Sort basicSort;
 
     protected TypeResetOld typeReset;
 
@@ -154,7 +154,7 @@ public abstract class CrudList extends VerticalLayout {
 
         this.propertyListNames = currentCrudModulo.getListPropertyNames();
         this.usaDataProvider = true;
-        this.basicSortOrder = currentCrudModulo.getBasicSortOrder();
+        this.basicSort = currentCrudModulo.getBasicSort();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
         this.usaVariantCompact = false;
 
@@ -387,7 +387,7 @@ public abstract class CrudList extends VerticalLayout {
         // filtro base (vuoto)
         // ordinamento iniziale di default bypassabile in fixPreferenze()
         filtri = appContext.getBean(FiltroSort.class, currentCrudEntityClazz);
-        filtri.sort(basicSortOrder);
+        filtri.sort(basicSort);
 
         // Pass all objects to a grid from a Data Provider
         this.refreshData();
@@ -619,11 +619,11 @@ public abstract class CrudList extends VerticalLayout {
 
         if (textService.isValid(searchValue)) {
             filtri.inizio(searchFieldName, searchValue);
-            filtri.sort(Sort.Order.asc(searchFieldName));
+            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_ORDINE));
         }
         else {
             filtri.remove(searchFieldName);
-            filtri.sort(basicSortOrder);
+            filtri.sort(basicSort);
         }
     }
 

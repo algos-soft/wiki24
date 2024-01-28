@@ -89,11 +89,11 @@ public abstract class ParList extends WikiList {
             String grezzo = searchGrezzo.getValue();
             if (textService.isValid(grezzo)) {
                 filtri.inizio(FIELD_NAME_GREZZO, grezzo);
-                filtri.sort(Sort.Order.asc(FIELD_NAME_GREZZO));
+                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_GREZZO));
             }
             else {
                 filtri.remove(FIELD_NAME_GREZZO);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
         }
 
@@ -101,11 +101,11 @@ public abstract class ParList extends WikiList {
             String elaborato = searchElaborato.getValue();
             if (textService.isValid(elaborato)) {
                 filtri.inizio(FIELD_NAME_ELABORATO, elaborato);
-                filtri.sort(Sort.Order.asc(FIELD_NAME_ELABORATO));
+                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_ELABORATO));
             }
             else {
                 filtri.remove(FIELD_NAME_ELABORATO);
-                filtri.sort(basicSortOrder);
+                filtri.sort(basicSort);
             }
         }
 

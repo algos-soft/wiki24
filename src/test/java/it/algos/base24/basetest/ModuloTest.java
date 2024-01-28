@@ -656,7 +656,7 @@ public abstract class ModuloTest extends AlgosTest {
         message = String.format("%s%s%s", "usaDataProvider", FORWARD, list.usaDataProvider);
         System.out.println(message);
 
-        message = String.format("%s%s%s", "basicSortOrder", FORWARD, list.basicSortOrder);
+        message = String.format("%s%s%s", "basicSortOrder", FORWARD, list.basicSort);
         System.out.println(message);
 
         message = String.format("%s%s%s", "searchFieldName", FORWARD, list.searchFieldName);

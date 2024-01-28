@@ -48,7 +48,7 @@ public class FiltroSort {
 
     public  LinkedHashMap<String, Filtro> mappaFiltri;
 
-   public Sort.Order sort = null;
+   public Sort sort = null;
 
     private Class<AbstractEntity> modelClazz;
 
@@ -67,7 +67,7 @@ public class FiltroSort {
     /**
      * Pattern Builder <br>
      */
-    public FiltroSort sort(Sort.Order sort) {
+    public FiltroSort sort(Sort sort) {
         this.sort = sort;
         return this;
     }
@@ -135,7 +135,7 @@ public class FiltroSort {
         }
 
         if (sort != null) {
-            query.with(Sort.by(sort));
+            query.with(sort);
         }
 
         return query;

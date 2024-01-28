@@ -86,7 +86,7 @@ public class DataProviderService {
 
     public Stream<AbstractEntity> fetch(final int offset, final int limit, FiltroSort filtroCorrente, List<QuerySortOrder> vaadinSortOrders) {
         Class<AbstractEntity> modelClazz = filtroCorrente.getModelClazz();
-        Sort.Order sortOrder = fixSingleSortOrder(vaadinSortOrders);
+        Sort sortOrder = fixSingleSortOrder(vaadinSortOrders);
 
         if (sortOrder != null) {
             filtroCorrente.sort(sortOrder);
@@ -153,8 +153,11 @@ public class DataProviderService {
     }
 
 
-    public Sort.Order fixSingleSortOrder(List<QuerySortOrder> vaadinSortOrders) {
-        Sort.Order sortOrder = null;
+    public Sort fixSingleSortOrder(List<QuerySortOrder> vaadinSortOrders) {
+        Sort sort = null;
+        Sort.Order order;
+        Sort.Direction direction;
+        String property;
 
         List<Sort.Order> springSortOrders = new ArrayList<>();
         for (QuerySortOrder so : vaadinSortOrders) {
@@ -167,10 +170,13 @@ public class DataProviderService {
             }
         }
         if (springSortOrders.size() == 1) {
-            sortOrder = springSortOrders.get(0);
+            order = springSortOrders.get(0);
+            direction = order.getDirection();
+            property = order.getProperty();
+            sort = Sort.by(direction, property);
         }
 
-        return sortOrder;
+        return sort;
     }
 
 }// end of Service class
