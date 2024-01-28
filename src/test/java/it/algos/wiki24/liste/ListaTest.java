@@ -2,8 +2,6 @@ package it.algos.wiki24.liste;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -15,9 +13,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
-import javax.inject.*;
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -30,7 +26,7 @@ import java.util.stream.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DisplayName("Lista giorno/anno nato/morto")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
+public class ListaTest extends WikiStreamTest {
 
 
     private Lista istanza;
@@ -39,6 +35,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
 
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
+    protected LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina;
 
     /**
      * Qui passa una volta sola <br>
@@ -57,7 +54,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
         super.setUpEach();
         istanza = null;
         currentModulo = null;
-
+        mappaSottopagina = null;
     }
 
     @Test
@@ -82,7 +79,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -109,7 +106,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -139,7 +136,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -169,7 +166,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -199,7 +196,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -226,7 +223,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
@@ -255,7 +252,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
@@ -292,8 +289,8 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    //    @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
     void listaSottopagine(String nomeLista, TypeLista type) {
@@ -303,7 +300,7 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
             return;
         }
 
-        listaStr = ((Lista) appContext.getBean(clazz, nomeLista)).type(type).listaSottopagine();
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
             return;
@@ -312,12 +309,70 @@ public class ListaGiornoAnnoNatoMortoTest extends WikiStreamTest {
             print(listaStr);
         }
         else {
-            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista,type.name());
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
             System.out.println(message);
         }
     }
 
 
+//    @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
+    @Order(901)
+    @DisplayName("901 - testoSottopagina")
+    void testoSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("901 - testoSottopagina"));
+        System.out.println(VUOTA);
+        if (!fixGiornoAnno(nomeLista, type)) {
+            return;
+        }
+
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
+                assertTrue(textService.isValid(ottenuto));
+                System.out.println(ottenuto);
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+
+    //    @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
+    @Order(902)
+    @DisplayName("902 - mappaSottopagina")
+    void mappaSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("902 - mappaSottopagina"));
+        System.out.println(VUOTA);
+        if (!fixGiornoAnno(nomeLista, type)) {
+            return;
+        }
+
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                mappaSottopagina = appContext.getBean(Lista.class, nomeLista).type(type).getMappaSottopagina(keySottopagina);
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
 
 
     protected void printBioLista(List<BioMongoEntity> listaBio) {

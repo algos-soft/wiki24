@@ -2,10 +2,12 @@ package it.algos.wiki24.backend.upload;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.ui.view.*;
@@ -24,6 +26,7 @@ import org.springframework.context.annotation.Scope;
 import javax.inject.*;
 import java.time.*;
 import java.time.format.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -94,7 +97,11 @@ public class Upload implements AlgosBuilderPattern {
 
     protected TypeSummary typeSummary;
 
-    boolean usaSottopaginaOltreMax;
+    protected boolean usaSottopaginaOltreMax;
+
+    private Lista istanzaLista;
+
+    protected boolean isSottopagina;
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -170,30 +177,28 @@ public class Upload implements AlgosBuilderPattern {
     /**
      * Pattern Builder <br>
      */
+    public Upload sottopagina() {
+        this.isSottopagina = true;
+        return this;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
     public Upload test() {
-        this.uploadTest = true;
+        return test(true);
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload test(boolean uploadTest) {
+        this.uploadTest = uploadTest;
         this.typeSummary = TypeSummary.test;
         return this;
     }
 
     protected void checkValiditaCostruttore() {
-        //        if (moduloCorrente != null) {
-        //            this.costruttoreValido = moduloCorrente.existByKey(textService.primaMaiuscola(nomeLista)) || moduloCorrente.existByKey(textService.primaMinuscola(nomeLista));
-        //        }
-        //        else {
-        //            message = String.format("Manca il backend in fixPreferenze() di %s", this.getClass().getSimpleName());
-        //            logger.error(new WrapLog().message(message));
-        //            this.costruttoreValido = false;
-        //        }
-        //
-        //        if (this.typeLista == TypeLista.nessunaLista) {
-        //            message = String.format("Manca il type della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
-        //            logger.error(new WrapLog().message(message));
-        //            this.costruttoreValido = false;
-        //        }
-        //
-        //        this.collectionName = costruttoreValido ? annotationService.getCollectionName(BioMongoEntity.class) : VUOTA;
-        //
         costruttoreValido = textService.isValid(nomeLista);
     }
 
@@ -224,31 +229,9 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     public WResult upload() {
-        //        String message;
         if (!checkValiditaPattern()) {
             return WResult.errato();
         }
-
-        //        if (type == null || type == TypeLista.nessunaLista) {
-        //            System.out.println(VUOTA);
-        //            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "upload", collectionName, nomeLista);
-        //            logger.info(new WrapLog().message(message));
-        //            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "upload");
-        //            logger.error(new WrapLog().message(message));
-        //            return null;
-        //        }
-        //        if (!costruttoreValido) {
-        //            System.out.println(VUOTA);
-        //            message = String.format("Upload non effettuato perché il valore [%s.%s] della collection '%s' non esiste", collectionName, nomeLista, collectionName);
-        //            logger.error(new WrapLog().message(message));
-        //            return null;
-        //        }
-        //        if (!patternCompleto) {
-        //            System.out.println(VUOTA);
-        //            message = String.format("AlgosBuilderPattern per l'istanza [%s.%s] non completo. Non funziona il metodo '%s'", collectionName, nomeLista, "upload");
-        //            logger.error(new WrapLog().message(message));
-        //            return null;
-        //        }
 
         if (textService.isEmpty(uploadText)) {
             this.esegue();
@@ -304,11 +287,25 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(creaHeader());
         buffer.append(creaBody());
         buffer.append(creaBottom());
-        this.uploadText = buffer.toString().trim();
 
+        this.uploadText = buffer.toString().trim();
         return this;
     }
 
+    public List<String> listaSottopagine() {
+        if (textService.isEmpty(bodyText)) {
+            this.esegue();
+        }
+        return istanzaLista != null ? istanzaLista.listaSottopagine() : null;
+    }
+
+    public WResult uploadSottopagina(String keySottopagina) {
+        WResult risultato = WResult.errato();
+        String nomeListaSottopagina = nomeLista + SLASH + keySottopagina;
+        risultato = appContext.getBean(Upload.class, nomeListaSottopagina).type(type).test(uploadTest).sottopagina().upload();
+
+        return risultato;
+    }
 
     public String creaHeader() {
         StringBuffer buffer = new StringBuffer();
@@ -359,19 +356,18 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String torna() {
+        String linkRitorno = isSottopagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
+
         return switch (type) {
-            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", nomeLista);
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", linkRitorno);
             default -> VUOTA;
         };
     }
 
     protected String tmpListaBio() {
-        if (numBio == 0) {
-            numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
-        }
         String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
         String progetto = "biografie";
-        String txtVoci = textService.format(numBio);
+        String txtVoci = textService.format(numBio());
 
         return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
     }
@@ -379,24 +375,34 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String creaBody() {
         StringBuffer buffer = new StringBuffer();
-        Lista istanza = appContext.getBean(Lista.class, nomeLista).type(type);
-        if (istanza.getType() == type) {
-            bodyText = istanza.bodyText();
+        String keyParagrafo;
+        String listaOriginaria;
+
+        if (isSottopagina) {
+            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
+            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+            if (istanzaLista == null) {
+                istanzaLista = appContext.getBean(Lista.class, listaOriginaria).type(type);
+            }
+            if (istanzaLista != null && istanzaLista.getType() == type) {
+                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
+            }
         }
         else {
-            message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanza.getType().getTag(), type.getTag());
-            logger.error(new WrapLog().exception(new AlgosException(message)));
-            return VUOTA;
+            istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
+            if (istanzaLista != null && istanzaLista.getType() == type) {
+                bodyText = istanzaLista.bodyText();
+            }
+            else {
+                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getType().getTag(), type.getTag());
+                logger.error(new WrapLog().exception(new AlgosException(message)));
+                return VUOTA;
+            }
         }
 
-        //        if (isSottopagina) {
-        //            buffer.append(creaBody());
-        //        }
-        //        else {
         buffer.append(getListaIni());
         buffer.append(bodyText);
         buffer.append(DOPPIE_GRAFFE_END);
-        //        }
 
         this.bodyText = buffer.toString();
         return this.bodyText;
@@ -404,6 +410,10 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String getListaIni() {
         StringBuffer buffer = new StringBuffer();
+
+        if (isSottopagina) {
+            return VUOTA;
+        }
 
         buffer.append("{{");
         buffer.append(type.getPersone());
@@ -471,11 +481,16 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     protected String interProgetto() {
-        return switch (type) {
-            case giornoNascita, giornoMorte -> VUOTA;
-            case annoNascita, annoMorte -> interProgettoAnni();
-            default -> VUOTA;
-        };
+        if (isSottopagina) {
+            return VUOTA;
+        }
+        else {
+            return switch (type) {
+                case giornoNascita, giornoMorte -> VUOTA;
+                case annoNascita, annoMorte -> interProgettoAnni();
+                default -> VUOTA;
+            };
+        }
     }
 
     protected String portale() {
@@ -549,26 +564,25 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String categorieAnni() {
         StringBuffer buffer = new StringBuffer();
-        //        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
-        String nomeAnno;
-        AnnoEntity anno;
-        int posCat;
-
-        String secolo;
         String nomeCat;
+        int ordineCategoriaSottopagina;
+        String keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
+        AnnoEntity anno = (AnnoEntity) annoModulo.findByKey(nomeAnno);
+        String secolo = anno.getSecolo().nome; ;
+        int posCat = anno.getOrdine() * MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI; ;
 
-        //        if (isSottopagina) {
-        //            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
-        //            posCat += ordineCategoriaSottopagina;
-        //        }
-        //        else {
-        //            nomeCat = titoloPagina;
-        //        }
-        nomeAnno = nomeLista;
-        anno = (AnnoEntity) annoModulo.findByKey(nomeAnno);
-        secolo = anno.getSecolo().nome;
-        nomeCat = titoloPagina;
-        posCat = anno.getOrdine() * MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI;
+        if (isSottopagina) {
+            nomeCat = textService.levaCodaDaUltimo(titoloPagina, SLASH);
+            ordineCategoriaSottopagina = Mese.getOrder(keyParagrafo);
+            if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
+                ordineCategoriaSottopagina = 13;
+            }
+            posCat += ordineCategoriaSottopagina;
+        }
+        else {
+            nomeCat = titoloPagina;
+        }
 
         buffer.append(CAPO);
         buffer.append("*");
@@ -647,6 +661,20 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     public String getBodyText() {
+        //        String keyParagrafo;
+        //        String lista;
+        //
+        //        if (isSottopagina) {
+        //            lista = textService.levaCodaDaUltimo(nomeLista, SLASH);
+        //            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+        //            if (istanzaLista == null) {
+        //                istanzaLista = appContext.getBean(Lista.class, lista).type(type);
+        //            }
+        //            if (istanzaLista != null && istanzaLista.getType() == type) {
+        //                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
+        //            }
+        //        }
+
         if (textService.isEmpty(bodyText)) {
             this.esegue();
         }

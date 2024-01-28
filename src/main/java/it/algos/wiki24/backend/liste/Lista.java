@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.base24.backend.enumeration.TypeFiltro.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
@@ -490,7 +491,6 @@ public class Lista implements AlgosBuilderPattern {
             }
         }
 
-        mappaCompleta = null;
         bodyText = buffer.toString().trim();
         return bodyText;
     }
@@ -543,12 +543,30 @@ public class Lista implements AlgosBuilderPattern {
         return listaSottopagine;
     }
 
-    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keyParagrafo) {
+
+    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina = null;
+
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+        return mappaCompleta.get(keySottopagina);
+    }
+
+    public String getTestoSottopagina(String keySottopagina) {
         if (textService.isEmpty(bodyText)) {
             bodyText();
         }
 
-        return mappaCompleta.get(keyParagrafo);
+        return bodyParagrafo(keySottopagina);
+    }
+
+    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+
+        return mappaCompleta.get(keySottopagina);
     }
 
 }
