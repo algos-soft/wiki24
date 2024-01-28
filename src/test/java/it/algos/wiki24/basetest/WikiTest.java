@@ -4,6 +4,8 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
+import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.base24.basetest.*;
@@ -96,6 +98,12 @@ public abstract class WikiTest extends AlgosTest {
 
     @Inject
     public DateService dateService;
+
+    @Inject
+    protected GiornoModulo giornoModulo;
+
+    @Inject
+    protected AnnoModulo annoModulo;
 
     //    protected CrudBackend crudBackend;
 
@@ -828,6 +836,40 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
+    protected boolean fixGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+        if (textService.isEmpty(nomeLista)) {
+            message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, typeSuggerito.name());
+            System.out.println(message);
+            return false;
+        }
+
+        currentType = typeSuggerito;
+
+        currentModulo = switch (typeSuggerito) {
+            case giornoNascita, giornoMorte -> giornoModulo;
+            case annoNascita, annoMorte -> annoModulo;
+            default -> null;
+        };
+
+        if (currentModulo == null) {
+            System.out.println("Manca l'indicazione del currentModulo");
+            return false;
+        }
+
+        if (currentModulo.findByKey(nomeLista) == null) {
+            message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
+            System.out.println(message);
+            return false;
+        }
+
+        if (currentType != typeSuggerito) {
+            message = String.format("Il type suggerito%s[%s] è incompatibile per un'istanza che prevede type%s[%s]", FORWARD, typeSuggerito, FORWARD, currentType);
+            System.out.println(message);
+            return false;
+        }
+
+        return true;
+    }
     protected void debug(String incipit, String valore, String metodoEseguito, boolean costruttoreValido, boolean patternValido) {
         System.out.println(incipit);
         System.out.println(String.format("Debug%s%s", FORWARD, valore));
@@ -1778,6 +1820,12 @@ public abstract class WikiTest extends AlgosTest {
         }
 
         return true;
+    }
+
+    protected void printMancanoBio(String manca, String nomeLista, TypeLista typeSuggerito) {
+        message = String.format("%s di type%s[%s] per %s [%s] è vuoto/a", manca, FORWARD, typeSuggerito.name(), typeSuggerito.getGiornoAnno(), nomeLista);
+        System.out.println(message);
+        System.out.println("Probabilmente non ci sono biografie valide");
     }
 
 }

@@ -59,7 +59,7 @@ public abstract class UploadAnni extends Upload {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(typeLista.getCategoria());
+        buffer.append(type.getCategoria());
         buffer.append(secolo);
         buffer.append("|");
         buffer.append(SPAZIO);

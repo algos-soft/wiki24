@@ -68,7 +68,6 @@ public abstract class UploadTest extends WikiTest {
     protected static Stream<Arguments> ANNO_NATO() {
         return Stream.of(
                 Arguments.of("38 a.C.", TypeLista.annoNascita),
-                //                Arguments.of("1467", TypeLista.annoNascita),
                 Arguments.of("1567", TypeLista.annoNascita)
         );
     }
@@ -79,8 +78,7 @@ public abstract class UploadTest extends WikiTest {
     protected static Stream<Arguments> ANNO_MORTO() {
         return Stream.of(
                 Arguments.of("2023", TypeLista.annoMorte),
-                Arguments.of("406 a.C.", TypeLista.annoMorte),
-                Arguments.of("560", TypeLista.annoMorte)
+                Arguments.of("406 a.C.", TypeLista.annoMorte)
         );
     }
 

@@ -30,8 +30,8 @@ public class UploadGiornoMorto extends UploadGiorni {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.typeLista = TypeLista.giornoMorte;
-        super.clazzLista = ListaGiornoMorto.class;
+        super.type = TypeLista.giornoMorte;
+//        super.clazzLista = ListaGiornoMorto.class;
         super.titoloPagina = wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
     }
 

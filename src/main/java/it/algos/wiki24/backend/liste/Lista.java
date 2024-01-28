@@ -3,6 +3,8 @@ package it.algos.wiki24.backend.liste;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.logic.*;
+import it.algos.base24.backend.packages.crono.anno.*;
+import it.algos.base24.backend.packages.crono.giorno.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -29,7 +31,7 @@ import java.util.*;
 @SpringComponent
 @Primary()
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public  class Lista implements AlgosBuilderPattern {
+public class Lista implements AlgosBuilderPattern {
 
     @Inject
     ApplicationContext appContext;
@@ -52,6 +54,12 @@ public  class Lista implements AlgosBuilderPattern {
     @Inject
     WikiUtilityService wikiUtilityService;
 
+    @Inject
+    protected GiornoModulo giornoModulo;
+
+    @Inject
+    protected AnnoModulo annoModulo;
+
     protected TypeLista type;
 
 
@@ -68,7 +76,7 @@ public  class Lista implements AlgosBuilderPattern {
 
     protected String bodyText;
 
-    protected  List<String> listaSottopagine;
+    protected List<String> listaSottopagine;
 
     protected boolean costruttoreValido = false;
 
@@ -90,6 +98,8 @@ public  class Lista implements AlgosBuilderPattern {
     boolean usaIncludeSottoMax;
 
     boolean usaSottopaginaOltreMax;
+
+    boolean isSottopagina;
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -118,7 +128,35 @@ public  class Lista implements AlgosBuilderPattern {
         this.type = TypeLista.nessunaLista;
         this.usaDimensioneParagrafi = true;
         this.usaIncludeSottoMax = true;
-        this.usaSottopaginaOltreMax = true;
+    }
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Lista type(TypeLista type) {
+        this.type = type;
+
+        this.moduloCorrente = switch (type) {
+            case giornoNascita, giornoMorte -> giornoModulo;
+            case annoNascita, annoMorte -> annoModulo;
+            default -> null;
+        };
+
+        this.titoloPagina = switch (type) {
+            case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
+            case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
+            case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
+            case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
+            default -> null;
+        };
+
+        this.usaSottopaginaOltreMax = switch (type) {
+            case giornoNascita, giornoMorte -> false;
+            case annoNascita, annoMorte -> true;
+            default -> false;
+        };
+
+        return this;
     }
 
     /**
@@ -132,8 +170,11 @@ public  class Lista implements AlgosBuilderPattern {
     /**
      * Pattern Builder <br>
      */
-    public Lista nonUsaSottoPagina() {
-        this.usaSottopaginaOltreMax = false;
+    public Lista isSottopagina() {
+        if (usaSottopaginaOltreMax) {
+            this.isSottopagina = true;
+        }
+
         return this;
     }
 
@@ -146,40 +187,49 @@ public  class Lista implements AlgosBuilderPattern {
     }
 
     protected void checkValiditaCostruttore() {
-        if (moduloCorrente != null) {
-            this.costruttoreValido = moduloCorrente.existByKey(textService.primaMaiuscola(nomeLista)) || moduloCorrente.existByKey(textService.primaMinuscola(nomeLista));
-        }
-        else {
-            message = String.format("Manca il modulo in fixPreferenze() di %s", this.getClass().getSimpleName());
-            logger.error(new WrapLog().message(message));
-            this.costruttoreValido = false;
-        }
-
-        if (this.type == TypeLista.nessunaLista) {
-            message = String.format("Manca il type della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
-            logger.error(new WrapLog().message(message));
-            this.costruttoreValido = false;
-        }
-
-        this.collectionName = costruttoreValido ? annotationService.getCollectionName(BioMongoEntity.class) : VUOTA;
+        //        if (moduloCorrente != null) {
+        //            this.costruttoreValido = moduloCorrente.existByKey(textService.primaMaiuscola(nomeLista)) || moduloCorrente.existByKey(textService.primaMinuscola(nomeLista));
+        //        }
+        //        else {
+        //            message = String.format("Manca il modulo in fixPreferenze() di %s", this.getClass().getSimpleName());
+        //            logger.error(new WrapLog().message(message));
+        //            this.costruttoreValido = false;
+        //        }
+        //
+        //        if (this.type == TypeLista.nessunaLista) {
+        //            message = String.format("Manca il type della lista in fixPreferenze() di %s", this.getClass().getSimpleName());
+        //            logger.error(new WrapLog().message(message));
+        //            this.costruttoreValido = false;
+        //        }
+        //
+        //        this.collectionName = costruttoreValido ? annotationService.getCollectionName(BioMongoEntity.class) : VUOTA;
+        costruttoreValido = textService.isValid(nomeLista);
     }
 
     protected boolean checkValiditaPattern() {
         if (costruttoreValido && patternCompleto) {
             return true;
         }
-        else {
-            if (!costruttoreValido) {
-                message = String.format("Non è valido il costruttore di %s", this.getClass().getSimpleName());
-                logger.error(new WrapLog().message(message));
-            }
-            if (!patternCompleto) {
-                message = String.format("Pattern non completo di %s", this.getClass().getSimpleName());
-                logger.error(new WrapLog().message(message));
-            }
-
+        if (type == TypeLista.nessunaLista) {
+            logger.error(new WrapLog().message("Manca il typeLista"));
             return false;
         }
+
+        patternCompleto = moduloCorrente != null;
+        patternCompleto = patternCompleto && textService.isValid(titoloPagina);
+
+        if (!costruttoreValido) {
+            message = String.format("Non è valido il costruttore di %s", this.getClass().getSimpleName());
+            logger.error(new WrapLog().message(message));
+            return false;
+        }
+        if (!patternCompleto) {
+            message = String.format("Pattern non completo di %s", this.getClass().getSimpleName());
+            logger.error(new WrapLog().message(message));
+            return false;
+        }
+
+        return patternCompleto;
     }
 
 

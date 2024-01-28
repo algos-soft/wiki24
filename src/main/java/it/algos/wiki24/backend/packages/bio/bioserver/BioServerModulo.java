@@ -88,9 +88,9 @@ public class BioServerModulo extends WikiModulo {
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
-     * @param pageId     (obbligatorio)
-     * @param wikiTitle  (obbligatorio)
-     * @param tmplBio    (facoltativo)
+     * @param pageId    (obbligatorio)
+     * @param wikiTitle (obbligatorio)
+     * @param tmplBio   (facoltativo)
      * @param timestamp (facoltativo)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
@@ -131,6 +131,17 @@ public class BioServerModulo extends WikiModulo {
         return (BioServerEntity) super.findOneByProperty(FIELD_NAME_WIKI_TITLE, wikiTitle);
     }
 
+    public boolean delete(AbstractEntity entityBean) {
+        boolean cancellata = super.delete(entityBean);
+        BioMongoEntity mongoEntity;
+
+        if (cancellata) {
+            mongoEntity = (BioMongoEntity) bioMongoModulo.findById(entityBean.id);
+            bioMongoModulo.delete(mongoEntity);
+        }
+
+        return cancellata;
+    }
 
     //--serve solo ad 'oscurare' il metodo sovrascritto
     //--le funzionalità inerenti sono eseguite da download

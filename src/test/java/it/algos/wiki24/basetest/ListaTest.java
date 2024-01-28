@@ -300,7 +300,7 @@ public abstract class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).nonUsaSottoPagina().bodyText();
+        ottenuto = ((Lista) appContext.getBean(clazz, nomeLista)).bodyText();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));

@@ -54,7 +54,7 @@ public abstract class UploadGiorni extends Upload {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(typeLista.getCategoria());
+        buffer.append(type.getCategoria());
         buffer.append("|");
         buffer.append(SPAZIO);
         buffer.append(posCat);

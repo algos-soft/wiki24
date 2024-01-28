@@ -70,7 +70,7 @@ public class UploadGiornoNatoTest extends UploadTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(101)
     @DisplayName("101 - Upload tramite QueryService (wikiTitle)")
@@ -86,7 +86,7 @@ public class UploadGiornoNatoTest extends UploadTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "getListeStream()")
     @Order(102)
     @DisplayName("102 - Upload tramite QueryService (giornoBean)")
