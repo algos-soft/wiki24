@@ -4,18 +4,21 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -48,6 +51,7 @@ public abstract class QueryTest extends WikiStreamTest {
     protected WResult ottenutoRisultato;
 
     protected String clazzName;
+
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>
@@ -104,12 +108,10 @@ public abstract class QueryTest extends WikiStreamTest {
         }
         else {
             System.out.println(("2 - Request (prevista) errata."));
-            System.out.println(VUOTA);
 
             ottenutoRisultato = ((AQuery) appContext.getBean(clazz)).urlRequest(sorgente);
             assertNotNull(ottenutoRisultato);
             assertFalse(ottenutoRisultato.isValido());
-            System.out.println(VUOTA);
             printRisultato(ottenutoRisultato);
         }
     }
@@ -130,7 +132,6 @@ public abstract class QueryTest extends WikiStreamTest {
             sorgente = "Pippoz Belloz";
             message = String.format("3 - Request (prevista) errata. Non esiste la pagina [%s]", sorgente);
             System.out.println(message);
-            System.out.println(VUOTA);
 
             ottenutoRisultato = ((AQuery) appContext.getBean(clazz)).urlRequest(sorgente);
             assertNotNull(ottenutoRisultato);

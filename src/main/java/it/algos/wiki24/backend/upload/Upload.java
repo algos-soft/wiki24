@@ -145,6 +145,10 @@ public class Upload implements AlgosBuilderPattern {
     public Upload type(TypeLista type) {
         this.type = type;
 
+        if (type == null) {
+            return this;
+        }
+
         this.moduloCorrente = switch (type) {
             case giornoNascita, giornoMorte -> giornoModulo;
             case annoNascita, annoMorte -> annoModulo;
@@ -367,7 +371,16 @@ public class Upload implements AlgosBuilderPattern {
     protected String tmpListaBio() {
         String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
         String progetto = "biografie";
-        String txtVoci = textService.format(numBio());
+        String txtVoci;
+        String keyParagrafo = VUOTA;
+
+        if (isSottopagina) {
+            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+            txtVoci = textService.format(numBio(keyParagrafo));
+        }
+        else {
+            txtVoci = textService.format(numBio());
+        }
 
         return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
     }
@@ -428,7 +441,7 @@ public class Upload implements AlgosBuilderPattern {
         });
         buffer.append(CAPO);
         buffer.append("|voci=");
-        buffer.append(numBio);
+        buffer.append(numBio());
         buffer.append(CAPO);
         buffer.append("|testo=<nowiki></nowiki>");
         buffer.append(CAPO);
@@ -661,19 +674,6 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     public String getBodyText() {
-        //        String keyParagrafo;
-        //        String lista;
-        //
-        //        if (isSottopagina) {
-        //            lista = textService.levaCodaDaUltimo(nomeLista, SLASH);
-        //            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
-        //            if (istanzaLista == null) {
-        //                istanzaLista = appContext.getBean(Lista.class, lista).type(type);
-        //            }
-        //            if (istanzaLista != null && istanzaLista.getType() == type) {
-        //                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
-        //            }
-        //        }
 
         if (textService.isEmpty(bodyText)) {
             this.esegue();
@@ -704,6 +704,19 @@ public class Upload implements AlgosBuilderPattern {
     public int numBio() {
         if (numBio == 0) {
             numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
+        }
+        return numBio;
+    }
+
+    /**
+     * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     */
+    public int numBio(String keyParagrafo) {
+        String listaOriginaria;
+
+        if (numBio == 0) {
+            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
+            numBio = appContext.getBean(Lista.class, listaOriginaria).type(type).numBio(keyParagrafo);
         }
         return numBio;
     }

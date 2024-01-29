@@ -843,6 +843,12 @@ public abstract class WikiTest extends AlgosTest {
             return false;
         }
 
+        if (typeSuggerito == null) {
+            message = String.format("Manca il typeLista per l'istanza di %s", nomeLista);
+            System.out.println(message);
+            return false;
+        }
+
         currentType = typeSuggerito;
 
         currentModulo = switch (typeSuggerito) {
@@ -870,6 +876,7 @@ public abstract class WikiTest extends AlgosTest {
 
         return true;
     }
+
     protected void debug(String incipit, String valore, String metodoEseguito, boolean costruttoreValido, boolean patternValido) {
         System.out.println(incipit);
         System.out.println(String.format("Debug%s%s", FORWARD, valore));

@@ -106,7 +106,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -136,7 +136,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -166,7 +166,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -196,7 +196,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -223,7 +223,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
@@ -252,7 +252,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
@@ -289,7 +289,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
@@ -315,7 +315,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(901)
     @DisplayName("901 - testoSottopagina")
@@ -346,12 +346,45 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(902)
-    @DisplayName("902 - mappaSottopagina")
+    @DisplayName("902 - numBioSottopagina")
+    void numBioSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("902 - numBioSottopagina"));
+        System.out.println(VUOTA);
+        if (!fixGiornoAnno(nomeLista, type)) {
+            return;
+        }
+
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+                if (ottenutoIntero > 0) {
+                    message = String.format("Le biografie di type%s[%s] per il mese di %s dell'anno %s, sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
+                    System.out.println(message);
+                }
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+
+//            @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
+    @Order(903)
+    @DisplayName("903 - mappaSottopagina")
     void mappaSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("902 - mappaSottopagina"));
+        System.out.println(("903 - mappaSottopagina"));
         System.out.println(VUOTA);
         if (!fixGiornoAnno(nomeLista, type)) {
             return;

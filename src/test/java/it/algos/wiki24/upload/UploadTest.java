@@ -27,6 +27,8 @@ public class UploadTest extends WikiStreamTest {
 
     private Upload istanza;
 
+    private TypeLista type;
+
     /**
      * Qui passa una volta sola <br>
      */
@@ -44,7 +46,7 @@ public class UploadTest extends WikiStreamTest {
         super.setUpEach();
         istanza = null;
         currentModulo = null;
-
+        type = null;
     }
 
     @Test
@@ -217,7 +219,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(702)
     @DisplayName("702 - bodyTextSottopagina")
@@ -275,7 +277,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(704)
     @DisplayName("704 - uploadTextSottopagina")
@@ -303,7 +305,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(801)
     @DisplayName("801 - uploadTestSottopagina")
@@ -330,11 +332,30 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
+    @Test
+    @Order(802)
+    @DisplayName("802 - uploadRealSottopagina")
+    void uploadRealSottopagina() {
+        System.out.println(("802 - uploadRealSottopagina"));
+        System.out.println(VUOTA);
+
+        type = TypeLista.annoMorte;
+        sorgente = 2023 + VUOTA;
+        listaStr = appContext.getBean(Upload.class, sorgente).type(type).listaSottopagine();
+        if (listaStr != null && listaStr.size() > 0) {
+            sorgente2 = sorgente + SLASH + listaStr.get(0);
+            ottenutoRisultato = appContext.getBean(Upload.class, sorgente2).type(type).sottopagina().upload();
+            message = String.format("Upload pagina REAL di %s%s", type.getCategoria(), sorgente2);
+            System.out.println(message);
+            printRisultato(ottenutoRisultato);
+        }
+    }
+
 
     //@todo da utilizzare solo DOPO aver controllato che BioServer sia allineato
-    //    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
-    @Order(801)
+    @Order(901)
     @DisplayName("801 - uploadReal")
     void uploadReal(String nomeLista, TypeLista type) {
         System.out.println(("801 - uploadReal"));

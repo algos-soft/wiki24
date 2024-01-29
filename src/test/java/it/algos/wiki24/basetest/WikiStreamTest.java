@@ -39,6 +39,7 @@ public abstract class WikiStreamTest extends WikiTest {
         return Stream.of(
                 Arguments.of(VUOTA, TypeLista.giornoNascita),
                 Arguments.of(VUOTA, TypeLista.giornoMorte),
+                Arguments.of("1857", null),
                 Arguments.of("1857", TypeLista.giornoNascita),
                 Arguments.of("29 febbraio", TypeLista.giornoNascita),
                 Arguments.of("29 febbraio", TypeLista.giornoMorte),

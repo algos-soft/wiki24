@@ -137,16 +137,16 @@ public class QueryWriteCheck extends AQuery {
             return result;
         }
 
-        if (textService.isEmpty(newTextSignificativo)) {
-            return (WResult) result.errorMessage("Manca il newTextSignificativo");
-        }
+//        if (textService.isEmpty(newTextSignificativo)) {
+//            return (WResult) result.errorMessage("Manca il newTextSignificativo");
+//        }
 
-        if (!newTextAll.endsWith(newTextSignificativo)) {
-            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
-        }
+//        if (!newTextAll.endsWith(newTextSignificativo)) {
+//            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
+//        }
 
         //--confronto della parte 'significativa' per decidere se registrare
-        if (isModificataSignificativamente(wikiTitleGrezzo, newTextAll, newTextSignificativo)) {
+        if (isModificataSignificativamente(wikiTitleGrezzo, newTextSignificativo)) {
             //--La prima request è di tipo GET
             //--Indispensabile aggiungere i cookies del botLogin
             result = this.primaryRequestGet(result);
@@ -171,23 +171,24 @@ public class QueryWriteCheck extends AQuery {
      * confronto le due parti 'significative' del testo <br>
      *
      * @param wikiTitleGrezzo      della pagina wiki (necessita di codifica) usato nella urlRequest
-     * @param newTextAll           complessivo da inserire
      * @param newTextSignificativo successivo alla parte iniziale che può variare senza che la pagina venga riscritta
      *
      * @return true se significativamente cambiata e deve essere scritta
      */
-    public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextAll, final String newTextSignificativo) {
-        boolean modificataSignificativamente = true;
+    public boolean isModificataSignificativamente(final String wikiTitleGrezzo, final String newTextSignificativo) {
+        boolean daScrivere = true;
         String oldTextAll;
 
-        oldTextAll = appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
-        if (textService.isValid(oldTextAll)) {
-            if (oldTextAll.endsWith(newTextSignificativo)) {
-                modificataSignificativamente = false;
+        if (textService.isValid(newTextSignificativo)) {
+            oldTextAll = appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
+            if (textService.isValid(oldTextAll)) {
+                if (oldTextAll.endsWith(newTextSignificativo)) {
+                    daScrivere = false;
+                }
             }
         }
 
-        return modificataSignificativamente;
+        return daScrivere;
     }
 
     public WResult urlRequest(final String wikiTitleGrezzo, final String newText) {

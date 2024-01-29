@@ -6,6 +6,7 @@ import static it.algos.base24.backend.enumeration.TypeFiltro.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
+import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.core.query.*;
 
 import javax.inject.*;
 import java.util.*;
@@ -66,6 +68,9 @@ public class Lista implements AlgosBuilderPattern {
 
     @Inject
     MathService mathService;
+
+    @Inject
+    SecoloModulo secoloModulo;
 
     protected TypeLista type;
 
@@ -142,6 +147,10 @@ public class Lista implements AlgosBuilderPattern {
      */
     public Lista type(TypeLista type) {
         this.type = type;
+
+        if (type == null) {
+            return this;
+        }
 
         this.moduloCorrente = switch (type) {
             case giornoNascita, giornoMorte -> giornoModulo;
@@ -243,19 +252,15 @@ public class Lista implements AlgosBuilderPattern {
      * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
      */
     public int numBio() {
-        if (checkValiditaPattern()) {
-            return switch (type) {
-                case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
-                case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
-                case annoNascita -> bioMongoModulo.countAllByAnnoNato(nomeLista);
-                case annoMorte -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
-                default -> 0;
-            };
-        }
-        else {
-            return 0;
-        }
+        return switch (type) {
+            case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
+            case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
+            case annoNascita -> bioMongoModulo.countAllByAnnoNato(nomeLista);
+            case annoMorte -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            default -> 0;
+        };
     }
+
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
@@ -515,28 +520,24 @@ public class Lista implements AlgosBuilderPattern {
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo = mappaCompleta.get(keyParagrafo);
         StringBuffer buffer = new StringBuffer();
         int maxVociPerUnaColonna = 5;
-        int numVociParagrafo;
-        boolean usaDiv;
+        int numVociParagrafo = wikiUtilityService.getSizeMappa(mappaParagrafo);
+        boolean usaDiv = usaDivisori && numVociParagrafo > maxVociPerUnaColonna;
 
-        if (mappaParagrafo != null && mappaParagrafo.size() > 0) {
+        if (numVociParagrafo > 0) {
+            if (usaDiv) {
+                buffer.append(DIV_INI_CAPO);
+            }
             for (String secondoLivello : mappaParagrafo.keySet()) {
                 for (String terzoLivello : mappaParagrafo.get(secondoLivello).keySet()) {
-
-                    numVociParagrafo = mappaParagrafo.get(secondoLivello).get(terzoLivello).size();
-                    usaDiv = usaDivisori && numVociParagrafo > maxVociPerUnaColonna;
-
-                    if (usaDiv) {
-                        buffer.append(DIV_INI_CAPO);
-                    }
                     for (String didascalia : mappaParagrafo.get(secondoLivello).get(terzoLivello)) {
                         buffer.append(ASTERISCO);
                         buffer.append(didascalia);
                         buffer.append(CAPO);
                     }
-                    if (usaDiv) {
-                        buffer.append(DIV_END_CAPO);
-                    }
                 }
+            }
+            if (usaDiv) {
+                buffer.append(DIV_END_CAPO);
             }
         }
 
@@ -554,13 +555,6 @@ public class Lista implements AlgosBuilderPattern {
         return listaSottopagine;
     }
 
-
-    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {
-        if (textService.isEmpty(bodyText)) {
-            bodyText();
-        }
-        return mappaCompleta.get(keySottopagina);
-    }
 
     public String getTestoSottopagina(String keySottopagina) {
         StringBuffer buffer = new StringBuffer();
@@ -583,6 +577,20 @@ public class Lista implements AlgosBuilderPattern {
         }
 
         return buffer.toString();
+    }
+
+    public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+        return mappaCompleta.get(keySottopagina);
+    }
+
+    /**
+     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico <br>
+     */
+    public int numBio(String keySottopagina) {
+        return wikiUtilityService.getSizeMappa(getMappaSottopagina(keySottopagina));
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {
