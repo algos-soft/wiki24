@@ -250,6 +250,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected WResult registra() {
         String wikiTitle = titoloPagina;
+        String newTextSignificativo = WPref.scriveComunque.is() ? VUOTA:bodyText + bottomText ;
 
         if (textService.isEmpty(titoloPagina)) {
             logger.error(new WrapLog().message("Manca il titolo della pagina"));
@@ -262,7 +263,7 @@ public class Upload implements AlgosBuilderPattern {
             wikiTitle = "Utente:Biobot/" + titoloPagina;
         }
 
-        return queryService.write(wikiTitle, uploadText, typeSummary.get());
+        return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
     }
 
 

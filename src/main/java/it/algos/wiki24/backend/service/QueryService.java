@@ -28,6 +28,7 @@ public class QueryService {
     public String legge(final String wikiTitleGrezzo) {
         return appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
     }
+
     public String legge(final long pageIds) {
         return appContext.getBean(QueryRead.class).getContent(pageIds);
     }
@@ -89,6 +90,10 @@ public class QueryService {
 
     public WResult write(final String wikiTitleGrezzo, final String newTesto, final String summary) {
         return appContext.getBean(QueryWrite.class).urlRequest(wikiTitleGrezzo, newTesto, summary);
+    }
+
+    public WResult writeCheck(final String wikiTitleGrezzo, final String newTesto, final String newTextSignificativo, final String summary) {
+        return appContext.getBean(QueryWriteCheck.class).urlRequestCheck(wikiTitleGrezzo, newTesto, newTextSignificativo, summary);
     }
 
 

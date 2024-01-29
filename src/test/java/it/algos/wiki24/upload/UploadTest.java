@@ -173,7 +173,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(ottenuto);
     }
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(601)
     @DisplayName("601 - uploadTest")
@@ -332,7 +332,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @Test
+//    @Test
     @Order(802)
     @DisplayName("802 - uploadRealSottopagina")
     void uploadRealSottopagina() {
@@ -353,7 +353,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     //@todo da utilizzare solo DOPO aver controllato che BioServer sia allineato
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(901)
     @DisplayName("801 - uploadReal")

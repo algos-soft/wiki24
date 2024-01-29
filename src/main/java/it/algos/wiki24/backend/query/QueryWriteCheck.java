@@ -137,13 +137,13 @@ public class QueryWriteCheck extends AQuery {
             return result;
         }
 
-//        if (textService.isEmpty(newTextSignificativo)) {
-//            return (WResult) result.errorMessage("Manca il newTextSignificativo");
-//        }
+        //        if (textService.isEmpty(newTextSignificativo)) {
+        //            return (WResult) result.errorMessage("Manca il newTextSignificativo");
+        //        }
 
-//        if (!newTextAll.endsWith(newTextSignificativo)) {
-//            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
-//        }
+        //        if (!newTextAll.endsWith(newTextSignificativo)) {
+        //            return (WResult) result.errorMessage("Il newTextAll NON finisce col newTextSignificativo");
+        //        }
 
         //--confronto della parte 'significativa' per decidere se registrare
         if (isModificataSignificativamente(wikiTitleGrezzo, newTextSignificativo)) {
@@ -182,7 +182,7 @@ public class QueryWriteCheck extends AQuery {
         if (textService.isValid(newTextSignificativo)) {
             oldTextAll = appContext.getBean(QueryRead.class).getContent(wikiTitleGrezzo);
             if (textService.isValid(oldTextAll)) {
-                if (oldTextAll.endsWith(newTextSignificativo)) {
+                if (oldTextAll.contains(newTextSignificativo)) {
                     daScrivere = false;
                 }
             }
@@ -464,7 +464,7 @@ public class QueryWriteCheck extends AQuery {
         if (objectAll != null && objectAll.get(QUERY) != null && objectAll.get(QUERY) instanceof JSONObject) {
             objectQuery = (JSONObject) objectAll.get(QUERY);
         }
-        if (objectQuery==null) {
+        if (objectQuery == null) {
             logger.error(new WrapLog().message("objectQuery==null"));
         }
 
