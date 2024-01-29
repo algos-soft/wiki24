@@ -110,10 +110,11 @@ public class WikiBoot extends BaseBoot {
     @Override
     protected void fixTask() {
         BaseVar.taskList.add(appContext.getBean(TaskDownloadBioServer.class));
+        BaseVar.taskList.add(appContext.getBean(TaskDeleteBioServer.class));
         BaseVar.taskList.add(appContext.getBean(TaskElaboraBioMongo.class));
+        BaseVar.taskList.add(appContext.getBean(TaskUploadMortiAnnoCorrente.class));
         BaseVar.taskList.add(appContext.getBean(TaskUploadGiorni.class));
         BaseVar.taskList.add(appContext.getBean(TaskUploadAnni.class));
-        BaseVar.taskList.add(appContext.getBean(TaskUploadMortiAnnoCorrente.class));
         super.fixTask();
     }
 

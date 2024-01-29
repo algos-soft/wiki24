@@ -24,7 +24,7 @@ import javax.inject.*;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class TaskElaboraBioMongo extends BaseTask {
 
-    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.everyTre;
+    public static TypeSchedule TYPE_SCHEDULE = TypeSchedule.dieciGiovedi;
 
     @Inject
     private BioMongoModulo bioMongoModulo;
@@ -34,7 +34,6 @@ public class TaskElaboraBioMongo extends BaseTask {
         super.flagAttivazione = WPref.usaElaboraBioMongo;
         super.descrizioneTask = WPref.usaElaboraBioMongo.getDescrizione();
         super.typeSchedule = TYPE_SCHEDULE;
-        //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 
     @Override

@@ -31,7 +31,6 @@ public class TaskUploadAnni extends BaseTask  {
         super.flagAttivazione = WPref.usaUploadAnni;
         super.descrizioneTask = WPref.usaUploadAnni.getDescrizione();
         super.typeSchedule = TYPE_SCHEDULE;
-        //        super.flagPrevisione = WPref.downloadBioPrevisto;
     }
 
     @Override

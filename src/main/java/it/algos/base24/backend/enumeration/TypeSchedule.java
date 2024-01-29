@@ -69,7 +69,6 @@ public enum TypeSchedule {
      * Descrizione: ogni giorno alle sei
      */
     alba("0 6 * * *", "ogni giorno alle sei."),
-    //    pomeriggio("53 13 * * *", "solo oggi alle 13:40"),
 
     /**
      * Pattern: 5 0 * * mon
@@ -100,6 +99,11 @@ public enum TypeSchedule {
      */
     quattroNoLunedi("0 4 * * sun,tue,wed,thu,fri,sat", "alle quattro di ogni mattina della settimana escluso il lunedì."),
 
+    /**
+     * Pattern: 0 10 * * sun
+     * Descrizione: alle dieci di ogni lunedì
+     */
+    dieciLunedi("0 10 * * sun", "alle dieci di ogni lunedì."),
     /**
      * Pattern: 0 10 * * tue
      * Descrizione: alle dieci di ogni martedì

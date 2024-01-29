@@ -26,6 +26,11 @@ public enum WPref implements IPref {
     bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
+    usaDeleteBioServer("usaDeleteBioServer", TypePref.bool, false, "Cancellazione e download di tutte le biografie.", true, false),
+    lastDeleteBioServer("lastDeleteBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last cancellazione e download date and time di BioServer.", true, true),
+    deleteBioServerTime("deleteBioServerTime", TypePref.integer, 0, "Durata delete e download di BioServer in minuti."),
+
+    //***************
     usaDownloadBioServer("usaDownloadBioServer", TypePref.bool, false, "Download ed elaborazione di tutte le biografie nuove/modificate.", true, false),
     lastDownloadBioServer("lastDownloadBioServer", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di BioServer.", true, true),
     downloadBioServerTime("downloadBioServerTime", TypePref.integer, 0, "Durata download di BioServer in minuti."),
@@ -145,6 +150,13 @@ public enum WPref implements IPref {
     iconaNato("iconaNato", TypePref.string, "n." + SPAZIO_NON_BREAKING, "Icona con spazio per le date di nascita", false, false),
     iconaMorto("iconaMorto", TypePref.string, "†" + SPAZIO_NON_BREAKING, "Icona con spazio per le date di morte", false, false),
     scriveComunque("scriveComunque", TypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data", true, false),
+    sogliaSottoPagina("sogliaSottoPagina", TypePref.integer, 50, "Soglia minima del paragrafo per creare una sottopagina di una lista sul server wiki"),
+    sogliaDiv("sogliaDiv", TypePref.integer, 5, "Soglia minima di voci per usare {{Div col}} nel singolo paragrafo"),
+    sogliaParagrafi("sogliaParagrafi", TypePref.integer, 3, "Soglia minima di paragrafi per mostrarli"),
+    sogliaIncludeAll("sogliaIncludeAll", TypePref.integer, 200, "Soglia minima di voci totali della pagina per 'includerla' in giorni/anni"),
+    sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
+    usaSottopagineGiorni("usaSottopagineGiorni", TypePref.bool, false, "Abilita l'eventuale sottopagina dei giorni (se >1500 e > 50)"),
+    usaSottopagineAnni("usaSottopagineAnni", TypePref.bool, true, "Abilita l'eventuale sottopagina degli anni (se >1500 e > 50)"),
 
     ;
 

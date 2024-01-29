@@ -109,9 +109,19 @@ public class Lista implements AlgosBuilderPattern {
 
     boolean usaIncludeSottoMax;
 
-    boolean usaSottopaginaOltreMax;
+    boolean usaSottopagine;
 
     boolean isSottopagina;
+
+    private int sogliaDiv;
+
+    private int sogliaParagrafi;
+
+    private int sogliaIncludeAll;
+
+    private int sogliaSottoPagina;
+
+    private int sogliaPaginaGiorniAnni;
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -140,6 +150,12 @@ public class Lista implements AlgosBuilderPattern {
         this.type = TypeLista.nessunaLista;
         this.usaDimensioneParagrafi = true;
         this.usaIncludeSottoMax = true;
+        this.sogliaDiv = WPref.sogliaDiv.getInt();
+        this.sogliaParagrafi = WPref.sogliaParagrafi.getInt();
+        this.sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
+        this.sogliaSottoPagina = WPref.sogliaSottoPagina.getInt();
+        this.sogliaPaginaGiorniAnni = WPref.sogliaPaginaGiorniAnni.getInt();
+
     }
 
     /**
@@ -166,9 +182,9 @@ public class Lista implements AlgosBuilderPattern {
             default -> null;
         };
 
-        this.usaSottopaginaOltreMax = switch (type) {
-            case giornoNascita, giornoMorte -> false;
-            case annoNascita, annoMorte -> true;
+        this.usaSottopagine = switch (type) {
+            case giornoNascita, giornoMorte -> WPref.usaSottopagineGiorni.is();
+            case annoNascita, annoMorte -> WPref.usaSottopagineAnni.is();
             default -> false;
         };
 
@@ -183,16 +199,16 @@ public class Lista implements AlgosBuilderPattern {
         return this;
     }
 
-    /**
-     * Pattern Builder <br>
-     */
-    public Lista isSottopagina() {
-        if (usaSottopaginaOltreMax) {
-            this.isSottopagina = true;
-        }
-
-        return this;
-    }
+    //    /**
+    //     * Pattern Builder <br>
+    //     */
+    //    public Lista isSottopagina() {
+    //        if (usaSottopaginaOltreMax) {
+    //            this.isSottopagina = true;
+    //        }
+    //
+    //        return this;
+    //    }
 
     /**
      * Pattern Builder <br>
@@ -410,17 +426,12 @@ public class Lista implements AlgosBuilderPattern {
      */
     public String bodyText() {
         StringBuffer buffer = new StringBuffer();
-        int numMinParagrafi = 2; //@todo passare a preferenza
-        int minVociInclude = 200; //@todo passare a preferenza
         int numVociLista; //voci totali
         int numChiaviMappa; //paragrafi effettivi
         boolean usaParagrafi = false;
         int numVociParagrafo;
-        int maxVociPerUnaColonna = 5;
-        boolean usaDiv;
         String sottoPagina;
         String vedi;
-        int maxVociPerParagrafo = 50; //@todo passare a preferenza
         listaSottopagine = new ArrayList<>();
 
         if (mappaCompleta == null || mappaCompleta.size() == 0) {
@@ -430,17 +441,16 @@ public class Lista implements AlgosBuilderPattern {
         if (mappaCompleta != null && mappaCompleta.size() > 0) {
             numVociLista = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
             numChiaviMappa = mappaCompleta.size();
-            usaParagrafi = numVociLista > maxVociPerParagrafo && numChiaviMappa > numMinParagrafi;
+            usaParagrafi = numVociLista > sogliaSottoPagina && numChiaviMappa >= sogliaParagrafi;
 
             if (usaParagrafi) {
                 for (String keyParagrafo : mappaCompleta.keySet()) {
                     numVociParagrafo = wikiUtilityService.getSizeMappa(mappaCompleta.get(keyParagrafo));
-                    usaDiv = numVociParagrafo > maxVociPerUnaColonna;
 
                     //titolo con/senza dimensione
                     if (usaDimensioneParagrafi) {
                         //titolo con/senza includeOnly
-                        if (usaIncludeSottoMax && numVociLista < minVociInclude) {
+                        if (usaIncludeSottoMax && numVociLista < sogliaIncludeAll) {
                             //per i titoli dei paragrafi che vengono 'inclusi', meglio non mettere le dimensioni
                             buffer.append(wikiUtilityService.setParagrafoIncludeOnly(keyParagrafo, numVociParagrafo));
                         }
@@ -453,7 +463,7 @@ public class Lista implements AlgosBuilderPattern {
                     }
 
                     //corpo con/senza sottopagine
-                    if (usaSottopaginaOltreMax && numVociParagrafo > maxVociPerParagrafo) {
+                    if (usaSottopagine && numVociLista > sogliaPaginaGiorniAnni && numVociParagrafo > sogliaSottoPagina) {
                         sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
 
                         vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
@@ -462,27 +472,13 @@ public class Lista implements AlgosBuilderPattern {
                         listaSottopagine.add(keyParagrafo);
                     }
                     else {
-                        //                        if (usaDiv) {
-                        //                            buffer.append(DIV_INI_CAPO);
-                        //                        }
                         buffer.append(bodyParagrafo(keyParagrafo, true));
-                        //                        if (usaDiv) {
-                        //                            buffer.append(DIV_END_CAPO);
-                        //                        }
                     }
                 }
             }
             else {
                 //corpo unico senza paragrafi e senza sottopagine
-                numVociParagrafo = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
-                usaDiv = numVociParagrafo >= maxVociPerUnaColonna;
-                //                if (usaDiv) {
-                //                    buffer.append(DIV_INI_CAPO);
-                //                }
                 buffer.append(bodyAll());
-                //                if (usaDiv) {
-                //                    buffer.append(DIV_END_CAPO);
-                //                }
             }
         }
 
@@ -496,9 +492,8 @@ public class Lista implements AlgosBuilderPattern {
      */
     public String bodyAll() {
         StringBuffer buffer = new StringBuffer();
-        int maxVociPerUnaColonna = 5;
         int numVociTotali = wikiUtilityService.getSizeMappaMappa(mappaCompleta);
-        boolean usaDiv = numVociTotali > maxVociPerUnaColonna;
+        boolean usaDiv = numVociTotali > sogliaDiv;
 
         if (usaDiv) {
             buffer.append(DIV_INI_CAPO);
@@ -519,9 +514,8 @@ public class Lista implements AlgosBuilderPattern {
     public String bodyParagrafo(String keyParagrafo, boolean usaDivisori) {
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo = mappaCompleta.get(keyParagrafo);
         StringBuffer buffer = new StringBuffer();
-        int maxVociPerUnaColonna = 5;
         int numVociParagrafo = wikiUtilityService.getSizeMappa(mappaParagrafo);
-        boolean usaDiv = usaDivisori && numVociParagrafo > maxVociPerUnaColonna;
+        boolean usaDiv = usaDivisori && numVociParagrafo > sogliaDiv;
 
         if (numVociParagrafo > 0) {
             if (usaDiv) {
@@ -558,7 +552,6 @@ public class Lista implements AlgosBuilderPattern {
 
     public String getTestoSottopagina(String keySottopagina) {
         StringBuffer buffer = new StringBuffer();
-        int maxVociPerUnaColonna = 5;
         int numVociSottopagina;
         boolean usaDiv;
 
@@ -566,7 +559,7 @@ public class Lista implements AlgosBuilderPattern {
             bodyText();
         }
         numVociSottopagina = wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
-        usaDiv = numVociSottopagina > maxVociPerUnaColonna;
+        usaDiv = numVociSottopagina > sogliaDiv;
 
         if (usaDiv) {
             buffer.append(DIV_INI_CAPO);
