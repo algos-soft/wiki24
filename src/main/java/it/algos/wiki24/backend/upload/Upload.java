@@ -232,7 +232,7 @@ public class Upload implements AlgosBuilderPattern {
         return patternCompleto;
     }
 
-    public WResult upload() {
+    public WResult uploadOnly() {
         if (!checkValiditaPattern()) {
             return WResult.errato();
         }
@@ -248,9 +248,18 @@ public class Upload implements AlgosBuilderPattern {
         return registra();
     }
 
+    public WResult uploadAll() {
+        WResult result = uploadOnly();
+
+        if (result.isValido()) {
+        }
+
+        return result;
+    }
+
     protected WResult registra() {
         String wikiTitle = titoloPagina;
-        String newTextSignificativo = WPref.scriveComunque.is() ? VUOTA:bodyText + bottomText ;
+        String newTextSignificativo = WPref.scriveComunque.is() ? VUOTA : bodyText + bottomText;
 
         if (textService.isEmpty(titoloPagina)) {
             logger.error(new WrapLog().message("Manca il titolo della pagina"));
@@ -307,7 +316,7 @@ public class Upload implements AlgosBuilderPattern {
     public WResult uploadSottopagina(String keySottopagina) {
         WResult risultato = WResult.errato();
         String nomeListaSottopagina = nomeLista + SLASH + keySottopagina;
-        risultato = appContext.getBean(Upload.class, nomeListaSottopagina).type(type).test(uploadTest).sottopagina().upload();
+        risultato = appContext.getBean(Upload.class, nomeListaSottopagina).type(type).test(uploadTest).sottopagina().uploadOnly();
 
         return risultato;
     }
