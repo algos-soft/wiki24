@@ -229,6 +229,12 @@ public class Upload implements AlgosBuilderPattern {
             return false;
         }
 
+        if (numBio<1) {
+            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(),titoloPagina);
+            logger.info(new WrapLog().message(message));
+            return false;
+        }
+
         return patternCompleto;
     }
 
@@ -250,8 +256,17 @@ public class Upload implements AlgosBuilderPattern {
 
     public WResult uploadAll() {
         WResult result = uploadOnly();
+        List<String> listaSottopagine;
+        String keySottopagina;
 
         if (result.isValido()) {
+            listaSottopagine = listaSottopagine();
+            if (listaSottopagine != null && listaSottopagine.size() > 0) {
+                for (String key : listaSottopagine) {
+                    keySottopagina = nomeLista + SLASH + key;
+                    result = appContext.getBean(Upload.class, keySottopagina).test(uploadTest).type(type).sottopagina().uploadOnly();
+                }
+            }
         }
 
         return result;
@@ -282,6 +297,7 @@ public class Upload implements AlgosBuilderPattern {
     public Upload esegue() {
         StringBuffer buffer = new StringBuffer();
         String message;
+        this.numBio();
         if (!checkValiditaPattern()) {
             return this;
         }
@@ -423,9 +439,16 @@ public class Upload implements AlgosBuilderPattern {
             }
         }
 
+        if (!isSottopagina) {
+            buffer.append(DOPPIE_GRAFFE_INI);
+        }
         buffer.append(getListaIni());
+
         buffer.append(bodyText);
-        buffer.append(DOPPIE_GRAFFE_END);
+
+        if (!isSottopagina) {
+            buffer.append(DOPPIE_GRAFFE_END);
+        }
 
         this.bodyText = buffer.toString();
         return this.bodyText;
@@ -438,7 +461,6 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        buffer.append("{{");
         buffer.append(type.getPersone());
         buffer.append(CAPO);
         buffer.append("|titolo=");

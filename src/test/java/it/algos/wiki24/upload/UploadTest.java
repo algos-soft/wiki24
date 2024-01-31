@@ -71,7 +71,7 @@ public class UploadTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -98,7 +98,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - getHeaderText")
@@ -108,16 +108,16 @@ public class UploadTest extends WikiStreamTest {
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
         }
-
-        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getHeaderText();
-        message = String.format("Header di %s%s", type.getCategoria(), nomeLista);
+        message = String.format("Header di %s %s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
+
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getHeaderText();
         System.out.println(ottenuto);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - getBodyText")
@@ -127,16 +127,16 @@ public class UploadTest extends WikiStreamTest {
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
         }
-
-        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getBodyText();
         message = String.format("Body di %s%s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
+
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getBodyText();
         System.out.println(ottenuto);
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - getBottomText")
@@ -146,16 +146,16 @@ public class UploadTest extends WikiStreamTest {
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
         }
-
-        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getBottomText();
         message = String.format("Bottom di %s%s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
+
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getBottomText();
         System.out.println(ottenuto);
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - getUploadText")
@@ -165,15 +165,15 @@ public class UploadTest extends WikiStreamTest {
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
         }
-
-        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getUploadText();
         message = String.format("UploadText di %s%s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
+
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getUploadText();
         System.out.println(ottenuto);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(601)
     @DisplayName("601 - uploadTest")
@@ -207,7 +207,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(701)
     @DisplayName("701 - headerTextSottopagina")
@@ -236,7 +236,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(702)
     @DisplayName("702 - bodyTextSottopagina")
@@ -265,7 +265,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(703)
     @DisplayName("703 - bottomTextSottopagina")
@@ -294,8 +294,8 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
-    //    @MethodSource(value = "LISTA_TEST")
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
     @Order(704)
     @DisplayName("704 - uploadTextSottopagina")
     void uploadTextSottopagina(String nomeLista, TypeLista type) {
@@ -356,8 +356,8 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(("802 - uploadRealSottopagina"));
         System.out.println(VUOTA);
 
-        type = TypeLista.annoMorte;
         sorgente = 2023 + VUOTA;
+        type = TypeLista.annoMorte;
         listaStr = appContext.getBean(Upload.class, sorgente).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
             sorgente2 = sorgente + SLASH + listaStr.get(0);
@@ -369,20 +369,43 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //@todo da utilizzare solo DOPO aver controllato che BioServer sia allineato
-    //    @ParameterizedTest
-    @MethodSource(value = "LISTA_TEST")
+    //    @Test
     @Order(901)
-    @DisplayName("801 - uploadReal")
-    void uploadReal(String nomeLista, TypeLista type) {
-        System.out.println(("801 - uploadReal"));
+    @DisplayName("901 - uploadTestAll")
+    void uploadTestAll() {
+        System.out.println(("901 - uploadTestAll"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
-            return;
-        }
 
-        ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).uploadAll();
-        message = String.format("Upload reale di '%s' per [%s]", type.getCategoria(), nomeLista);
+        sorgente = 2023 + VUOTA;
+        type = TypeLista.annoMorte;
+        ottenutoRisultato = appContext.getBean(Upload.class, sorgente).test().type(type).uploadOnly();
+        message = String.format("Upload reale only di '%s' per [%s]", type.getCategoria(), sorgente);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+        ottenutoRisultato = appContext.getBean(Upload.class, sorgente).test().type(type).uploadAll();
+        message = String.format("Upload reale completo di '%s' per [%s]", type.getCategoria(), sorgente);
+        System.out.println(message);
+    }
+
+
+    //@todo da utilizzare solo DOPO aver controllato che BioServer sia allineato
+    //    @Test
+    @Order(902)
+    @DisplayName("902 - uploadRealAll")
+    void uploadRealAll() {
+        System.out.println(("902 - uploadRealAll"));
+        System.out.println(VUOTA);
+
+        sorgente = 2023 + VUOTA;
+        type = TypeLista.annoMorte;
+        ottenutoRisultato = appContext.getBean(Upload.class, sorgente).type(type).uploadOnly();
+        message = String.format("Upload reale only di '%s' per [%s]", type.getCategoria(), sorgente);
+        System.out.println(message);
+
+        System.out.println(VUOTA);
+        ottenutoRisultato = appContext.getBean(Upload.class, sorgente).type(type).uploadAll();
+        message = String.format("Upload reale completo di '%s' per [%s]", type.getCategoria(), sorgente);
         System.out.println(message);
     }
 
