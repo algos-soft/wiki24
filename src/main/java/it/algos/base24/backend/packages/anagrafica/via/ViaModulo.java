@@ -69,6 +69,10 @@ public class ViaModulo extends CrudModulo {
         return (ViaEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public ViaEntity findByKey(final Object keyPropertyValue) {
+        return (ViaEntity) super.findByKey(keyPropertyValue);
+    }
 
     @Override
     public RisultatoReset resetDelete() {

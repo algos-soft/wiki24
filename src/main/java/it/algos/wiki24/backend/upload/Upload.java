@@ -229,7 +229,7 @@ public class Upload implements AlgosBuilderPattern {
             return false;
         }
 
-        if (numBio<1) {
+        if (numBio()<1) {
             message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(),titoloPagina);
             logger.info(new WrapLog().message(message));
             return false;

@@ -23,7 +23,7 @@ public enum WPref implements IPref {
 
     //***************
     categoriaBio("categoriaBio", TypePref.string, "BioBot", "Categoria di riferimento per le Biografie", true, false),
-    bloccoDownload("bloccoDownload", TypePref.integer, 10000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
+    bloccoDownload("bloccoDownload", TypePref.integer, 5000, "Blocco di pagine da leggere in DownloadService; dimensione del ciclo.", false, false),
 
     //***************
     usaDeleteBioServer("usaDeleteBioServer", TypePref.bool, false, "Cancellazione e download di tutte le biografie.", true, false),

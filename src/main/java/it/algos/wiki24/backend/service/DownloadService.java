@@ -523,7 +523,7 @@ public class DownloadService {
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
-        int blocco = WPref.bloccoDownload.getInt();
+        int blocco = WPref.bloccoDownload.getInt() * 10;
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio;
 
