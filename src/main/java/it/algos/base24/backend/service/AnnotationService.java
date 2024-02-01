@@ -232,14 +232,22 @@ public class AnnotationService {
 
         // Controlla che i parametri in ingresso siano validi
         if (!checkEntity(entityClazz, "usaStartupReset")) {
-            return usaStartupReset;
+            return false;
         }
 
         annotation = this.getEntityAnnotation(entityClazz);
         if (annotation != null) {
+
+            //se usa la TypeList comincia a controllare quella
+            //se è TRUE nella lista, rimane true
             typeList = annotation.typeList();
             if (typeList != null) {
                 usaStartupReset = typeList.isUsaStartupReset();
+            }
+
+            //se nella lista è falso, controllo se c'è una regolazione SPECIFICA al di fuori della TypeList
+            if (!usaStartupReset) {
+                usaStartupReset = annotation.usaStartupReset();
             }
         }
 
@@ -902,6 +910,31 @@ public class AnnotationService {
         }
 
         return hasFocus;
+    }
+
+    /**
+     * Get the custom text of the boolean property.
+     *
+     * @param entityClazz  the class of type AbstractEntity
+     * @param propertyName the property name
+     *
+     * @return the text of custom value tur/false
+     */
+    public String getCustomBoolean(final Class entityClazz, final String propertyName) {
+        String customBoolean = VUOTA;
+        AField annotation;
+
+        // Controlla che i parametri in ingresso siano validi
+        if (!checkEntity(entityClazz, propertyName, "getCustomBoolean")) {
+            return customBoolean;
+        }
+
+        annotation = this.getFieldAnnotation(entityClazz, propertyName);
+        if (annotation != null) {
+            customBoolean = annotation.customBoolean();
+        }
+
+        return customBoolean;
     }
 
     //==========================================================================

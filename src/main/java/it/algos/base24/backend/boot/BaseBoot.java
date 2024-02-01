@@ -296,7 +296,6 @@ public class BaseBoot {
             menuRouteListVaadin.add(PreferenzaView.class);
             menuRouteListVaadin.add(ViaView.class);
         }
-
     }
 
     private void logError(Exception unErrore, String property) {

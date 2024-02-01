@@ -37,7 +37,7 @@ public class PreferenzaList extends CrudList {
     public void fixAlert() {
         super.infoScopo = String.format(typeList.getInfoScopo());
         super.fixAlert();
-        message="Di default ordinate per &#8593;critical, &#8593;base24 e &#8595;code";
+        message="Di default ordinate per &#8593;base24, &#8593;critical e &#8595;code";
         alertPlaceHolder.add(ASpan.text(message).rosso());
     }
 

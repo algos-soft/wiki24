@@ -14,7 +14,7 @@ import java.util.stream.*;
  * Time: 06:44
  */
 public enum TypeList implements Type {
-    standard(VUOTA, TEXT_STANDARD, TEXT_DELETE, false, true, false, false, false, true, true, true, false, true, true, true),
+    standard(VUOTA, TEXT_STANDARD, TEXT_DELETE, false, true, false, true, false, false, true, true, false, true, true, true),
     hardEnum(TEXT_TAVOLA + SPAZIO + TEXT_ENUM, TEXT_HARD, TEXT_RESET_DELETE, true, false, true, false, false, false, false, false, true, false, true, true),
     hardCsv(TEXT_TAVOLA + SPAZIO + TEXT_CSV, TEXT_HARD, TEXT_RESET_DELETE, true, false, true, false, false, false, false, false, true, false, true, true),
     softCsv(TEXT_TAVOLA + SPAZIO + TEXT_CSV, TEXT_NEWS, TEXT_RESET_ADD, true, true, false, true, false, false, true, true, false, true, true, true),

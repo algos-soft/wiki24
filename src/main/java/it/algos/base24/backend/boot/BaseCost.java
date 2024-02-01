@@ -257,7 +257,8 @@ public class BaseCost {
 
     public static String TEXT_EXPORT = "Export dati come esempio.";
 
-    public static String TEXT_TYPE_DATE = "Test di date utilizzabili nelle liste in vari formati selezionati da [TypeDate] in @AField di xxxModel.";
+    public static String TEXT_TYPE_BOOL = "Test di booleani utilizzabili nelle liste in vari formati selezionati da [TypeBool] in @AField di xxxEntity.";
+    public static String TEXT_TYPE_DATE = "Test di date utilizzabili nelle liste in vari formati selezionati da [TypeDate] in @AField di xxxEntity.";
 
 
     public static final String TAG_INNER_HTML = "innerHTML";

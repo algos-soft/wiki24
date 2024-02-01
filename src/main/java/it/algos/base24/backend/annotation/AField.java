@@ -105,4 +105,11 @@ public @interface AField {
 
     boolean focus() default false;
 
+    /**
+     * (Optional) Testo dei 2 valori booleani.
+     *
+     * @return string dei due valori separati da virgola
+     */
+    String customBoolean() default VUOTA;
+
 }

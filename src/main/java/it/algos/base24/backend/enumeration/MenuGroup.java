@@ -20,6 +20,8 @@ public enum MenuGroup implements Type {
     geografia("geografia", 2),
     crono("crono", 3),
     utility("utility", 4),
+    altro("altro", 5),
+    test("test", 6),
     ;
 
     public String tag;

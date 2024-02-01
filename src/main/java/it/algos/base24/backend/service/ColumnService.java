@@ -102,7 +102,8 @@ public class ColumnService {
         colonna = switch (type) {
             case text -> grid.addColumn(propertyName).setSortable(sortable);
             case localDateTime, localDate, localTime -> addLocalDateTime(grid, modelClazz, propertyName).setSortable(sortable);
-            case integer, ordine, lungo -> grid.addColumn(propertyName).setSortable(sortable);
+            case integer, ordine, lungo, doppio -> grid.addColumn(propertyName).setSortable(sortable);
+            case bigDecimal -> grid.addColumn(propertyName).setSortable(sortable);
             case booleano -> addBoolean(grid, modelClazz, propertyName);
             case enumType -> grid.addColumn(propertyName).setSortable(sortable);
             case linkStatico -> grid.addColumn(propertyName).setSortable(sortable);
@@ -215,6 +216,9 @@ public class ColumnService {
             Icon icon = null;
             String testo;
             Span span = new Span();
+            String customText;
+            String customVero;
+            String customFalso;
 
             try {
                 value = reflectionService.getPropertyValue((AbstractEntity) entity, propertyName);
@@ -260,39 +264,6 @@ public class ColumnService {
                     }
                     icon.setSize("1em");
                     return icon;
-                case customLabel:
-                    return span;
-                case yesNo:
-                    testo = status ? "si" : "no";
-                    span.setText(testo);
-                    if (status) {
-                        span.getStyle().set("color", COLOR_VERO);
-                    }
-                    else {
-                        span.getStyle().set("color", COLOR_FALSO);
-                    }
-                    return span;
-                case yesNoReverse:
-                    testo = status ? "no" : "si";
-                    span.setText(testo);
-                    if (status) {
-                        span.getStyle().set("color", COLOR_FALSO);
-                    }
-                    else {
-                        span.getStyle().set("color", COLOR_VERO);
-                    }
-                    return span;
-                case yesNoBold:
-                    testo = status ? "si" : "no";
-                    span.setText(testo);
-                    span.getStyle().set("font-weight", "bold");
-                    if (status) {
-                        span.getStyle().set("color", COLOR_VERO);
-                    }
-                    else {
-                        span.getStyle().set("color", COLOR_FALSO);
-                    }
-                    return span;
                 case thumb:
                     if (status) {
                         icon = new Icon(VaadinIcon.THUMBS_UP);
@@ -315,6 +286,52 @@ public class ColumnService {
                     }
                     icon.setSize("1em");
                     return icon;
+                case yesNo:
+                    testo = status ? "si" : "no";
+                    span.setText(testo);
+                    if (status) {
+                        span.getStyle().set("color", COLOR_VERO);
+                    }
+                    else {
+                        span.getStyle().set("color", COLOR_FALSO);
+                    }
+                    return span;
+                case yesNoBold:
+                    testo = status ? "si" : "no";
+                    span.setText(testo);
+                    span.getStyle().set("font-weight", "bold");
+                    if (status) {
+                        span.getStyle().set("color", COLOR_VERO);
+                    }
+                    else {
+                        span.getStyle().set("color", COLOR_FALSO);
+                    }
+                    return span;
+                case yesNoReverse:
+                    testo = status ? "no" : "si";
+                    span.setText(testo);
+                    if (status) {
+                        span.getStyle().set("color", COLOR_FALSO);
+                    }
+                    else {
+                        span.getStyle().set("color", COLOR_VERO);
+                    }
+                    return span;
+                case customLabel:
+                    customText = annotationService.getCustomBoolean(entityClazz, propertyName);
+                    if (textService.isValid(customText)) {
+                        customVero = textService.levaCodaDaPrimo(customText, VIRGOLA);
+                        customFalso = textService.levaPrimaAncheTag(customText, VIRGOLA);
+                        testo = status ? customVero : customFalso;
+                        span.setText(testo);
+                        if (status) {
+                            span.getStyle().set("color", "green");
+                        }
+                        else {
+                            span.getStyle().set("color", "red");
+                        }
+                    }
+                    return span;
                 default:
                     //                    logService.error(new WrapLog().exception(new AlgosException("Switch - caso non definito")).usaDb());
                     break;

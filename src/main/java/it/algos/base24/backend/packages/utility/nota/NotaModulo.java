@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 
 import java.time.*;
@@ -72,6 +73,10 @@ public class NotaModulo extends CrudModulo {
                 .build();
 
         return newEntityBean;
+    }
+    @Override
+    public Sort getBasicSort() {
+        return Sort.by(Sort.Order.asc("fatto"),  Sort.Order.desc("evento"));
     }
 
     @Override
