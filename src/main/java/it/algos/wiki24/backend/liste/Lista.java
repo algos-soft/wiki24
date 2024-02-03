@@ -482,6 +482,8 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Testo della pagina suddiviso in paragrafi <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String bodyText() {
         StringBuffer buffer = new StringBuffer();
@@ -617,7 +619,11 @@ public class Lista implements AlgosBuilderPattern {
         return listaSottopagine;
     }
 
-
+    /**
+     * Testo della sottopagina <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
     public String getTestoSottopagina(String keySottopagina) {
         StringBuffer buffer = new StringBuffer();
         int numVociSottopagina;
@@ -626,10 +632,13 @@ public class Lista implements AlgosBuilderPattern {
         if (!checkValiditaPattern()) {
             return STRING_ERROR;
         }
-
-        if (textService.isEmpty(bodyText)) {
-            bodyText();
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
         }
+        if (!mappaCompleta.containsKey(keySottopagina)) {
+            return STRING_ERROR;
+        }
+
         numVociSottopagina = wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
         usaDiv = numVociSottopagina > sogliaDiv;
 

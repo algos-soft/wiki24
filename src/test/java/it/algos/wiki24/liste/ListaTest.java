@@ -486,13 +486,14 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")
     void testoSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("903 - testoSottopagina"));
         System.out.println(VUOTA);
+        String keySottopaginaErrata;
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
@@ -503,14 +504,7 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaStr);
             return;
         }
-        if (listaStr == null) {
-            assertTrue(false);
-            return;
-        }
-
-        if (listaStr.size() > 0) {
-            listaStr = new ArrayList<>();
-            listaStr.add("pippox");
+        if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
                 ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
                 assertTrue(textService.isValid(ottenuto));
@@ -518,6 +512,17 @@ public class ListaTest extends WikiStreamTest {
                     assertTrue(false);
                 }
                 System.out.println(ottenuto);
+            }
+
+            if (!byPassaErrori) {
+                keySottopaginaErrata = "Brumaio";
+                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopaginaErrata);
+                assertTrue(textService.isValid(ottenuto));
+                if (ottenuto.equals(STRING_ERROR)) {
+                    assertTrue(true);
+                    message = String.format("Nella lista [%s] non esiste una sottopagina [%s]", nomeLista, keySottopaginaErrata);
+                    System.out.println(message);
+                }
             }
         }
         else {
