@@ -33,7 +33,7 @@ public class BioMongoEntity extends AbstractEntity {
     @AField(type = TypeField.text, headerText = "X", widthRem = 4)
     public String sesso;
 
-    @AField(type = TypeField.text)
+    @AField(type = TypeField.text, widthRem = 14)
     public String luogoNato;
 
     @AField(type = TypeField.text)
@@ -51,7 +51,7 @@ public class BioMongoEntity extends AbstractEntity {
     @AField(type = TypeField.integer)
     public int annoNatoOrd;
 
-    @AField(type = TypeField.text)
+    @AField(type = TypeField.text, widthRem = 14)
     public String luogoMorto;
 
     @AField(type = TypeField.text)

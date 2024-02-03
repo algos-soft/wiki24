@@ -27,7 +27,6 @@ public class NomeDoppioList extends CrudList {
         super.fixPreferenze();
     }
 
-    @Override
     public void fixAlert() {
         VerticalLayout layout = new SimpleVerticalLayout();
         Anchor anchor;
@@ -42,9 +41,9 @@ public class NomeDoppioList extends CrudList {
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(testo, anchor));
+        headerPlaceHolder.add(new Span(testo, anchor));
 
-        alertPlaceHolder.add(layout);
+        headerPlaceHolder.add(layout);
 
     }
 

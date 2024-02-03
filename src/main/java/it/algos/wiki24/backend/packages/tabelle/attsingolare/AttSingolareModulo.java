@@ -25,11 +25,12 @@ public class AttSingolareModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AttSingolareModulo() {
-        super(AttSingolareEntity.class, AttSingolareList.class, AttSingolareForm.class);
+        super(AttSingolareEntity.class, AttSingolareView.class, AttSingolareList.class, AttSingolareForm.class);
     }
 
 
@@ -109,22 +110,22 @@ public class AttSingolareModulo extends WikiModulo {
     }
 
     public List<AttSingolareEntity> findAllByProperty(final String propertyName, final Object propertyValue) {
-        return super.findAllBeanByProperty(propertyName,propertyValue)
+        return super.findAllBeanByProperty(propertyName, propertyValue)
                 .stream()
-                .map(bean->(AttSingolareEntity)bean)
+                .map(bean -> (AttSingolareEntity) bean)
                 .collect(Collectors.toList());
-//        Query query = new Query();
-//
-//        if (textService.isEmpty(propertyName)) {
-//            return null;
-//        }
-//        if (propertyValue == null) {
-//            return null;
-//        }
-//
-//        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
-//
-//        return findQuery(query);
+        //        Query query = new Query();
+        //
+        //        if (textService.isEmpty(propertyName)) {
+        //            return null;
+        //        }
+        //        if (propertyValue == null) {
+        //            return null;
+        //        }
+        //
+        //        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
+        //
+        //        return findQuery(query);
     }
 
     protected List<AttSingolareEntity> findQuery(Query query) {
@@ -141,6 +142,7 @@ public class AttSingolareModulo extends WikiModulo {
     public List<AttSingolareEntity> findAllByPlurale(AttSingolareEntity plurale) {
         return this.findAllByProperty("plurale", plurale.plurale);
     }
+
     public List<AttSingolareEntity> findAllByPlurale(String plurale) {
         return this.findAllByProperty("plurale", plurale);
     }

@@ -44,7 +44,7 @@ public abstract class WikiList extends CrudList {
 
     protected boolean usaInfoUpload;
 
-    protected VerticalLayout infoPlaceHolder;
+    //    protected VerticalLayout infoPlaceHolder;
 
 
     public WPref lastDownload;
@@ -107,6 +107,7 @@ public abstract class WikiList extends CrudList {
         this.currentCrudModulo = crudModulo;
     }
 
+    @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
 
@@ -168,31 +169,27 @@ public abstract class WikiList extends CrudList {
     }
 
     /**
-     * Costruisce un layout per informazioni aggiuntive come header della lista <br>
+     * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
      */
-    protected void addAlertPlaceHolder() {
-        super.addAlertPlaceHolder();
-
-        infoPlaceHolder = new SimpleVerticalLayout();
-        this.add(infoPlaceHolder);
+    @Override
+    protected void fixHeader() {
+        super.fixHeader();
         this.fixInfo();
     }
 
 
     /**
-     * Costruisce un (eventuale) layout per informazioni aggiuntive come header della view <br>
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge al placeHolder header della view alcune informazioni aggiuntive, tipiche di Wiki24 <br>
      */
-    public void fixInfo() {
-        infoPlaceHolder.removeAll();
-
+    private void fixInfo() {
         this.fixInfoDownload();
         this.fixInfoElabora();
         this.fixInfoUpload();
     }
 
 
-    public void fixInfoDownload() {
+    private void fixInfoDownload() {
         String downloadTxt = VUOTA;
         String downloadLast = VUOTA;
         WPref flagDownload = currentCrudModulo.flagDownload;
@@ -219,12 +216,12 @@ public abstract class WikiList extends CrudList {
                 }
             }
             message = String.format("%s%s%s", downloadTxt, SPAZIO, downloadLast);
-            infoPlaceHolder.add(ASpan.text(message).verde().small());
+            headerPlaceHolder.add(ASpan.text(message).verde().small());
         }
     }
 
 
-    public void fixInfoElabora() {
+    private void fixInfoElabora() {
         String elaboraTxt = VUOTA;
         String elaboraLast = VUOTA;
         WPref flagElabora = currentCrudModulo.flagElabora;
@@ -233,7 +230,8 @@ public abstract class WikiList extends CrudList {
         if (usaInfoElabora) {
             if (scheduledElabora != null) {
                 elaboraTxt = String.format("Elabora (%s=%s). Task %s", flagElabora, status,
-                        textService.primaMinuscola(scheduledElabora.getNota()));
+                        textService.primaMinuscola(scheduledElabora.getNota())
+                );
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
@@ -252,11 +250,11 @@ public abstract class WikiList extends CrudList {
                 }
             }
             message = String.format("%s%s%s", elaboraTxt, SPAZIO, elaboraLast);
-            infoPlaceHolder.add(ASpan.text(message).verde().small());
+            headerPlaceHolder.add(ASpan.text(message).verde().small());
         }
     }
 
-    public void fixInfoUpload() {
+    private void fixInfoUpload() {
         String uploadTxt = VUOTA;
         String uploadLast = VUOTA;
 
@@ -281,13 +279,8 @@ public abstract class WikiList extends CrudList {
                 }
             }
             message = String.format("%s%s%s", uploadTxt, SPAZIO, uploadLast);
-            infoPlaceHolder.add(ASpan.text(message).verde().small());
+            headerPlaceHolder.add(ASpan.text(message).verde().small());
         }
-    }
-
-    public VerticalLayout addAlert(VerticalLayout layout) {
-        alertPlaceHolder.add(layout);
-        return layout;
     }
 
 
@@ -438,7 +431,7 @@ public abstract class WikiList extends CrudList {
 
         if (searchPageId > 0) {
             filtri.uguale(FIELD_NAME_PAGE_ID, searchPageId);
-            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_PAGE_ID));
+            filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_PAGE_ID));
         }
         else {
             filtri.remove(FIELD_NAME_PAGE_ID);
@@ -451,7 +444,7 @@ public abstract class WikiList extends CrudList {
 
         if (textService.isValid(searchWikiTitle)) {
             filtri.inizio(FIELD_NAME_WIKI_TITLE, searchWikiTitle);
-            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_WIKI_TITLE));
+            filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_WIKI_TITLE));
         }
         else {
             filtri.remove(FIELD_NAME_WIKI_TITLE);

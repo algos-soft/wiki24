@@ -60,12 +60,11 @@ public class BioMongoList extends WikiList {
         super.usaBottoneElaboraDue = true;
         super.usaBottoneResetEntity = true;
     }
+
     @Override
-    public void fixAlert() {
+    protected void fixHeader() {
         String category = WPref.categoriaBio.getStr();
         Span biografie;
-        Span contiene;
-        String numPagine;
         String categoria = TAG_WIKI + CAT + WPref.categoriaBio.getStr();
 
         Anchor anchor = new Anchor(categoria, textService.setQuadre(category));
@@ -75,10 +74,12 @@ public class BioMongoList extends WikiList {
         biografie = new Span(message);
         biografie.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         biografie.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(biografie));
+        headerPlaceHolder.add(new Span(biografie));
 
         message = "Elabora: ricontrolla tutta la collection. La singola elaborazione viene effettuata dal download di BioServer.";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+
+        super.fixHeader();
     }
 
 

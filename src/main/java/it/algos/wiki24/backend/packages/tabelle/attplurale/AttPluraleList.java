@@ -26,7 +26,7 @@ public class AttPluraleList extends WikiList {
     }
 
     @Override
-    public void fixAlert() {
+    protected void fixHeader() {
         String categoria = TAG_WIKI + "Categoria:Bio attività";
 
         Anchor anchor2 = new Anchor(categoria, textService.setQuadre("Categoria"));
@@ -40,21 +40,23 @@ public class AttPluraleList extends WikiList {
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        alertPlaceHolder.add(new Span(testo, anchor2, new Text(SEP), anchor3));
+        headerPlaceHolder.add(new Span(testo, anchor2, new Text(SEP), anchor3));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le attività plurali sono convertite in minuscolo.";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
         message = String.format("Download%sCancella tutto. Esegue un download di AttSingolare.", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Download%sCrea una nuova tavola dai plurali (DISTINCT) di AttSingolare.", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Download%sCrea un link alla PaginaLista. Crea un link alla pagina di Attività.", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola attività plurale.", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = "Gestisce l'elaborazione delle liste biografiche e gli upload delle liste di attività.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).rosso().small());
+
+        super.fixHeader();
     }
 
 }// end of CrudList class

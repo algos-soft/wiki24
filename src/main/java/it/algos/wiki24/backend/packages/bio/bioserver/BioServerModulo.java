@@ -46,11 +46,12 @@ public class BioServerModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public BioServerModulo() {
-        super(BioServerEntity.class, BioServerList.class, BioServerForm.class);
+        super(BioServerEntity.class, BioServerView.class, BioServerList.class, BioServerForm.class);
     }
 
 

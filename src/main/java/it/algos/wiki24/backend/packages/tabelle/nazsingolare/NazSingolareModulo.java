@@ -25,11 +25,12 @@ public class NazSingolareModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public NazSingolareModulo() {
-        super(NazSingolareEntity.class, NazSingolareList.class, NazSingolareForm.class);
+        super(NazSingolareEntity.class, NazSingolareView.class, NazSingolareList.class, NazSingolareForm.class);
     }
 
 

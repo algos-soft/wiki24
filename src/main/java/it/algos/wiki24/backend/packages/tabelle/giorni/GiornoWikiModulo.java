@@ -39,11 +39,12 @@ public class GiornoWikiModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public GiornoWikiModulo() {
-        super(GiornoWikiEntity.class, GiornoWikiList.class, GiornoWikiForm.class);
+        super(GiornoWikiEntity.class, GiornoWikiView.class, GiornoWikiList.class, GiornoWikiForm.class);
     }
 
 

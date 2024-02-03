@@ -24,13 +24,15 @@ public class NazPluraleModulo extends WikiModulo {
 
     @Inject
     private NazSingolareModulo nazSingolareModulo;
+
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public NazPluraleModulo() {
-        super(NazPluraleEntity.class, NazPluraleList.class, NazPluraleForm.class);
+        super(NazPluraleEntity.class, NazPluraleView.class, NazPluraleList.class, NazPluraleForm.class);
     }
 
 

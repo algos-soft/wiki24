@@ -146,7 +146,6 @@ public abstract class CrudList extends VerticalLayout {
         this.setMargin(false);
         setSizeFull();
 
-
         this.fixPreferenze();
         this.fixForm();
         this.fixView();
@@ -232,7 +231,8 @@ public abstract class CrudList extends VerticalLayout {
 
 
     /**
-     * Costruisce un layout per informazioni aggiuntive come header della lista <br>
+     * Costruisce un placeHolder per informazioni aggiuntive come header della lista <br>
+     * Può essere utilizzato o meno ma viene SEMPRE aggiunto al layout <br>
      */
     protected void addHeaderPlaceHolder() {
         headerPlaceHolder = new SimpleVerticalLayout();
@@ -242,9 +242,10 @@ public abstract class CrudList extends VerticalLayout {
 
 
     /**
-     * Può essere sovrascritto, invocando prima o dopo il metodo della superclasse <br>
+     * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
      */
-    public void fixHeader() {
+    protected void fixHeader() {
         if (typeList != TypeList.hardWiki && typeList != TypeList.softWiki) {
             if (textService.isEmpty(infoScopo)) {
                 infoScopo = typeList.getInfoScopo();
@@ -257,32 +258,10 @@ public abstract class CrudList extends VerticalLayout {
         headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
         headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
 
-        //        if (usaBottoneShows) {
-        //            layout.add(ASpan.text(TEXT_HARD).rosso());
-        //        }
-        //        if (!usaBottoneShows && !usaBottoneEdit) {
-        //            layout.add(ASpan.text(TEXT_HARD).rosso());
-        //        }
-        //
-        //        if (usaBottoneResetDelete) {
-        //            layout.add(ASpan.text(TEXT_RESET_DELETE).rosso());
-        //        }
-        //
-        //        if (usaBottoneResetAdd) {
-        //            layout.add(ASpan.text(TEXT_NEWS).rosso());
-        //            layout.add(ASpan.text(TEXT_RESET_ADD).rosso());
-        //        }
-        //        if (usaBottoneResetPref) {
-        //            layout.add(ASpan.text(TEXT_NEWS).rosso());
-        //            layout.add(ASpan.text(TEXT_RESET_PREF).rosso());
-        //        }
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
             headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
         }
-
-        //        alertPlaceHolder.add(layout);
-        //        return layout;
     }
 
 

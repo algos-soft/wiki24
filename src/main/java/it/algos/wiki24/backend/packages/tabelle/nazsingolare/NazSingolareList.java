@@ -29,7 +29,7 @@ public class NazSingolareList extends WikiList {
     }
 
     @Override
-    public void fixAlert() {
+    protected void fixHeader() {
         Anchor anchor1;
         Anchor anchor2;
         String link;
@@ -49,17 +49,19 @@ public class NazSingolareList extends WikiList {
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
+        headerPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le nazionalità singolari sono convertite in minuscolo.";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
         message = String.format("Download%sCancella tutto e scarica i 2 moduli wiki", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = String.format("Elabora%sCalcola il numero di voci biografiche che usano ogni singola nazionalità singolare.", FORWARD);
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
         message = "La lista dei plurali, l'elaborazione delle liste biografiche e gli upload delle liste di Nazionalità sono gestiti dalla task NazPlurale.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).rosso().small());
+
+        super.fixHeader();
     }
 
 

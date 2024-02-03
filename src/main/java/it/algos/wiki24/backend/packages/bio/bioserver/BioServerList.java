@@ -38,7 +38,7 @@ public class BioServerList extends WikiList {
     }
 
     @Override
-    public void fixAlert() {
+    protected void fixHeader() {
         String category = WPref.categoriaBio.getStr();
         Span biografie;
         Span contiene;
@@ -59,13 +59,15 @@ public class BioServerList extends WikiList {
         contiene.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         contiene.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        alertPlaceHolder.add(new Span(biografie, anchor, contiene));
+        headerPlaceHolder.add(new Span(biografie, anchor, contiene));
 
         message = "Una piccola differenza tra le pagine del server e gli elementi del DB è fisiologica e dovuta alle voci della " +
                 "categoria che NON hanno un tmplBio valido";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
         message = "Download: effettua anche l'elaborazione di ogni singola BioMongo modificata.";
-        alertPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
+
+        super.fixHeader();
     }
 
 }// end of CrudList class

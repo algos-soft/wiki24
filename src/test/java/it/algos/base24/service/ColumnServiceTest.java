@@ -49,10 +49,10 @@ public class ColumnServiceTest extends ServiceTest {
         return Stream.of(
                 Arguments.of(null, VUOTA, false, null, VUOTA, VUOTA),
                 Arguments.of(RoleView.class, VUOTA, false, null, VUOTA, VUOTA),
-//                Arguments.of(ContinenteModel.class, FIELD_NAME_DESCRIZIONE, false, null, VUOTA, VUOTA),
+                //                Arguments.of(ContinenteModel.class, FIELD_NAME_DESCRIZIONE, false, null, VUOTA, VUOTA),
                 Arguments.of(RoleEntity.class, FIELD_NAME_ORDINE, true, TypeField.integer, "4rem", FIELD_HEADER_ORDINE),
-//                Arguments.of(ContinenteModel.class, FIELD_NAME_NOME, true, TypeField.text, "12rem", textService.primaMaiuscola(FIELD_NAME_NOME)),
-//                Arguments.of(ContinenteModel.class, "abitato", true, TypeField.booleano, "5rem", "Ab.")
+                //                Arguments.of(ContinenteModel.class, FIELD_NAME_NOME, true, TypeField.text, "12rem", textService.primaMaiuscola(FIELD_NAME_NOME)),
+                //                Arguments.of(ContinenteModel.class, "abitato", true, TypeField.booleano, "5rem", "Ab.")
                 Arguments.of(RoleEntity.class, VUOTA, false, null, VUOTA, VUOTA)
         );
     }
@@ -114,7 +114,7 @@ public class ColumnServiceTest extends ServiceTest {
         Grid grid = clazz != null ? new Grid<>(clazz, false) : null;
         Grid.Column<AbstractEntity> colonna = null;
 
-        colonna = service.crea(grid, clazz, sorgente);
+        colonna = service.crea(grid, clazz, sorgente, false);
         assertEquals(previstoBooleano, colonna != null);
         if (colonna != null) {
             System.out.println(VUOTA);
@@ -136,7 +136,7 @@ public class ColumnServiceTest extends ServiceTest {
         System.out.println(message);
 
         assertEquals(sorgente, colonna.getKey());
-        Object alfa=colonna.getWidth();
+        Object alfa = colonna.getWidth();
         assertEquals(width, colonna.getWidth());
         assertEquals(header, colonna.getHeaderText());
 

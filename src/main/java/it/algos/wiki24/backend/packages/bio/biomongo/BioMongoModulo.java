@@ -84,11 +84,12 @@ public class BioMongoModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public BioMongoModulo() {
-        super(BioMongoEntity.class, BioMongoList.class, BioMongoForm.class);
+        super(BioMongoEntity.class, BioMongoView.class, BioMongoList.class, BioMongoForm.class);
     }
 
 
@@ -262,9 +263,11 @@ public class BioMongoModulo extends WikiModulo {
     public int countAllByAttivitaSingolare(final String propertyValue) {
         return mongoService.count(queryByAttivitaSingolare(propertyValue), BioMongoEntity.class);
     }
+
     public List<BioMongoEntity> findAllByAttivitaSingolare(final String propertyValue) {
         return mongoService.find(queryByAttivitaSingolare(propertyValue), BioMongoEntity.class);
     }
+
     public Query queryByAttivitaSingolare(final String propertyValue) {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA);

@@ -66,16 +66,18 @@ public abstract class WikiModulo extends CrudModulo {
 
     @Inject
     protected WikiApiService wikiApiService;
+
     @Inject
     protected UploadService uploadService;
 
     /**
      * Regola la modelClazz associata a questo Modulo <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo <br>
      * Regola la formClazz associata a questo Modulo <br>
      */
-    public WikiModulo(Class entityClazz, Class listClazz, Class formClazz) {
-        super(entityClazz, listClazz, formClazz);
+    public WikiModulo(Class entityClazz, Class viewClass, Class listClazz, Class formClazz) {
+        super(entityClazz, viewClass, listClazz, formClazz);
     }
 
     @PostConstruct

@@ -41,11 +41,12 @@ public class AnnoWikiModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AnnoWikiModulo() {
-        super(AnnoWikiEntity.class, AnnoWikiList.class, AnnoWikiForm.class);
+        super(AnnoWikiEntity.class, AnnoWikiView.class, AnnoWikiList.class, AnnoWikiForm.class);
     }
 
 
@@ -200,7 +201,8 @@ public class AnnoWikiModulo extends WikiModulo {
         uploadService.annoMorto(annoCorrente);
         numMorti = uploadService.numMortiAnno(annoCorrente);
         risultato = String.format("Nella pagina [Morti nel %s] ci sono [%s] biografie. ", annoCorrente,
-                textService.format(numMorti));
+                textService.format(numMorti)
+        );
 
         super.fixUpload(inizio);
         return risultato;

@@ -27,11 +27,12 @@ public class AttPluraleModulo extends WikiModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AttPluraleModulo() {
-        super(AttPluraleEntity.class, AttPluraleList.class, AttPluraleForm.class);
+        super(AttPluraleEntity.class, AttPluraleView.class, AttPluraleList.class, AttPluraleForm.class);
     }
 
 
