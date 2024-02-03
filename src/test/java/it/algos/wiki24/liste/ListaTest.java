@@ -413,7 +413,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -421,11 +421,16 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("902 - numBioSottopagina"));
         System.out.println(VUOTA);
         String keySottopaginaErrata;
+        int previstoTotalePagina;
+        int totaleEffettivoParagrafiSenzaSottopagina = 0;
+        int totaleEffettivoSottoPagine = 0;
+
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
         listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        previstoTotalePagina = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
 
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
@@ -435,10 +440,30 @@ public class ListaTest extends WikiStreamTest {
             for (String keySottopagina : listaStr) {
                 ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
                 if (ottenutoIntero > 0) {
+                    totaleEffettivoSottoPagine += ottenutoIntero;
                     message = String.format("Le biografie di type%s[%s] per il mese di %s dell'anno %s, sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
                     System.out.println(message);
                 }
             }
+            System.out.println(VUOTA);
+            message = String.format("In totale nella lista [%s] ci sono [%d] biografie", nomeLista, totaleEffettivoSottoPagine);
+            System.out.println(message);
+            assertTrue(previstoTotalePagina >= totaleEffettivoSottoPagine);
+            message = String.format("Che sono meno delle [%d] totali perché alcuni paragrafi NON hanno sottopagina", previstoTotalePagina);
+            System.out.println(message);
+            ottenutoArray = appContext.getBean(Lista.class, nomeLista).type(type).keyMappa();
+            for (String keyParagrafoSenzaSottopagina : ottenutoArray) {
+                if (!listaStr.contains(keyParagrafoSenzaSottopagina)) {
+                    ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keyParagrafoSenzaSottopagina);
+                    totaleEffettivoParagrafiSenzaSottopagina += ottenutoIntero;
+                }
+            }
+            assertEquals(totaleEffettivoSottoPagine + totaleEffettivoParagrafiSenzaSottopagina, previstoTotalePagina);
+            System.out.println(VUOTA);
+            System.out.println(String.format("totaleEffettivoSottoPagine [%d]", totaleEffettivoSottoPagine));
+            System.out.println(String.format("totaleEffettivoParagrafiSenzaSottopagina [%d]", totaleEffettivoParagrafiSenzaSottopagina));
+            System.out.println(String.format("previstoTotalePagina [%d]", previstoTotalePagina));
+
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
