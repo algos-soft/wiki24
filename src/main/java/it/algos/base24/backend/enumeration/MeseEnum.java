@@ -7,6 +7,7 @@ import jakarta.annotation.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.time.*;
 import java.util.*;
 import java.util.stream.*;
@@ -43,7 +44,7 @@ public enum MeseEnum implements Type {
      * Iniettata automaticamente dal framework SpringBoot/Vaadin con l'Annotation @Autowired <br>
      * Disponibile DOPO il ciclo init() del costruttore di questa classe <br>
      */
-    @Autowired
+    @Inject
     public TextService text;
 
     String nome;

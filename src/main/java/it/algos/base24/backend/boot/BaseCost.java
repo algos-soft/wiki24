@@ -37,6 +37,8 @@ public class BaseCost {
     public static final String SEP_TABLE = "|-";
 
     public static final String CONFIG = "config";
+    public static final int INT_ERROR = -1;
+    public static final String STRING_ERROR = "errore";
 
     public static final String FRONTEND = "frontend";
 
@@ -314,8 +316,6 @@ public class BaseCost {
 
     public static final LocalDateTime ERROR_DATA_TIME = LocalDateTime.of(1978, 4, 17, 14, 35);
 
-    public static final int INT_ERROR = -1;
-    public static final String STRING_ERROR = "errore";
 
     public static final String GIALLO = "\u001b[38;5;111m%s\u001b[0m";
 

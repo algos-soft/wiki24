@@ -100,7 +100,7 @@ public class MeseModulo extends CrudModulo {
             sigla = meseEnum.getSigla();
             nome = meseEnum.getNome();
             primo = ultimo + 1;
-            giorni = meseEnum.getGiorni();
+            giorni = meseEnum.getGiorniBisestili();
             ultimo = primo + giorni - 1;
             newBean = newEntity(ordine, sigla, nome, giorni, primo, ultimo);
             if (newBean != null) {

@@ -254,11 +254,12 @@ public class WebService {
      */
     public String estraeTable(String testoTable) {
         int posLastEsclamativo;
+        int posFirstSeparatore;
 
         //--elimina la testa di apertura della table per evitare fuffa
         if (textService.isValid(testoTable)) {
-            posLastEsclamativo = testoTable.lastIndexOf(ESCLAMATIVO);
-            testoTable = testoTable.substring(posLastEsclamativo);
+//            posLastEsclamativo = testoTable.lastIndexOf(ESCLAMATIVO);
+//            testoTable = testoTable.substring(posLastEsclamativo);
             testoTable = textService.levaPrimaAncheTag(testoTable, SEP_TABLE);
             testoTable = testoTable.trim();
         }

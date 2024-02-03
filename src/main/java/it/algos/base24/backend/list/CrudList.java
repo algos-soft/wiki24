@@ -146,6 +146,7 @@ public abstract class CrudList extends VerticalLayout {
         this.setMargin(false);
         setSizeFull();
 
+
         this.fixPreferenze();
         this.fixForm();
         this.fixView();
@@ -257,7 +258,6 @@ public abstract class CrudList extends VerticalLayout {
 
         headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
         headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
-
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
             headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
@@ -405,12 +405,6 @@ public abstract class CrudList extends VerticalLayout {
                 grid.addItemDoubleClickListener(listener -> showItem(listener.getItem()));
             }
         }
-
-//        //--Colorazione di controllo <br>
-//        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-//            grid.getElement().getStyle().set("background-color", "#FFE6E8");
-//        }
-
 
         this.sincroSelection();
         this.add(grid);
