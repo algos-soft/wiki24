@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.bio.biomongo;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -48,6 +49,9 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ArrayService arrayService;
+
+    @Inject
+    MeseModulo meseModulo;
 
     @Inject
     ParNomeModulo parNomeModulo;
@@ -256,6 +260,60 @@ public class BioMongoModulo extends WikiModulo {
         }
 
         query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(propertyValue));
+        query.with(sort);
+        return query;
+    }
+
+    public int countByAnnoNatoAndMese(final String anno, String meseTxt) {
+        return mongoService.count(queryByAnnoNatoAndMese(anno, meseTxt), BioMongoEntity.class);
+    }
+
+
+    public Query queryByAnnoNatoAndMese(final String anno, final String meseTxt) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
+        MeseEntity meseBean;
+        int primo = 0;
+        int ultimo = 0;
+
+        if (textService.isEmpty(anno) || textService.isEmpty(meseTxt)) {
+            return null;
+        }
+        meseBean = meseModulo.findByKey(textService.primaMinuscola(meseTxt));
+        if (meseBean != null) {
+            primo = meseBean.primo;
+            ultimo = meseBean.ultimo;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(anno));
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO_ORD).gte(primo).lte(ultimo));
+        query.with(sort);
+        return query;
+    }
+
+
+    public int countByAnnoMortoAndMese(final String anno, String meseTxt) {
+        return mongoService.count(queryByAnnoMortoAndMese(anno, meseTxt), BioMongoEntity.class);
+    }
+
+
+    public Query queryByAnnoMortoAndMese(final String anno, final String meseTxt) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_GIORNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
+        MeseEntity meseBean;
+        int primo = 0;
+        int ultimo = 0;
+
+        if (textService.isEmpty(anno) || textService.isEmpty(meseTxt)) {
+            return null;
+        }
+        meseBean = meseModulo.findByKey(textService.primaMinuscola(meseTxt));
+        if (meseBean != null) {
+            primo = meseBean.primo;
+            ultimo = meseBean.ultimo;
+        }
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(anno));
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO_ORD).gte(primo).lte(ultimo));
         query.with(sort);
         return query;
     }

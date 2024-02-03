@@ -64,6 +64,10 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("406 a.C.", TypeLista.annoMorte),
                 //                Arguments.of("1567", TypeLista.annoNascita),
                 //                Arguments.of("560", TypeLista.annoMorte),
+                Arguments.of("2023", TypeLista.nessunaLista),
+                Arguments.of("3125", TypeLista.annoMorte),
+                Arguments.of("2025", TypeLista.annoNascita),
+                Arguments.of("1493", TypeLista.annoNascita),
                 Arguments.of("2023", TypeLista.annoMorte)
         );
     }

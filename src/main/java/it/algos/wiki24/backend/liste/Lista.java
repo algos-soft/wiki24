@@ -152,7 +152,7 @@ public class Lista implements AlgosBuilderPattern {
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
-        this.patternCompleto = type != TypeLista.nessunaLista;
+        this.patternCompleto = type != null && type != TypeLista.nessunaLista;
         this.checkValiditaCostruttore();
     }
 
@@ -239,16 +239,16 @@ public class Lista implements AlgosBuilderPattern {
         if (costruttoreValido && patternCompleto) {
             return true;
         }
-        if (type == TypeLista.nessunaLista) {
+        if (type == null || type == TypeLista.nessunaLista) {
             logger.error(new WrapLog().message("Manca il typeLista"));
             return false;
         }
 
         patternCompleto = moduloCorrente != null;
         patternCompleto = switch (type) {
-            case giornoNascita,giornoMorte,annoNascita,annoMorte -> patternCompleto && textService.isValid(titoloPagina);
-            case attivitaSingolare,nazionalitaSingolare -> patternCompleto;
-            case attivitaPlurale,nazionalitaPlurale -> textService.isValid(titoloPagina);
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> patternCompleto && textService.isValid(titoloPagina);
+            case attivitaSingolare, nazionalitaSingolare -> patternCompleto;
+            case attivitaPlurale, nazionalitaPlurale -> textService.isValid(titoloPagina);
             default -> patternCompleto;
         };
 
@@ -284,8 +284,14 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     *
+     * @return -1 se il pattern della classe non è valido, zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
+        if (!checkValiditaPattern()) {
+            return INT_ERROR;
+        }
+
         return switch (type) {
             case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
             case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
@@ -302,34 +308,41 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     *
+     * @return null se il pattern della classe non è valido, lista con zero elementi se i dati sono validi ma non ci sono biografie <br>
      */
     public List<BioMongoEntity> listaBio() {
-        if (checkValiditaPattern()) {
-            return switch (type) {
-                case giornoNascita -> bioMongoModulo.findAllByGiornoNato(nomeLista);
-                case giornoMorte -> bioMongoModulo.findAllByGiornoMorto(nomeLista);
-                case annoNascita -> bioMongoModulo.findAllByAnnoNato(nomeLista);
-                case annoMorte -> bioMongoModulo.findAllByAnnoMorto(nomeLista);
-                case attivitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-                case attivitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-                case nazionalitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-                case nazionalitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-                default -> null;
-            };
-        }
-        else {
+        if (!checkValiditaPattern()) {
             return null;
         }
+
+        return switch (type) {
+            case giornoNascita -> bioMongoModulo.findAllByGiornoNato(nomeLista);
+            case giornoMorte -> bioMongoModulo.findAllByGiornoMorto(nomeLista);
+            case annoNascita -> bioMongoModulo.findAllByAnnoNato(nomeLista);
+            case annoMorte -> bioMongoModulo.findAllByAnnoMorto(nomeLista);
+            case attivitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+            case attivitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+            case nazionalitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+            case nazionalitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+            default -> null;
+        };
     }
 
 
     /**
      * Lista ordinata di tutti i wrapLista che hanno una valore valido per la pagina specifica <br>
+     *
+     * @return null se il pattern della classe non è valido, lista con zero elementi se i dati sono validi ma non ci sono biografie <br>
      */
     public List<WrapDidascalia> listaWrapDidascalie() {
-        listaWrapDidascalie = new ArrayList<>();
         WrapDidascalia wrap;
 
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        listaWrapDidascalie = new ArrayList<>();
         if (listaBio == null || listaBio.size() == 0) {
             listaBio = listaBio();
         }
@@ -352,8 +365,13 @@ public class Lista implements AlgosBuilderPattern {
      * Lista ordinata di tutte le didascalie che hanno una valore valido per la pagina specifica <br>
      */
     public List<String> listaTestoDidascalie() {
-        List<String> listaTestoDidascalie = new ArrayList<>();
+        List<String> listaTestoDidascalie;
 
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        listaTestoDidascalie = new ArrayList<>();
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
             listaWrapDidascalie = listaWrapDidascalie();
         }
@@ -370,7 +388,6 @@ public class Lista implements AlgosBuilderPattern {
 
 
     public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie() {
-        mappaCompleta = new LinkedHashMap<>();
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaPrima;
         LinkedHashMap<String, List<String>> mappaSeconda;
         List<String> listaTerza;
@@ -378,36 +395,43 @@ public class Lista implements AlgosBuilderPattern {
         String keyDue;
         String keyTre;
 
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        mappaCompleta = new LinkedHashMap<>();
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
             listaWrapDidascalie = listaWrapDidascalie();
         }
-        for (WrapDidascalia wrap : listaWrapDidascalie) {
-            //--primo livello - paragrafi
-            keyUno = wrap.getPrimoLivello();
-            if (!mappaCompleta.containsKey(keyUno)) {
-                mappaPrima = new LinkedHashMap<>();
-                mappaCompleta.put(keyUno, mappaPrima);
-            }
+        if (listaWrapDidascalie != null) {
+            for (WrapDidascalia wrap : listaWrapDidascalie) {
+                //--primo livello - paragrafi
+                keyUno = wrap.getPrimoLivello();
+                if (!mappaCompleta.containsKey(keyUno)) {
+                    mappaPrima = new LinkedHashMap<>();
+                    mappaCompleta.put(keyUno, mappaPrima);
+                }
 
-            //--secondo livello - decade/lettera alfabetica iniziale
-            keyDue = wrap.getSecondoLivello();
-            mappaPrima = mappaCompleta.get(keyUno);
-            if (!mappaPrima.containsKey(keyDue)) {
-                mappaSeconda = new LinkedHashMap<>();
-                mappaPrima.put(keyDue, mappaSeconda);
-            }
+                //--secondo livello - decade/lettera alfabetica iniziale
+                keyDue = wrap.getSecondoLivello();
+                mappaPrima = mappaCompleta.get(keyUno);
+                if (!mappaPrima.containsKey(keyDue)) {
+                    mappaSeconda = new LinkedHashMap<>();
+                    mappaPrima.put(keyDue, mappaSeconda);
+                }
 
-            //--terzo livello - giorno/anno/binomio alfabetico
-            keyTre = wrap.getTerzoLivello();
-            mappaSeconda = mappaPrima.get(keyDue);
-            listaTerza = new ArrayList<>();
-            if (!mappaSeconda.containsKey(keyTre)) {
-                mappaSeconda.put(keyTre, listaTerza);
-            }
+                //--terzo livello - giorno/anno/binomio alfabetico
+                keyTre = wrap.getTerzoLivello();
+                mappaSeconda = mappaPrima.get(keyDue);
+                listaTerza = new ArrayList<>();
+                if (!mappaSeconda.containsKey(keyTre)) {
+                    mappaSeconda.put(keyTre, listaTerza);
+                }
 
-            //--didascalia
-            listaTerza = mappaSeconda.get(keyTre);
-            listaTerza.add(wrap.getDidascalia());
+                //--didascalia
+                listaTerza = mappaSeconda.get(keyTre);
+                listaTerza.add(wrap.getDidascalia());
+            }
         }
 
         listaWrapDidascalie = null;
@@ -419,6 +443,10 @@ public class Lista implements AlgosBuilderPattern {
      */
     public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> fixAltreInCoda(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa) {
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaAltre;
+
+        if (mappa == null) {
+            return null;
+        }
 
         for (TypeInesistente type : TypeInesistente.values()) {
             if (mappa.containsKey(type.getTag())) {
@@ -432,13 +460,18 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     public List<String> keyMappa() {
-        List<String> keyList = null;
+        List<String> keyList;
+
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        keyList = new ArrayList<>();
         if (mappaCompleta == null || mappaCompleta.size() == 0) {
             mappaCompleta = mappaDidascalie();
         }
 
         if (mappaCompleta != null && mappaCompleta.size() > 0) {
-            keyList = new ArrayList<>();
             for (String key : mappaCompleta.keySet()) {
                 keyList.add(key);
             }
@@ -459,6 +492,10 @@ public class Lista implements AlgosBuilderPattern {
         String sottoPagina;
         String vedi;
         listaSottopagine = new ArrayList<>();
+
+        if (!checkValiditaPattern()) {
+            return STRING_ERROR;
+        }
 
         if (mappaCompleta == null || mappaCompleta.size() == 0) {
             mappaCompleta = mappaDidascalie();
@@ -569,6 +606,11 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     public List<String> listaSottopagine() {
+
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
         if (textService.isEmpty(bodyText)) {
             bodyText();
         }
@@ -580,6 +622,10 @@ public class Lista implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
         int numVociSottopagina;
         boolean usaDiv;
+
+        if (!checkValiditaPattern()) {
+            return STRING_ERROR;
+        }
 
         if (textService.isEmpty(bodyText)) {
             bodyText();
@@ -607,9 +653,42 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico <br>
+     * Prima esegue una query diretta al database (più veloce)
+     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
+     *
+     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio(String keySottopagina) {
-        return wikiUtilityService.getSizeMappa(getMappaSottopagina(keySottopagina));
+        int numBioSottopagina = INT_ERROR;
+
+        if (!checkValiditaPattern()) {
+            return numBioSottopagina;
+        }
+
+        numBioSottopagina = switch (type) {
+            case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
+            case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
+            case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(nomeLista, keySottopagina);
+            case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(nomeLista, keySottopagina);
+            case attivitaSingolare -> bioMongoModulo.countAllByAttivitaSingolare(nomeLista);
+            case attivitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            default -> INT_ERROR;
+        };
+
+        if (numBioSottopagina > 0) {
+            return numBioSottopagina;
+        }
+
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
+        }
+        if (!mappaCompleta.containsKey(keySottopagina)) {
+            return INT_ERROR;
+        }
+
+        return wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {

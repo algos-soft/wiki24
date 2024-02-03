@@ -70,8 +70,14 @@ public class MeseModulo extends CrudModulo {
         return (MeseEntity) fixKey(newEntityBean);
     }
 
+    @Override
     public List<MeseEntity> findAll() {
         return super.findAll();
+    }
+
+    @Override
+    public MeseEntity findByKey(final Object keyPropertyValue) {
+        return (MeseEntity) super.findByKey(keyPropertyValue);
     }
 
     @Override

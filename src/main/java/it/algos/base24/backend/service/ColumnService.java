@@ -207,6 +207,7 @@ public class ColumnService {
             colonna.setKey(propertyName);
         }
 
+        colonna.setResizable(true);
         return colonna;
     }
 

@@ -2,6 +2,7 @@ package it.algos.wiki24.liste;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -47,6 +48,7 @@ public class ListaTest extends WikiStreamTest {
         super.usaCollectionName = false;
         super.usaCurrentModulo = false;
         super.usaTypeLista = true;
+        super.byPassaErrori = true; //false in fase di debug e true alla fine per essere sicuri che i tests non vadano negli errori previsti
     }
 
     @BeforeEach
@@ -86,7 +88,7 @@ public class ListaTest extends WikiStreamTest {
     void numBio(String nomeLista, TypeLista type) {
         System.out.println(("101 - numBio"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -102,7 +104,14 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(message);
         }
         else {
-            printMancanoBio("La listaBio", nomeLista, type);
+            if (ottenutoIntero == INT_ERROR) {
+                message = String.format("Probabilmente manca il typeLista di [%s]", nomeLista);
+                logger.info(new WrapLog().message(message));
+                assertTrue(false);
+            }
+            else {
+                printMancanoBio("La listaBio", nomeLista, type);
+            }
         }
     }
 
@@ -113,7 +122,7 @@ public class ListaTest extends WikiStreamTest {
     void listaBio(String nomeLista, TypeLista type) {
         System.out.println(("201 - listaBio"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -123,7 +132,11 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaBio);
             return;
         }
-        assertNotNull(listaBio);
+        if (listaBio == null) {
+            assertTrue(false);
+            return;
+        }
+
         if (listaBio.size() > 0) {
             message = String.format("Lista delle [%d] biografie di type%s[%s] per %s [%s]", listaBio.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
             System.out.println(message);
@@ -143,7 +156,7 @@ public class ListaTest extends WikiStreamTest {
     void listaWrapDidascalie(String nomeLista, TypeLista type) {
         System.out.println(("301 - listaWrapDidascalie"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -153,7 +166,11 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaWrap);
             return;
         }
-        assertNotNull(listaWrap);
+        if (listaWrap == null) {
+            assertTrue(false);
+            return;
+        }
+
         if (listaWrap.size() > 0) {
             message = String.format("Lista dei [%d] wrap di type%s[%s] per %s [%s]", listaWrap.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
             System.out.println(message);
@@ -166,14 +183,14 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
     void listaTestoDidascalia(String nomeLista, TypeLista type) {
         System.out.println(("401 - listaTestoDidascalia"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -183,7 +200,11 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaStr);
             return;
         }
-        assertNotNull(listaStr);
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+
         if (listaStr.size() > 0) {
             message = String.format("Lista delle [%d] didascalie di type%s[%s] per %s [%s]", listaStr.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
             System.out.println(message);
@@ -196,14 +217,14 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
     void mappaDidascalie(String nomeLista, TypeLista type) {
         System.out.println(("501 - mappaDidascalie"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -213,7 +234,11 @@ public class ListaTest extends WikiStreamTest {
             assertNull(mappaDidascalie);
             return;
         }
-        assertNotNull(mappaDidascalie);
+        if (mappaDidascalie == null) {
+            assertTrue(false);
+            return;
+        }
+
         if (mappaDidascalie.size() > 0) {
             printMappa(type.getTag(), nomeLista, mappaDidascalie);
         }
@@ -223,14 +248,14 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
     void keyMappa(String nomeLista, TypeLista type) {
         System.out.println(("601 - key della mappa (paragrafi)"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -240,6 +265,11 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaStr);
             return;
         }
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+
         if (listaStr != null) {
             message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d chiavi (paragrafi)", FORWARD, type.name(), type.getGiornoAnno(), nomeLista, listaStr.size());
             System.out.println(message);
@@ -252,14 +282,14 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
     void paragrafi(String nomeLista, TypeLista type) {
         System.out.println(("701 - paragrafi"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -269,6 +299,11 @@ public class ListaTest extends WikiStreamTest {
             assertFalse(textService.isValid(ottenuto));
             return;
         }
+        if (ottenuto.equals(STRING_ERROR)) {
+            assertTrue(false);
+            return;
+        }
+
         if (textService.isValid(ottenuto)) {
             message = String.format("Paragrafi della lista di type%s[%s] per %s [%s] con eventuali sottopagine e divisori colonne", FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
             System.out.println(message);
@@ -290,13 +325,13 @@ public class ListaTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA_TEST")
+    @MethodSource(value = "LISTA")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
     void listaSottopagine(String nomeLista, TypeLista type) {
         System.out.println(("801 - listaSottopagine"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -305,7 +340,12 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaStr);
             return;
         }
-        if (listaStr != null && listaStr.size() > 0) {
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+
+        if (listaStr.size() > 0) {
             print(listaStr);
         }
         else {
@@ -316,17 +356,21 @@ public class ListaTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA_TEST")
+    @MethodSource(value = "LISTA")
     @Order(901)
-    @DisplayName("901 - testoSottopagina")
-    void testoSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("901 - testoSottopagina"));
+    @DisplayName("901 - numBioParagrafi")
+    void numBioParagrafi(String nomeLista, TypeLista type) {
+        System.out.println(("901 - numBioParagrafi"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        String keySottopaginaErrata;
+        int previstoTotaleParagrafi;
+        int totaleEffettivoPagina = 0;
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
-        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).keyMappa();
+        previstoTotaleParagrafi = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
 
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
@@ -334,9 +378,32 @@ public class ListaTest extends WikiStreamTest {
         }
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
-                assertTrue(textService.isValid(ottenuto));
-                System.out.println(ottenuto);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+                if (ottenutoIntero > 0) {
+                    totaleEffettivoPagina += ottenutoIntero;
+                    message = String.format("Le biografie di type%s[%s] per il paragrafo di %s di %s, sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
+                    System.out.println(message);
+                }
+            }
+            System.out.println(VUOTA);
+            message = String.format("In totale nella lista [%s] ci sono [%d] biografie", nomeLista, totaleEffettivoPagina);
+            System.out.println(message);
+            assertEquals(previstoTotaleParagrafi, totaleEffettivoPagina);
+
+            if (!byPassaErrori) {
+                System.out.println(VUOTA);
+                keySottopaginaErrata = "Brumaio";
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopaginaErrata);
+                if (ottenutoIntero == INT_ERROR) {
+                    message = String.format("Nella lista [%s] non esiste un paragrafo [%s]", nomeLista, keySottopaginaErrata);
+                    System.out.println(message);
+                    assertNotEquals(INT_ERROR, ottenutoIntero);
+                }
+                else {
+                    message = String.format("Non ci sono biografie di tipo [%s] per il paragrafo [%s/%s]", type.name(), nomeLista, keySottopaginaErrata);
+                    System.out.println(message);
+                    assertEquals(INT_ERROR, ottenutoIntero);
+                }
             }
         }
         else {
@@ -346,14 +413,15 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
-    @MethodSource(value = "LISTA_TEST")
+//    @ParameterizedTest
+    @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
     void numBioSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("902 - numBioSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        String keySottopaginaErrata;
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
@@ -371,6 +439,61 @@ public class ListaTest extends WikiStreamTest {
                     System.out.println(message);
                 }
             }
+            if (!byPassaErrori) {
+                System.out.println(VUOTA);
+                keySottopaginaErrata = "Brumaio";
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopaginaErrata);
+                if (ottenutoIntero == INT_ERROR) {
+                    message = String.format("Nella lista [%s] non esiste un paragrafo/sottopagina [%s]", nomeLista, keySottopaginaErrata);
+                    System.out.println(message);
+                    assertNotEquals(INT_ERROR, ottenutoIntero);
+                }
+                else {
+                    message = String.format("Non ci sono biografie di tipo [%s] per il paragrafo/sottopagina [%s/%s]", type.name(), nomeLista, keySottopaginaErrata);
+                    System.out.println(message);
+                    assertEquals(INT_ERROR, ottenutoIntero);
+                }
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+    //    @ParameterizedTest
+    @MethodSource(value = "LISTA")
+    @Order(903)
+    @DisplayName("903 - testoSottopagina")
+    void testoSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("903 - testoSottopagina"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+
+        if (listaStr.size() > 0) {
+            listaStr = new ArrayList<>();
+            listaStr.add("pippox");
+            for (String keySottopagina : listaStr) {
+                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
+                assertTrue(textService.isValid(ottenuto));
+                if (ottenuto.equals(STRING_ERROR)) {
+                    assertTrue(false);
+                }
+                System.out.println(ottenuto);
+            }
         }
         else {
             message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
@@ -386,7 +509,7 @@ public class ListaTest extends WikiStreamTest {
     void mappaSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("903 - mappaSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 

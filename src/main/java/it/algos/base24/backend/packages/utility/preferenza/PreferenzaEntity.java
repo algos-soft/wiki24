@@ -22,7 +22,7 @@ public class PreferenzaEntity extends AbstractEntity {
     @AField(type = TypeField.enumType, enumClazz = TypePref.class)
     public TypePref type;
 
-    @AField(type = TypeField.text, widthRem = 30)
+    @AField(type = TypeField.text, widthRem = 40)
     public String descrizione;
 
     @AField(type = TypeField.preferenza, widthRem = 12)

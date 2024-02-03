@@ -78,7 +78,7 @@ public class UploadTest extends WikiStreamTest {
     void numBio(String nomeLista, TypeLista type) {
         System.out.println(("101 - numBio"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
         message = String.format("Numero di biografie di %s %s", type.getCategoria(), nomeLista);
@@ -107,7 +107,7 @@ public class UploadTest extends WikiStreamTest {
     void getHeaderText(String nomeLista, TypeLista type) {
         System.out.println(("201 - getHeaderText"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
         message = String.format("Header di %s %s", type.getCategoria(), nomeLista);
@@ -126,7 +126,7 @@ public class UploadTest extends WikiStreamTest {
     void getBodyText(String nomeLista, TypeLista type) {
         System.out.println(("301 - getBodyText"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
         message = String.format("Body di %s%s", type.getCategoria(), nomeLista);
@@ -145,7 +145,7 @@ public class UploadTest extends WikiStreamTest {
     void getBottomText(String nomeLista, TypeLista type) {
         System.out.println(("401 - getBottomText"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
         message = String.format("Bottom di %s%s", type.getCategoria(), nomeLista);
@@ -164,7 +164,7 @@ public class UploadTest extends WikiStreamTest {
     void getUploadText(String nomeLista, TypeLista type) {
         System.out.println(("501 - getUploadText"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
         message = String.format("UploadText di %s%s", type.getCategoria(), nomeLista);
@@ -182,7 +182,7 @@ public class UploadTest extends WikiStreamTest {
     void uploadTest(String nomeLista, TypeLista type) {
         System.out.println(("601 - uploadTest"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -199,7 +199,7 @@ public class UploadTest extends WikiStreamTest {
     void uploadAll(String nomeLista, TypeLista type) {
         System.out.println(("602 - upload voce e sottopagine"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -217,7 +217,7 @@ public class UploadTest extends WikiStreamTest {
     void numBioSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("701 - numBioSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -253,7 +253,7 @@ public class UploadTest extends WikiStreamTest {
     void headerTextSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("702 - headerTextSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -283,7 +283,7 @@ public class UploadTest extends WikiStreamTest {
     void bodyTextSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("703 - bodyTextSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -312,7 +312,7 @@ public class UploadTest extends WikiStreamTest {
     void bottomTextSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("704 - bottomTextSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -341,7 +341,7 @@ public class UploadTest extends WikiStreamTest {
     void uploadTextSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("705 - uploadTextSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 
@@ -369,7 +369,7 @@ public class UploadTest extends WikiStreamTest {
     void uploadTestSottopagina(String nomeLista, TypeLista type) {
         System.out.println(("801 - uploadTestSottopagina"));
         System.out.println(VUOTA);
-        if (!fixGiornoAnno(nomeLista, type)) {
+        if (!fixListe(nomeLista, type)) {
             return;
         }
 

@@ -21,7 +21,6 @@ import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.context.*;
 
@@ -38,6 +37,8 @@ import java.util.stream.*;
  * Classe astratta che contiene le regolazioni essenziali <br>
  */
 public abstract class WikiTest extends AlgosTest {
+
+    protected boolean byPassaErrori;
 
     protected String clazzName;
 
@@ -340,7 +341,7 @@ public abstract class WikiTest extends AlgosTest {
         listaPageIds = null;
         listWrapBio = null;
         listWrapTime = null;
-        //        listBio = null;
+        listaBio = null;
         //        listWrapDidascalia = null;
         //        listWrapLista = null;
         //        listMiniWrap = null;
@@ -852,7 +853,9 @@ public abstract class WikiTest extends AlgosTest {
         }
     }
 
-    protected boolean fixGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
+
+
+    protected boolean fixListe(final String nomeLista, final TypeLista typeSuggerito) {
         if (textService.isEmpty(nomeLista)) {
             message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, typeSuggerito.name());
             System.out.println(message);
