@@ -12,6 +12,10 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
@@ -71,6 +75,18 @@ public class Lista implements AlgosBuilderPattern {
 
     @Inject
     SecoloModulo secoloModulo;
+
+    @Inject
+    protected AttSingolareModulo attSingolareModulo;
+
+    @Inject
+    protected AttPluraleModulo attPluraleModulo;
+
+    @Inject
+    protected NazSingolareModulo nazSingolareModulo;
+
+    @Inject
+    protected NazPluraleModulo nazPluraleModulo;
 
     protected TypeLista type;
 
@@ -171,6 +187,10 @@ public class Lista implements AlgosBuilderPattern {
         this.moduloCorrente = switch (type) {
             case giornoNascita, giornoMorte -> giornoModulo;
             case annoNascita, annoMorte -> annoModulo;
+            case attivitaSingolare -> attSingolareModulo;
+            case attivitaPlurale -> attPluraleModulo;
+            case nazionalitaSingolare -> nazSingolareModulo;
+            case nazionalitaPlurale -> nazPluraleModulo;
             default -> null;
         };
 
@@ -179,6 +199,10 @@ public class Lista implements AlgosBuilderPattern {
             case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
             case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
             case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
+            case attivitaSingolare -> VUOTA;
+            case attivitaPlurale -> wikiUtilityService.wikiTitleAttivita(nomeLista);
+            case nazionalitaSingolare -> VUOTA;
+            case nazionalitaPlurale -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
             default -> null;
         };
 
@@ -198,17 +222,6 @@ public class Lista implements AlgosBuilderPattern {
         this.usaDimensioneParagrafi = false;
         return this;
     }
-
-    //    /**
-    //     * Pattern Builder <br>
-    //     */
-    //    public Lista isSottopagina() {
-    //        if (usaSottopaginaOltreMax) {
-    //            this.isSottopagina = true;
-    //        }
-    //
-    //        return this;
-    //    }
 
     /**
      * Pattern Builder <br>
@@ -232,7 +245,12 @@ public class Lista implements AlgosBuilderPattern {
         }
 
         patternCompleto = moduloCorrente != null;
-        patternCompleto = patternCompleto && textService.isValid(titoloPagina);
+        patternCompleto = switch (type) {
+            case giornoNascita,giornoMorte,annoNascita,annoMorte -> patternCompleto && textService.isValid(titoloPagina);
+            case attivitaSingolare,nazionalitaSingolare -> patternCompleto;
+            case attivitaPlurale,nazionalitaPlurale -> textService.isValid(titoloPagina);
+            default -> patternCompleto;
+        };
 
         if (!costruttoreValido) {
             message = String.format("Non è valido il costruttore di %s", this.getClass().getSimpleName());
@@ -273,6 +291,10 @@ public class Lista implements AlgosBuilderPattern {
             case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
             case annoNascita -> bioMongoModulo.countAllByAnnoNato(nomeLista);
             case annoMorte -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case attivitaSingolare -> bioMongoModulo.countAllByAttivitaSingolare(nomeLista);
+            case attivitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             default -> 0;
         };
     }
@@ -288,6 +310,10 @@ public class Lista implements AlgosBuilderPattern {
                 case giornoMorte -> bioMongoModulo.findAllByGiornoMorto(nomeLista);
                 case annoNascita -> bioMongoModulo.findAllByAnnoNato(nomeLista);
                 case annoMorte -> bioMongoModulo.findAllByAnnoMorto(nomeLista);
+                case attivitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+                case attivitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+                case nazionalitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+                case nazionalitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
                 default -> null;
             };
         }

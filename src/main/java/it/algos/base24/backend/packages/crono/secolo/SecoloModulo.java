@@ -29,11 +29,12 @@ public class SecoloModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public SecoloModulo() {
-        super(SecoloEntity.class, SecoloList.class, SecoloForm.class);
+        super(SecoloEntity.class, SecoloView.class, SecoloList.class, SecoloForm.class);
     }
 
 

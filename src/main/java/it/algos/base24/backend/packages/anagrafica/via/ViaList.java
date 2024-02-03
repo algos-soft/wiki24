@@ -23,9 +23,9 @@ public class ViaList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "vie");
-        super.fixAlert();
+        super.fixHeader();
     }
 
     public ExcelExporter creaExcelExporter() {

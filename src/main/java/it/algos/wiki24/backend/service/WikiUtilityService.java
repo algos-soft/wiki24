@@ -111,6 +111,14 @@ public class WikiUtilityService {
         return natiMortiAnno("Morti", anno);
     }
 
+    public String wikiTitleAttivita(String attivita) {
+        return "Progetto:Biografie/Attività/" + attivita;
+    }
+
+    public String wikiTitleNazionalita(String nazionalita) {
+        return "Progetto:Biografie/Nazionalità/" + nazionalita;
+    }
+
     /**
      * Inserisce un numero in caratteri ridotti <br>
      *

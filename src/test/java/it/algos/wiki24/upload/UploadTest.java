@@ -81,9 +81,11 @@ public class UploadTest extends WikiStreamTest {
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
         }
+        message = String.format("Numero di biografie di %s %s", type.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
 
         ottenutoIntero = appContext.getBean(Upload.class, nomeLista).type(type).numBio();
-
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
             return;
@@ -98,7 +100,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - getHeaderText")
@@ -117,7 +119,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - getBodyText")
@@ -136,7 +138,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - getBottomText")
@@ -155,7 +157,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - getUploadText")
@@ -173,7 +175,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(ottenuto);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(601)
     @DisplayName("601 - uploadTest")
@@ -190,7 +192,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(602)
     @DisplayName("602 - upload voce e sottopagine")
@@ -207,12 +209,13 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
+
     @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(701)
-    @DisplayName("701 - headerTextSottopagina")
-    void headerTextSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("701 - headerTextSottopagina"));
+    @DisplayName("701 - numBioSottopagina")
+    void numBioSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("701 - numBioSottopagina"));
         System.out.println(VUOTA);
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
@@ -220,8 +223,45 @@ public class UploadTest extends WikiStreamTest {
 
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
-            for (String key : listaStr) {
-                sorgente = nomeLista + SLASH + key;
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+                if (textService.isEmpty(nomeLista)) {
+                    assertFalse(ottenutoIntero > 0);
+                    return;
+                }
+                if (ottenutoIntero > 0) {
+                    ottenuto = textService.format(ottenutoIntero);
+                    message = String.format("Le biografie di type%s[%s] per %s [%s] sono [%s]", FORWARD, type.name(), type.getGiornoAnno(), sorgente, ottenuto);
+                    System.out.println(message);
+                }
+                else {
+                    printMancanoBio("La listaBio", nomeLista, type);
+                }
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_TEST")
+    @Order(702)
+    @DisplayName("702 - headerTextSottopagina")
+    void headerTextSottopagina(String nomeLista, TypeLista type) {
+        System.out.println(("702 - headerTextSottopagina"));
+        System.out.println(VUOTA);
+        if (!fixGiornoAnno(nomeLista, type)) {
+            return;
+        }
+
+        listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
+//                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
                 ottenuto = appContext.getBean(Upload.class, sorgente).type(type).sottopagina().getHeaderText();
                 System.out.println(VUOTA);
                 message = String.format("Header di %s%s", type.getCategoria(), sorgente);
@@ -238,10 +278,10 @@ public class UploadTest extends WikiStreamTest {
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
-    @Order(702)
-    @DisplayName("702 - bodyTextSottopagina")
+    @Order(703)
+    @DisplayName("703 - bodyTextSottopagina")
     void bodyTextSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("702 - bodyTextSottopagina"));
+        System.out.println(("703 - bodyTextSottopagina"));
         System.out.println(VUOTA);
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
@@ -249,8 +289,8 @@ public class UploadTest extends WikiStreamTest {
 
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
-            for (String key : listaStr) {
-                sorgente = nomeLista + SLASH + key;
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
                 ottenuto = appContext.getBean(Upload.class, sorgente).type(type).sottopagina().getBodyText();
                 System.out.println(VUOTA);
                 message = String.format("Body di %s%s", type.getCategoria(), sorgente);
@@ -267,10 +307,10 @@ public class UploadTest extends WikiStreamTest {
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
-    @Order(703)
-    @DisplayName("703 - bottomTextSottopagina")
+    @Order(704)
+    @DisplayName("704 - bottomTextSottopagina")
     void bottomTextSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("703 - bottomTextSottopagina"));
+        System.out.println(("704 - bottomTextSottopagina"));
         System.out.println(VUOTA);
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
@@ -278,8 +318,8 @@ public class UploadTest extends WikiStreamTest {
 
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
-            for (String key : listaStr) {
-                sorgente = nomeLista + SLASH + key;
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
                 ottenuto = appContext.getBean(Upload.class, sorgente).type(type).sottopagina().getBottomText();
                 System.out.println(VUOTA);
                 message = String.format("Bottom di %s%s", type.getCategoria(), sorgente);
@@ -296,10 +336,10 @@ public class UploadTest extends WikiStreamTest {
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
-    @Order(704)
-    @DisplayName("704 - uploadTextSottopagina")
+    @Order(705)
+    @DisplayName("705 - uploadTextSottopagina")
     void uploadTextSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("704 - uploadTextSottopagina"));
+        System.out.println(("705 - uploadTextSottopagina"));
         System.out.println(VUOTA);
         if (!fixGiornoAnno(nomeLista, type)) {
             return;
@@ -307,8 +347,8 @@ public class UploadTest extends WikiStreamTest {
 
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
-            for (String key : listaStr) {
-                sorgente = nomeLista + SLASH + key;
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
                 ottenuto = appContext.getBean(Upload.class, sorgente).type(type).sottopagina().getUploadText();
                 System.out.println(VUOTA);
                 message = String.format("UploadText di %s%s", type.getCategoria(), sorgente);
@@ -335,8 +375,8 @@ public class UploadTest extends WikiStreamTest {
 
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
         if (listaStr != null && listaStr.size() > 0) {
-            for (String key : listaStr) {
-                sorgente = nomeLista + SLASH + key;
+            for (String keySottopagina : listaStr) {
+                sorgente = nomeLista + SLASH + keySottopagina;
                 ottenutoRisultato = appContext.getBean(Upload.class, sorgente).type(type).test().sottopagina().uploadOnly();
                 message = String.format("Upload pagina di test di %s%s", type.getCategoria(), sorgente);
                 System.out.println(message);

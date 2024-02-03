@@ -19,6 +19,7 @@ import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.view.*;
 import it.algos.base24.ui.wrapper.*;
 import jakarta.annotation.*;
+import lombok.*;
 import org.springframework.context.*;
 import org.springframework.data.domain.*;
 
@@ -82,8 +83,9 @@ public abstract class CrudList extends VerticalLayout {
 
     protected FiltroSort filtri;
 
-    protected VerticalLayout alertPlaceHolder;
+    protected VerticalLayout headerPlaceHolder;
 
+    @Getter
     protected HorizontalLayout topPlaceHolder;
 
     protected VerticalLayout bottomPlaceHolder;
@@ -137,6 +139,14 @@ public abstract class CrudList extends VerticalLayout {
 
     @PostConstruct
     public void postConstruct() {
+
+        this.getElement().setAttribute("id","crudList");
+        this.setPadding(true);
+        this.setSpacing(false);
+        this.setMargin(false);
+        setSizeFull();
+
+
         this.fixPreferenze();
         this.fixForm();
         this.fixView();
@@ -193,19 +203,12 @@ public abstract class CrudList extends VerticalLayout {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixView() {
-        //--Layout generale della view di questa lista <br>
-        this.setPadding(true);
-        this.setSpacing(false);
-        this.setMargin(false);
-        setSizeFull();
-
-        this.getElement().getStyle().set("background-color", "#E0FFFF");
 
         //--Aggiunge un layout per informazioni aggiuntive come header della lista <br>
         //--Qui costruisce sempre il contenitore (placeHolder) anche vuoto <br>
         //--Nella sottoclasse lo riempie (eventualmente) di contenuti informativi <br>
-        this.addAlertPlaceHolder();
-        this.fixAlert();
+        this.addHeaderPlaceHolder();
+        this.fixHeader();
 
         //--Costruisce un layout per i bottoni di comando al Top della lista <br>
         //--Eventualmente i bottoni potrebbero andare su due righe <br>
@@ -231,27 +234,28 @@ public abstract class CrudList extends VerticalLayout {
     /**
      * Costruisce un layout per informazioni aggiuntive come header della lista <br>
      */
-    protected void addAlertPlaceHolder() {
-        alertPlaceHolder = new SimpleVerticalLayout();
-        this.add(alertPlaceHolder);
+    protected void addHeaderPlaceHolder() {
+        headerPlaceHolder = new SimpleVerticalLayout();
+        headerPlaceHolder.getElement().setAttribute("id","headerPlaceHolder");
+        this.add(headerPlaceHolder);
     }
 
 
     /**
      * Può essere sovrascritto, invocando prima o dopo il metodo della superclasse <br>
      */
-    public void fixAlert() {
+    public void fixHeader() {
         if (typeList != TypeList.hardWiki && typeList != TypeList.softWiki) {
             if (textService.isEmpty(infoScopo)) {
                 infoScopo = typeList.getInfoScopo();
             }
             if (textService.isValid(infoScopo)) {
-                alertPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
+                headerPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
             }
         }
 
-        alertPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
-        alertPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
+        headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
+        headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
 
         //        if (usaBottoneShows) {
         //            layout.add(ASpan.text(TEXT_HARD).rosso());
@@ -274,7 +278,7 @@ public abstract class CrudList extends VerticalLayout {
         //        }
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-            alertPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
+            headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
         }
 
         //        alertPlaceHolder.add(layout);
@@ -292,9 +296,9 @@ public abstract class CrudList extends VerticalLayout {
      */
     protected void addTopPlaceHolder() {
         topPlaceHolder = new SimpleHorizontalLayout();
+        topPlaceHolder.getElement().setAttribute("id","topPlaceHolder");
         topPlaceHolder.setClassName("buttons");
         topPlaceHolder.setClassName("confirm-dialog-buttons");
-
         this.add(topPlaceHolder);
     }
 
@@ -382,6 +386,14 @@ public abstract class CrudList extends VerticalLayout {
             // costruisce in automatico la Grid CON tutte le colonne della ModelClazz
             grid = new Grid<>(currentCrudEntityClazz, true);
         }
+
+        grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
+        grid.setSizeUndefined();
+
+        if (usaVariantCompact) {
+            grid.addThemeVariants(GridVariant.LUMO_COMPACT);
+        }
+
         this.fixColumns();
 
         // filtro base (vuoto)
@@ -415,22 +427,13 @@ public abstract class CrudList extends VerticalLayout {
             }
         }
 
-        //--Colorazione di controllo <br>
-        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
-            grid.getElement().getStyle().set("background-color", "#FFE6E8");
-        }
+//        //--Colorazione di controllo <br>
+//        if (Pref.debug.is() && Pref.usaBackgroundColor.is()) {
+//            grid.getElement().getStyle().set("background-color", "#FFE6E8");
+//        }
 
-        if (grid != null) {
-            grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
-        }// end of if cycle
-        grid.setSizeUndefined();
-        this.setMinHeight("50rem");
-        this.setMaxHeight("50rem");
 
-        if (usaVariantCompact) {
-            grid.addThemeVariants(GridVariant.LUMO_COMPACT);
-        }
-
+        this.sincroSelection();
         this.add(grid);
     }
 
@@ -469,6 +472,7 @@ public abstract class CrudList extends VerticalLayout {
      */
     private void addBottomPlaceHolder() {
         bottomPlaceHolder = new SimpleVerticalLayout();
+        bottomPlaceHolder.getElement().setAttribute("id","bottomPlaceHolder");
         this.add(bottomPlaceHolder);
     }
 
@@ -619,7 +623,7 @@ public abstract class CrudList extends VerticalLayout {
 
         if (textService.isValid(searchValue)) {
             filtri.inizio(searchFieldName, searchValue);
-            filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_ORDINE));
+            filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE));
         }
         else {
             filtri.remove(searchFieldName);
@@ -672,9 +676,13 @@ public abstract class CrudList extends VerticalLayout {
      * Aggiorna il contenuto della Grid tramite DataProvider <br>
      */
     public boolean resetAdd() {
+        boolean usaNotification = Pref.usaNotification.is();
+        Pref.usaNotification.setValue(false);
+
         currentCrudModulo.resetAdd();
         refreshData();
 
+        Pref.usaNotification.setValue(usaNotification);
         return true;
     }
 

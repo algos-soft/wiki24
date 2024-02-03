@@ -17,11 +17,12 @@ public class RoleModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public RoleModulo() {
-        super(RoleEntity.class, RoleList.class, RoleForm.class);
+        super(RoleEntity.class, RoleView.class, RoleList.class, RoleForm.class);
     }
 
 
@@ -77,7 +78,7 @@ public class RoleModulo extends CrudModulo {
         }
 
         for (RoleEnum roleEnum : RoleEnum.values()) {
-            newBean = newEntity(roleEnum.ordinal()+1,roleEnum.name());
+            newBean = newEntity(roleEnum.ordinal() + 1, roleEnum.name());
             if (newBean != null) {
                 mappaBeans.put(roleEnum.name(), newBean);
             }

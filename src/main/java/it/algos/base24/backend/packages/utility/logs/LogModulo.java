@@ -27,11 +27,12 @@ public class LogModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public LogModulo() {
-        super(LogEntity.class, LogList.class, LogForm.class);
+        super(LogEntity.class, LogView.class, LogList.class, LogForm.class);
     }
 
 
@@ -60,7 +61,7 @@ public class LogModulo extends CrudModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public LogEntity newEntity(TypeLog typeLog, LogLevel typeLevel,  String descrizione) {
+    public LogEntity newEntity(TypeLog typeLog, LogLevel typeLevel, String descrizione) {
         LogEntity newEntityBean = LogEntity.builder()
                 .typeLog(typeLog == null ? TypeLog.system : typeLog)
                 .typeLevel(typeLevel == null ? LogLevel.info : typeLevel)
@@ -71,14 +72,14 @@ public class LogModulo extends CrudModulo {
         return newEntityBean;
     }
 
-    public void crea( final WrapLog wrap) {
+    public void crea(final WrapLog wrap) {
         LogEntity newBean;
         TypeLog typeLog = wrap.getType();
         LogLevel typeLevel = wrap.getLivello();
         String message = wrap.getMessage();
-//        String companySigla = wrap.getCompanySigla();
-//        String userName = wrap.getUserName();
-//        String addressIP = wrap.getAddressIP();
+        //        String companySigla = wrap.getCompanySigla();
+        //        String userName = wrap.getUserName();
+        //        String addressIP = wrap.getAddressIP();
         String classe = VUOTA;
         String metodo = VUOTA;
         String descrizione = VUOTA;
@@ -91,16 +92,15 @@ public class LogModulo extends CrudModulo {
             linea = wrap.getException().getLineNum();
         }
 
+        //        entity.descrizione = textService.isValid(message) ? message : null;
+        //        entity.company = textService.isValid(companySigla) ? companySigla : null;
+        //        entity.user = textService.isValid(userName) ? userName : null;
+        //        entity.address = textService.isValid(addressIP) ? addressIP : null;
+        //        entity.classe = textService.isValid(classe) ? classe : null;
+        //        entity.metodo = textService.isValid(metodo) ? metodo : null;
+        //        entity.linea = linea;
 
-//        entity.descrizione = textService.isValid(message) ? message : null;
-//        entity.company = textService.isValid(companySigla) ? companySigla : null;
-//        entity.user = textService.isValid(userName) ? userName : null;
-//        entity.address = textService.isValid(addressIP) ? addressIP : null;
-//        entity.classe = textService.isValid(classe) ? classe : null;
-//        entity.metodo = textService.isValid(metodo) ? metodo : null;
-//        entity.linea = linea;
-
-        newBean= newEntity(typeLog,typeLevel,descrizione);
+        newBean = newEntity(typeLog, typeLevel, descrizione);
         insert(newBean);
     }
 

@@ -27,9 +27,9 @@ public class GiornoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "Giorno");;
-        super.fixAlert();
+        super.fixHeader();
     }
 
 

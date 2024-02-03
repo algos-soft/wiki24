@@ -71,6 +71,8 @@ public abstract class CrudModulo {
 
     public Class currentCrudEntityClazz;
 
+    protected Class currentCrudViewClazz;
+
     protected Class currentCrudListClazz;
 
     protected Class currentCrudFormClazz;
@@ -91,29 +93,38 @@ public abstract class CrudModulo {
      * Regola la entityClazz associata a questo Modulo <br>
      */
     public CrudModulo(Class entityClazz) {
-        this(entityClazz, DefaultList.class);
+        this(entityClazz, null, null, null);
     }
 
 
     /**
-     * Regola la modelClazz associata a questo Modulo <br>
+     * Regola la entityClazz associata a questo Modulo <br>
+     * Regola la viewClazz @Route associata a questo Modulo <br>
+     */
+    public CrudModulo(Class entityClazz, Class viewClazz) {
+        this(entityClazz, viewClazz, null, null);
+    }
+
+    /**
+     * Regola la entityClazz associata a questo Modulo <br>
+     * Regola la viewClazz @Route associata a questo Modulo <br>
      * Regola la listClazz associata a questo Modulo <br>
      */
-    public CrudModulo(Class entityClazz, Class listClazz) {
-        //        this(entityClazz, listClazz, DefaultForm.class);
-        // @todo ATTENTION QUI
-        this(entityClazz, listClazz, null);
+    public CrudModulo(Class entityClazz, Class viewClazz, Class listClazz) {
+        this(entityClazz, viewClazz, listClazz, null);
     }
 
     /**
-     * Regola la modelClazz associata a questo Modulo <br>
+     * Regola la entityClazz associata a questo Modulo <br>
+     * Regola la viewClazz @Route associata a questo Modulo <br>
      * Regola la listClazz associata a questo Modulo <br>
      * Regola la formClazz associata a questo Modulo <br>
      */
-    public CrudModulo(Class entityClazz, Class listClazz, Class formClazz) {
-        this.currentCrudEntityClazz = entityClazz;
-        this.currentCrudListClazz = listClazz;
-        this.currentCrudFormClazz = formClazz;
+    public CrudModulo(Class entityClazz, Class viewClazz, Class listClazz, Class formClazz) {
+        this.currentCrudEntityClazz = entityClazz != null ? entityClazz : AbstractEntity.class;
+        this.currentCrudViewClazz = viewClazz != null ? viewClazz : CrudView.class;
+        this.currentCrudListClazz = listClazz != null ? listClazz : DefaultList.class;
+        this.currentCrudFormClazz = formClazz != null ? formClazz : DefaultForm.class;
     }
 
 
@@ -144,23 +155,25 @@ public abstract class CrudModulo {
 
     public void checkReset() {
         String message;
-        String nomeMetodo = "resetStartup";
-        Class clazz = this.getClass();
+        MenuGroup menuGroup;
 
-        //        if (currentCrudEntityClazz != null && annotationService.usaStartupReset(currentCrudEntityClazz)) {
-        //            if (reflectionService.isEsisteMetodo(clazz, nomeMetodo)) {
-        //                this.resetStartup();
-        //            }
-        //            else {
-        //                message = String.format("La POJO %s ha il flag usaStartupReset=true ma manca il metodo %s() nella classe %s", currentCrudEntityClazz.getSimpleName(), nomeMetodo, clazz.getSimpleName());
-        //                logger.warn(new WrapLog().message(message).type(TypeLog.startup));
-        //            }
-        //        }
+        if (currentCrudViewClazz == null) {
+            message = String.format("Manca la currentCrudViewClazz nel modulo [%s]", this.getClass().getSimpleName());
+            logger.warn(new WrapLog().message(message));
+            return;
+        }
+
+        menuGroup = annotationService.getMenuGroup(currentCrudViewClazz);
+        if (BaseVar.caricaDirectoryGeografia == false && menuGroup.tag.equals(MenuGroup.geografia.tag)) {
+            return;
+        }
+        if (BaseVar.caricaDirectoryCrono == false && menuGroup.tag.equals(MenuGroup.crono.tag)) {
+            return;
+        }
 
         if (currentCrudEntityClazz != null && annotationService.usaStartupReset(currentCrudEntityClazz)) {
             this.resetStartup();
         }
-
     }
 
 
@@ -493,7 +506,7 @@ public abstract class CrudModulo {
 
     public RisultatoReset resetStartup() {
         String message;
-        String collectionName = annotationService.getCollectionName(currentCrudEntityClazz);
+        String collectionName = annotationService.getCollectionName(currentCrudEntityClazz); ;
         int elementi = count();
         RisultatoReset typeReset = RisultatoReset.nessuno;
 

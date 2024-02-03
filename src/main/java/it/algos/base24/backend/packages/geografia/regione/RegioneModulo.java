@@ -35,11 +35,12 @@ public class RegioneModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public RegioneModulo() {
-        super(RegioneEntity.class, RegioneList.class, RegioneForm.class);
+        super(RegioneEntity.class, RegioneView.class, RegioneList.class, RegioneForm.class);
     }
 
 
@@ -338,7 +339,7 @@ public class RegioneModulo extends CrudModulo {
                     break;
                 }
             }
-            entityBean = newEntity(pos, nome, sigla, stato,  stato.alfa2+"xx", TypeRegione.nazione);
+            entityBean = newEntity(pos, nome, sigla, stato, stato.alfa2 + "xx", TypeRegione.nazione);
             if (entityBean != null) {
                 mappaBeans.put(sigla, entityBean);
             }

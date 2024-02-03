@@ -259,6 +259,24 @@ public class BioMongoModulo extends WikiModulo {
         return query;
     }
 
+    public int countAllByAttivitaSingolare(final String propertyValue) {
+        return mongoService.count(queryByAttivitaSingolare(propertyValue), BioMongoEntity.class);
+    }
+    public List<BioMongoEntity> findAllByAttivitaSingolare(final String propertyValue) {
+        return mongoService.find(queryByAttivitaSingolare(propertyValue), BioMongoEntity.class);
+    }
+    public Query queryByAttivitaSingolare(final String propertyValue) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(propertyValue));
+        query.with(sort);
+        return query;
+    }
 
     public String elabora() {
         inizio = System.currentTimeMillis();

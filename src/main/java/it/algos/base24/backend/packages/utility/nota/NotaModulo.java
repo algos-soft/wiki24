@@ -22,11 +22,12 @@ public class NotaModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public NotaModulo() {
-        super(NotaEntity.class, NotaList.class, NotaForm.class);
+        super(NotaEntity.class, NotaView.class, NotaList.class, NotaForm.class);
     }
 
 
@@ -74,16 +75,17 @@ public class NotaModulo extends CrudModulo {
 
         return newEntityBean;
     }
+
     @Override
     public Sort getBasicSort() {
-        return Sort.by(Sort.Order.asc("fatto"),  Sort.Order.desc("evento"));
+        return Sort.by(Sort.Order.asc("fatto"), Sort.Order.desc("evento"));
     }
 
     @Override
     public AbstractEntity beforeSave(AbstractEntity entityBean) {
         NotaEntity notaBean = (NotaEntity) entityBean;
 
-        if (notaBean.fatto ) {
+        if (notaBean.fatto) {
             if (notaBean.fine == null) {
                 notaBean.fine = LocalDate.now();
             }

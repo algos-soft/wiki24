@@ -36,6 +36,10 @@ public abstract class CrudView extends VerticalLayout {
 
     @PostConstruct
     public void postConstruct() {
+
+        this.getElement().setAttribute("id","crudView");
+        setSizeFull();
+
         this.setPadding(false);
         this.setSpacing(false);
         this.setMargin(false);

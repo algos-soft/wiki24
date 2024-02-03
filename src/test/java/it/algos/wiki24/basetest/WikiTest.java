@@ -13,6 +13,10 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
@@ -104,6 +108,18 @@ public abstract class WikiTest extends AlgosTest {
 
     @Inject
     protected AnnoModulo annoModulo;
+
+    @Inject
+    protected AttSingolareModulo attSingolareModulo;
+
+    @Inject
+    protected AttPluraleModulo attPluraleModulo;
+
+    @Inject
+    protected NazSingolareModulo nazSingolareModulo;
+
+    @Inject
+    protected NazPluraleModulo nazPluraleModulo;
 
     //    protected CrudBackend crudBackend;
 
@@ -854,6 +870,10 @@ public abstract class WikiTest extends AlgosTest {
         currentModulo = switch (typeSuggerito) {
             case giornoNascita, giornoMorte -> giornoModulo;
             case annoNascita, annoMorte -> annoModulo;
+            case attivitaSingolare -> attSingolareModulo;
+            case attivitaPlurale -> attPluraleModulo;
+            case nazionalitaSingolare -> nazSingolareModulo;
+            case nazionalitaPlurale -> nazPluraleModulo;
             default -> null;
         };
 

@@ -31,11 +31,12 @@ public class PreferenzaModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public PreferenzaModulo() {
-        super(PreferenzaEntity.class, PreferenzaList.class, PreferenzaForm.class);
+        super(PreferenzaEntity.class, PreferenzaView.class, PreferenzaList.class, PreferenzaForm.class);
     }
 
 

@@ -26,9 +26,9 @@ public class ContinenteList extends CrudList {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "Continente", "Continente"); ;
-        super.fixAlert();
+        super.fixHeader();
     }
 
     public ExcelExporter creaExcelExporter() {

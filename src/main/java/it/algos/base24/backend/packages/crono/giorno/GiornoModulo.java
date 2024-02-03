@@ -30,11 +30,12 @@ public class GiornoModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public GiornoModulo() {
-        super(GiornoEntity.class, GiornoList.class, GiornoForm.class);
+        super(GiornoEntity.class, GiornoView.class, GiornoList.class, GiornoForm.class);
     }
 
 
@@ -87,12 +88,12 @@ public class GiornoModulo extends CrudModulo {
         int ordine;
         String nome;
         String meseTxt;
-        MeseEntity mese ;
+        MeseEntity mese;
         int trascorsi;
         int mancanti;
         String message;
-        GiornoEntity newBean ;
-        List<HashMap<String, Object>> lista ;
+        GiornoEntity newBean;
+        List<HashMap<String, Object>> lista;
 
         if (meseModulo.count() < 1) {
             logger.error(new WrapLog().exception(new AlgosException("Manca la collezione [mese]")).usaDb().type(TypeLog.startup));

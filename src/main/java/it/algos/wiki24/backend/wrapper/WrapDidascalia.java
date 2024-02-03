@@ -106,6 +106,10 @@ public class WrapDidascalia {
             case giornoMorte -> didascaliaService.didascaliaGiornoMorto(bio);
             case annoNascita -> didascaliaService.didascaliaAnnoNato(bio);
             case annoMorte -> didascaliaService.didascaliaAnnoMorto(bio);
+            case attivitaSingolare -> didascaliaService.didascaliaLista(bio);
+            case attivitaPlurale -> didascaliaService.didascaliaLista(bio);
+            case nazionalitaSingolare -> didascaliaService.didascaliaLista(bio);
+            case nazionalitaPlurale -> didascaliaService.didascaliaLista(bio);
             default -> VUOTA;
         };
 

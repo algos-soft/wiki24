@@ -303,6 +303,18 @@ public class DidascaliaServiceTest extends WikiTest {
         }
     }
 
+    @Test
+    @Order(91)
+    @DisplayName("91 - annoMortoIcona")
+    void localita() {
+        System.out.println(("91 - annoMortoIcona"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.localita(bio);
+            System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoMortoIcona", FORWARD, ottenuto));
+        }
+    }
 
     @Test
     @Order(101)

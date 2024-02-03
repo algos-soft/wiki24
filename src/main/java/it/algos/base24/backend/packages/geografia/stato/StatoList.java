@@ -34,7 +34,7 @@ public class StatoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         Anchor anchor1;
         Anchor anchor2;
         Anchor anchor3;
@@ -63,9 +63,9 @@ public class StatoList extends CrudList {
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        alertPlaceHolder.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
+        headerPlaceHolder.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
 
-        super.fixAlert();
+        super.fixHeader();
     }
 
     /**

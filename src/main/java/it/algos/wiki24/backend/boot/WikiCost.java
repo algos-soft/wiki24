@@ -138,7 +138,7 @@ public class WikiCost {
     public static final String FIELD_NAME_ANNO_MORTO_ORD = "annoMortoOrd";
     public static final String FIELD_NAME_SECOLO = "secolo";
 
-
+    public static final String FIELD_NAME_ATTIVITA = "attivita";
     public static final String TAG_BOLD = "'''";
 
     public static final String TAG_ITALIC = "''";

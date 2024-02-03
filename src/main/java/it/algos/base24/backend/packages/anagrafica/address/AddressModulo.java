@@ -23,11 +23,12 @@ public class AddressModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AddressModulo() {
-        super(AddressEntity.class, AddressList.class, AddressForm.class);
+        super(AddressEntity.class, AddressView.class, AddressList.class, AddressForm.class);
     }
 
 

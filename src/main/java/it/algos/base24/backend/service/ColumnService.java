@@ -62,8 +62,10 @@ public class ColumnService {
      */
     public void addColumnsOneByOne(final Grid grid, Class modelClazz, final List<String> gridPropertyNamesList) {
         if (grid != null && gridPropertyNamesList != null) {
-            for (String propertyName : gridPropertyNamesList) {
-                this.crea(grid, modelClazz, propertyName);
+            for(int i=0; i<gridPropertyNamesList.size();i++){
+                String propertyName = gridPropertyNamesList.get(i);
+                boolean isLastColumn = (i==gridPropertyNamesList.size()-1);
+                this.crea(grid, modelClazz, propertyName, isLastColumn);
             }
         }
     }
@@ -76,7 +78,7 @@ public class ColumnService {
      * @param modelClazz   modello-dati specifico
      * @param propertyName della property
      */
-    public Grid.Column<AbstractEntity> crea(final Grid grid, Class modelClazz, final String propertyName) {
+    public Grid.Column<AbstractEntity> crea(final Grid grid, Class modelClazz, final String propertyName, boolean isLastColumn) {
         Grid.Column<AbstractEntity> colonna = null;
         TypeField type;
         String width;
@@ -172,9 +174,12 @@ public class ColumnService {
 
         if (colonna != null) {
             if (textService.isValid(width)) {
-                colonna.setWidth(width).setFlexGrow(0);
+                colonna.setWidth(width);
             }
-            else {
+
+            if(isLastColumn){
+                colonna.setFlexGrow(1);
+            }else{
                 colonna.setFlexGrow(0);
             }
 

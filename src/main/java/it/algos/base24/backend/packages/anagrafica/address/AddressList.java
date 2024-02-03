@@ -25,11 +25,11 @@ public class AddressList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         VerticalLayout layout = new SimpleVerticalLayout();
         layout.add(ASpan.text("Blocco per l'indirizzo utilizzabile in anagrafica.").verde());
         layout.add(ASpan.text("Tavola esemplicativa. La singola entity rimane all'interno di Persone.").rosso().small());
-        alertPlaceHolder.add(layout);
+        headerPlaceHolder.add(layout);
     }
 
 }// end of CrudList class

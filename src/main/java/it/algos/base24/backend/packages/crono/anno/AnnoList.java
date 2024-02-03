@@ -34,10 +34,10 @@ public class AnnoList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "Anno"); ;
-        super.fixAlert();
-        alertPlaceHolder.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
+        super.fixHeader();
+        headerPlaceHolder.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }
 
 

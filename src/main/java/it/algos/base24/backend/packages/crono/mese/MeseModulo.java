@@ -25,11 +25,12 @@ public class MeseModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public MeseModulo() {
-        super(MeseEntity.class, MeseList.class, MeseForm.class);
+        super(MeseEntity.class, MeseView.class, MeseList.class, MeseForm.class);
     }
 
 
@@ -92,9 +93,9 @@ public class MeseModulo extends CrudModulo {
             ordine = meseEnum.ordinal() + 1;
             sigla = meseEnum.getSigla();
             nome = meseEnum.getNome();
-            primo = ultimo+1;
+            primo = ultimo + 1;
             giorni = meseEnum.getGiorni();
-            ultimo = primo + giorni-1;
+            ultimo = primo + giorni - 1;
             newBean = newEntity(ordine, sigla, nome, giorni, primo, ultimo);
             if (newBean != null) {
                 mappaBeans.put(sigla, newBean);

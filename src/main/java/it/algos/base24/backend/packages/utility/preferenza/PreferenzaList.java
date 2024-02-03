@@ -34,11 +34,11 @@ public class PreferenzaList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo());
-        super.fixAlert();
+        super.fixHeader();
         message="Di default ordinate per &#8593;base24, &#8593;critical e &#8595;code";
-        alertPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).rosso());
     }
 
 

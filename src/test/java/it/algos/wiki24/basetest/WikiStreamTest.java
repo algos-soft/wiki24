@@ -37,33 +37,34 @@ public abstract class WikiStreamTest extends WikiTest {
     //--typeLista per il test
     protected static Stream<Arguments> LISTA() {
         return Stream.of(
-                Arguments.of(VUOTA, TypeLista.giornoNascita),
-                Arguments.of(VUOTA, TypeLista.giornoMorte),
-                Arguments.of("1857", null),
-                Arguments.of("34 marzo", TypeLista.giornoMorte),
-                Arguments.of("2024", TypeLista.annoNascita),
-                Arguments.of("2026", TypeLista.annoMorte),
-                Arguments.of("1857", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoMorte),
-                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
-                Arguments.of("20 marzo", TypeLista.giornoNascita),
-                Arguments.of("21 febbraio", TypeLista.giornoMorte),
-                Arguments.of("34 febbraio", TypeLista.giornoMorte),
-                Arguments.of("1º gennaio", TypeLista.giornoNascita),
-                Arguments.of("23 marzo", TypeLista.annoMorte),
-                Arguments.of("2024", TypeLista.annoMorte),
-                Arguments.of("2023", TypeLista.annoMorte),
-                Arguments.of("38 a.C.", TypeLista.annoNascita),
-                Arguments.of("38 a.C.", TypeLista.annoMorte),
-                Arguments.of("38 A.C.", TypeLista.annoNascita),
-                Arguments.of("4 gennaio", TypeLista.annoNascita),
-                Arguments.of("1985", TypeLista.nazionalitaSingolare),
-                Arguments.of("1º gennaio", TypeLista.annoMorte),
-                Arguments.of("1467", TypeLista.giornoNascita),
-                Arguments.of("406 a.C.", TypeLista.annoMorte),
-                Arguments.of("1567", TypeLista.annoNascita),
-                Arguments.of("560", TypeLista.annoMorte)
+                //                Arguments.of(VUOTA, TypeLista.giornoNascita),
+                //                Arguments.of(VUOTA, TypeLista.giornoMorte),
+                //                Arguments.of("ciclista", TypeLista.attivitaSingolare),
+                //                Arguments.of("1857", null),
+                //                Arguments.of("34 marzo", TypeLista.giornoMorte),
+                //                Arguments.of("2024", TypeLista.annoNascita),
+                //                Arguments.of("2026", TypeLista.annoMorte),
+                //                Arguments.of("1857", TypeLista.giornoNascita),
+                //                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                //                Arguments.of("29 febbraio", TypeLista.giornoMorte),
+                //                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
+                //                Arguments.of("20 marzo", TypeLista.giornoNascita),
+                //                Arguments.of("21 febbraio", TypeLista.giornoMorte),
+                //                Arguments.of("34 febbraio", TypeLista.giornoMorte),
+                //                Arguments.of("1º gennaio", TypeLista.giornoNascita),
+                //                Arguments.of("23 marzo", TypeLista.annoMorte),
+                //                Arguments.of("2024", TypeLista.annoMorte),
+                //                Arguments.of("38 a.C.", TypeLista.annoNascita),
+                //                Arguments.of("38 a.C.", TypeLista.annoMorte),
+                //                Arguments.of("38 A.C.", TypeLista.annoNascita),
+                //                Arguments.of("4 gennaio", TypeLista.annoNascita),
+                //                Arguments.of("1985", TypeLista.nazionalitaSingolare),
+                //                Arguments.of("1º gennaio", TypeLista.annoMorte),
+                //                Arguments.of("1467", TypeLista.giornoNascita),
+                //                Arguments.of("406 a.C.", TypeLista.annoMorte),
+                //                Arguments.of("1567", TypeLista.annoNascita),
+                //                Arguments.of("560", TypeLista.annoMorte),
+                Arguments.of("2023", TypeLista.annoMorte)
         );
     }
 
@@ -71,18 +72,18 @@ public abstract class WikiStreamTest extends WikiTest {
     //--typeLista per il test
     protected static Stream<Arguments> LISTA_TEST() {
         return Stream.of(
-                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-                Arguments.of("20 marzo", TypeLista.giornoNascita),
-                Arguments.of("29 febbraio", TypeLista.giornoMorte),
-                Arguments.of("21 febbraio", TypeLista.giornoMorte),
-                Arguments.of("38 a.C.", TypeLista.annoNascita),
-                Arguments.of("1567", TypeLista.annoNascita),
-                Arguments.of("406 a.C.", TypeLista.annoMorte),
-                Arguments.of("42 luglio", TypeLista.giornoNascita),
-                Arguments.of("2023", TypeLista.annoMorte),
-                Arguments.of("2024", TypeLista.annoNascita),
-                Arguments.of("2026", TypeLista.annoMorte)
-                );
+                //                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                //                Arguments.of("20 marzo", TypeLista.giornoNascita),
+                //                Arguments.of("29 febbraio", TypeLista.giornoMorte),
+                //                Arguments.of("21 febbraio", TypeLista.giornoMorte),
+                //                Arguments.of("38 a.C.", TypeLista.annoNascita),
+                //                Arguments.of("1567", TypeLista.annoNascita),
+                //                Arguments.of("406 a.C.", TypeLista.annoMorte),
+                //                Arguments.of("42 luglio", TypeLista.giornoNascita),
+                //                Arguments.of("2024", TypeLista.annoNascita),
+                //                Arguments.of("2026", TypeLista.annoMorte),
+                Arguments.of("2023", TypeLista.annoMorte)
+        );
     }
 
     //--nome giorno

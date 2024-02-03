@@ -29,11 +29,12 @@ public class AnnoModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AnnoModulo() {
-        super(AnnoEntity.class, AnnoList.class, AnnoForm.class);
+        super(AnnoEntity.class, AnnoView.class, AnnoList.class, AnnoForm.class);
     }
 
 

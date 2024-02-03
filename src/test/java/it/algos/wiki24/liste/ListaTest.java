@@ -79,7 +79,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -106,7 +106,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//            @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -136,7 +136,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -289,7 +289,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
@@ -315,7 +315,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(901)
     @DisplayName("901 - testoSottopagina")
@@ -346,7 +346,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -379,7 +379,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //            @ParameterizedTest
+    //                @ParameterizedTest
     @MethodSource(value = "LISTA_TEST")
     @Order(903)
     @DisplayName("903 - mappaSottopagina")

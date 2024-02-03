@@ -21,11 +21,12 @@ public class ViaModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public ViaModulo() {
-        super(ViaEntity.class, ViaList.class, ViaForm.class);
+        super(ViaEntity.class, ViaView.class, ViaList.class, ViaForm.class);
     }
 
 
@@ -98,7 +99,7 @@ public class ViaModulo extends CrudModulo {
                 newBean = newEntity(pos++, rigaUnValore.get(0));
                 mappaBeans.put(rigaUnValore.get(0), newBean);
             }
-            mappaBeans.values().stream().forEach(bean -> creaIfNotExists((ViaEntity)bean));
+            mappaBeans.values().stream().forEach(bean -> creaIfNotExists((ViaEntity) bean));
         }
         else {
             message = String.format("Manca il file [%s] nella directory /config o sul server", nomeFileCSV);

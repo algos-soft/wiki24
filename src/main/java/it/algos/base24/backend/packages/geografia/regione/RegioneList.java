@@ -35,7 +35,7 @@ public class RegioneList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         Anchor anchor;
         String link;
         String caption;
@@ -50,9 +50,9 @@ public class RegioneList extends CrudList {
         Span testo = new Span(typeList.getInfoScopo());
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        alertPlaceHolder.add(new Span(testo, anchor));
+        headerPlaceHolder.add(new Span(testo, anchor));
 
-        super.fixAlert();
+        super.fixHeader();
     }
 
     /**

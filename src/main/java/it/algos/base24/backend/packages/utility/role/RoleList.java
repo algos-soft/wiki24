@@ -27,9 +27,9 @@ public class RoleList extends CrudList {
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "Role", "Role"); ;
-        super.fixAlert();
+        super.fixHeader();
     }
 
 

@@ -27,26 +27,30 @@ public class BaseVar {
     /**
      * Nome identificativo del framework base <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      */
     public static String frameworkBase;
 
     /**
-     * Nome identificativo del progetto corrente <br>
+     * Nome identificativo del progetto corrente (iniziale maiuscola) <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      */
     public static String projectCurrent;
 
 
     /**
-     * Nome identificativo minuscolo del modulo corrente <br>
+     * Nome identificativo del modulo corrente (iniziale minuscola) <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      */
     public static String projectModulo;
 
     /**
-     * Nome identificativo del prefisso di progetto corrente <br>
+     * Nome identificativo del prefisso di progetto corrente (minuscolo) <br>
      * Usato (eventualmente) nella barra di menu in testa pagina <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectPrefix;
@@ -55,6 +59,7 @@ public class BaseVar {
     /**
      * Versione del progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static double projectVersion;
@@ -62,6 +67,7 @@ public class BaseVar {
     /**
      * Data di rilascio della versione di progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectDate;
@@ -69,12 +75,14 @@ public class BaseVar {
     /**
      * Note di rilascio della versione di progetto corrente <br>
      * Usato (eventualmente) nella barra di informazioni a piè di pagina <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String projectNote;
 
     /**
      * Nome del database mongo collegato in esecuzione <br>
+     * Il valore viene 'letto' da [application.properties] <br>
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      */
     public static String mongoDatabaseName;
@@ -186,5 +194,30 @@ public class BaseVar {
      * Deve essere regolato in VaadSchedule o in una sua sottoclasse <br>
      */
     public static List<BaseTask> taskList = new ArrayList<>();
+
+    /**
+     * Flag per visualizzare il menu base di Base24 <br>
+     * Il valore viene 'letto' da [application.properties] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Di default false <br>
+     */
+    public static boolean usaMenuBase24;
+
+    /**
+     * Flag per caricare le tavole della directory [geografia] <br>
+     * Il valore viene 'letto' da [application.properties] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Di default false <br>
+     */
+    public static boolean caricaDirectoryGeografia;
+
+    /**
+     * Flag per caricare le tavole della directory [crono] <br>
+     * Il valore viene 'letto' da [application.properties] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Di default false <br>
+     */
+    public static boolean caricaDirectoryCrono;
+
 
 }

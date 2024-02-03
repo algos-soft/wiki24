@@ -25,13 +25,13 @@ public class NotaList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = "Appunti liberi";
-        super.fixAlert();
+        super.fixHeader();
         message="Data iniziale proposta quella attuale ma modificabile. Data finale inserita automaticamente col flag fatto=true.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).rosso().small());
         message="Filtri selezione per typeLog e typeLevel. Ordinamento decrescente per data iniziale. Descrizione libera.";
-        alertPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).rosso().small());
 
     }
 

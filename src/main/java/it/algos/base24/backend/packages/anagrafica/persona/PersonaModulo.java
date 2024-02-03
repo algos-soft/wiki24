@@ -18,11 +18,12 @@ public class PersonaModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public PersonaModulo() {
-        super(PersonaEntity.class, PersonaList.class, PersonaForm.class);
+        super(PersonaEntity.class, PersonaView.class, PersonaList.class, PersonaForm.class);
     }
 
 
@@ -85,8 +86,8 @@ public class PersonaModulo extends CrudModulo {
         RisultatoReset typeReset = super.resetDelete();
 
         insert(newEntity("Mario", "Rossi"));
-        insert(newEntity("Maria Giovanna", "Brambilla","339 254377","giovanna.brambilla.libero.it"));
-        insert(newEntity("Odoardo Luigi", "Passerini","","passerini@win.com"));
+        insert(newEntity("Maria Giovanna", "Brambilla", "339 254377", "giovanna.brambilla.libero.it"));
+        insert(newEntity("Odoardo Luigi", "Passerini", "", "passerini@win.com"));
 
         return null;
     }

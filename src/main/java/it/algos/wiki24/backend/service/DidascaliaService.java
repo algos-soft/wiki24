@@ -411,6 +411,62 @@ public class DidascaliaService {
         return buffer.toString().trim();
     }
 
+    /**
+     * Costruisce la didascalia completa per una lista di attività/nazionalità <br>
+     * WikiTitle (sempre)
+     * AttivitàNazionalità (sempre)
+     * Blocco luogo e anni nascita e morte (sempre)
+     *
+     * @param bio completa
+     *
+     * @return didascalia completa
+     */
+    public String didascaliaLista(final BioMongoEntity bio) {
+        StringBuffer buffer = new StringBuffer();
+        String attivitaNazionalita = attivitaNazionalita(bio);
+        String localita = localita(bio);
+
+        if (textService.isEmpty(bio.giornoNato)) {
+            return VUOTA;
+        }
+
+        buffer.append(getWikiTitle(bio));
+
+        if (textService.isValid(attivitaNazionalita)) {
+            buffer.append(VIRGOLA_SPAZIO);
+            buffer.append(attivitaNazionalita);
+        }
+
+        if (textService.isValid(localita)) {
+            buffer.append(SPAZIO);
+            buffer.append(localita);
+        }
+
+        return buffer.toString().trim();
+    }
+
+    public String localita(final BioMongoEntity bio) {
+        String luogoNatoAnno="";
+        String luogoMortoAnno="";
+
+//        luogoNatoAnno = luogoNatoAnno(bio);
+//        luogoMortoAnno = luogoMortoAnno(bio);
+
+        if (textService.isValid(luogoNatoAnno) && textService.isValid(luogoMortoAnno)) {
+            return textService.setTonde(luogoNatoAnno + SEP + luogoMortoAnno);
+        }
+        else {
+            if (textService.isValid(luogoNatoAnno)) {
+                return textService.setTonde(luogoNatoAnno);
+            }
+            if (textService.isValid(luogoMortoAnno)) {
+                return textService.setTonde(luogoMortoAnno);
+            }
+        }
+
+        return textService.setTonde("Pippoz");
+    }
+
 
     public String getDecade(final String annoIn) {
         String decade = VUOTA;

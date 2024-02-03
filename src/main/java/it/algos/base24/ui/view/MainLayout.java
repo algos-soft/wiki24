@@ -7,6 +7,7 @@ import com.vaadin.flow.component.sidenav.*;
 import com.vaadin.flow.router.*;
 import com.vaadin.flow.theme.lumo.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseVar.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
@@ -32,6 +33,7 @@ public class MainLayout extends AppLayout {
 
     @Inject
     ArrayService arrayService;
+
     private H2 viewTitle;
 
     public MainLayout() {
@@ -77,6 +79,8 @@ public class MainLayout extends AppLayout {
     }
 
     private void addDrawerContentProject() {
+        Scroller scroller = null;
+        Scroller scrollerProject = null;
         H1 appName = new H1(frameworkBase);
         appName.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.NONE);
         Header header = new Header(appName);
@@ -87,10 +91,15 @@ public class MainLayout extends AppLayout {
         //--Colorazione di controllo <br>
         header.getElement().getStyle().set("background-color", "lightblue");
         headerProject.getElement().getStyle().set("background-color", "lightpink");
-        Scroller scroller = new Scroller(createNavigation(menuRouteListVaadin));
-        Scroller scrollerProject = new Scroller(createNavigation(menuRouteListProject));
 
-        addToDrawer(header, scroller, headerProject, scrollerProject, createFooter());
+        scrollerProject = new Scroller(createNavigation(menuRouteListProject));
+        if (usaMenuBase24 == true) {
+            scroller = new Scroller(createNavigation(menuRouteListVaadin));
+            addToDrawer(header, scroller, headerProject, scrollerProject, createFooter());
+        }
+        else {
+            addToDrawer(headerProject, scrollerProject, createFooter());
+        }
     }
 
     private SideNav createNavigation(List<Class<? extends CrudView>> lista) {
@@ -117,6 +126,13 @@ public class MainLayout extends AppLayout {
 
         mappa = fixOrderMappa(mappa);
         mappa = arrayService.orderMap(mappa);
+
+        if (BaseVar.caricaDirectoryGeografia == false) {
+            mappa.remove(textService.primaMaiuscola(MenuGroup.geografia.tag));
+        }
+        if (BaseVar.caricaDirectoryCrono == false) {
+            mappa.remove(textService.primaMaiuscola(MenuGroup.crono.tag));
+        }
 
         if (mappa != null) {
             for (String key : mappa.keySet()) {

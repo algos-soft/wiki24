@@ -21,11 +21,12 @@ public class ContinenteModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public ContinenteModulo() {
-        super(ContinenteEntity.class, ContinenteList.class, ContinenteForm.class);
+        super(ContinenteEntity.class, ContinenteView.class, ContinenteList.class, ContinenteForm.class);
     }
 
 

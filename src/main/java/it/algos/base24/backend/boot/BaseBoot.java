@@ -36,6 +36,7 @@ public class BaseBoot {
 
     @Inject
     public Environment environment;
+
     @Inject
     public ApplicationContext appContext;
 
@@ -140,7 +141,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome identificativo del progetto corrente <br>
+         * Nome identificativo del progetto corrente (iniziale maiuscola) <br>
          */
         try {
             property = "algos.project.current";
@@ -150,7 +151,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome identificativo minuscolo del modulo corrente <br>
+         * Nome identificativo del modulo corrente (iniziale minuscola) <br>
          */
         try {
             property = "algos.project.modulo";
@@ -160,7 +161,7 @@ public class BaseBoot {
         }
 
         /**
-         * Nome identificativo del prefisso di progetto corrente <br>
+         * Nome identificativo del prefisso di progetto corrente (minuscolo) <br>
          */
         try {
             property = "algos.project.prefix";
@@ -230,6 +231,42 @@ public class BaseBoot {
             BaseVar.pathModuloProgetto = PATH_ALGOS + PUNTO + moduloProject;
         } catch (Exception unErrore) {
             logError(unErrore, property);
+        }
+
+        /**
+         * Flag per visualizzare il menu base di Base24 <br>
+         */
+        try {
+            property = "algos.project.usa.menu.base24";
+            String valueTxt = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.usaMenuBase24 = Boolean.parseBoolean(valueTxt);
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+            BaseVar.usaMenuBase24 = false;
+        }
+
+        /**
+         * Flag per caricare le tavole della directory [geografia] <br>
+         */
+        try {
+            property = "algos.project.carica.directory.geografia";
+            String valueTxt = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.caricaDirectoryGeografia = Boolean.parseBoolean(valueTxt);
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+            BaseVar.caricaDirectoryGeografia = false;
+        }
+
+        /**
+         * Flag per caricare le tavole della directory [crono] <br>
+         */
+        try {
+            property = "algos.project.carica.directory.crono";
+            String valueTxt = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.caricaDirectoryCrono = Boolean.parseBoolean(valueTxt);
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+            BaseVar.caricaDirectoryCrono = false;
         }
     }
 

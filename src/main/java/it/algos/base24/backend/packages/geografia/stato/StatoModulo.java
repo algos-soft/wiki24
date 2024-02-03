@@ -26,11 +26,12 @@ public class StatoModulo extends CrudModulo {
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
+     * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public StatoModulo() {
-        super(StatoEntity.class, StatoList.class, StatoForm.class);
+        super(StatoEntity.class, StatoView.class, StatoList.class, StatoForm.class);
     }
 
 
@@ -103,8 +104,9 @@ public class StatoModulo extends CrudModulo {
     @Override
     public void download() {
         RisultatoReset typeReset = super.resetDelete();
-         resetBase(typeReset);
+        resetBase(typeReset);
     }
+
     @Override
     public RisultatoReset resetDelete() {
         RisultatoReset typeReset = super.resetDelete();

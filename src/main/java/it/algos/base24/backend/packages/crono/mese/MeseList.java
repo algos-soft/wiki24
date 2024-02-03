@@ -20,9 +20,9 @@ public class MeseList extends CrudList {
     }
 
     @Override
-    public void fixAlert() {
+    public void fixHeader() {
         super.infoScopo = String.format(typeList.getInfoScopo(), "Mese", "Mese");;
-        super.fixAlert();
+        super.fixHeader();
     }
 
 
