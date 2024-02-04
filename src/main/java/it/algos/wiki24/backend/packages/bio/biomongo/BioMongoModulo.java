@@ -313,7 +313,7 @@ public class BioMongoModulo extends WikiModulo {
             ultimo = meseBean.ultimo;
         }
         query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(anno));
-        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO_ORD).gte(primo).lte(ultimo));
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO_ORD).gte(primo).lte(ultimo));
         query.with(sort);
         return query;
     }

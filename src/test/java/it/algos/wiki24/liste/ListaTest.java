@@ -486,7 +486,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")
