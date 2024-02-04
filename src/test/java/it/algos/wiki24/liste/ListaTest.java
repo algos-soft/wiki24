@@ -25,6 +25,7 @@ import java.util.*;
  */
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Tag("listaupload")
 @DisplayName("Lista giorno/anno nato/morto")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaTest extends WikiStreamTest {
@@ -105,8 +106,10 @@ public class ListaTest extends WikiStreamTest {
         }
         else {
             if (ottenutoIntero == INT_ERROR) {
-                message = String.format("Probabilmente manca il typeLista di [%s]", nomeLista);
-                logger.info(new WrapLog().message(message));
+                if (byPassaErrori) {
+                    message = String.format("Probabilmente manca il typeLista di [%s]", nomeLista);
+                    logger.info(new WrapLog().message(message));
+                }
                 assertTrue(false);
             }
             else {
@@ -436,6 +439,7 @@ public class ListaTest extends WikiStreamTest {
             assertNull(listaStr);
             return;
         }
+
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
                 ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
@@ -486,7 +490,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")

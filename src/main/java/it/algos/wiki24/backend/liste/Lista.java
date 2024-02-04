@@ -164,6 +164,7 @@ public class Lista implements AlgosBuilderPattern {
      */
     protected void fixPreferenze() {
         this.type = TypeLista.nessunaLista;
+
         this.usaDimensioneParagrafi = true;
         this.usaIncludeSottoMax = true;
         this.sogliaDiv = WPref.sogliaDiv.getInt();
@@ -235,28 +236,48 @@ public class Lista implements AlgosBuilderPattern {
         costruttoreValido = textService.isValid(nomeLista);
     }
 
+    /**
+     * Pattern valido se: <br>
+     * <p>
+     * costruttoreValido = true <br>
+     * patternCompleto = true <br>
+     * type != null e type == TypeLista.nessunaLista <br>
+     * nomeLista != null e corrispondente a un valore valido di giorno/anno/attività/nazionalità <br>
+     */
     protected boolean checkValiditaPattern() {
+        boolean valoreValidoNomeLista;
+
         if (costruttoreValido && patternCompleto) {
             return true;
         }
-        if (type == null || type == TypeLista.nessunaLista) {
-            logger.error(new WrapLog().message("Manca il typeLista"));
-            return false;
-        }
-
-        patternCompleto = moduloCorrente != null;
-        patternCompleto = switch (type) {
-            case giornoNascita, giornoMorte, annoNascita, annoMorte -> patternCompleto && textService.isValid(titoloPagina);
-            case attivitaSingolare, nazionalitaSingolare -> patternCompleto;
-            case attivitaPlurale, nazionalitaPlurale -> textService.isValid(titoloPagina);
-            default -> patternCompleto;
-        };
 
         if (!costruttoreValido) {
             message = String.format("Non è valido il costruttore di %s", this.getClass().getSimpleName());
             logger.error(new WrapLog().message(message));
             return false;
         }
+
+        if (type == null || type == TypeLista.nessunaLista) {
+            message = String.format("Manca il typeLista di [%s]", nomeLista);
+            logger.error(new WrapLog().message(message));
+            return false;
+        }
+
+        patternCompleto = moduloCorrente != null;
+        valoreValidoNomeLista = switch (type) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> patternCompleto && moduloCorrente.existByKey(nomeLista);
+            case attivitaSingolare, nazionalitaSingolare -> patternCompleto;
+            case attivitaPlurale, nazionalitaPlurale -> textService.isValid(titoloPagina);
+            default -> false;
+        };
+
+        if (!valoreValidoNomeLista) {
+            message = String.format("Non esiste un valore 'nomeLista' valido per il type [%s%s]", type.getCategoria(), nomeLista);
+            logger.error(new WrapLog().message(message));
+            return false;
+        }
+        patternCompleto = patternCompleto && valoreValidoNomeLista;
+
         if (!patternCompleto) {
             message = String.format("Pattern non completo di %s", this.getClass().getSimpleName());
             logger.error(new WrapLog().message(message));
