@@ -207,6 +207,13 @@ public class Upload implements AlgosBuilderPattern {
     public Upload sottopagina(String keySottopagina) {
         this.isSottopagina = true;
         this.keySottopagina = keySottopagina;
+        if (textService.isValid(titoloPagina)) {
+            titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottopagina);
+        }
+        else {
+            logger.error(new WrapLog().message("Nel Pattern Builder di questa classe, occorre chiamare type() PRIMA di sottopagina()"));
+            return null;
+        }
 
         return this;
     }
@@ -277,8 +284,8 @@ public class Upload implements AlgosBuilderPattern {
     protected boolean checkBio() {
 
         if (patternCompleto && numBio() < 1) {
-            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
-            logger.info(new WrapLog().message(message));
+            //            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
+            //            logger.info(new WrapLog().message(message));
             patternCompleto = false;
         }
 
@@ -291,11 +298,14 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         if (!checkBio()) {
-            return WResult.errato();
+            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
+            logger.info(new WrapLog().message(message));
+
+            return WResult.valido(message).typeResult(TypeResult.noBio);
         }
 
         if (textService.isEmpty(uploadText)) {
-            this.esegue();
+            uploadText = getUploadText();
         }
 
         if (textService.isEmpty(uploadText)) {
@@ -308,14 +318,12 @@ public class Upload implements AlgosBuilderPattern {
     public WResult uploadAll() {
         WResult result = uploadOnly();
         List<String> listaSottopagine;
-        String keySottopaginaMetodo;
 
         if (result.isValido()) {
             listaSottopagine = listaSottopagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
-                for (String key : listaSottopagine) {
-                    keySottopaginaMetodo = nomeLista + SLASH + key;
-                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottopagina(keySottopaginaMetodo).uploadOnly();
+                for (String keySottopagina : listaSottopagine) {
+                    result = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).uploadOnly();
                 }
             }
         }
@@ -341,43 +349,52 @@ public class Upload implements AlgosBuilderPattern {
         return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
     }
 
+    //    /**
+    //     * Pattern Builder <br>
+    //     */
+    //    public String creaUploadText() {
+    //        StringBuffer buffer = new StringBuffer();
+    //        String message;
+    //        this.numBio();
+    //        if (!checkValiditaPattern()) {
+    //            return this;
+    //        }
+    //        if (textService.isValid(uploadText)) {
+    //            return this;
+    //        }
 
-    /**
-     * Pattern Builder <br>
-     */
-    public Upload esegue() {
-        StringBuffer buffer = new StringBuffer();
-        String message;
-        this.numBio();
+    //        if (type == null || type == TypeLista.nessunaLista) {
+    //            System.out.println(VUOTA);
+    //            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "esegue", collectionName, nomeLista);
+    //            logger.info(new WrapLog().message(message));
+    //            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "esegue");
+    //            logger.warn(new WrapLog().message(message));
+    //            return null;
+    //        }
+    //
+    //        buffer.append(creaHeader());
+    //        buffer.append(creaBody());
+    //        buffer.append(creaBottom());
+    //
+    //        uploadText = buffer.toString().trim();
+    //        return uploadText;
+    //    }
+
+    public List<String> listaSottopagine() {
         if (!checkValiditaPattern()) {
-            return this;
-        }
-        if (textService.isValid(uploadText)) {
-            return this;
-        }
-
-        if (type == null || type == TypeLista.nessunaLista) {
-            System.out.println(VUOTA);
-            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "esegue", collectionName, nomeLista);
-            logger.info(new WrapLog().message(message));
-            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "esegue");
-            logger.warn(new WrapLog().message(message));
             return null;
         }
 
-        buffer.append(creaHeader());
-        buffer.append(creaBody());
-        buffer.append(creaBottom());
-
-        this.uploadText = buffer.toString().trim();
-        return this;
-    }
-
-    public List<String> listaSottopagine() {
-        if (textService.isEmpty(bodyText)) {
-            this.esegue();
+        if (!checkBio()) {
+            return null;
         }
-        return istanzaLista != null ? istanzaLista.listaSottopagine() : null;
+
+        return appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+
+        //        if (textService.isEmpty(bodyText)) {
+        ////            this.esegue();
+        //        }
+        //        return istanzaLista != null ? istanzaLista.listaSottopagine() : null;
     }
 
     public WResult uploadSottopagina(String keySottopagina) {
@@ -449,15 +466,8 @@ public class Upload implements AlgosBuilderPattern {
         String data = LocalDate.now().format(DateTimeFormatter.ofPattern("d MMM yyy")); ;
         String progetto = "biografie";
         String txtVoci;
-        String keyParagrafo = VUOTA;
 
-        if (isSottopagina) {
-            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
-            txtVoci = textService.format(numBio(keyParagrafo));
-        }
-        else {
-            txtVoci = textService.format(numBio());
-        }
+        txtVoci = textService.format(numBio());
 
         return String.format("{{ListaBio|bio=%s|data=%s|progetto=%s}}", txtVoci, data, progetto);
     }
@@ -465,18 +475,20 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String creaBody() {
         StringBuffer buffer = new StringBuffer();
-        String keyParagrafo;
-        String listaOriginaria;
+        //        String keyParagrafo;
+        //        String listaOriginaria;
 
         if (isSottopagina) {
-            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
-            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
-            if (istanzaLista == null) {
-                istanzaLista = appContext.getBean(Lista.class, listaOriginaria).type(type);
-            }
-            if (istanzaLista != null && istanzaLista.getType() == type) {
-                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
-            }
+            bodyText = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
+
+            //            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
+            //            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+            //            if (istanzaLista == null) {
+            //                istanzaLista = appContext.getBean(Lista.class, listaOriginaria).type(type);
+            //            }
+            //            if (istanzaLista != null && istanzaLista.getType() == type) {
+            //                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
+            //            }
         }
         else {
             istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
@@ -670,7 +682,7 @@ public class Upload implements AlgosBuilderPattern {
 
         if (isSottopagina) {
             nomeCat = textService.levaCodaDaUltimo(titoloPagina, SLASH);
-            ordineCategoriaSottopagina = Mese.getOrder(keyParagrafo);
+            ordineCategoriaSottopagina = Mese.getOrder(keySottopagina);
             if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
                 ordineCategoriaSottopagina = 13;
             }
@@ -764,10 +776,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        if (textService.isEmpty(headerText)) {
-            this.esegue();
-        }
-
+        headerText = creaHeader();
         return headerText;
     }
 
@@ -787,10 +796,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        if (textService.isEmpty(bodyText)) {
-            this.esegue();
-        }
-
+        bodyText = creaBody();
         return bodyText;
     }
 
@@ -808,10 +814,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        if (textService.isEmpty(bottomText)) {
-            this.esegue();
-        }
-
+        bottomText = creaBottom();
         return bottomText;
     }
 
@@ -821,6 +824,8 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getUploadText() {
+        StringBuffer buffer = new StringBuffer();
+
         if (!checkValiditaPattern()) {
             return STRING_ERROR;
         }
@@ -829,23 +834,30 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        if (textService.isEmpty(uploadText)) {
-            this.esegue();
-        }
+        buffer.append(creaHeader());
+        buffer.append(creaBody());
+        buffer.append(creaBottom());
 
+        uploadText = buffer.toString().trim();
         return uploadText;
     }
 
     /**
-     * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     * Numero delle biografie (Bio) che hanno una valore valido (letto dalla lista) <br>
+     * Controlla di essere o meno in una sottopagina <br>
      * Rinvia al metodo della lista <br>
+     * Numero delle biografie (Bio) che hanno una valore valido per l'intera pagina (letto dalla lista) <br>
+     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico (letto dalla lista) <br>
+     * Prima esegue una query diretta al database (più veloce)
+     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
      *
-     * @return -1 se il pattern della classe non è valido, zero se i dati sono validi ma non ci sono biografie <br>
+     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina
+     * zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
         if (numBio == 0) {
             if (isSottopagina) {
-                numBio = numBio(keySottopagina);
+                numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
             }
             else {
                 numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
@@ -855,28 +867,28 @@ public class Upload implements AlgosBuilderPattern {
         return numBio;
     }
 
-    /**
-     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico <br>
-     * Controlla di essere in una sottopagina <br>
-     * Rinvia al metodo della lista <br>
-     * Prima esegue una query diretta al database (più veloce)
-     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
-     *
-     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
-     */
-    public int numBio(String keyParagrafo) {
-        String listaOriginaria;
-
-        if (!isSottopagina) {
-            return INT_ERROR;
-        }
-
-        if (numBio == 0) {
-            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
-            numBio = appContext.getBean(Lista.class, listaOriginaria).type(type).numBio(keyParagrafo);
-        }
-        return numBio;
-    }
+    //    /**
+    //     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico <br>
+    //     * Controlla di essere in una sottopagina <br>
+    //     * Rinvia al metodo della lista <br>
+    //     * Prima esegue una query diretta al database (più veloce)
+    //     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
+    //     *
+    //     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
+    //     */
+    //    public int numBio(String keyParagrafo) {
+    //        String listaOriginaria;
+    //
+    //        if (!isSottopagina) {
+    //            return INT_ERROR;
+    //        }
+    //
+    //        if (numBio == 0) {
+    //            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
+    //            numBio = appContext.getBean(Lista.class, listaOriginaria).type(type).numBio(keyParagrafo);
+    //        }
+    //        return numBio;
+    //    }
 
     //    /**
     //     * Testo header <br>
@@ -901,27 +913,27 @@ public class Upload implements AlgosBuilderPattern {
     //        return headerText;
     //    }
 
-    /**
-     * Testo body <br>
-     *
-     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
-     */
-    public String getBodyText(String keyParagrafo) {
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        this.numBio(keyParagrafo);
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        if (textService.isEmpty(bodyText)) {
-            this.esegue();
-        }
-
-        return bodyText;
-    }
+    //    /**
+    //     * Testo body <br>
+    //     *
+    //     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+    //     */
+    //    public String getBodyText(String keyParagrafo) {
+    //        if (!checkValiditaPattern()) {
+    //            return STRING_ERROR;
+    //        }
+    //
+    //        this.numBio(keyParagrafo);
+    //
+    //        if (!checkBio()) {
+    //            return VUOTA;
+    //        }
+    //
+    //        if (textService.isEmpty(bodyText)) {
+    //            this.esegue();
+    //        }
+    //
+    //        return bodyText;
+    //    }
 
 }

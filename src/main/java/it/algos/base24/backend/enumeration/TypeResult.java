@@ -30,7 +30,6 @@ public enum TypeResult implements Type {
     fileEsistenteUguale("Il file esisteva già e non è stato modificato"), //dopo fileModifyEver
     fileEsistenteModificato("Il file esisteva già ma è stato modificato"), //dopo fileModifyEver
 
-
     fileSovrascritto("Il file è stato sovrascritto"),
 
 
@@ -44,7 +43,6 @@ public enum TypeResult implements Type {
     collectionPiena("La collection esiste ed ha dei valori"), //dopo isCollectionNullOrEmpty
     collectionVuota("La collection esiste ma è vuota"), //dopo isCollectionNullOrEmpty
     collectionCreata("La collection è stata creata"), //dopo isCollectionNullOrEmpty
-
 
     downloadValido("Download effettuato"),
     elaborazioneValida("Elaborazione effettuata"),
@@ -66,7 +64,8 @@ public enum TypeResult implements Type {
     queryWriteEsistente("Pagina wiki esistente"),
     queryWriteModificata("Pagina wiki modificata"),
     querySuccess("MediaWiki API valida"),
-    queryError("MediaWiki API errata");
+    queryError("MediaWiki API errata"),
+    noBio("Non ci sono biografie");
 
     private String tag;
 
@@ -83,7 +82,7 @@ public enum TypeResult implements Type {
     public List<String> getAllTags() {
         return getAllEnums()
                 .stream()
-                .map(type->type.getTag())
+                .map(type -> type.getTag())
                 .collect(Collectors.toList());
     }
 

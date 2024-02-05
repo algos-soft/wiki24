@@ -54,8 +54,6 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("1º gennaio", TypeLista.giornoNascita),
                 //                Arguments.of("23 marzo", TypeLista.annoMorte),
                 //                Arguments.of("2024", TypeLista.annoMorte),
-                //                Arguments.of("38 a.C.", TypeLista.annoNascita),
-                //                Arguments.of("38 a.C.", TypeLista.annoMorte),
                 //                Arguments.of("38 A.C.", TypeLista.annoNascita),
                 //                Arguments.of("4 gennaio", TypeLista.annoNascita),
                 //                Arguments.of("1985", TypeLista.nazionalitaSingolare),
@@ -67,6 +65,9 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("2023", TypeLista.nessunaLista),
                 Arguments.of("3125", TypeLista.annoMorte),
                 Arguments.of("2025", TypeLista.annoNascita),
+                Arguments.of("43 a.C.", TypeLista.annoNascita),
+                Arguments.of("138", TypeLista.annoMorte),
+                Arguments.of("43 a.C.", TypeLista.annoMorte),
                 Arguments.of("1493", TypeLista.annoNascita),
                 Arguments.of("2023", TypeLista.annoMorte)
         );
