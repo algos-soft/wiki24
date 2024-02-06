@@ -498,7 +498,7 @@ public class DownloadService {
 
     /**
      * Crea le nuove voci presenti nella category e non ancora esistenti nel database (mongo) locale <br>
-     * Legge tutte le pagine <br>
+     * Legge tutte le pagine circa mezzo milione) <br>
      * Recupera i contenuti di tutte le voci biografiche da creare/modificare <br>
      * Controlla che esista il tmpl BIO <br>
      * Nella listaWrapBio ci sono solo voci CON il tmpl BIO valido <br>
@@ -523,7 +523,7 @@ public class DownloadService {
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
-        int blocco = WPref.bloccoDownload.getInt() * 10;
+        int blocco =50000;
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio;
 
@@ -614,7 +614,8 @@ public class DownloadService {
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
-        int blocco = WPref.bloccoDownload.getInt();
+//        int blocco = WPref.bloccoDownload.getInt();
+        int blocco = 1000;
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio = null;
         LocalDateTime ultimoCheck = WPref.lastDownloadBioServer.getDateTime();
@@ -660,15 +661,15 @@ public class DownloadService {
             }
             vociBlocco = textService.format(numVociBlocco);
             vociCreate = textService.format(numVociCreate);
-            message = String.format("Lette %s/%s/%s nuove pagine in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoPageIds), dateService.deltaText(inizio));
+            message = String.format("Lette %s/%s/%s pagine in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoPageIds), dateService.deltaText(inizio));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
-            message = String.format("Create %s/%s/%s nuove biografie in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoWrapBio), dateService.deltaText(inizio));
+            message = String.format("Modificate %s/%s/%s biografie in %s/%s", vociBlocco, vociCreate, vociTotali, dateService.deltaText(inizioBloccoWrapBio), dateService.deltaText(inizio));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
         }
 
         if (numVociCreate > 0) {
             vociCreate = textService.format(numVociCreate);
-            message = String.format("Create in totale %s nuove biografie in %s", vociCreate, dateService.deltaText(inizio));
+            message = String.format("Modificate in totale %s nuove biografie in %s", vociCreate, dateService.deltaText(inizio));
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
             message = String.format("Ci sono probabilmente %s pagine della categoria [%s] che NON hanno un tmplBio valido", numVociTotali - numVociCreate, WPref.categoriaBio.getStr());
             logger.info(new WrapLog().message(message).type(TypeLog.bio));
