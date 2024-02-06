@@ -94,6 +94,13 @@ public class ProvinciaModulo extends CrudModulo {
     public ProvinciaEntity findByKey(final Object keyPropertyValue) {
         return (ProvinciaEntity) super.findByKey(keyPropertyValue);
     }
+    public ProvinciaEntity findByNomeBreve(String nomeBreve) {
+        return this.findOneByProperty("nomeBreve", nomeBreve);
+    }
+
+    public ProvinciaEntity findOneByProperty(String keyPropertyName, Object keyPropertyValue) {
+        return (ProvinciaEntity) super.findOneByProperty(keyPropertyName, keyPropertyValue);
+    }
 
     @Override
     public void download() {

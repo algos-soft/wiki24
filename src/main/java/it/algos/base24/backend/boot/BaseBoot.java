@@ -249,7 +249,7 @@ public class BaseBoot {
          * Flag per caricare le tavole della directory [geografia] <br>
          */
         try {
-            property = "algos.project.carica.directory.geografia";
+            property = "algos.project.crea.directory.geografia";
             String valueTxt = Objects.requireNonNull(environment.getProperty(property));
             BaseVar.caricaDirectoryGeografia = Boolean.parseBoolean(valueTxt);
         } catch (Exception unErrore) {
@@ -261,7 +261,7 @@ public class BaseBoot {
          * Flag per caricare le tavole della directory [crono] <br>
          */
         try {
-            property = "algos.project.carica.directory.crono";
+            property = "algos.project.crea.directory.crono";
             String valueTxt = Objects.requireNonNull(environment.getProperty(property));
             BaseVar.caricaDirectoryCrono = Boolean.parseBoolean(valueTxt);
         } catch (Exception unErrore) {

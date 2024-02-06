@@ -30,7 +30,7 @@ public class ProvinciaEntity extends AbstractEntity {
 
     @Override
     public String toString() {
-        return sigla;
+        return nomeBreve;
     }
 
 }// end of Entity class

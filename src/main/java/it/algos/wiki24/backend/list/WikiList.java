@@ -289,40 +289,40 @@ public abstract class WikiList extends CrudList {
      */
     protected void fixTop() {
         this.buttonBar = appContext.getBean(WikiListButtonBar.class, currentCrudModulo, this);
-        super.buttonBar = this.buttonBar;
+        super.topPlaceHolder = this.buttonBar;
 
         if (usaBottoneDeleteAll) {
-            buttonBar.deleteAll();
+            topPlaceHolder.deleteAll();
         }
         if (usaBottoneResetDelete) {
-            buttonBar.resetDelete();
+            topPlaceHolder.resetDelete();
         }
         if (usaBottoneDownload) {
-            buttonBar.download();
+            topPlaceHolder.download();
         }
         if (usaBottoneElabora) {
-            buttonBar.elabora();
+//            topPlaceHolder.elabora();
         }
         if (usaBottoneElaboraDue) {
-            buttonBar.elaboraDue();
+//            topPlaceHolder.elaboraDue();
         }
         if (usaBottoneUploadAll) {
-            buttonBar.uploadAll();
+//            topPlaceHolder.uploadAll();
         }
         if (usaBottoneTransfer) {
-            buttonBar.transfer();
+//            topPlaceHolder.transfer();
         }
         if (usaBottoneResetEntity) {
-            buttonBar.restEntity();
+//            topPlaceHolder.restEntity();
         }
         if (usaBottoneWikiView) {
-            buttonBar.wikiView();
+//            topPlaceHolder.wikiView();
         }
         if (usaBottoneWikiEdit) {
-            buttonBar.wikiEdit();
+//            topPlaceHolder.wikiEdit();
         }
         if (usaBottoneWikiCrono) {
-            buttonBar.wikiCrono();
+//            topPlaceHolder.wikiCrono();
         }
 
         if (usaBottoneTest1) {

@@ -314,59 +314,65 @@ public class WikiListButtonBar extends ListButtonBar {
     }
 
 
-    public void addDownload() {
+    public ListButtonBar addDownload() {
         buttonDownload.getElement().setAttribute("theme", "primary");
         buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDownload.getElement().setProperty("title", "Download: ricarica tutti i valori dal server");
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
         buttonDownload.addClickListener(event -> currentCrudList.download(event));
         this.add(buttonDownload);
+        return this;
     }
 
-    public void addResetDelete() {
+    public ListButtonBar addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
         buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
         buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
         this.add(buttonResetDelete);
+        return this;
     }
 
-    private void addElabora() {
+    private ListButtonBar addElabora() {
         buttonElabora.getElement().setAttribute("theme", "primary");
         buttonElabora.getElement().setProperty("title", "Elabora: tutte le funzioni del package");
         buttonElabora.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
         buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
+        return this;
     }
 
-    private void addElaboraDue() {
+    private ListButtonBar addElaboraDue() {
         buttonElaboraDue.getElement().setAttribute("theme", "secondary");
         buttonElaboraDue.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonElaboraDue.getElement().setProperty("title", "Elabora: alcune funzioni del package");
         buttonElaboraDue.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
         buttonElaboraDue.addClickListener(event -> currentCrudList.elaboraDue());
         this.add(buttonElaboraDue);
+        return this;
     }
 
-    private void addTransfer() {
+    private ListButtonBar addTransfer() {
         buttonTransfer.getElement().setAttribute("theme", "secondary");
         buttonTransfer.getElement().setProperty("title", "Transfer: spostamento ad altro modulo");
         buttonTransfer.setIcon(new Icon(VaadinIcon.ARROW_LEFT));
         buttonTransfer.setEnabled(false);
         buttonTransfer.addClickListener(event -> currentCrudList.transfer());
         this.add(buttonTransfer);
+        return this;
     }
 
-    private void addResetEntity() {
+    private ListButtonBar addResetEntity() {
         buttonResetEntity.getElement().setAttribute("theme", "secondary");
         buttonResetEntity.getElement().setProperty("title", "Reset: elabora la entity");
         buttonResetEntity.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetEntity.setEnabled(false);
         buttonResetEntity.addClickListener(event -> currentCrudList.resetEntity());
         this.add(buttonResetEntity);
+        return this;
     }
 
-    private void addUploadAll() {
+    private ListButtonBar addUploadAll() {
         buttonUploadAll.getElement().setAttribute("theme", "primary");
         buttonUploadAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonUploadAll.getElement().setProperty("title", "Upload di tutte le pagine");
@@ -374,33 +380,37 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonUploadAll.setEnabled(true);
         buttonUploadAll.addClickListener(event -> currentCrudModulo.uploadAll());
         this.add(buttonUploadAll);
+        return this;
     }
 
-    private void addWikiView() {
+    private ListButtonBar addWikiView() {
         buttonWikiView.getElement().setAttribute("theme", "primary");
         buttonWikiView.getElement().setProperty("title", "Wiki: pagina in visione");
         buttonWikiView.setIcon(new Icon(VaadinIcon.POINTER));
         buttonWikiView.setEnabled(false);
         buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
         this.add(buttonWikiView);
+        return this;
     }
 
-    private void addWikiEdit() {
+    private ListButtonBar addWikiEdit() {
         buttonWikiEdit.getElement().setAttribute("theme", "secondary");
         buttonWikiEdit.getElement().setProperty("title", "Wiki: pagina in modifica");
         buttonWikiEdit.setIcon(new Icon(VaadinIcon.PENCIL));
         buttonWikiEdit.setEnabled(false);
         buttonWikiEdit.addClickListener(event -> currentCrudModulo.wikiEdit());
         this.add(buttonWikiEdit);
+        return this;
     }
 
-    private void addWikiCrono() {
+    private ListButtonBar addWikiCrono() {
         buttonWikiCrono.getElement().setAttribute("theme", "secondary");
         buttonWikiCrono.getElement().setProperty("title", "Wiki: cronistoria della pagina");
         buttonWikiCrono.setIcon(new Icon(VaadinIcon.CALENDAR));
         buttonWikiCrono.setEnabled(false);
         buttonWikiCrono.addClickListener(event -> currentCrudModulo.wikiCrono());
         this.add(buttonWikiCrono);
+        return this;
     }
 
 
