@@ -177,7 +177,10 @@ public class ListButtonBar extends HorizontalLayout {
 
 
     /**
-     * Fluent pattern Builder <br>
+     * Termina la fase pattern Builder <br>
+     * Aggiunge tutti e solo i bottoni previsti dal Fluent pattern Builder <br>
+     * I bottoni vengono aggiunti al layout nell'ordine fisso previsto in questa classe <br>
+     * In alternativa, usare direttamente i metodi addxxx per ogni bottone nell'ordine desiderato <br>
      */
     public ListButtonBar build() {
         addButtons();
@@ -229,52 +232,57 @@ public class ListButtonBar extends HorizontalLayout {
         }
     }
 
-    public void addDeleteAll() {
+    public ListButtonBar addDeleteAll() {
         buttonDeleteAll.getElement().setAttribute("theme", "primary");
         buttonDeleteAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteAll.getElement().setProperty("title", TEXT_DELETE);
         buttonDeleteAll.setIcon(new Icon(VaadinIcon.TRASH));
         buttonDeleteAll.addClickListener(event -> currentCrudList.deleteAll());
         this.add(buttonDeleteAll);
+        return this;
     }
 
-    public void addResetDelete() {
+    public ListButtonBar addResetDelete() {
         buttonResetDelete.getElement().setAttribute("theme", "primary");
         buttonResetDelete.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
         buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
         this.add(buttonResetDelete);
+        return this;
     }
 
-    public void addResetAdd() {
+    public ListButtonBar addResetAdd() {
         buttonResetAdd.getElement().setAttribute("theme", "primary");
         buttonResetAdd.getElement().setProperty("title", TEXT_RESET_ADD);
         buttonResetAdd.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetAdd.addClickListener(event -> currentCrudList.resetAdd());
         this.add(buttonResetAdd);
+        return this;
     }
 
 
-    public void addResetPref() {
+    public ListButtonBar addResetPref() {
         buttonResetPref.getElement().setAttribute("theme", "primary");
         buttonResetPref.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonResetPref.getElement().setProperty("title", TEXT_RESET_PREF);
         buttonResetPref.setIcon(new Icon(VaadinIcon.REFRESH));
         buttonResetPref.addClickListener(event -> currentCrudList.resetPref());
         this.add(buttonResetPref);
+        return this;
     }
 
-    public void addDownload() {
+    public ListButtonBar addDownload() {
         buttonDownload.getElement().setAttribute("theme", "primary");
         buttonDownload.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDownload.getElement().setProperty("title", TEXT_DOWNLOAD);
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
         buttonDownload.addClickListener(event -> currentCrudList.download());
         this.add(buttonDownload);
+        return this;
     }
 
-    public void addNew() {
+    public ListButtonBar addNew() {
         buttonNew.getElement().setAttribute("theme", "primary");
         buttonNew.getElement().setProperty("title", "New: aggiunge un elemento alla collezione");
         buttonNew.setIcon(new Icon(VaadinIcon.PLUS));
@@ -284,29 +292,32 @@ public class ListButtonBar extends HorizontalLayout {
         }
         buttonNew.addClickListener(event -> currentCrudList.newItem());
         this.add(buttonNew);
+        return this;
     }
 
 
-    public void addEdit() {
+    public ListButtonBar addEdit() {
         buttonEdit.getElement().setAttribute("theme", "primary");
         buttonEdit.getElement().setProperty("title", "Edit: modifica il singolo elemento selezionato");
         buttonEdit.setIcon(new Icon(VaadinIcon.PENCIL));
         buttonEdit.setEnabled(false);
         buttonEdit.addClickListener(event -> currentCrudList.updateItem());
         this.add(buttonEdit);
+        return this;
     }
 
-    public void addShows() {
+    public ListButtonBar addShows() {
         buttonShow.getElement().setAttribute("theme", "secondary");
         buttonShow.getElement().setProperty("title", "Shows: mostra il singolo elemento selezionato");
         buttonShow.setIcon(new Icon(VaadinIcon.SEARCH));
         buttonShow.setEnabled(false);
         buttonShow.addClickListener(event -> currentCrudList.showItem());
         this.add(buttonShow);
+        return this;
     }
 
 
-    public void addDeleteEntity() {
+    public ListButtonBar addDeleteEntity() {
         buttonDeleteEntity.getElement().setAttribute("theme", "primary");
         buttonDeleteEntity.addThemeVariants(ButtonVariant.LUMO_ERROR);
         buttonDeleteEntity.getElement().setProperty("title", "Delete: cancella il singolo elemento selezionato");
@@ -314,10 +325,11 @@ public class ListButtonBar extends HorizontalLayout {
         buttonDeleteEntity.setEnabled(false);
         buttonDeleteEntity.addClickListener(event -> currentCrudList.dialogDeleteItem());
         this.add(buttonDeleteEntity);
+        return this;
     }
 
 
-    public void addSearchField() {
+    public ListButtonBar addSearchField() {
         //        searchFieldName = annotationService.getKeyPropertyName(currentCrudModelClazz);
         searchField.setPlaceholder(TAG_ALTRE_BY + searchFieldName);
         searchField.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
@@ -325,6 +337,7 @@ public class ListButtonBar extends HorizontalLayout {
         searchField.setClearButtonVisible(true);
         searchField.addValueChangeListener(event -> currentCrudList.sincroFiltri());
         this.add(searchField);
+        return this;
     }
 
 

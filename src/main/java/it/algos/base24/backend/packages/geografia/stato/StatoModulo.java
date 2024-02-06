@@ -94,11 +94,18 @@ public class StatoModulo extends CrudModulo {
         return super.findAll();
     }
 
+
+
     public List<StatoEntity> findAllEuropa() {
         return findAll()
                 .stream()
                 .filter(stato -> stato.continente != null ? stato.continente.nome.equals(ContinenteEnum.europa.getTag()) : false)
                 .toList();
+    }
+
+    @Override
+    public StatoEntity findByKey(final Object keyPropertyValue) {
+        return (StatoEntity) super.findByKey(keyPropertyValue);
     }
 
     @Override

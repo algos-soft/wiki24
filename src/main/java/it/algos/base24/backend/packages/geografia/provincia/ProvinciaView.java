@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.*;
  *
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
-@PageTitle("Province")
+@PageTitle("Province italiane")
 @Route(value = "provincia", layout = MainLayout.class)
 @AView(menuGroup = MenuGroup.geografia)
 public class ProvinciaView extends CrudView {

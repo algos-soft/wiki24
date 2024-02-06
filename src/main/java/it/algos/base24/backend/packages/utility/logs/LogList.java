@@ -27,6 +27,11 @@ public class LogList extends CrudList {
         super.usaBottoneEdit = false;
         super.usaBottoneShows = true;
     }
+    /**
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
+     */
     @Override
     protected void fixTop() {
         super.fixTop();
@@ -37,7 +42,7 @@ public class LogList extends CrudList {
         comboTypeLog.setWidth("10rem");
         comboTypeLog.setItems(TypeLog.values());
         comboTypeLog.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboTypeLog);
+        topPlaceHolder.add(comboTypeLog);
 
         comboTypeLevel = new ComboBox<>();
         comboTypeLevel.setPlaceholder("TypeLevel...");
@@ -45,7 +50,7 @@ public class LogList extends CrudList {
         comboTypeLevel.setWidth("8.7rem");
         comboTypeLevel.setItems(LogLevel.values());
         comboTypeLevel.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboTypeLevel);
+        topPlaceHolder.add(comboTypeLevel);
     }
 
     @Override

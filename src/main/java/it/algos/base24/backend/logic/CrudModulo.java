@@ -540,6 +540,9 @@ public abstract class CrudModulo {
     public void dialogResetDelete() {
         DialogDelete.reset(this::resetDelete);
     }
+    public void dialogResetAdd() {
+        DialogDelete.reset(this::resetAdd);
+    }
 
     public RisultatoReset resetDelete() {
         return RisultatoReset.getDelete(deleteAll());

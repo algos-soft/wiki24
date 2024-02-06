@@ -85,8 +85,10 @@ public abstract class CrudList extends VerticalLayout {
 
     protected VerticalLayout headerPlaceHolder;
 
+    //    @Getter
+    //    protected HorizontalLayout topPlaceHolder;
     @Getter
-    protected HorizontalLayout topPlaceHolder;
+    protected ListButtonBar topPlaceHolder;
 
     protected VerticalLayout bottomPlaceHolder;
 
@@ -116,7 +118,6 @@ public abstract class CrudList extends VerticalLayout {
 
     public String searchFieldName;
 
-    protected ListButtonBar buttonBar;
 
     public Sort basicSort;
 
@@ -140,12 +141,11 @@ public abstract class CrudList extends VerticalLayout {
     @PostConstruct
     public void postConstruct() {
 
-        this.getElement().setAttribute("id","crudList");
+        this.getElement().setAttribute("id", "crudList");
         this.setPadding(true);
         this.setSpacing(false);
         this.setMargin(false);
         setSizeFull();
-
 
         this.fixPreferenze();
         this.fixForm();
@@ -216,7 +216,6 @@ public abstract class CrudList extends VerticalLayout {
         //--Aggiunge eventuali bottoni/combobox della sottoclasse <br>
         //--Aggiunge in fondo un DownloadAnchor per l'export se previsto nelle preferenze <br>
         this.addTopPlaceHolder();
-        this.fixTop();
         this.fixExport();
 
         //--Corpo principale della Grid/Form sempre presente <br>
@@ -237,7 +236,7 @@ public abstract class CrudList extends VerticalLayout {
      */
     protected void addHeaderPlaceHolder() {
         headerPlaceHolder = new SimpleVerticalLayout();
-        headerPlaceHolder.getElement().setAttribute("id","headerPlaceHolder");
+        headerPlaceHolder.getElement().setAttribute("id", "headerPlaceHolder");
         this.add(headerPlaceHolder);
     }
 
@@ -266,60 +265,69 @@ public abstract class CrudList extends VerticalLayout {
 
 
     /**
-     * Costruisce un layout per i componenti al Top della Lista <br>
+     * Costruisce un layout (standard) per i componenti al Top della Lista <br>
      * I componenti possono essere (nell'ordine):
      * Bottoni standard (solo icone) Reset, New, Edit, Delete, ecc.. <br>
      * SearchField per il filtro testuale di ricerca <br>
      * ComboBox e CheckBox di filtro <br>
      * Bottoni specifici non standard <br>
+     * <p>
+     * Per aggiunte od ordinamenti specifici, sovrascrivere il metodo fixTop() <br>
      */
     protected void addTopPlaceHolder() {
-        topPlaceHolder = new SimpleHorizontalLayout();
-        topPlaceHolder.getElement().setAttribute("id","topPlaceHolder");
+        //        topPlaceHolder = new SimpleHorizontalLayout();
+        //        topPlaceHolder.getElement().setAttribute("id","topPlaceHolder");
+        //        topPlaceHolder.setClassName("buttons");
+        //        topPlaceHolder.setClassName("confirm-dialog-buttons");
+        //        this.add(topPlaceHolder);
+        topPlaceHolder = (ListButtonBar) appContext.getBean(QUALIFIER_LIST_BUTTON_BAR, this);
+        topPlaceHolder.getElement().setAttribute("id", "topPlaceHolder");
         topPlaceHolder.setClassName("buttons");
         topPlaceHolder.setClassName("confirm-dialog-buttons");
+
+        this.fixTop();
         this.add(topPlaceHolder);
     }
 
 
     /**
-     * Può essere sovrascritto <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     protected void fixTop() {
-        buttonBar = (ListButtonBar) appContext.getBean(QUALIFIER_LIST_BUTTON_BAR, this);
-
         if (usaBottoneDeleteAll) {
-            buttonBar.deleteAll();
+            topPlaceHolder.deleteAll();
         }
         if (usaBottoneResetDelete) {
-            buttonBar.resetDelete();
+            topPlaceHolder.resetDelete();
         }
         if (usaBottoneResetAdd) {
-            buttonBar.resetAdd();
+            topPlaceHolder.resetAdd();
         }
         if (usaBottoneResetPref) {
-            buttonBar.resetPref();
+            topPlaceHolder.resetPref();
         }
         if (usaBottoneDownload) {
-            buttonBar.download();
+            topPlaceHolder.download();
         }
         if (usaBottoneNew) {
-            buttonBar.add();
+            topPlaceHolder.add();
         }
         if (usaBottoneEdit) {
-            buttonBar.edit();
+            topPlaceHolder.edit();
         }
         if (usaBottoneShows) {
-            buttonBar.shows();
+            topPlaceHolder.shows();
         }
         if (usaBottoneDeleteEntity) {
-            buttonBar.deleteEntity();
+            topPlaceHolder.deleteEntity();
         }
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-            buttonBar.searchField(searchFieldName);
+            topPlaceHolder.searchField(searchFieldName);
         }
 
-        topPlaceHolder.add(buttonBar.build());
+        topPlaceHolder.build();
     }
 
     private void fixExport() {
@@ -332,7 +340,7 @@ public abstract class CrudList extends VerticalLayout {
             String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
             Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
             downloadAnchor.getStyle().set("margin-left", "0.4rem");
-            buttonBar.export(downloadAnchor);
+            topPlaceHolder.export(downloadAnchor);
 
             //            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
             //                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
@@ -445,7 +453,7 @@ public abstract class CrudList extends VerticalLayout {
      */
     private void addBottomPlaceHolder() {
         bottomPlaceHolder = new SimpleVerticalLayout();
-        bottomPlaceHolder.getElement().setAttribute("id","bottomPlaceHolder");
+        bottomPlaceHolder.getElement().setAttribute("id", "bottomPlaceHolder");
         this.add(bottomPlaceHolder);
     }
 
@@ -565,8 +573,8 @@ public abstract class CrudList extends VerticalLayout {
 
 
     protected void sincroSelection() {
-        if (buttonBar != null) {
-            buttonBar.sincroSelection(isSingolo());
+        if (topPlaceHolder != null) {
+            topPlaceHolder.sincroSelection(isSingolo());
         }
     }
 
@@ -592,7 +600,7 @@ public abstract class CrudList extends VerticalLayout {
     }
 
     protected void fixFiltri() {
-        String searchValue = buttonBar.getSearchFieldValue();
+        String searchValue = topPlaceHolder.getSearchFieldValue();
 
         if (textService.isValid(searchValue)) {
             filtri.inizio(searchFieldName, searchValue);
@@ -636,7 +644,7 @@ public abstract class CrudList extends VerticalLayout {
         boolean usaNotification = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
 
-        currentCrudModulo.dialogResetDelete();
+        currentCrudModulo.resetDelete();
         refreshData();
 
         Pref.usaNotification.setValue(usaNotification);
@@ -652,7 +660,7 @@ public abstract class CrudList extends VerticalLayout {
         boolean usaNotification = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
 
-        currentCrudModulo.resetAdd();
+        currentCrudModulo.dialogResetAdd();
         refreshData();
 
         Pref.usaNotification.setValue(usaNotification);

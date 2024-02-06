@@ -43,13 +43,15 @@ public class PreferenzaList extends CrudList {
 
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     @Override
     protected void fixTop() {
         super.fixTop();
 
-        Button buttonResetAdd = buttonBar.getButtonResetAdd();
+        Button buttonResetAdd = topPlaceHolder.getButtonResetAdd();
         buttonResetAdd.getElement().setProperty("title", TEXT_RESET_ADD);
 
         comboType = new ComboBox<>();

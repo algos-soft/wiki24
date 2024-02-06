@@ -34,7 +34,9 @@ public class GiornoList extends CrudList {
 
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     @Override
     protected void fixTop() {
@@ -46,7 +48,7 @@ public class GiornoList extends CrudList {
         comboMese.setWidth("12rem");
         comboMese.setItems(meseModulo.findAll());
         comboMese.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboMese);
+        topPlaceHolder.add(comboMese);
     }
 
     @Override

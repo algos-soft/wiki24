@@ -42,7 +42,9 @@ public class AnnoList extends CrudList {
 
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     @Override
     protected void fixTop() {
@@ -54,7 +56,7 @@ public class AnnoList extends CrudList {
         comboSecolo.setWidth("12rem");
         comboSecolo.setItems(secoloModulo.findAll());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboSecolo);
+        topPlaceHolder.add(comboSecolo);
 
         boxCristo = new IndeterminateCheckbox();
         boxCristo.setLabel("DopoCristo");
@@ -63,7 +65,7 @@ public class AnnoList extends CrudList {
         boxCristo.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout1 = new HorizontalLayout(boxCristo);
         layout1.setAlignItems(Alignment.CENTER);
-        buttonBar.add(layout1);
+        topPlaceHolder.add(layout1);
 
         boxBisestile = new IndeterminateCheckbox();
         boxBisestile.setLabel("Bisestile");
@@ -71,7 +73,7 @@ public class AnnoList extends CrudList {
         boxBisestile.addValueChangeListener(event -> sincroFiltri());
         HorizontalLayout layout2 = new HorizontalLayout(boxBisestile);
         layout2.setAlignItems(Alignment.CENTER);
-        buttonBar.add(layout2);
+        topPlaceHolder.add(layout2);
     }
 
 

@@ -137,6 +137,9 @@ public enum TypeDate implements Type {
      */
     completaOrario("data e orario completi", "EEEE, d-MMMM-yyy 'alle' H:mm", "domenica, 5-ottobre-2014 alle 13:45", 22, false),
 
+    dd_mm_yyyy("dd-mm-yyyy", "dd-MM-yyyy", "12-05-2024", 8),
+
+    dd_mm_yy("dd-mm-yy", "dd-MM-yy", "12-05-24", 6),
 
     ;
 

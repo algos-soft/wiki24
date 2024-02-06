@@ -69,7 +69,9 @@ public class StatoList extends CrudList {
     }
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     @Override
     protected void fixTop() {
@@ -81,7 +83,7 @@ public class StatoList extends CrudList {
         comboContinente.setWidth("14rem");
         comboContinente.setItems(continenteModulo.findAll());
         comboContinente.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboContinente);
+        topPlaceHolder.add(comboContinente);
     }
 
     @Override

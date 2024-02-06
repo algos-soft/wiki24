@@ -220,7 +220,10 @@ public class WebService {
         if (righeTable != null && righeTable.length > 0) {
             listaTable = new ArrayList<>();
             for (int k = 0; k < righeTable.length; k++) {
-                testoRigaSingola = righeTable[k].trim();
+                testoRigaSingola = textService.trim(righeTable[k]);
+                if (testoRigaSingola.startsWith(ESCLAMATIVO)) {
+                    continue;
+                }
                 partiRiga = getParti(testoRigaSingola);
                 if (partiRiga != null && partiRiga.length > 0) {
                     listaRiga = new ArrayList<>();
@@ -390,6 +393,53 @@ public class WebService {
         lista.add("{ | class = \\\"wikitable");
 
         return lista;
+    }
+
+    public String getNomeDaLink(String link) {
+        String nomeDivisione = VUOTA;
+        String tag = "Template";
+        String prefix = "IT";
+        String wikiTitle;
+        String tagBand = "band";
+        String tagBandiera = "bandiera";
+        String[] sottoParti;
+
+        if (textService.isEmpty(link)) {
+            return VUOTA;
+        }
+        wikiTitle = String.format("%s%s%s%s%s", tag, DUE_PUNTI, prefix, TRATTINO, link);
+        String textTemplate = leggeWikiParse(wikiTitle);
+
+        if (textService.isEmpty(textTemplate)) {
+            return link;
+        }
+        if (textTemplate.startsWith("#REDIRECT")) {
+            return link;
+        }
+
+        if (textTemplate.contains(NO_INCLUDE)) {
+            textTemplate = textService.levaCodaDaPrimo(textTemplate, NO_INCLUDE);
+        }
+
+        if (textTemplate.contains(tagBand) && !textTemplate.contains(tagBandiera)) {
+            textTemplate = textService.setNoDoppieGraffe(textTemplate);
+            textTemplate = textService.levaTesta(textTemplate, PIPE);
+            sottoParti = textTemplate.split(PIPE_REGEX);
+            if (sottoParti.length > 2) {
+                nomeDivisione = sottoParti[2];
+            }
+        }
+
+        if ((textTemplate.contains("File") || textTemplate.contains("Image")) && (textTemplate.contains("px]]") || textTemplate.contains("px|"))) {
+            textTemplate = textService.levaTesta(textTemplate, DOPPIE_QUADRE_INI);
+            textTemplate = textService.levaPrimaDelTag(textTemplate, DOPPIE_QUADRE_INI);
+            textTemplate = textService.setNoDoppieQuadre(textTemplate);
+            nomeDivisione = textService.levaPrimaAncheTag(textTemplate, PIPE);
+        }
+
+        nomeDivisione = textService.levaCoda(nomeDivisione, DOPPIE_GRAFFE_END);
+
+        return nomeDivisione;
     }
 
 }

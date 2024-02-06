@@ -79,6 +79,36 @@ public class RegioneModulo extends CrudModulo {
     }
 
     @Override
+    public List<RegioneEntity> findAll() {
+        return super.findAll();
+    }
+
+    public List<RegioneEntity> findAllItalia() {
+        StatoEntity italia = statoModulo.findByKey("Italia");
+        if (italia == null) {
+            return null;
+        }
+
+        return findAll()
+                .stream()
+                .filter(regione -> regione.stato != italia)
+                .toList();
+    }
+
+    @Override
+    public RegioneEntity findByKey(final Object keyPropertyValue) {
+        return (RegioneEntity) super.findByKey(keyPropertyValue);
+    }
+
+    public RegioneEntity findByNome(String nome) {
+        return this.findOneByProperty(FIELD_NAME_NOME, nome);
+    }
+
+    public RegioneEntity findOneByProperty(String keyPropertyName, Object keyPropertyValue) {
+        return (RegioneEntity) super.findOneByProperty(keyPropertyName, keyPropertyValue);
+    }
+
+    @Override
     public void download() {
         RisultatoReset typeReset = super.resetDelete();
         resetBase(typeReset);
@@ -144,13 +174,13 @@ public class RegioneModulo extends CrudModulo {
             nome = rigaArray.get(1);
 
             if (nome.equals(sigla)) {
-                nome = getNomeDaLink(nome);
+                nome = webService.getNomeDaLink(nome);
             }
             if (nome.contains(TRATTINO)) {
                 String iniSigla = textService.levaCodaDaPrimo(sigla, TRATTINO);
                 String iniNome = textService.levaCodaDaPrimo(nome, TRATTINO);
                 if (iniNome.equals(iniSigla)) {
-                    nome = getNomeDaLink(nome);
+                    nome = webService.getNomeDaLink(nome);
                 }
             }
 
@@ -408,7 +438,7 @@ public class RegioneModulo extends CrudModulo {
                 //--le sigle col trattino (corte) vanno elaborate
                 //--i nomi composti (lunghi) come Emilia-Romagna eo Friuli-Venezia Giulia, no
                 if (nome.contains(TRATTINO) && nome.length() < 10) {
-                    nome = getNomeDaLink(nome);
+                    nome = webService.getNomeDaLink(nome);
                 }
 
                 //-- sigle della Francia
@@ -427,47 +457,6 @@ public class RegioneModulo extends CrudModulo {
         }
 
         return pos;
-    }
-
-    public String getNomeDaLink(String link) {
-        String nomeDivisione = VUOTA;
-        String tag = "Template:";
-        String tagBand = "band";
-        String tagBandiera = "bandiera";
-        String[] sottoParti;
-
-        String textTemplate = webService.leggeWikiParse(tag + link);
-
-        if (textService.isEmpty(textTemplate)) {
-            return link;
-        }
-        if (textTemplate.startsWith("#REDIRECT")) {
-            return link;
-        }
-
-        if (textTemplate.contains(NO_INCLUDE)) {
-            textTemplate = textService.levaCodaDaPrimo(textTemplate, NO_INCLUDE);
-        }
-
-        if (textTemplate.contains(tagBand) && !textTemplate.contains(tagBandiera)) {
-            textTemplate = textService.setNoDoppieGraffe(textTemplate);
-            textTemplate = textService.levaTesta(textTemplate, PIPE);
-            sottoParti = textTemplate.split(PIPE_REGEX);
-            if (sottoParti.length > 2) {
-                nomeDivisione = sottoParti[2];
-            }
-        }
-
-        if ((textTemplate.contains("File") || textTemplate.contains("Image")) && (textTemplate.contains("px]]") || textTemplate.contains("px|"))) {
-            textTemplate = textService.levaTesta(textTemplate, DOPPIE_QUADRE_INI);
-            textTemplate = textService.levaPrimaDelTag(textTemplate, DOPPIE_QUADRE_INI);
-            textTemplate = textService.setNoDoppieQuadre(textTemplate);
-            nomeDivisione = textService.levaPrimaAncheTag(textTemplate, PIPE);
-        }
-
-        nomeDivisione = textService.levaCoda(nomeDivisione, DOPPIE_GRAFFE_END);
-
-        return nomeDivisione;
     }
 
 

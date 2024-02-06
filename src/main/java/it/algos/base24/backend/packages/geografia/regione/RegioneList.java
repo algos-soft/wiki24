@@ -56,7 +56,9 @@ public class RegioneList extends CrudList {
     }
 
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Aggiunge componenti al Top della Lista <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse se si vogliono aggiungere componenti IN CODA <br>
+     * Può essere sovrascritto, SENZA invocare il metodo della superclasse se si vogliono aggiungere componenti in ordine diverso <br>
      */
     @Override
     protected void fixTop() {
@@ -68,7 +70,7 @@ public class RegioneList extends CrudList {
         comboStato.setWidth("14rem");
         comboStato.setItems(statoModulo.findAllEuropa());
         comboStato.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboStato);
+        topPlaceHolder.add(comboStato);
 
         comboType = new ComboBox<>();
         comboType.setPlaceholder("Type...");
@@ -76,7 +78,7 @@ public class RegioneList extends CrudList {
         comboType.setWidth("14rem");
         comboType.setItems(TypeRegione.values());
         comboType.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboType);
+        topPlaceHolder.add(comboType);
     }
 
     @Override
