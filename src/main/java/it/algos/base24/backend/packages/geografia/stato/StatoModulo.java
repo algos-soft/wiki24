@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.geografia.stato;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.geografia.continente.*;
@@ -40,6 +41,14 @@ public class StatoModulo extends CrudModulo {
         super.fixPreferenze();
     }
 
+    public StatoEntity creaIfNotExists(String nome, String capitale, String alfa3, String alfa2) {
+        if (existByKey(nome)) {
+            return null;
+        }
+        else {
+            return (StatoEntity) insert(newEntity(nome, capitale, alfa3, alfa2));
+        }
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -49,6 +58,10 @@ public class StatoModulo extends CrudModulo {
     @Override
     public StatoEntity newEntity() {
         return newEntity(0, VUOTA, VUOTA, VUOTA, VUOTA, VUOTA, null, VUOTA);
+    }
+
+    public StatoEntity newEntity(String nome, String capitale, String alfa3, String alfa2) {
+        return newEntity(0, nome, capitale, alfa3, alfa2, VUOTA, null, VUOTA);
     }
 
     public StatoEntity newEntity(int ordine, String nome, String alfa3) {
@@ -95,7 +108,6 @@ public class StatoModulo extends CrudModulo {
     }
 
 
-
     public List<StatoEntity> findAllEuropa() {
         return findAll()
                 .stream()
@@ -127,6 +139,10 @@ public class StatoModulo extends CrudModulo {
     }
 
     private RisultatoReset resetBase(RisultatoReset typeReset) {
+        if (!BaseVar.creaDirectoryGeografia) {
+            creaIfNotExists("Italia", "Roma", "ITA", "IT");
+            return typeReset;
+        }
 
         this.leggeAlfa3();
         this.leggeCapitali();
@@ -134,6 +150,7 @@ public class StatoModulo extends CrudModulo {
         this.leggeContinenti();
 
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
+
         return typeReset;
     }
 

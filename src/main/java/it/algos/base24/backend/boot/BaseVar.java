@@ -209,7 +209,7 @@ public class BaseVar {
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      * Di default false <br>
      */
-    public static boolean caricaDirectoryGeografia;
+    public static boolean creaDirectoryGeografia;
 
     /**
      * Flag per caricare le tavole della directory [crono] <br>
@@ -217,7 +217,7 @@ public class BaseVar {
      * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
      * Di default false <br>
      */
-    public static boolean caricaDirectoryCrono;
+    public static boolean creaDirectoryCrono;
 
 
 }

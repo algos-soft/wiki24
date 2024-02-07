@@ -251,10 +251,10 @@ public class BaseBoot {
         try {
             property = "algos.project.crea.directory.geografia";
             String valueTxt = Objects.requireNonNull(environment.getProperty(property));
-            BaseVar.caricaDirectoryGeografia = Boolean.parseBoolean(valueTxt);
+            BaseVar.creaDirectoryGeografia = Boolean.parseBoolean(valueTxt);
         } catch (Exception unErrore) {
             logError(unErrore, property);
-            BaseVar.caricaDirectoryGeografia = false;
+            BaseVar.creaDirectoryGeografia = false;
         }
 
         /**
@@ -263,10 +263,10 @@ public class BaseBoot {
         try {
             property = "algos.project.crea.directory.crono";
             String valueTxt = Objects.requireNonNull(environment.getProperty(property));
-            BaseVar.caricaDirectoryCrono = Boolean.parseBoolean(valueTxt);
+            BaseVar.creaDirectoryCrono = Boolean.parseBoolean(valueTxt);
         } catch (Exception unErrore) {
             logError(unErrore, property);
-            BaseVar.caricaDirectoryCrono = false;
+            BaseVar.creaDirectoryCrono = false;
         }
     }
 

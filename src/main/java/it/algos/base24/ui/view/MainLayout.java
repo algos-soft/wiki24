@@ -127,10 +127,10 @@ public class MainLayout extends AppLayout {
         mappa = fixOrderMappa(mappa);
         mappa = arrayService.orderMap(mappa);
 
-        if (BaseVar.caricaDirectoryGeografia == false) {
+        if (BaseVar.creaDirectoryGeografia == false) {
             mappa.remove(textService.primaMaiuscola(MenuGroup.geografia.tag));
         }
-        if (BaseVar.caricaDirectoryCrono == false) {
+        if (BaseVar.creaDirectoryCrono == false) {
             mappa.remove(textService.primaMaiuscola(MenuGroup.crono.tag));
         }
 

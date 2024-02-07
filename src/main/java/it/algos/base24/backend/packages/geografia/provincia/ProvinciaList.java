@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.*;
 
 import javax.inject.*;
+import java.util.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
@@ -68,6 +69,7 @@ public class ProvinciaList extends CrudList {
     @Override
     protected void fixTop() {
         super.fixTop();
+        List itemsRegione = regioneModulo.findAllItalia();
 
         searchNomeBreve = new TextField();
         searchNomeBreve.setPlaceholder(TAG_ALTRE_BY + "nome breve");
@@ -80,7 +82,9 @@ public class ProvinciaList extends CrudList {
         comboRegione.setPlaceholder("Regioni...");
         comboRegione.setClearButtonVisible(true);
         comboRegione.setWidth("14rem");
-        comboRegione.setItems(regioneModulo.findAllItalia());
+        if (itemsRegione != null && itemsRegione.size() > 0) {
+            comboRegione.setItems(itemsRegione);
+        }
         comboRegione.addValueChangeListener(event -> sincroFiltri());
         topPlaceHolder.add(comboRegione);
     }

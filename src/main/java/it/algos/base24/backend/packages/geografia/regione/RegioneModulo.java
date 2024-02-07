@@ -1,12 +1,16 @@
 package it.algos.base24.backend.packages.geografia.regione;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.geografia.stato.*;
 import it.algos.base24.backend.wrapper.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -86,13 +90,17 @@ public class RegioneModulo extends CrudModulo {
     public List<RegioneEntity> findAllItalia() {
         StatoEntity italia = statoModulo.findByKey("Italia");
         if (italia == null) {
-            return null;
+            return new ArrayList<>();
         }
 
-        return findAll()
-                .stream()
-                .filter(regione -> regione.stato != italia)
-                .toList();
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, "ordine");
+        query.addCriteria(Criteria.where("stato").is(italia));
+        query.addCriteria(Criteria.where("type").in(TypeRegione.regione,TypeRegione.regioneSpeciale));
+        query.with(sort);
+
+        List<AbstractEntity> lista= mongoService.mongoOp.find(query, currentCrudEntityClazz, "regione");
+        return lista.stream().map(bean -> (RegioneEntity) bean).toList();
     }
 
     @Override
@@ -128,8 +136,12 @@ public class RegioneModulo extends CrudModulo {
 
 
     private RisultatoReset resetBase(RisultatoReset typeReset) {
+        if (!BaseVar.creaDirectoryGeografia) {
+            addItaliaOnly();
+            return typeReset;
+        }
+
         int pos;
-        pos = 0;
         pos = addItalia();
         pos = addFrancia(pos);
         pos = add("Svizzera", TypeRegione.cantone, pos);
@@ -193,11 +205,29 @@ public class RegioneModulo extends CrudModulo {
         return pos;
     }
 
+    public void addItaliaOnly() {
+        String nomeStato = "Italia";
+        StatoEntity stato = this.getStato(nomeStato);
+
+        if (stato == null) {
+            stato = statoModulo.creaIfNotExists("Italia", "Roma", "ITA", "IT");
+        }
+
+        //--regioni
+        listaBean = this.getLista(stato, 1);
+        add(stato, listaBean, 0, TypeRegione.regione);
+        mappaBeans.values().stream().forEach(bean -> insertSave(bean));
+    }
+
 
     public int addItalia() {
         int pos = 0;
         String nomeStato = "Italia";
         StatoEntity stato = this.getStato(nomeStato);
+
+        if (stato == null) {
+            return 0;
+        }
 
         //--regioni
         listaBean = this.getLista(stato, 1);

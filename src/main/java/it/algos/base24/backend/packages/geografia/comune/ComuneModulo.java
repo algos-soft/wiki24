@@ -119,7 +119,10 @@ public class ComuneModulo extends CrudModulo {
         String tag = "Comuni d'Italia";
         List<String> lettere = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H-J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Z");
         String wikiTitle;
-        ComuneEntity newBean;
+
+        if (provinciaModulo.count() < 1) {
+            provinciaModulo.resetDelete();
+        }
 
         for (String key : lettere) {
             wikiTitle = String.format("%s%s%s%s%s", tag, SPAZIO, PARENTESI_TONDA_INI, key, PARENTESI_TONDA_END);
@@ -142,10 +145,10 @@ public class ComuneModulo extends CrudModulo {
         for (List<String> rigaUnValore : mappa) {
             nome = rigaUnValore.get(0);
 
-            provinciaTxt = rigaUnValore.size()>1?rigaUnValore.get(1) : VUOTA;
+            provinciaTxt = rigaUnValore.size() > 1 ? rigaUnValore.get(1) : VUOTA;
             provinciaBean = provinciaModulo.findByNomeBreve(provinciaTxt);
 
-            regioneTxt = rigaUnValore.size()>2?rigaUnValore.get(2) : VUOTA;
+            regioneTxt = rigaUnValore.size() > 2 ? rigaUnValore.get(2) : VUOTA;
             regioneBean = regioneModulo.findByNome(regioneTxt);
 
             creaIfNotExists(nome, provinciaBean, regioneBean);

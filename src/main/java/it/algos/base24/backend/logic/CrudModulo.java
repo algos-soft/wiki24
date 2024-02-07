@@ -164,10 +164,10 @@ public abstract class CrudModulo {
         }
 
         menuGroup = annotationService.getMenuGroup(currentCrudViewClazz);
-        if (BaseVar.caricaDirectoryGeografia == false && menuGroup.tag.equals(MenuGroup.geografia.tag)) {
-            return;
-        }
-        if (BaseVar.caricaDirectoryCrono == false && menuGroup.tag.equals(MenuGroup.crono.tag)) {
+//        if (BaseVar.creaDirectoryGeografia == false && menuGroup.tag.equals(MenuGroup.geografia.tag)) {
+//            return;
+//        }
+        if (BaseVar.creaDirectoryCrono == false && menuGroup.tag.equals(MenuGroup.crono.tag)) {
             return;
         }
 
