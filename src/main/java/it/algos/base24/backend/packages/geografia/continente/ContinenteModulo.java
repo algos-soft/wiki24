@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.geografia.continente;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
@@ -73,6 +74,9 @@ public class ContinenteModulo extends CrudModulo {
         ContinenteEntity newBean;
         String message;
 
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
         if (typeReset == RisultatoReset.esistenteNonModificato) {
             return typeReset;
         }

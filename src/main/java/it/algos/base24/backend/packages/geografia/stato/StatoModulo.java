@@ -139,6 +139,9 @@ public class StatoModulo extends CrudModulo {
     }
 
     private RisultatoReset resetBase(RisultatoReset typeReset) {
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
         if (!BaseVar.creaDirectoryGeografia) {
             creaIfNotExists("Italia", "Roma", "ITA", "IT");
             return typeReset;

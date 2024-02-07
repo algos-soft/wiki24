@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.*;
  */
 @PageTitle("Comuni italiani")
 @Route(value = "comune", layout = MainLayout.class)
-@AView(menuGroup = MenuGroup.geografia)
+@AView(menuGroup = MenuGroup.altro)
 public class ComuneView extends CrudView {
 
 

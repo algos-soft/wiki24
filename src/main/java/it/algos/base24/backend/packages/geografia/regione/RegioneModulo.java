@@ -136,6 +136,9 @@ public class RegioneModulo extends CrudModulo {
 
 
     private RisultatoReset resetBase(RisultatoReset typeReset) {
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
         if (!BaseVar.creaDirectoryGeografia) {
             addItaliaOnly();
             return typeReset;

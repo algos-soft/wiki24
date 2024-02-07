@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.geografia.comune;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.geografia.provincia.*;
@@ -119,6 +120,10 @@ public class ComuneModulo extends CrudModulo {
         String tag = "Comuni d'Italia";
         List<String> lettere = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H-J", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "Z");
         String wikiTitle;
+
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
 
         if (provinciaModulo.count() < 1) {
             provinciaModulo.resetDelete();

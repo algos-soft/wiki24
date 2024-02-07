@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.geografia.provincia;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.anagrafica.via.*;
@@ -127,6 +128,9 @@ public class ProvinciaModulo extends CrudModulo {
         RegioneEntity regioneBean = null;
         ViaEntity newBean;
 
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
         if (regioneModulo.count() < 1) {
             regioneModulo.addItaliaOnly();
         }

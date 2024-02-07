@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.anagrafica.via;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.boot.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
@@ -92,6 +93,9 @@ public class ViaModulo extends CrudModulo {
         int pos = 1;
         String message;
         ViaEntity newBean;
+        if (BaseVar.creaDirectoryGeografia == false) {
+            return null;
+        }
 
         Map<String, List<String>> mappaSource = resourceService.leggeMappa(nomeFileCSV);
         if (mappaSource != null && mappaSource.size() > 0) {

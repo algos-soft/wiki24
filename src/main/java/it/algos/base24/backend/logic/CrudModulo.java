@@ -133,6 +133,7 @@ public abstract class CrudModulo {
         this.simpleName = textService.levaCoda(this.getClass().getSimpleName(), SUFFIX_MODULO);
         this.fixPreferenze();
         this.currentCollectionName = currentCrudEntityClazz != null ? annotationService.getCollectionName(currentCrudEntityClazz) : VUOTA;
+
         if (BaseVar.crudModuloListVaadin != null) {
             BaseVar.crudModuloListVaadin.add(this);
         }
