@@ -482,10 +482,10 @@ public class WikiListButtonBar extends ListButtonBar {
 
 
     public boolean sincroSelection(boolean singoloSelezionato) {
-//        buttonDeleteAll.setEnabled(!singoloSelezionato);
-//        buttonResetDelete.setEnabled(!singoloSelezionato);
-//        buttonResetAdd.setEnabled(!singoloSelezionato);
-//        buttonResetPref.setEnabled(!singoloSelezionato);
+        buttonDeleteAll.setEnabled(!singoloSelezionato);
+        buttonResetDelete.setEnabled(!singoloSelezionato);
+        buttonResetAdd.setEnabled(!singoloSelezionato);
+        buttonResetPref.setEnabled(!singoloSelezionato);
         buttonDownload.setEnabled(!singoloSelezionato);
         buttonElabora.setEnabled(!singoloSelezionato);
         buttonUploadAll.setEnabled(!singoloSelezionato);
@@ -500,13 +500,13 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonUpload1.setEnabled(singoloSelezionato);
         buttonUpload2.setEnabled(singoloSelezionato);
 
-//        buttonNew.setEnabled(!singoloSelezionato);
-//        buttonEdit.setEnabled(singoloSelezionato);
-//        buttonShow.setEnabled(singoloSelezionato);
-//        buttonDeleteEntity.setEnabled(singoloSelezionato);
-//        if (downloadAnchor != null) {
-//            downloadAnchor.setEnabled(!singoloSelezionato);
-//        }
+        buttonNew.setEnabled(!singoloSelezionato);
+        buttonEdit.setEnabled(singoloSelezionato);
+        buttonShow.setEnabled(singoloSelezionato);
+        buttonDeleteEntity.setEnabled(singoloSelezionato);
+        if (downloadAnchor != null) {
+            downloadAnchor.setEnabled(!singoloSelezionato);
+        }
 
         return singoloSelezionato;
     }

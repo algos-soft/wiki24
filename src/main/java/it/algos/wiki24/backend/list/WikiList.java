@@ -435,6 +435,11 @@ public abstract class WikiList extends CrudList {
         return true;
     }
 
+    protected void sincroSelection() {
+        if (wikiTopPlaceHolder != null) {
+            wikiTopPlaceHolder.sincroSelection(isSingolo());
+        }
+    }
 
     @Override
     protected void fixFiltri() {
