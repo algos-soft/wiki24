@@ -56,7 +56,7 @@ public class GiornoWikiList extends WikiList {
         comboMese.setWidth("12rem");
         comboMese.setItems(meseModulo.findAll());
         comboMese.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboMese);
+//        buttonBar.add(comboMese);
     }
 
     @Override

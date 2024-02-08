@@ -9,5 +9,5 @@ package it.algos.base24.backend.enumeration;
  * Enumeration type: Simple
  */
 public enum TypeBool {
-    boolGrezzo, checkBox, checkIcon, checkIconReverse, customLabel, yesNo, yesNoReverse, yesNoBold, thumb, thumbReverse
+    boolGrezzo, checkBox, checkIcon, checkIconReverse, customLabel, yesNo, yesNoReverse, yesNoBold, thumb, thumbReverse, simpleCheckIcon
 }

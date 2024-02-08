@@ -516,5 +516,6 @@ public class WikiCost {
     public static final String DIV_END_CAPO = DIV_END + CAPO;
 
     public static final int MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI = 100;
+    public static final String WIKI_QUALIFIER_LIST_BUTTON_BAR = "wikiListButtonBar";
 
 }

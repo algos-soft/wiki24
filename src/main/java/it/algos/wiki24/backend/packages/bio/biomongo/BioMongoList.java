@@ -93,7 +93,7 @@ public class BioMongoList extends WikiList {
         searchNome = creaSearch(FIELD_NAME_NOME);
         searchCognome = creaSearch(FIELD_NAME_COGNOME);
         searchSesso = creaSearch(FIELD_NAME_SESSO);
-        buttonBar.add(searchNome, searchCognome, searchSesso);
+//        buttonBar.add(searchNome, searchCognome, searchSesso);
 
         searchLuogoNato = creaSearch(FIELD_NAME_LUOGO_NATO);
         searchGiornoNato = creaSearch(FIELD_NAME_GIORNO_NATO);

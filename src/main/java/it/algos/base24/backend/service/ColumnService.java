@@ -338,8 +338,18 @@ public class ColumnService {
                         }
                     }
                     return span;
+
+                case simpleCheckIcon:
+                    if (status) {
+                        icon = new Icon(VaadinIcon.CHECK);
+                    }
+                    else {
+                        return null;
+                    }
+                    icon.setSize("1em");
+                    return icon;
+
                 default:
-                    //                    logService.error(new WrapLog().exception(new AlgosException("Switch - caso non definito")).usaDb());
                     break;
             }
 

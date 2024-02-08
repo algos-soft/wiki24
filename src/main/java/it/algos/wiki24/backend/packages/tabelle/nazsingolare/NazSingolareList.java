@@ -75,7 +75,7 @@ public class NazSingolareList extends WikiList {
         searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(searchPlurale);
+//        buttonBar.add(searchPlurale);
     }
 
 

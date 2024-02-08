@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.components;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.icon.*;
+import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
@@ -25,7 +26,7 @@ import javax.inject.*;
  * Date: Wed, 29-Nov-2023
  * Time: 07:47
  */
-@Component
+@Component(WIKI_QUALIFIER_LIST_BUTTON_BAR)
 @Scope(value = SCOPE_PROTOTYPE)
 public class WikiListButtonBar extends ListButtonBar {
 
@@ -119,7 +120,7 @@ public class WikiListButtonBar extends ListButtonBar {
      * Fluent pattern Builder <br>
      */
     public WikiListButtonBar resetDelete() {
-        this.usaBottoneResetDelete = true;
+//        this.usaBottoneResetDelete = true;
         return this;
     }
 
@@ -243,6 +244,17 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
+    /**
+     * Termina la fase pattern Builder <br>
+     * Aggiunge tutti e solo i bottoni previsti dal Fluent pattern Builder <br>
+     * I bottoni vengono aggiunti al layout nell'ordine fisso previsto in questa classe <br>
+     * In alternativa, usare direttamente i metodi addxxx per ogni bottone nell'ordine desiderato <br>
+     */
+    public WikiListButtonBar build() {
+        addButtons();
+        return this;
+    }
+
     public void addButtons() {
 
         if (usaBottoneDeleteAll) {
@@ -321,16 +333,16 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonDownload.setIcon(new Icon(VaadinIcon.DOWNLOAD));
         buttonDownload.addClickListener(event -> currentCrudList.download(event));
         this.add(buttonDownload);
-        return this;
+        return null;
     }
 
     public ListButtonBar addResetDelete() {
-        buttonResetDelete.getElement().setAttribute("theme", "primary");
-        buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
-        buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
-        buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
-        this.add(buttonResetDelete);
-        return this;
+//        buttonResetDelete.getElement().setAttribute("theme", "primary");
+//        buttonResetDelete.getElement().setProperty("title", TEXT_RESET_DELETE);
+//        buttonResetDelete.setIcon(new Icon(VaadinIcon.REFRESH));
+//        buttonResetDelete.addClickListener(event -> currentCrudList.resetDelete());
+//        this.add(buttonResetDelete);
+        return null;
     }
 
     private ListButtonBar addElabora() {
@@ -339,7 +351,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElabora.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
         buttonElabora.addClickListener(event -> currentCrudList.elabora());
         this.add(buttonElabora);
-        return this;
+        return null;
     }
 
     private ListButtonBar addElaboraDue() {
@@ -349,7 +361,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonElaboraDue.setIcon(new Icon(VaadinIcon.PUZZLE_PIECE));
         buttonElaboraDue.addClickListener(event -> currentCrudList.elaboraDue());
         this.add(buttonElaboraDue);
-        return this;
+        return null;
     }
 
     private ListButtonBar addTransfer() {
@@ -359,7 +371,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonTransfer.setEnabled(false);
         buttonTransfer.addClickListener(event -> currentCrudList.transfer());
         this.add(buttonTransfer);
-        return this;
+        return null;
     }
 
     private ListButtonBar addResetEntity() {
@@ -369,7 +381,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonResetEntity.setEnabled(false);
         buttonResetEntity.addClickListener(event -> currentCrudList.resetEntity());
         this.add(buttonResetEntity);
-        return this;
+        return null;
     }
 
     private ListButtonBar addUploadAll() {
@@ -380,7 +392,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonUploadAll.setEnabled(true);
         buttonUploadAll.addClickListener(event -> currentCrudModulo.uploadAll());
         this.add(buttonUploadAll);
-        return this;
+        return null;
     }
 
     private ListButtonBar addWikiView() {
@@ -390,7 +402,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiView.setEnabled(false);
         buttonWikiView.addClickListener(event -> currentCrudList.wikiView());
         this.add(buttonWikiView);
-        return this;
+        return null;
     }
 
     private ListButtonBar addWikiEdit() {
@@ -400,7 +412,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiEdit.setEnabled(false);
         buttonWikiEdit.addClickListener(event -> currentCrudModulo.wikiEdit());
         this.add(buttonWikiEdit);
-        return this;
+        return null;
     }
 
     private ListButtonBar addWikiCrono() {
@@ -410,7 +422,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiCrono.setEnabled(false);
         buttonWikiCrono.addClickListener(event -> currentCrudModulo.wikiCrono());
         this.add(buttonWikiCrono);
-        return this;
+        return null;
     }
 
 
@@ -470,10 +482,10 @@ public class WikiListButtonBar extends ListButtonBar {
 
 
     public boolean sincroSelection(boolean singoloSelezionato) {
-        buttonDeleteAll.setEnabled(!singoloSelezionato);
-        buttonResetDelete.setEnabled(!singoloSelezionato);
-        buttonResetAdd.setEnabled(!singoloSelezionato);
-        buttonResetPref.setEnabled(!singoloSelezionato);
+//        buttonDeleteAll.setEnabled(!singoloSelezionato);
+//        buttonResetDelete.setEnabled(!singoloSelezionato);
+//        buttonResetAdd.setEnabled(!singoloSelezionato);
+//        buttonResetPref.setEnabled(!singoloSelezionato);
         buttonDownload.setEnabled(!singoloSelezionato);
         buttonElabora.setEnabled(!singoloSelezionato);
         buttonUploadAll.setEnabled(!singoloSelezionato);
@@ -488,13 +500,13 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonUpload1.setEnabled(singoloSelezionato);
         buttonUpload2.setEnabled(singoloSelezionato);
 
-        buttonNew.setEnabled(!singoloSelezionato);
-        buttonEdit.setEnabled(singoloSelezionato);
-        buttonShow.setEnabled(singoloSelezionato);
-        buttonDeleteEntity.setEnabled(singoloSelezionato);
-        if (downloadAnchor != null) {
-            downloadAnchor.setEnabled(!singoloSelezionato);
-        }
+//        buttonNew.setEnabled(!singoloSelezionato);
+//        buttonEdit.setEnabled(singoloSelezionato);
+//        buttonShow.setEnabled(singoloSelezionato);
+//        buttonDeleteEntity.setEnabled(singoloSelezionato);
+//        if (downloadAnchor != null) {
+//            downloadAnchor.setEnabled(!singoloSelezionato);
+//        }
 
         return singoloSelezionato;
     }

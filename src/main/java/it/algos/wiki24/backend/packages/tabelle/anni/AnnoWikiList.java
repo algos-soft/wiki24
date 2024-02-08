@@ -56,7 +56,7 @@ public class AnnoWikiList extends WikiList {
         comboSecolo.setWidth("12rem");
         comboSecolo.setItems(secoloModulo.findAll());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(comboSecolo);
+//        buttonBar.add(comboSecolo);
     }
 
     @Override

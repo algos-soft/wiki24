@@ -84,12 +84,12 @@ public class AttSingolareList extends WikiList {
         searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(searchPlurale);
+//        buttonBar.add(searchPlurale);
 
         checkEx = new IndeterminateCheckbox("Ex attività");
         checkEx.getStyle().set("margin-top", "0.5rem");
         checkEx.addValueChangeListener(event -> sincroFiltri());
-        buttonBar.add(checkEx);
+//        buttonBar.add(checkEx);
     }
 
 

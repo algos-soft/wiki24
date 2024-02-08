@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.list;
 
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -36,7 +37,8 @@ public abstract class WikiList extends CrudList {
     WikiApiService wikiApiService;
 
 
-    protected WikiListButtonBar buttonBar;
+    //    protected WikiListButtonBar buttonBar;
+    protected WikiListButtonBar wikiTopPlaceHolder;
 
     protected boolean usaInfoDownload;
 
@@ -283,84 +285,100 @@ public abstract class WikiList extends CrudList {
         }
     }
 
+    /**
+     * Costruisce un layout (standard) per i componenti al Top della Lista <br>
+     * I componenti possono essere (nell'ordine):
+     * Bottoni standard (solo icone) Reset, New, Edit, Delete, ecc.. <br>
+     * SearchField per il filtro testuale di ricerca <br>
+     * ComboBox e CheckBox di filtro <br>
+     * Bottoni specifici non standard <br>
+     * <p>
+     * Per aggiunte od ordinamenti specifici, sovrascrivere il metodo fixTop() <br>
+     */
+    protected void addTopPlaceHolder() {
+        //        topPlaceHolder = (WikiListButtonBar) appContext.getBean(WIKI_QUALIFIER_LIST_BUTTON_BAR, this);
+        wikiTopPlaceHolder = (WikiListButtonBar) appContext.getBean(WIKI_QUALIFIER_LIST_BUTTON_BAR, currentCrudModulo, this);
+        wikiTopPlaceHolder.getElement().setAttribute("id", "wikiTopPlaceHolder");
+        wikiTopPlaceHolder.setClassName("buttons");
+        wikiTopPlaceHolder.setClassName("confirm-dialog-buttons");
+
+        this.fixTop();
+        this.add(wikiTopPlaceHolder);
+    }
 
     /**
      * Può essere sovrascritto <br>
      */
     protected void fixTop() {
-        this.buttonBar = appContext.getBean(WikiListButtonBar.class, currentCrudModulo, this);
-        super.topPlaceHolder = this.buttonBar;
-
         if (usaBottoneDeleteAll) {
-            topPlaceHolder.deleteAll();
+            wikiTopPlaceHolder.deleteAll();
         }
         if (usaBottoneResetDelete) {
-            topPlaceHolder.resetDelete();
+            wikiTopPlaceHolder.resetDelete();
         }
         if (usaBottoneDownload) {
-            topPlaceHolder.download();
+            wikiTopPlaceHolder.download();
         }
         if (usaBottoneElabora) {
-//            topPlaceHolder.elabora();
+            wikiTopPlaceHolder.elabora();
         }
         if (usaBottoneElaboraDue) {
-//            topPlaceHolder.elaboraDue();
+            wikiTopPlaceHolder.elaboraDue();
         }
         if (usaBottoneUploadAll) {
-//            topPlaceHolder.uploadAll();
+            wikiTopPlaceHolder.uploadAll();
         }
         if (usaBottoneTransfer) {
-//            topPlaceHolder.transfer();
+            wikiTopPlaceHolder.transfer();
         }
         if (usaBottoneResetEntity) {
-//            topPlaceHolder.restEntity();
+            wikiTopPlaceHolder.restEntity();
         }
         if (usaBottoneWikiView) {
-//            topPlaceHolder.wikiView();
+            wikiTopPlaceHolder.wikiView();
         }
         if (usaBottoneWikiEdit) {
-//            topPlaceHolder.wikiEdit();
+            wikiTopPlaceHolder.wikiEdit();
         }
         if (usaBottoneWikiCrono) {
-//            topPlaceHolder.wikiCrono();
+            wikiTopPlaceHolder.wikiCrono();
         }
 
         if (usaBottoneTest1) {
-            buttonBar.test1();
+            wikiTopPlaceHolder.test1();
         }
         if (usaBottoneTest2) {
-            buttonBar.test2();
+            wikiTopPlaceHolder.test2();
         }
         if (usaBottoneUpload1) {
-            buttonBar.upload1();
+            wikiTopPlaceHolder.upload1();
         }
         if (usaBottoneUpload2) {
-            buttonBar.upload2();
+            wikiTopPlaceHolder.upload2();
         }
-
         if (usaBottoneNew) {
-            buttonBar.add();
+            wikiTopPlaceHolder.add();
         }
         if (usaBottoneEdit) {
-            buttonBar.edit();
+            wikiTopPlaceHolder.edit();
         }
         if (usaBottoneShows) {
-            buttonBar.shows();
+            wikiTopPlaceHolder.shows();
         }
         if (usaBottoneDeleteEntity) {
-            buttonBar.deleteEntity();
+            wikiTopPlaceHolder.deleteEntity();
         }
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-            buttonBar.searchField(searchFieldName);
+            wikiTopPlaceHolder.searchField(searchFieldName);
         }
         if (usaSearchPageId) {
-            buttonBar.searchPageId();
+            wikiTopPlaceHolder.searchPageId();
         }
         if (usaSearchWikiTitle) {
-            buttonBar.searchWikiTitle();
+            wikiTopPlaceHolder.searchWikiTitle();
         }
 
-        topPlaceHolder.add(buttonBar.build());
+        wikiTopPlaceHolder.build();
     }
 
     public boolean resetDelete() {
@@ -420,13 +438,13 @@ public abstract class WikiList extends CrudList {
 
     @Override
     protected void fixFiltri() {
-        super.fixFiltri();
+        //        super.fixFiltri();
 
         long searchPageId = 0;
         String searchWikiTitle = VUOTA;
 
         if (usaSearchPageId) {
-            searchPageId = buttonBar.getSearchPageIdFieldValue();
+            //            searchPageId = buttonBar.getSearchPageIdFieldValue();
         }
 
         if (searchPageId > 0) {
@@ -439,7 +457,7 @@ public abstract class WikiList extends CrudList {
         }
 
         if (usaSearchWikiTitle) {
-            searchWikiTitle = buttonBar.getSearchWikiTitleFieldValue();
+            //            searchWikiTitle = buttonBar.getSearchWikiTitleFieldValue();
         }
 
         if (textService.isValid(searchWikiTitle)) {
