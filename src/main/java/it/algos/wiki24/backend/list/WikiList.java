@@ -4,6 +4,7 @@ import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
+import com.vaadin.flow.server.*;
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
@@ -224,16 +225,14 @@ public abstract class WikiList extends CrudList {
 
 
     private void fixInfoElabora() {
-        String elaboraTxt = VUOTA;
+        String elaboraTxt;
         String elaboraLast = VUOTA;
         WPref flagElabora = currentCrudModulo.flagElabora;
         String status = flagElabora != null ? flagElabora.is() ? "acceso" : "spento" : "indefinito";
 
         if (usaInfoElabora) {
             if (scheduledElabora != null) {
-                elaboraTxt = String.format("Elabora (%s=%s). Task %s", flagElabora, status,
-                        textService.primaMinuscola(scheduledElabora.getNota())
-                );
+                elaboraTxt = String.format("Elabora (%s=%s). Task %s", flagElabora, status, textService.primaMinuscola(scheduledElabora.getNota()));
             }
             else {
                 elaboraTxt = "Scheduled elaborazione non prevista.";
@@ -262,7 +261,7 @@ public abstract class WikiList extends CrudList {
 
         if (usaInfoUpload) {
             if (scheduledUpload != null) {
-                //                uploadTxt = "Scheduled upload " + scheduledUpload.getDescrizione();
+                uploadTxt = "Scheduled upload " + scheduledUpload.getNota();
             }
             else {
                 uploadTxt = "Scheduled upload non previsto.";
@@ -296,7 +295,6 @@ public abstract class WikiList extends CrudList {
      * Per aggiunte od ordinamenti specifici, sovrascrivere il metodo fixTop() <br>
      */
     protected void addTopPlaceHolder() {
-        //        topPlaceHolder = (WikiListButtonBar) appContext.getBean(WIKI_QUALIFIER_LIST_BUTTON_BAR, this);
         wikiTopPlaceHolder = (WikiListButtonBar) appContext.getBean(WIKI_QUALIFIER_LIST_BUTTON_BAR, currentCrudModulo, this);
         wikiTopPlaceHolder.getElement().setAttribute("id", "wikiTopPlaceHolder");
         wikiTopPlaceHolder.setClassName("buttons");
@@ -437,19 +435,28 @@ public abstract class WikiList extends CrudList {
 
     protected void sincroSelection() {
         if (wikiTopPlaceHolder != null) {
-            wikiTopPlaceHolder.sincroSelection(isSingolo());
+            wikiTopPlaceHolder.sincroSelection(isUnoSoloSelezionato());
         }
     }
 
     @Override
     protected void fixFiltri() {
-        //        super.fixFiltri();
-
         long searchPageId = 0;
         String searchWikiTitle = VUOTA;
 
+        String searchValue = wikiTopPlaceHolder.getSearchFieldValue();
+
+        if (textService.isValid(searchValue)) {
+            filtri.inizio(searchFieldName, searchValue);
+            filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE));
+        }
+        else {
+            filtri.remove(searchFieldName);
+            filtri.sort(basicSort);
+        }
+
         if (usaSearchPageId) {
-            //            searchPageId = buttonBar.getSearchPageIdFieldValue();
+            searchPageId = wikiTopPlaceHolder.getSearchPageIdFieldValue();
         }
 
         if (searchPageId > 0) {
@@ -462,7 +469,7 @@ public abstract class WikiList extends CrudList {
         }
 
         if (usaSearchWikiTitle) {
-            //            searchWikiTitle = buttonBar.getSearchWikiTitleFieldValue();
+            searchWikiTitle = wikiTopPlaceHolder.getSearchWikiTitleFieldValue();
         }
 
         if (textService.isValid(searchWikiTitle)) {
@@ -513,6 +520,21 @@ public abstract class WikiList extends CrudList {
 
         if (crudEntityBean != null) {
             currentCrudModulo.uploadPaginaMorti(crudEntityBean);
+        }
+    }
+
+    @Override
+    protected void fixExport() {
+        if (usaBottoneExport) {
+            //--fix per gestire anche i test che NON hanno la UI e andrebbero in errore
+            if (UI.getCurrent() == null) {
+                return;
+            }
+
+            String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
+            Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
+            downloadAnchor.getStyle().set("margin-left", "0.4rem");
+            wikiTopPlaceHolder.export(downloadAnchor);
         }
     }
 

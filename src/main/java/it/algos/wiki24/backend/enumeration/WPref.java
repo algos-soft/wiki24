@@ -41,6 +41,7 @@ public enum WPref implements IPref {
     lastElaboraBioMongo("lastElaboraBioMongo", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di BioMongo.", true, true),
     elaboraBioMongoTime("elaboraBioMongoTime", TypePref.integer, 0, "Durata elaborazione di BioMongo in minuti."),
 
+
     //***************
     lastElaboraParNome("lastElaboraParNome", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParNome."),
     elaboraParNomeTime("elaboraParNomeTime", TypePref.integer, 0, "Durata elaborazione di ParNome in minuti."),
@@ -87,6 +88,7 @@ public enum WPref implements IPref {
     lastElaboraParNazionalita("lastElaboraParNazionalita", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di ParNazionalita."),
     elaboraParNazionalitaTime("elaboraParNazionalitaTime", TypePref.integer, 0, "Durata elaborazione di ParNazionalita in minuti."),
 
+
     //***************
     usaElaboraGiorni("usaElaboraGiorni", TypePref.bool, false, "Flag per usare la task di elaborazione di Giorni."),
     lastElaboraGiorni("lastElaboraGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di Giorni."),
@@ -94,6 +96,7 @@ public enum WPref implements IPref {
     usaUploadGiorni("usaUploadGiorni", TypePref.bool, false, "Upload delle pagine dei Giorni."),
     lastUploadGiorni("lastUploadGiorni", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di Giorni.", true, true),
     uploadGiorniTime("uploadGiorniTime", TypePref.integer, 0, "Durata upload di Giorni in minuti."),
+
 
     //***************
     usaElaboraAnni("usaElaboraAnni", TypePref.bool, false, "Flag per usare la task di elaborazione di Anni."),
@@ -127,6 +130,8 @@ public enum WPref implements IPref {
     usaElaboraAttPlu("usaElaboraAttPlu", TypePref.bool, false, "Flag per usare l'elaborazione di AttivitàPlurale."),
     lastElaboraAttPlu("lastElaboraAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàPlurale."),
     elaboraAttPluTime("elaboraAttPluTime", TypePref.integer, 0, "Durata elaborazione di AttivitàPlurale in minuti."),
+    lastUploadAttPlu("lastUploadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di AttivitàPlurale."),
+    uploadAttPluTime("uploadAttPluTime", TypePref.integer, 0, "Durata upload di AttivitàPlurale in secondi."),
 
     //***************
 
@@ -157,6 +162,8 @@ public enum WPref implements IPref {
     sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
     usaSottopagineGiorni("usaSottopagineGiorni", TypePref.bool, false, "Abilita l'eventuale sottopagina dei giorni (se >1500 e > 50)"),
     usaSottopagineAnni("usaSottopagineAnni", TypePref.bool, true, "Abilita l'eventuale sottopagina degli anni (se >1500 e > 50)"),
+    usaSottopagineAttivita("usaSottopagineAttivita", TypePref.bool, true, "Abilita l'eventuale sottopagina delle attività (se > 50)"),
+    usaSottopagineNazionalita("usaSottopagineNazionalita", TypePref.bool, true, "Abilita l'eventuale sottopagina delle nazionalità (se > 50)"),
 
     ;
 

@@ -21,7 +21,7 @@ public class NazPluraleEntity extends AbstractEntity {
     public String plurale;
 
     @AField(type = TypeField.linkStatico, headerText = "singolari", widthRem = 30)
-    public List<String> singolari;
+    public List<String> txtSingolari;
 
     @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Nazionalità/")
     public String lista;
@@ -29,10 +29,10 @@ public class NazPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.integer,  widthRem = 20)
-    public int bio;
+    @AField(type = TypeField.integer, widthRem = 7)
+    public int numBio;
 
-    @AField(type = TypeField.integer, headerText = "numSin")
+    @AField(type = TypeField.integer, headerText = "numSin", widthRem = 7)
     public int numSingolari;
 
     @AField(type = TypeField.booleano, headerText = "s")

@@ -424,11 +424,7 @@ public class DidascaliaService {
     public String didascaliaLista(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
         String attivitaNazionalita = attivitaNazionalita(bio);
-        String localita = localita(bio);
-
-        if (textService.isEmpty(bio.giornoNato)) {
-            return VUOTA;
-        }
+        String localitaCrono = localitaCrono(bio);
 
         buffer.append(getWikiTitle(bio));
 
@@ -437,34 +433,66 @@ public class DidascaliaService {
             buffer.append(attivitaNazionalita);
         }
 
-        if (textService.isValid(localita)) {
+        if (textService.isValid(localitaCrono)) {
             buffer.append(SPAZIO);
-            buffer.append(localita);
+            buffer.append(localitaCrono);
         }
 
         return buffer.toString().trim();
     }
 
-    public String localita(final BioMongoEntity bio) {
-        String luogoNatoAnno="";
-        String luogoMortoAnno="";
+    public String luogoNatoCrono(final BioMongoEntity bio) {
+        String luogoNato = luogoNato(bio);
+        String annoNato = annoNatoIcona(bio);
 
-//        luogoNatoAnno = luogoNatoAnno(bio);
-//        luogoMortoAnno = luogoMortoAnno(bio);
-
-        if (textService.isValid(luogoNatoAnno) && textService.isValid(luogoMortoAnno)) {
-            return textService.setTonde(luogoNatoAnno + SEP + luogoMortoAnno);
+        if (textService.isValid(luogoNato) && textService.isValid(annoNato)) {
+            return luogoNato + VIRGOLA_SPAZIO + annoNato;
         }
         else {
-            if (textService.isValid(luogoNatoAnno)) {
-                return textService.setTonde(luogoNatoAnno);
+            if (textService.isValid(luogoNato)) {
+                return luogoNato;
             }
-            if (textService.isValid(luogoMortoAnno)) {
-                return textService.setTonde(luogoMortoAnno);
+            if (textService.isValid(annoNato)) {
+                return annoNato;
             }
+            return VUOTA;
         }
+    }
 
-        return textService.setTonde("Pippoz");
+    public String luogoMortoCrono(final BioMongoEntity bio) {
+        String luogoMorto = luogoMorto(bio);
+        String annoMorto = annoMortoIcona(bio);
+
+        if (textService.isValid(luogoMorto) && textService.isValid(annoMorto)) {
+            return luogoMorto + VIRGOLA_SPAZIO + annoMorto;
+        }
+        else {
+            if (textService.isValid(luogoMorto)) {
+                return luogoMorto;
+            }
+            if (textService.isValid(annoMorto)) {
+                return annoMorto;
+            }
+            return VUOTA;
+        }
+    }
+
+    public String localitaCrono(final BioMongoEntity bio) {
+        String luogoNatoCrono = luogoNatoCrono(bio);
+        String luogoMortoCrono = luogoMortoCrono(bio);
+
+        if (textService.isValid(luogoNatoCrono) && textService.isValid(luogoMortoCrono)) {
+            return textService.setTonde(luogoNatoCrono + SEP + luogoMortoCrono);
+        }
+        else {
+            if (textService.isValid(luogoNatoCrono)) {
+                return textService.setTonde(luogoNatoCrono);
+            }
+            if (textService.isValid(luogoMortoCrono)) {
+                return textService.setTonde(luogoMortoCrono);
+            }
+            return VUOTA;
+        }
     }
 
 

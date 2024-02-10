@@ -788,7 +788,7 @@ public class ElaboraService {
         }
 
         if (textService.isValid(elaborato)) {
-            elaborato = fixDopo(elaborato);
+            elaborato = fixDopoNaz(elaborato);
         }
         else {
             return VUOTA;
@@ -875,6 +875,28 @@ public class ElaboraService {
         }
         else {
             valoreGrezzo = textService.levaCodaDaPrimo(valoreGrezzo, PARENTESI_TONDA_INI);
+        }
+
+        return valoreGrezzo.trim();
+    }
+
+    public String fixDopoNaz(String valorePropertyTmplBioServer) {
+        String valoreGrezzo = valorePropertyTmplBioServer.trim();
+
+        if (textService.isEmpty(valorePropertyTmplBioServer)) {
+            return VUOTA;
+        }
+
+        valoreGrezzo = textService.setNoDoppieQuadre(valoreGrezzo);
+        valoreGrezzo = textService.setNoQuadre(valoreGrezzo);
+
+        for (TypeDopo type : TypeDopo.values()) {
+            valoreGrezzo = type.get(valoreGrezzo);
+        }
+
+        if (valoreGrezzo.startsWith(PARENTESI_TONDA_INI)) {
+            valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_INI_REGEX, VUOTA);
+            valoreGrezzo = valoreGrezzo.replaceAll(PARENTESI_TONDA_END_REGEX, VUOTA);
         }
 
         return valoreGrezzo.trim();

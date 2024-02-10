@@ -17,11 +17,11 @@ import java.util.*;
 @AEntity(collectionName = "attplurale", keyPropertyName = "plurale", typeList = TypeList.hardWiki)
 public class AttPluraleEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text, widthRem = 16)
+    @AField(type = TypeField.text, widthRem = 20)
     public String plurale;
 
     @AField(type = TypeField.linkStatico, headerText = "singolari", widthRem = 30)
-    public List<String> singolari;
+    public List<String> txtSingolari;
 
     @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Attività/")
     public String lista;
@@ -29,10 +29,10 @@ public class AttPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.integer,  widthRem = 20)
-    public int bio;
+    @AField(type = TypeField.integer, widthRem = 7)
+    public int numBio;
 
-    @AField(type = TypeField.integer, headerText = "numSin")
+    @AField(type = TypeField.integer, headerText = "numSin", widthRem = 7)
     public int numSingolari;
 
     @AField(type = TypeField.booleano, headerText = "s")

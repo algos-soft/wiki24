@@ -341,7 +341,6 @@ public abstract class WikiTest extends AlgosTest {
         listaPageIds = null;
         listWrapBio = null;
         listWrapTime = null;
-        listaBio = null;
         //        listWrapDidascalia = null;
         //        listWrapLista = null;
         //        listMiniWrap = null;
@@ -864,6 +863,12 @@ public abstract class WikiTest extends AlgosTest {
 
         if (typeSuggerito == null) {
             message = String.format("Manca il typeLista per l'istanza di %s", nomeLista);
+            System.out.println(message);
+            return false;
+        }
+
+        if (typeSuggerito == TypeLista.nessunaLista) {
+            message = String.format("Non è specificato il typeLista per l'istanza di %s", nomeLista);
             System.out.println(message);
             return false;
         }

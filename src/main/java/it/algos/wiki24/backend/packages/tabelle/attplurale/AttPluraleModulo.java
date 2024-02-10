@@ -1,11 +1,13 @@
 package it.algos.wiki24.backend.packages.tabelle.attplurale;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import org.springframework.stereotype.*;
 
@@ -25,6 +27,9 @@ public class AttPluraleModulo extends WikiModulo {
     @Inject
     protected AttSingolareModulo attSingolareModulo;
 
+    @Inject
+    BioMongoModulo bioMongoModulo;
+
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
@@ -41,13 +46,18 @@ public class AttPluraleModulo extends WikiModulo {
         super.fixPreferenze();
 
         super.scheduledDownload = TypeSchedule.zeroTrenta;
+
         super.lastDownload = WPref.lastDownloadAttPlu;
         super.durataDownload = WPref.downloadAttPluTime;
-        super.unitaMisuraDownload = TypeDurata.secondi;
+        super.unitaMisuraDownload = TypeDurata.minuti;
 
         super.lastElabora = WPref.lastElaboraAttPlu;
         super.durataElabora = WPref.elaboraAttPluTime;
         super.unitaMisuraElabora = TypeDurata.minuti;
+
+        super.lastUpload = WPref.lastUploadAttPlu;
+        super.durataUpload = WPref.uploadAttPluTime;
+        super.unitaMisuraUpload = TypeDurata.minuti;
     }
 
 
@@ -70,20 +80,20 @@ public class AttPluraleModulo extends WikiModulo {
      */
     public AttPluraleEntity newEntity(
             String plurale,
-            List<String> singolari,
+            List<String> txtSingolari,
             String lista,
             String pagina,
-            int bio,
+            int numBio,
             int numSingolari,
             boolean superaSoglia,
             boolean esisteLista) {
         AttPluraleEntity newEntityBean = AttPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
-                .singolari(singolari)
+                .txtSingolari(txtSingolari)
                 .lista(textService.isValid(lista) ? lista : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
-                .bio(bio)
-                .numSingolari(numSingolari)
+                .numBio(numBio)
+                .numSingolari(numSingolari == 0 ? txtSingolari != null ? txtSingolari.size() : 0 : 0)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
                 .build();
@@ -91,6 +101,10 @@ public class AttPluraleModulo extends WikiModulo {
         return (AttPluraleEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public AttPluraleEntity findByKey(final Object keyPropertyValue) {
+        return (AttPluraleEntity) super.findByKey(keyPropertyValue);
+    }
 
     @Override
     public RisultatoReset resetDelete() {
@@ -112,6 +126,7 @@ public class AttPluraleModulo extends WikiModulo {
         super.deleteAll();
 
         attSingolareModulo.download();
+        attSingolareModulo.elabora();
         this.creaTavolaDistinct();
 
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
@@ -138,5 +153,29 @@ public class AttPluraleModulo extends WikiModulo {
         }
     }
 
+    @Override
+    public String elabora() {
+        super.elabora();
+        List<AttPluraleEntity> listaBeans = findAll();
+        List<String> listaAttivitaSingolari;
+        int numBio;
+
+        if (listaBeans != null && listaBeans.size() > 0) {
+            for (AttPluraleEntity entityBean : listaBeans) {
+                numBio = 0;
+                listaAttivitaSingolari = entityBean.txtSingolari;
+                if (listaAttivitaSingolari != null && listaAttivitaSingolari.size() > 0) {
+                    for (String attivitaSingolare : listaAttivitaSingolari) {
+                        numBio += bioMongoModulo.countAllByAttivitaSingolare(attivitaSingolare);
+                    }
+                }
+                entityBean.numBio = numBio;
+                save(entityBean);
+            }
+        }
+
+        super.fixInfoElabora();
+        return VUOTA;
+    }
 
 }// end of CrudModulo class

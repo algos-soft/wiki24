@@ -37,7 +37,7 @@ public abstract class WikiStreamTest extends WikiTest {
     //--typeLista per il test
     protected static Stream<Arguments> LISTA() {
         return Stream.of(
-                //                Arguments.of(VUOTA, TypeLista.giornoNascita),
+                                Arguments.of(VUOTA, TypeLista.giornoNascita),
                 //                Arguments.of(VUOTA, TypeLista.giornoMorte),
                 //                Arguments.of("ciclista", TypeLista.attivitaSingolare),
                 //                Arguments.of("1857", null),
@@ -64,6 +64,17 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("560", TypeLista.annoMorte),
                 Arguments.of("2023", TypeLista.nessunaLista),
                 Arguments.of("3125", TypeLista.annoMorte),
+                Arguments.of("direttore di scena", TypeLista.nessunaLista),
+                Arguments.of("direttore di scena", TypeLista.attivitaSingolare),
+                Arguments.of("agronomi", TypeLista.attivitaPlurale),
+                Arguments.of("direttore d'orchestra", TypeLista.attivitaSingolare),
+
+                Arguments.of("afghani", TypeLista.nessunaLista),
+                Arguments.of("afghano", TypeLista.nazionalitaSingolare),
+                Arguments.of("afghani", TypeLista.nazionalitaPlurale),
+                Arguments.of("afghani", TypeLista.nazionalitaSingolare),
+                Arguments.of("anglosassoni", TypeLista.nazionalitaPlurale),
+
                 Arguments.of("2025", TypeLista.annoNascita),
                 Arguments.of("43 a.C.", TypeLista.annoNascita),
                 Arguments.of("138", TypeLista.annoMorte),

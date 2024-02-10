@@ -311,7 +311,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
 
         for (BioMongoEntity bio : listaBio) {
-            ottenuto = service.localita(bio);
+            ottenuto = service.localitaCrono(bio);
             System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoMortoIcona", FORWARD, ottenuto));
         }
     }
@@ -377,13 +377,67 @@ public class DidascaliaServiceTest extends WikiTest {
             System.out.println(message);
         }
     }
+    @Test
+    @Order(501)
+    @DisplayName("501 - luogoNatoCrono")
+    void luogoNatoCrono() {
+        System.out.println(("501 - luogoNatoCrono"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.luogoNatoCrono(bio);
+            message = String.format("(%s) luogoNatoCrono %s%s", bio.wikiTitle, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
+    @Test
+    @Order(502)
+    @DisplayName("502 - luogoMortoCrono")
+    void luogoMortoCrono() {
+        System.out.println(("502 - luogoMortoCrono"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.luogoMortoCrono(bio);
+            message = String.format("(%s) luogoMortoCrono %s%s", bio.wikiTitle, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
+
+    @Test
+    @Order(503)
+    @DisplayName("503 - localitaCrono")
+    void localitaCrono() {
+        System.out.println(("503 - localitaCrono"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.localitaCrono(bio);
+            message = String.format("(%s) localitaCrono %s%s", bio.wikiTitle, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
+
+    @Test
+    @Order(601)
+    @DisplayName("601 - didascaliaListe")
+    void didascaliaListe() {
+        System.out.println(("601 - didascaliaListe"));
+        System.out.println(VUOTA);
+
+        for (BioMongoEntity bio : listaBio) {
+            ottenuto = service.didascaliaLista(bio);
+            message = String.format("(%s) lista %s%s", bio.wikiTitle, FORWARD, ottenuto);
+            System.out.println(message);
+        }
+    }
 
 
     @Test
-    @Order(501)
-    @DisplayName("501 - getDecade")
+    @Order(901)
+    @DisplayName("901 - getDecade")
     void getDecade() {
-        System.out.println("501 - getDecade");
+        System.out.println("901 - getDecade");
         System.out.println(VUOTA);
 
         //--anno

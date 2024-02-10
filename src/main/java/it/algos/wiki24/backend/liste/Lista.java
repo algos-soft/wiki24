@@ -137,7 +137,7 @@ public class Lista implements AlgosBuilderPattern {
 
     private int sogliaSottoPagina;
 
-    private int sogliaPaginaGiorniAnni;
+    private int sogliaVociTotaliPaginaPerSottopagine;
 
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
@@ -166,12 +166,10 @@ public class Lista implements AlgosBuilderPattern {
         this.type = TypeLista.nessunaLista;
 
         this.usaDimensioneParagrafi = true;
-        this.usaIncludeSottoMax = true;
         this.sogliaDiv = WPref.sogliaDiv.getInt();
         this.sogliaParagrafi = WPref.sogliaParagrafi.getInt();
         this.sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         this.sogliaSottoPagina = WPref.sogliaSottoPagina.getInt();
-        this.sogliaPaginaGiorniAnni = WPref.sogliaPaginaGiorniAnni.getInt();
 
     }
 
@@ -210,6 +208,24 @@ public class Lista implements AlgosBuilderPattern {
         this.usaSottopagine = switch (type) {
             case giornoNascita, giornoMorte -> WPref.usaSottopagineGiorni.is();
             case annoNascita, annoMorte -> WPref.usaSottopagineAnni.is();
+            case attivitaSingolare, attivitaPlurale -> WPref.usaSottopagineAttivita.is();
+            case nazionalitaSingolare, nazionalitaPlurale -> WPref.usaSottopagineNazionalita.is();
+            default -> false;
+        };
+
+        this.sogliaVociTotaliPaginaPerSottopagine = switch (type) {
+            case giornoNascita, giornoMorte -> WPref.sogliaPaginaGiorniAnni.getInt();
+            case annoNascita, annoMorte -> WPref.sogliaPaginaGiorniAnni.getInt();
+            case attivitaSingolare, attivitaPlurale -> WPref.sogliaSottoPagina.getInt();
+            case nazionalitaSingolare, nazionalitaPlurale -> WPref.sogliaSottoPagina.getInt();
+            default -> 0;
+        };
+
+        this.usaIncludeSottoMax = switch (type) {
+            case giornoNascita, giornoMorte -> true;
+            case annoNascita, annoMorte -> true;
+            case attivitaSingolare, attivitaPlurale -> false;
+            case nazionalitaSingolare, nazionalitaPlurale -> false;
             default -> false;
         };
 
@@ -224,13 +240,13 @@ public class Lista implements AlgosBuilderPattern {
         return this;
     }
 
-    /**
-     * Pattern Builder <br>
-     */
-    public Lista nonUsaIncludeNeiParagrafi() {
-        this.usaIncludeSottoMax = false;
-        return this;
-    }
+    //    /**
+    //     * Pattern Builder <br>
+    //     */
+    //    public Lista nonUsaIncludeNeiParagrafi() {
+    //        this.usaIncludeSottoMax = false;
+    //        return this;
+    //    }
 
     protected void checkValiditaCostruttore() {
         costruttoreValido = textService.isValid(nomeLista);
@@ -319,9 +335,9 @@ public class Lista implements AlgosBuilderPattern {
             case annoNascita -> bioMongoModulo.countAllByAnnoNato(nomeLista);
             case annoMorte -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             case attivitaSingolare -> bioMongoModulo.countAllByAttivitaSingolare(nomeLista);
-            case attivitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
-            case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
-            case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case attivitaPlurale -> bioMongoModulo.countAllByAttivitaPlurale(nomeLista);
+            case nazionalitaSingolare -> bioMongoModulo.countAllByNazionalitaSingolare(nomeLista);
+            case nazionalitaPlurale -> bioMongoModulo.countAllByNazionalitaPlurale(nomeLista);
             default -> 0;
         };
     }
@@ -343,9 +359,9 @@ public class Lista implements AlgosBuilderPattern {
             case annoNascita -> bioMongoModulo.findAllByAnnoNato(nomeLista);
             case annoMorte -> bioMongoModulo.findAllByAnnoMorto(nomeLista);
             case attivitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-            case attivitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-            case nazionalitaSingolare -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
-            case nazionalitaPlurale -> bioMongoModulo.findAllByAttivitaSingolare(nomeLista);
+            case attivitaPlurale -> bioMongoModulo.findAllByAttivitaPlurale(nomeLista);
+            case nazionalitaSingolare -> bioMongoModulo.findAllByNazionalitaSingolare(nomeLista);
+            case nazionalitaPlurale -> bioMongoModulo.findAllByNazionalitaPlurale(nomeLista);
             default -> null;
         };
     }
@@ -469,6 +485,13 @@ public class Lista implements AlgosBuilderPattern {
             return null;
         }
 
+        switch (type) {
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> {
+                mappa = arrayService.sort(mappa);
+            }
+            default -> {}
+        } ;
+
         for (TypeInesistente type : TypeInesistente.values()) {
             if (mappa.containsKey(type.getTag())) {
                 mappaAltre = mappa.get(type.getTag());
@@ -549,7 +572,7 @@ public class Lista implements AlgosBuilderPattern {
                     }
 
                     //corpo con/senza sottopagine
-                    if (usaSottopagine && numVociLista > sogliaPaginaGiorniAnni && numVociParagrafo > sogliaSottoPagina) {
+                    if (usaSottopagine && numVociLista > sogliaVociTotaliPaginaPerSottopagine && numVociParagrafo > sogliaSottoPagina) {
                         sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
 
                         vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
@@ -700,8 +723,8 @@ public class Lista implements AlgosBuilderPattern {
             case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
             case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(nomeLista, keySottopagina);
             case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(nomeLista, keySottopagina);
-            case attivitaSingolare -> bioMongoModulo.countAllByAttivitaSingolare(nomeLista);
-            case attivitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista,keySottopagina);
+            case attivitaPlurale -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista,keySottopagina);
             case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             default -> INT_ERROR;

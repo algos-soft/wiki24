@@ -24,8 +24,8 @@ public class NazSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki, widthRem = 18)
     public String pagina;
 
-    @AField(type = TypeField.integer, caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 6)
-    public int bio;
+    @AField(type = TypeField.integer, caption = "Numero di biografie che utilizzano questa singola nazionalità", widthRem = 7)
+    public int numBio;
 
     @Override
     public String toString() {

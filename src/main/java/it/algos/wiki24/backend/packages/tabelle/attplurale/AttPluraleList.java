@@ -23,6 +23,14 @@ public class AttPluraleList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaInfoDownload = true;
+        super.usaInfoElabora = true;
+        super.usaInfoUpload = true;
+
+        this.usaBottoneDownload = true;
+        this.usaBottoneElabora = true;
+        this.usaBottoneUploadAll = true;
     }
 
     @Override

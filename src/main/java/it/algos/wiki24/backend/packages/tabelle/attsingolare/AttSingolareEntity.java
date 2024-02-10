@@ -27,8 +27,8 @@ public class AttSingolareEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.integer,  caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 6)
-    public int bio;
+    @AField(type = TypeField.integer,  caption = "Numero di biografie che utilizzano questa singola attività", widthRem = 7)
+    public int numBio;
 
     @Override
     public String toString() {

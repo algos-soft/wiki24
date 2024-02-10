@@ -6,6 +6,7 @@ import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import org.springframework.stereotype.*;
 
@@ -70,19 +71,19 @@ public class NazPluraleModulo extends WikiModulo {
      */
     public NazPluraleEntity newEntity(
             String plurale,
-            List<String> singolari,
+            List<String> txtSingolari,
             String lista,
             String pagina,
-            int bio,
+            int numBio,
             int numSingolari,
             boolean superaSoglia,
             boolean esisteLista) {
         NazPluraleEntity newEntityBean = NazPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
-                .singolari(singolari)
+                .txtSingolari(txtSingolari)
                 .lista(textService.isValid(lista) ? lista : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
-                .bio(bio)
+                .numBio(numBio)
                 .numSingolari(numSingolari)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
@@ -91,6 +92,10 @@ public class NazPluraleModulo extends WikiModulo {
         return (NazPluraleEntity) fixKey(newEntityBean);
     }
 
+    @Override
+    public NazPluraleEntity findByKey(final Object keyPropertyValue) {
+        return (NazPluraleEntity) super.findByKey(keyPropertyValue);
+    }
 
     @Override
     public RisultatoReset resetDelete() {

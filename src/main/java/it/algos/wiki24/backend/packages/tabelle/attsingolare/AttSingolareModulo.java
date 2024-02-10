@@ -7,9 +7,12 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.tabelle.anni.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -22,6 +25,9 @@ import java.util.stream.*;
  */
 @Service
 public class AttSingolareModulo extends WikiModulo {
+
+    @Inject
+    BioMongoModulo bioMongoModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -90,7 +96,7 @@ public class AttSingolareModulo extends WikiModulo {
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .ex(ex)
                 .pagina(textService.isValid(pagina) ? pagina : null)
-                .bio(0)
+                .numBio(0)
                 .build();
 
         return (AttSingolareEntity) fixKey(newEntityBean);
@@ -183,6 +189,11 @@ public class AttSingolareModulo extends WikiModulo {
 
         Collections.sort(lista);
         return lista;
+    }
+
+    @Override
+    public AttSingolareEntity findByKey(final Object keyPropertyValue) {
+        return (AttSingolareEntity) super.findByKey(keyPropertyValue);
     }
 
     @Override
@@ -301,6 +312,26 @@ public class AttSingolareModulo extends WikiModulo {
                 logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
         }
+    }
+
+    @Override
+    public String elabora() {
+        super.elabora();
+        List<AttSingolareEntity> listaBeans = findAll();
+        String attivitaSingolare;
+        int numBio;
+
+        if (listaBeans != null && listaBeans.size() > 0) {
+            for (AttSingolareEntity entityBean : listaBeans) {
+                attivitaSingolare = entityBean.singolare;
+                numBio = bioMongoModulo.countAllByAttivitaSingolare(attivitaSingolare);
+                entityBean.numBio = numBio;
+                save(entityBean);
+            }
+        }
+
+        super.fixInfoElabora();
+        return VUOTA;
     }
 
 }// end of CrudModulo class

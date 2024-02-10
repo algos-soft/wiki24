@@ -30,6 +30,14 @@ public class AttSingolareList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaInfoDownload = true;
+        super.usaInfoElabora = true;
+        super.usaInfoUpload = false;
+
+        this.usaBottoneDownload = true;
+        this.usaBottoneElabora = true;
+        this.usaBottoneUploadAll = false;
     }
 
     @Override
@@ -84,12 +92,12 @@ public class AttSingolareList extends WikiList {
         searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
-//        buttonBar.add(searchPlurale);
+        wikiTopPlaceHolder.add(searchPlurale);
 
         checkEx = new IndeterminateCheckbox("Ex attività");
         checkEx.getStyle().set("margin-top", "0.5rem");
         checkEx.addValueChangeListener(event -> sincroFiltri());
-//        buttonBar.add(checkEx);
+        wikiTopPlaceHolder.add(checkEx);
     }
 
 

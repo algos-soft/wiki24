@@ -77,6 +77,7 @@ public abstract class CrudList extends VerticalLayout {
 
     protected CrudOperation currentCrudOperation;
 
+    @Getter
     protected Grid<AbstractEntity> grid;
 
     public List<String> propertyListNames;
@@ -275,16 +276,10 @@ public abstract class CrudList extends VerticalLayout {
      * Per aggiunte od ordinamenti specifici, sovrascrivere il metodo fixTop() <br>
      */
     protected void addTopPlaceHolder() {
-        //        topPlaceHolder = new SimpleHorizontalLayout();
-        //        topPlaceHolder.getElement().setAttribute("id","topPlaceHolder");
-        //        topPlaceHolder.setClassName("buttons");
-        //        topPlaceHolder.setClassName("confirm-dialog-buttons");
-        //        this.add(topPlaceHolder);
         topPlaceHolder = (ListButtonBar) appContext.getBean(QUALIFIER_LIST_BUTTON_BAR, this);
         topPlaceHolder.getElement().setAttribute("id", "topPlaceHolder");
         topPlaceHolder.setClassName("buttons");
         topPlaceHolder.setClassName("confirm-dialog-buttons");
-
         this.fixTop();
         this.add(topPlaceHolder);
     }
@@ -330,7 +325,7 @@ public abstract class CrudList extends VerticalLayout {
         topPlaceHolder.build();
     }
 
-    private void fixExport() {
+    protected void fixExport() {
         if (usaBottoneExport) {
             //--fix per gestire anche i test che NON hanno la UI e andrebbero in errore
             if (UI.getCurrent() == null) {
@@ -567,21 +562,21 @@ public abstract class CrudList extends VerticalLayout {
     }
 
 
-    public boolean isSingolo() {
+    public boolean isUnoSoloSelezionato() {
         return grid.getSelectedItems().size() == 1;
     }
 
 
     protected void sincroSelection() {
         if (topPlaceHolder != null) {
-            topPlaceHolder.sincroSelection(isSingolo());
+            topPlaceHolder.sincroSelection(isUnoSoloSelezionato());
         }
     }
 
     public AbstractEntity getSingleEntity() {
         Optional entityBean;
 
-        if (isSingolo()) {
+        if (isUnoSoloSelezionato()) {
             entityBean = grid.getSelectedItems().stream().findFirst();
             if (entityBean.isPresent() && entityBean.get() instanceof AbstractEntity crudEntityBean) {
                 return crudEntityBean;
@@ -794,6 +789,17 @@ public abstract class CrudList extends VerticalLayout {
         }
 
         return exporter;
+    }
+
+
+    public Grid.Column getColumnByKey(String key){
+        List<Grid.Column<AbstractEntity>> columns = grid.getColumns();
+        for(Grid.Column<AbstractEntity> column : columns){
+            if(column.getKey().equals(key)){
+                return column;
+            }
+        }
+        return null;
     }
 
 }

@@ -21,6 +21,10 @@ import it.algos.wiki24.backend.packages.parametri.luogonato.*;
 import it.algos.wiki24.backend.packages.parametri.nazionalita.*;
 import it.algos.wiki24.backend.packages.parametri.nome.*;
 import it.algos.wiki24.backend.packages.parametri.sesso.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
+import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.schedule.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.data.domain.*;
@@ -85,6 +89,12 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     ParNazionalitaModulo parNazionalitaModulo;
+
+    @Inject
+    NazPluraleModulo nazPluraleModulo;
+
+    @Inject
+    AttPluraleModulo attPluraleModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -328,7 +338,7 @@ public class BioMongoModulo extends WikiModulo {
 
     public Query queryByAttivitaSingolare(final String propertyValue) {
         Query query = new Query();
-        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA);
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_NAZIONALITA, FIELD_NAME_COGNOME);
 
         if (textService.isEmpty(propertyValue)) {
             return null;
@@ -338,6 +348,132 @@ public class BioMongoModulo extends WikiModulo {
         query.with(sort);
         return query;
     }
+
+    public int countAllByAttivitaPlurale(final String propertyValue) {
+        int numBio = 0;
+        AttPluraleEntity attivitaPluraleBean;
+        List<String> attivitaSingolari = null;
+
+        attivitaPluraleBean = attPluraleModulo.findByKey(propertyValue);
+        if (attivitaPluraleBean != null) {
+            attivitaSingolari = attivitaPluraleBean.getTxtSingolari();
+        }
+
+        if (attivitaSingolari != null && attivitaSingolari.size() > 0) {
+            for (String attivita : attivitaSingolari) {
+                numBio += countAllByAttivitaSingolare(attivita);
+            }
+        }
+
+        return numBio;
+    }
+
+
+    public List<BioMongoEntity> findAllByAttivitaPlurale(final String propertyValue) {
+        List<BioMongoEntity> lista = new ArrayList<>();
+        AttPluraleEntity attivitaPluraleBean;
+        List<String> attivitaSingolari = null;
+
+        attivitaPluraleBean = attPluraleModulo.findByKey(propertyValue);
+        if (attivitaPluraleBean != null) {
+            attivitaSingolari = attivitaPluraleBean.getTxtSingolari();
+        }
+
+        if (attivitaSingolari != null && attivitaSingolari.size() > 0) {
+            for (String attivita : attivitaSingolari) {
+                lista.addAll(findAllByAttivitaSingolare(attivita));
+            }
+        }
+
+        return lista;
+    }
+
+
+    public int countAllByNazionalitaSingolare(final String propertyValue) {
+        return mongoService.count(queryByNazionalitaSingolare(propertyValue), BioMongoEntity.class);
+    }
+
+    public List<BioMongoEntity> findAllByNazionalitaSingolare(final String propertyValue) {
+        return mongoService.find(queryByNazionalitaSingolare(propertyValue), BioMongoEntity.class);
+    }
+
+    public Query queryByNazionalitaSingolare(final String propertyValue) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA, FIELD_NAME_COGNOME);
+
+        if (textService.isEmpty(propertyValue)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).is(propertyValue));
+        query.with(sort);
+        return query;
+    }
+
+
+    public int countAllByNazionalitaPlurale(final String propertyValue) {
+        int numBio = 0;
+        NazPluraleEntity nazionalitaPluraleBean;
+        List<String> nazionalitaSingolari = null;
+
+        nazionalitaPluraleBean = nazPluraleModulo.findByKey(propertyValue);
+        if (nazionalitaPluraleBean != null) {
+            nazionalitaSingolari = nazionalitaPluraleBean.txtSingolari;
+        }
+
+        if (nazionalitaSingolari != null && nazionalitaSingolari.size() > 0) {
+            for (String nazionalita : nazionalitaSingolari) {
+                numBio += countAllByNazionalitaSingolare(nazionalita);
+            }
+        }
+
+        return numBio;
+    }
+
+
+    public List<BioMongoEntity> findAllByNazionalitaPlurale(final String propertyValue) {
+        List<BioMongoEntity> lista = new ArrayList<>();
+        NazPluraleEntity nazionalitaPluraleBean;
+        List<String> nazionalitaSingolari = null;
+
+        nazionalitaPluraleBean = nazPluraleModulo.findByKey(propertyValue);
+        if (nazionalitaPluraleBean != null) {
+            nazionalitaSingolari = nazionalitaPluraleBean.txtSingolari;
+        }
+
+        if (nazionalitaSingolari != null && nazionalitaSingolari.size() > 0) {
+            for (String nazionalita : nazionalitaSingolari) {
+                lista.addAll(findAllByNazionalitaSingolare(nazionalita));
+            }
+        }
+
+        return lista;
+    }
+
+    public int countByAttivitaAndNazionalita( String attivita, String nazionalita) {
+        return mongoService.count(queryByAttivitaAndNazionalita(attivita, nazionalita), BioMongoEntity.class);
+    }
+
+    public List<BioMongoEntity> findAllByAttivitaAndNazionalita( String attivita, String nazionalita) {
+        return mongoService.find(queryByAttivitaAndNazionalita(attivita, nazionalita), BioMongoEntity.class);
+    }
+
+    public Query queryByAttivitaAndNazionalita(final String attivita, String nazionalita) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_NAZIONALITA, FIELD_NAME_COGNOME);
+
+        if (textService.isEmpty(attivita) || textService.isEmpty(nazionalita)) {
+            return null;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(attivita));
+        query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).is(nazionalita));
+        query.with(sort);
+        return query;
+    }
+
+
+
 
     public String elabora() {
         inizio = System.currentTimeMillis();

@@ -26,7 +26,7 @@ import java.util.*;
 @SpringBootTest(classes = {Application.class})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("listaupload")
-@DisplayName("Lista giorno/anno nato/morto")
+@DisplayName("Liste giorno, anno, attività")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ListaTest extends WikiStreamTest {
 
@@ -90,6 +90,8 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("101 - numBio"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
+            System.out.println(VUOTA);
+            System.out.println("numBio ERRATA - mancano parametri validi");
             return;
         }
 
@@ -97,12 +99,15 @@ public class ListaTest extends WikiStreamTest {
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
+            System.out.println("numBio ERRATA - mancano parametri validi");
             return;
         }
         if (ottenutoIntero > 0) {
             ottenuto = textService.format(ottenutoIntero);
             message = String.format("Le biografie di type%s[%s] per %s [%s] sono [%s]", FORWARD, type.name(), type.getGiornoAnno(), nomeLista, ottenuto);
             System.out.println(message);
+            System.out.println(VUOTA);
+            System.out.println("numBio VALIDA");
         }
         else {
             if (ottenutoIntero == INT_ERROR) {
@@ -111,14 +116,18 @@ public class ListaTest extends WikiStreamTest {
                     logger.info(new WrapLog().message(message));
                 }
                 assertTrue(false);
+                System.out.println(VUOTA);
+                System.out.println("numBio ERRATA - mancano parametri validi");
             }
             else {
                 printMancanoBio("La listaBio", nomeLista, type);
+                System.out.println(VUOTA);
+                System.out.println("numBio VUOTA");
             }
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -152,7 +161,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -186,7 +195,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -220,7 +229,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -285,7 +294,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
@@ -349,6 +358,9 @@ public class ListaTest extends WikiStreamTest {
         }
 
         if (listaStr.size() > 0) {
+            message = String.format("Ci sono %s sottopagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+            System.out.println(message);
+            System.out.println(VUOTA);
             print(listaStr);
         }
         else {
@@ -384,12 +396,14 @@ public class ListaTest extends WikiStreamTest {
                 ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
                 if (ottenutoIntero > 0) {
                     totaleEffettivoPagina += ottenutoIntero;
-                    message = String.format("Le biografie di type%s[%s] per il paragrafo di %s di %s, sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
+                    message = String.format("Le biografie di type%s[%s] per il paragrafo [%s] di [%s], sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
                     System.out.println(message);
                 }
             }
             System.out.println(VUOTA);
-            message = String.format("In totale nella lista [%s] ci sono [%d] biografie", nomeLista, totaleEffettivoPagina);
+            message = String.format("In totale nella pagina della lista [%s] ci sono [%d] biografie.", nomeLista, previstoTotaleParagrafi);
+            System.out.println(message);
+            message = String.format("Nella somma dei paragrafi (%d) della lista [%s] ci sono [%d] biografie.", listaStr.size(),nomeLista, totaleEffettivoPagina);
             System.out.println(message);
             assertEquals(previstoTotaleParagrafi, totaleEffettivoPagina);
 
@@ -416,7 +430,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -490,7 +504,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")

@@ -7,6 +7,7 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
@@ -75,7 +76,7 @@ public class NazSingolareModulo extends WikiModulo {
                 .singolare(textService.isValid(keyPropertyValue) ? keyPropertyValue : null)
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
-                .bio(0)
+                .numBio(0)
                 .build();
 
         return (NazSingolareEntity) fixKey(newEntityBean);
@@ -128,6 +129,10 @@ public class NazSingolareModulo extends WikiModulo {
         else {
             return mongoService.mongoOp.find(query, currentCrudEntityClazz);
         }
+    }
+    @Override
+    public NazSingolareEntity findOneById(String idValue) {
+        return (NazSingolareEntity) super.findOneById(idValue);
     }
 
     @Override

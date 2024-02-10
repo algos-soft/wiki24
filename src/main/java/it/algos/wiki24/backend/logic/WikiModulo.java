@@ -9,6 +9,7 @@ import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.schedule.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.base24.ui.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
 import jakarta.annotation.*;
@@ -152,10 +153,38 @@ public abstract class WikiModulo extends CrudModulo {
     }
 
     public String elabora() {
+        inizio = System.currentTimeMillis();
         return VUOTA;
     }
 
     public void elaboraDue() {
+    }
+
+    protected void fixInfoElabora() {
+        long fine = System.currentTimeMillis();
+        Long delta = fine - inizio;
+
+        if (lastElabora != null) {
+            lastElabora.setValue(LocalDateTime.now());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("lastElabora è nullo")));
+            return;
+        }
+
+        if (durataElabora != null) {
+            delta = delta / 1000;
+            delta = switch (unitaMisuraElabora) {
+                case secondi -> delta;
+                case minuti -> delta / 60;
+                default -> delta;
+            };
+
+            durataElabora.setValue(delta.intValue());
+        }
+        else {
+            logger.warn(new WrapLog().exception(new AlgosException("durataElabora è nullo")));
+        }
     }
 
     public void transfer(AbstractEntity crudEntityBean) {
