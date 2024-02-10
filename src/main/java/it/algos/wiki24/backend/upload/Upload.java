@@ -415,7 +415,14 @@ public class Upload implements AlgosBuilderPattern {
         String tagAttNazDiretta = VUOTA;
         String tagAttNazInversa = VUOTA;
         String tagDidascalie = "[[Progetto:Biografie/Didascalie|progetto biografie]]";
+        String tagTmplBio = "[[template:Bio|template Bio]]";
+        String tagDiscussione = VUOTA;
+        String tagDiscussioneInversa = VUOTA;
+        String tagModulo = VUOTA;
+        String tagModuloInverso = VUOTA;
+        String tagLista = VUOTA;
         int numSottopagine = 0;
+        int sogliaSottoPagina = WPref.sogliaSottoPagina.getInt();
 
         switch (type) {
             case attivitaPlurale: {
@@ -423,6 +430,10 @@ public class Upload implements AlgosBuilderPattern {
                 tagAttNazDiretta = "attività";
                 tagAttNazInversa = "nazionalità";
                 numSottopagine = WPref.sogliaPaginaAttivita.getInt();
+                tagDiscussione = "Discussioni progetto:Biografie/Attività|";
+                tagDiscussioneInversa = "Discussioni progetto:Biografie/Nazionalità|";
+                tagModulo = "Modulo:Bio/Plurale attività|";
+                tagModuloInverso = "Modulo:Bio/Plurale nazionalità|";
                 break;
             }
             case nazionalitaPlurale: {
@@ -430,10 +441,15 @@ public class Upload implements AlgosBuilderPattern {
                 tagAttNazDiretta = "nazionalità";
                 tagAttNazInversa = "attività";
                 numSottopagine = WPref.sogliaPaginaNazionalita.getInt();
+                tagDiscussione = "Discussioni progetto:Biografie/Nazionalità|";
+                tagDiscussioneInversa = "Discussioni progetto:Biografie/Attività|";
+                tagModulo = "Modulo:Bio/Plurale nazionalità|";
+                tagModuloInverso = "Modulo:Bio/Plurale attività|";
                 break;
             }
             default: {}
         }
+        tagLista = textService.setDoppieQuadre(tagDiscussione + "lista");
 
         buffer.append("Questa");
         buffer.append(REF);
@@ -454,8 +470,82 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(SPAZIO);
         buffer.append(tagDidascalie);
         buffer.append(REF_END);
-
-        String mario = "Questa<ref>Questa pagina di una singola '''attività''' è stata creata perché le relative voci biografiche superano le '''50''' unità.</ref> è una lista<ref>Le didascalie delle voci sono quelle previste nel [[Progetto:Biografie/Didascalie|progetto biografie]]</ref><ref>Le voci, all'interno di ogni paragrafo, sono in ordine alfabetico per '''forzaOrdinamento''' oppure per '''cognome''' oppure per '''titolo''' della pagina su wikipedia.</ref> di persone<ref>Ogni persona è presente in una sola [[Discussioni progetto:Biografie/Attività|lista]], in base a quanto riportato nel parametro ''attività'' utilizzato dal [[template:Bio|template Bio]]</ref> presenti<ref>La lista non è esaustiva e contiene '''solo''' le persone che sono citate nell'enciclopedia e per le quali è stato implementato correttamente il '''[[template:Bio|template Bio]]'''</ref> nell'enciclopedia che hanno come attività<ref>Le '''attività''' sono quelle [[Discussioni progetto:Biografie/Attività|'''convenzionalmente''' previste]] dalla comunità ed [[Modulo:Bio/Plurale attività|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]</ref> quella di '''agronomi'''. Le persone sono suddivise<ref>La lista è suddivisa in paragrafi per ogni '''nazionalità''' individuata. Se il numero di voci biografiche nel paragrafo supera le '''50''' unità, viene creata una '''sottopagina'''.</ref> per nazionalità.<ref>Le '''nazionalità''' sono quelle [[Discussioni progetto:Biografie/Nazionalità|'''convenzionalmente''' previste]] dalla comunità ed [[Modulo:Bio/Plurale nazionalità|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]</ref>\n";
+        buffer.append(REF);
+        buffer.append("Le voci, all'interno di ogni paragrafo, sono in ordine alfabetico per");
+        buffer.append(SPAZIO + textService.setBold("forzaOrdinamento") + SPAZIO);
+        buffer.append("oppure per");
+        buffer.append(SPAZIO + textService.setBold("cognome") + SPAZIO);
+        buffer.append("oppure per");
+        buffer.append(SPAZIO + textService.setBold("titolo") + SPAZIO);
+        buffer.append("della pagina su wikipedia.");
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("di persone");
+        buffer.append(REF);
+        buffer.append("Ogni persona è presente in una sola");
+        buffer.append(SPAZIO + tagLista + VIRGOLA_SPAZIO);
+        buffer.append("in base a quanto riportato nel parametro");
+        buffer.append(SPAZIO + textService.setBold(tagAttNazDiretta) + SPAZIO);
+        buffer.append("utilizzato dal");
+        buffer.append(SPAZIO);
+        buffer.append(textService.setBold(tagTmplBio));
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("presenti");
+        buffer.append(REF);
+        buffer.append("La lista non è esaustiva e contiene");
+        buffer.append(SPAZIO + textService.setBold("solo") + SPAZIO);
+        buffer.append("le persone che sono citate nell'enciclopedia e per le quali è stato implementato correttamente il");
+        buffer.append(SPAZIO);
+        buffer.append(textService.setBold(tagTmplBio));
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("nell'enciclopedia che hanno come attività");
+        buffer.append(REF);
+        buffer.append("Le");
+        buffer.append(SPAZIO + textService.setBold(tagAttNazDiretta) + SPAZIO);
+        buffer.append("sono quelle");
+        buffer.append(SPAZIO);
+        buffer.append(SPAZIO + textService.setBold(textService.setDoppieQuadre(tagDiscussione + "convenzionalmente")) + SPAZIO);
+        buffer.append("previste dalla comunità e inserite nel'");
+        buffer.append(SPAZIO + textService.setBold(textService.setDoppieQuadre(tagModulo + "elenco")) + SPAZIO);
+        buffer.append("utilizzato dal");
+        buffer.append(SPAZIO);
+        buffer.append(tagTmplBio);
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("quella di");
+        buffer.append(SPAZIO + textService.setBold(textService.primaMinuscola(nomeLista)));
+        buffer.append(PUNTO);
+        buffer.append(SPAZIO);
+        buffer.append("Le persone sono suddivise");
+        buffer.append(REF);
+        buffer.append("La lista è suddivisa in paragrafi per ogni");
+        buffer.append(SPAZIO + textService.setBold(tagAttNazInversa) + SPAZIO);
+        buffer.append("individuata.");
+        buffer.append(SPAZIO);
+        buffer.append("Se il numero di voci biografiche nel paragrafo supera le");
+        buffer.append(SPAZIO + textService.setBold(sogliaSottoPagina + VUOTA) + SPAZIO);
+        buffer.append("unità, viene creata una");
+        buffer.append(SPAZIO + textService.setBold("sottopagina") + SPAZIO);
+        buffer.append(PUNTO);
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("per");
+        buffer.append(SPAZIO);
+        buffer.append(tagAttNazInversa);
+        buffer.append(PUNTO);
+        buffer.append(REF);
+        buffer.append("Le");
+        buffer.append(SPAZIO + textService.setBold(tagAttNazInversa) + SPAZIO);
+        buffer.append("sono quelle");
+        buffer.append(SPAZIO + textService.setBold(textService.setDoppieQuadre(tagDiscussioneInversa + "convenzionalmente")) + SPAZIO);
+        buffer.append("previste dalla comunità e inserite nel'");
+        buffer.append(SPAZIO + textService.setBold(textService.setDoppieQuadre(tagModuloInverso + "elenco")) + SPAZIO);
+        buffer.append("utilizzato dal");
+        buffer.append(SPAZIO);
+        buffer.append(tagTmplBio);
+        buffer.append(REF_END);
 
         if (usaIncipit) {
             this.incipitText = buffer.toString();

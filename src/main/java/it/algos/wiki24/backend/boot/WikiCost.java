@@ -109,7 +109,7 @@ public class WikiCost {
     public static final String STATISTICHE = "Statistiche";
 
 
-    public static final String WIKI_TITLE_DEBUG = "Utente:Biobot/2";
+    public static final String WIKI_TITLE_TEST = "Utente:Biobot/2";
 
     public static final String FIELD_NAME_SINGOLARE = "singolare";
 

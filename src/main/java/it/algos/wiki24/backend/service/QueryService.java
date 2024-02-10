@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.*;
@@ -96,5 +97,8 @@ public class QueryService {
         return appContext.getBean(QueryWriteCheck.class).urlRequestCheck(wikiTitleGrezzo, newTesto, newTextSignificativo, summary);
     }
 
+    public WResult writeTest(final String newTesto) {
+        return appContext.getBean(QueryWrite.class).urlRequest(WIKI_TITLE_TEST, newTesto);
+    }
 
 }

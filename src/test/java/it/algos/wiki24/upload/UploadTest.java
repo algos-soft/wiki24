@@ -5,6 +5,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.basetest.*;
 import static org.junit.Assert.*;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+
+import javax.inject.*;
 
 /**
  * Project wiki24
@@ -26,6 +29,9 @@ import org.springframework.boot.test.context.*;
 @DisplayName("Upload giorno/anno nato/morto")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UploadTest extends WikiStreamTest {
+
+    @Inject
+    QueryService queryService;
 
     private Upload istanza;
 
@@ -74,7 +80,7 @@ public class UploadTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - getNumBio")
@@ -109,7 +115,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(202)
     @DisplayName("202 - getHeaderText")
@@ -198,7 +204,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(205)
     @DisplayName("205 - getBottomText")
@@ -228,7 +234,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(206)
     @DisplayName("206 - getUploadText")
@@ -257,7 +263,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(ottenuto);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
@@ -281,7 +287,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(212)
     @DisplayName("212 - uploadRealPaginaPrincipaleOnly")
@@ -304,8 +310,40 @@ public class UploadTest extends WikiStreamTest {
         printRisultato(ottenutoRisultato);
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "LISTA")
+    @Order(303)
+    @DisplayName("303 - printIncipitText")
+    void printIncipitText(String nomeLista, TypeLista type) {
+        System.out.println(("303 - printIncipitText"));
+        System.out.println("Stampa del testo incipit della pagina con Note a piè pagina");
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
 
-//    @ParameterizedTest
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getIncipitText();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        if (ottenuto.equals(STRING_ERROR)) {
+            assertTrue(false);
+            return;
+        }
+
+        message = String.format("Incipit di %s %s", type.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+        if (textService.isValid(ottenuto)) {
+            queryService.writeTest(ottenuto);
+        }
+
+    }
+
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - getNumBioSottopagina")
@@ -379,7 +417,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(502)
     @DisplayName("502 - getHeaderTextSottopagina")
@@ -414,7 +452,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(503)
     @DisplayName("503 - getBodyTextSottopagina")
@@ -448,7 +486,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(504)
     @DisplayName("504 - getBottomTextSottopagina")
@@ -477,7 +515,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(505)
     @DisplayName("505 - getUploadTextSottopagina")
@@ -505,7 +543,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(511)
     @DisplayName("511 - uploadTestSottopagina")
@@ -523,7 +561,7 @@ public class UploadTest extends WikiStreamTest {
         listaStr = appContext.getBean(Upload.class, nomeLista).type(type).listaSottopagine();
 
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr.subList(4,5)) {
+            for (String keySottopagina : listaStr.subList(4, 5)) {
                 ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).test().uploadOnly();
                 message = String.format("Upload pagina di test di %s%s", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -536,7 +574,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(512)
     @DisplayName("512 - uploadRealSottopagina")
