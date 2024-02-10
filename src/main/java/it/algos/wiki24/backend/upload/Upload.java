@@ -101,6 +101,8 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String headerText;
 
+    protected String incipitText;
+
     protected String bodyText;
 
     protected String bottomText;
@@ -149,6 +151,7 @@ public class Upload implements AlgosBuilderPattern {
 
         this.uploadTest = false;
         this.headerText = VUOTA;
+        this.incipitText = VUOTA;
         this.bodyText = VUOTA;
         this.bottomText = VUOTA;
         this.uploadText = VUOTA;
@@ -284,8 +287,6 @@ public class Upload implements AlgosBuilderPattern {
     protected boolean checkBio() {
 
         if (patternCompleto && numBio() < 1) {
-            //            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
-            //            logger.info(new WrapLog().message(message));
             patternCompleto = false;
         }
 
@@ -349,36 +350,6 @@ public class Upload implements AlgosBuilderPattern {
         return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
     }
 
-    //    /**
-    //     * Pattern Builder <br>
-    //     */
-    //    public String creaUploadText() {
-    //        StringBuffer buffer = new StringBuffer();
-    //        String message;
-    //        this.numBio();
-    //        if (!checkValiditaPattern()) {
-    //            return this;
-    //        }
-    //        if (textService.isValid(uploadText)) {
-    //            return this;
-    //        }
-
-    //        if (type == null || type == TypeLista.nessunaLista) {
-    //            System.out.println(VUOTA);
-    //            message = String.format("Tentativo di usare il metodo '%s' per l'istanza [%s.%s]", "esegue", collectionName, nomeLista);
-    //            logger.info(new WrapLog().message(message));
-    //            message = String.format("Manca il '%s' per l'istanza [%s.%s] e il metodo '%s' NON può funzionare.", "typeLista", collectionName, nomeLista, "esegue");
-    //            logger.warn(new WrapLog().message(message));
-    //            return null;
-    //        }
-    //
-    //        buffer.append(creaHeader());
-    //        buffer.append(creaBody());
-    //        buffer.append(creaBottom());
-    //
-    //        uploadText = buffer.toString().trim();
-    //        return uploadText;
-    //    }
 
     public List<String> listaSottopagine() {
         if (!checkValiditaPattern()) {
@@ -390,11 +361,6 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         return appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
-
-        //        if (textService.isEmpty(bodyText)) {
-        ////            this.esegue();
-        //        }
-        //        return istanzaLista != null ? istanzaLista.listaSottopagine() : null;
     }
 
     public WResult uploadSottopagina(String keySottopagina) {
@@ -410,11 +376,19 @@ public class Upload implements AlgosBuilderPattern {
 
         buffer.append(avviso());
         buffer.append(include());
-        buffer.append(incipit());
         buffer.append(CAPO);
 
         this.headerText = buffer.toString();
         return headerText;
+    }
+
+    public String creaIncipit() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(incipit());
+
+        this.incipitText = buffer.toString();
+        return incipitText;
     }
 
     protected String avviso() {
@@ -436,7 +410,61 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     protected String incipit() {
-        return VUOTA;
+        StringBuffer buffer = new StringBuffer();
+        boolean usaIncipit = false;
+        String tagAttNazDiretta = VUOTA;
+        String tagAttNazInversa = VUOTA;
+        String tagDidascalie = "[[Progetto:Biografie/Didascalie|progetto biografie]]";
+        int numSottopagine = 0;
+
+        switch (type) {
+            case attivitaPlurale: {
+                usaIncipit = true;
+                tagAttNazDiretta = "attività";
+                tagAttNazInversa = "nazionalità";
+                numSottopagine = WPref.sogliaPaginaAttivita.getInt();
+                break;
+            }
+            case nazionalitaPlurale: {
+                usaIncipit = true;
+                tagAttNazDiretta = "nazionalità";
+                tagAttNazInversa = "attività";
+                numSottopagine = WPref.sogliaPaginaNazionalita.getInt();
+                break;
+            }
+            default: {}
+        }
+
+        buffer.append("Questa");
+        buffer.append(REF);
+        buffer.append("Questa pagina di una singola");
+        buffer.append(SPAZIO);
+        buffer.append(textService.setBold(tagAttNazDiretta));
+        buffer.append(SPAZIO);
+        buffer.append("è stata creata perché le relative voci biografiche superano le");
+        buffer.append(SPAZIO);
+        buffer.append(textService.setBold(numSottopagine + VUOTA));
+        buffer.append(SPAZIO);
+        buffer.append("unità.");
+        buffer.append(REF_END);
+        buffer.append(SPAZIO);
+        buffer.append("è una lista");
+        buffer.append(REF);
+        buffer.append("Le didascalie delle voci sono quelle previste nel");
+        buffer.append(SPAZIO);
+        buffer.append(tagDidascalie);
+        buffer.append(REF_END);
+
+        String mario = "Questa<ref>Questa pagina di una singola '''attività''' è stata creata perché le relative voci biografiche superano le '''50''' unità.</ref> è una lista<ref>Le didascalie delle voci sono quelle previste nel [[Progetto:Biografie/Didascalie|progetto biografie]]</ref><ref>Le voci, all'interno di ogni paragrafo, sono in ordine alfabetico per '''forzaOrdinamento''' oppure per '''cognome''' oppure per '''titolo''' della pagina su wikipedia.</ref> di persone<ref>Ogni persona è presente in una sola [[Discussioni progetto:Biografie/Attività|lista]], in base a quanto riportato nel parametro ''attività'' utilizzato dal [[template:Bio|template Bio]]</ref> presenti<ref>La lista non è esaustiva e contiene '''solo''' le persone che sono citate nell'enciclopedia e per le quali è stato implementato correttamente il '''[[template:Bio|template Bio]]'''</ref> nell'enciclopedia che hanno come attività<ref>Le '''attività''' sono quelle [[Discussioni progetto:Biografie/Attività|'''convenzionalmente''' previste]] dalla comunità ed [[Modulo:Bio/Plurale attività|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]</ref> quella di '''agronomi'''. Le persone sono suddivise<ref>La lista è suddivisa in paragrafi per ogni '''nazionalità''' individuata. Se il numero di voci biografiche nel paragrafo supera le '''50''' unità, viene creata una '''sottopagina'''.</ref> per nazionalità.<ref>Le '''nazionalità''' sono quelle [[Discussioni progetto:Biografie/Nazionalità|'''convenzionalmente''' previste]] dalla comunità ed [[Modulo:Bio/Plurale nazionalità|inserite nell' '''elenco''']] utilizzato dal [[template:Bio|template Bio]]</ref>\n";
+
+        if (usaIncipit) {
+            this.incipitText = buffer.toString();
+        }
+        else {
+            this.incipitText = VUOTA;
+        }
+
+        return incipitText;
     }
 
 
@@ -454,10 +482,19 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String torna() {
-        String linkRitorno = isSottopagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
+        String giornoAnnoLink = isSottopagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
+        String giornoAnnoTxt = String.format("{{Torna a|%s}}", giornoAnnoLink);
+
+        String attivitaLink = isSottopagina ? PATH_BIOGRAFIE + SLASH + ATT : PATH_BIOGRAFIE + ATT;
+        String attivitaTxt = String.format("{{Torna a|%s}}", attivitaLink);
+
+        String nazionalitaLink = isSottopagina ? PATH_BIOGRAFIE + SLASH + ATT : PATH_BIOGRAFIE + NAZ;
+        String nazionalitaTxt = String.format("{{Torna a|%s}}", nazionalitaLink);
 
         return switch (type) {
-            case giornoNascita, giornoMorte, annoNascita, annoMorte -> String.format("{{Torna a|%s}}", linkRitorno);
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> giornoAnnoTxt;
+            case attivitaSingolare, attivitaPlurale -> attivitaTxt;
+            case nazionalitaSingolare, nazionalitaPlurale -> nazionalitaTxt;
             default -> VUOTA;
         };
     }
@@ -475,20 +512,9 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String creaBody() {
         StringBuffer buffer = new StringBuffer();
-        //        String keyParagrafo;
-        //        String listaOriginaria;
 
         if (isSottopagina) {
             bodyText = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
-
-            //            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
-            //            keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
-            //            if (istanzaLista == null) {
-            //                istanzaLista = appContext.getBean(Lista.class, listaOriginaria).type(type);
-            //            }
-            //            if (istanzaLista != null && istanzaLista.getType() == type) {
-            //                bodyText = istanzaLista.getTestoSottopagina(keyParagrafo);
-            //            }
         }
         else {
             istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
@@ -506,7 +532,6 @@ public class Upload implements AlgosBuilderPattern {
             buffer.append(DOPPIE_GRAFFE_INI);
         }
         buffer.append(getListaIni());
-
         buffer.append(bodyText);
 
         if (!isSottopagina) {
@@ -548,7 +573,7 @@ public class Upload implements AlgosBuilderPattern {
     public String creaBottom() {
         StringBuffer buffer = new StringBuffer();
 
-        buffer.append(note("textDaEsaminare"));
+        buffer.append(note(incipitText));
         buffer.append(correlate());
 
         buffer.append(includeIni());
@@ -562,14 +587,13 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     protected String note(String textDaEsaminare) {
-        StringBuffer buffer = new StringBuffer();
         String tag = "</ref>";
 
         if (textDaEsaminare.contains(tag)) {
             return note();
         }
         else {
-            return buffer.toString();
+            return VUOTA;
         }
     }
 
@@ -624,15 +648,6 @@ public class Upload implements AlgosBuilderPattern {
         int posCat;
         String nomeGiorno;
         String nomeCat;
-
-        //        if (isSottopagina) {
-        //            nomeGiorno = textService.levaCodaDaPrimo(nomeLista, SLASH);
-        //            nomeCat = textService.levaCodaDaUltimo(wikiTitleUpload, SLASH);
-        //        }
-        //        else {
-        //            nomeGiorno = nomeLista;
-        //            nomeCat = titoloPagina;
-        //        }
 
         nomeGiorno = nomeLista;
         nomeCat = titoloPagina;
@@ -780,6 +795,27 @@ public class Upload implements AlgosBuilderPattern {
         return headerText;
     }
 
+
+    /**
+     * Testo incipit <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public String getIncipitText() {
+        if (!checkValiditaPattern()) {
+            return STRING_ERROR;
+        }
+
+        this.numBio();
+
+        if (!checkBio()) {
+            return VUOTA;
+        }
+
+        incipitText = creaIncipit();
+        return incipitText;
+    }
+
     /**
      * Testo body <br>
      *
@@ -814,6 +850,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
+        creaIncipit();
         bottomText = creaBottom();
         return bottomText;
     }
@@ -866,74 +903,5 @@ public class Upload implements AlgosBuilderPattern {
 
         return numBio;
     }
-
-    //    /**
-    //     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico <br>
-    //     * Controlla di essere in una sottopagina <br>
-    //     * Rinvia al metodo della lista <br>
-    //     * Prima esegue una query diretta al database (più veloce)
-    //     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
-    //     *
-    //     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
-    //     */
-    //    public int numBio(String keyParagrafo) {
-    //        String listaOriginaria;
-    //
-    //        if (!isSottopagina) {
-    //            return INT_ERROR;
-    //        }
-    //
-    //        if (numBio == 0) {
-    //            listaOriginaria = textService.levaCodaDaUltimo(nomeLista, SLASH);
-    //            numBio = appContext.getBean(Lista.class, listaOriginaria).type(type).numBio(keyParagrafo);
-    //        }
-    //        return numBio;
-    //    }
-
-    //    /**
-    //     * Testo header <br>
-    //     *
-    //     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
-    //     */
-    //    public String getHeaderText(String keyParagrafo) {
-    //        if (!checkValiditaPattern()) {
-    //            return STRING_ERROR;
-    //        }
-    //
-    //        this.numBio(keyParagrafo);
-    //
-    //        if (!checkBio()) {
-    //            return VUOTA;
-    //        }
-    //
-    //        if (textService.isEmpty(headerText)) {
-    //            this.esegue();
-    //        }
-    //
-    //        return headerText;
-    //    }
-
-    //    /**
-    //     * Testo body <br>
-    //     *
-    //     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
-    //     */
-    //    public String getBodyText(String keyParagrafo) {
-    //        if (!checkValiditaPattern()) {
-    //            return STRING_ERROR;
-    //        }
-    //
-    //        this.numBio(keyParagrafo);
-    //
-    //        if (!checkBio()) {
-    //            return VUOTA;
-    //        }
-    //
-    //        if (textService.isEmpty(bodyText)) {
-    //            this.esegue();
-    //        }
-    //
-    //        return bodyText;
-    //    }
 
 }

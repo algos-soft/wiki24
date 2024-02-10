@@ -156,6 +156,7 @@ public class AttPluraleModulo extends WikiModulo {
     @Override
     public String elabora() {
         super.elabora();
+
         List<AttPluraleEntity> listaBeans = findAll();
         List<String> listaAttivitaSingolari;
         int numBio;

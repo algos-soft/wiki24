@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.tabelle.nazsingolare;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.textfield.*;
@@ -26,6 +27,14 @@ public class NazSingolareList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaInfoDownload = true;
+        super.usaInfoElabora = true;
+        super.usaInfoUpload = false;
+
+        this.usaBottoneDownload = true;
+        this.usaBottoneElabora = true;
+        this.usaBottoneUploadAll = false;
     }
 
     @Override
@@ -75,7 +84,7 @@ public class NazSingolareList extends WikiList {
         searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
-//        buttonBar.add(searchPlurale);
+        wikiTopPlaceHolder.add(searchPlurale);
     }
 
 

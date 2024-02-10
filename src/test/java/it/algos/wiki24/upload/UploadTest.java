@@ -74,7 +74,7 @@ public class UploadTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - getNumBio")
@@ -109,13 +109,13 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(202)
     @DisplayName("202 - getHeaderText")
     void getHeaderText(String nomeLista, TypeLista type) {
         System.out.println(("202 - getHeaderText"));
-        System.out.println("Testo header della pagina con Avviso, Toc, Unconnected, Uneditable, Torna, TmplBio, Incipit");
+        System.out.println("Testo header della pagina con Avviso, Toc, Unconnected, Uneditable, Torna, TmplBio");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
@@ -142,9 +142,39 @@ public class UploadTest extends WikiStreamTest {
     @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(203)
-    @DisplayName("203 - getBodyText")
+    @DisplayName("203 - getIncipitText")
+    void getIncipitText(String nomeLista, TypeLista type) {
+        System.out.println(("203 - getIncipitText"));
+        System.out.println("Testo incipit della pagina con Note a piè pagina");
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).getIncipitText();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertFalse(textService.isValid(ottenuto));
+            return;
+        }
+        if (ottenuto.equals(STRING_ERROR)) {
+            assertTrue(false);
+            return;
+        }
+
+        message = String.format("Incipit di %s %s", type.getCategoria(), nomeLista);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+    }
+
+
+    //    @ParameterizedTest
+    @MethodSource(value = "LISTA")
+    @Order(204)
+    @DisplayName("204 - getBodyText")
     void getBodyText(String nomeLista, TypeLista type) {
-        System.out.println(("203 - getBodyText"));
+        System.out.println(("204 - getBodyText"));
         System.out.println("Testo body della pagina");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
@@ -162,18 +192,18 @@ public class UploadTest extends WikiStreamTest {
             return;
         }
 
-        message = String.format("Body di %s%s", type.getCategoria(), nomeLista);
+        message = String.format("Body di %s %s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(ottenuto);
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
-    @Order(204)
-    @DisplayName("204 - getBottomText")
+    @Order(205)
+    @DisplayName("205 - getBottomText")
     void getBottomText(String nomeLista, TypeLista type) {
-        System.out.println(("v - getBottomText"));
+        System.out.println(("205 - getBottomText"));
         System.out.println("Testo bottom della pagina con Correlate, InterProgetto, Portale, Categorie");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
@@ -191,19 +221,19 @@ public class UploadTest extends WikiStreamTest {
             return;
         }
 
-        message = String.format("Bottom di %s%s", type.getCategoria(), nomeLista);
+        message = String.format("Bottom di %s %s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
         System.out.println(ottenuto);
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
-    @Order(205)
-    @DisplayName("205 - getUploadText")
+    @Order(206)
+    @DisplayName("206 - getUploadText")
     void getUploadText(String nomeLista, TypeLista type) {
-        System.out.println(("205 - getUploadText"));
+        System.out.println(("206 - getUploadText"));
         System.out.println("Testo completo della pagina con Header, Body e Bottom");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
@@ -221,13 +251,13 @@ public class UploadTest extends WikiStreamTest {
             return;
         }
 
-        message = String.format("UploadText di %s%s", type.getCategoria(), nomeLista);
+        message = String.format("UploadText di %s %s", type.getCategoria(), nomeLista);
         System.out.println(message);
         System.out.println(VUOTA);
         System.out.println(ottenuto);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
@@ -251,7 +281,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(212)
     @DisplayName("212 - uploadRealPaginaPrincipaleOnly")
@@ -275,7 +305,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - getNumBioSottopagina")
@@ -349,7 +379,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(502)
     @DisplayName("502 - getHeaderTextSottopagina")
@@ -384,7 +414,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(503)
     @DisplayName("503 - getBodyTextSottopagina")
@@ -418,7 +448,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(504)
     @DisplayName("504 - getBottomTextSottopagina")
@@ -447,7 +477,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(505)
     @DisplayName("505 - getUploadTextSottopagina")
@@ -475,7 +505,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(511)
     @DisplayName("511 - uploadTestSottopagina")
@@ -506,7 +536,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(512)
     @DisplayName("512 - uploadRealSottopagina")

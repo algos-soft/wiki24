@@ -10,6 +10,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.layer.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.ui.wrapper.*;
@@ -299,6 +300,11 @@ public abstract class WikiList extends CrudList {
         wikiTopPlaceHolder.getElement().setAttribute("id", "wikiTopPlaceHolder");
         wikiTopPlaceHolder.setClassName("buttons");
         wikiTopPlaceHolder.setClassName("confirm-dialog-buttons");
+
+        // filtro base (vuoto)
+        // ordinamento iniziale di default bypassabile in fixPreferenze()
+        filtri = appContext.getBean(FiltroSort.class, currentCrudEntityClazz);
+        filtri.sort(basicSort);
 
         this.fixTop();
         this.add(wikiTopPlaceHolder);

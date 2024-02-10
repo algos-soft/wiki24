@@ -145,7 +145,7 @@ public enum WPref implements IPref {
     //***************
     usaTaskNazPlu("usaTaskNazPlu", TypePref.bool, false, "Flag per usare la task di download NazionalitàPlurale."),
     lastDownloadNazPlu("lastDownloadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NazionalitàPlurale."),
-    downloadNazPluTime("downloadNazPluTime", TypePref.integer, 0, "Durata download di NazionalitàPlurale in secondi."),
+    downloadNazPluTime("downloadNazPluTime", TypePref.integer, 0, "Durata download di NazionalitàPlurale in minuti."),
     usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, false, "Flag per usare l'elaborazione di NazionalitàPlurale."),
     lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
     elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
@@ -160,6 +160,8 @@ public enum WPref implements IPref {
     sogliaParagrafi("sogliaParagrafi", TypePref.integer, 3, "Soglia minima di paragrafi per mostrarli"),
     sogliaIncludeAll("sogliaIncludeAll", TypePref.integer, 200, "Soglia minima di voci totali della pagina per 'includerla' in giorni/anni"),
     sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
+    sogliaPaginaAttivita("sogliaPaginaAttivita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di attività sul server wiki"),
+    sogliaPaginaNazionalita("sogliaPaginaNazionalita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di nazionalità sul server wiki"),
     usaSottopagineGiorni("usaSottopagineGiorni", TypePref.bool, false, "Abilita l'eventuale sottopagina dei giorni (se >1500 e > 50)"),
     usaSottopagineAnni("usaSottopagineAnni", TypePref.bool, true, "Abilita l'eventuale sottopagina degli anni (se >1500 e > 50)"),
     usaSottopagineAttivita("usaSottopagineAttivita", TypePref.bool, true, "Abilita l'eventuale sottopagina delle attività (se > 50)"),

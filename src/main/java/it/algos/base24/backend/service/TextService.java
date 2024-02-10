@@ -909,4 +909,17 @@ public class TextService {
         return pari;
     }
 
+    /**
+     * Aggiunge 3 tag APICE in testa e coda alla stringa. <br>
+     * Elimina spazi vuoti iniziali e finali <br>
+     *
+     * @param stringaIn in ingresso
+     *
+     * @return stringa con 3 APICE aggiunti
+     */
+    public String setBold(final String stringaIn) {
+        String stringaOut = APICE + APICE + APICE + stringaIn.trim() + APICE + APICE + APICE;
+        return stringaOut.trim();
+    }
+
 }

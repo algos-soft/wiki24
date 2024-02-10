@@ -317,6 +317,7 @@ public class AttSingolareModulo extends WikiModulo {
     @Override
     public String elabora() {
         super.elabora();
+
         List<AttSingolareEntity> listaBeans = findAll();
         String attivitaSingolare;
         int numBio;

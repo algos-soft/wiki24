@@ -5,37 +5,27 @@ import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.boot.WikiCost.FIELD_NAME_NOME;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
+import it.algos.wiki24.backend.logic.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 import org.springframework.data.domain.*;
+
+import java.util.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
 public class BioMongoList extends WikiList {
 
-    protected TextField searchNome;
+    private List<WikiSearch> wikiSearchListAnte;
 
-    protected TextField searchCognome;
-
-    protected TextField searchSesso;
-
-    protected TextField searchLuogoNato;
-
-    protected TextField searchGiornoNato;
-
-    protected TextField searchAnnoNato;
-
-    protected TextField searchLuogoMorto;
-
-    protected TextField searchGiornoMorto;
-
-    protected TextField searchAnnoMorto;
+    private List<WikiSearch> wikiSearchListPost;
 
     public BioMongoList(final BioMongoModulo crudModulo) {
         super(crudModulo);
@@ -82,27 +72,45 @@ public class BioMongoList extends WikiList {
         super.fixHeader();
     }
 
-
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Può essere sovrascritto <br>
      */
     @Override
     protected void fixTop() {
         super.fixTop();
 
-        searchNome = creaSearch(FIELD_NAME_NOME);
-        searchCognome = creaSearch(FIELD_NAME_COGNOME);
-        searchSesso = creaSearch(FIELD_NAME_SESSO);
-//        buttonBar.add(searchNome, searchCognome, searchSesso);
+        wikiSearchListAnte = new ArrayList<>();
 
-        searchLuogoNato = creaSearch(FIELD_NAME_LUOGO_NATO);
-        searchGiornoNato = creaSearch(FIELD_NAME_GIORNO_NATO);
-        searchAnnoNato = creaSearch(FIELD_NAME_ANNO_NATO);
-        searchLuogoMorto = creaSearch(FIELD_NAME_LUOGO_MORTO);
-        searchGiornoMorto = creaSearch(FIELD_NAME_GIORNO_MORTO);
-        searchAnnoMorto = creaSearch(FIELD_NAME_ANNO_MORTO);
+        wikiSearchListAnte.add(new WikiSearch(FIELD_NAME_NOME));
+        wikiSearchListAnte.add(new WikiSearch(FIELD_NAME_COGNOME));
+        wikiSearchListAnte.add(new WikiSearch(FIELD_NAME_SESSO));
 
-        this.add(new HorizontalLayout(searchLuogoNato, searchGiornoNato, searchAnnoNato, searchLuogoMorto, searchGiornoMorto, searchAnnoMorto));
+        wikiSearchListAnte.stream().forEach(wikiSearch -> wikiSearch.clickHandler(this::sincroFiltri));
+        wikiSearchListAnte.stream().forEach(wikiSearch -> wikiTopPlaceHolder.add(wikiSearch.getSearchField()));
+    }
+
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void addTopPlaceHolder() {
+        super.addTopPlaceHolder();
+
+        SimpleHorizontalLayout layout = new SimpleHorizontalLayout();
+        wikiSearchListPost = new ArrayList<>();
+
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_LUOGO_NATO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_GIORNO_NATO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_ANNO_NATO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_LUOGO_MORTO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_GIORNO_MORTO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_ANNO_MORTO));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_ATTIVITA));
+        wikiSearchListPost.add(new WikiSearch(FIELD_NAME_NAZIONALITA));
+
+        wikiSearchListPost.stream().forEach(wikiSearch -> wikiSearch.clickHandler(this::sincroFiltri));
+        wikiSearchListPost.stream().forEach(wikiSearch -> layout.add(wikiSearch.getSearchField()));
+        this.add(layout);
     }
 
     protected TextField creaSearch(String fieldName) {
@@ -116,42 +124,36 @@ public class BioMongoList extends WikiList {
         return searchField;
     }
 
+    public void sincroFiltri(boolean flag) {
+        super.sincroFiltri();
+    }
+
     @Override
     protected void fixFiltri() {
         super.fixFiltri();
 
-        if (searchNome != null) {
-            String nome = searchNome.getValue();
-            if (textService.isValid(nome)) {
-                filtri.inizio(FIELD_NAME_NOME, nome);
-                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_NOME));
-            }
-            else {
-                filtri.remove(FIELD_NAME_NOME);
-                filtri.sort(basicSort);
-            }
+        if (wikiSearchListAnte != null) {
+            wikiSearchListAnte.stream().forEach(wikiSearch -> fixFiltro(wikiSearch));
         }
-
-        if (searchCognome != null) {
-            String cognome = searchCognome.getValue();
-            if (textService.isValid(cognome)) {
-                filtri.inizio(FIELD_NAME_COGNOME, cognome);
-                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_COGNOME));
-            }
-            else {
-                filtri.remove(FIELD_NAME_COGNOME);
-                filtri.sort(basicSort);
-            }
+        if (wikiSearchListPost != null) {
+            wikiSearchListPost.stream().forEach(wikiSearch -> fixFiltro(wikiSearch));
         }
+    }
 
-        if (searchSesso != null) {
-            String sesso = searchSesso.getValue();
-            if (textService.isValid(sesso)) {
-                filtri.uguale(FIELD_NAME_SESSO, sesso);
-                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_SESSO));
+
+    protected void fixFiltro(WikiSearch wikiSearch) {
+        String textFieldValue;
+        TextField searchField = wikiSearch.getSearchField();
+        String propertyName = wikiSearch.getPropertyName();
+
+        if (searchField != null) {
+            textFieldValue = searchField.getValue();
+            if (textService.isValid(textFieldValue)) {
+                filtri.inizio(propertyName, textFieldValue);
+                filtri.sort(Sort.by(Sort.Direction.ASC, propertyName));
             }
             else {
-                filtri.remove(FIELD_NAME_SESSO);
+                filtri.remove(propertyName);
                 filtri.sort(basicSort);
             }
         }

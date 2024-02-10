@@ -6,6 +6,7 @@ import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import org.springframework.stereotype.*;
@@ -26,6 +27,9 @@ public class NazPluraleModulo extends WikiModulo {
     @Inject
     private NazSingolareModulo nazSingolareModulo;
 
+    @Inject
+    BioMongoModulo bioMongoModulo;
+
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
@@ -44,7 +48,7 @@ public class NazPluraleModulo extends WikiModulo {
         super.scheduledDownload = TypeSchedule.zeroQuaranta;
         super.lastDownload = WPref.lastDownloadNazPlu;
         super.durataDownload = WPref.downloadNazPluTime;
-        super.unitaMisuraDownload = TypeDurata.secondi;
+        super.unitaMisuraDownload = TypeDurata.minuti;
 
         super.lastElabora = WPref.lastElaboraNazPlu;
         super.durataElabora = WPref.elaboraNazPluTime;
@@ -117,6 +121,7 @@ public class NazPluraleModulo extends WikiModulo {
         super.deleteAll();
 
         nazSingolareModulo.download();
+        nazSingolareModulo.elabora();
         this.creaTavolaDistinct();
 
         mappaBeans.values().stream().forEach(bean -> insertSave(bean));
@@ -141,6 +146,33 @@ public class NazPluraleModulo extends WikiModulo {
             newBean = newEntity(naz.plurale, listaSingolari, textService.primaMaiuscola(naz.plurale), textService.primaMaiuscola(naz.pagina), 0, 0, false, false);
             mappaBeans.put(naz.plurale, newBean);
         }
+    }
+
+
+    @Override
+    public String elabora() {
+        super.elabora();
+
+        List<NazPluraleEntity> listaBeans = findAll();
+        List<String> listaNazionalitaSingolari;
+        int numBio;
+
+        if (listaBeans != null && listaBeans.size() > 0) {
+            for (NazPluraleEntity entityBean : listaBeans) {
+                numBio = 0;
+                listaNazionalitaSingolari = entityBean.txtSingolari;
+                if (listaNazionalitaSingolari != null && listaNazionalitaSingolari.size() > 0) {
+                    for (String nazionalitaSingolare : listaNazionalitaSingolari) {
+                        numBio += bioMongoModulo.countAllByNazionalitaSingolare(nazionalitaSingolare);
+                    }
+                }
+                entityBean.numBio = numBio;
+                save(entityBean);
+            }
+        }
+
+        super.fixInfoElabora();
+        return VUOTA;
     }
 
 }// end of CrudModulo class

@@ -69,6 +69,7 @@ public class BaseCost {
     public static final String TAB = "\t";
 
     public static final String APICETTI = "\"";
+    public static final String APICE = "'";
 
     public static final String VIRGOLA = ",";
 

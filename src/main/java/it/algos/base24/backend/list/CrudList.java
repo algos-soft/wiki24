@@ -280,6 +280,12 @@ public abstract class CrudList extends VerticalLayout {
         topPlaceHolder.getElement().setAttribute("id", "topPlaceHolder");
         topPlaceHolder.setClassName("buttons");
         topPlaceHolder.setClassName("confirm-dialog-buttons");
+
+        // filtro base (vuoto)
+        // ordinamento iniziale di default bypassabile in fixPreferenze()
+        filtri = appContext.getBean(FiltroSort.class, currentCrudEntityClazz);
+        filtri.sort(basicSort);
+
         this.fixTop();
         this.add(topPlaceHolder);
     }
@@ -377,11 +383,6 @@ public abstract class CrudList extends VerticalLayout {
         }
 
         this.fixColumns();
-
-        // filtro base (vuoto)
-        // ordinamento iniziale di default bypassabile in fixPreferenze()
-        filtri = appContext.getBean(FiltroSort.class, currentCrudEntityClazz);
-        filtri.sort(basicSort);
 
         // Pass all objects to a grid from a Data Provider
         this.refreshData();

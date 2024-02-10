@@ -370,7 +370,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(901)
     @DisplayName("901 - numBioParagrafi")
@@ -403,7 +403,7 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(VUOTA);
             message = String.format("In totale nella pagina della lista [%s] ci sono [%d] biografie.", nomeLista, previstoTotaleParagrafi);
             System.out.println(message);
-            message = String.format("Nella somma dei paragrafi (%d) della lista [%s] ci sono [%d] biografie.", listaStr.size(),nomeLista, totaleEffettivoPagina);
+            message = String.format("Nella somma dei paragrafi (%d) della lista [%s] ci sono [%d] biografie.", listaStr.size(), nomeLista, totaleEffettivoPagina);
             System.out.println(message);
             assertEquals(previstoTotaleParagrafi, totaleEffettivoPagina);
 
@@ -430,7 +430,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -504,7 +504,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")

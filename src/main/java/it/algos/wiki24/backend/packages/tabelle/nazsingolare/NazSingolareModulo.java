@@ -7,10 +7,12 @@ import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
+import javax.inject.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -23,6 +25,8 @@ import java.util.stream.*;
  */
 @Service
 public class NazSingolareModulo extends WikiModulo {
+    @Inject
+    BioMongoModulo bioMongoModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -216,6 +220,26 @@ public class NazSingolareModulo extends WikiModulo {
                 logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             }
         }
+    }
+    @Override
+    public String elabora() {
+        super.elabora();
+
+        List<NazSingolareEntity> listaBeans = findAll();
+        String nazionalitaSingolare;
+        int numBio;
+
+        if (listaBeans != null && listaBeans.size() > 0) {
+            for (NazSingolareEntity entityBean : listaBeans) {
+                nazionalitaSingolare = entityBean.singolare;
+                numBio = bioMongoModulo.countAllByNazionalitaSingolare(nazionalitaSingolare);
+                entityBean.numBio = numBio;
+                save(entityBean);
+            }
+        }
+
+        super.fixInfoElabora();
+        return VUOTA;
     }
 
 }// end of CrudModulo class
