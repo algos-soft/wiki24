@@ -182,9 +182,9 @@ public class Upload implements AlgosBuilderPattern {
             case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
             case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
             case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
-            case attivitaSingolare -> VUOTA;
+            case attivitaSingolare -> wikiUtilityService.wikiTitleAttivita(nomeLista);
             case attivitaPlurale -> wikiUtilityService.wikiTitleAttivita(nomeLista);
-            case nazionalitaSingolare -> VUOTA;
+            case nazionalitaSingolare -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
             case nazionalitaPlurale -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
             default -> null;
         };
@@ -333,7 +333,15 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     protected WResult registra() {
-        String wikiTitle = titoloPagina;
+        String wikiTitle;
+
+        if (textService.isValid(titoloPagina)) {
+            wikiTitle = titoloPagina;
+        }
+        else {
+            return WResult.errato("Manca il wikiTitle");
+        }
+
         String newTextSignificativo = WPref.scriveComunque.is() ? VUOTA : bodyText + bottomText;
 
         if (textService.isEmpty(titoloPagina)) {
@@ -500,7 +508,9 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(textService.setBold(tagTmplBio));
         buffer.append(REF_END);
         buffer.append(SPAZIO);
-        buffer.append("nell'enciclopedia che hanno come attività");
+        buffer.append("nell'enciclopedia che hanno come");
+        buffer.append(SPAZIO);
+        buffer.append(tagAttNazDiretta);
         buffer.append(REF);
         buffer.append("Le");
         buffer.append(SPAZIO + textService.setBold(tagAttNazDiretta) + SPAZIO);
@@ -546,6 +556,7 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(SPAZIO);
         buffer.append(tagTmplBio);
         buffer.append(REF_END);
+        buffer.append(CAPO);
 
         if (usaIncipit) {
             this.incipitText = buffer.toString();
@@ -602,6 +613,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String creaBody() {
         StringBuffer buffer = new StringBuffer();
+        String titoloLista;
 
         if (isSottopagina) {
             bodyText = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
@@ -618,59 +630,63 @@ public class Upload implements AlgosBuilderPattern {
             }
         }
 
-        if (!isSottopagina) {
-            buffer.append(DOPPIE_GRAFFE_INI);
-        }
-        buffer.append(getListaIni());
-        buffer.append(bodyText);
+        titoloLista = switch (type) {
+            case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
+            case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
+            case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
+            case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
+            default -> VUOTA;
+        };
 
-        if (!isSottopagina) {
-            buffer.append(DOPPIE_GRAFFE_END);
+        if (isSottopagina) {
+            buffer.append(bodyText);
+        }
+        else {
+            if (textService.isValid(titoloLista)) {
+                buffer.append(DOPPIE_GRAFFE_INI);
+                buffer.append(type.getPersone());
+                buffer.append(CAPO);
+                buffer.append("|titolo=");
+                buffer.append(titoloLista);
+                buffer.append(CAPO);
+                buffer.append("|voci=");
+                buffer.append(numBio());
+                buffer.append(CAPO);
+                buffer.append("|testo=<nowiki></nowiki>");
+                buffer.append(CAPO);
+                buffer.append(bodyText);
+                buffer.append(DOPPIE_GRAFFE_END);
+            }
+            else {
+                buffer.append(bodyText);
+            }
         }
 
         this.bodyText = buffer.toString();
         return this.bodyText;
     }
 
-    protected String getListaIni() {
-        StringBuffer buffer = new StringBuffer();
-
-        if (isSottopagina) {
-            return VUOTA;
-        }
-
-        buffer.append(type.getPersone());
-        buffer.append(CAPO);
-        buffer.append("|titolo=");
-        buffer.append(switch (type) {
-            case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
-            case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
-            case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
-            case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
-            default -> VUOTA;
-        });
-        buffer.append(CAPO);
-        buffer.append("|voci=");
-        buffer.append(numBio());
-        buffer.append(CAPO);
-        buffer.append("|testo=<nowiki></nowiki>");
-        buffer.append(CAPO);
-
-        return buffer.toString();
-    }
-
 
     public String creaBottom() {
         StringBuffer buffer = new StringBuffer();
 
+        boolean usaInclude = switch (type) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> true;
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> false;
+            default -> false;
+        };
+
         buffer.append(note(incipitText));
         buffer.append(correlate());
-
-        buffer.append(includeIni());
+        if (usaInclude) {
+            buffer.append(includeIni());
+        }
         buffer.append(interProgetto());
         buffer.append(portale());
         buffer.append(categorie());
-        buffer.append(includeEnd());
+        if (usaInclude) {
+            buffer.append(includeEnd());
+        }
 
         this.bottomText = buffer.toString();
         return bottomText;
@@ -699,7 +715,32 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String correlate() {
-        return VUOTA;
+        StringBuffer buffer = new StringBuffer();
+String tagCorrelato=VUOTA;
+
+        boolean usaCorrelate = switch (type) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> false;
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> true;
+            default -> false;
+        };
+
+        if (!usaCorrelate) {
+            return VUOTA;
+        }
+
+        tagCorrelato = switch (type) {
+            case attivitaSingolare, attivitaPlurale -> ATT;
+            case  nazionalitaSingolare, nazionalitaPlurale -> NAZ;
+            default -> VUOTA;
+        };
+
+        buffer.append(CAPO);
+        buffer.append(wikiUtilityService.setParagrafo("Voci correlate"));
+        buffer.append(ASTERISCO);
+        buffer.append(textService.setDoppieQuadre(PATH_BIOGRAFIE + tagCorrelato));
+        buffer.append(CAPO);
+
+        return buffer.toString();
     }
 
     protected String interProgetto() {
@@ -720,6 +761,7 @@ public class Upload implements AlgosBuilderPattern {
 
         buffer.append(CAPO);
         buffer.append("{{Portale|biografie}}");
+        buffer.append(CAPO);
 
         return buffer.toString();
     }
@@ -729,6 +771,8 @@ public class Upload implements AlgosBuilderPattern {
         return switch (type) {
             case giornoNascita, giornoMorte -> categorieGiorni();
             case annoNascita, annoMorte -> categorieAnni();
+            case attivitaSingolare, attivitaPlurale -> categorieAttivita();
+            case nazionalitaSingolare, nazionalitaPlurale -> categorieNazionalita();
             default -> VUOTA;
         };
     }
@@ -798,7 +842,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         buffer.append(CAPO);
-        buffer.append("*");
+        buffer.append(ASTERISCO);
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
         }
@@ -814,7 +858,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         buffer.append(CAPO);
-        buffer.append("*");
+        buffer.append(ASTERISCO);
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
         }
@@ -826,6 +870,26 @@ public class Upload implements AlgosBuilderPattern {
         if (uploadTest) {
             buffer.append(NO_WIKI_END);
         }
+
+        return buffer.toString();
+    }
+
+    protected String categorieAttivita() {
+        StringBuffer buffer = new StringBuffer();
+        String categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+
+        buffer.append(ASTERISCO);
+        buffer.append(textService.setDoppieQuadre(categoria));
+
+        return buffer.toString();
+    }
+
+    protected String categorieNazionalita() {
+        StringBuffer buffer = new StringBuffer();
+        String categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+
+        buffer.append(ASTERISCO);
+        buffer.append(textService.setDoppieQuadre(categoria));
 
         return buffer.toString();
     }
@@ -962,6 +1026,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         buffer.append(creaHeader());
+        buffer.append(creaIncipit());
         buffer.append(creaBody());
         buffer.append(creaBottom());
 

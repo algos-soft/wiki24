@@ -145,7 +145,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(203)
     @DisplayName("203 - getIncipitText")
@@ -166,6 +166,12 @@ public class UploadTest extends WikiStreamTest {
         if (ottenuto.equals(STRING_ERROR)) {
             assertTrue(false);
             return;
+        }
+        if (type == TypeLista.attivitaPlurale || type == TypeLista.nazionalitaPlurale) {
+            assertTrue(textService.isValid(ottenuto));
+        }
+        else {
+            assertTrue(textService.isEmpty(ottenuto));
         }
 
         message = String.format("Incipit di %s %s", type.getCategoria(), nomeLista);
@@ -204,7 +210,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(205)
     @DisplayName("205 - getBottomText")
@@ -240,7 +246,7 @@ public class UploadTest extends WikiStreamTest {
     @DisplayName("206 - getUploadText")
     void getUploadText(String nomeLista, TypeLista type) {
         System.out.println(("206 - getUploadText"));
-        System.out.println("Testo completo della pagina con Header, Body e Bottom");
+        System.out.println("Testo completo della pagina con Header, Incipit, Body e Bottom");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
@@ -264,7 +270,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
     //    @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    //    @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
     void uploadTestPaginaPrincipaleOnly(String nomeLista, TypeLista type) {
@@ -275,8 +281,12 @@ public class UploadTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
-        if (true) {
+        if (false) {
             System.out.println("Sospesa");
+            return;
+        }
+        if (type == TypeLista.attivitaSingolare || type == TypeLista.nazionalitaSingolare) {
+            System.out.println("Disabilitata la possibilità (che esiste nel codice) di stampare un'attività/nazionalità singolare");
             return;
         }
 
@@ -310,7 +320,7 @@ public class UploadTest extends WikiStreamTest {
         printRisultato(ottenutoRisultato);
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(303)
     @DisplayName("303 - printIncipitText")

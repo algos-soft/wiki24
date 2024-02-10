@@ -112,11 +112,11 @@ public class WikiUtilityService {
     }
 
     public String wikiTitleAttivita(String attivita) {
-        return "Progetto:Biografie/Attività/" + attivita;
+        return "Progetto:Biografie/Attività/" + textService.primaMaiuscola(attivita);
     }
 
     public String wikiTitleNazionalita(String nazionalita) {
-        return "Progetto:Biografie/Nazionalità/" + nazionalita;
+        return "Progetto:Biografie/Nazionalità/" +  textService.primaMaiuscola(nazionalita);
     }
 
     /**

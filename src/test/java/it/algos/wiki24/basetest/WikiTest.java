@@ -1,6 +1,7 @@
 package it.algos.wiki24.basetest;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
@@ -853,8 +854,9 @@ public abstract class WikiTest extends AlgosTest {
     }
 
 
-
     protected boolean fixListe(final String nomeLista, final TypeLista typeSuggerito) {
+        AbstractEntity entityBean;
+
         if (textService.isEmpty(nomeLista)) {
             message = String.format("Manca il nome di %s per un'istanza di type%s[%s]", typeSuggerito.getGiornoAnno(), FORWARD, typeSuggerito.name());
             System.out.println(message);
@@ -890,7 +892,8 @@ public abstract class WikiTest extends AlgosTest {
             return false;
         }
 
-        if (currentModulo.findByKey(nomeLista) == null) {
+        entityBean = currentModulo.findByKey(nomeLista);
+        if (entityBean == null) {
             message = String.format("%s [%s] indicato NON esiste per un'istanza di type%s[%s]", textService.primaMaiuscola(typeSuggerito.getGiornoAnno()), nomeLista, FORWARD, currentType.name());
             System.out.println(message);
             return false;
