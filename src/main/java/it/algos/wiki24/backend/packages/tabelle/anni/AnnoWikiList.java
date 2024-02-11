@@ -37,8 +37,10 @@ public class AnnoWikiList extends WikiList {
         super.usaVariantCompact = true;
 
         super.usaBottoneWikiView = true;
+        super.usaBottoneTest = false;
         super.usaBottoneTest1 = true;
         super.usaBottoneTest2 = true;
+        super.usaBottoneUpload = false;
         super.usaBottoneUpload1 = true;
         super.usaBottoneUpload2 = true;
     }

@@ -5,6 +5,7 @@ import it.algos.base24.backend.entity.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.tabelle.anni.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.upload.*;
@@ -95,6 +96,12 @@ public class UploadService {
 
     public int numMortiAnno(final String nomeAnno) {
         return appContext.getBean(Upload.class, nomeAnno).type(TypeLista.annoMorte).numBio();
+    }
+    public boolean attivitaTest(final AttPluraleEntity attivitaBean) {
+        return appContext.getBean(Upload.class, attivitaBean.plurale).test().type(TypeLista.attivitaPlurale).uploadAll().isValido();
+    }
+    public boolean attivita(final AttPluraleEntity attivitaBean) {
+        return appContext.getBean(Upload.class, attivitaBean.plurale).type(TypeLista.attivitaPlurale).uploadAll().isValido();
     }
 
 }

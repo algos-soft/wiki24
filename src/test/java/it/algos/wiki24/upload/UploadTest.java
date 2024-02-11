@@ -145,7 +145,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(203)
     @DisplayName("203 - getIncipitText")
@@ -270,7 +270,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
     //    @ParameterizedTest
-    //    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
     void uploadTestPaginaPrincipaleOnly(String nomeLista, TypeLista type) {
@@ -297,7 +297,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(212)
     @DisplayName("212 - uploadRealPaginaPrincipaleOnly")
@@ -309,8 +309,12 @@ public class UploadTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
-        if (true) {
+        if (false) {
             System.out.println("Sospesa");
+            return;
+        }
+        if (type == TypeLista.attivitaSingolare || type == TypeLista.nazionalitaSingolare) {
+            System.out.println("Disabilitata la possibilità (che esiste nel codice) di stampare un'attività/nazionalità singolare");
             return;
         }
 

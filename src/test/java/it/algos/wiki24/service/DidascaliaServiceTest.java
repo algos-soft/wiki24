@@ -2,8 +2,6 @@ package it.algos.wiki24.service;
 
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.basetest.*;
@@ -11,19 +9,11 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
-import javax.inject.*;
-import java.util.*;
 import java.util.stream.*;
 
 /**
@@ -272,7 +262,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
 
         for (BioMongoEntity bio : listaBio) {
-            ottenuto = service.annoNatoIcona(bio);
+            ottenuto = service.annoNatoIconaTonde(bio);
             System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoNatoIcona", FORWARD, ottenuto));
         }
     }
@@ -298,7 +288,7 @@ public class DidascaliaServiceTest extends WikiTest {
         System.out.println(VUOTA);
 
         for (BioMongoEntity bio : listaBio) {
-            ottenuto = service.annoMortoIcona(bio);
+            ottenuto = service.annoMortoIconaTonde(bio);
             System.out.println(String.format("La biografia [%s] ha (%s)%s%s", bio.wikiTitle, "annoMortoIcona", FORWARD, ottenuto));
         }
     }

@@ -4,13 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
 
@@ -222,6 +216,17 @@ public class DidascaliaService {
             return VUOTA;
         }
 
+        return tagNato + annoNatoLinkato;
+    }
+
+    public String annoNatoIconaTonde(final BioMongoEntity bio) {
+        String annoNatoLinkato = annoNato(bio);
+        String tagNato = WPref.iconaNato.getStr();
+
+        if (textService.isEmpty(annoNatoLinkato)) {
+            return VUOTA;
+        }
+
         return textService.setTonde(tagNato + annoNatoLinkato);
     }
 
@@ -238,6 +243,16 @@ public class DidascaliaService {
 
 
     public String annoMortoIcona(final BioMongoEntity bio) {
+        String annoMortoLinkato = annoMorto(bio);
+        String tagMorto = WPref.iconaMorto.getStr();
+
+        if (textService.isEmpty(annoMortoLinkato)) {
+            return VUOTA;
+        }
+
+        return tagMorto + annoMortoLinkato;
+    }
+    public String annoMortoIconaTonde(final BioMongoEntity bio) {
         String annoMortoLinkato = annoMorto(bio);
         String tagMorto = WPref.iconaMorto.getStr();
 
@@ -262,7 +277,7 @@ public class DidascaliaService {
     public String didascaliaGiornoNato(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
         String annoNato = annoNato(bio);
-        String annoMorto = annoMortoIcona(bio);
+        String annoMorto = annoMortoIconaTonde(bio);
         String attivitaNazionalita = attivitaNazionalita(bio);
 
         if (textService.isEmpty(bio.giornoNato)) {
@@ -303,7 +318,7 @@ public class DidascaliaService {
     public String didascaliaGiornoMorto(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
         String annoMorto = annoMorto(bio);
-        String annoNato = annoNatoIcona(bio);
+        String annoNato = annoNatoIconaTonde(bio);
         String attivitaNazionalita = attivitaNazionalita(bio);
 
         if (textService.isEmpty(bio.giornoMorto)) {
@@ -343,7 +358,7 @@ public class DidascaliaService {
     public String didascaliaAnnoNato(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
         String giornoNato = giornoNato(bio);
-        String annoMorto = annoMortoIcona(bio);
+        String annoMorto = annoMortoIconaTonde(bio);
         String attivitaNazionalita = attivitaNazionalita(bio);
 
         if (textService.isEmpty(bio.annoNato)) {
@@ -384,7 +399,7 @@ public class DidascaliaService {
     public String didascaliaAnnoMorto(final BioMongoEntity bio) {
         StringBuffer buffer = new StringBuffer();
         String giornoMorto = giornoMorto(bio);
-        String annoNato = annoNatoIcona(bio);
+        String annoNato = annoNatoIconaTonde(bio);
         String attivitaNazionalita = attivitaNazionalita(bio);
 
         if (textService.isEmpty(bio.annoMorto)) {

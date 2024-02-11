@@ -96,10 +96,12 @@ public abstract class WikiList extends CrudList {
 
     public boolean usaBottoneWikiCrono;
 
+    public boolean usaBottoneTest;
     public boolean usaBottoneTest1;
 
     public boolean usaBottoneTest2;
 
+    public boolean usaBottoneUpload;
     public boolean usaBottoneUpload1;
 
     public boolean usaBottoneUpload2;
@@ -145,8 +147,10 @@ public abstract class WikiList extends CrudList {
         this.usaBottoneWikiEdit = false;
         this.usaBottoneWikiCrono = false;
 
+        this.usaBottoneTest = false;
         this.usaBottoneTest1 = false;
         this.usaBottoneTest2 = false;
+        this.usaBottoneUpload = false;
         this.usaBottoneUpload1 = false;
         this.usaBottoneUpload2 = false;
 
@@ -348,11 +352,17 @@ public abstract class WikiList extends CrudList {
             wikiTopPlaceHolder.wikiCrono();
         }
 
+        if (usaBottoneTest) {
+            wikiTopPlaceHolder.test();
+        }
         if (usaBottoneTest1) {
             wikiTopPlaceHolder.test1();
         }
         if (usaBottoneTest2) {
             wikiTopPlaceHolder.test2();
+        }
+        if (usaBottoneUpload) {
+            wikiTopPlaceHolder.upload();
         }
         if (usaBottoneUpload1) {
             wikiTopPlaceHolder.upload1();
@@ -497,6 +507,14 @@ public abstract class WikiList extends CrudList {
         }
     }
 
+    public void testPagina() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.testPagina(crudEntityBean);
+        }
+    }
+
     public void testPaginaNati() {
         AbstractEntity crudEntityBean = getSingleEntity();
 
@@ -513,6 +531,13 @@ public abstract class WikiList extends CrudList {
         }
     }
 
+    public void uploadPagina() {
+        AbstractEntity crudEntityBean = getSingleEntity();
+
+        if (crudEntityBean != null) {
+            currentCrudModulo.uploadPagina(crudEntityBean);
+        }
+    }
     public void uploadPaginaNati() {
         AbstractEntity crudEntityBean = getSingleEntity();
 

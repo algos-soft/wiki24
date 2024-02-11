@@ -55,10 +55,12 @@ public class WikiListButtonBar extends ListButtonBar {
 
     public boolean usaBottoneWikiCrono;
 
+    public boolean usaBottoneTest;
     public boolean usaBottoneTest1;
 
     public boolean usaBottoneTest2;
 
+    public boolean usaBottoneUpload;
     public boolean usaBottoneUpload1;
 
     public boolean usaBottoneUpload2;
@@ -88,10 +90,12 @@ public class WikiListButtonBar extends ListButtonBar {
 
     protected Button buttonWikiCrono = new Button();
 
+    protected Button buttonTest = new Button();
     protected Button buttonTest1 = new Button();
 
     protected Button buttonTest2 = new Button();
 
+    protected Button buttonUpload = new Button();
     protected Button buttonUpload1 = new Button();
 
     protected Button buttonUpload2 = new Button();
@@ -199,6 +203,13 @@ public class WikiListButtonBar extends ListButtonBar {
     /**
      * Fluent pattern Builder <br>
      */
+    public WikiListButtonBar test() {
+        this.usaBottoneTest = true;
+        return this;
+    }
+    /**
+     * Fluent pattern Builder <br>
+     */
     public WikiListButtonBar test1() {
         this.usaBottoneTest1 = true;
         return this;
@@ -212,6 +223,13 @@ public class WikiListButtonBar extends ListButtonBar {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WikiListButtonBar upload() {
+        this.usaBottoneUpload = true;
+        return this;
+    }
     /**
      * Fluent pattern Builder <br>
      */
@@ -302,11 +320,17 @@ public class WikiListButtonBar extends ListButtonBar {
         if (usaBottoneWikiCrono) {
             this.addWikiCrono();
         }
+        if (usaBottoneTest) {
+            this.addTest();
+        }
         if (usaBottoneTest1) {
             this.addTest1();
         }
         if (usaBottoneTest2) {
             this.addTest2();
+        }
+        if (usaBottoneUpload) {
+            this.addUpload();
         }
         if (usaBottoneUpload1) {
             this.addUpload1();
@@ -426,6 +450,15 @@ public class WikiListButtonBar extends ListButtonBar {
     }
 
 
+    private void addTest() {
+        buttonTest.getElement().setAttribute("theme", "secondary");
+        buttonTest.getElement().setProperty("title", "Test: scrittura di una voce su Utente:Biobot");
+        buttonTest.setIcon(new Icon(VaadinIcon.SERVER));
+        buttonTest.setEnabled(false);
+        buttonTest.addClickListener(event -> currentCrudList.testPagina());
+        this.add(buttonTest);
+    }
+
     private void addTest1() {
         buttonTest1.getElement().setAttribute("theme", "secondary");
         buttonTest1.getElement().setProperty("title", "Test: scrittura di una voce nati su Utente:Biobot");
@@ -444,6 +477,16 @@ public class WikiListButtonBar extends ListButtonBar {
         this.add(buttonTest2);
     }
 
+    private void addUpload() {
+        buttonUpload.getElement().setAttribute("theme", "primary");
+        buttonUpload.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        buttonUpload.getElement().setProperty("title", "Upload della singola pagina");
+        buttonUpload.setIcon(new Icon(VaadinIcon.UPLOAD));
+        buttonUpload.setEnabled(false);
+        buttonUpload.addClickListener(event -> currentCrudList.uploadPagina());
+        this.add(buttonUpload);
+    }
+
     private void addUpload1() {
         buttonUpload1.getElement().setAttribute("theme", "primary");
         buttonUpload1.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -453,6 +496,7 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonUpload1.addClickListener(event -> currentCrudList.uploadPaginaNati());
         this.add(buttonUpload1);
     }
+
 
     private void addUpload2() {
         buttonUpload2.getElement().setAttribute("theme", "primary");
@@ -495,8 +539,10 @@ public class WikiListButtonBar extends ListButtonBar {
         buttonWikiView.setEnabled(singoloSelezionato);
         buttonWikiEdit.setEnabled(singoloSelezionato);
         buttonWikiCrono.setEnabled(singoloSelezionato);
+        buttonTest.setEnabled(singoloSelezionato);
         buttonTest1.setEnabled(singoloSelezionato);
         buttonTest2.setEnabled(singoloSelezionato);
+        buttonUpload.setEnabled(singoloSelezionato);
         buttonUpload1.setEnabled(singoloSelezionato);
         buttonUpload2.setEnabled(singoloSelezionato);
 

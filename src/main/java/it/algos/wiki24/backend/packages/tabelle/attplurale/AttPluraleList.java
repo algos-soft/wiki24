@@ -31,6 +31,14 @@ public class AttPluraleList extends WikiList {
         this.usaBottoneDownload = true;
         this.usaBottoneElabora = true;
         this.usaBottoneUploadAll = true;
+
+        super.usaBottoneWikiView = false;
+        super.usaBottoneTest = true;
+        super.usaBottoneTest1 = false;
+        super.usaBottoneTest2 = false;
+        super.usaBottoneUpload = true;
+        super.usaBottoneUpload1 = false;
+        super.usaBottoneUpload2 = false;
     }
 
     @Override

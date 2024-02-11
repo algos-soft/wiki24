@@ -207,10 +207,16 @@ public abstract class WikiModulo extends CrudModulo {
         return VUOTA;
     }
 
+    public void testPagina(AbstractEntity crudEntityBean) {
+    }
+
     public void testPaginaNati(AbstractEntity crudEntityBean) {
     }
 
     public void testPaginaMorti(AbstractEntity crudEntityBean) {
+    }
+
+    public void uploadPagina(AbstractEntity crudEntityBean) {
     }
 
     public void uploadPaginaNati(AbstractEntity crudEntityBean) {

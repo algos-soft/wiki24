@@ -33,12 +33,14 @@ public class GiornoWikiList extends WikiList {
         super.usaBottoneSearch = typeList.isUsaBottoneSearch();
         super.usaBottoneExport = false;
         super.usaInfoElabora = true;
-        this.usaInfoUpload = true;
+        super.usaInfoUpload = true;
         super.usaVariantCompact = true;
 
         super.usaBottoneWikiView = true;
+        super.usaBottoneTest = false;
         super.usaBottoneTest1 = true;
         super.usaBottoneTest2 = true;
+        super.usaBottoneUpload = false;
         super.usaBottoneUpload1 = true;
         super.usaBottoneUpload2 = true;
     }

@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -102,6 +103,12 @@ public class AttPluraleModulo extends WikiModulo {
     }
 
     @Override
+    public List<AttPluraleEntity> findAll() {
+        return super.findAll();
+    }
+
+
+    @Override
     public AttPluraleEntity findByKey(final Object keyPropertyValue) {
         return (AttPluraleEntity) super.findByKey(keyPropertyValue);
     }
@@ -178,5 +185,27 @@ public class AttPluraleModulo extends WikiModulo {
         super.fixInfoElabora();
         return VUOTA;
     }
+
+    @Override
+    public String uploadAll() {
+        inizio = System.currentTimeMillis();
+
+        for (AttPluraleEntity attivitaBean : findAll()) {
+            uploadPagina(attivitaBean);
+        }
+
+        return super.fixUpload(inizio);
+    }
+    @Override
+    public void testPagina(AbstractEntity crudEntityBean) {
+        uploadService.attivitaTest((AttPluraleEntity)crudEntityBean);
+    }
+
+    @Override
+    public void uploadPagina(AbstractEntity crudEntityBean) {
+        uploadService.attivita((AttPluraleEntity)crudEntityBean);
+    }
+
+
 
 }// end of CrudModulo class

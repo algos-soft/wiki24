@@ -198,6 +198,8 @@ public class Upload implements AlgosBuilderPattern {
         this.typeSummary = switch (type) {
             case giornoNascita, giornoMorte -> TypeSummary.giorniBio;
             case annoNascita, annoMorte -> TypeSummary.anniBio;
+            case attivitaSingolare, attivitaPlurale -> TypeSummary.attivitàBio;
+            case nazionalitaSingolare, nazionalitaPlurale -> TypeSummary.nazionalitàBio;
             default -> TypeSummary.nessuno;
         };
 
@@ -324,7 +326,7 @@ public class Upload implements AlgosBuilderPattern {
             listaSottopagine = listaSottopagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
-                    result = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).uploadOnly();
+                    result = appContext.getBean(Upload.class, nomeLista).test().type(type).sottopagina(keySottopagina).uploadOnly();
                 }
             }
         }
@@ -716,7 +718,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String correlate() {
         StringBuffer buffer = new StringBuffer();
-String tagCorrelato=VUOTA;
+        String tagCorrelato = VUOTA;
 
         boolean usaCorrelate = switch (type) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> false;
@@ -730,7 +732,7 @@ String tagCorrelato=VUOTA;
 
         tagCorrelato = switch (type) {
             case attivitaSingolare, attivitaPlurale -> ATT;
-            case  nazionalitaSingolare, nazionalitaPlurale -> NAZ;
+            case nazionalitaSingolare, nazionalitaPlurale -> NAZ;
             default -> VUOTA;
         };
 
