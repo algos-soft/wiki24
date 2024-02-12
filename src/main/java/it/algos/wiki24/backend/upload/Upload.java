@@ -326,7 +326,7 @@ public class Upload implements AlgosBuilderPattern {
             listaSottopagine = listaSottopagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
-                    result = appContext.getBean(Upload.class, nomeLista).test().type(type).sottopagina(keySottopagina).uploadOnly();
+                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottopagina(keySottopagina).uploadOnly();
                 }
             }
         }
@@ -363,11 +363,11 @@ public class Upload implements AlgosBuilderPattern {
 
     public List<String> listaSottopagine() {
         if (!checkValiditaPattern()) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (!checkBio()) {
-            return null;
+            return new ArrayList<>();
         }
 
         return appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
@@ -463,16 +463,39 @@ public class Upload implements AlgosBuilderPattern {
 
         buffer.append("Questa");
         buffer.append(REF);
-        buffer.append("Questa pagina di una singola");
-        buffer.append(SPAZIO);
-        buffer.append(textService.setBold(tagAttNazDiretta));
-        buffer.append(SPAZIO);
-        buffer.append("è stata creata perché le relative voci biografiche superano le");
-        buffer.append(SPAZIO);
-        buffer.append(textService.setBold(numSottopagine + VUOTA));
-        buffer.append(SPAZIO);
-        buffer.append("unità.");
-        buffer.append(REF_END);
+
+        if (isSottopagina) {
+            buffer.append("Questa sottopagina");
+            buffer.append(SPAZIO);
+            buffer.append(QUADRA_INI);
+            buffer.append(textService.setBold(textService.primaMaiuscola(nomeLista) + SLASH + textService.primaMaiuscola(keySottopagina)));
+            buffer.append(QUADRA_END);
+            buffer.append(SPAZIO);
+            buffer.append("è stata creata perché ci sono");
+            buffer.append(SPAZIO);
+            buffer.append(textService.setBold(numBio + VUOTA));
+            buffer.append(SPAZIO);
+            buffer.append("voci biografiche nel paragrafo");
+            buffer.append(SPAZIO + textService.setBold(textService.primaMaiuscola(keySottopagina)) + SPAZIO);
+            buffer.append("della");
+            buffer.append(SPAZIO);
+            buffer.append(tagAttNazDiretta);
+            buffer.append(SPAZIO + textService.setBold(textService.primaMaiuscola(nomeLista)) + SPAZIO);
+            buffer.append(REF_END);
+        }
+        else {
+            buffer.append("Questa pagina di una singola");
+            buffer.append(SPAZIO);
+            buffer.append(textService.setBold(tagAttNazDiretta));
+            buffer.append(SPAZIO);
+            buffer.append("è stata creata perché le relative voci biografiche superano le");
+            buffer.append(SPAZIO);
+            buffer.append(textService.setBold(numSottopagine + VUOTA));
+            buffer.append(SPAZIO);
+            buffer.append("unità.");
+            buffer.append(REF_END);
+        }
+
         buffer.append(SPAZIO);
         buffer.append("è una lista");
         buffer.append(REF);
@@ -528,25 +551,34 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(SPAZIO);
         buffer.append("quella di");
         buffer.append(SPAZIO + textService.setBold(textService.primaMinuscola(nomeLista)));
-        buffer.append(PUNTO);
-        buffer.append(SPAZIO);
-        buffer.append("Le persone sono suddivise");
-        buffer.append(REF);
-        buffer.append("La lista è suddivisa in paragrafi per ogni");
-        buffer.append(SPAZIO + textService.setBold(tagAttNazInversa) + SPAZIO);
-        buffer.append("individuata.");
-        buffer.append(SPAZIO);
-        buffer.append("Se il numero di voci biografiche nel paragrafo supera le");
-        buffer.append(SPAZIO + textService.setBold(sogliaSottoPagina + VUOTA) + SPAZIO);
-        buffer.append("unità, viene creata una");
-        buffer.append(SPAZIO + textService.setBold("sottopagina") + SPAZIO);
-        buffer.append(PUNTO);
-        buffer.append(REF_END);
-        buffer.append(SPAZIO);
-        buffer.append("per");
-        buffer.append(SPAZIO);
-        buffer.append(tagAttNazInversa);
-        buffer.append(PUNTO);
+        if (isSottopagina) {
+            buffer.append(SPAZIO);
+            buffer.append("e sono");
+            buffer.append(SPAZIO);
+            buffer.append(textService.setBold(textService.primaMinuscola(keySottopagina)));
+            buffer.append(PUNTO);
+        }
+        else {
+            buffer.append(PUNTO);
+            buffer.append(SPAZIO);
+            buffer.append("Le persone sono suddivise");
+            buffer.append(REF);
+            buffer.append("La lista è suddivisa in paragrafi per ogni");
+            buffer.append(SPAZIO + textService.setBold(tagAttNazInversa) + SPAZIO);
+            buffer.append("individuata.");
+            buffer.append(SPAZIO);
+            buffer.append("Se il numero di voci biografiche nel paragrafo supera le");
+            buffer.append(SPAZIO + textService.setBold(sogliaSottoPagina + VUOTA) + SPAZIO);
+            buffer.append("unità, viene creata una");
+            buffer.append(SPAZIO + textService.setBold("sottopagina") + SPAZIO);
+            buffer.append(PUNTO);
+            buffer.append(REF_END);
+            buffer.append(SPAZIO);
+            buffer.append("per");
+            buffer.append(SPAZIO);
+            buffer.append(tagAttNazInversa);
+            buffer.append(PUNTO);
+        }
         buffer.append(REF);
         buffer.append("Le");
         buffer.append(SPAZIO + textService.setBold(tagAttNazInversa) + SPAZIO);
@@ -572,7 +604,18 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String fixToc() {
-        return TypeToc.nessuno.get();
+        if (isSottopagina) {
+            return switch (type) {
+                case giornoNascita, giornoMorte -> TypeToc.nessuno.get();
+                case annoNascita, annoMorte -> TypeToc.nessuno.get();
+                case attivitaSingolare, attivitaPlurale -> TypeToc.noToc.get();
+                case nazionalitaSingolare, nazionalitaPlurale -> TypeToc.noToc.get();
+                default -> TypeToc.nessuno.get();
+            };
+        }
+        else {
+            return TypeToc.nessuno.get();
+        }
     }
 
     protected String fixUnConnected() {
@@ -588,10 +631,10 @@ public class Upload implements AlgosBuilderPattern {
         String giornoAnnoLink = isSottopagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
         String giornoAnnoTxt = String.format("{{Torna a|%s}}", giornoAnnoLink);
 
-        String attivitaLink = isSottopagina ? PATH_BIOGRAFIE + SLASH + ATT : PATH_BIOGRAFIE + ATT;
+        String attivitaLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
         String attivitaTxt = String.format("{{Torna a|%s}}", attivitaLink);
 
-        String nazionalitaLink = isSottopagina ? PATH_BIOGRAFIE + SLASH + ATT : PATH_BIOGRAFIE + NAZ;
+        String nazionalitaLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
         String nazionalitaTxt = String.format("{{Torna a|%s}}", nazionalitaLink);
 
         return switch (type) {
@@ -664,6 +707,7 @@ public class Upload implements AlgosBuilderPattern {
             }
         }
 
+        buffer.append(CAPO);
         this.bodyText = buffer.toString();
         return this.bodyText;
     }
@@ -691,7 +735,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         this.bottomText = buffer.toString();
-        return bottomText;
+        return bottomText = textService.isValid(bottomText) ? bottomText.trim() : bottomText;
     }
 
     protected String note(String textDaEsaminare) {
@@ -878,7 +922,10 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String categorieAttivita() {
         StringBuffer buffer = new StringBuffer();
-        String categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+        String categoria;
+
+        categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+        categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
 
         buffer.append(ASTERISCO);
         buffer.append(textService.setDoppieQuadre(categoria));
@@ -888,7 +935,10 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String categorieNazionalita() {
         StringBuffer buffer = new StringBuffer();
-        String categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+        String categoria;
+
+        categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+        categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
 
         buffer.append(ASTERISCO);
         buffer.append(textService.setDoppieQuadre(categoria));

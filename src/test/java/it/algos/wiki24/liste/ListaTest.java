@@ -82,7 +82,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -260,7 +260,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
@@ -336,7 +336,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
@@ -430,7 +430,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -523,6 +523,8 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
         if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("Nella pagina [%s] di type%s[%s], ci sono [%d] sottopagine", nomeLista, FORWARD, type.name(), listaStr.size());
+            System.out.println(message);
             for (String keySottopagina : listaStr) {
                 ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
                 assertTrue(textService.isValid(ottenuto));

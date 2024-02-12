@@ -116,7 +116,7 @@ public class WikiUtilityService {
     }
 
     public String wikiTitleNazionalita(String nazionalita) {
-        return "Progetto:Biografie/Nazionalità/" +  textService.primaMaiuscola(nazionalita);
+        return "Progetto:Biografie/Nazionalità/" + textService.primaMaiuscola(nazionalita);
     }
 
     /**
@@ -227,6 +227,18 @@ public class WikiUtilityService {
         if (mappa3 != null) {
             for (String key : mappa3.keySet()) {
                 size += getSizeMappa(mappa3.get(key));
+            }
+        }
+
+        return size;
+    }
+
+    public int getSizeMappaMappaLista(LinkedHashMap<String, List<String>> mappa4) {
+        int size = 0;
+
+        if (mappa4 != null) {
+            for (String key : mappa4.keySet()) {
+                size += mappa4.get(key).size();
             }
         }
 

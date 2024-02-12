@@ -196,6 +196,7 @@ public class AttPluraleModulo extends WikiModulo {
 
         return super.fixUpload(inizio);
     }
+
     @Override
     public void testPagina(AbstractEntity crudEntityBean) {
         uploadService.attivitaTest((AttPluraleEntity)crudEntityBean);
@@ -205,7 +206,6 @@ public class AttPluraleModulo extends WikiModulo {
     public void uploadPagina(AbstractEntity crudEntityBean) {
         uploadService.attivita((AttPluraleEntity)crudEntityBean);
     }
-
 
 
 }// end of CrudModulo class

@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.tabelle.nazplurale;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
@@ -97,6 +98,12 @@ public class NazPluraleModulo extends WikiModulo {
     }
 
     @Override
+    public List<NazPluraleEntity> findAll() {
+        return super.findAll();
+    }
+
+
+    @Override
     public NazPluraleEntity findByKey(final Object keyPropertyValue) {
         return (NazPluraleEntity) super.findByKey(keyPropertyValue);
     }
@@ -173,6 +180,28 @@ public class NazPluraleModulo extends WikiModulo {
 
         super.fixInfoElabora();
         return VUOTA;
+    }
+
+
+    @Override
+    public String uploadAll() {
+        inizio = System.currentTimeMillis();
+
+        for (NazPluraleEntity nazionalitaBean : findAll()) {
+            uploadPagina(nazionalitaBean);
+        }
+
+        return super.fixUpload(inizio);
+    }
+
+    @Override
+    public void testPagina(AbstractEntity crudEntityBean) {
+        uploadService.nazionalitaTest((NazPluraleEntity)crudEntityBean);
+    }
+
+    @Override
+    public void uploadPagina(AbstractEntity crudEntityBean) {
+        uploadService.nazionalita((NazPluraleEntity)crudEntityBean);
     }
 
 }// end of CrudModulo class

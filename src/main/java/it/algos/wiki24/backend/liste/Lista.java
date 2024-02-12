@@ -533,7 +533,7 @@ public class Lista implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
         int numVociLista; //voci totali
         int numChiaviMappa; //paragrafi effettivi
-        boolean usaParagrafi = false;
+        boolean usaParagrafi;
         int numVociParagrafo;
         String sottoPagina;
         String vedi;
@@ -670,8 +670,13 @@ public class Lista implements AlgosBuilderPattern {
      */
     public String getTestoSottopagina(String keySottopagina) {
         StringBuffer buffer = new StringBuffer();
-        int numVociSottopagina;
+        int numVociSottoPagina; //voci della sottoPagina
+        boolean usaParagrafiPreferenze;
+        boolean usaParagrafiDinamico;
         boolean usaDiv;
+        int numChiaviMappaSottoPagina; //paragrafi della sottoPagina
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottoPagina;
+        int numVociParagrafo = 0;
 
         if (!checkValiditaPattern()) {
             return STRING_ERROR;
@@ -683,15 +688,47 @@ public class Lista implements AlgosBuilderPattern {
             return STRING_ERROR;
         }
 
-        numVociSottopagina = wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
-        usaDiv = numVociSottopagina > sogliaDiv;
+        usaParagrafiPreferenze = switch (type) {
+            case giornoNascita, giornoMorte -> WPref.usaParagrafiGiorniSotto.is();
+            case annoNascita, annoMorte -> WPref.usaParagrafiAnniSotto.is();
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> WPref.usaParagrafiAttNazSotto.is();
+            default -> false;
+        };
 
-        if (usaDiv) {
-            buffer.append(DIV_INI_CAPO);
+        mappaSottoPagina = mappaCompleta.get(keySottopagina);
+        numVociSottoPagina = wikiUtilityService.getSizeMappa(mappaSottoPagina);
+        numChiaviMappaSottoPagina = mappaSottoPagina.size();
+        usaParagrafiDinamico = numVociSottoPagina > sogliaSottoPagina && numChiaviMappaSottoPagina >= sogliaParagrafi;
+        if (usaParagrafiPreferenze && usaParagrafiDinamico) {
+            for (String keyParagrafo : mappaSottoPagina.keySet()) {
+                numVociParagrafo = wikiUtilityService.getSizeMappaMappaLista(mappaSottoPagina.get(keyParagrafo));
+                usaDiv = numVociParagrafo > sogliaDiv;
+
+                for (String terzoLivello : mappaSottoPagina.get(keyParagrafo).keySet()) {
+                    buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                    if (usaDiv) {
+                        buffer.append(DIV_INI_CAPO);
+                    }
+                    for (String didascalia : mappaSottoPagina.get(keyParagrafo).get(terzoLivello)) {
+                        buffer.append(ASTERISCO);
+                        buffer.append(didascalia);
+                        buffer.append(CAPO);
+                    }
+                    if (usaDiv) {
+                        buffer.append(DIV_END_CAPO);
+                    }
+                }
+            }
         }
-        buffer.append(bodyParagrafo(keySottopagina, false));
-        if (usaDiv) {
-            buffer.append(DIV_END_CAPO);
+        else {
+            usaDiv = numVociSottoPagina > sogliaDiv;
+            if (usaDiv) {
+                buffer.append(DIV_INI_CAPO);
+            }
+            buffer.append(bodyParagrafo(keySottopagina, false));
+            if (usaDiv) {
+                buffer.append(DIV_END_CAPO);
+            }
         }
 
         return buffer.toString();
@@ -723,8 +760,8 @@ public class Lista implements AlgosBuilderPattern {
             case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
             case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(nomeLista, keySottopagina);
             case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(nomeLista, keySottopagina);
-            case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista,keySottopagina);
-            case attivitaPlurale -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista,keySottopagina);
+            case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista, keySottopagina);
+            case attivitaPlurale -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista, keySottopagina);
             case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
             default -> INT_ERROR;

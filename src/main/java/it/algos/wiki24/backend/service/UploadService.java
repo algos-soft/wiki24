@@ -7,6 +7,7 @@ import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.tabelle.anni.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
+import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.upload.*;
 import org.springframework.context.*;
@@ -102,6 +103,13 @@ public class UploadService {
     }
     public boolean attivita(final AttPluraleEntity attivitaBean) {
         return appContext.getBean(Upload.class, attivitaBean.plurale).type(TypeLista.attivitaPlurale).uploadAll().isValido();
+    }
+
+    public boolean nazionalitaTest(final NazPluraleEntity nazionalitaBean) {
+        return appContext.getBean(Upload.class, nazionalitaBean.plurale).test().type(TypeLista.nazionalitaPlurale).uploadAll().isValido();
+    }
+    public boolean nazionalita(final NazPluraleEntity nazionalitaBean) {
+        return appContext.getBean(Upload.class, nazionalitaBean.plurale).type(TypeLista.nazionalitaPlurale).uploadAll().isValido();
     }
 
 }

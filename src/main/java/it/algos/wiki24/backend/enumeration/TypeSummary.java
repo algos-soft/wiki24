@@ -16,8 +16,8 @@ public enum TypeSummary {
     nessuno(VUOTA, false),
     giorniBio("giorniBio", true),
     anniBio("anniBio", true),
-    attivitàBio("attivitàBio", false),
-    nazionalitàBio("nazionalitàBio", false),
+    attivitàBio("attivitàBio", true),
+    nazionalitàBio("nazionalitàBio", true),
     statBio("statBio", false),
     test("test", false),
     ;

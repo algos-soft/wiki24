@@ -167,6 +167,11 @@ public enum WPref implements IPref {
     usaSottopagineAttivita("usaSottopagineAttivita", TypePref.bool, true, "Abilita l'eventuale sottopagina delle attività (se > 50)"),
     usaSottopagineNazionalita("usaSottopagineNazionalita", TypePref.bool, true, "Abilita l'eventuale sottopagina delle nazionalità (se > 50)"),
 
+
+    usaParagrafiGiorniSotto("usaParagrafiGiorniSotto", TypePref.bool, false, "Usa i paragrafi (decadi) nelle sottoPagine (secoli) dei giorni"),
+    usaParagrafiAnniSotto("usaParagrafiAnniSotto", TypePref.bool, false, "Usa i paragrafi (decine) nelle sottoPagine (mesi) degli anni"),
+    usaParagrafiAttNazSotto("usaParagrafiAttNazSotto", TypePref.bool, true, "Usa i paragrafi (alfabetici) nelle sottoPagine di attività/nazionalità"),
+
     ;
 
     public PreferenzaModulo preferenzaModulo;
