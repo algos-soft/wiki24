@@ -64,6 +64,7 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("560", TypeLista.annoMorte),
                 Arguments.of("2023", TypeLista.nessunaLista),
                 Arguments.of("3125", TypeLista.annoMorte),
+                Arguments.of("agricoltori", TypeLista.attivitaPlurale),
                 Arguments.of("direttore di scena", TypeLista.nessunaLista),
                 Arguments.of("direttore di scena", TypeLista.attivitaSingolare),
                 Arguments.of("agronomi", TypeLista.attivitaPlurale),
@@ -84,8 +85,9 @@ public abstract class WikiStreamTest extends WikiTest {
         );
     }
 
-    //--nome giorno/anno
+    //--nome lista
     //--typeLista per il test
+    //--key sottoPagina
     protected static Stream<Arguments> LISTA_TEST() {
         return Stream.of(
                 //                Arguments.of("29 febbraio", TypeLista.giornoNascita),
@@ -98,7 +100,9 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("42 luglio", TypeLista.giornoNascita),
                 //                Arguments.of("2024", TypeLista.annoNascita),
                 //                Arguments.of("2026", TypeLista.annoMorte),
-                Arguments.of("2023", TypeLista.annoMorte)
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"belgi"),
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"bosniaci"),
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"brasiliani")
         );
     }
 

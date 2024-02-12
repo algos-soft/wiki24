@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.upload;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
@@ -296,6 +297,7 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     public WResult uploadOnly() {
+        int numeroMinimoDiVociPerPoterStampare;
         if (!checkValiditaPattern()) {
             return WResult.errato();
         }
@@ -304,6 +306,21 @@ public class Upload implements AlgosBuilderPattern {
             message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
             logger.info(new WrapLog().message(message));
 
+            return WResult.valido(message).typeResult(TypeResult.noBio);
+        }
+
+        numeroMinimoDiVociPerPoterStampare = switch (type) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> 0;
+            case attivitaSingolare -> MAX_INT_VALUE;
+            case attivitaPlurale -> WPref.sogliaPaginaAttivita.getInt();
+            case nazionalitaSingolare -> MAX_INT_VALUE;
+            case nazionalitaPlurale -> WPref.sogliaPaginaNazionalita.getInt();
+            default -> MAX_INT_VALUE;
+        };
+
+        if (numBio < numeroMinimoDiVociPerPoterStampare) {
+            message = String.format("Nella lista [%s] ci sono solo [%s] biografie che sono meno delle [%s] richieste.", titoloPagina, numBio, numeroMinimoDiVociPerPoterStampare);
+            logger.info(new WrapLog().message(message));
             return WResult.valido(message).typeResult(TypeResult.noBio);
         }
 

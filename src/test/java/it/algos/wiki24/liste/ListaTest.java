@@ -3,6 +3,7 @@ package it.algos.wiki24.liste;
 import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -82,7 +83,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -229,7 +230,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -260,7 +261,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
@@ -294,7 +295,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
@@ -336,7 +337,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
@@ -430,7 +431,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -504,7 +505,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")
@@ -552,34 +553,69 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //                @ParameterizedTest
-    @MethodSource(value = "LISTA_TEST")
-    @Order(903)
-    @DisplayName("903 - mappaSottopagina")
-    void mappaSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("903 - mappaSottopagina"));
+    @Test
+    @Order(904)
+    @DisplayName("904 - mappaSottopagina")
+    void mappaSottopagina() {
+        System.out.println(("904 - mappaSottopagina"));
         System.out.println(VUOTA);
-        if (!fixListe(nomeLista, type)) {
-            return;
-        }
+        sorgente = "allenatori di calcio";
 
-        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        istanza = appContext.getBean(Lista.class, sorgente).type(TypeLista.attivitaPlurale);
+        assertNotNull(istanza);
+        listaStr = istanza.keyMappa();
+        assertNotNull(listaStr);
+        listaStr = istanza.listaSottopagine();
+        assertNotNull(listaStr);
 
-        if (textService.isEmpty(nomeLista)) {
-            assertNull(listaStr);
-            return;
-        }
-        if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr) {
-                mappaSottopagina = appContext.getBean(Lista.class, nomeLista).type(type).getMappaSottopagina(keySottopagina);
+        sorgente2 = "belgi";
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
             }
         }
-        else {
-            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
-            System.out.println(message);
-        }
-    }
+        System.out.println(VUOTA);
 
+        sorgente2 = "bosniaci";
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
+        System.out.println(VUOTA);
+
+        sorgente2 = "brasiliani";
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
+        System.out.println(VUOTA);
+
+        sorgente2 = TAG_LISTA_NO_NAZIONALITA;
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
+        System.out.println(VUOTA);
+    }
 
     protected void printBioLista(List<BioMongoEntity> listaBio) {
         String message;
@@ -604,7 +640,6 @@ public class ListaTest extends WikiStreamTest {
             printBioBase(listaBio.subList(iniB, endB), iniB);
         }
     }
-
 
     protected void printBioBase(List<BioMongoEntity> listaBio, final int inizio) {
         int cont = inizio;
@@ -658,7 +693,6 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-
     protected void printMappa(String tipo, String nome, LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa) {
         if (mappa == null || mappa.size() == 0) {
             message = String.format("La mappa di didascalie per la lista [%s] è vuota", sorgente);
@@ -686,6 +720,32 @@ public class ListaTest extends WikiStreamTest {
                         System.out.print(TAB);
                         System.out.println(didascalia);
                     }
+                }
+            }
+        }
+    }
+
+    protected void printMappa(LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappa) {
+        if (mappa == null || mappa.size() == 0) {
+            message = String.format("La mappa è vuota");
+            System.out.println(message);
+            return;
+        }
+
+        for (String secondoLivello : mappa.keySet()) {
+            System.out.print(TAB);
+            System.out.println(textService.isValid(secondoLivello) ? secondoLivello : NULLO);
+
+            for (String terzoLivello : mappa.get(secondoLivello).keySet()) {
+                System.out.print(TAB);
+                System.out.print(TAB);
+                System.out.println(textService.isValid(terzoLivello) ? terzoLivello : NULLO);
+
+                for (String didascalia : mappa.get(secondoLivello).get(terzoLivello)) {
+                    System.out.print(TAB);
+                    System.out.print(TAB);
+                    System.out.print(TAB);
+                    System.out.println(didascalia);
                 }
             }
         }

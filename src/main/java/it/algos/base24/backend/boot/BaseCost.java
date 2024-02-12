@@ -15,6 +15,7 @@ import java.util.*;
 @Service
 public class BaseCost {
 
+    public static final int MAX_INT_VALUE = 2147483647;
 
     public static final String KEY_NULL = "null";
 

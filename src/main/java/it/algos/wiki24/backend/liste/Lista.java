@@ -449,7 +449,7 @@ public class Lista implements AlgosBuilderPattern {
                     mappaCompleta.put(keyUno, mappaPrima);
                 }
 
-                //--secondo livello - decade/lettera alfabetica iniziale
+                //--secondo livello - decade/decina/lettera alfabetica iniziale
                 keyDue = wrap.getSecondoLivello();
                 mappaPrima = mappaCompleta.get(keyUno);
                 if (!mappaPrima.containsKey(keyDue)) {
@@ -457,7 +457,7 @@ public class Lista implements AlgosBuilderPattern {
                     mappaPrima.put(keyDue, mappaSeconda);
                 }
 
-                //--terzo livello - giorno/anno/binomio alfabetico
+                //--terzo livello - giorno/anno/binomio alfabetico iniziale
                 keyTre = wrap.getTerzoLivello();
                 mappaSeconda = mappaPrima.get(keyDue);
                 listaTerza = new ArrayList<>();
@@ -472,35 +472,70 @@ public class Lista implements AlgosBuilderPattern {
         }
 
         listaWrapDidascalie = null;
+        mappaCompleta = ordinamento(mappaCompleta);
         return fixAltreInCoda(mappaCompleta);
+    }
+
+    public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> ordinamento(final LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaIn) {
+        LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaOut = new LinkedHashMap<>();
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaParagrafo;
+
+        mappaOut = switch (type) {
+            case giornoNascita, giornoMorte: {
+                yield mappaIn;
+            }
+            case annoNascita, annoMorte: {
+                yield mappaIn;
+            }
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale: {
+                for (String key : mappaIn.keySet()) {
+                    mappaParagrafo = mappaIn.get(key);
+                    mappaParagrafo = arrayService.sort(mappaParagrafo);
+                    mappaOut.put(key, mappaParagrafo);
+                }
+                yield mappaOut;
+            }
+            default:
+                yield mappaIn;
+        };
+
+        return mappaOut;
     }
 
     /**
      * Sposta in coda alla mappa il paragrafo 'Altre...' (eventuale) <br>
      */
-    public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> fixAltreInCoda(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa) {
-        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaAltre;
+    public LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> fixAltreInCoda(final LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaIn) {
+        LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaOut = new LinkedHashMap<>();
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaAltre = new LinkedHashMap<>();
+        String tag;
 
-        if (mappa == null) {
+        if (mappaIn == null) {
             return null;
         }
 
-        switch (type) {
-            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> {
-                mappa = arrayService.sort(mappa);
-            }
-            default -> {}
-        } ;
+        tag = switch (type) {
+            case giornoNascita, giornoMorte -> TypeInesistente.giorno.getTag();
+            case annoNascita, annoMorte -> TypeInesistente.anno.getTag();
+            case attivitaSingolare, attivitaPlurale -> TypeInesistente.attivita.getTag();
+            case nazionalitaSingolare, nazionalitaPlurale -> TypeInesistente.nazionalita.getTag();
+            default -> VUOTA;
+        };
 
-        for (TypeInesistente type : TypeInesistente.values()) {
-            if (mappa.containsKey(type.getTag())) {
-                mappaAltre = mappa.get(type.getTag());
-                mappa.remove(type.getTag());
-                mappa.put(type.getTag(), mappaAltre);
+        for (String key : mappaIn.keySet()) {
+            if (key.equals(tag)) {
+                mappaAltre = mappaIn.get(key);
+            }
+            else {
+                mappaOut.put(key, mappaIn.get(key));
             }
         }
 
-        return mappa;
+        if (mappaAltre != null && mappaAltre.size() > 0) {
+            mappaOut.put(tag, mappaAltre);
+        }
+
+        return mappaOut;
     }
 
     public List<String> keyMappa() {
@@ -735,10 +770,15 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {
-        if (textService.isEmpty(bodyText)) {
-            bodyText();
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
         }
-        return mappaCompleta.get(keySottopagina);
+
+        if (mappaCompleta != null && mappaCompleta.size() > 0) {
+            return mappaCompleta.get(textService.primaMaiuscola(keySottopagina));
+        }
+
+        return null;
     }
 
     /**
