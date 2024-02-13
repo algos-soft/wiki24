@@ -493,7 +493,7 @@ public class Lista implements AlgosBuilderPattern {
                     mappaParagrafo = arrayService.sort(mappaParagrafo);
                     mappaOut.put(key, mappaParagrafo);
                 }
-                yield mappaOut;
+                yield arrayService.sort(mappaOut);
             }
             default:
                 yield mappaIn;
@@ -517,8 +517,8 @@ public class Lista implements AlgosBuilderPattern {
         tag = switch (type) {
             case giornoNascita, giornoMorte -> TypeInesistente.giorno.getTag();
             case annoNascita, annoMorte -> TypeInesistente.anno.getTag();
-            case attivitaSingolare, attivitaPlurale -> TypeInesistente.attivita.getTag();
-            case nazionalitaSingolare, nazionalitaPlurale -> TypeInesistente.nazionalita.getTag();
+            case attivitaSingolare, attivitaPlurale -> TypeInesistente.nazionalita.getTag();
+            case nazionalitaSingolare, nazionalitaPlurale -> TypeInesistente.attivita.getTag();
             default -> VUOTA;
         };
 
@@ -796,8 +796,8 @@ public class Lista implements AlgosBuilderPattern {
         }
 
         numBioSottopagina = switch (type) {
-            case giornoNascita -> bioMongoModulo.countAllByGiornoNato(nomeLista);
-            case giornoMorte -> bioMongoModulo.countAllByGiornoMorto(nomeLista);
+            case giornoNascita -> bioMongoModulo.countByGiornoNatoAndSecolo(nomeLista, keySottopagina);
+            case giornoMorte -> bioMongoModulo.countByGiornoMortoAndSecolo(nomeLista, keySottopagina);
             case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(nomeLista, keySottopagina);
             case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(nomeLista, keySottopagina);
             case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista, keySottopagina);

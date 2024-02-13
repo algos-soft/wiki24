@@ -4,6 +4,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.wrapper.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -76,6 +77,15 @@ public class SecoloModulo extends CrudModulo {
                 .build();
 
         return (SecoloEntity) fixKey(newEntityBean);
+    }
+    @Override
+    public List<SecoloEntity> findAll() {
+        return super.findAll();
+    }
+
+    @Override
+    public SecoloEntity findByKey(final Object keyPropertyValue) {
+        return (SecoloEntity) super.findByKey(keyPropertyValue);
     }
 
     /**

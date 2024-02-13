@@ -56,6 +56,8 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     MeseModulo meseModulo;
+    @Inject
+    SecoloModulo secoloModulo;
 
     @Inject
     ParNomeModulo parNomeModulo;
@@ -273,6 +275,54 @@ public class BioMongoModulo extends WikiModulo {
         query.with(sort);
         return query;
     }
+
+
+
+    public int countByGiornoNatoAndSecolo(final String giorno, String secoloTxt) {
+        return mongoService.count(queryByGiornoNatoAndSecolo(giorno, secoloTxt), BioMongoEntity.class);
+    }
+
+
+    public Query queryByGiornoNatoAndSecolo(final String giorno, String secoloTxt) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
+        SecoloEntity secoloBean;
+
+        if (textService.isEmpty(giorno) || textService.isEmpty(secoloTxt)) {
+            return null;
+        }
+        secoloBean = secoloModulo.findByKey(secoloTxt);
+
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO).is(giorno));
+        query.addCriteria(Criteria.where(FIELD_NAME_SECOLO).is(secoloBean));
+        query.with(sort);
+        return query;
+    }
+
+
+    public int countByGiornoMortoAndSecolo(final String giorno, String secoloTxt) {
+        return mongoService.count(queryByGiornoMortoAndSecolo(giorno, secoloTxt), BioMongoEntity.class);
+    }
+
+
+    public Query queryByGiornoMortoAndSecolo(final String giorno, String secoloTxt) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
+        SecoloEntity secoloBean;
+
+        if (textService.isEmpty(giorno) || textService.isEmpty(secoloTxt)) {
+            return null;
+        }
+        secoloBean = secoloModulo.findByKey(secoloTxt);
+
+        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO).is(giorno));
+        query.addCriteria(Criteria.where(FIELD_NAME_SECOLO).is(secoloBean));
+        query.with(sort);
+        return query;
+    }
+
+
+
 
     public int countByAnnoNatoAndMese(final String anno, String meseTxt) {
         return mongoService.count(queryByAnnoNatoAndMese(anno, meseTxt), BioMongoEntity.class);
