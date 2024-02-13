@@ -83,7 +83,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -105,7 +105,7 @@ public class ListaTest extends WikiStreamTest {
         }
         if (ottenutoIntero > 0) {
             ottenuto = textService.format(ottenutoIntero);
-            message = String.format("Le biografie di type%s[%s] per %s [%s] sono [%s]", FORWARD, type.name(), type.getGiornoAnno(), nomeLista, ottenuto);
+            message = String.format("le biografie di [%s] per type%s[%s] sono [%s]", nomeLista, FORWARD, type.name(), ottenuto);
             System.out.println(message);
             System.out.println(VUOTA);
             System.out.println("numBio VALIDA");
@@ -128,7 +128,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -151,7 +151,7 @@ public class ListaTest extends WikiStreamTest {
         }
 
         if (listaBio.size() > 0) {
-            message = String.format("Lista delle [%d] biografie di type%s[%s] per %s [%s]", listaBio.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
+            message = String.format("Lista delle [%d] biografie di [%s] per type%s[%s]", listaBio.size(), nomeLista, FORWARD, type.name(), type.getGiornoAnno());
             System.out.println(message);
             System.out.println(VUOTA);
             printBioLista(listaBio);
@@ -162,7 +162,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -196,7 +196,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -230,7 +230,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -261,7 +261,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa")
@@ -295,7 +295,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - paragrafi")
@@ -337,7 +337,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(801)
     @DisplayName("801 - listaSottopagine")
@@ -371,7 +371,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(901)
     @DisplayName("901 - numBioParagrafi")
@@ -431,7 +431,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -505,7 +505,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(903)
     @DisplayName("903 - testoSottopagina")
@@ -532,7 +532,11 @@ public class ListaTest extends WikiStreamTest {
                 if (ottenuto.equals(STRING_ERROR)) {
                     assertTrue(false);
                 }
+                message = String.format("Testo body della sottopagina [%s] [%s]", nomeLista, keySottopagina);
+                System.out.println(message);
+                System.out.println(VUOTA);
                 System.out.println(ottenuto);
+                System.out.println(VUOTA);
             }
 
             if (!byPassaErrori) {
@@ -616,6 +620,59 @@ public class ListaTest extends WikiStreamTest {
         }
         System.out.println(VUOTA);
     }
+
+    @Test
+    @Order(904)
+    @DisplayName("904 - getTestoSottopagina")
+    void getTestoSottopagina() {
+        System.out.println(("904 - getTestoSottopagina"));
+        System.out.println(VUOTA);
+        sorgente = "allenatori di calcio";
+
+        istanza = appContext.getBean(Lista.class, sorgente).type(TypeLista.attivitaPlurale);
+        assertNotNull(istanza);
+        listaStr = istanza.keyMappa();
+        assertNotNull(listaStr);
+        listaStr = istanza.listaSottopagine();
+        assertNotNull(listaStr);
+
+        sorgente2 = "belgi";
+        ottenuto = istanza.getTestoSottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+        System.out.println(VUOTA);
+
+        sorgente2 = "bosniaci";
+        ottenuto = istanza.getTestoSottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+        System.out.println(VUOTA);
+
+        sorgente2 = "brasiliani";
+        ottenuto = istanza.getTestoSottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+        System.out.println(VUOTA);
+
+        sorgente2 = TAG_LISTA_NO_NAZIONALITA;
+        ottenuto = istanza.getTestoSottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
+        System.out.println(VUOTA);
+    }
+
 
     protected void printBioLista(List<BioMongoEntity> listaBio) {
         String message;

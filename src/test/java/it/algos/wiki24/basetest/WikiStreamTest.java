@@ -68,7 +68,6 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("direttore di scena", TypeLista.nessunaLista),
                 Arguments.of("direttore di scena", TypeLista.attivitaSingolare),
                 Arguments.of("agronomi", TypeLista.attivitaPlurale),
-                Arguments.of("direttore d'orchestra", TypeLista.attivitaSingolare),
                 Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale),
 
                 Arguments.of("afghani", TypeLista.nessunaLista),

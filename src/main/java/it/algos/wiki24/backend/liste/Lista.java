@@ -708,10 +708,14 @@ public class Lista implements AlgosBuilderPattern {
         int numVociSottoPagina; //voci della sottoPagina
         boolean usaParagrafiPreferenze;
         boolean usaParagrafiDinamico;
+        boolean usaSottoSottoPaginaPreferenze = false;
+        boolean usaSottoSottoPaginaDinamico = false;
         boolean usaDiv;
         int numChiaviMappaSottoPagina; //paragrafi della sottoPagina
         LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottoPagina;
         int numVociParagrafo = 0;
+        String sottoPagina;
+        String vedi;
 
         if (!checkValiditaPattern()) {
             return STRING_ERROR;
@@ -719,7 +723,7 @@ public class Lista implements AlgosBuilderPattern {
         if (mappaCompleta == null || mappaCompleta.size() == 0) {
             mappaCompleta = mappaDidascalie();
         }
-        if (!mappaCompleta.containsKey(keySottopagina)) {
+        if (!mappaCompleta.containsKey(textService.primaMaiuscola(keySottopagina))) {
             return STRING_ERROR;
         }
 
@@ -730,43 +734,75 @@ public class Lista implements AlgosBuilderPattern {
             default -> false;
         };
 
-        mappaSottoPagina = mappaCompleta.get(keySottopagina);
+        usaSottoSottoPaginaPreferenze = switch (type) {
+            case giornoNascita, giornoMorte -> false;
+            case annoNascita, annoMorte -> false;
+            case attivitaSingolare, attivitaPlurale -> true;
+            case nazionalitaSingolare, nazionalitaPlurale -> true;
+            default -> false;
+        };
+
+        mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottopagina));
         numVociSottoPagina = wikiUtilityService.getSizeMappa(mappaSottoPagina);
         numChiaviMappaSottoPagina = mappaSottoPagina.size();
         usaParagrafiDinamico = numVociSottoPagina > sogliaSottoPagina && numChiaviMappaSottoPagina >= sogliaParagrafi;
         if (usaParagrafiPreferenze && usaParagrafiDinamico) {
             for (String keyParagrafo : mappaSottoPagina.keySet()) {
                 numVociParagrafo = wikiUtilityService.getSizeMappaMappaLista(mappaSottoPagina.get(keyParagrafo));
+                usaSottoSottoPaginaDinamico = numVociParagrafo > sogliaSottoPagina;
                 usaDiv = numVociParagrafo > sogliaDiv;
 
-                for (String terzoLivello : mappaSottoPagina.get(keyParagrafo).keySet()) {
-                    buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+                //corpo con/senza sottoSottoPagine
+                if (usaSottoSottoPaginaPreferenze && usaSottoSottoPaginaDinamico) {
+                    sottoPagina = String.format("%s%s%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, textService.primaMaiuscola(keySottopagina), SLASH, keyParagrafo);
+                    vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
+                    buffer.append(vedi + CAPO);
+                }
+                else {
                     if (usaDiv) {
                         buffer.append(DIV_INI_CAPO);
                     }
-                    for (String didascalia : mappaSottoPagina.get(keyParagrafo).get(terzoLivello)) {
-                        buffer.append(ASTERISCO);
-                        buffer.append(didascalia);
-                        buffer.append(CAPO);
+                    for (String terzoLivello : mappaSottoPagina.get(keyParagrafo).keySet()) {
+                        for (String didascalia : mappaSottoPagina.get(keyParagrafo).get(terzoLivello)) {
+                            buffer.append(ASTERISCO);
+                            buffer.append(didascalia);
+                            buffer.append(CAPO);
+                        }
                     }
                     if (usaDiv) {
                         buffer.append(DIV_END_CAPO);
                     }
                 }
             }
+
+            //                for (String terzoLivello : mappaSottoPagina.get(keyParagrafo).keySet()) {
+            //                    buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+            //                    if (usaDiv) {
+            //                        buffer.append(DIV_INI_CAPO);
+            //                    }
+            //                    for (String didascalia : mappaSottoPagina.get(keyParagrafo).get(terzoLivello)) {
+            //                        buffer.append(ASTERISCO);
+            //                        buffer.append(didascalia);
+            //                        buffer.append(CAPO);
+            //                    }
+            //                    if (usaDiv) {
+            //                        buffer.append(DIV_END_CAPO);
+            //                    }
+            //                }
         }
         else {
             usaDiv = numVociSottoPagina > sogliaDiv;
             if (usaDiv) {
                 buffer.append(DIV_INI_CAPO);
             }
-            buffer.append(bodyParagrafo(keySottopagina, false));
+            buffer.append(bodyParagrafo(textService.primaMaiuscola(keySottopagina), false));
             if (usaDiv) {
                 buffer.append(DIV_END_CAPO);
             }
         }
 
-        return buffer.toString();
+        return buffer.toString().trim();
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> getMappaSottopagina(String keySottopagina) {

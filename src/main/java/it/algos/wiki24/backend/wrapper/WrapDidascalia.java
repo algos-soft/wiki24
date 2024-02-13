@@ -178,6 +178,8 @@ public class WrapDidascalia {
             case giornoMorte -> bio.annoMorto;
             case annoNascita -> bio.giornoNato;
             case annoMorte -> bio.giornoMorto;
+            case attivitaSingolare, attivitaPlurale -> getTerzoLivelloAlfabetico(bio);
+            case nazionalitaSingolare, nazionalitaPlurale -> getTerzoLivelloAlfabetico(bio);
             default -> VUOTA;
         };
     }
@@ -315,6 +317,26 @@ public class WrapDidascalia {
         }
 
         return secondoLivello;
+    }
+
+    public String getTerzoLivelloAlfabetico(BioMongoEntity bio) {
+        String  terzoLivello = VUOTA;
+        String cognome = bio.cognome;
+        String wikiTitle = bio.wikiTitle;
+
+        if (textService.isValid(cognome)) {
+            terzoLivello = cognome.substring(0, 2).toUpperCase();
+        }
+        else {
+            if (textService.isValid(wikiTitle)) {
+                terzoLivello = wikiTitle.substring(0, 2).toUpperCase();
+            }
+            else {
+                logger.warn(new WrapLog().message("Manca il wikiTitle"));
+            }
+        }
+
+        return terzoLivello;
     }
 
     public TypeLista getType() {
