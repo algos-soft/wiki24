@@ -33,7 +33,7 @@ import java.util.stream.*;
  */
 public abstract class WikiStreamTest extends WikiTest {
 
-    //--nome giorno/anno
+    //--nome lista
     //--typeLista per il test
     protected static Stream<Arguments> LISTA() {
         return Stream.of(

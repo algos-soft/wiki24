@@ -84,6 +84,8 @@ public abstract class AlgosTest {
     protected List<List<String>> listaTable;
 
     protected Map<String, List<String>> mappa;
+    protected LinkedHashMap<String, String> previstoMappa;
+    protected LinkedHashMap<String, String> ottenutoMappa;
 
     protected List<AbstractEntity> listaEntity;
 

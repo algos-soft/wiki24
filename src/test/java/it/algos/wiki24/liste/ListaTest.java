@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -39,6 +40,25 @@ public class ListaTest extends WikiStreamTest {
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaDidascalie;
 
     protected LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina;
+
+
+    //--nome lista
+    //--typeLista per il test
+    //--sottopagina
+    protected static Stream<Arguments> SOTTO_PAGINE() {
+        return Stream.of(
+                //                Arguments.of("29 febbraio", TypeLista.giornoNascita, NULLO),
+                //                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
+                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
+                Arguments.of("afghani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, "cestisti"),
+                Arguments.of("2023", TypeLista.annoMorte, NULLO)
+        );
+    }
 
     /**
      * Qui passa una volta sola <br>
@@ -105,7 +125,9 @@ public class ListaTest extends WikiStreamTest {
         }
         if (ottenutoIntero > 0) {
             ottenuto = textService.format(ottenutoIntero);
-            message = String.format("le biografie di [%s] per type%s[%s] sono [%s]", nomeLista, FORWARD, type.name(), ottenuto);
+            message = String.format("Le biografie di [%s] per type%s[%s] sono [%s]", nomeLista, FORWARD, type.name(), ottenuto);
+            System.out.println(message);
+            message = "Rimanda direttamente al service BioMongoModulo, SENZA nessuna elaborazione nell'istanza di Lista.";
             System.out.println(message);
             System.out.println(VUOTA);
             System.out.println("numBio VALIDA");
@@ -153,6 +175,8 @@ public class ListaTest extends WikiStreamTest {
         if (listaBio.size() > 0) {
             message = String.format("Lista delle [%d] biografie di [%s] per type%s[%s]", listaBio.size(), nomeLista, FORWARD, type.name(), type.getGiornoAnno());
             System.out.println(message);
+            message = "Rimanda direttamente al service BioMongoModulo, SENZA nessuna elaborazione nell'istanza di Lista.";
+            System.out.println(message);
             System.out.println(VUOTA);
             printBioLista(listaBio);
         }
@@ -187,6 +211,8 @@ public class ListaTest extends WikiStreamTest {
         if (listaWrap.size() > 0) {
             message = String.format("Lista dei [%d] wrap di type%s[%s] per %s [%s]", listaWrap.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
             System.out.println(message);
+            message = "Costruisce un wrap per ogni elemento della listaBio recuperata da BioMongoModulo.";
+            System.out.println(message);
             System.out.println(VUOTA);
             printWrapDidascalie(listaWrap, sorgente);
         }
@@ -220,6 +246,8 @@ public class ListaTest extends WikiStreamTest {
 
         if (listaStr.size() > 0) {
             message = String.format("Lista delle [%d] didascalie di type%s[%s] per %s [%s]", listaStr.size(), FORWARD, type.name(), type.getGiornoAnno(), nomeLista);
+            System.out.println(message);
+            message = "Lista esemplificativa fine a se stessa che NON viene utilizzata da bodyText che usa direttamente listaWrapDidascalie.";
             System.out.println(message);
             System.out.println(VUOTA);
             print(listaStr);
@@ -261,10 +289,10 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
-    @DisplayName("601 - key della mappa")
+    @DisplayName("601 - key della mappa (paragrafi)")
     void keyMappa(String nomeLista, TypeLista type) {
         System.out.println(("601 - key della mappa (paragrafi)"));
         System.out.println(VUOTA);
@@ -295,18 +323,22 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
-    @DisplayName("701 - paragrafi")
-    void paragrafi(String nomeLista, TypeLista type) {
-        System.out.println(("701 - paragrafi"));
+    @DisplayName("701 - bodyText")
+    void bodyText(String nomeLista, TypeLista type) {
+        System.out.println(("701 - bodyText"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
-        ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).bodyText();
+        previsto = appContext.getBean(Lista.class, nomeLista).type(type).bodyText();
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        ottenuto = istanza.bodyText();
+        assertEquals(previsto, ottenuto);
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -337,29 +369,29 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(801)
-    @DisplayName("801 - listaSottopagine")
-    void listaSottopagine(String nomeLista, TypeLista type) {
-        System.out.println(("801 - listaSottopagine"));
+    @DisplayName("801 - listaSottoPagine")
+    void listaSottoPagine(String nomeLista, TypeLista type) {
+        System.out.println(("801 - listaSottoPagine"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, type)) {
             return;
         }
 
-        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
-        if (textService.isEmpty(nomeLista)) {
-            assertNull(listaStr);
-            return;
-        }
-        if (listaStr == null) {
-            assertTrue(false);
-            return;
-        }
+        previstoArray = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
+        assertNotNull(previstoArray);
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        listaStr = istanza.listaSottoPagine();
+        assertNotNull(listaStr);
+        assertEquals(previstoArray, listaStr);
 
         if (listaStr.size() > 0) {
             message = String.format("Ci sono %s sottopagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+            System.out.println(message);
+            message = "Elabora il testo body della pagina principale, se non già elaborato";
             System.out.println(message);
             System.out.println(VUOTA);
             print(listaStr);
@@ -369,6 +401,205 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(message);
         }
     }
+
+//    @ParameterizedTest
+    @MethodSource(value = "LISTA")
+    @Order(802)
+    @DisplayName("802 - mappaSottoPagine")
+    void mappaSottoPagine(String nomeLista, TypeLista type) {
+        System.out.println(("802 - mappaSottoPagine"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        previstoMappa = appContext.getBean(Lista.class, nomeLista).type(type).mappaSottoPagine();
+        assertNotNull(previstoMappa);
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        ottenutoMappa = istanza.mappaSottoPagine();
+        assertNotNull(ottenutoMappa);
+        assertEquals(previstoMappa, ottenutoMappa);
+
+        if (ottenutoMappa != null && ottenutoMappa.size() > 0) {
+            message = String.format("Ci sono %s sottopagine nella lista [%s] di type [%s]", ottenutoMappa.size(), nomeLista, type.name());
+            System.out.println(message);
+            message = "Elabora il testo body della pagina principale, se non già elaborato";
+            System.out.println(message);
+            message = String.format("SottoPagine: %s", ottenutoMappa.keySet());
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            for (String key : ottenutoMappa.keySet()) {
+                System.out.println(key);
+                System.out.println(ottenutoMappa.get(key));
+                System.out.println(VUOTA);
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottosottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+//    @ParameterizedTest
+    @MethodSource(value = "SOTTO_PAGINE")
+    @Order(803)
+    @DisplayName("803 - listaSottoSottoPagine")
+    void listaSottoSottoPagine(String nomeLista, TypeLista type) {
+        System.out.println(("803 - listaSottoSottoPagine"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        previstoArray = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoSottoPagine();
+        assertNotNull(previstoArray);
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        listaStr = istanza.listaSottoSottoPagine();
+        assertNotNull(listaStr);
+        assertEquals(previstoArray, listaStr);
+
+        if (listaStr.size() > 0) {
+            message = String.format("Ci sono %s sottosottopagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+            System.out.println(message);
+            message = "Elabora il testo body della pagina principale, se non già elaborato";
+            System.out.println(message);
+            System.out.println(VUOTA);
+            print(listaStr);
+        }
+        else {
+            message = String.format("Non ci sono sottosottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "SOTTO_PAGINE")
+    @Order(804)
+    @DisplayName("804 - getMappaSottoSottoPagine")
+    void getMappaSottoSottoPagine(String nomeLista, TypeLista type) {
+        System.out.println(("804 - getMappaSottoSottoPagine"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        previstoMappa = appContext.getBean(Lista.class, nomeLista).type(type).mappaSottoSottoPagine();
+        assertNotNull(previstoMappa);
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        ottenutoMappa = istanza.mappaSottoSottoPagine();
+        assertNotNull(ottenutoMappa);
+        assertEquals(previstoMappa, ottenutoMappa);
+
+        if (ottenutoMappa != null && ottenutoMappa.size() > 0) {
+            message = String.format("Ci sono %s sottosottopagine nella lista [%s] di type [%s]", ottenutoMappa.size(), nomeLista, type.name());
+            System.out.println(message);
+            message = "Elabora il testo body della pagina principale, se non già elaborato";
+            System.out.println(message);
+            message = String.format("SottoSottoPagine: %s", ottenutoMappa.keySet());
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            for (String key : ottenutoMappa.keySet()) {
+                System.out.println(key);
+                System.out.println(ottenutoMappa.get(key));
+                System.out.println(VUOTA);
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottosottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            System.out.println(message);
+        }
+    }
+
+    //    //    @ParameterizedTest
+    //    @MethodSource(value = "LISTA_SOTTO_PAGINE")
+    //    @Order(803)
+    //    @DisplayName("803 - listaSottoSottoPagine")
+    //    void listaSottoSottoPagine(String nomeLista, TypeLista type, String keySottoPagina) {
+    //        System.out.println(("803 - listaSottoSottoPagine"));
+    //        System.out.println(VUOTA);
+    //        if (byPassaErrori && !fixListe(nomeLista, type)) {
+    //            return;
+    //        }
+    //        List<String> listaParagrafi;
+    //        List<String> listaSottopagineGetter;
+    //        List<String> listaSottopagine;
+    //        List<String> listaSottoSottopagine;
+    //        LinkedHashMap<String, String> mappaSottoPagine;
+    //        LinkedHashMap<String, String> mappaSottoSottoPagine;
+    //
+    //        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+    //        assertNotNull(istanza);
+    //        listaParagrafi = istanza.keyMappa();
+    //        assertNotNull(listaParagrafi);
+    //
+    //        listaSottopagineGetter = istanza.getListaSottoPagine();
+    //        assertNotNull(listaSottopagineGetter);
+    //        listaSottopagine = istanza.listaSottoPagine();
+    //        assertNotNull(listaSottopagine);
+    //        assertEquals(listaSottopagine, listaSottopagineGetter);
+    //
+    //        mappaSottoPagine = istanza.getMappaSottoPagine();
+    //        assertNotNull(mappaSottoPagine);
+    //        mappaSottoSottoPagine = istanza.getMappaSottoSottoPagine();
+    //        assertNotNull(mappaSottoSottoPagine);
+    //
+    //        if (listaParagrafi.size() > 0) {
+    //            message = String.format("Ci sono %s paragrafi nella lista [%s] di type [%s]", listaParagrafi.size(), nomeLista, type.name());
+    //            System.out.println(message);
+    //            System.out.println(listaParagrafi);
+    //            System.out.println(VUOTA);
+    //        }
+    //
+    //        if (listaSottopagine.size() > 0) {
+    //            message = String.format("Ci sono %s sottoPagine nella lista [%s] di type [%s]", listaSottopagine.size(), nomeLista, type.name());
+    //            System.out.println(message);
+    //            System.out.println(listaSottopagine);
+    //            System.out.println(VUOTA);
+    //            for (String key : mappaSottoPagine.keySet()) {
+    //                ottenuto = mappaSottoPagine.get(key);
+    //                System.out.println(ottenuto);
+    //                System.out.println(VUOTA);
+    //            }
+    //        }
+    //
+    //        if (listaSottopagine.size() > 0) {
+    //            message = String.format("Ci sono %s sottoSottoPagine nella lista [%s] di type [%s]", listaSottopagine.size(), nomeLista, type.name());
+    //            System.out.println(message);
+    //            System.out.println(listaSottopagine);
+    //            System.out.println(VUOTA);
+    //            for (String key : mappaSottoPagine.keySet()) {
+    //                ottenuto = mappaSottoPagine.get(key);
+    //                System.out.println(ottenuto);
+    //                System.out.println(VUOTA);
+    //            }
+    //        }
+    //
+    //        //        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoSottoPagine();
+    //        //        if (textService.isEmpty(nomeLista)) {
+    //        //            assertNull(listaStr);
+    //        //            return;
+    //        //        }
+    //        //        if (listaStr == null) {
+    //        //            assertTrue(false);
+    //        //            return;
+    //        //        }
+    //
+    //        //        if (listaStr.size() > 0) {
+    //        //            message = String.format("Ci sono %s sottoSottoPagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+    //        //            System.out.println(message);
+    //        //            System.out.println(VUOTA);
+    //        //            print(listaStr);
+    //        //        }
+    //        //        else {
+    //        //            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, type.name());
+    //        //            System.out.println(message);
+    //        //        }
+    //    }
 
 
     //    @ParameterizedTest
@@ -447,7 +678,7 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
 
-        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
         previstoTotalePagina = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
 
         if (textService.isEmpty(nomeLista)) {
@@ -517,7 +748,7 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
 
-        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
 
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
@@ -527,7 +758,7 @@ public class ListaTest extends WikiStreamTest {
             message = String.format("Nella pagina [%s] di type%s[%s], ci sono [%d] sottopagine", nomeLista, FORWARD, type.name(), listaStr.size());
             System.out.println(message);
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
+                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).bodySottopagina(keySottopagina);
                 assertTrue(textService.isValid(ottenuto));
                 if (ottenuto.equals(STRING_ERROR)) {
                     assertTrue(false);
@@ -541,7 +772,7 @@ public class ListaTest extends WikiStreamTest {
 
             if (!byPassaErrori) {
                 keySottopaginaErrata = "Brumaio";
-                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopaginaErrata);
+                ottenuto = appContext.getBean(Lista.class, nomeLista).type(type).bodySottopagina(keySottopaginaErrata);
                 assertTrue(textService.isValid(ottenuto));
                 if (ottenuto.equals(STRING_ERROR)) {
                     assertTrue(true);
@@ -557,11 +788,52 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @Test
+    //    @ParameterizedTest
+    @MethodSource(value = "LISTA_SOTTO_PAGINE")
     @Order(904)
-    @DisplayName("904 - mappaSottopagina")
-    void mappaSottopagina() {
-        System.out.println(("904 - mappaSottopagina"));
+    @DisplayName("904 - getTestoSottoSottopagina")
+    void getTestoSottoSottopagina(String nomeLista, TypeLista type, String keySottoPagina) {
+        System.out.println(("904 - getTestoSottoSottopagina"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, type)) {
+            return;
+        }
+
+        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
+        assertNotNull(istanza);
+        listaStr = istanza.keyMappa();
+        assertNotNull(listaStr);
+        listaStr = istanza.listaSottoPagine();
+        assertNotNull(listaStr);
+
+        if (listaStr.contains(textService.primaMaiuscola(keySottoPagina))) {
+            for (String keySottoSotto : listaStr) {
+//                ottenuto = istanza.getTestoSottoSottopagina(keySottoSotto);
+            }
+        }
+        else {
+            message = String.format("Non esiste una sottoPagina [%s%s%s] di type [%s]", nomeLista, SLASH, keySottoPagina, type.name());
+            System.out.println(message);
+        }
+
+        //        if (listaStr.size() > 0) {
+        //            message = String.format("Ci sono %s sottoSottoPagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+        //            System.out.println(message);
+        //            System.out.println(VUOTA);
+        //            print(listaStr);
+        //        }
+        //        else {
+        //            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, type.name());
+        //            System.out.println(message);
+        //        }
+    }
+
+
+    //    @Test
+    @Order(905)
+    @DisplayName("905 - getTestoSottoSottopagina")
+    void getTestoSottoSottopagina() {
+        System.out.println(("905 - getTestoSottoSottopagina"));
         System.out.println(VUOTA);
         sorgente = "allenatori di calcio";
 
@@ -569,63 +841,52 @@ public class ListaTest extends WikiStreamTest {
         assertNotNull(istanza);
         listaStr = istanza.keyMappa();
         assertNotNull(listaStr);
-        listaStr = istanza.listaSottopagine();
+        listaStr = istanza.listaSottoPagine();
         assertNotNull(listaStr);
 
         sorgente2 = "belgi";
-        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
-        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
-            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            for (String key : mappaSottopagina.keySet()) {
-                System.out.println(key);
-            }
-        }
+        ottenuto = istanza.bodySottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
         System.out.println(VUOTA);
 
         sorgente2 = "bosniaci";
-        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
-        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
-            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            for (String key : mappaSottopagina.keySet()) {
-                System.out.println(key);
-            }
-        }
+        ottenuto = istanza.bodySottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
         System.out.println(VUOTA);
 
         sorgente2 = "brasiliani";
-        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
-        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
-            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            for (String key : mappaSottopagina.keySet()) {
-                System.out.println(key);
-            }
-        }
+        ottenuto = istanza.bodySottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
         System.out.println(VUOTA);
 
         sorgente2 = TAG_LISTA_NO_NAZIONALITA;
-        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
-        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
-            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
-            System.out.println(message);
-            System.out.println(VUOTA);
-            for (String key : mappaSottopagina.keySet()) {
-                System.out.println(key);
-            }
-        }
+        ottenuto = istanza.bodySottopagina(sorgente2);
+        assertTrue(textService.isValid(ottenuto));
+        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
+        System.out.println(message);
+        System.out.println(VUOTA);
+        System.out.println(ottenuto);
         System.out.println(VUOTA);
     }
 
-    @Test
-    @Order(904)
-    @DisplayName("904 - getTestoSottopagina")
-    void getTestoSottopagina() {
-        System.out.println(("904 - getTestoSottopagina"));
+
+    //    @Test
+    @Order(906)
+    @DisplayName("906 - mappaSottopagina")
+    void mappaSottopagina() {
+        System.out.println(("906 - mappaSottopagina"));
         System.out.println(VUOTA);
         sorgente = "allenatori di calcio";
 
@@ -633,43 +894,55 @@ public class ListaTest extends WikiStreamTest {
         assertNotNull(istanza);
         listaStr = istanza.keyMappa();
         assertNotNull(listaStr);
-        listaStr = istanza.listaSottopagine();
+        listaStr = istanza.listaSottoPagine();
         assertNotNull(listaStr);
 
         sorgente2 = "belgi";
-        ottenuto = istanza.getTestoSottopagina(sorgente2);
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
         System.out.println(VUOTA);
 
         sorgente2 = "bosniaci";
-        ottenuto = istanza.getTestoSottopagina(sorgente2);
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
         System.out.println(VUOTA);
 
         sorgente2 = "brasiliani";
-        ottenuto = istanza.getTestoSottopagina(sorgente2);
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
         System.out.println(VUOTA);
 
         sorgente2 = TAG_LISTA_NO_NAZIONALITA;
-        ottenuto = istanza.getTestoSottopagina(sorgente2);
-        assertTrue(textService.isValid(ottenuto));
-        message = String.format("Testo di [%s%s%s]", sorgente, SLASH, sorgente2);
-        System.out.println(message);
-        System.out.println(VUOTA);
-        System.out.println(ottenuto);
+        mappaSottopagina = istanza.getMappaSottopagina(sorgente2);
+        if (mappaSottopagina != null && mappaSottopagina.size() > 0) {
+            message = String.format("Paragrafi di [%s%s%s]", sorgente, SLASH, sorgente2);
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String key : mappaSottopagina.keySet()) {
+                System.out.println(key);
+            }
+        }
         System.out.println(VUOTA);
     }
 

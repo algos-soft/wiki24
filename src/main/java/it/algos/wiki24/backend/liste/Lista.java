@@ -2,7 +2,6 @@ package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import static it.algos.base24.backend.enumeration.TypeFiltro.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
@@ -23,7 +22,6 @@ import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.mongodb.core.query.*;
 
 import javax.inject.*;
 import java.util.*;
@@ -102,9 +100,16 @@ public class Lista implements AlgosBuilderPattern {
 
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaCompleta;
 
+
     protected String bodyText;
 
-    protected List<String> listaSottopagine;
+    protected List<String> listaSottoPagine = new ArrayList<>();
+
+    protected List<String> listaSottoSottoPagine = new ArrayList<>();
+
+    protected LinkedHashMap<String, String> mappaSottoPagine;
+
+    protected LinkedHashMap<String, String> mappaSottoSottoPagine;
 
     protected boolean costruttoreValido = false;
 
@@ -321,11 +326,12 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Numero delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     * Rimanda direttamente al metodo dedicato del service BioMongoModulo, SENZA nessuna elaborazione in questa classe <br>
      *
      * @return -1 se il pattern della classe non è valido, zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
-        if (!checkValiditaPattern()) {
+        if (bioMongoModulo == null || textService.isEmpty(nomeLista)) {
             return INT_ERROR;
         }
 
@@ -345,11 +351,12 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Lista ordinata delle biografie (Bio) che hanno una valore valido per la pagina specifica <br>
+     * Rimanda direttamente al metodo dedicato del service BioMongoModulo, SENZA nessuna elaborazione in questa classe <br>
      *
      * @return null se il pattern della classe non è valido, lista con zero elementi se i dati sono validi ma non ci sono biografie <br>
      */
     public List<BioMongoEntity> listaBio() {
-        if (!checkValiditaPattern()) {
+        if (bioMongoModulo == null || textService.isEmpty(nomeLista)) {
             return null;
         }
 
@@ -369,15 +376,12 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Lista ordinata di tutti i wrapLista che hanno una valore valido per la pagina specifica <br>
+     * Costruisce un wrap per ogni elemento della listaBio recuperata da BioMongoModulo <br>
      *
      * @return null se il pattern della classe non è valido, lista con zero elementi se i dati sono validi ma non ci sono biografie <br>
      */
     public List<WrapDidascalia> listaWrapDidascalie() {
         WrapDidascalia wrap;
-
-        if (!checkValiditaPattern()) {
-            return null;
-        }
 
         listaWrapDidascalie = new ArrayList<>();
         if (listaBio == null || listaBio.size() == 0) {
@@ -400,13 +404,17 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Lista ordinata di tutte le didascalie che hanno una valore valido per la pagina specifica <br>
+     * Estrae la didascalia da ogni elemento della listaWrapDidascalie di questa classe <br>
+     * Lista esemplificativa fine a se stessa che NON viene utilizzata da bodyText che usa direttamente listaWrapDidascalie <br>
+     *
+     * @return null se il pattern della classe non è valido, lista con zero elementi se i dati sono validi ma non ci sono biografie <br>
      */
     public List<String> listaTestoDidascalie() {
         List<String> listaTestoDidascalie;
 
-        if (!checkValiditaPattern()) {
-            return null;
-        }
+        //        if (!checkValiditaPattern()) {
+        //            return null;
+        //        }
 
         listaTestoDidascalie = new ArrayList<>();
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
@@ -437,6 +445,8 @@ public class Lista implements AlgosBuilderPattern {
         }
 
         mappaCompleta = new LinkedHashMap<>();
+        mappaSottoPagine = new LinkedHashMap<>();
+        mappaSottoSottoPagine = new LinkedHashMap<>();
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
             listaWrapDidascalie = listaWrapDidascalie();
         }
@@ -539,28 +549,21 @@ public class Lista implements AlgosBuilderPattern {
     }
 
     public List<String> keyMappa() {
-        List<String> keyList;
-
         if (!checkValiditaPattern()) {
             return null;
         }
 
-        keyList = new ArrayList<>();
         if (mappaCompleta == null || mappaCompleta.size() == 0) {
             mappaCompleta = mappaDidascalie();
         }
 
-        if (mappaCompleta != null && mappaCompleta.size() > 0) {
-            for (String key : mappaCompleta.keySet()) {
-                keyList.add(key);
-            }
-        }
-
-        return keyList;
+        return mappaCompleta != null ? mappaCompleta.keySet().stream().toList() : null;
     }
 
     /**
-     * Testo della pagina suddiviso in paragrafi <br>
+     * Testo body della pagina suddiviso (eventualmente) in paragrafi <br>
+     * Elabora il testo body della pagina principale <br>
+     * Elabora lista e mappa delle eventuali sottoPagine <br>
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
@@ -572,7 +575,6 @@ public class Lista implements AlgosBuilderPattern {
         int numVociParagrafo;
         String sottoPagina;
         String vedi;
-        listaSottopagine = new ArrayList<>();
 
         if (!checkValiditaPattern()) {
             return STRING_ERROR;
@@ -613,7 +615,12 @@ public class Lista implements AlgosBuilderPattern {
                         vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                         buffer.append(vedi + CAPO);
 
-                        listaSottopagine.add(keyParagrafo);
+                        if (listaSottoPagine != null) {
+                            listaSottoPagine.add(keyParagrafo);
+                        }
+                        if (mappaSottoPagine != null) {
+                            mappaSottoPagine.put(keyParagrafo, bodySottopagina(keyParagrafo));
+                        }
                     }
                     else {
                         buffer.append(bodyParagrafo(keyParagrafo, true));
@@ -686,8 +693,13 @@ public class Lista implements AlgosBuilderPattern {
         return type;
     }
 
-    public List<String> listaSottopagine() {
-
+    /**
+     * Lista delle sottoPagine <br>
+     * Elabora il testo body della pagina principale, se non già elaborato <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public List<String> listaSottoPagine() {
         if (!checkValiditaPattern()) {
             return null;
         }
@@ -695,7 +707,57 @@ public class Lista implements AlgosBuilderPattern {
         if (textService.isEmpty(bodyText)) {
             bodyText();
         }
-        return listaSottopagine;
+
+        return listaSottoPagine;
+    }
+
+    /**
+     * Mappa delle sottoPagine <br>
+     * Elabora il testo body della pagina principale, se non già elaborato <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public LinkedHashMap<String, String> mappaSottoPagine() {
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        if (textService.isEmpty(bodyText)) {
+            bodyText();
+        }
+
+        return mappaSottoPagine;
+    }
+
+    /**
+     * Lista delle sottoSottoPagine <br>
+     * Elabora il testo body della pagina principale, se non già elaborato <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public List<String> listaSottoSottoPagine() {
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        listaSottoPagine();
+        return listaSottoSottoPagine;
+    }
+
+
+    /**
+     * Mappa delle sottoSottoPagine <br>
+     * Elabora il testo body della pagina principale, se non già elaborato <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public LinkedHashMap<String, String> mappaSottoSottoPagine() {
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        listaSottoPagine();
+        return mappaSottoSottoPagine;
     }
 
     /**
@@ -703,7 +765,7 @@ public class Lista implements AlgosBuilderPattern {
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
-    public String getTestoSottopagina(String keySottopagina) {
+    public String bodySottopagina(String keySottopagina) {
         StringBuffer buffer = new StringBuffer();
         int numVociSottoPagina; //voci della sottoPagina
         boolean usaParagrafiPreferenze;
@@ -758,6 +820,13 @@ public class Lista implements AlgosBuilderPattern {
                     sottoPagina = String.format("%s%s%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, textService.primaMaiuscola(keySottopagina), SLASH, keyParagrafo);
                     vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
                     buffer.append(vedi + CAPO);
+
+                    if (listaSottoSottoPagine != null) {
+                        listaSottoSottoPagine.add(keySottopagina + SLASH + keyParagrafo);
+                    }
+                    if (mappaSottoSottoPagine != null) {
+                        mappaSottoSottoPagine.put(keySottopagina + SLASH + keyParagrafo, bodySottoSottoPagina(keySottopagina, keyParagrafo));
+                    }
                 }
                 else {
                     if (usaDiv) {
@@ -801,6 +870,69 @@ public class Lista implements AlgosBuilderPattern {
                 buffer.append(DIV_END_CAPO);
             }
         }
+
+        return buffer.toString().trim();
+    }
+
+    /**
+     * Testo della sottoSottoPagina <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public String bodySottoSottoPagina(String keySottoPagina, String keyParagrafo) {
+        StringBuffer buffer = new StringBuffer();
+        int numVociSottoPagina; //voci della sottoPagina
+        boolean usaParagrafiPreferenze;
+        boolean usaParagrafiDinamico;
+        boolean usaSottoSottoPaginaPreferenze = false;
+        boolean usaSottoSottoPaginaDinamico = false;
+        boolean usaDiv;
+        int numChiaviMappaSottoPagina; //paragrafi della sottoPagina
+        LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottoPagina;
+        LinkedHashMap<String, List<String>> mappaSottoSottoPagina;
+        int numVociParagrafo = 0;
+        String sottoPagina;
+        String vedi;
+
+        if (!checkValiditaPattern()) {
+            return STRING_ERROR;
+        }
+        if (mappaCompleta == null || mappaCompleta.size() == 0) {
+            mappaCompleta = mappaDidascalie();
+        }
+        if (!mappaCompleta.containsKey(textService.primaMaiuscola(keySottoPagina))) {
+            return STRING_ERROR;
+        }
+
+        mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottoPagina));
+
+        mappaSottoSottoPagina=mappaSottoPagina.get(keyParagrafo);
+
+//        mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottoPagina));
+//        numVociSottoPagina = wikiUtilityService.getSizeMappa(mappaSottoPagina);
+//        numChiaviMappaSottoPagina = mappaSottoPagina.size();
+//        usaParagrafiDinamico = numVociSottoPagina > sogliaSottoPagina && numChiaviMappaSottoPagina >= sogliaParagrafi;
+
+        buffer.append(DIV_INI_CAPO);
+
+//            numVociParagrafo = wikiUtilityService.getSizeMappaMappaLista(mappaSottoPagina.get(keyParagrafo));
+//            usaSottoSottoPaginaDinamico = numVociParagrafo > sogliaSottoPagina;
+//            usaDiv = numVociParagrafo > sogliaDiv;
+
+//            buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+            //corpo con/senza sottoSottoPagine
+//            if (usaDiv) {
+//            }
+            for (String key : mappaSottoSottoPagina.keySet()) {
+                for (String didascalia : mappaSottoSottoPagina.get(key)) {
+                    buffer.append(ASTERISCO);
+                    buffer.append(didascalia);
+                    buffer.append(CAPO);
+                }
+//            if (usaDiv) {
+//            }
+        }
+        buffer.append(DIV_END_CAPO);
 
         return buffer.toString().trim();
     }

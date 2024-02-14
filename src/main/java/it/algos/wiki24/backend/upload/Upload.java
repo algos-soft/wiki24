@@ -1,17 +1,14 @@
 package it.algos.wiki24.backend.upload;
 
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.ui.view.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
@@ -387,7 +384,7 @@ public class Upload implements AlgosBuilderPattern {
             return new ArrayList<>();
         }
 
-        return appContext.getBean(Lista.class, nomeLista).type(type).listaSottopagine();
+        return appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
     }
 
     public WResult uploadSottopagina(String keySottopagina) {
@@ -678,7 +675,7 @@ public class Upload implements AlgosBuilderPattern {
         String titoloLista;
 
         if (isSottopagina) {
-            bodyText = appContext.getBean(Lista.class, nomeLista).type(type).getTestoSottopagina(keySottopagina);
+            bodyText = appContext.getBean(Lista.class, nomeLista).type(type).bodySottopagina(keySottopagina);
         }
         else {
             istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
