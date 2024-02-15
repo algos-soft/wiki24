@@ -33,11 +33,16 @@ import java.util.stream.*;
  */
 public abstract class WikiStreamTest extends WikiTest {
 
+
     //--nome lista
     //--typeLista per il test
     protected static Stream<Arguments> LISTA() {
         return Stream.of(
-                                Arguments.of(VUOTA, TypeLista.giornoNascita),
+                Arguments.of(VUOTA, TypeLista.giornoNascita),
+                Arguments.of("afghani", TypeLista.nessunaLista),
+                Arguments.of("afghano", TypeLista.nazionalitaSingolare),
+                Arguments.of("afghani", TypeLista.nazionalitaPlurale),
+                Arguments.of("afghani", TypeLista.nazionalitaSingolare),
                 //                Arguments.of(VUOTA, TypeLista.giornoMorte),
                 //                Arguments.of("ciclista", TypeLista.attivitaSingolare),
                 //                Arguments.of("1857", null),
@@ -45,8 +50,8 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("2024", TypeLista.annoNascita),
                 //                Arguments.of("2026", TypeLista.annoMorte),
                 //                Arguments.of("1857", TypeLista.giornoNascita),
-                                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-                                Arguments.of("29 febbraio", TypeLista.giornoMorte),
+                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                Arguments.of("29 febbraio", TypeLista.giornoMorte),
                 //                Arguments.of("8 aprile", TypeLista.attivitaPlurale),
                 //                Arguments.of("20 marzo", TypeLista.giornoNascita),
                 //                Arguments.of("21 febbraio", TypeLista.giornoMorte),
@@ -70,10 +75,6 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("agronomi", TypeLista.attivitaPlurale),
                 Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale),
 
-                Arguments.of("afghani", TypeLista.nessunaLista),
-                Arguments.of("afghano", TypeLista.nazionalitaSingolare),
-                Arguments.of("afghani", TypeLista.nazionalitaPlurale),
-                Arguments.of("afghani", TypeLista.nazionalitaSingolare),
                 Arguments.of("dominicani", TypeLista.nazionalitaPlurale),
 
                 Arguments.of("2025", TypeLista.annoNascita),
@@ -100,9 +101,9 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("42 luglio", TypeLista.giornoNascita),
                 //                Arguments.of("2024", TypeLista.annoNascita),
                 //                Arguments.of("2026", TypeLista.annoMorte),
-                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"belgi"),
-                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"bosniaci"),
-                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale,"brasiliani")
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale, "belgi"),
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale, "bosniaci"),
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale, "brasiliani")
         );
     }
 

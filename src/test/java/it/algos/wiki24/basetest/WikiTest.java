@@ -22,6 +22,7 @@ import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
 import org.springframework.context.*;
 
@@ -290,6 +291,24 @@ public abstract class WikiTest extends AlgosTest {
     protected CrudModulo currentModulo;
 
     private boolean setUpAllEffettuato = false;
+
+    //--nome lista
+    //--typeLista per il test
+    //--sottopagina
+    protected static Stream<Arguments> SOTTO_PAGINE() {
+        return Stream.of(
+                //                Arguments.of("29 febbraio", TypeLista.giornoNascita, NULLO),
+                //                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
+                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
+                Arguments.of("afghani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
+                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, "cestisti"),
+                Arguments.of("2023", TypeLista.annoMorte, NULLO)
+        );
+    }
 
     /**
      * Qui passa una volta sola, chiamato dalle sottoclassi <br>

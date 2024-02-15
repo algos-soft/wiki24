@@ -56,6 +56,7 @@ public class BioMongoModulo extends WikiModulo {
 
     @Inject
     MeseModulo meseModulo;
+
     @Inject
     SecoloModulo secoloModulo;
 
@@ -93,10 +94,17 @@ public class BioMongoModulo extends WikiModulo {
     ParNazionalitaModulo parNazionalitaModulo;
 
     @Inject
-    NazPluraleModulo nazPluraleModulo;
+    AttSingolareModulo attSingolareModulo;
 
     @Inject
     AttPluraleModulo attPluraleModulo;
+
+    @Inject
+    NazSingolareModulo nazSingolareModulo;
+
+    @Inject
+    NazPluraleModulo nazPluraleModulo;
+
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -210,7 +218,6 @@ public class BioMongoModulo extends WikiModulo {
         return query;
     }
 
-
     public int countAllByGiornoMorto(final String propertyValue) {
         return mongoService.count(queryByGiornoMorto(propertyValue), BioMongoEntity.class);
     }
@@ -277,7 +284,6 @@ public class BioMongoModulo extends WikiModulo {
     }
 
 
-
     public int countByGiornoNatoAndSecolo(final String giorno, String secoloTxt) {
         return mongoService.count(queryByGiornoNatoAndSecolo(giorno, secoloTxt), BioMongoEntity.class);
     }
@@ -287,14 +293,20 @@ public class BioMongoModulo extends WikiModulo {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_NATO_ORD, FIELD_NAME_ORDINAMENTO);
         SecoloEntity secoloBean;
+        int inizio = 0;
+        int fine = 0;
 
         if (textService.isEmpty(giorno) || textService.isEmpty(secoloTxt)) {
             return null;
         }
         secoloBean = secoloModulo.findByKey(secoloTxt);
+        if (secoloBean != null) {
+            inizio = secoloBean.inizio + DELTA_ANNI;
+            fine = secoloBean.fine + DELTA_ANNI;
+        }
 
         query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO).is(giorno));
-        query.addCriteria(Criteria.where(FIELD_NAME_SECOLO).is(secoloBean));
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO_ORD).gte(inizio).lte(fine));
         query.with(sort);
         return query;
     }
@@ -309,19 +321,23 @@ public class BioMongoModulo extends WikiModulo {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ANNO_MORTO_ORD, FIELD_NAME_ORDINAMENTO);
         SecoloEntity secoloBean;
+        int inizio = 0;
+        int fine = 0;
 
         if (textService.isEmpty(giorno) || textService.isEmpty(secoloTxt)) {
             return null;
         }
         secoloBean = secoloModulo.findByKey(secoloTxt);
+        if (secoloBean != null) {
+            inizio = secoloBean.inizio + DELTA_ANNI;
+            fine = secoloBean.fine + DELTA_ANNI;
+        }
 
         query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO).is(giorno));
-        query.addCriteria(Criteria.where(FIELD_NAME_SECOLO).is(secoloBean));
+        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO_ORD).gte(inizio).lte(fine));
         query.with(sort);
         return query;
     }
-
-
 
 
     public int countByAnnoNatoAndMese(final String anno, String meseTxt) {
@@ -343,10 +359,14 @@ public class BioMongoModulo extends WikiModulo {
         if (meseBean != null) {
             primo = meseBean.primo;
             ultimo = meseBean.ultimo;
+            query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(anno));
+            query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO_ORD).gte(primo).lte(ultimo));
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(anno));
+            query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO).is(VUOTA));
         }
 
-        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_NATO).is(anno));
-        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_NATO_ORD).gte(primo).lte(ultimo));
         query.with(sort);
         return query;
     }
@@ -371,9 +391,14 @@ public class BioMongoModulo extends WikiModulo {
         if (meseBean != null) {
             primo = meseBean.primo;
             ultimo = meseBean.ultimo;
+            query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(anno));
+            query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO_ORD).gte(primo).lte(ultimo));
         }
-        query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(anno));
-        query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO_ORD).gte(primo).lte(ultimo));
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ANNO_MORTO).is(anno));
+            query.addCriteria(Criteria.where(FIELD_NAME_GIORNO_MORTO).is(VUOTA));
+        }
+
         query.with(sort);
         return query;
     }
@@ -500,30 +525,151 @@ public class BioMongoModulo extends WikiModulo {
         return lista;
     }
 
-    public int countByAttivitaAndNazionalita( String attivita, String nazionalita) {
-        return mongoService.count(queryByAttivitaAndNazionalita(attivita, nazionalita), BioMongoEntity.class);
+    public int countByAttivitaAndNazionalita(String attivitaPlurale, String nazionalitaPlurale) {
+        return mongoService.count(queryByAttivitaAndNazionalita(attivitaPlurale, nazionalitaPlurale), BioMongoEntity.class);
     }
 
-    public List<BioMongoEntity> findAllByAttivitaAndNazionalita( String attivita, String nazionalita) {
-        return mongoService.find(queryByAttivitaAndNazionalita(attivita, nazionalita), BioMongoEntity.class);
+    public List<BioMongoEntity> findAllByAttivitaAndNazionalita(String attivitaPlurale, String nazionalitaPlurale) {
+        return mongoService.find(queryByAttivitaAndNazionalita(attivitaPlurale, nazionalitaPlurale), BioMongoEntity.class);
     }
 
-    public Query queryByAttivitaAndNazionalita(final String attivita, String nazionalita) {
+    public Query queryByAttivitaAndNazionalita(final String attivitaPlurale, final String nazionalitaPlurale) {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_NAZIONALITA, FIELD_NAME_COGNOME);
+        AttPluraleEntity attPluraleEntity;
+        NazPluraleEntity nazPluraleEntity;
+        List<String> listaSingoleAttività;
+        List<String> listaSingoleNazionalità;
 
-        if (textService.isEmpty(attivita) || textService.isEmpty(nazionalita)) {
-            return null;
+        if (textService.isEmpty(attivitaPlurale) || textService.isEmpty(nazionalitaPlurale)) {
+            return query;
+        }
+        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
+        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
+        if (attPluraleEntity == null) {
+            return query;
         }
 
-        query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(attivita));
-        query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).is(nazionalita));
+        listaSingoleAttività = attPluraleEntity.txtSingolari;
+        if (nazPluraleEntity != null) {
+            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+
+            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
+            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
+            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).is(VUOTA));
+        }
+
         query.with(sort);
         return query;
     }
 
+    public int countByNazionalitaAndAttivita(String nazionalitaPlurale, String attivitaPlurale) {
+        return mongoService.count(queryByNazionalitaAndAttivita(nazionalitaPlurale, attivitaPlurale), BioMongoEntity.class);
+    }
+
+    public Query queryByNazionalitaAndAttivita(final String nazionalitaPlurale, final String attivitaPlurale) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA, FIELD_NAME_COGNOME);
+        NazPluraleEntity nazPluraleEntity;
+        NazSingolareEntity nazSingolareEntity;
+        AttPluraleEntity attPluraleEntity;
+        List<String> listaSingoleNazionalità;
+        List<String> listaSingoleAttività;
+
+        if (textService.isEmpty(nazionalitaPlurale) || textService.isEmpty(attivitaPlurale)) {
+            return query;
+        }
+
+        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
+        if (nazPluraleEntity != null) {
+            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+        }
+        else {
+            nazSingolareEntity = nazSingolareModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
+        }
+
+        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
+        if (nazPluraleEntity == null) {
+            return query;
+        }
+
+        listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+        if (attPluraleEntity != null) {
+            listaSingoleAttività = attPluraleEntity.txtSingolari;
+
+            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
+            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
+        }
+        else {
+            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
+            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(VUOTA));
+        }
+
+        query.with(sort);
+        return query;
+    }
+
+    /**
+     * Recupera la lista dei nomi delle attività singole <br>
+     * L'attività in ingresso può essere singola o plurale <br>
+     *
+     * @param attività (obbligatorio)
+     *
+     * @return lista (String) delle attività singole
+     */
+    public List<String> findAllAttivitaSingole(final String attività) {
+        List<String> lista = new ArrayList<>();
+        AttPluraleEntity attPluraleEntity;
+        AttSingolareEntity attSingolareEntity;
+
+        attPluraleEntity = attPluraleModulo.findByKey(attività);
+        if (attPluraleEntity != null) {
+            return attPluraleEntity.txtSingolari;
+        }
+
+        attSingolareEntity = attSingolareModulo.findByKey(attività);
+        if (attSingolareEntity != null) {
+            attPluraleEntity = attPluraleModulo.findByKey(attSingolareEntity.plurale);
+            if (attPluraleEntity != null) {
+                return attPluraleEntity.txtSingolari;
+            }
+        }
+
+        return lista;
+    }
 
 
+    /**
+     * Recupera la lista dei nomi delle nazionalità singole <br>
+     * La nazionalità in ingresso può essere singola o plurale <br>
+     *
+     * @param nazionalità (obbligatorio)
+     *
+     * @return lista (String) delle attività singole
+     */
+    public List<String> findAllNazionalitaSingole(final String nazionalità) {
+        List<String> lista = new ArrayList<>();
+        NazPluraleEntity nazPluraleEntity;
+        NazSingolareEntity nazSingolareEntity;
+
+        nazPluraleEntity = nazPluraleModulo.findByKey(nazionalità);
+        if (nazPluraleEntity != null) {
+            return nazPluraleEntity.txtSingolari;
+        }
+
+        nazSingolareEntity = nazSingolareModulo.findByKey(nazionalità);
+        if (nazSingolareEntity != null) {
+            nazPluraleEntity = nazPluraleModulo.findByKey(nazSingolareEntity.plurale);
+            if (nazPluraleEntity != null) {
+                return nazPluraleEntity.txtSingolari;
+            }
+        }
+
+        return lista;
+    }
 
     public String elabora() {
         inizio = System.currentTimeMillis();

@@ -7,6 +7,7 @@ import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
+import it.algos.wiki24.basetest.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.*;

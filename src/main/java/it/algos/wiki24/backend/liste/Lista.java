@@ -906,31 +906,31 @@ public class Lista implements AlgosBuilderPattern {
 
         mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottoPagina));
 
-        mappaSottoSottoPagina=mappaSottoPagina.get(keyParagrafo);
+        mappaSottoSottoPagina = mappaSottoPagina.get(keyParagrafo);
 
-//        mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottoPagina));
-//        numVociSottoPagina = wikiUtilityService.getSizeMappa(mappaSottoPagina);
-//        numChiaviMappaSottoPagina = mappaSottoPagina.size();
-//        usaParagrafiDinamico = numVociSottoPagina > sogliaSottoPagina && numChiaviMappaSottoPagina >= sogliaParagrafi;
+        //        mappaSottoPagina = mappaCompleta.get(textService.primaMaiuscola(keySottoPagina));
+        //        numVociSottoPagina = wikiUtilityService.getSizeMappa(mappaSottoPagina);
+        //        numChiaviMappaSottoPagina = mappaSottoPagina.size();
+        //        usaParagrafiDinamico = numVociSottoPagina > sogliaSottoPagina && numChiaviMappaSottoPagina >= sogliaParagrafi;
 
         buffer.append(DIV_INI_CAPO);
 
-//            numVociParagrafo = wikiUtilityService.getSizeMappaMappaLista(mappaSottoPagina.get(keyParagrafo));
-//            usaSottoSottoPaginaDinamico = numVociParagrafo > sogliaSottoPagina;
-//            usaDiv = numVociParagrafo > sogliaDiv;
+        //            numVociParagrafo = wikiUtilityService.getSizeMappaMappaLista(mappaSottoPagina.get(keyParagrafo));
+        //            usaSottoSottoPaginaDinamico = numVociParagrafo > sogliaSottoPagina;
+        //            usaDiv = numVociParagrafo > sogliaDiv;
 
-//            buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
-            //corpo con/senza sottoSottoPagine
-//            if (usaDiv) {
-//            }
-            for (String key : mappaSottoSottoPagina.keySet()) {
-                for (String didascalia : mappaSottoSottoPagina.get(key)) {
-                    buffer.append(ASTERISCO);
-                    buffer.append(didascalia);
-                    buffer.append(CAPO);
-                }
-//            if (usaDiv) {
-//            }
+        //            buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+        //corpo con/senza sottoSottoPagine
+        //            if (usaDiv) {
+        //            }
+        for (String key : mappaSottoSottoPagina.keySet()) {
+            for (String didascalia : mappaSottoSottoPagina.get(key)) {
+                buffer.append(ASTERISCO);
+                buffer.append(didascalia);
+                buffer.append(CAPO);
+            }
+            //            if (usaDiv) {
+            //            }
         }
         buffer.append(DIV_END_CAPO);
 
@@ -956,22 +956,24 @@ public class Lista implements AlgosBuilderPattern {
      *
      * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
      */
-    public int numBio(String keySottopagina) {
+    public int numBio(final String keySottopagina) {
         int numBioSottopagina = INT_ERROR;
+        String lowerLista = textService.primaMinuscola(nomeLista);
+        String lowerSotto = textService.primaMinuscola(keySottopagina);
 
         if (!checkValiditaPattern()) {
             return numBioSottopagina;
         }
 
         numBioSottopagina = switch (type) {
-            case giornoNascita -> bioMongoModulo.countByGiornoNatoAndSecolo(nomeLista, keySottopagina);
-            case giornoMorte -> bioMongoModulo.countByGiornoMortoAndSecolo(nomeLista, keySottopagina);
-            case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(nomeLista, keySottopagina);
-            case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(nomeLista, keySottopagina);
-            case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista, keySottopagina);
-            case attivitaPlurale -> bioMongoModulo.countByAttivitaAndNazionalita(nomeLista, keySottopagina);
-            case nazionalitaSingolare -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
-            case nazionalitaPlurale -> bioMongoModulo.countAllByAnnoMorto(nomeLista);
+            case giornoNascita -> bioMongoModulo.countByGiornoNatoAndSecolo(lowerLista, keySottopagina);
+            case giornoMorte -> bioMongoModulo.countByGiornoMortoAndSecolo(lowerLista, keySottopagina);
+            case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(lowerLista, lowerSotto);
+            case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(lowerLista, lowerSotto);
+            case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(lowerLista, lowerSotto);
+            case attivitaPlurale -> bioMongoModulo.countByAttivitaAndNazionalita(lowerLista, lowerSotto);
+            case nazionalitaSingolare -> bioMongoModulo.countByNazionalitaAndAttivita(lowerLista, lowerSotto);
+            case nazionalitaPlurale -> bioMongoModulo.countByNazionalitaAndAttivita(lowerLista, lowerSotto);
             default -> INT_ERROR;
         };
 
@@ -979,14 +981,7 @@ public class Lista implements AlgosBuilderPattern {
             return numBioSottopagina;
         }
 
-        if (mappaCompleta == null || mappaCompleta.size() == 0) {
-            mappaCompleta = mappaDidascalie();
-        }
-        if (!mappaCompleta.containsKey(keySottopagina)) {
-            return INT_ERROR;
-        }
-
-        return wikiUtilityService.getSizeMappa(mappaCompleta.get(keySottopagina));
+        return numBioSottopagina;
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {

@@ -42,24 +42,6 @@ public class ListaTest extends WikiStreamTest {
     protected LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina;
 
 
-    //--nome lista
-    //--typeLista per il test
-    //--sottopagina
-    protected static Stream<Arguments> SOTTO_PAGINE() {
-        return Stream.of(
-                //                Arguments.of("29 febbraio", TypeLista.giornoNascita, NULLO),
-                //                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
-                //                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
-                //                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
-                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
-                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
-                Arguments.of("afghani", TypeLista.nazionalitaPlurale, NULLO),
-                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO),
-                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, "cestisti"),
-                Arguments.of("2023", TypeLista.annoMorte, NULLO)
-        );
-    }
-
     /**
      * Qui passa una volta sola <br>
      */
@@ -103,7 +85,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -150,7 +132,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(201)
     @DisplayName("201 - listaBio")
@@ -186,7 +168,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -258,7 +240,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -289,7 +271,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    //            @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa (paragrafi)")
@@ -323,7 +305,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - bodyText")
@@ -369,8 +351,8 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    //    @ParameterizedTest
+    @MethodSource(value = "SOTTO_PAGINE")
     @Order(801)
     @DisplayName("801 - listaSottoPagine")
     void listaSottoPagine(String nomeLista, TypeLista type) {
@@ -402,7 +384,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(802)
     @DisplayName("802 - mappaSottoPagine")
@@ -442,7 +424,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(803)
     @DisplayName("803 - listaSottoSottoPagine")
@@ -475,7 +457,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(804)
     @DisplayName("804 - getMappaSottoSottoPagine")
@@ -602,7 +584,7 @@ public class ListaTest extends WikiStreamTest {
     //    }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(901)
     @DisplayName("901 - numBioParagrafi")
@@ -624,14 +606,23 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr) {
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+            for (String keyParagrafo : listaStr) {
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keyParagrafo);
                 if (ottenutoIntero > 0) {
                     totaleEffettivoPagina += ottenutoIntero;
-                    message = String.format("Le biografie di type%s[%s] per il paragrafo [%s] di [%s], sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
+                    message = String.format("Le biografie di type%s[%s] per il paragrafo [%s] di [%s], sono [%d]", FORWARD, type.name(), keyParagrafo, nomeLista, ottenutoIntero);
                     System.out.println(message);
                 }
             }
+
+            if (totaleEffettivoPagina == INT_ERROR||totaleEffettivoPagina == 0) {
+                if (type == TypeLista.attivitaSingolare || type == TypeLista.nazionalitaSingolare) {
+                    message = String.format("La lista non calcola i paragrafi", nomeLista, previstoTotaleParagrafi);
+                    System.out.println(message);
+                    return;
+                }
+            }
+
             System.out.println(VUOTA);
             message = String.format("In totale nella pagina della lista [%s] ci sono [%d] biografie.", nomeLista, previstoTotaleParagrafi);
             System.out.println(message);
@@ -662,7 +653,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -808,7 +799,7 @@ public class ListaTest extends WikiStreamTest {
 
         if (listaStr.contains(textService.primaMaiuscola(keySottoPagina))) {
             for (String keySottoSotto : listaStr) {
-//                ottenuto = istanza.getTestoSottoSottopagina(keySottoSotto);
+                //                ottenuto = istanza.getTestoSottoSottopagina(keySottoSotto);
             }
         }
         else {

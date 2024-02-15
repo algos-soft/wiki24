@@ -9,6 +9,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
@@ -84,6 +85,11 @@ public class NazSingolareModulo extends WikiModulo {
                 .build();
 
         return (NazSingolareEntity) fixKey(newEntityBean);
+    }
+
+    @Override
+    public NazSingolareEntity findByKey(final Object keyPropertyValue) {
+        return (NazSingolareEntity) super.findByKey(keyPropertyValue);
     }
 
     public List<NazSingolareEntity> findAllByDistinctPlurale() {

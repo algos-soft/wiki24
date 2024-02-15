@@ -121,6 +121,10 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String keySottopagina;
 
+    protected List<String> listaSottoPagine = new ArrayList<>();
+
+    protected List<String> listaSottoSottoPagine = new ArrayList<>();
+
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, classe astratta <br>
@@ -337,7 +341,7 @@ public class Upload implements AlgosBuilderPattern {
         List<String> listaSottopagine;
 
         if (result.isValido()) {
-            listaSottopagine = listaSottopagine();
+            listaSottopagine = listaSottoPagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
                     result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottopagina(keySottopagina).uploadOnly();
@@ -375,17 +379,28 @@ public class Upload implements AlgosBuilderPattern {
     }
 
 
-    public List<String> listaSottopagine() {
+    /**
+     * Lista delle sottoPagine <br>
+     * Controlla che il valore esista, altrimenti lo recupera da Lista <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public List<String> listaSottoPagine() {
         if (!checkValiditaPattern()) {
-            return new ArrayList<>();
+            return null;
         }
 
         if (!checkBio()) {
             return new ArrayList<>();
         }
 
-        return appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
+        if (listaSottoPagine == null || listaSottoPagine.isEmpty()) {
+            listaSottoPagine = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
+        }
+
+        return listaSottoPagine;
     }
+
 
     public WResult uploadSottopagina(String keySottopagina) {
         WResult risultato = WResult.errato();
@@ -858,10 +873,6 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(SPAZIO);
         buffer.append(posCat);
         buffer.append("]]");
-        if (uploadTest) {
-            buffer.append(NO_WIKI_END);
-        }
-
         buffer.append(CAPO);
         buffer.append("*");
         if (uploadTest) {
@@ -916,7 +927,6 @@ public class Upload implements AlgosBuilderPattern {
         if (uploadTest) {
             buffer.append(NO_WIKI_END);
         }
-
         buffer.append(CAPO);
         buffer.append(ASTERISCO);
         if (uploadTest) {
@@ -941,8 +951,14 @@ public class Upload implements AlgosBuilderPattern {
         categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
         categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
 
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
         buffer.append(ASTERISCO);
         buffer.append(textService.setDoppieQuadre(categoria));
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
 
         return buffer.toString();
     }
@@ -954,8 +970,14 @@ public class Upload implements AlgosBuilderPattern {
         categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
         categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
 
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
         buffer.append(ASTERISCO);
         buffer.append(textService.setDoppieQuadre(categoria));
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
 
         return buffer.toString();
     }
@@ -1113,13 +1135,33 @@ public class Upload implements AlgosBuilderPattern {
      * zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
-        if (numBio == 0) {
-            if (isSottopagina) {
-                numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
-            }
-            else {
+        if (isSottopagina) {
+            numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+        }
+        else {
+            if (numBio == 0) {
                 numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
             }
+        }
+
+        return numBio;
+    }
+
+    /**
+     * Numero delle biografie (Bio) che hanno una valore valido (letto dalla lista) <br>
+     * Controlla di essere o meno in una sottopagina <br>
+     * Rinvia al metodo della lista <br>
+     * Numero delle biografie (Bio) che hanno una valore valido per l'intera pagina (letto dalla lista) <br>
+     * Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico (letto dalla lista) <br>
+     * Prima esegue una query diretta al database (più veloce)
+     * Se non trova nulla controlla la mappaCompleta (creandola se manca) per vedere se esiste il paragrafo/sottopagina
+     *
+     * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina
+     * zero se i dati sono validi ma non ci sono biografie <br>
+     */
+    public int numBio(String keySottopagina) {
+        if (numBio == 0) {
+            numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
         }
 
         return numBio;
