@@ -117,9 +117,11 @@ public class Upload implements AlgosBuilderPattern {
 
     private Lista istanzaLista;
 
-    protected boolean isSottopagina;
+    protected boolean isSottoPagina;
+    protected boolean isSottoSottoPagina;
 
-    protected String keySottopagina;
+    protected String keySottoPagina;
+    protected String keySottoSottoPagina;
 
     protected List<String> listaSottoPagine = new ArrayList<>();
 
@@ -212,11 +214,29 @@ public class Upload implements AlgosBuilderPattern {
     /**
      * Pattern Builder <br>
      */
-    public Upload sottopagina(String keySottopagina) {
-        this.isSottopagina = true;
-        this.keySottopagina = keySottopagina;
+    public Upload sottoPagina(String keySottoPagina) {
+        this.isSottoPagina = true;
+        this.keySottoPagina = keySottoPagina;
         if (textService.isValid(titoloPagina)) {
-            titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottopagina);
+            titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottoPagina);
+        }
+        else {
+            logger.error(new WrapLog().message("Nel Pattern Builder di questa classe, occorre chiamare type() PRIMA di sottopagina()"));
+            return null;
+        }
+
+        return this;
+    }
+
+
+    /**
+     * Pattern Builder <br>
+     */
+    public Upload sottoSottoPagina(String keySottoSottoPagina) {
+        this.isSottoSottoPagina = true;
+        this.keySottoSottoPagina = keySottoSottoPagina;
+        if (textService.isValid(titoloPagina)) {
+            titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottoSottoPagina);
         }
         else {
             logger.error(new WrapLog().message("Nel Pattern Builder di questa classe, occorre chiamare type() PRIMA di sottopagina()"));
@@ -345,7 +365,7 @@ public class Upload implements AlgosBuilderPattern {
             listaSottopagine = listaSottoPagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
-                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottopagina(keySottopagina).uploadOnly();
+                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottoPagina(keySottopagina).uploadOnly();
                 }
             }
         }
@@ -437,7 +457,7 @@ public class Upload implements AlgosBuilderPattern {
     public WResult uploadSottopagina(String keySottopagina) {
         WResult risultato = WResult.errato();
         String nomeListaSottopagina = nomeLista + SLASH + keySottopagina;
-        risultato = appContext.getBean(Upload.class, nomeLista).type(type).test(uploadTest).sottopagina(keySottopagina).uploadOnly();
+        risultato = appContext.getBean(Upload.class, nomeLista).type(type).test(uploadTest).sottoPagina(keySottopagina).uploadOnly();
 
         return risultato;
     }
@@ -526,11 +546,11 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append("Questa");
         buffer.append(REF);
 
-        if (isSottopagina) {
+        if (isSottoPagina) {
             buffer.append("Questa sottopagina");
             buffer.append(SPAZIO);
             buffer.append(QUADRA_INI);
-            buffer.append(textService.setBold(textService.primaMaiuscola(nomeLista) + SLASH + textService.primaMaiuscola(keySottopagina)));
+            buffer.append(textService.setBold(textService.primaMaiuscola(nomeLista) + SLASH + textService.primaMaiuscola(keySottoPagina)));
             buffer.append(QUADRA_END);
             buffer.append(SPAZIO);
             buffer.append("è stata creata perché ci sono");
@@ -538,7 +558,7 @@ public class Upload implements AlgosBuilderPattern {
             buffer.append(textService.setBold(numBio + VUOTA));
             buffer.append(SPAZIO);
             buffer.append("voci biografiche nel paragrafo");
-            buffer.append(SPAZIO + textService.setBold(textService.primaMaiuscola(keySottopagina)) + SPAZIO);
+            buffer.append(SPAZIO + textService.setBold(textService.primaMaiuscola(keySottoPagina)) + SPAZIO);
             buffer.append("della");
             buffer.append(SPAZIO);
             buffer.append(tagAttNazDiretta);
@@ -613,11 +633,11 @@ public class Upload implements AlgosBuilderPattern {
         buffer.append(SPAZIO);
         buffer.append("quella di");
         buffer.append(SPAZIO + textService.setBold(textService.primaMinuscola(nomeLista)));
-        if (isSottopagina) {
+        if (isSottoPagina) {
             buffer.append(SPAZIO);
             buffer.append("e sono");
             buffer.append(SPAZIO);
-            buffer.append(textService.setBold(textService.primaMinuscola(keySottopagina)));
+            buffer.append(textService.setBold(textService.primaMinuscola(keySottoPagina)));
             buffer.append(PUNTO);
         }
         else {
@@ -666,7 +686,7 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String fixToc() {
-        if (isSottopagina) {
+        if (isSottoPagina) {
             return switch (type) {
                 case giornoNascita, giornoMorte -> TypeToc.nessuno.get();
                 case annoNascita, annoMorte -> TypeToc.nessuno.get();
@@ -690,7 +710,7 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String torna() {
-        String giornoAnnoLink = isSottopagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
+        String giornoAnnoLink = isSottoPagina ? textService.levaCodaDaUltimo(titoloPagina, SLASH) : nomeLista;
         String giornoAnnoTxt = String.format("{{Torna a|%s}}", giornoAnnoLink);
 
         String attivitaLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
@@ -722,8 +742,8 @@ public class Upload implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
         String titoloLista;
 
-        if (isSottopagina) {
-            bodyText = istanzaLista.bodySottopagina(keySottopagina);
+        if (isSottoPagina) {
+            bodyText = istanzaLista.bodySottopagina(keySottoPagina);
         }
         else {
             if (istanzaLista != null && istanzaLista.getType() == type) {
@@ -744,7 +764,7 @@ public class Upload implements AlgosBuilderPattern {
             default -> VUOTA;
         };
 
-        if (isSottopagina) {
+        if (isSottoPagina) {
             buffer.append(bodyText);
         }
         else {
@@ -851,7 +871,7 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     protected String interProgetto() {
-        if (isSottopagina) {
+        if (isSottoPagina) {
             return VUOTA;
         }
         else {
@@ -927,14 +947,14 @@ public class Upload implements AlgosBuilderPattern {
         String nomeCat;
         int ordineCategoriaSottopagina;
         String keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
-        String nomeAnno = isSottopagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
+        String nomeAnno = isSottoPagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
         AnnoEntity anno = (AnnoEntity) annoModulo.findByKey(nomeAnno);
         String secolo = anno.getSecolo().nome; ;
         int posCat = anno.getOrdine() * MOLTIPLICATORE_ORDINE_CATEGORIA_ANNI; ;
 
-        if (isSottopagina) {
+        if (isSottoPagina) {
             nomeCat = textService.levaCodaDaUltimo(titoloPagina, SLASH);
-            ordineCategoriaSottopagina = Mese.getOrder(keySottopagina);
+            ordineCategoriaSottopagina = Mese.getOrder(keySottoPagina);
             if (ordineCategoriaSottopagina == 0 && keyParagrafo.equals(TAG_LISTA_NO_GIORNO)) {
                 ordineCategoriaSottopagina = 13;
             }
@@ -981,7 +1001,7 @@ public class Upload implements AlgosBuilderPattern {
         String categoria;
 
         categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
-        categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
+        categoria = isSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
 
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
@@ -1000,7 +1020,7 @@ public class Upload implements AlgosBuilderPattern {
         String categoria;
 
         categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
-        categoria = isSottopagina ? categoria + SLASH + keySottopagina : categoria;
+        categoria = isSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
 
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
@@ -1167,12 +1187,12 @@ public class Upload implements AlgosBuilderPattern {
      * zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
-        if (isSottopagina) {
-            numBio = istanzaLista.numBio(keySottopagina);
+        if (isSottoPagina) {
+            numBio = istanzaLista.numBioSotto(keySottoPagina);
         }
         else {
             if (numBio == 0) {
-                numBio = istanzaLista.numBio();
+                numBio = istanzaLista.numBioSotto();
             }
         }
 
@@ -1193,7 +1213,7 @@ public class Upload implements AlgosBuilderPattern {
      */
     public int numBio(String keySottopagina) {
         if (numBio == 0) {
-            numBio = istanzaLista.numBio(keySottopagina);
+            numBio = istanzaLista.numBioSotto(keySottopagina);
         }
 
         return numBio;

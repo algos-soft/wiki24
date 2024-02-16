@@ -330,7 +330,7 @@ public class Lista implements AlgosBuilderPattern {
      *
      * @return -1 se il pattern della classe non è valido, zero se i dati sono validi ma non ci sono biografie <br>
      */
-    public int numBio() {
+    public int numBioSotto() {
         if (bioMongoModulo == null || textService.isEmpty(nomeLista)) {
             return INT_ERROR;
         }
@@ -944,18 +944,18 @@ public class Lista implements AlgosBuilderPattern {
      *
      * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina, zero se i dati sono validi ma non ci sono biografie <br>
      */
-    public int numBio(final String keySottopagina) {
-        int numBioSottopagina = INT_ERROR;
+    public int numBioSotto(final String keySottoPagina) {
+        int numBioSottoPagina = INT_ERROR;
         String lowerLista = textService.primaMinuscola(nomeLista);
-        String lowerSotto = textService.primaMinuscola(keySottopagina);
+        String lowerSotto = textService.primaMinuscola(keySottoPagina);
 
         if (!checkValiditaPattern()) {
-            return numBioSottopagina;
+            return numBioSottoPagina;
         }
 
-        numBioSottopagina = switch (type) {
-            case giornoNascita -> bioMongoModulo.countByGiornoNatoAndSecolo(lowerLista, keySottopagina);
-            case giornoMorte -> bioMongoModulo.countByGiornoMortoAndSecolo(lowerLista, keySottopagina);
+        numBioSottoPagina = switch (type) {
+            case giornoNascita -> bioMongoModulo.countByGiornoNatoAndSecolo(lowerLista, keySottoPagina);
+            case giornoMorte -> bioMongoModulo.countByGiornoMortoAndSecolo(lowerLista, keySottoPagina);
             case annoNascita -> bioMongoModulo.countByAnnoNatoAndMese(lowerLista, lowerSotto);
             case annoMorte -> bioMongoModulo.countByAnnoMortoAndMese(lowerLista, lowerSotto);
             case attivitaSingolare -> bioMongoModulo.countByAttivitaAndNazionalita(lowerLista, lowerSotto);
@@ -965,11 +965,7 @@ public class Lista implements AlgosBuilderPattern {
             default -> INT_ERROR;
         };
 
-        if (numBioSottopagina > 0) {
-            return numBioSottopagina;
-        }
-
-        return numBioSottopagina;
+        return numBioSottoPagina;
     }
 
     public LinkedHashMap<String, LinkedHashMap<String, List<String>>> mappaSottopagina(String keySottopagina) {

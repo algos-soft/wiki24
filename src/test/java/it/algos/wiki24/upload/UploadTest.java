@@ -458,7 +458,7 @@ public class UploadTest extends WikiStreamTest {
             message = String.format("Nella pagina [%s] di type%s[%s], ci sono [%d] sottopagine", nomeLista, FORWARD, type.name(), listaStr.size());
             System.out.println(message);
             for (String keySottopagina : listaStr) {
-                previstoIntero = istanza.sottopagina(keySottopagina).numBio();
+                previstoIntero = istanza.sottoPagina(keySottopagina).numBio();
                 ottenutoIntero = istanza.numBio(keySottopagina);
                 assertEquals(previstoIntero, ottenutoIntero);
                 if (ottenutoIntero > 0) {
@@ -476,7 +476,7 @@ public class UploadTest extends WikiStreamTest {
             ottenutoArray = appContext.getBean(Lista.class, nomeLista).type(type).keyMappa();
             for (String keyParagrafoSenzaSottopagina : ottenutoArray) {
                 if (!listaStr.contains(keyParagrafoSenzaSottopagina)) {
-                    ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keyParagrafoSenzaSottopagina);
+                    ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keyParagrafoSenzaSottopagina);
                     totaleEffettivoParagrafiSenzaSottopagina += ottenutoIntero;
                 }
             }
@@ -489,7 +489,7 @@ public class UploadTest extends WikiStreamTest {
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopaginaErrata);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keySottopaginaErrata);
                 if (ottenutoIntero == INT_ERROR) {
                     message = String.format("Nella lista [%s] non esiste un paragrafo/sottopagina [%s]", nomeLista, keySottopaginaErrata);
                     System.out.println(message);
@@ -533,7 +533,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).getHeaderText();
+                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).getHeaderText();
                 System.out.println(VUOTA);
                 message = String.format("Header di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -571,7 +571,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).getIncipitText();
+                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).getIncipitText();
                 System.out.println(VUOTA);
                 message = String.format("Incipit di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -609,7 +609,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (ottenutoMappa != null && ottenutoMappa.size() > 0) {
             for (String keySottopagina : ottenutoMappa.keySet()) {
-                previsto = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).getBodyText();
+                previsto = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).getBodyText();
                 ottenuto = ottenutoMappa.get(keySottopagina);
                 assertEquals(previsto, ottenuto);
 
@@ -651,7 +651,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).getBottomText();
+                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).getBottomText();
                 System.out.println(VUOTA);
                 message = String.format("Bottom di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -681,7 +681,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).getUploadText();
+                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).getUploadText();
                 System.out.println(VUOTA);
                 message = String.format("UploadText di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -694,7 +694,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(511)
     @DisplayName("511 - uploadTestSottopagina")
@@ -714,7 +714,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr.size() > 0) {
             for (String keySottopagina : listaStr.subList(0, Math.min(3, listaStr.size()))) {
-                ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).test().uploadOnly();
+                ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).test().uploadOnly();
                 message = String.format("Upload pagina di test di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
                 printRisultato(ottenutoRisultato);
@@ -746,7 +746,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).sottopagina(keySottopagina).uploadOnly();
+                ottenutoRisultato = appContext.getBean(Upload.class, nomeLista).type(type).sottoPagina(keySottopagina).uploadOnly();
                 message = String.format("Upload pagina REAL di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
                 printRisultato(ottenutoRisultato);
@@ -759,7 +759,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(601)
     @DisplayName("601 - listaSottoSottoPagine")
@@ -818,7 +818,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(603)
     @DisplayName("603 - getHeaderTextSottoSottopagina")
@@ -841,10 +841,10 @@ public class UploadTest extends WikiStreamTest {
         }
 
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr) {
-                ottenuto = istanza.sottopagina(keySottopagina).getHeaderText();
+            for (String keySottoSottoPagina : listaStr) {
+                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoSottoPagina(keySottoSottoPagina).getHeaderText();
                 System.out.println(VUOTA);
-                message = String.format("Header di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottopagina);
+                message = String.format("Header di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottoSottoPagina);
                 System.out.println(message);
                 System.out.println(ottenuto.trim());
             }

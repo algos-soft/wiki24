@@ -16,7 +16,6 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 /**
  * Project wiki24
@@ -98,7 +97,7 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
 
-        ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
+        ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
@@ -168,7 +167,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+            @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -204,7 +203,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -305,7 +304,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - bodyText")
@@ -599,7 +598,7 @@ public class ListaTest extends WikiStreamTest {
         }
 
         listaStr = appContext.getBean(Lista.class, nomeLista).type(type).keyMappa();
-        previstoTotaleParagrafi = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
+        previstoTotaleParagrafi = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto();
 
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
@@ -607,7 +606,7 @@ public class ListaTest extends WikiStreamTest {
         }
         if (listaStr != null && listaStr.size() > 0) {
             for (String keyParagrafo : listaStr) {
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keyParagrafo);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keyParagrafo);
                 if (ottenutoIntero > 0) {
                     totaleEffettivoPagina += ottenutoIntero;
                     message = String.format("Le biografie di type%s[%s] per il paragrafo [%s] di [%s], sono [%d]", FORWARD, type.name(), keyParagrafo, nomeLista, ottenutoIntero);
@@ -633,7 +632,7 @@ public class ListaTest extends WikiStreamTest {
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopaginaErrata);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keySottopaginaErrata);
                 if (ottenutoIntero == INT_ERROR) {
                     message = String.format("Nella lista [%s] non esiste un paragrafo [%s]", nomeLista, keySottopaginaErrata);
                     System.out.println(message);
@@ -653,7 +652,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")
@@ -670,7 +669,7 @@ public class ListaTest extends WikiStreamTest {
         }
 
         listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
-        previstoTotalePagina = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
+        previstoTotalePagina = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto();
 
         if (textService.isEmpty(nomeLista)) {
             assertNull(listaStr);
@@ -679,7 +678,7 @@ public class ListaTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keySottopagina);
                 if (ottenutoIntero > 0) {
                     totaleEffettivoSottoPagine += ottenutoIntero;
                     message = String.format("Le biografie di type%s[%s] per il mese di %s dell'anno %s, sono [%d]", FORWARD, type.name(), keySottopagina, nomeLista, ottenutoIntero);
@@ -695,7 +694,7 @@ public class ListaTest extends WikiStreamTest {
             ottenutoArray = appContext.getBean(Lista.class, nomeLista).type(type).keyMappa();
             for (String keyParagrafoSenzaSottopagina : ottenutoArray) {
                 if (!listaStr.contains(keyParagrafoSenzaSottopagina)) {
-                    ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keyParagrafoSenzaSottopagina);
+                    ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keyParagrafoSenzaSottopagina);
                     totaleEffettivoParagrafiSenzaSottopagina += ottenutoIntero;
                 }
             }
@@ -708,7 +707,7 @@ public class ListaTest extends WikiStreamTest {
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
-                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopaginaErrata);
+                ottenutoIntero = appContext.getBean(Lista.class, nomeLista).type(type).numBioSotto(keySottopaginaErrata);
                 if (ottenutoIntero == INT_ERROR) {
                     message = String.format("Nella lista [%s] non esiste un paragrafo/sottopagina [%s]", nomeLista, keySottopaginaErrata);
                     System.out.println(message);
