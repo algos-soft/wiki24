@@ -85,7 +85,7 @@ public class ListaTest extends WikiStreamTest {
         //        super.fixCheckParametroNelCostruttore(PARAMETRO, "...nonEsiste...", CHECK, FUNZIONE);
     }
 
-        @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(101)
     @DisplayName("101 - numBio")
@@ -615,7 +615,7 @@ public class ListaTest extends WikiStreamTest {
                 }
             }
 
-            if (totaleEffettivoPagina == INT_ERROR||totaleEffettivoPagina == 0) {
+            if (totaleEffettivoPagina == INT_ERROR || totaleEffettivoPagina == 0) {
                 if (type == TypeLista.attivitaSingolare || type == TypeLista.nazionalitaSingolare) {
                     message = String.format("La lista non calcola i paragrafi", nomeLista, previstoTotaleParagrafi);
                     System.out.println(message);

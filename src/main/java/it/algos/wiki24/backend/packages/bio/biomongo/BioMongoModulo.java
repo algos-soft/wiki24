@@ -570,6 +570,14 @@ public class BioMongoModulo extends WikiModulo {
         return mongoService.count(queryByNazionalitaAndAttivita(nazionalitaPlurale, attivitaPlurale), BioMongoEntity.class);
     }
 
+    /**
+     * Query per nazionalità (lista) e attività (sottopagina) <br>
+     *
+     * @param nazionalitaPlurale (obbligatorio)
+     * @param attivitaPlurale    (facoltativa)
+     *
+     * @return query per la ricerca
+     */
     public Query queryByNazionalitaAndAttivita(final String nazionalitaPlurale, final String attivitaPlurale) {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA, FIELD_NAME_COGNOME);
@@ -583,23 +591,13 @@ public class BioMongoModulo extends WikiModulo {
             return query;
         }
 
-        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
-        if (nazPluraleEntity != null) {
-            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
-        }
-        else {
-            nazSingolareEntity = nazSingolareModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
-        }
-
-        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
-        if (nazPluraleEntity == null) {
+        listaSingoleNazionalità = this.findAllNazionalitaSingole(nazionalitaPlurale);
+        if (listaSingoleNazionalità.isEmpty()) {
             return query;
         }
 
-        listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
-        if (attPluraleEntity != null) {
-            listaSingoleAttività = attPluraleEntity.txtSingolari;
-
+        listaSingoleAttività = this.findAllAttivitaSingole(attivitaPlurale);
+        if (listaSingoleAttività!=null&&listaSingoleAttività.size()>0) {
             query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
             query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
         }
@@ -607,6 +605,32 @@ public class BioMongoModulo extends WikiModulo {
             query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
             query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(VUOTA));
         }
+
+
+        //        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
+//        if (nazPluraleEntity != null) {
+//            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+//        }
+//        else {
+//            nazSingolareEntity = nazSingolareModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
+//        }
+//
+//        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
+        //        if (nazPluraleEntity == null) {
+        //            return query;
+        //        }
+        //
+        //        listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+        //        if (attPluraleEntity != null) {
+        //            listaSingoleAttività = attPluraleEntity.txtSingolari;
+        //
+        //            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
+        //            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
+        //        }
+        //        else {
+        //            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
+        //            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(VUOTA));
+        //        }
 
         query.with(sort);
         return query;
