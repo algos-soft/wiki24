@@ -402,6 +402,15 @@ public class Upload implements AlgosBuilderPattern {
         return listaSottoPagine;
     }
 
+    /**
+     * Mappa delle sottoPagine <br>
+     * Recupera il valore dalla Lista <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public LinkedHashMap<String, String> mappaSottoPagine() {
+        return istanzaLista != null ? istanzaLista.mappaSottoPagine() : null;
+    }
 
     /**
      * Lista delle sottoSottoPagine <br>
@@ -437,6 +446,7 @@ public class Upload implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(avviso());
+        buffer.append(CAPO);
         buffer.append(include());
         buffer.append(CAPO);
 
@@ -758,7 +768,6 @@ public class Upload implements AlgosBuilderPattern {
             }
         }
 
-        buffer.append(CAPO);
         this.bodyText = buffer.toString();
         return this.bodyText;
     }
@@ -766,6 +775,7 @@ public class Upload implements AlgosBuilderPattern {
 
     public String creaBottom() {
         StringBuffer buffer = new StringBuffer();
+        buffer.append(CAPO);
 
         boolean usaInclude = switch (type) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> true;

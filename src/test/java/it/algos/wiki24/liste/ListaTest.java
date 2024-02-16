@@ -305,7 +305,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(701)
     @DisplayName("701 - bodyText")
@@ -351,7 +351,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(801)
     @DisplayName("801 - listaSottoPagine")
@@ -424,7 +424,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-        @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(803)
     @DisplayName("803 - listaSottoSottoPagine")

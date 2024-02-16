@@ -817,6 +817,7 @@ public class Lista implements AlgosBuilderPattern {
                 usaDiv = numVociParagrafo > sogliaDiv;
 
                 buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
+
                 //corpo con/senza sottoSottoPagine
                 if (usaSottoSottoPaginaPreferenze && usaSottoSottoPaginaDinamico) {
                     sottoPagina = String.format("%s%s%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, textService.primaMaiuscola(keySottopagina), SLASH, keyParagrafo);
@@ -846,21 +847,6 @@ public class Lista implements AlgosBuilderPattern {
                     }
                 }
             }
-
-            //                for (String terzoLivello : mappaSottoPagina.get(keyParagrafo).keySet()) {
-            //                    buffer.append(wikiUtilityService.setParagrafo(keyParagrafo, numVociParagrafo));
-            //                    if (usaDiv) {
-            //                        buffer.append(DIV_INI_CAPO);
-            //                    }
-            //                    for (String didascalia : mappaSottoPagina.get(keyParagrafo).get(terzoLivello)) {
-            //                        buffer.append(ASTERISCO);
-            //                        buffer.append(didascalia);
-            //                        buffer.append(CAPO);
-            //                    }
-            //                    if (usaDiv) {
-            //                        buffer.append(DIV_END_CAPO);
-            //                    }
-            //                }
         }
         else {
             usaDiv = numVociSottoPagina > sogliaDiv;
@@ -873,7 +859,7 @@ public class Lista implements AlgosBuilderPattern {
             }
         }
 
-        return buffer.toString().trim();
+        return buffer.toString().trim()+CAPO;
     }
 
     /**
