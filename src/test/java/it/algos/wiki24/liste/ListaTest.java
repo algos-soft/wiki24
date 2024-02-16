@@ -351,7 +351,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(801)
     @DisplayName("801 - listaSottoPagine")
@@ -424,7 +424,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+        @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(803)
     @DisplayName("803 - listaSottoSottoPagine")
@@ -584,7 +584,7 @@ public class ListaTest extends WikiStreamTest {
     //    }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(901)
     @DisplayName("901 - numBioParagrafi")
@@ -653,7 +653,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")

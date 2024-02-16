@@ -536,24 +536,20 @@ public class BioMongoModulo extends WikiModulo {
     public Query queryByAttivitaAndNazionalita(final String attivitaPlurale, final String nazionalitaPlurale) {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_NAZIONALITA, FIELD_NAME_COGNOME);
-        AttPluraleEntity attPluraleEntity;
-        NazPluraleEntity nazPluraleEntity;
         List<String> listaSingoleAttività;
         List<String> listaSingoleNazionalità;
 
         if (textService.isEmpty(attivitaPlurale) || textService.isEmpty(nazionalitaPlurale)) {
             return query;
         }
-        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
-        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
-        if (attPluraleEntity == null) {
+        listaSingoleAttività = this.findAllAttivitaSingole(attivitaPlurale);
+        if (listaSingoleAttività.isEmpty()) {
             return query;
         }
 
-        listaSingoleAttività = attPluraleEntity.txtSingolari;
-        if (nazPluraleEntity != null) {
-            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
+        listaSingoleNazionalità = this.findAllNazionalitaSingole(nazionalitaPlurale);
 
+        if (listaSingoleNazionalità != null&&listaSingoleNazionalità.size()>0) {
             query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
             query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
         }
@@ -581,9 +577,6 @@ public class BioMongoModulo extends WikiModulo {
     public Query queryByNazionalitaAndAttivita(final String nazionalitaPlurale, final String attivitaPlurale) {
         Query query = new Query();
         Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_ATTIVITA, FIELD_NAME_COGNOME);
-        NazPluraleEntity nazPluraleEntity;
-        NazSingolareEntity nazSingolareEntity;
-        AttPluraleEntity attPluraleEntity;
         List<String> listaSingoleNazionalità;
         List<String> listaSingoleAttività;
 
@@ -597,7 +590,7 @@ public class BioMongoModulo extends WikiModulo {
         }
 
         listaSingoleAttività = this.findAllAttivitaSingole(attivitaPlurale);
-        if (listaSingoleAttività!=null&&listaSingoleAttività.size()>0) {
+        if (listaSingoleAttività != null && listaSingoleAttività.size() > 0) {
             query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
             query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
         }
@@ -605,32 +598,6 @@ public class BioMongoModulo extends WikiModulo {
             query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
             query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(VUOTA));
         }
-
-
-        //        nazPluraleEntity = nazPluraleModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
-//        if (nazPluraleEntity != null) {
-//            listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
-//        }
-//        else {
-//            nazSingolareEntity = nazSingolareModulo.findByKey(textService.primaMinuscola(nazionalitaPlurale));
-//        }
-//
-//        attPluraleEntity = attPluraleModulo.findByKey(textService.primaMinuscola(attivitaPlurale));
-        //        if (nazPluraleEntity == null) {
-        //            return query;
-        //        }
-        //
-        //        listaSingoleNazionalità = nazPluraleEntity.txtSingolari;
-        //        if (attPluraleEntity != null) {
-        //            listaSingoleAttività = attPluraleEntity.txtSingolari;
-        //
-        //            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
-        //            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).in(listaSingoleAttività));
-        //        }
-        //        else {
-        //            query.addCriteria(Criteria.where(FIELD_NAME_NAZIONALITA).in(listaSingoleNazionalità));
-        //            query.addCriteria(Criteria.where(FIELD_NAME_ATTIVITA).is(VUOTA));
-        //        }
 
         query.with(sort);
         return query;

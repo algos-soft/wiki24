@@ -695,6 +695,7 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Lista delle sottoPagine <br>
+     * Restituisce sempre un valore. Se l'istanza ha il patternCompleto=false, la elabora <br>
      * Elabora il testo body della pagina principale, se non già elaborato <br>
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
@@ -713,6 +714,7 @@ public class Lista implements AlgosBuilderPattern {
 
     /**
      * Mappa delle sottoPagine <br>
+     * Restituisce sempre un valore. Se l'istanza ha il patternCompleto=false, la elabora <br>
      * Elabora il testo body della pagina principale, se non già elaborato <br>
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>

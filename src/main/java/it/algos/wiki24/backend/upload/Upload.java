@@ -205,6 +205,7 @@ public class Upload implements AlgosBuilderPattern {
             default -> TypeSummary.nessuno;
         };
 
+        istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
         return this;
     }
 
@@ -395,12 +396,34 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         if (listaSottoPagine == null || listaSottoPagine.isEmpty()) {
-            listaSottoPagine = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoPagine();
+            listaSottoPagine = istanzaLista.listaSottoPagine();
         }
 
         return listaSottoPagine;
     }
 
+
+    /**
+     * Lista delle sottoSottoPagine <br>
+     * Controlla che il valore esista, altrimenti lo recupera da Lista <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public List<String> listaSottoSottoPagine() {
+        if (!checkValiditaPattern()) {
+            return null;
+        }
+
+        if (!checkBio()) {
+            return new ArrayList<>();
+        }
+
+        if (listaSottoSottoPagine == null || listaSottoSottoPagine.isEmpty()) {
+            listaSottoSottoPagine = istanzaLista.listaSottoSottoPagine();
+        }
+
+        return listaSottoSottoPagine;
+    }
 
     public WResult uploadSottopagina(String keySottopagina) {
         WResult risultato = WResult.errato();
@@ -690,10 +713,9 @@ public class Upload implements AlgosBuilderPattern {
         String titoloLista;
 
         if (isSottopagina) {
-            bodyText = appContext.getBean(Lista.class, nomeLista).type(type).bodySottopagina(keySottopagina);
+            bodyText = istanzaLista.bodySottopagina(keySottopagina);
         }
         else {
-            istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
             if (istanzaLista != null && istanzaLista.getType() == type) {
                 bodyText = istanzaLista.bodyText();
             }
@@ -1136,11 +1158,11 @@ public class Upload implements AlgosBuilderPattern {
      */
     public int numBio() {
         if (isSottopagina) {
-            numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+            numBio = istanzaLista.numBio(keySottopagina);
         }
         else {
             if (numBio == 0) {
-                numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio();
+                numBio = istanzaLista.numBio();
             }
         }
 
@@ -1161,10 +1183,18 @@ public class Upload implements AlgosBuilderPattern {
      */
     public int numBio(String keySottopagina) {
         if (numBio == 0) {
-            numBio = appContext.getBean(Lista.class, nomeLista).type(type).numBio(keySottopagina);
+            numBio = istanzaLista.numBio(keySottopagina);
         }
 
         return numBio;
+    }
+
+    public LinkedHashMap<String, String> mappaSottoSottoPagine() {
+        return istanzaLista != null ? istanzaLista.mappaSottoSottoPagine() : null;
+    }
+
+    public Lista getIstanzaLista() {
+        return istanzaLista;
     }
 
 }
