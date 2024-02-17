@@ -100,6 +100,7 @@ public class Lista implements AlgosBuilderPattern {
 
     protected LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappaCompleta;
 
+    private MappaWrap mappaWrap;
 
     protected String bodyText;
 
@@ -144,6 +145,8 @@ public class Lista implements AlgosBuilderPattern {
 
     private int sogliaVociTotaliPaginaPerSottopagine;
 
+    private TypeWrap typeWrap;
+
     /**
      * Costruttore base con 1 parametro (obbligatorio) <br>
      * Not annotated with @Autowired annotation, classe astratta <br>
@@ -169,6 +172,7 @@ public class Lista implements AlgosBuilderPattern {
      */
     protected void fixPreferenze() {
         this.type = TypeLista.nessunaLista;
+        this.typeWrap = TypeWrap.primoLivello;
 
         this.usaDimensioneParagrafi = true;
         this.sogliaDiv = WPref.sogliaDiv.getInt();
@@ -234,6 +238,14 @@ public class Lista implements AlgosBuilderPattern {
             default -> false;
         };
 
+        this.typeWrap = switch (type) {
+            case giornoNascita, giornoMorte -> TypeWrap.primoLivello;
+            case annoNascita, annoMorte -> TypeWrap.secondoLivello;
+            case attivitaSingolare, attivitaPlurale -> TypeWrap.terzoLivello;
+            case nazionalitaSingolare, nazionalitaPlurale -> TypeWrap.terzoLivello;
+            default -> TypeWrap.primoLivello;
+        };
+
         return this;
     }
 
@@ -245,13 +257,6 @@ public class Lista implements AlgosBuilderPattern {
         return this;
     }
 
-    //    /**
-    //     * Pattern Builder <br>
-    //     */
-    //    public Lista nonUsaIncludeNeiParagrafi() {
-    //        this.usaIncludeSottoMax = false;
-    //        return this;
-    //    }
 
     protected void checkValiditaCostruttore() {
         costruttoreValido = textService.isValid(nomeLista);
@@ -411,10 +416,6 @@ public class Lista implements AlgosBuilderPattern {
      */
     public List<String> listaTestoDidascalie() {
         List<String> listaTestoDidascalie;
-
-        //        if (!checkValiditaPattern()) {
-        //            return null;
-        //        }
 
         listaTestoDidascalie = new ArrayList<>();
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
@@ -859,7 +860,7 @@ public class Lista implements AlgosBuilderPattern {
             }
         }
 
-        return buffer.toString().trim()+CAPO;
+        return buffer.toString().trim() + CAPO;
     }
 
     /**
