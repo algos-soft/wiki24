@@ -115,12 +115,14 @@ public class Upload implements AlgosBuilderPattern {
 
     protected boolean usaSottopaginaOltreMax;
 
-    private Lista istanzaLista;
+    private ListaPagina istanzaLista;
 
     protected boolean isSottoPagina;
+
     protected boolean isSottoSottoPagina;
 
     protected String keySottoPagina;
+
     protected String keySottoSottoPagina;
 
     protected List<String> listaSottoPagine = new ArrayList<>();
@@ -207,7 +209,8 @@ public class Upload implements AlgosBuilderPattern {
             default -> TypeSummary.nessuno;
         };
 
-        istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
+        istanzaLista = appContext.getBean(ListaPagina.class, nomeLista, type);
+        //        istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
         return this;
     }
 
@@ -416,7 +419,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         if (listaSottoPagine == null || listaSottoPagine.isEmpty()) {
-            listaSottoPagine = istanzaLista.listaSottoPagine();
+            listaSottoPagine = istanzaLista.getKeySottoPagine();
         }
 
         return listaSottoPagine;
@@ -429,7 +432,8 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public LinkedHashMap<String, String> mappaSottoPagine() {
-        return istanzaLista != null ? istanzaLista.mappaSottoPagine() : null;
+        //        return istanzaLista != null ? istanzaLista.mappaSottoPagine() : null;
+        return null;
     }
 
     /**
@@ -448,7 +452,7 @@ public class Upload implements AlgosBuilderPattern {
         }
 
         if (listaSottoSottoPagine == null || listaSottoSottoPagine.isEmpty()) {
-            listaSottoSottoPagine = istanzaLista.listaSottoSottoPagine();
+            listaSottoSottoPagine = istanzaLista.getKeySottoPagine();
         }
 
         return listaSottoSottoPagine;
@@ -743,14 +747,14 @@ public class Upload implements AlgosBuilderPattern {
         String titoloLista;
 
         if (isSottoPagina) {
-            bodyText = istanzaLista.bodySottopagina(keySottoPagina);
+            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
         }
         else {
-            if (istanzaLista != null && istanzaLista.getType() == type) {
-                bodyText = istanzaLista.bodyText();
+            if (istanzaLista != null && istanzaLista.getTypeLista() == type) {
+                bodyText = istanzaLista.getBodyText();
             }
             else {
-                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getType().getTag(), type.getTag());
+                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getTypeLista().getTag(), type.getTag());
                 logger.error(new WrapLog().exception(new AlgosException(message)));
                 return VUOTA;
             }
@@ -1188,11 +1192,14 @@ public class Upload implements AlgosBuilderPattern {
      */
     public int numBio() {
         if (isSottoPagina) {
-            numBio = istanzaLista.numBioSotto(keySottoPagina);
+            //            numBio = istanzaLista.n(keySottoPagina);
+            //            numBio= istanzaLista.getMappaSottoPagine().get(keySottoPagina).size();
+            numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
         }
         else {
             if (numBio == 0) {
-                numBio = istanzaLista.numBioSotto();
+                //                numBio = istanzaLista.numBioSotto();
+                numBio = istanzaLista.getNumBio();
             }
         }
 
@@ -1213,17 +1220,18 @@ public class Upload implements AlgosBuilderPattern {
      */
     public int numBio(String keySottopagina) {
         if (numBio == 0) {
-            numBio = istanzaLista.numBioSotto(keySottopagina);
+            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
         }
 
         return numBio;
     }
 
     public LinkedHashMap<String, String> mappaSottoSottoPagine() {
-        return istanzaLista != null ? istanzaLista.mappaSottoSottoPagine() : null;
+//        return istanzaLista != null ? istanzaLista.mappaSottoSottoPagine() : null;
+        return  null;
     }
 
-    public Lista getIstanzaLista() {
+    public ListaPagina getIstanzaLista() {
         return istanzaLista;
     }
 

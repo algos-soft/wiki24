@@ -8,6 +8,7 @@ import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.basetest.*;
 import it.algos.base24.ui.form.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
@@ -19,6 +20,9 @@ import org.junit.jupiter.params.provider.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -33,6 +37,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DisplayName("WrapDidascalia")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class WrapDidascaliaTest extends WikiTest {
+
+    @Inject
+    DidascaliaService didascaliaService;
 
     /**
      * Classe principale di riferimento <br>
@@ -125,6 +132,7 @@ public class WrapDidascaliaTest extends WikiTest {
         printBioMongo(bio);
         printWrap(istanza, bio.annoMorto);
     }
+
     @ParameterizedTest
     @MethodSource(value = "getBio")
     @Order(501)
@@ -143,14 +151,74 @@ public class WrapDidascaliaTest extends WikiTest {
 
 
 
-    //    protected void printWrap(WrapDidascalia wrap, String previsto, String type) {
+    @Test
+    @Order(601)
+    @DisplayName("601 - ordinamentoAlfabetico")
+    void ordinamentoAlfabetico() {
+        System.out.println(("601 - ordinamentoAlfabetico"));
+        System.out.println(VUOTA);
+        List<WrapDidascalia> disordinata = new ArrayList<>();
+        List<WrapDidascalia> ordinata;
+
+        for (BioMongoEntity bio : listaBio) {
+            istanza = ((WrapDidascalia) appContext.getBean(clazz)).attivita().get(bio);
+            if (textService.isValid(istanza.getDidascalia())) {
+                disordinata.add(istanza);
+            }
+        }
+
+        message = String.format("Lista %s di %s wrapDidascalie", "disordinata", disordinata.size());
+        System.out.println(message);
+        System.out.println(VUOTA);
+        for (WrapDidascalia wrap : disordinata) {
+            System.out.println(wrap.getDidascalia());
+        }
+
+        ordinata = didascaliaService.ordinamentoAlfabetico(disordinata);
+        System.out.println(VUOTA);
+        System.out.println(VUOTA);
+        message = String.format("Lista %s di %s wrapDidascalie", "ordinate alfabeticamente", ordinata.size());
+        System.out.println(message);
+        System.out.println(VUOTA);
+        for (WrapDidascalia wrap : ordinata) {
+            System.out.println(wrap.getDidascalia());
+        }
+    }
+
+
+
+    @Test
+    @Order(602)
+    @DisplayName("602 - ordinamentoNumerico")
+    void ordinamentoNumerico() {
+        System.out.println(("602 - ordinamentoNumerico"));
+        System.out.println(VUOTA);
+        List<WrapDidascalia> disordinata = new ArrayList<>();
+        List<WrapDidascalia> ordinata;
+
+        for (BioMongoEntity bio : listaBio) {
+            istanza = ((WrapDidascalia) appContext.getBean(clazz)).giornoMorte().get(bio);
+            if (textService.isValid(istanza.getDidascalia())) {
+                disordinata.add(istanza);
+            }
+        }
+
+        message = String.format("Lista %s di %s wrapDidascalie", "disordinata", disordinata.size());
+        System.out.println(message);
+        System.out.println(VUOTA);
+        for (WrapDidascalia wrap : disordinata) {
+            System.out.println(wrap.getDidascalia());
+        }
+
+//        ordinata = didascaliaService.ordinamentoNumerico(disordinata);
 //        System.out.println(VUOTA);
-//        System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
-//        System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
-//        System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
-//        System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
-//        System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
-//        System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
-//    }
+//        System.out.println(VUOTA);
+//        message = String.format("Lista %s di %s wrapDidascalie", "ordinate numericamente", ordinata.size());
+//        System.out.println(message);
+//        System.out.println(VUOTA);
+//        for (WrapDidascalia wrap : ordinata) {
+//            System.out.println(wrap.getDidascalia());
+//        }
+    }
 
 }

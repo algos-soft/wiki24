@@ -2,7 +2,6 @@ package it.algos.wiki24.backend.wrapper;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.packages.crono.anno.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.service.*;
@@ -12,10 +11,8 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
-import jakarta.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 
@@ -65,7 +62,9 @@ public class WrapDidascalia {
 
     private TypeLista type;
 
-    int ordinamento;
+    private int ordineNumerico;
+
+    private String ordineAlfabetico;
 
     public WrapDidascalia() {
     }
@@ -118,6 +117,14 @@ public class WrapDidascalia {
         return this;
     }
 
+    /**
+     * Fluent pattern Builder <br>
+     */
+    public WrapDidascalia nazionalita() {
+        this.type = TypeLista.nazionalitaPlurale;
+        return this;
+    }
+
     public WrapDidascalia get(BioMongoEntity bio) {
         didascalia = switch (type) {
             case giornoNascita -> didascaliaService.didascaliaGiornoNato(bio);
@@ -140,13 +147,30 @@ public class WrapDidascalia {
     }
 
     public void fixOrdinamento(BioMongoEntity bio) {
-        ordinamento = switch (type) {
+        String ordinamento = VUOTA;
+
+        ordineNumerico = switch (type) {
             case giornoNascita -> bio.annoNatoOrd;
             case giornoMorte -> bio.annoMortoOrd;
             case annoNascita -> 0;
             case annoMorte -> 0;
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> 0;
             default -> 0;
         };
+
+        if (textService.isValid(bio.cognome)) {
+            ordinamento += bio.cognome;
+        }
+        if (textService.isValid(bio.nome)) {
+            ordinamento += VIRGOLA;
+            ordinamento += bio.nome;
+        }
+        if (textService.isEmpty(ordinamento)) {
+            ordinamento = bio.ordinamento;
+        }
+        ordinamento += VIRGOLA;
+        ordinamento += bio.wikiTitle;
+        ordineAlfabetico = ordinamento;
     }
 
     public void fixPrimoLivello(BioMongoEntity bio) {
@@ -320,7 +344,7 @@ public class WrapDidascalia {
     }
 
     public String getTerzoLivelloAlfabetico(BioMongoEntity bio) {
-        String  terzoLivello = VUOTA;
+        String terzoLivello = VUOTA;
         String cognome = bio.cognome;
         String wikiTitle = bio.wikiTitle;
 
@@ -363,8 +387,12 @@ public class WrapDidascalia {
         return quartoLivello;
     }
 
-    public int getOrdinamento() {
-        return ordinamento;
+    public int getOrdineNumerico() {
+        return ordineNumerico;
+    }
+
+    public String getOrdineAlfabetico() {
+        return ordineAlfabetico;
     }
 
 }

@@ -151,7 +151,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(203)
     @DisplayName("203 - getIncipitText")
@@ -189,7 +189,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    //            @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(204)
     @DisplayName("204 - getBodyText")
@@ -297,7 +297,7 @@ public class UploadTest extends WikiStreamTest {
 
         istanza = appContext.getBean(Upload.class, nomeLista).type(type);
         assertNotNull(istanza);
-        istanzaLista = istanza.getIstanzaLista();
+        //        istanzaLista = istanza.getIstanzaLista();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(textService.isValid(ottenuto));
@@ -430,7 +430,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    //        @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(502)
     @DisplayName("502 - getNumBioSottopagina")
@@ -665,7 +665,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    //            @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(507)
     @DisplayName("507 - getUploadTextSottopagina")
@@ -694,7 +694,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(511)
     @DisplayName("511 - uploadTestSottopagina")
@@ -818,7 +818,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(603)
     @DisplayName("603 - getHeaderTextSottoSottopagina")

@@ -167,7 +167,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-            @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(301)
     @DisplayName("301 - listaWrapDidascalie")
@@ -203,7 +203,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(401)
     @DisplayName("401 - listaTestoDidascalia")
@@ -239,7 +239,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(501)
     @DisplayName("501 - mappaDidascalie")
@@ -270,7 +270,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //            @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(601)
     @DisplayName("601 - key della mappa (paragrafi)")
@@ -496,91 +496,6 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    //    @ParameterizedTest
-    //    @MethodSource(value = "LISTA_SOTTO_PAGINE")
-    //    @Order(803)
-    //    @DisplayName("803 - listaSottoSottoPagine")
-    //    void listaSottoSottoPagine(String nomeLista, TypeLista type, String keySottoPagina) {
-    //        System.out.println(("803 - listaSottoSottoPagine"));
-    //        System.out.println(VUOTA);
-    //        if (byPassaErrori && !fixListe(nomeLista, type)) {
-    //            return;
-    //        }
-    //        List<String> listaParagrafi;
-    //        List<String> listaSottopagineGetter;
-    //        List<String> listaSottopagine;
-    //        List<String> listaSottoSottopagine;
-    //        LinkedHashMap<String, String> mappaSottoPagine;
-    //        LinkedHashMap<String, String> mappaSottoSottoPagine;
-    //
-    //        istanza = appContext.getBean(Lista.class, nomeLista).type(type);
-    //        assertNotNull(istanza);
-    //        listaParagrafi = istanza.keyMappa();
-    //        assertNotNull(listaParagrafi);
-    //
-    //        listaSottopagineGetter = istanza.getListaSottoPagine();
-    //        assertNotNull(listaSottopagineGetter);
-    //        listaSottopagine = istanza.listaSottoPagine();
-    //        assertNotNull(listaSottopagine);
-    //        assertEquals(listaSottopagine, listaSottopagineGetter);
-    //
-    //        mappaSottoPagine = istanza.getMappaSottoPagine();
-    //        assertNotNull(mappaSottoPagine);
-    //        mappaSottoSottoPagine = istanza.getMappaSottoSottoPagine();
-    //        assertNotNull(mappaSottoSottoPagine);
-    //
-    //        if (listaParagrafi.size() > 0) {
-    //            message = String.format("Ci sono %s paragrafi nella lista [%s] di type [%s]", listaParagrafi.size(), nomeLista, type.name());
-    //            System.out.println(message);
-    //            System.out.println(listaParagrafi);
-    //            System.out.println(VUOTA);
-    //        }
-    //
-    //        if (listaSottopagine.size() > 0) {
-    //            message = String.format("Ci sono %s sottoPagine nella lista [%s] di type [%s]", listaSottopagine.size(), nomeLista, type.name());
-    //            System.out.println(message);
-    //            System.out.println(listaSottopagine);
-    //            System.out.println(VUOTA);
-    //            for (String key : mappaSottoPagine.keySet()) {
-    //                ottenuto = mappaSottoPagine.get(key);
-    //                System.out.println(ottenuto);
-    //                System.out.println(VUOTA);
-    //            }
-    //        }
-    //
-    //        if (listaSottopagine.size() > 0) {
-    //            message = String.format("Ci sono %s sottoSottoPagine nella lista [%s] di type [%s]", listaSottopagine.size(), nomeLista, type.name());
-    //            System.out.println(message);
-    //            System.out.println(listaSottopagine);
-    //            System.out.println(VUOTA);
-    //            for (String key : mappaSottoPagine.keySet()) {
-    //                ottenuto = mappaSottoPagine.get(key);
-    //                System.out.println(ottenuto);
-    //                System.out.println(VUOTA);
-    //            }
-    //        }
-    //
-    //        //        listaStr = appContext.getBean(Lista.class, nomeLista).type(type).listaSottoSottoPagine();
-    //        //        if (textService.isEmpty(nomeLista)) {
-    //        //            assertNull(listaStr);
-    //        //            return;
-    //        //        }
-    //        //        if (listaStr == null) {
-    //        //            assertTrue(false);
-    //        //            return;
-    //        //        }
-    //
-    //        //        if (listaStr.size() > 0) {
-    //        //            message = String.format("Ci sono %s sottoSottoPagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
-    //        //            System.out.println(message);
-    //        //            System.out.println(VUOTA);
-    //        //            print(listaStr);
-    //        //        }
-    //        //        else {
-    //        //            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, type.name());
-    //        //            System.out.println(message);
-    //        //        }
-    //    }
 
 
     //    @ParameterizedTest
@@ -652,7 +567,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(902)
     @DisplayName("902 - numBioSottopagina")

@@ -1850,12 +1850,14 @@ public abstract class WikiTest extends AlgosTest {
         System.out.println(VUOTA);
         System.out.println(String.format("Type: %s (%s)", wrap.getType(), previsto));
         System.out.println(String.format("Didascalia: %s", wrap.getDidascalia()));
-        System.out.println(String.format("Ordinamento: %s", wrap.getOrdinamento()));
+        System.out.println(String.format("Ordine numerico: %s", wrap.getOrdineNumerico()));
+        System.out.println(String.format("Ordine alfabetico: %s", wrap.getOrdineAlfabetico()));
         System.out.println(String.format("Primo livello: %s", wrap.getPrimoLivello()));
         System.out.println(String.format("Secondo livello: %s", wrap.getSecondoLivello()));
         System.out.println(String.format("Terzo livello: %s", wrap.getTerzoLivello()));
         System.out.println(String.format("Quarto livello: %s", wrap.getQuartoLivello()));
     }
+
 
     protected boolean validoGiornoAnno(final String nomeLista, final TypeLista typeSuggerito) {
         if (textService.isEmpty(nomeLista)) {

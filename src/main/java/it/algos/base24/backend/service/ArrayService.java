@@ -272,8 +272,14 @@ public class ArrayService {
         LinkedHashMap mappaOrdinata = new LinkedHashMap();
         Object[] listaChiavi;
 
-        if (!isAllValid(mappaDisordinata)) {
-            return (LinkedHashMap) mappaDisordinata;
+        if (mappaDisordinata == null) {
+            return null;
+        }
+        if (mappaDisordinata.size() == 1) {
+            for (Object chiave : mappaDisordinata.keySet()) {
+                mappaOrdinata.put(chiave, mappaDisordinata.get(chiave));
+            }
+            return mappaOrdinata;
         }
 
         listaChiavi = mappaDisordinata.keySet().toArray();
@@ -514,7 +520,7 @@ public class ArrayService {
         for (SideNavItem item : lista) {
             mappa.put(item.getLabel(), item);
         }
-        mappa= sortVuota(mappa);
+        mappa = sortVuota(mappa);
         lista.removeAll(lista);
         for (Object key : mappa.keySet()) {
             lista.add(mappa.get(key));

@@ -4,9 +4,11 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -31,6 +33,9 @@ public class DidascaliaService {
 
     @Inject
     WikiUtilityService wikiUtilityService;
+
+    @Inject
+    ArrayService arrayService;
 
     /**
      * Costruisce il nome e cognome (obbligatori) <br>
@@ -252,6 +257,7 @@ public class DidascaliaService {
 
         return tagMorto + annoMortoLinkato;
     }
+
     public String annoMortoIconaTonde(final BioMongoEntity bio) {
         String annoMortoLinkato = annoMorto(bio);
         String tagMorto = WPref.iconaMorto.getStr();
@@ -556,5 +562,38 @@ public class DidascaliaService {
 
         return decade;
     }
+
+//    public List<WrapDidascalia> ordinamentoNumerico(final List<WrapDidascalia> listaIn) {
+//        List<WrapDidascalia> listaOut = new ArrayList<>();
+//        Map<Integer, WrapDidascalia> mappa = new HashMap<>();
+//
+//        for (WrapDidascalia wrap : listaIn) {
+//            mappa.put(wrap.getOrdineNumerico(), wrap);
+//        }
+//
+//        mappa = arrayService.sort(mappa);
+//        for (Integer key : mappa.keySet()) {
+//            listaOut.add(mappa.get(key));
+//        }
+//
+//        return listaOut;
+//    }
+
+    public List<WrapDidascalia> ordinamentoAlfabetico(final List<WrapDidascalia> listaIn) {
+        List<WrapDidascalia> listaOut = new ArrayList<>();
+        Map<String, WrapDidascalia> mappa = new HashMap<>();
+
+        for (WrapDidascalia wrap : listaIn) {
+            mappa.put(wrap.getOrdineAlfabetico(), wrap);
+        }
+
+        mappa = arrayService.sort(mappa);
+        for (String key : mappa.keySet()) {
+            listaOut.add(mappa.get(key));
+        }
+
+        return listaOut;
+    }
+
 
 }// end of Service class
