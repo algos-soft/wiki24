@@ -38,9 +38,8 @@ import java.util.*;
  * Time: 09:05
  */
 @SpringComponent
-@Primary()
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class Upload implements AlgosBuilderPattern {
+public class Upload {
 
     @Inject
     TextService textService;
@@ -91,7 +90,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String nomeLista;
 
-    protected TypeLista type;
+    protected TypeLista typeLista;
 
     protected String collectionName;
 
@@ -115,7 +114,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected boolean usaSottopaginaOltreMax;
 
-    private ListaPagina istanzaLista;
+    private Lista istanzaLista;
 
     protected boolean isSottoPagina;
 
@@ -129,21 +128,36 @@ public class Upload implements AlgosBuilderPattern {
 
     protected List<String> listaSottoSottoPagine = new ArrayList<>();
 
-    /**
-     * Costruttore base con 1 parametro (obbligatorio) <br>
-     * Not annotated with @Autowired annotation, classe astratta <br>
-     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
-     */
-    public Upload(String nomeLista) {
-        this.nomeLista = nomeLista;
-    }// end of constructor not @Autowired and used
+    //    /**
+    //     * Costruttore base con 1 parametro (obbligatorio) <br>
+    //     * Not annotated with @Autowired annotation, classe astratta <br>
+    //     * La superclasse usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+    //     */
+    //    public Upload(String nomeLista) {
+    //        this.nomeLista = nomeLista;
+    //    }// end of constructor not @Autowired and used
 
+
+    /**
+     * Costruttore base con 2 parametri (obbligatori) <br>
+     * Not annotated with @Autowired annotation, classe astratta <br>
+     * La classe usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     */
+    public Upload(final String nomeLista, TypeLista typeLista) {
+        this.nomeLista = nomeLista;
+        this.typeLista = typeLista;
+    }// end of constructor not @Autowired and used
 
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
-        this.patternCompleto = type != null && type != TypeLista.nessunaLista;
-        this.checkValiditaCostruttore();
+        this.fixRegolazioni();
+        this.numBio();
+
+        //        this.listaBio();
+        //        this.listaWrapDidascalie();
+        //        this.mappaWrapDidascalie();
+        //        this.bodyText();
     }
 
     /**
@@ -152,7 +166,6 @@ public class Upload implements AlgosBuilderPattern {
      * Puo essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     protected void fixPreferenze() {
-        this.type = TypeLista.nessunaLista;
         this.typeSummary = TypeSummary.nessuno;
 
         this.uploadTest = false;
@@ -166,14 +179,9 @@ public class Upload implements AlgosBuilderPattern {
     /**
      * Pattern Builder <br>
      */
-    public Upload type(TypeLista type) {
-        this.type = type;
+    public void fixRegolazioni() {
 
-        if (type == null) {
-            return this;
-        }
-
-        this.moduloCorrente = switch (type) {
+        this.moduloCorrente = switch (typeLista) {
             case giornoNascita, giornoMorte -> giornoModulo;
             case annoNascita, annoMorte -> annoModulo;
             case attivitaSingolare -> attSingolareModulo;
@@ -183,7 +191,7 @@ public class Upload implements AlgosBuilderPattern {
             default -> null;
         };
 
-        this.titoloPagina = switch (type) {
+        this.titoloPagina = switch (typeLista) {
             case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
             case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
             case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
@@ -195,13 +203,13 @@ public class Upload implements AlgosBuilderPattern {
             default -> null;
         };
 
-        this.usaSottopaginaOltreMax = switch (type) {
+        this.usaSottopaginaOltreMax = switch (typeLista) {
             case giornoNascita, giornoMorte -> WPref.usaSottopagineGiorni.is();
             case annoNascita, annoMorte -> WPref.usaSottopagineAnni.is();
             default -> false;
         };
 
-        this.typeSummary = switch (type) {
+        this.typeSummary = switch (typeLista) {
             case giornoNascita, giornoMorte -> TypeSummary.giorniBio;
             case annoNascita, annoMorte -> TypeSummary.anniBio;
             case attivitaSingolare, attivitaPlurale -> TypeSummary.attivitàBio;
@@ -209,9 +217,24 @@ public class Upload implements AlgosBuilderPattern {
             default -> TypeSummary.nessuno;
         };
 
-        istanzaLista = appContext.getBean(ListaPagina.class, nomeLista, type);
-        //        istanzaLista = appContext.getBean(Lista.class, nomeLista).type(type);
-        return this;
+        istanzaLista = appContext.getBean(Lista.class, nomeLista, typeLista);
+    }
+
+
+    /**
+     * Testo uploadText (all) <br>
+     *
+     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
+     */
+    public void creaUploadText() {
+        StringBuffer buffer = new StringBuffer();
+
+        buffer.append(creaHeader());
+        buffer.append(creaIncipit());
+        buffer.append(creaBody());
+        buffer.append(creaBottom());
+
+        uploadText = buffer.toString().trim();
     }
 
     /**
@@ -265,76 +288,16 @@ public class Upload implements AlgosBuilderPattern {
         return this;
     }
 
-    protected void checkValiditaCostruttore() {
-        costruttoreValido = textService.isValid(nomeLista);
-    }
-
-    protected boolean checkValiditaPattern() {
-        boolean valoreValidoNomeLista;
-
-        if (costruttoreValido && patternCompleto) {
-            return true;
-        }
-
-        if (!costruttoreValido) {
-            message = String.format("Non è valido il costruttore di %s", this.getClass().getSimpleName());
-            logger.error(new WrapLog().message(message));
-            return false;
-        }
-
-        if (type == null || type == TypeLista.nessunaLista) {
-            message = String.format("Manca il typeLista di [%s]", nomeLista);
-            logger.error(new WrapLog().message(message));
-            return false;
-        }
-
-        patternCompleto = moduloCorrente != null;
-        valoreValidoNomeLista = switch (type) {
-            case giornoNascita, giornoMorte, annoNascita, annoMorte -> patternCompleto && moduloCorrente.existByKey(nomeLista);
-            case attivitaSingolare, nazionalitaSingolare -> patternCompleto;
-            case attivitaPlurale, nazionalitaPlurale -> textService.isValid(titoloPagina);
-            default -> false;
-        };
-
-        if (!valoreValidoNomeLista) {
-            message = String.format("Non esiste un valore 'nomeLista' valido per il type [%s%s]", type.getCategoria(), nomeLista);
-            logger.error(new WrapLog().message(message));
-            return false;
-        }
-        patternCompleto = patternCompleto && valoreValidoNomeLista;
-
-        if (!patternCompleto) {
-            message = String.format("Pattern non completo di %s", this.getClass().getSimpleName());
-            logger.error(new WrapLog().message(message));
-            return false;
-        }
-
-        return patternCompleto;
-    }
-
-    protected boolean checkBio() {
-
-        if (patternCompleto && numBio() < 1) {
-            patternCompleto = false;
-        }
-
-        return patternCompleto;
-    }
-
     public WResult uploadOnly() {
         int numeroMinimoDiVociPerPoterStampare;
-        if (!checkValiditaPattern()) {
-            return WResult.errato();
-        }
-
-        if (!checkBio()) {
-            message = String.format("Non ci sono biografie per la lista %s di %s", type.getTag(), titoloPagina);
+        if (numBio < 1) {
+            message = String.format("Non ci sono biografie per la lista %s di %s", typeLista.getTag(), titoloPagina);
             logger.info(new WrapLog().message(message));
 
             return WResult.valido(message).typeResult(TypeResult.noBio);
         }
 
-        numeroMinimoDiVociPerPoterStampare = switch (type) {
+        numeroMinimoDiVociPerPoterStampare = switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> 0;
             case attivitaSingolare -> MAX_INT_VALUE;
             case attivitaPlurale -> WPref.sogliaPaginaAttivita.getInt();
@@ -349,9 +312,7 @@ public class Upload implements AlgosBuilderPattern {
             return WResult.valido(message).typeResult(TypeResult.noBio);
         }
 
-        if (textService.isEmpty(uploadText)) {
-            uploadText = getUploadText();
-        }
+        this.creaUploadText();
 
         if (textService.isEmpty(uploadText)) {
             return WResult.errato();
@@ -368,7 +329,7 @@ public class Upload implements AlgosBuilderPattern {
             listaSottopagine = listaSottoPagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
-                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).type(type).sottoPagina(keySottopagina).uploadOnly();
+                    result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).sottoPagina(keySottopagina).uploadOnly();
                 }
             }
         }
@@ -397,6 +358,7 @@ public class Upload implements AlgosBuilderPattern {
 
         if (uploadTest) {
             wikiTitle = "Utente:Biobot/" + titoloPagina;
+            typeSummary = TypeSummary.test;
         }
 
         return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
@@ -410,16 +372,8 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public List<String> listaSottoPagine() {
-        if (!checkValiditaPattern()) {
-            return null;
-        }
-
-        if (!checkBio()) {
-            return new ArrayList<>();
-        }
-
         if (listaSottoPagine == null || listaSottoPagine.isEmpty()) {
-            listaSottoPagine = istanzaLista.getKeySottoPagine();
+            listaSottoPagine = istanzaLista.getListaSottoPagine();
         }
 
         return listaSottoPagine;
@@ -443,16 +397,8 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public List<String> listaSottoSottoPagine() {
-        if (!checkValiditaPattern()) {
-            return null;
-        }
-
-        if (!checkBio()) {
-            return new ArrayList<>();
-        }
-
         if (listaSottoSottoPagine == null || listaSottoSottoPagine.isEmpty()) {
-            listaSottoSottoPagine = istanzaLista.getKeySottoPagine();
+            //            listaSottoSottoPagine = istanzaLista.getListaSottoPagine();
         }
 
         return listaSottoSottoPagine;
@@ -461,7 +407,7 @@ public class Upload implements AlgosBuilderPattern {
     public WResult uploadSottopagina(String keySottopagina) {
         WResult risultato = WResult.errato();
         String nomeListaSottopagina = nomeLista + SLASH + keySottopagina;
-        risultato = appContext.getBean(Upload.class, nomeLista).type(type).test(uploadTest).sottoPagina(keySottopagina).uploadOnly();
+        risultato = appContext.getBean(Upload.class, nomeLista).test(uploadTest).sottoPagina(keySottopagina).uploadOnly();
 
         return risultato;
     }
@@ -520,7 +466,7 @@ public class Upload implements AlgosBuilderPattern {
         int numSottopagine = 0;
         int sogliaSottoPagina = WPref.sogliaSottoPagina.getInt();
 
-        switch (type) {
+        switch (typeLista) {
             case attivitaPlurale: {
                 usaIncipit = true;
                 tagAttNazDiretta = "attività";
@@ -691,7 +637,7 @@ public class Upload implements AlgosBuilderPattern {
 
     protected String fixToc() {
         if (isSottoPagina) {
-            return switch (type) {
+            return switch (typeLista) {
                 case giornoNascita, giornoMorte -> TypeToc.nessuno.get();
                 case annoNascita, annoMorte -> TypeToc.nessuno.get();
                 case attivitaSingolare, attivitaPlurale -> TypeToc.noToc.get();
@@ -723,7 +669,7 @@ public class Upload implements AlgosBuilderPattern {
         String nazionalitaLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
         String nazionalitaTxt = String.format("{{Torna a|%s}}", nazionalitaLink);
 
-        return switch (type) {
+        return switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> giornoAnnoTxt;
             case attivitaSingolare, attivitaPlurale -> attivitaTxt;
             case nazionalitaSingolare, nazionalitaPlurale -> nazionalitaTxt;
@@ -750,17 +696,17 @@ public class Upload implements AlgosBuilderPattern {
             bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
         }
         else {
-            if (istanzaLista != null && istanzaLista.getTypeLista() == type) {
+            if (istanzaLista != null && istanzaLista.getTypeLista() == typeLista) {
                 bodyText = istanzaLista.getBodyText();
             }
             else {
-                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getTypeLista().getTag(), type.getTag());
+                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getTypeLista().getTag(), typeLista.getTag());
                 logger.error(new WrapLog().exception(new AlgosException(message)));
                 return VUOTA;
             }
         }
 
-        titoloLista = switch (type) {
+        titoloLista = switch (typeLista) {
             case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
             case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
             case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
@@ -774,7 +720,7 @@ public class Upload implements AlgosBuilderPattern {
         else {
             if (textService.isValid(titoloLista)) {
                 buffer.append(DOPPIE_GRAFFE_INI);
-                buffer.append(type.getPersone());
+                buffer.append(typeLista.getPersone());
                 buffer.append(CAPO);
                 buffer.append("|titolo=");
                 buffer.append(titoloLista);
@@ -792,6 +738,7 @@ public class Upload implements AlgosBuilderPattern {
             }
         }
 
+        buffer.append(CAPO);
         this.bodyText = buffer.toString();
         return this.bodyText;
     }
@@ -801,7 +748,7 @@ public class Upload implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
         buffer.append(CAPO);
 
-        boolean usaInclude = switch (type) {
+        boolean usaInclude = switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> true;
             case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> false;
             default -> false;
@@ -849,7 +796,7 @@ public class Upload implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
         String tagCorrelato = VUOTA;
 
-        boolean usaCorrelate = switch (type) {
+        boolean usaCorrelate = switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> false;
             case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> true;
             default -> false;
@@ -859,7 +806,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
 
-        tagCorrelato = switch (type) {
+        tagCorrelato = switch (typeLista) {
             case attivitaSingolare, attivitaPlurale -> ATT;
             case nazionalitaSingolare, nazionalitaPlurale -> NAZ;
             default -> VUOTA;
@@ -879,7 +826,7 @@ public class Upload implements AlgosBuilderPattern {
             return VUOTA;
         }
         else {
-            return switch (type) {
+            return switch (typeLista) {
                 case giornoNascita, giornoMorte -> VUOTA;
                 case annoNascita, annoMorte -> interProgettoAnni();
                 default -> VUOTA;
@@ -899,7 +846,7 @@ public class Upload implements AlgosBuilderPattern {
 
 
     protected String categorie() {
-        return switch (type) {
+        return switch (typeLista) {
             case giornoNascita, giornoMorte -> categorieGiorni();
             case annoNascita, annoMorte -> categorieAnni();
             case attivitaSingolare, attivitaPlurale -> categorieAttivita();
@@ -924,11 +871,14 @@ public class Upload implements AlgosBuilderPattern {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(type.getCategoria());
+        buffer.append(typeLista.getCategoria());
         buffer.append("|");
         buffer.append(SPAZIO);
         buffer.append(posCat);
         buffer.append("]]");
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
         buffer.append(CAPO);
         buffer.append("*");
         if (uploadTest) {
@@ -974,7 +924,7 @@ public class Upload implements AlgosBuilderPattern {
             buffer.append(NO_WIKI_INI);
         }
         buffer.append("[[Categoria:");
-        buffer.append(type.getCategoria());
+        buffer.append(typeLista.getCategoria());
         buffer.append(secolo);
         buffer.append("|");
         buffer.append(SPAZIO);
@@ -1042,8 +992,7 @@ public class Upload implements AlgosBuilderPattern {
         StringBuffer buffer = new StringBuffer();
 
         buffer.append(CAPO);
-        buffer.append("{{subst:#if:{{subst:#invoke:string|match|{{subst:#invoke:interprogetto|interprogetto}}|template vuoto|nomatch=}}||== Altri progetti ==\n" +
-                "{{interprogetto}}}}");
+        buffer.append("{{subst:#if:{{subst:#invoke:string|match|{{subst:#invoke:interprogetto|interprogetto}}|template vuoto|nomatch=}}||== Altri progetti ==\n" + "{{interprogetto}}}}");
 
         return buffer.toString();
     }
@@ -1057,39 +1006,12 @@ public class Upload implements AlgosBuilderPattern {
         return "</noinclude>";
     }
 
-
-    @Override
-    public boolean isCostruttoreValido() {
-        return this.costruttoreValido;
-    }
-
-    @Override
-    public boolean isPatternCompleto() {
-        return this.patternCompleto;
-    }
-
-    @Override
-    public String getNome() {
-        return this.nomeLista;
-    }
-
     /**
      * Testo header <br>
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getHeaderText() {
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        this.numBio();
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        headerText = creaHeader();
         return headerText;
     }
 
@@ -1100,17 +1022,6 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getIncipitText() {
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        this.numBio();
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        incipitText = creaIncipit();
         return incipitText;
     }
 
@@ -1120,17 +1031,6 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getBodyText() {
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        this.numBio();
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        bodyText = creaBody();
         return bodyText;
     }
 
@@ -1140,43 +1040,9 @@ public class Upload implements AlgosBuilderPattern {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getBottomText() {
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        creaIncipit();
-        bottomText = creaBottom();
         return bottomText;
     }
 
-    /**
-     * Testo uploadText (all) <br>
-     *
-     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
-     */
-    public String getUploadText() {
-        StringBuffer buffer = new StringBuffer();
-
-        if (!checkValiditaPattern()) {
-            return STRING_ERROR;
-        }
-
-        if (!checkBio()) {
-            return VUOTA;
-        }
-
-        buffer.append(creaHeader());
-        buffer.append(creaIncipit());
-        buffer.append(creaBody());
-        buffer.append(creaBottom());
-
-        uploadText = buffer.toString().trim();
-        return uploadText;
-    }
 
     /**
      * Numero delle biografie (Bio) che hanno una valore valido (letto dalla lista) <br>
@@ -1198,7 +1064,6 @@ public class Upload implements AlgosBuilderPattern {
         }
         else {
             if (numBio == 0) {
-                //                numBio = istanzaLista.numBioSotto();
                 numBio = istanzaLista.getNumBio();
             }
         }
@@ -1227,12 +1092,20 @@ public class Upload implements AlgosBuilderPattern {
     }
 
     public LinkedHashMap<String, String> mappaSottoSottoPagine() {
-//        return istanzaLista != null ? istanzaLista.mappaSottoSottoPagine() : null;
-        return  null;
+        //        return istanzaLista != null ? istanzaLista.mappaSottoSottoPagine() : null;
+        return null;
     }
 
-    public ListaPagina getIstanzaLista() {
+    public Lista getIstanzaLista() {
         return istanzaLista;
+    }
+
+    public String getUploadText() {
+        if (textService.isEmpty(uploadText)) {
+            creaUploadText();
+        }
+
+        return uploadText;
     }
 
 }

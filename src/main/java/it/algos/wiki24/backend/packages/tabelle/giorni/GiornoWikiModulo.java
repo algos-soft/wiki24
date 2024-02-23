@@ -13,6 +13,7 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

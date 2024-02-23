@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.upload.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.*;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -30,86 +31,68 @@ public class UploadService {
     @Inject
     public ApplicationContext appContext;
 
-    public boolean giornoNato(final GiornoWikiEntity giornoBean) {
-        return appContext.getBean(Upload.class, giornoBean.nome).type(TypeLista.giornoNascita).uploadAll().isValido();
+    public WResult giornoNatoTest(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita).test().uploadOnly();
     }
 
-    public boolean giornoNato(final String nomeGiorno) {
-        return appContext.getBean(Upload.class, nomeGiorno).type(TypeLista.giornoNascita).uploadAll().isValido();
+    public WResult giornoNato(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita).uploadOnly();
     }
 
-    public boolean giornoMorto(final GiornoWikiEntity giornoBean) {
-        return appContext.getBean(Upload.class, giornoBean.nome).type(TypeLista.giornoMorte).uploadAll().isValido();
+    public WResult giornoMortoTest(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte).test().uploadOnly();
     }
 
-    public boolean giornoMorto(final String nomeGiorno) {
-        return appContext.getBean(Upload.class, nomeGiorno).type(TypeLista.giornoMorte).uploadAll().isValido();
+    public WResult giornoMorto(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte).uploadOnly();
     }
 
-    public boolean annoNato(final AnnoWikiEntity annoBean) {
-        return appContext.getBean(Upload.class, annoBean.nome).type(TypeLista.annoNascita).uploadAll().isValido();
+    public WResult annoNatoTest(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita).test().uploadOnly();
     }
 
-    public boolean annoNato(final String nomeAnno) {
-        return appContext.getBean(Upload.class, nomeAnno).type(TypeLista.annoNascita).uploadAll().isValido();
+    public WResult annoNato(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita).uploadOnly();
     }
 
-    public boolean annoMorto(final AnnoWikiEntity annoBean) {
-        return appContext.getBean(Upload.class, annoBean.nome).type(TypeLista.annoMorte).uploadAll().isValido();
+    public WResult annoMortoTest(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte).test().uploadOnly();
     }
 
-    public boolean annoMorto(final String nomeAnno) {
-        return appContext.getBean(Upload.class, nomeAnno).type(TypeLista.annoMorte).uploadAll().isValido();
+    public WResult annoMorto(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte).uploadOnly();
     }
 
 
-    public boolean giornoNatoTest(final GiornoWikiEntity giornoBean) {
-        return appContext.getBean(Upload.class, giornoBean.nome).test().type(TypeLista.giornoNascita).uploadAll().isValido();
+    public int numNatiGiorno(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita).numBio();
+    }
+    public int numMortiGiorno(final GiornoWikiEntity giornoBean) {
+        return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte).numBio();
     }
 
-    public boolean giornoNatoTest(final String nomeGiorno) {
-        return appContext.getBean(Upload.class, nomeGiorno).test().type(TypeLista.giornoNascita).uploadAll().isValido();
+
+    public int numNatiAnno(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita).numBio();
+    }
+    public int numMortiAnno(final AnnoWikiEntity annoBean) {
+        return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte).numBio();
     }
 
-    public boolean giornoMortoTest(final GiornoWikiEntity giornoBean) {
-        return appContext.getBean(Upload.class, giornoBean.nome).test().type(TypeLista.giornoMorte).uploadAll().isValido();
+    public WResult attivitaTest(final AttPluraleEntity attivitaBean) {
+        return appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale).test().uploadOnly();
     }
 
-    public boolean giornoMortoTest(final String nomeGiorno) {
-        return appContext.getBean(Upload.class, nomeGiorno).test().type(TypeLista.giornoMorte).uploadAll().isValido();
+    public WResult attivita(final AttPluraleEntity attivitaBean) {
+        return appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale).uploadOnly();
     }
 
-    public boolean annoNatoTest(final AnnoWikiEntity annoBean) {
-        return appContext.getBean(Upload.class, annoBean.nome).test().type(TypeLista.annoNascita).uploadAll().isValido();
+    public WResult nazionalitaTest(final NazPluraleEntity nazionalitaBean) {
+        return appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale).test().uploadOnly();
     }
 
-    public boolean annoNatoTest(final String nomeAnno) {
-        return appContext.getBean(Upload.class, nomeAnno).test().type(TypeLista.annoNascita).uploadAll().isValido();
-    }
-
-    public boolean annoMortoTest(final AnnoWikiEntity annoBean) {
-        return appContext.getBean(Upload.class, annoBean.nome).test().type(TypeLista.annoMorte).uploadAll().isValido();
-    }
-
-    public boolean annoMortoTest(final String nomeAnno) {
-        return appContext.getBean(Upload.class, nomeAnno).test().type(TypeLista.annoMorte).uploadAll().isValido();
-    }
-
-    public int numMortiAnno(final String nomeAnno) {
-        return appContext.getBean(Upload.class, nomeAnno).type(TypeLista.annoMorte).numBio();
-    }
-    public boolean attivitaTest(final AttPluraleEntity attivitaBean) {
-        return appContext.getBean(Upload.class, attivitaBean.plurale).test().type(TypeLista.attivitaPlurale).uploadAll().isValido();
-    }
-    public boolean attivita(final AttPluraleEntity attivitaBean) {
-        return appContext.getBean(Upload.class, attivitaBean.plurale).type(TypeLista.attivitaPlurale).uploadAll().isValido();
-    }
-
-    public boolean nazionalitaTest(final NazPluraleEntity nazionalitaBean) {
-        return appContext.getBean(Upload.class, nazionalitaBean.plurale).test().type(TypeLista.nazionalitaPlurale).uploadAll().isValido();
-    }
-    public boolean nazionalita(final NazPluraleEntity nazionalitaBean) {
-        return appContext.getBean(Upload.class, nazionalitaBean.plurale).type(TypeLista.nazionalitaPlurale).uploadAll().isValido();
+    public WResult nazionalita(final NazPluraleEntity nazionalitaBean) {
+        return appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale).uploadOnly();
     }
 
 }

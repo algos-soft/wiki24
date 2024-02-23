@@ -196,15 +196,20 @@ public class AnnoWikiModulo extends WikiModulo {
         String risultato;
         int numMorti;
         inizio = System.currentTimeMillis();
-        String annoCorrente = LocalDateTime.now().getYear() + VUOTA;
+        String annoCorrenteTxt = LocalDateTime.now().getYear() + VUOTA;
+        AnnoWikiEntity annoCorrente = findByKey(annoCorrenteTxt);
 
-        uploadService.annoMorto(annoCorrente);
-        numMorti = uploadService.numMortiAnno(annoCorrente);
-        risultato = String.format("Nella pagina [Morti nel %s] ci sono [%s] biografie. ", annoCorrente,
-                textService.format(numMorti)
-        );
+        if (annoCorrente!=null) {
+            uploadService.annoMorto(annoCorrente);
+            numMorti = uploadService.numMortiAnno(annoCorrente);
+            risultato = String.format("Nella pagina [Morti nel %s] ci sono [%s] biografie. ", annoCorrenteTxt, textService.format(numMorti));
 
-        super.fixUpload(inizio);
+            super.fixUpload(inizio);
+        }
+        else {
+            risultato = String.format("Sembra che l'anno corrente sia il %s, ma non l'ho trovato", annoCorrenteTxt);
+        }
+
         return risultato;
     }
 
@@ -232,6 +237,7 @@ public class AnnoWikiModulo extends WikiModulo {
     public void uploadPaginaMorti(AbstractEntity annoBean) {
         uploadService.annoMorto((AnnoWikiEntity) annoBean);
     }
+
 
 }// end of CrudModulo class
 

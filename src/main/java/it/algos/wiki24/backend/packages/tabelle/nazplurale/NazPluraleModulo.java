@@ -194,14 +194,17 @@ public class NazPluraleModulo extends WikiModulo {
         return super.fixUpload(inizio);
     }
 
-    @Override
-    public void testPagina(AbstractEntity crudEntityBean) {
-        uploadService.nazionalitaTest((NazPluraleEntity)crudEntityBean);
-    }
 
     @Override
-    public void uploadPagina(AbstractEntity crudEntityBean) {
-        uploadService.nazionalita((NazPluraleEntity)crudEntityBean);
+    public void testPagina(AbstractEntity nazionalitaPlurale) {
+        uploadService.nazionalitaTest((NazPluraleEntity) nazionalitaPlurale);
     }
+
+
+    @Override
+    public void uploadPagina(AbstractEntity nazionalitaPlurale) {
+        uploadService.nazionalita((NazPluraleEntity) nazionalitaPlurale);
+    }
+
 
 }// end of CrudModulo class

@@ -304,7 +304,7 @@ public class WrapDidascalia {
 
 
     public String getTitoloParagrafoAttivita(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza attività specificata";
+        String titoloParagrafo = TypeInesistente.attivita.getTag();
         String attivita = bio.attivita;
         AttSingolareEntity attivitaBean;
 
