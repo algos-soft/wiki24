@@ -131,7 +131,8 @@ public enum WPref implements IPref {
     lastElaboraAttPlu("lastElaboraAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di AttivitàPlurale."),
     elaboraAttPluTime("elaboraAttPluTime", TypePref.integer, 0, "Durata elaborazione di AttivitàPlurale in minuti."),
     lastUploadAttPlu("lastUploadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di AttivitàPlurale."),
-    uploadAttPluTime("uploadAttPluTime", TypePref.integer, 0, "Durata upload di AttivitàPlurale in secondi."),
+    uploadAttPluTime("uploadAttPluTime", TypePref.integer, 0, "Durata upload di AttivitàPlurale in minuti."),
+
 
     //***************
 
@@ -149,6 +150,8 @@ public enum WPref implements IPref {
     usaElaboraNazPlu("usaElaboraNazPlu", TypePref.bool, false, "Flag per usare l'elaborazione di NazionalitàPlurale."),
     lastElaboraNazPlu("lastElaboraNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NazionalitàPlurale."),
     elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
+    lastUploadNazPlu("lastUploadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di NazionalitàPlurale."),
+    uploadNazPluTime("uploadNazPluTime", TypePref.integer, 0, "Durata upload di NazionalitàPlurale in minuti."),
 
 
     //***************

@@ -190,9 +190,17 @@ public class AttPluraleModulo extends WikiModulo {
     public String uploadAll() {
         inizio = System.currentTimeMillis();
 
+        message = String.format("Inizio del ciclo di upload di tutte le attività (plurali)");
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+
         for (AttPluraleEntity attivitaBean : findAll()) {
             uploadPagina(attivitaBean);
         }
+
+        message = String.format("Fine del ciclo di upload di tutte le attività (plurali)");
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
 
         return super.fixUpload(inizio);
     }
