@@ -349,11 +349,11 @@ public class WrapDidascalia {
         String wikiTitle = bio.wikiTitle;
 
         if (textService.isValid(cognome)) {
-            terzoLivello = cognome.substring(0, 2).toUpperCase();
+            terzoLivello = cognome.substring(0, Math.min(2, cognome.length())).toUpperCase();
         }
         else {
             if (textService.isValid(wikiTitle)) {
-                terzoLivello = wikiTitle.substring(0, 2).toUpperCase();
+                terzoLivello = wikiTitle.substring(0, Math.min(2, wikiTitle.length())).toUpperCase();
             }
             else {
                 logger.warn(new WrapLog().message("Manca il wikiTitle"));

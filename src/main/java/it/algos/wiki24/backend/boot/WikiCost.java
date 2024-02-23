@@ -17,7 +17,7 @@ import org.springframework.stereotype.*;
 public class WikiCost {
 
     public static final String TAG_MODULO = "Modulo:Bio/";
-
+    public static final String NESSUNA_MODIFICA =  "Nessuna modifica sostanziale ai contenuti";
     public static final String PATH_MODULO = TAG_WIKI + TAG_MODULO;
 
     public static final String PATH_BIOGRAFIE = "Progetto:Biografie/";

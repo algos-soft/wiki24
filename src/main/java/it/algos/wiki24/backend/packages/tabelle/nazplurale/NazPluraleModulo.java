@@ -187,9 +187,17 @@ public class NazPluraleModulo extends WikiModulo {
     public String uploadAll() {
         inizio = System.currentTimeMillis();
 
+        message = String.format("Inizio del ciclo di upload di tutte le nazionalità (plurali)");
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+
         for (NazPluraleEntity nazionalitaBean : findAll()) {
             uploadPagina(nazionalitaBean);
         }
+
+        message = String.format("Fine del ciclo di upload di tutte le nazionalità (plurali)");
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
 
         return super.fixUpload(inizio);
     }

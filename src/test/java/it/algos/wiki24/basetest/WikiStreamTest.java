@@ -53,6 +53,7 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("agronomi", TypeLista.attivitaPlurale),
                 Arguments.of("brasiliani", TypeLista.nazionalitaPlurale),
                 Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale),
+                Arguments.of("birmani", TypeLista.nazionalitaPlurale),
                 Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale)
 
                 );

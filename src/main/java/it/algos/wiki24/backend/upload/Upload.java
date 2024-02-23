@@ -289,6 +289,7 @@ public class Upload {
     }
 
     public WResult uploadOnly() {
+        WResult risultato;
         int numeroMinimoDiVociPerPoterStampare;
         if (numBio < 1) {
             message = String.format("Non ci sono biografie per la lista %s di %s", typeLista.getTag(), titoloPagina);
@@ -307,8 +308,8 @@ public class Upload {
         };
 
         if (numBio < numeroMinimoDiVociPerPoterStampare) {
-            message = String.format("Nella lista [%s] ci sono solo [%s] biografie che sono meno delle [%s] richieste.", titoloPagina, numBio, numeroMinimoDiVociPerPoterStampare);
-            logger.info(new WrapLog().message(message));
+            message = String.format("Nella lista [%s] ci sono solo [%s] biografie che sono meno delle [%s] richieste.", nomeLista, numBio, numeroMinimoDiVociPerPoterStampare);
+            logger.debug(new WrapLog().message(message).type(TypeLog.upload));
             return WResult.valido(message).typeResult(TypeResult.noBio);
         }
 
@@ -318,7 +319,25 @@ public class Upload {
             return WResult.errato();
         }
 
-        return registra();
+        risultato = registra();
+        if (risultato == null) {
+            message = String.format("Non sono riuscito a registrare la lista [%s]", nomeLista);
+            logger.warn(new WrapLog().message(message).type(TypeLog.upload));
+        }
+        else {
+            if (risultato.isValido() && risultato.isModificata() == false && risultato.getValidMessage().equals(NESSUNA_MODIFICA)) {
+                message = String.format("Non registrata la lista [%s] perché le modifiche erano solo sulla data", nomeLista);
+                logger.debug(new WrapLog().message(message).type(TypeLog.upload));
+            }
+            else {
+                if (risultato.isValido() && risultato.isModificata() == true) {
+                    message = String.format("La lista [%s] è stata registrata", nomeLista);
+                    logger.debug(new WrapLog().message(message).type(TypeLog.upload));
+                }
+            }
+        }
+
+        return risultato;
     }
 
     public WResult uploadAll() {
