@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.list;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -97,11 +98,13 @@ public abstract class WikiList extends CrudList {
     public boolean usaBottoneWikiCrono;
 
     public boolean usaBottoneTest;
+
     public boolean usaBottoneTest1;
 
     public boolean usaBottoneTest2;
 
     public boolean usaBottoneUpload;
+
     public boolean usaBottoneUpload1;
 
     public boolean usaBottoneUpload2;
@@ -395,6 +398,16 @@ public abstract class WikiList extends CrudList {
         wikiTopPlaceHolder.build();
     }
 
+    protected IndeterminateCheckbox creaFiltroCheckBox(IndeterminateCheckbox checkBox, String labelText) {
+        checkBox = new IndeterminateCheckbox(labelText);
+        checkBox.getStyle().set("margin-top", "0.5rem");
+        checkBox.addValueChangeListener(event -> sincroFiltri());
+        wikiTopPlaceHolder.add(checkBox);
+
+        return checkBox;
+    }
+
+
     public boolean resetDelete() {
         boolean usaNotification = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
@@ -498,6 +511,22 @@ public abstract class WikiList extends CrudList {
         }
     }
 
+    protected void fixFiltroCheckBox(IndeterminateCheckbox checkBox, String propertyName) {
+        if (checkBox != null) {
+            if (checkBox.isIndeterminate()) {
+                filtri.remove(propertyName);
+                filtri.sort(basicSort);
+            }
+            else if (checkBox.getValue()) {
+                filtri.add(propertyName, true);
+                filtri.sort(Sort.by(Sort.Direction.ASC, propertyName));
+            }
+            else {
+                filtri.add(propertyName, false);
+                filtri.sort(Sort.by(Sort.Direction.ASC, propertyName));
+            }
+        }
+    }
 
     public void wikiView() {
         AbstractEntity crudEntityBean = getSingleEntity();
@@ -538,6 +567,7 @@ public abstract class WikiList extends CrudList {
             currentCrudModulo.uploadPagina(crudEntityBean);
         }
     }
+
     public void uploadPaginaNati() {
         AbstractEntity crudEntityBean = getSingleEntity();
 

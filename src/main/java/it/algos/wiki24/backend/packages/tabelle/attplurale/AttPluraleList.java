@@ -1,8 +1,10 @@
 package it.algos.wiki24.backend.packages.tabelle.attplurale;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.base24.backend.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
@@ -10,11 +12,19 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
+import org.springframework.data.domain.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
 public class AttPluraleList extends WikiList {
 
+    private IndeterminateCheckbox checkSoglia;
+
+    private IndeterminateCheckbox checkLista;
+
+    private IndeterminateCheckbox checkPagina;
+
+    private IndeterminateCheckbox checkCategoria;
 
     public AttPluraleList(final AttPluraleModulo crudModulo) {
         super(crudModulo);
@@ -73,6 +83,30 @@ public class AttPluraleList extends WikiList {
         headerPlaceHolder.add(ASpan.text(message).rosso().small());
 
         super.fixHeader();
+    }
+
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixTop() {
+        super.fixTop();
+
+        checkSoglia = super.creaFiltroCheckBox(checkSoglia, "Soglia");
+        checkLista = super.creaFiltroCheckBox(checkLista, "Lista");
+        checkPagina = super.creaFiltroCheckBox(checkPagina, "Pagina");
+        checkCategoria = super.creaFiltroCheckBox(checkCategoria, "Categoria");
+    }
+
+
+    @Override
+    protected void fixFiltri() {
+        super.fixFiltri();
+
+        super.fixFiltroCheckBox(checkSoglia, "superaSoglia");
+        super.fixFiltroCheckBox(checkLista, "esisteLista");
+        super.fixFiltroCheckBox(checkPagina, "esistePagina");
+        super.fixFiltroCheckBox(checkCategoria, "esisteCategoria");
     }
 
 }// end of CrudList class

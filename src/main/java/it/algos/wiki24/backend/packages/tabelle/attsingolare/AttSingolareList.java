@@ -88,16 +88,14 @@ public class AttSingolareList extends WikiList {
     @Override
     protected void fixTop() {
         super.fixTop();
+
         searchPlurale.setPlaceholder(TAG_ALTRE_BY + "plurale");
         searchPlurale.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + searchFieldName);
         searchPlurale.setClearButtonVisible(true);
         searchPlurale.addValueChangeListener(event -> sincroFiltri());
         wikiTopPlaceHolder.add(searchPlurale);
 
-        checkEx = new IndeterminateCheckbox("Ex attività");
-        checkEx.getStyle().set("margin-top", "0.5rem");
-        checkEx.addValueChangeListener(event -> sincroFiltri());
-        wikiTopPlaceHolder.add(checkEx);
+        checkEx = super.creaFiltroCheckBox(checkEx, "Ex attività");
     }
 
 
@@ -121,21 +119,7 @@ public class AttSingolareList extends WikiList {
             filtri.sort(basicSort);
         }
 
-        String propertyEx = "ex";
-        if (checkEx != null) {
-            if (checkEx.isIndeterminate()) {
-                filtri.remove(propertyEx);
-                filtri.sort(basicSort);
-            }
-            else if (checkEx.getValue()) {
-                filtri.add(propertyEx, true);
-                filtri.sort(Sort.by(Sort.Direction.ASC,propertyEx));
-            }
-            else {
-                filtri.add(propertyEx, false);
-                filtri.sort(Sort.by(Sort.Direction.ASC,propertyEx));
-            }
-        }
+        super.fixFiltroCheckBox(checkEx, "ex");
     }
 
 }// end of CrudList class

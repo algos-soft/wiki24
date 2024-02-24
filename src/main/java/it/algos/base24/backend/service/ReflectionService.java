@@ -185,6 +185,7 @@ public class ReflectionService {
                 if (field.getName().equals(publicFieldName)) {
                     field.setAccessible(true);
                     value = field.get(entityBean);
+                    break;
                 }
             }
         } catch (Exception unErrore) {

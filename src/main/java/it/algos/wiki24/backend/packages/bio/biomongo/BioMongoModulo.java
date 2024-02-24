@@ -684,17 +684,17 @@ public class BioMongoModulo extends WikiModulo {
     public void elaboraParametri() {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
 
-        parNomeModulo.elabora(lista);
-        parCognomeModulo.elabora(lista);
-        parSessoModulo.elabora(lista);
+//        parNomeModulo.elabora(lista);
+//        parCognomeModulo.elabora(lista);
+//        parSessoModulo.elabora(lista);
         parLuogoNatoModulo.elabora(lista);
-        parGiornoNatoModulo.elabora(lista);
-        parAnnoNatoModulo.elabora(lista);
-        parLuogoMortoModulo.elabora(lista);
-        parGiornoMortoModulo.elabora(lista);
-        parAnnoMortoModulo.elabora(lista);
-        parAttivitaModulo.elabora(lista);
-        parNazionalitaModulo.elabora(lista);
+//        parGiornoNatoModulo.elabora(lista);
+//        parAnnoNatoModulo.elabora(lista);
+//        parLuogoMortoModulo.elabora(lista);
+//        parGiornoMortoModulo.elabora(lista);
+//        parAnnoMortoModulo.elabora(lista);
+//        parAttivitaModulo.elabora(lista);
+//        parNazionalitaModulo.elabora(lista);
     }
 
     public void eliminaMongoCancellatiDaServer() {

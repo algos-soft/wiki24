@@ -77,10 +77,8 @@ public abstract class ParModulo extends WikiModulo {
 
     public void elabora(List<BioServerEntity> lista) {
         inizio = System.currentTimeMillis();
-        int k = 0;
 
         for (BioServerEntity bioServerBean : lista) {
-            k++;
             elabora(bioServerBean);
         }
 

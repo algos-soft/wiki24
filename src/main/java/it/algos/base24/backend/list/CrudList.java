@@ -86,8 +86,6 @@ public abstract class CrudList extends VerticalLayout {
 
     protected VerticalLayout headerPlaceHolder;
 
-    //    @Getter
-    //    protected HorizontalLayout topPlaceHolder;
     @Getter
     protected ListButtonBar topPlaceHolder;
 
@@ -117,6 +115,8 @@ public abstract class CrudList extends VerticalLayout {
 
     public boolean usaBottoneSearch;
 
+    public boolean autoCreateColumns;
+
     public String searchFieldName;
 
 
@@ -129,6 +129,10 @@ public abstract class CrudList extends VerticalLayout {
     protected String message;
 
     protected boolean usaVariantCompact;
+
+    protected boolean usaVariantStripes;
+
+    protected Grid.SelectionMode gridSelection;
 
     public CrudList() {
     }
@@ -168,6 +172,9 @@ public abstract class CrudList extends VerticalLayout {
         this.basicSort = currentCrudModulo.getBasicSort();
         this.searchFieldName = annotationService.getSearchPropertyName(currentCrudEntityClazz);
         this.usaVariantCompact = false;
+        this.usaVariantStripes = true;
+        this.gridSelection = Grid.SelectionMode.SINGLE;
+        this.autoCreateColumns = true;
 
         if (typeList != null) {
             this.usaBottoneDeleteAll = typeList.isUsaBottoneDeleteAll();
@@ -342,17 +349,6 @@ public abstract class CrudList extends VerticalLayout {
             Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
             downloadAnchor.getStyle().set("margin-left", "0.4rem");
             topPlaceHolder.export(downloadAnchor);
-
-            //            if (reflectionService.isEsisteMetodo(this.getClass(), METHOD_EXPORT)) {
-            //                String nomeLista = annotationService.getMenuName(currentCrudEntityClazz);
-            //                Anchor downloadAnchor = new DownloadAnchor(new StreamResource(nomeLista + ".xlsx", () -> this.creaExcelExporter().getInputStream()), "Esporta");
-            //                downloadAnchor.getStyle().set("margin-left", "0.4rem");
-            //                buttonBar.export(downloadAnchor);
-            //            }
-            //            else {
-            //                String message = String.format("Nella classe %s c'è flag usaBottoneExport=true ma manca il metodo %s()", this.getClass().getSimpleName(), METHOD_EXPORT);
-            //                logger.warn(new WrapLog().message(message));
-            //            }
         }
     }
 
@@ -364,34 +360,41 @@ public abstract class CrudList extends VerticalLayout {
      * Costruisce un' istanza dedicata con la Grid <br>
      */
     protected void fixBodyLayout() {
-        // controlla la lista di colonne (nomi) per la Grid
-        if (propertyListNames != null) {
-            // costruisce la Grid SENZA colonne e poi le aggiunge una ad una
-            grid = new Grid<>(currentCrudEntityClazz, false);
-            columnService.addColumnsOneByOne(grid, currentCrudEntityClazz, propertyListNames);
-        }
-        else {
-            // costruisce in automatico la Grid CON tutte le colonne della ModelClazz
-            grid = new Grid<>(currentCrudEntityClazz, true);
-        }
 
+        // costruisce la Grid SENZA colonne
+        grid = new Grid<>(currentCrudEntityClazz, false);
         grid.addThemeVariants(GridVariant.LUMO_WRAP_CELL_CONTENT);
         grid.setSizeUndefined();
 
+        // flag FALSE di default; modificabile in fixPreferenze() della singola sottoclasse
         if (usaVariantCompact) {
             grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         }
 
+        // The row-stripes theme produces a background color for every other row.
+        // flag TRUE di default; modificabile in fixPreferenze() della singola sottoclasse
+        if (usaVariantStripes) {
+            grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
+        }
+
+        // switch to type select mode
+        // selection = Grid.SelectionMode.SINGLE di default; modificabile in fixPreferenze() della singola sottoclasse
+        grid.setSelectionMode(gridSelection);
+
+        // flag TRUE di default; modificabile in fixPreferenze() della singola sottoclasse
+        if (autoCreateColumns) {
+            if (propertyListNames == null) {
+                propertyListNames = currentCrudModulo.getPropertyNames();
+            }
+            // aggiunge tutte le colonne (standard) previste nella lista utilizzando ColumnService
+            columnService.addColumnsOneByOne(grid, currentCrudEntityClazz, propertyListNames);
+        }
+
+        // aggiunge le colonne (specifiche) previste nel metodo fixColumns() della sottoClasse
         this.fixColumns();
 
         // Pass all objects to a grid from a Data Provider
         this.refreshData();
-
-        // The row-stripes theme produces a background color for every other row.
-        grid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
-
-        // switch to single select mode
-        grid.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // sincronizza l'abilitazione dei bottoni in funzione della selezione delle righe
         // alcuni bottoni si abilitano/disabilitano se è selezionata solo 1 riga
@@ -793,10 +796,10 @@ public abstract class CrudList extends VerticalLayout {
     }
 
 
-    public Grid.Column getColumnByKey(String key){
+    public Grid.Column getColumnByKey(String key) {
         List<Grid.Column<AbstractEntity>> columns = grid.getColumns();
-        for(Grid.Column<AbstractEntity> column : columns){
-            if(column.getKey().equals(key)){
+        for (Grid.Column<AbstractEntity> column : columns) {
+            if (column.getKey().equals(key)) {
                 return column;
             }
         }

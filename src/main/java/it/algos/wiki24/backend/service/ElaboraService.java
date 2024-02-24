@@ -615,7 +615,7 @@ public class ElaboraService {
             elaborato = String.format("%s%s%s", linkLuogo, PIPE, elaborato);
         }
 
-        return textService.isValid(elaborato) ? textService.setDoppieQuadre(elaborato) : VUOTA;
+        return elaborato;
     }
 
     public String fixGiorno(String wikiTitle, String grezzo) {
