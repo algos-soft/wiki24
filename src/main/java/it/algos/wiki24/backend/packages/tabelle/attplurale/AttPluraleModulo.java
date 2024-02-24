@@ -10,6 +10,7 @@ import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
+import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -30,6 +31,9 @@ public class AttPluraleModulo extends WikiModulo {
 
     @Inject
     BioMongoModulo bioMongoModulo;
+
+    @Inject
+    QueryService queryService;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -69,7 +73,7 @@ public class AttPluraleModulo extends WikiModulo {
      */
     @Override
     public AttPluraleEntity newEntity() {
-        return newEntity(VUOTA, null, VUOTA, VUOTA, 0, 0, false, false);
+        return newEntity(VUOTA, null, VUOTA, VUOTA, VUOTA, 0, 0, false, false, false, false);
     }
 
     /**
@@ -84,19 +88,25 @@ public class AttPluraleModulo extends WikiModulo {
             List<String> txtSingolari,
             String lista,
             String pagina,
+            String categoria,
             int numBio,
             int numSingolari,
             boolean superaSoglia,
-            boolean esisteLista) {
+            boolean esisteLista,
+            boolean esistePagina,
+            boolean esisteCategoria) {
         AttPluraleEntity newEntityBean = AttPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .txtSingolari(txtSingolari)
                 .lista(textService.isValid(lista) ? lista : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
+                .categoria(textService.isValid(categoria) ? categoria : null)
                 .numBio(numBio)
                 .numSingolari(numSingolari == 0 ? txtSingolari != null ? txtSingolari.size() : 0 : 0)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
+                .esistePagina(esistePagina)
+                .esisteCategoria(esisteCategoria)
                 .build();
 
         return (AttPluraleEntity) fixKey(newEntityBean);
@@ -155,7 +165,7 @@ public class AttPluraleModulo extends WikiModulo {
 
         for (AttSingolareEntity att : listaAttSingolariDistinte) {
             listaSingolari = attSingolareModulo.findSingolariByPlurale(att);
-            newBean = newEntity(att.plurale, listaSingolari, textService.primaMaiuscola(att.plurale), textService.primaMaiuscola(att.pagina), 0, 0, false, false);
+            newBean = newEntity(att.plurale, listaSingolari, textService.primaMaiuscola(att.plurale), textService.primaMaiuscola(att.pagina), VUOTA, 0, 0, false, false, false, false);
             mappaBeans.put(att.plurale, newBean);
         }
     }
@@ -163,6 +173,7 @@ public class AttPluraleModulo extends WikiModulo {
     @Override
     public String elabora() {
         super.elabora();
+        int soglia = WPref.sogliaPaginaAttivita.getInt();
 
         List<AttPluraleEntity> listaBeans = findAll();
         List<String> listaAttivitaSingolari;
@@ -177,6 +188,21 @@ public class AttPluraleModulo extends WikiModulo {
                         numBio += bioMongoModulo.countAllByAttivitaSingolare(attivitaSingolare);
                     }
                 }
+                entityBean.categoria = textService.isValid(entityBean.plurale) ? textService.primaMaiuscola(entityBean.plurale) : VUOTA;
+                if (numBio > soglia) {
+                    entityBean.superaSoglia = true;
+                }
+
+                if (queryService.isEsiste(annotationService.getAnchorPrefix(AttPluraleEntity.class, entityBean.lista))) {
+                    entityBean.esisteLista = true;
+                }
+                if (queryService.isEsiste(entityBean.pagina)) {
+                    entityBean.esistePagina = true;
+                }
+                if (queryService.isEsiste(entityBean.categoria)) {
+                    entityBean.esisteCategoria = true;
+                }
+
                 entityBean.numBio = numBio;
                 save(entityBean);
             }

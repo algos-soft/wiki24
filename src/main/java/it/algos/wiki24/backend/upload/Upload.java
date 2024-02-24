@@ -813,7 +813,9 @@ public class Upload {
 
     protected String correlate() {
         StringBuffer buffer = new StringBuffer();
-        String tagCorrelato = VUOTA;
+        String tagPagina = VUOTA;
+        String tagCategoria = VUOTA;
+        String tagProgetto = VUOTA;
 
         boolean usaCorrelate = switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> false;
@@ -825,17 +827,46 @@ public class Upload {
             return VUOTA;
         }
 
-        tagCorrelato = switch (typeLista) {
+        tagPagina = switch (typeLista) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> VUOTA;
+            case attivitaSingolare, nazionalitaSingolare -> VUOTA;
+            case attivitaPlurale -> attPluraleModulo.findByKey(nomeLista).pagina;
+            case nazionalitaPlurale -> nazPluraleModulo.findByKey(nomeLista).pagina;
+            default -> VUOTA;
+        };
+        tagPagina = textService.isValid(tagPagina) ? textService.primaMaiuscola(tagPagina) : VUOTA;
+
+        tagCategoria = switch (typeLista) {
+            case giornoNascita, giornoMorte, annoNascita, annoMorte -> VUOTA;
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> nomeLista;
+            default -> VUOTA;
+        };
+        tagCategoria = textService.isValid(tagCategoria) ? textService.primaMaiuscola(tagCategoria) : VUOTA;
+
+        tagProgetto = switch (typeLista) {
             case attivitaSingolare, attivitaPlurale -> ATT;
             case nazionalitaSingolare, nazionalitaPlurale -> NAZ;
             default -> VUOTA;
         };
+        tagProgetto = textService.isValid(tagProgetto) ? textService.primaMaiuscola(tagProgetto) : VUOTA;
 
         buffer.append(CAPO);
         buffer.append(wikiUtilityService.setParagrafo("Voci correlate"));
-        buffer.append(ASTERISCO);
-        buffer.append(textService.setDoppieQuadre(PATH_BIOGRAFIE + tagCorrelato));
-        buffer.append(CAPO);
+        if (textService.isValid(tagPagina)) {
+            buffer.append(ASTERISCO);
+            buffer.append(textService.setDoppieQuadre(tagPagina));
+            buffer.append(CAPO);
+        }
+        if (textService.isValid(tagCategoria)) {
+            buffer.append(ASTERISCO);
+            buffer.append(textService.setDoppieQuadre(DUE_PUNTI + CAT + tagCategoria));
+            buffer.append(CAPO);
+        }
+        if (textService.isValid(tagProgetto)) {
+            buffer.append(ASTERISCO);
+            buffer.append(textService.setDoppieQuadre(PATH_BIOGRAFIE + tagProgetto));
+            buffer.append(CAPO);
+        }
 
         return buffer.toString();
     }
@@ -1031,6 +1062,9 @@ public class Upload {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getHeaderText() {
+        if (textService.isEmpty(uploadText)) {
+            creaUploadText();
+        }
         return headerText;
     }
 
@@ -1041,6 +1075,9 @@ public class Upload {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getIncipitText() {
+        if (textService.isEmpty(uploadText)) {
+            creaUploadText();
+        }
         return incipitText;
     }
 
@@ -1050,6 +1087,9 @@ public class Upload {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getBodyText() {
+        if (textService.isEmpty(uploadText)) {
+            creaUploadText();
+        }
         return bodyText;
     }
 
@@ -1059,6 +1099,9 @@ public class Upload {
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
     public String getBottomText() {
+        if (textService.isEmpty(uploadText)) {
+            creaUploadText();
+        }
         return bottomText;
     }
 

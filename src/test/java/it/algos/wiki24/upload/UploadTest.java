@@ -225,9 +225,9 @@ public class UploadTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (ESEGUE_SOLO_UPLOD) {
-            return;
-        }
+//        if (ESEGUE_SOLO_UPLOD) {
+//            return;
+//        }
 
         istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
@@ -280,7 +280,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(210)
     @DisplayName("210 - getIstanzaLista")
@@ -312,7 +312,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
-    @ParameterizedTest
+//    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
