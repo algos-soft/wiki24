@@ -220,4 +220,20 @@ public class BaseVar {
     public static boolean creaDirectoryCrono;
 
 
+    /**
+     * Flag per distinguere tra un'applicazione mono o multi company <br>
+     * Il valore viene 'letto' da [application.properties] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Di default false <br>
+     */
+    public static boolean usaMultiCompany;
+
+    /**
+     * Flag per creare una istanza demo dell'applicazione <br>
+     * Il valore viene 'letto' da [application.properties] <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del modulo [base24] <br>
+     * Di default false <br>
+     */
+    public static boolean isIstanzaDemo;
+
 }

@@ -112,8 +112,8 @@ public class BaseBoot {
         //        this.fixVariabiliRiferimentoIstanzeGenerali();
         this.fixMenuRoutes();
         this.fixTask();
+        this.fixData();
         this.printInfo();
-        //        this.fixData();
         //        this.fixVersioni();
         this.fixLogin();
 
@@ -268,6 +268,31 @@ public class BaseBoot {
             logError(unErrore, property);
             BaseVar.creaDirectoryCrono = false;
         }
+
+        /**
+         * Flag per distinguere tra un'applicazione mono o multi company <br>
+         */
+        try {
+            property = "algos.project.usa.multi.company";
+            String valueTxt = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.usaMultiCompany = Boolean.parseBoolean(valueTxt);
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+            BaseVar.usaMultiCompany = false;
+        }
+
+        /**
+         * Flag per creare una istanza demo dell'applicazione <br>
+         */
+        try {
+            property = "algos.project.istanza.demo";
+            String valueTxt = Objects.requireNonNull(environment.getProperty(property));
+            BaseVar.isIstanzaDemo = Boolean.parseBoolean(valueTxt);
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+            BaseVar.isIstanzaDemo = false;
+        }
+
     }
 
     /**
@@ -338,6 +363,21 @@ public class BaseBoot {
     private void logError(Exception unErrore, String property) {
         String message = String.format("Non ho trovato la property %s nelle risorse", property);
         logger.warn(new WrapLog().exception(unErrore).message(message).usaDb());
+    }
+
+    /**
+     * Controlla i dati iniziali <br>
+     * <p>
+     * Se l'applicazione è mono-company: <br>
+     * a) controlla se è una company demo
+     * b) crea i dati demo
+     * Se l'applicazione è multi-company: <br>
+     * a) controlla che esista una company demo
+     * b) se manca la crea con i dati demo
+     * <p>
+     * Deve essere sovrascritto <br>
+     */
+    protected void fixData() {
     }
 
     protected void fixTask() {
