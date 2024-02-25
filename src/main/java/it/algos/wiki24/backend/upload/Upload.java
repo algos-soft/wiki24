@@ -148,6 +148,19 @@ public class Upload {
         this.typeLista = typeLista;
     }// end of constructor not @Autowired and used
 
+    /**
+     * Costruttore base con 2 parametri (obbligatori) <br>
+     * Not annotated with @Autowired annotation, classe astratta <br>
+     * La classe usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
+     */
+    public Upload(final String nomeLista, TypeLista typeLista, Lista istanzaLista, String keySottoPagina) {
+        this.nomeLista = nomeLista;
+        this.typeLista = typeLista;
+        this.istanzaLista = istanzaLista;
+        this.isSottoPagina = true;
+        this.keySottoPagina = keySottoPagina;
+    }// end of constructor not @Autowired and used
+
     @PostConstruct
     protected void postConstruct() {
         this.fixPreferenze();
@@ -203,6 +216,12 @@ public class Upload {
             default -> null;
         };
 
+        if (isSottoPagina) {
+            if (textService.isValid(titoloPagina)) {
+                titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottoPagina);
+            }
+        }
+
         this.usaSottopaginaOltreMax = switch (typeLista) {
             case giornoNascita, giornoMorte -> WPref.usaSottopagineGiorni.is();
             case annoNascita, annoMorte -> WPref.usaSottopagineAnni.is();
@@ -217,7 +236,7 @@ public class Upload {
             default -> TypeSummary.nessuno;
         };
 
-        istanzaLista = appContext.getBean(Lista.class, nomeLista, typeLista);
+        istanzaLista = istanzaLista == null ? appContext.getBean(Lista.class, nomeLista, typeLista) : istanzaLista;
     }
 
 
