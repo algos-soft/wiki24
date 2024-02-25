@@ -5,11 +5,13 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
+import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -30,6 +32,9 @@ public class NazPluraleModulo extends WikiModulo {
 
     @Inject
     BioMongoModulo bioMongoModulo;
+
+    @Inject
+    QueryService queryService;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -68,7 +73,7 @@ public class NazPluraleModulo extends WikiModulo {
      */
     @Override
     public NazPluraleEntity newEntity() {
-        return newEntity(VUOTA, null, VUOTA, VUOTA, 0, 0, false, false);
+        return newEntity(VUOTA, null, VUOTA, VUOTA, 0, 0, false, false, false);
     }
 
     /**
@@ -86,16 +91,18 @@ public class NazPluraleModulo extends WikiModulo {
             int numBio,
             int numSingolari,
             boolean superaSoglia,
-            boolean esisteLista) {
+            boolean esisteLista,
+            boolean esistePagina) {
         NazPluraleEntity newEntityBean = NazPluraleEntity.builder()
                 .plurale(textService.isValid(plurale) ? plurale : null)
                 .txtSingolari(txtSingolari)
                 .lista(textService.isValid(lista) ? lista : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
                 .numBio(numBio)
-                .numSingolari(numSingolari)
+                .numSingolari(numSingolari == 0 ? txtSingolari != null ? txtSingolari.size() : 0 : 0)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
+                .esistePagina(esistePagina)
                 .build();
 
         return (NazPluraleEntity) fixKey(newEntityBean);
@@ -154,7 +161,7 @@ public class NazPluraleModulo extends WikiModulo {
 
         for (NazSingolareEntity naz : listaNazSingolariDistinte) {
             listaSingolari = nazSingolareModulo.findSingolariByPlurale(naz);
-            newBean = newEntity(naz.plurale, listaSingolari, textService.primaMaiuscola(naz.plurale), textService.primaMaiuscola(naz.pagina), 0, 0, false, false);
+            newBean = newEntity(naz.plurale, listaSingolari, textService.primaMaiuscola(naz.plurale), textService.primaMaiuscola(naz.pagina), 0, 0, false, false,false);
             mappaBeans.put(naz.plurale, newBean);
         }
     }
@@ -163,10 +170,12 @@ public class NazPluraleModulo extends WikiModulo {
     @Override
     public String elabora() {
         super.elabora();
+        int soglia = WPref.sogliaPaginaNazionalita.getInt();
 
         List<NazPluraleEntity> listaBeans = findAll();
         List<String> listaNazionalitaSingolari;
         int numBio;
+        String wikiTitleLista = VUOTA;
 
         if (listaBeans != null && listaBeans.size() > 0) {
             for (NazPluraleEntity entityBean : listaBeans) {
@@ -178,6 +187,12 @@ public class NazPluraleModulo extends WikiModulo {
                     }
                 }
                 entityBean.numBio = numBio;
+                entityBean.superaSoglia = numBio > soglia;
+                wikiTitleLista = annotationService.getAnchorPrefix(NazPluraleEntity.class, "lista");
+                wikiTitleLista += textService.primaMaiuscola(entityBean.plurale);
+                entityBean.esisteLista = queryService.isEsiste(wikiTitleLista);
+                entityBean.esistePagina = queryService.isEsiste(entityBean.pagina);
+
                 save(entityBean);
             }
         }

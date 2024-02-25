@@ -26,20 +26,23 @@ public class NazPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Nazionalità/")
     public String lista;
 
-    @AField(type = TypeField.linkWiki)
+    @AField(type = TypeField.linkWiki, widthRem = 14)
     public String pagina;
 
-    @AField(type = TypeField.integer, widthRem = 7)
+    @AField(type = TypeField.integer, headerText = "bio", widthRem = 5)
     public int numBio;
 
-    @AField(type = TypeField.integer, headerText = "numSin", widthRem = 7)
+    @AField(type = TypeField.integer, headerText = "sin", widthRem = 5)
     public int numSingolari;
 
-    @AField(type = TypeField.booleano, headerText = "s")
+    @AField(type = TypeField.booleano, headerText = "s", widthRem = 3)
     public boolean superaSoglia;
 
-    @AField(type = TypeField.booleano, headerText = "l")
+    @AField(type = TypeField.booleano, headerText = "l", widthRem = 3)
     public boolean esisteLista;
+
+    @AField(type = TypeField.booleano, headerText = "p", widthRem = 3)
+    public boolean esistePagina;
 
     @Override
     public String toString() {

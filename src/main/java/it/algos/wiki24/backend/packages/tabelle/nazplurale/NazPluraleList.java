@@ -1,19 +1,29 @@
 package it.algos.wiki24.backend.packages.tabelle.nazplurale;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
 public class NazPluraleList extends WikiList {
+    private IndeterminateCheckbox checkSoglia;
+
+    private IndeterminateCheckbox checkLista;
+
+    private IndeterminateCheckbox checkPagina;
+
 
 
     public NazPluraleList(final NazPluraleModulo crudModulo) {
@@ -73,6 +83,75 @@ public class NazPluraleList extends WikiList {
         headerPlaceHolder.add(ASpan.text(message).rosso().small());
 
         super.fixHeader();
+        message = "Lista: blue=normale, rosso=esiste ma non dovrebbe, verde=andrebbe creata";
+        headerPlaceHolder.add(ASpan.text(message).blue().small());
+    }
+
+
+    /**
+     * Regola numero, ordine e visibilità delle colonne della grid <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void fixColumns() {
+        Grid.Column newLista = grid.addColumn(new ComponentRenderer<>(entity -> {
+            String wikiTitle = textService.primaMaiuscola(((NazPluraleEntity) entity).lista);
+            String anchorPrefix = TAG_WIKI + annotationService.getAnchorPrefix(NazPluraleEntity.class, "lista");
+            Anchor anchor = new Anchor(anchorPrefix + wikiTitle, wikiTitle);
+            boolean superaSoglia = ((NazPluraleEntity) entity).superaSoglia;
+            if (((NazPluraleEntity) entity).isEsisteLista()) {
+                if (superaSoglia) {
+                    anchor.getElement().getStyle().set("color", "blue");
+                }
+                else {
+                    anchor.getElement().getStyle().set("color", "red");
+                }
+            }
+            else {
+                if (superaSoglia) {
+                    anchor.getElement().getStyle().set("color", "green");
+                }
+                else {
+                    return new Span();
+                }
+            }
+            return new Span(anchor);
+        })).setHeader("Lista").setKey("newLista").setWidth("10rem").setFlexGrow(0);
+
+        Grid.Column plurale = grid.getColumnByKey("plurale");
+        Grid.Column txtSingolari = grid.getColumnByKey("txtSingolari");
+
+        Grid.Column oldLista = grid.getColumnByKey("lista");
+
+        Grid.Column pagina = grid.getColumnByKey("pagina");
+        Grid.Column numBio = grid.getColumnByKey("numBio");
+        Grid.Column numSingolari = grid.getColumnByKey("numSingolari");
+        Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
+        Grid.Column esisteLista = grid.getColumnByKey("esisteLista");
+        Grid.Column esistePagina = grid.getColumnByKey("esistePagina");
+
+        grid.removeColumn(oldLista);
+        grid.setColumnOrder(plurale, txtSingolari, newLista, pagina, numBio, numSingolari, superaSoglia, esisteLista, esistePagina);
+    }
+
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixTop() {
+        super.fixTop();
+
+        checkSoglia = super.creaFiltroCheckBox(checkSoglia, "Soglia");
+        checkLista = super.creaFiltroCheckBox(checkLista, "Lista");
+        checkPagina = super.creaFiltroCheckBox(checkPagina, "Pagina");
+    }
+
+    @Override
+    protected void fixFiltri() {
+        super.fixFiltri();
+
+        super.fixFiltroCheckBox(checkSoglia, "superaSoglia");
+        super.fixFiltroCheckBox(checkLista, "esisteLista");
+        super.fixFiltroCheckBox(checkPagina, "esistePagina");
     }
 
 }// end of CrudList class
