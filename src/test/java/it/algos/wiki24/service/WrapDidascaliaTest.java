@@ -140,9 +140,22 @@ public class WrapDidascaliaTest extends WikiTest {
     void wrapAttivita(BioMongoEntity bio) {
         System.out.println(("501 - wrapAttivita"));
         sorgente = "attivita";
-        WrapDidascalia wrap;
 
         istanza = ((WrapDidascalia) appContext.getBean(clazz)).attivita().get(bio);
+        assertNotNull(istanza);
+        printBioMongo(bio);
+        printWrap(istanza, bio.annoMorto);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "getBio")
+    @Order(601)
+    @DisplayName("601 - wrapNazionalita")
+    void wrapNazionalita(BioMongoEntity bio) {
+        System.out.println(("601 - wrapNazionalita"));
+        sorgente = "nazionalità";
+
+        istanza = ((WrapDidascalia) appContext.getBean(clazz)).nazionalita().get(bio);
         assertNotNull(istanza);
         printBioMongo(bio);
         printWrap(istanza, bio.annoMorto);

@@ -41,7 +41,7 @@ public class ListaTest extends WikiStreamTest {
     @Inject
     QueryService queryService;
 
-    public static final boolean ESEGUE_SOLO_BODY = false;
+    public static final boolean ESEGUE_SOLO_BODY = true;
 
     /**
      * Classe principale di riferimento <br>

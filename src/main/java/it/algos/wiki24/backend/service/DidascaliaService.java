@@ -163,8 +163,18 @@ public class DidascaliaService {
     public String luogoNato(final BioMongoEntity bio) {
         String luogoNato = textService.isValid(bio.luogoNato) ? bio.luogoNato : VUOTA;
         String luogoNatoLink = textService.isValid(bio.luogoNatoLink) ? bio.luogoNatoLink : VUOTA;
+
         if (textService.isValid(luogoNato) && textService.isValid(luogoNatoLink)) {
             luogoNato = luogoNatoLink + PIPE + luogoNato;
+        }
+
+        if (textService.isValid(luogoNato)) {
+            if (!luogoNato.startsWith(DOPPIE_QUADRE_INI)) {
+                luogoNato = DOPPIE_QUADRE_INI + luogoNato;
+            }
+            if (!luogoNato.endsWith(DOPPIE_QUADRE_END)) {
+                luogoNato = luogoNato + DOPPIE_QUADRE_END;
+            }
         }
 
         return textService.isValid(luogoNato) ? luogoNato : VUOTA;
@@ -173,8 +183,18 @@ public class DidascaliaService {
     public String luogoMorto(final BioMongoEntity bio) {
         String luogoMorto = textService.isValid(bio.luogoMorto) ? bio.luogoMorto : VUOTA;
         String luogoMortoLink = textService.isValid(bio.luogoMortoLink) ? bio.luogoMortoLink : VUOTA;
+
         if (textService.isValid(luogoMorto) && textService.isValid(luogoMortoLink)) {
             luogoMorto = luogoMortoLink + PIPE + luogoMorto;
+        }
+
+        if (textService.isValid(luogoMorto)) {
+            if (!luogoMorto.startsWith(DOPPIE_QUADRE_INI)) {
+                luogoMorto = DOPPIE_QUADRE_INI + luogoMorto;
+            }
+            if (!luogoMorto.endsWith(DOPPIE_QUADRE_END)) {
+                luogoMorto = luogoMorto + DOPPIE_QUADRE_END;
+            }
         }
 
         return textService.isValid(luogoMorto) ? luogoMorto : VUOTA;
@@ -563,21 +583,21 @@ public class DidascaliaService {
         return decade;
     }
 
-//    public List<WrapDidascalia> ordinamentoNumerico(final List<WrapDidascalia> listaIn) {
-//        List<WrapDidascalia> listaOut = new ArrayList<>();
-//        Map<Integer, WrapDidascalia> mappa = new HashMap<>();
-//
-//        for (WrapDidascalia wrap : listaIn) {
-//            mappa.put(wrap.getOrdineNumerico(), wrap);
-//        }
-//
-//        mappa = arrayService.sort(mappa);
-//        for (Integer key : mappa.keySet()) {
-//            listaOut.add(mappa.get(key));
-//        }
-//
-//        return listaOut;
-//    }
+    //    public List<WrapDidascalia> ordinamentoNumerico(final List<WrapDidascalia> listaIn) {
+    //        List<WrapDidascalia> listaOut = new ArrayList<>();
+    //        Map<Integer, WrapDidascalia> mappa = new HashMap<>();
+    //
+    //        for (WrapDidascalia wrap : listaIn) {
+    //            mappa.put(wrap.getOrdineNumerico(), wrap);
+    //        }
+    //
+    //        mappa = arrayService.sort(mappa);
+    //        for (Integer key : mappa.keySet()) {
+    //            listaOut.add(mappa.get(key));
+    //        }
+    //
+    //        return listaOut;
+    //    }
 
     public List<WrapDidascalia> ordinamentoAlfabetico(final List<WrapDidascalia> listaIn) {
         List<WrapDidascalia> listaOut = new ArrayList<>();
