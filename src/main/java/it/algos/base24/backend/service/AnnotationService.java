@@ -1064,7 +1064,7 @@ public class AnnotationService {
 
         annotation = this.getFieldAnnotation(entityClazz, propertyName);
         if (annotation != null) {
-            prefix = TAG_WIKI + annotation.anchorPrefix();
+            prefix =   annotation.anchorPrefix();
         }
 
         return prefix;

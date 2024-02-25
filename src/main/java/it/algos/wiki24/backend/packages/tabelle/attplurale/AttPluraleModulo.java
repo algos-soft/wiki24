@@ -5,6 +5,7 @@ import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
@@ -158,7 +159,7 @@ public class AttPluraleModulo extends WikiModulo {
         List<String> listaSingolari;
 
         if (listaAttSingolariDistinte == null || listaAttSingolariDistinte.size() < 1) {
-            message = String.format("Non sono riuscito a leggere da mongoDB la collection  %s", "attsingolare");
+            message = String.format("Non sono riuscito a leggere da mongoDB la collection %s", "attsingolare");
             logger.warn(new WrapLog().exception(new AlgosException(message)).usaDb());
             return;
         }
@@ -178,6 +179,8 @@ public class AttPluraleModulo extends WikiModulo {
         List<AttPluraleEntity> listaBeans = findAll();
         List<String> listaAttivitaSingolari;
         int numBio;
+        String wikiTitleLista = VUOTA;
+        String wikiTitleCategoria = VUOTA;
 
         if (listaBeans != null && listaBeans.size() > 0) {
             for (AttPluraleEntity entityBean : listaBeans) {
@@ -188,22 +191,15 @@ public class AttPluraleModulo extends WikiModulo {
                         numBio += bioMongoModulo.countAllByAttivitaSingolare(attivitaSingolare);
                     }
                 }
-                entityBean.categoria = textService.isValid(entityBean.plurale) ? textService.primaMaiuscola(entityBean.plurale) : VUOTA;
-                if (numBio > soglia) {
-                    entityBean.superaSoglia = true;
-                }
-
-                if (queryService.isEsiste(annotationService.getAnchorPrefix(AttPluraleEntity.class, entityBean.lista))) {
-                    entityBean.esisteLista = true;
-                }
-                if (queryService.isEsiste(entityBean.pagina)) {
-                    entityBean.esistePagina = true;
-                }
-                if (queryService.isEsiste(entityBean.categoria)) {
-                    entityBean.esisteCategoria = true;
-                }
-
                 entityBean.numBio = numBio;
+                entityBean.superaSoglia = numBio > soglia;
+                wikiTitleLista = annotationService.getAnchorPrefix(AttPluraleEntity.class, "lista");
+                wikiTitleLista += textService.primaMaiuscola(entityBean.plurale);
+                entityBean.esisteLista = queryService.isEsiste(wikiTitleLista);
+                entityBean.esistePagina = queryService.isEsiste(entityBean.pagina);
+                wikiTitleCategoria = CAT + entityBean.categoria;
+                entityBean.esisteCategoria = queryService.isEsiste(wikiTitleCategoria);
+
                 save(entityBean);
             }
         }

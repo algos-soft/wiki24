@@ -62,9 +62,9 @@ public class ColumnService {
      */
     public void addColumnsOneByOne(final Grid grid, Class modelClazz, final List<String> gridPropertyNamesList) {
         if (grid != null && gridPropertyNamesList != null) {
-            for(int i=0; i<gridPropertyNamesList.size();i++){
+            for (int i = 0; i < gridPropertyNamesList.size(); i++) {
                 String propertyName = gridPropertyNamesList.get(i);
-                boolean isLastColumn = (i==gridPropertyNamesList.size()-1);
+                boolean isLastColumn = (i == gridPropertyNamesList.size() - 1);
                 this.crea(grid, modelClazz, propertyName, isLastColumn);
             }
         }
@@ -122,7 +122,7 @@ public class ColumnService {
 
                 if (obj != null && obj instanceof String wikiTitle) {
                     //                    anchor = new Anchor(anchorPrefix + wikiTitle, textService.setQuadre(wikiTitle));
-                    anchor = new Anchor(anchorPrefix + wikiTitle, wikiTitle);
+                    anchor = new Anchor(TAG_WIKI + anchorPrefix + wikiTitle, wikiTitle);
                     anchor.getElement().getStyle().set("color", "blue");
                     //                    anchor.getElement().getStyle().set("fontWeight", "bold");
                     //                    anchor.getElement().getStyle().set("font-style", "italic");
@@ -177,9 +177,10 @@ public class ColumnService {
                 colonna.setWidth(width);
             }
 
-            if(isLastColumn){
+            if (isLastColumn) {
                 colonna.setFlexGrow(1);
-            }else{
+            }
+            else {
                 colonna.setFlexGrow(0);
             }
 
