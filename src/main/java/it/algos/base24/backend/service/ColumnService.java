@@ -113,6 +113,8 @@ public class ColumnService {
             case linkWiki -> grid.addColumn(new ComponentRenderer<>(entity -> {
                 Object obj = null;
                 Anchor anchor;
+                String wikiLink = VUOTA;
+                String wikiLabel = VUOTA;
 
                 try {
                     obj = field.get(entity);
@@ -121,8 +123,16 @@ public class ColumnService {
                 }
 
                 if (obj != null && obj instanceof String wikiTitle) {
-                    //                    anchor = new Anchor(anchorPrefix + wikiTitle, textService.setQuadre(wikiTitle));
-                    anchor = new Anchor(TAG_WIKI + anchorPrefix + wikiTitle, wikiTitle);
+                    wikiTitle = textService.setNoDoppieQuadre(wikiTitle);
+                    if (wikiTitle.contains(PIPE)) {
+                        wikiLink = textService.levaCodaDaPrimo(wikiTitle, PIPE);
+                        wikiLabel = textService.levaPrimaAncheTag(wikiTitle, PIPE);
+                    }
+                    else {
+                        wikiLink = wikiTitle;
+                        wikiLabel = wikiTitle;
+                    }
+                    anchor = new Anchor(TAG_WIKI + anchorPrefix + wikiLink, wikiLabel);
                     anchor.getElement().getStyle().set("color", "blue");
                     //                    anchor.getElement().getStyle().set("fontWeight", "bold");
                     //                    anchor.getElement().getStyle().set("font-style", "italic");
