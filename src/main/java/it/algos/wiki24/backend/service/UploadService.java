@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.service;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24
@@ -67,6 +69,7 @@ public class UploadService {
     public int numNatiGiorno(final GiornoWikiEntity giornoBean) {
         return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita).numBio();
     }
+
     public int numMortiGiorno(final GiornoWikiEntity giornoBean) {
         return appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte).numBio();
     }
@@ -75,6 +78,7 @@ public class UploadService {
     public int numNatiAnno(final AnnoWikiEntity annoBean) {
         return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita).numBio();
     }
+
     public int numMortiAnno(final AnnoWikiEntity annoBean) {
         return appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte).numBio();
     }
@@ -83,16 +87,54 @@ public class UploadService {
         return appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale).test().uploadOnly();
     }
 
-    public WResult attivita(final AttPluraleEntity attivitaBean) {
+    public WResult attivitaOnly(final AttPluraleEntity attivitaBean) {
         return appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale).uploadOnly();
+    }
+
+    public void attivitaAll(final AttPluraleEntity attivitaBean) {
+        Upload istanzaUpload;
+        List<String> listaStr;
+        Lista istanzaLista;
+
+        // pagina principale
+        istanzaUpload = appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale);
+        istanzaUpload.uploadOnly();
+
+        // sottopagine
+        listaStr = istanzaUpload.listaSottoPagine();
+        istanzaLista = istanzaUpload.getIstanzaLista();
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+            }
+        }
     }
 
     public WResult nazionalitaTest(final NazPluraleEntity nazionalitaBean) {
         return appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale).test().uploadOnly();
     }
 
-    public WResult nazionalita(final NazPluraleEntity nazionalitaBean) {
+    public WResult nazionalitaOnly(final NazPluraleEntity nazionalitaBean) {
         return appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale).uploadOnly();
+    }
+
+    public void nazionalitaAll(final NazPluraleEntity nazionalitaBean) {
+        Upload istanzaUpload;
+        List<String> listaStr;
+        Lista istanzaLista;
+
+        // pagina principale
+        istanzaUpload = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale);
+        istanzaUpload.uploadOnly();
+
+        // sottopagine
+        listaStr = istanzaUpload.listaSottoPagine();
+        istanzaLista = istanzaUpload.getIstanzaLista();
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+            }
+        }
     }
 
 }

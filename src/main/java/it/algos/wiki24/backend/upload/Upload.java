@@ -340,17 +340,32 @@ public class Upload {
 
         risultato = registra();
         if (risultato == null) {
-            message = String.format("Non sono riuscito a registrare la lista [%s]", nomeLista);
+            if (isSottoPagina) {
+                message = String.format("Non sono riuscito a registrare la sottoPagina [%s%s%s]", nomeLista, SLASH, keySottoPagina);
+            }
+            else {
+                message = String.format("Non sono riuscito a registrare la pagina [%s]", nomeLista);
+            }
             logger.warn(new WrapLog().message(message).type(TypeLog.upload));
         }
         else {
             if (risultato.isValido() && risultato.isModificata() == false && risultato.getValidMessage().equals(NESSUNA_MODIFICA)) {
-                message = String.format("Non registrata la lista [%s] perché le modifiche erano solo sulla data", nomeLista);
+                if (isSottoPagina) {
+                    message = String.format("Non registrata la sottoPagina [%s%s%s] perché le modifiche erano solo sulla data", nomeLista, SLASH, keySottoPagina);
+                }
+                else {
+                    message = String.format("Non registrata la pagina [%s] perché le modifiche erano solo sulla data", nomeLista);
+                }
                 logger.debug(new WrapLog().message(message).type(TypeLog.upload));
             }
             else {
                 if (risultato.isValido() && risultato.isModificata() == true) {
-                    message = String.format("La lista [%s] è stata registrata", nomeLista);
+                    if (isSottoPagina) {
+                        message = String.format("La sottoPagina [%s%s%s] è stata registrata", nomeLista, SLASH, keySottoPagina);
+                    }
+                    else {
+                        message = String.format("La pagina [%s] è stata registrata", nomeLista);
+                    }
                     logger.debug(new WrapLog().message(message).type(TypeLog.upload));
                 }
             }

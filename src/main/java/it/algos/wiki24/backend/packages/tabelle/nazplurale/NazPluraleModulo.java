@@ -230,7 +230,7 @@ public class NazPluraleModulo extends WikiModulo {
 
     @Override
     public void uploadPagina(AbstractEntity nazionalitaPlurale) {
-        uploadService.nazionalita((NazPluraleEntity) nazionalitaPlurale);
+        uploadService.nazionalitaAll((NazPluraleEntity) nazionalitaPlurale);
     }
 
 
