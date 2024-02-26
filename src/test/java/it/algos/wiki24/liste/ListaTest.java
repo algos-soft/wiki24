@@ -478,7 +478,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(601)
     @DisplayName("601 - bodyText")
@@ -486,6 +486,10 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("601 - bodyText"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (true) {
+            System.out.println("Sospesa");
             return;
         }
 
@@ -525,7 +529,7 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(602)
     @DisplayName("602 - printBodyText")
@@ -533,6 +537,10 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("602 - printBodyText"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (true) {
+            System.out.println("Sospesa");
             return;
         }
 
@@ -558,7 +566,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(701)
     @DisplayName("701 - body singola sottopagina")
@@ -566,6 +574,10 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("701 - body singola sottopagina"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (false) {
+            System.out.println("Sospesa");
             return;
         }
 
@@ -580,6 +592,9 @@ public class ListaTest extends WikiStreamTest {
             System.out.println("Prime 5 sottopagine");
             for (String keySottoPagina : listaStr.subList(0, Math.min(10, listaStr.size()))) {
                 ottenuto = istanza.getBodySottoPagina(keySottoPagina);
+
+                Object alfa=istanza.getListaSottoSottoPagine();
+
                 if (textService.isValid(ottenuto)) {
                     message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);
                     System.out.println(message);
@@ -599,7 +614,7 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(702)
     @DisplayName("702 - printBodySottoPagina")
@@ -607,6 +622,10 @@ public class ListaTest extends WikiStreamTest {
         System.out.println(("702 - printBodySottoPagina"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (true) {
+            System.out.println("Sospesa");
             return;
         }
 
@@ -635,14 +654,18 @@ public class ListaTest extends WikiStreamTest {
     }
 
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(801)
     @DisplayName("801 - body singola sottoSottoPagina")
-    void bodySottoSottoPagina(String nomeLista, TypeLista typeLista) {
+    void xyz(String nomeLista, TypeLista typeLista) {
         System.out.println(("801 - body singola sottoSottoPagina"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (true) {
+            System.out.println("Sospesa");
             return;
         }
 

@@ -1,5 +1,7 @@
 package it.algos.wiki24.backend.packages.tabelle.attplurale;
 
+import com.vaadin.flow.component.formlayout.*;
+import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.form.*;
@@ -23,7 +25,20 @@ public class AttPluraleForm extends CrudForm {
      */
     protected void fixPreferenze() {
         super.fixPreferenze();
-        super.numResponsiveStepColumn = 1;
+        super.numResponsiveStepColumn = 3;
+    }
+
+    /**
+     * Aggiunge i componenti grafici al layout
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void addFields() {
+        super.addFields();
+
+        formLayout.setColspan(mappaFields.get("plurale"), 3);
+        formLayout.setColspan(mappaFields.get("lista"), 1);
+        formLayout.setColspan(mappaFields.get("pagina"), 1);
     }
 
 }// end of CrudForm class

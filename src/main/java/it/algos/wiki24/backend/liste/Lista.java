@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.liste;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.packages.crono.anno.*;
@@ -51,24 +52,6 @@ public class Lista {
     protected WikiUtilityService wikiUtilityService;
 
     @Inject
-    protected GiornoModulo giornoModulo;
-
-    @Inject
-    protected AnnoModulo annoModulo;
-
-    @Inject
-    protected AttSingolareModulo attSingolareModulo;
-
-    @Inject
-    protected AttPluraleModulo attPluraleModulo;
-
-    @Inject
-    protected NazSingolareModulo nazSingolareModulo;
-
-    @Inject
-    protected NazPluraleModulo nazPluraleModulo;
-
-    @Inject
     protected ArrayService arrayService;
 
     @Inject
@@ -102,6 +85,8 @@ public class Lista {
 
     protected int sogliaSottoPagina;
 
+    protected int sogliaSottoSottoPagina;
+
     protected int sogliaVociTotaliPaginaPerSottopagine;
 
     protected int numBio = INT_ERROR;
@@ -122,6 +107,8 @@ public class Lista {
 
     // titolo della sottoPagina
     protected List<String> listaSottoPagine = new ArrayList<>();
+    // titolo della sottoPagina
+    protected List<String> listaSottoSottoPagine = new ArrayList<>();
 
 
     /**
@@ -158,6 +145,7 @@ public class Lista {
         this.sogliaParagrafi = WPref.sogliaParagrafi.getInt();
         this.sogliaIncludeAll = WPref.sogliaIncludeAll.getInt();
         this.sogliaSottoPagina = WPref.sogliaSottoPagina.getInt();
+        this.sogliaSottoSottoPagina = MAX_INT_VALUE;
     }
 
 
@@ -218,6 +206,15 @@ public class Lista {
             case nazionalitaPlurale -> true;
             default -> false;
         };
+
+        this.sogliaSottoSottoPagina = switch (typeLista) {
+            case giornoNascita, giornoMorte -> MAX_INT_VALUE;
+            case annoNascita, annoMorte -> MAX_INT_VALUE;
+            case attivitaSingolare, attivitaPlurale -> WPref.sogliaSottoPaginaAttNaz.getInt();
+            case nazionalitaSingolare, nazionalitaPlurale -> WPref.sogliaSottoPaginaAttNaz.getInt();
+            default -> MAX_INT_VALUE;
+        };
+
     }
 
     /**
@@ -499,7 +496,9 @@ public class Lista {
         return buffer.toString().trim();
     }
 
-
+    /**
+     * Singolo paragrafo della pagina principale di 1° livello <br>
+     */
     public String singoloParagrafo(String keyParagrafo) {
         StringBuffer buffer = new StringBuffer();
         int numVociParagrafo = mappaParagrafi.get(keyParagrafo);
@@ -631,14 +630,20 @@ public class Lista {
 
     public String bodyTextSottoPaginaConParagrafi(List<WrapDidascalia> listaSottoPagina) {
         StringBuffer buffer = new StringBuffer();
+        int numVociParagrafo = listaSottoPagina.size();
         Map<String, List<WrapDidascalia>> mappaSotto = mappaWrapDidascalieSotto(listaSottoPagina);
         boolean usaDiv;
         int dimensioneParagrafo = 0;
 
-        if (usaSottoSottoPagineLista) {
-        }
+        //        //corpo con/senza sottosottopagine
+        //        if (usaSottoSottoPagineLista && numVociParagrafo >  sogliaSottoSottoPagina) {
+        //            listaSottoPagine.add(keyParagrafo);
+        //        }
 
         for (String keyParagrafo : mappaSotto.keySet()) {
+//            if (usaSottoSottoPagineLista && numVociParagrafo > sogliaSottoSottoPagina) {
+                listaSottoSottoPagine.add(listaSottoPagina+SLASH+keyParagrafo);
+//            }
             dimensioneParagrafo = mappaSotto.get(keyParagrafo).size();
             buffer.append(getTitoloParagrafo(keyParagrafo, dimensioneParagrafo));
             usaDiv = dimensioneParagrafo > sogliaDiv;
@@ -691,6 +696,10 @@ public class Lista {
     public int getNumBioSottoPagina(String keySottoPagina) {
         List<WrapDidascalia> listaSottoPagina = mappaWrapDidascalie.get(keySottoPagina);
         return listaSottoPagina != null ? listaSottoPagina.size() : 0;
+    }
+
+    public List<String> getListaSottoSottoPagine() {
+        return listaSottoSottoPagine;
     }
 
 }

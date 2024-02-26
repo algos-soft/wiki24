@@ -163,6 +163,7 @@ public enum WPref implements IPref {
     sogliaParagrafi("sogliaParagrafi", TypePref.integer, 3, "Soglia minima di paragrafi per mostrarli"),
     sogliaIncludeAll("sogliaIncludeAll", TypePref.integer, 200, "Soglia minima di voci totali della pagina per 'includerla' in giorni/anni"),
     sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
+    sogliaSottoPaginaAttNaz("sogliaSottoPaginaAttNaz", TypePref.integer, 3000, "Soglia minima di voci totali della sottoPagina di att/naz per creare le sottoSottoPagine per ogni lettere alfabetica"),
     sogliaPaginaAttivita("sogliaPaginaAttivita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di attività sul server wiki"),
     sogliaPaginaNazionalita("sogliaPaginaNazionalita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di nazionalità sul server wiki"),
     usaSottopagineGiorni("usaSottopagineGiorni", TypePref.bool, false, "Abilita l'eventuale sottopagina dei giorni (se >1500 e > 50)"),

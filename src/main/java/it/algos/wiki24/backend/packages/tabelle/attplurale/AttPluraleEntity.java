@@ -32,14 +32,14 @@ public class AttPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkWiki, headerText = "cat", anchorPrefix = "Categoria:")
     public String categoria;
 
+    @AField(type = TypeField.booleano, headerText = "s", widthRem = 3)
+    public boolean superaSoglia;
+
     @AField(type = TypeField.integer, headerText = "bio", widthRem = 5)
     public int numBio;
 
     @AField(type = TypeField.integer, headerText = "sin", widthRem = 5)
     public int numSingolari;
-
-    @AField(type = TypeField.booleano, headerText = "s", widthRem = 3)
-    public boolean superaSoglia;
 
     @AField(type = TypeField.booleano, headerText = "l", widthRem = 3)
     public boolean esisteLista;
