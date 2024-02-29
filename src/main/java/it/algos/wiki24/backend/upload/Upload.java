@@ -746,7 +746,7 @@ public class Upload {
         String titoloLista;
 
         if (isSottoPagina) {
-            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
+//            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
         }
         else {
             if (istanzaLista != null && istanzaLista.getTypeLista() == typeLista) {
@@ -1156,7 +1156,7 @@ public class Upload {
         if (isSottoPagina) {
             //            numBio = istanzaLista.n(keySottoPagina);
             //            numBio= istanzaLista.getMappaSottoPagine().get(keySottoPagina).size();
-            numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
+//            numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
         }
         else {
             if (numBio == 0) {
@@ -1181,7 +1181,7 @@ public class Upload {
      */
     public int numBio(String keySottopagina) {
         if (numBio == 0) {
-            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
+//            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
         }
 
         return numBio;

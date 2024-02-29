@@ -478,7 +478,7 @@ public class UploadTest extends WikiStreamTest {
             ottenutoArray = istanzaLista.getKeyParagrafi();
             for (String keyParagrafoSenzaSottopagina : ottenutoArray) {
                 if (!listaStr.contains(keyParagrafoSenzaSottopagina)) {
-                    ottenutoIntero = istanzaLista.getNumBioSottoPagina(keyParagrafoSenzaSottopagina);
+//                    ottenutoIntero = istanzaLista.getNumBioSottoPagina(keyParagrafoSenzaSottopagina);
                     totaleEffettivoParagrafiSenzaSottopagina += ottenutoIntero;
                 }
             }
@@ -491,7 +491,7 @@ public class UploadTest extends WikiStreamTest {
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
-                ottenutoIntero = istanzaLista.getNumBioSottoPagina(keySottopaginaErrata);
+//                ottenutoIntero = istanzaLista.getNumBioSottoPagina(keySottopaginaErrata);
                 if (ottenutoIntero == INT_ERROR) {
                     message = String.format("Nella lista [%s] non esiste un paragrafo/sottopagina [%s]", nomeLista, keySottopaginaErrata);
                     System.out.println(message);
