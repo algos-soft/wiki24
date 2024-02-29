@@ -38,25 +38,38 @@ public abstract class WikiStreamTest extends WikiTest {
     //--typeLista per il test
     protected static Stream<Arguments> LISTA_LIVELLO_PAGINA() {
         return Stream.of(
-//                Arguments.of(VUOTA, TypeLista.giornoNascita),
-//                Arguments.of("34 marzo", TypeLista.giornoMorte),
-//                Arguments.of("34 febbraio", TypeLista.giornoMorte),
-//                Arguments.of("38 A.C.", TypeLista.annoNascita),
-//                Arguments.of("38 a.C.", TypeLista.annoNascita),
-//                Arguments.of("29 febbraio", TypeLista.giornoNascita),
-//                Arguments.of("406 a.C.", TypeLista.annoMorte),
-//                Arguments.of("1567", TypeLista.annoNascita),
-//                Arguments.of("1610", TypeLista.annoMorte),
-//                Arguments.of("560", TypeLista.annoMorte),
-//                Arguments.of("2023", TypeLista.annoMorte),
-//                Arguments.of("dominicani", TypeLista.nazionalitaPlurale),
-//                Arguments.of("agronomi", TypeLista.attivitaPlurale),
+                Arguments.of(VUOTA, TypeLista.giornoNascita),
+                Arguments.of("34 marzo", TypeLista.giornoMorte),
+                Arguments.of("34 febbraio", TypeLista.giornoMorte),
+                Arguments.of("38 A.C.", TypeLista.annoNascita),
+                Arguments.of("38 a.C.", TypeLista.annoNascita),
+                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                Arguments.of("406 a.C.", TypeLista.annoMorte),
+                Arguments.of("1567", TypeLista.annoNascita),
+                Arguments.of("1610", TypeLista.annoMorte),
+                Arguments.of("560", TypeLista.annoMorte),
+                Arguments.of("2023", TypeLista.annoMorte),
+                Arguments.of("dominicani", TypeLista.nazionalitaPlurale),
+                Arguments.of("abati e badesse", TypeLista.attivitaPlurale),
+                Arguments.of("agronomi", TypeLista.attivitaPlurale),
                 Arguments.of("brasiliani", TypeLista.nazionalitaPlurale),
-//                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale),
-//                Arguments.of("birmani", TypeLista.nazionalitaPlurale),
+                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale),
+                Arguments.of("birmani", TypeLista.nazionalitaPlurale),
                 Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale)
+        );
+    }
 
-                );
+    //--nome lista
+    //--typeLista per il test
+    protected static Stream<Arguments> LISTA_MAPPA() {
+        return Stream.of(
+                Arguments.of("38 a.C.", TypeLista.annoNascita),
+                Arguments.of("1431", TypeLista.annoMorte),
+                Arguments.of("29 febbraio", TypeLista.giornoNascita),
+                Arguments.of("dominicani", TypeLista.nazionalitaPlurale)
+                //                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale),
+
+        );
     }
 
     //--nome lista

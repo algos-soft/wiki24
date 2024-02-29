@@ -615,5 +615,4 @@ public class DidascaliaService {
         return listaOut;
     }
 
-
 }// end of Service class

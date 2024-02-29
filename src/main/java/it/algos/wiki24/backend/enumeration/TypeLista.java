@@ -11,19 +11,19 @@ import static it.algos.base24.backend.boot.BaseCost.*;
  * Time: 13:54
  */
 public enum TypeLista {
-    giornoNascita("nati", "nate", "giorno", "nascita", "Liste di nati per giorno", "Lista persone per giorno"),
-    giornoMorte("morti", "morte", "giorno", "morte", "Liste di morti per giorno", "Lista persone per giorno"),
-    annoNascita("nati", "nate", "anno", "nascita", "Liste di nati nel ", "Lista persone per anno"),
-    annoMorte("morti", "morte", "anno", "morte", "Liste di morti nel ", "Lista persone per anno"),
-    nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA, "Lista nazionalità", ""),
-    nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista nazionalità", ""),
-    attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA, "Lista attività", ""),
-    attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista attività", ""),
-    nomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per nome", ""),
-    cognomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per cognome", ""),
-    listaBreve(VUOTA, VUOTA, VUOTA, VUOTA, "", ""),
-    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA, "", ""),
-    nessunaLista(VUOTA, VUOTA, VUOTA, VUOTA, "", "");
+    giornoNascita("nati", "nate", "giorno", "nascita", "Liste di nati per giorno", "Lista persone per giorno", TypeLivello.giorni),
+    giornoMorte("morti", "morte", "giorno", "morte", "Liste di morti per giorno", "Lista persone per giorno", TypeLivello.giorni),
+    annoNascita("nati", "nate", "anno", "nascita", "Liste di nati nel ", "Lista persone per anno", TypeLivello.anni),
+    annoMorte("morti", "morte", "anno", "morte", "Liste di morti nel ", "Lista persone per anno", TypeLivello.anni),
+    attivitaSingolare("singolare", VUOTA, VUOTA, VUOTA, "Lista attività", "", TypeLivello.attivita),
+    attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista attività", "", TypeLivello.attivita),
+    nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA, "Lista nazionalità", "", TypeLivello.nazionalita),
+    nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista nazionalità", "", TypeLivello.nazionalita),
+    nomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per nome", "", null),
+    cognomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per cognome", "", null),
+    listaBreve(VUOTA, VUOTA, VUOTA, VUOTA, "", "", null),
+    listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA, "", "", null),
+    nessunaLista(VUOTA, VUOTA, VUOTA, VUOTA, "", "", null);
 
     private String tagLower;
 
@@ -41,8 +41,9 @@ public enum TypeLista {
 
     private String persone;
 
+    private TypeLivello typeLivello;
 
-    TypeLista(String tag, String tagF, String giornoAnno, String civile, String categoria, String persone) {
+    TypeLista(String tag, String tagF, String giornoAnno, String civile, String categoria, String persone, TypeLivello typeLivello) {
         this.tagLower = tag;
         this.tag = tag;
         this.tagF = tagF;
@@ -51,6 +52,7 @@ public enum TypeLista {
         this.categoria = categoria;
         this.persone = persone;
         this.tagUpper = tag != null && tag.length() > 0 ? tag.substring(0, 1).toUpperCase() + tag.substring(1) : VUOTA;
+        this.typeLivello = typeLivello != null ? typeLivello : TypeLivello.vuota;
     }
 
     public String getTagLower() {
@@ -83,5 +85,9 @@ public enum TypeLista {
 
     public String getPersone() {
         return persone;
+    }
+
+    public TypeLivello getTypeLivello() {
+        return typeLivello;
     }
 }

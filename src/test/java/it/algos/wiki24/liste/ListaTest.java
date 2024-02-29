@@ -41,7 +41,7 @@ public class ListaTest extends WikiStreamTest {
     @Inject
     QueryService queryService;
 
-    public static final boolean ESEGUE_SOLO_BODY = true;
+    public static final boolean ESEGUE_SOLO_BODY = false;
 
     /**
      * Classe principale di riferimento <br>
@@ -55,6 +55,11 @@ public class ListaTest extends WikiStreamTest {
     private Map<String, List<WrapDidascalia>> mappaSottoPagine;
 
     private Map<String, Integer> mappaDimensioni;
+
+    Map<String, WrapLista> mappaGenerale;
+
+    private WrapLista wrapLista;
+
 
     /**
      * Qui passa una volta sola <br>
@@ -81,6 +86,8 @@ public class ListaTest extends WikiStreamTest {
         mappaWrapDidascalie = null;
         mappaDimensioni = null;
         mappaSottoPagine = null;
+        mappaGenerale = null;
+        wrapLista = null;
     }
 
 
@@ -480,6 +487,24 @@ public class ListaTest extends WikiStreamTest {
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(508)
+    @DisplayName("508 - bodyTextNew")
+    void bodyTextNew(String nomeLista, TypeLista typeLista) {
+        System.out.println(("508 - bodyTextNew"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+
+        istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        mappaGenerale = istanza.getMappaGenerale();
+        ottenuto = istanza.bodyTextNew();
+        System.out.println(ottenuto);
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(601)
     @DisplayName("601 - bodyText")
     void bodyText(String nomeLista, TypeLista typeLista) {
@@ -488,10 +513,10 @@ public class ListaTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (true) {
-            System.out.println("Sospesa");
-            return;
-        }
+//        if (true) {
+//            System.out.println("Sospesa");
+//            return;
+//        }
 
         istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
         assertNotNull(istanza);
@@ -590,11 +615,8 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(message);
             System.out.println(VUOTA);
             System.out.println("Prime 5 sottopagine");
-            for (String keySottoPagina : listaStr.subList(0, Math.min(10, listaStr.size()))) {
+            for (String keySottoPagina : listaStr.subList(0, Math.min(5, listaStr.size()))) {
                 ottenuto = istanza.getBodySottoPagina(keySottoPagina);
-
-                Object alfa=istanza.getListaSottoSottoPagine();
-
                 if (textService.isValid(ottenuto)) {
                     message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);
                     System.out.println(message);
@@ -613,13 +635,52 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-
     @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(702)
-    @DisplayName("702 - printBodySottoPagina")
+    @DisplayName("702 - bodyTextNewSottoPagina")
+    void bodyTextNewSottoPagina(String nomeLista, TypeLista typeLista) {
+        System.out.println(("702 - bodyTextNewSottoPagina"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+
+        istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        listaStr = istanza.getListaSottoPagine();
+
+        if (listaStr.size() > 0) {
+            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d (sottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
+            System.out.println("Prime 5 sottopagine");
+            for (String keySottoPagina : listaStr.subList(0, Math.min(5, listaStr.size()))) {
+                ottenuto = istanza.getBodySottoPaginaNew(keySottoPagina);
+                if (textService.isValid(ottenuto)) {
+                    message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);
+                    System.out.println(message);
+
+                    System.out.println(ottenuto);
+                    System.out.println(VUOTA);
+                }
+                else {
+                    message = String.format("Non sono riuscito a recuperare il bodyText della sottoPagina [%s%s%s] esistente", nomeLista, SLASH, keySottoPagina);
+                    System.out.println(message);
+                }
+            }
+        }
+        else {
+            printMancanoBio("Non ci sono sottoPagine nella lista", nomeLista, typeLista);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(703)
+    @DisplayName("703 - printBodySottoPagina")
     void printBodySottoPagina(String nomeLista, TypeLista typeLista) {
-        System.out.println(("702 - printBodySottoPagina"));
+        System.out.println(("703 - printBodySottoPagina"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
