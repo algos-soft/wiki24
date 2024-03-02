@@ -4,6 +4,7 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.wiki24.backend.enumeration.*;
+import it.algos.wiki24.backend.service.*;
 import org.checkerframework.checker.units.qual.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
@@ -26,9 +27,8 @@ public class WrapLista {
     @Inject
     private TextService textService;
 
-    private boolean usaTitoloParagrafo;
-
-    private boolean usaRinvio;
+    @Inject
+    WikiUtilityService wikiUtilityService;
 
     private String titoloPagina;
 
@@ -36,30 +36,41 @@ public class WrapLista {
 
     private int sogliaSottoPagina;
 
+//    private boolean usaTitoloParagrafo;
+
+    private boolean usaRinvio;
+
     private List<WrapDidascalia> lista = new ArrayList<>();
 
+    private Map<String, WrapLista> mappa = new HashMap<>();
+
+
     public WrapLista(String titoloPagina, String keyParagrafo) {
-        this.usaTitoloParagrafo = false;
-        this.usaRinvio = false;
-        this.sogliaSottoPagina = MAX_INT_VALUE;
+        this(titoloPagina, keyParagrafo, MAX_INT_VALUE);
+    }
+
+    public WrapLista(String titoloPagina, String keyParagrafo, int sogliaSottoPagina) {
         this.titoloPagina = titoloPagina;
         this.keyParagrafo = keyParagrafo;
+        this.sogliaSottoPagina = sogliaSottoPagina;
+//        this.usaTitoloParagrafo = false;
+        this.usaRinvio = false;
     }
 
-    /**
-     * Fluent pattern Builder <br>
-     */
-    public WrapLista usaTitoloParagrafo() {
-        return usaTitoloParagrafo(true);
-    }
+//    /**
+//     * Fluent pattern Builder <br>
+//     */
+//    public WrapLista usaTitoloParagrafo() {
+//        return usaTitoloParagrafo(true);
+//    }
 
-    /**
-     * Fluent pattern Builder <br>
-     */
-    public WrapLista usaTitoloParagrafo(boolean usaTitoloParagrafo) {
-        this.usaTitoloParagrafo = usaTitoloParagrafo;
-        return this;
-    }
+//    /**
+//     * Fluent pattern Builder <br>
+//     */
+//    public WrapLista usaTitoloParagrafo(boolean usaTitoloParagrafo) {
+//        this.usaTitoloParagrafo = usaTitoloParagrafo;
+//        return this;
+//    }
 
     /**
      * Fluent pattern Builder <br>
@@ -98,24 +109,32 @@ public class WrapLista {
         return lista;
     }
 
-    public boolean isUsaTitoloParagrafo() {
-        return usaTitoloParagrafo;
-    }
+//    public boolean isUsaTitoloParagrafo() {
+//        return usaTitoloParagrafo;
+//    }
 
     public boolean isUsaRinvio() {
-        return usaRinvio && lista.size() > sogliaSottoPagina;
+        return usaRinvio;
     }
 
     public String getKeyParagrafo() {
-        return keyParagrafo+CAPO;
+        return keyParagrafo + CAPO;
     }
 
     public int getNumBio() {
-        return lista.size();
+        return lista != null ? lista.size() : mappa != null ? wikiUtilityService.getSizeMappa(mappa) : 0;
     }
 
     public void setLista(List<WrapDidascalia> lista) {
         this.lista = lista;
+    }
+
+    public int getSogliaSottoPagina() {
+        return sogliaSottoPagina;
+    }
+
+    public Map<String, WrapLista> getMappa() {
+        return mappa;
     }
 
 }

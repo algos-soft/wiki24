@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.service;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
@@ -220,6 +221,33 @@ public class WikiUtilityService {
 
         return size;
     }
+
+
+    public int getSizeMappa(Map<String, WrapLista> mappa) {
+        int size = 0;
+        WrapLista wrapLista;
+        List<WrapDidascalia> lista;
+        Map<String, WrapLista> mappaSub;
+
+        if (mappa != null) {
+            for (String key : mappa.keySet()) {
+                wrapLista = mappa.get(key);
+                if (wrapLista != null) {
+                    lista = wrapLista.getLista();
+                    mappaSub = wrapLista.getMappa();
+                    if (lista != null) {
+                        size += lista.size();
+                    }
+                    else {
+                        size += getSizeMappa(mappaSub);
+                    }
+                }
+            }
+        }
+
+        return size;
+    }
+
 
     public int getSizeMappaMappa(LinkedHashMap<String, LinkedHashMap<String, LinkedHashMap<String, List<String>>>> mappa3) {
         int size = 0;

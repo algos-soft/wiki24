@@ -603,6 +603,10 @@ public class DidascaliaService {
         List<WrapDidascalia> listaOut = new ArrayList<>();
         Map<String, WrapDidascalia> mappa = new HashMap<>();
 
+        if (listaIn == null) {
+            return null;
+        }
+
         for (WrapDidascalia wrap : listaIn) {
             mappa.put(wrap.getOrdineAlfabetico(), wrap);
         }

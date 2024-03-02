@@ -972,8 +972,10 @@ public class ListaTest extends WikiStreamTest {
                 message = String.format("%s", paragrafo);
                 System.out.println(message);
                 lista = mappa.get(paragrafo).getLista();
-                for (WrapDidascalia wrap : lista.subList(0, Math.min(10, lista.size()))) {
-                    printWrap(wrap);
+                if (lista != null) {
+                    for (WrapDidascalia wrap : lista.subList(0, Math.min(10, lista.size()))) {
+                        printWrap(wrap);
+                    }
                 }
                 System.out.println(VUOTA);
                 System.out.println(VUOTA);
@@ -1006,9 +1008,11 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(paragrafo);
 
             lista = mappa.get(paragrafo).getLista();
-            for (WrapDidascalia wrap : lista) {
-                System.out.print(TAB);
-                System.out.println(wrap.getDidascalia());
+            if (lista != null) {
+                for (WrapDidascalia wrap : lista) {
+                    System.out.print(TAB);
+                    System.out.println(wrap.getDidascalia());
+                }
             }
         }
     }
