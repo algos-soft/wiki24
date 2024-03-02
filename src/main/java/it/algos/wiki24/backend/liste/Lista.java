@@ -348,12 +348,12 @@ public class Lista {
 
         //--secondo livello paragrafi
         if (typeLivello.getLivelloParagrafi() >= 1) {
-            mappaSottoPagine();
+            mappaParagrafiAndSottoPagine();
         }
 
         //--terzo livello - paragrafi
         if (typeLivello.getLivelloParagrafi() >= 2) {
-            mappaSottoSottoPagine();
+            mappaParagrafiAndSottoSottoPagine();
         }
 
         this.fixMappaGenerale();
@@ -382,7 +382,6 @@ public class Lista {
                 if (usaSottoPaginaSingoloParagrafo) {
                     listaWrap = wrapListaParagrafo.getLista();
                     wrapListaParagrafo.usaRinvio();
-                    listaSottoPagine.add(keyParagrafo);
                     mappa = wrapListaParagrafo.getMappa();
 
                     if (listaWrap != null && listaWrap.size() > 0) {
@@ -406,12 +405,15 @@ public class Lista {
     /**
      * Rielabora la mappa per le sottoPagine - 2° livello <br>
      */
-    protected void mappaSottoPagine() {
+    protected void mappaParagrafiAndSottoPagine() {
         WrapLista wrapListaParagrafo;
         WrapLista wrapListaSub;
         String key;
         Map<String, WrapLista> mappa;
         List<WrapDidascalia> listaWrap;
+        int soglia;
+        int numBio;
+//        boolean usaRinvio = false;
 
         //--secondo livello
         if (typeLivello.getLivelloSottoPagine() >= 1) {
@@ -419,10 +421,10 @@ public class Lista {
                 wrapListaParagrafo = mappaGenerale.get(keyParagrafo);
 
                 if (wrapListaParagrafo != null) {
-                    if (wrapListaParagrafo.getNumBio() > wrapListaParagrafo.getSogliaSottoPagina()) {
+                    numBio = wrapListaParagrafo.getNumBio();
+                    soglia = wrapListaParagrafo.getSogliaSottoPagina();
+                    if (numBio > soglia) {
                         listaWrap = wrapListaParagrafo.getLista();
-                        wrapListaParagrafo.usaRinvio(true);//@todo controllare typeLista
-                        listaSottoPagine.add(keyParagrafo);
                         mappa = wrapListaParagrafo.getMappa();
 
                         if (listaWrap != null && listaWrap.size() > 0) {
@@ -436,9 +438,10 @@ public class Lista {
                                 wrapListaSub = mappa.get(key);
                                 wrapListaSub.add(wrap);
                             }
-                            wrapListaParagrafo.usaRinvio(true);//@todo controllare typeLista
                             wrapListaParagrafo.setLista(null);
                         }
+                        wrapListaParagrafo.usaRinvio(true);
+                        listaSottoPagine.add(keyParagrafo);
                     }
                     else {
                         wrapListaParagrafo.usaRinvio(false);
@@ -452,7 +455,7 @@ public class Lista {
     /**
      * Rielabora la mappa per le sottoSottoPagine - 3° livello <br>
      */
-    protected void mappaSottoSottoPagine() {
+    protected void mappaParagrafiAndSottoSottoPagine() {
         WrapLista wrapListaParagrafo;
         WrapLista wrapListaSub;
         WrapLista wrapListaSubSub;
@@ -724,8 +727,8 @@ public class Lista {
         StringBuffer buffer = new StringBuffer();
         boolean usaParagrafi;
         WrapLista wrapLista;
-        int livPagina = 1;
-        int livParagrafi = 1;
+//        int livPagina = 1;
+//        int livParagrafi = 1;
 
         usaParagrafi = numBio >= sogliaSottoPagina && mappaGenerale.size() >= sogliaParagrafi;
 
@@ -735,7 +738,7 @@ public class Lista {
 
         for (String keyParagrafo : mappaGenerale.keySet()) {
             wrapLista = mappaGenerale.get(keyParagrafo);
-            buffer.append(bodyParagrafo(livPagina, livParagrafi, usaParagrafi, keyParagrafo, wrapLista));
+            buffer.append(bodyParagrafo( usaParagrafi, keyParagrafo, wrapLista));
         }
         if (!usaParagrafi && numBio > sogliaDiv) {
             buffer.append(DIV_END_CAPO);
@@ -745,7 +748,7 @@ public class Lista {
         return bodyText;
     }
 
-    public String bodyParagrafo(int livPagina, int livParagrafi, boolean usaParagrafi, final String keyParagrafo, final WrapLista wrapLista) {
+    public String bodyParagrafo( boolean usaParagrafi, final String keyParagrafo, final WrapLista wrapLista) {
         StringBuffer buffer = new StringBuffer();
         List<WrapDidascalia> lista;
         int dimensioneParagrafo;
@@ -759,12 +762,12 @@ public class Lista {
         }
         if (wrapLista.isUsaRinvio()) {
             buffer.append(wrapLista.getRinvio());
-            if (livPagina == 1) {
-                listaSottoPagine.add(keyParagrafo);
-            }
-            if (livPagina == 2) {
-                listaSottoPagine.add(keyParagrafo + "x");
-            }
+//            if (livPagina == 1) {
+//                listaSottoPagine.add(keyParagrafo);
+//            }
+//            if (livPagina == 2) {
+//                listaSottoPagine.add(keyParagrafo + "x");
+//            }
         }
         else {
             if (usaParagrafi && usaDiv) {
@@ -796,55 +799,6 @@ public class Lista {
         }
     }
 
-    //    public String bodyTextConParagrafi() {
-    //        StringBuffer buffer = new StringBuffer();
-    //
-    //        for (String key : mappaWrapDidascalie.keySet()) {
-    //            buffer.append(singoloParagrafo(key));
-    //        }
-    //
-    //        return buffer.toString().trim();
-    //    }
-
-    //    /**
-    //     * Singolo paragrafo della pagina principale di 1° livello <br>
-    //     */
-    //    public String singoloParagrafo(String keyParagrafo) {
-    //        StringBuffer buffer = new StringBuffer();
-    //        int numVociParagrafo = mappaParagrafi.get(keyParagrafo);
-    //        boolean usaDiv = numVociParagrafo > sogliaDiv;
-    //        String sottoPagina;
-    //        String vedi;
-    //
-    //        buffer.append(getTitoloParagrafo(keyParagrafo, numVociParagrafo));
-    //
-    //        //corpo con/senza sottopagine
-    //        if (usaSottoPagineLista && numBio > sogliaVociTotaliPaginaPerSottopagine && numVociParagrafo > sogliaSottoPagina) {
-    //            sottoPagina = String.format("%s%s%s", textService.primaMaiuscola(titoloPagina), SLASH, keyParagrafo);
-    //            vedi = String.format("{{Vedi anche|%s}}", sottoPagina);
-    //            buffer.append(vedi);
-    //            buffer.append(CAPO);
-    //
-    //            listaSottoPagine.add(keyParagrafo);
-    //        }
-    //        else {
-    //            if (usaDiv) {
-    //                buffer.append(DIV_INI_CAPO);
-    //            }
-    //
-    //            for (WrapDidascalia wrap : mappaWrapDidascalie.get(keyParagrafo)) {
-    //                buffer.append(ASTERISCO);
-    //                buffer.append(wrap.getDidascalia());
-    //                buffer.append(CAPO);
-    //            }
-    //
-    //            if (usaDiv) {
-    //                buffer.append(DIV_END_CAPO);
-    //            }
-    //        }
-    //
-    //        return buffer.toString();
-    //    }
 
     public String getTitoloParagrafo(String keyParagrafo, int numVociParagrafo) {
         if (usaIncludeParagrafi && numBio < sogliaIncludeAll) {
@@ -855,32 +809,6 @@ public class Lista {
         }
     }
 
-    //    /**
-    //     * Testo della pagina <br>
-    //     * Corpo unico senza paragrafi e senza sottopagine <br>
-    //     */
-    //    public String bodyTextSenzaParagrafi() {
-    //        StringBuffer buffer = new StringBuffer();
-    //        boolean usaDiv = numBio > sogliaDiv;
-    //
-    //        if (usaDiv) {
-    //            buffer.append(DIV_INI_CAPO);
-    //        }
-    //
-    //        for (String keyParagrafo : mappaWrapDidascalie.keySet()) {
-    //            for (WrapDidascalia wrap : mappaWrapDidascalie.get(keyParagrafo)) {
-    //                buffer.append(ASTERISCO);
-    //                buffer.append(wrap.getDidascalia());
-    //                buffer.append(CAPO);
-    //            }
-    //        }
-    //
-    //        if (usaDiv) {
-    //            buffer.append(DIV_END_CAPO);
-    //        }
-    //
-    //        return buffer.toString();
-    //    }
 
     public int getNumBio() {
         return numBio;
@@ -894,9 +822,6 @@ public class Lista {
         return listaWrapDidascalie;
     }
 
-    //    public Map<String, List<WrapDidascalia>> getMappaWrapDidascalie() {
-    //        return mappaWrapDidascalie;
-    //    }
 
     public Map<String, Integer> getMappaParagrafi() {
         return mappaParagrafi;
@@ -915,27 +840,6 @@ public class Lista {
         return listaSottoPagine;
     }
 
-    //    public String getBodySottoPagina(String keySottoPagina) {
-    //        List<WrapDidascalia> listaSottoPagina;
-    //
-    //        if (!usaSottoPagineLista) {
-    //            return VUOTA;
-    //        }
-    //        if (!listaSottoPagine.contains(keySottoPagina)) {
-    //            return VUOTA;
-    //        }
-    //        if (!mappaWrapDidascalie.keySet().contains(keySottoPagina)) {
-    //            return VUOTA;
-    //        }
-    //        listaSottoPagina = mappaWrapDidascalie.get(keySottoPagina);
-    //
-    //        if (usaParagrafiSottoPagina) {
-    //            return bodyTextSottoPaginaConParagrafi(listaSottoPagina);
-    //        }
-    //        else {
-    //            return bodyTextSottoPaginaSenzaParagrafi(listaSottoPagina);
-    //        }
-    //    }
 
     public String getBodySottoPagina(final String keySottoPagina) {
         StringBuffer buffer = new StringBuffer();
