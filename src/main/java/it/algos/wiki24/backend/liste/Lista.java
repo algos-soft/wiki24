@@ -106,6 +106,7 @@ public class Lista {
     // titolo della sottoPagina
     protected List<String> listaSottoSottoPagine = new ArrayList<>();
 
+    protected Map<String, String> mappaBodySottoPagine = new LinkedHashMap<>();
 
     /**
      * Costruttore base con 2 parametri (obbligatori) <br>
@@ -128,7 +129,7 @@ public class Lista {
         this.mappaGenerale();
         //        this.mappaWrapDidascalie();
         this.bodyText();
-        //        this.spazzolaSottoPaginePerSottoSottoPagine();
+        this.bodyTextSottoPagine();
     }
 
     /**
@@ -413,7 +414,7 @@ public class Lista {
         List<WrapDidascalia> listaWrap;
         int soglia;
         int numBio;
-//        boolean usaRinvio = false;
+        //        boolean usaRinvio = false;
 
         //--secondo livello
         if (typeLivello.getLivelloSottoPagine() >= 1) {
@@ -727,18 +728,15 @@ public class Lista {
         StringBuffer buffer = new StringBuffer();
         boolean usaParagrafi;
         WrapLista wrapLista;
-//        int livPagina = 1;
-//        int livParagrafi = 1;
 
         usaParagrafi = numBio >= sogliaSottoPagina && mappaGenerale.size() >= sogliaParagrafi;
 
         if (!usaParagrafi && numBio > sogliaDiv) {
             buffer.append(DIV_INI_CAPO);
         }
-
         for (String keyParagrafo : mappaGenerale.keySet()) {
             wrapLista = mappaGenerale.get(keyParagrafo);
-            buffer.append(bodyParagrafo( usaParagrafi, keyParagrafo, wrapLista));
+            buffer.append(bodyParagrafo(usaParagrafi, keyParagrafo, wrapLista));
         }
         if (!usaParagrafi && numBio > sogliaDiv) {
             buffer.append(DIV_END_CAPO);
@@ -748,7 +746,8 @@ public class Lista {
         return bodyText;
     }
 
-    public String bodyParagrafo( boolean usaParagrafi, final String keyParagrafo, final WrapLista wrapLista) {
+
+    private String bodyParagrafo(boolean usaParagrafi, final String keyParagrafo, final WrapLista wrapLista) {
         StringBuffer buffer = new StringBuffer();
         List<WrapDidascalia> lista;
         int dimensioneParagrafo;
@@ -762,12 +761,6 @@ public class Lista {
         }
         if (wrapLista.isUsaRinvio()) {
             buffer.append(wrapLista.getRinvio());
-//            if (livPagina == 1) {
-//                listaSottoPagine.add(keyParagrafo);
-//            }
-//            if (livPagina == 2) {
-//                listaSottoPagine.add(keyParagrafo + "x");
-//            }
         }
         else {
             if (usaParagrafi && usaDiv) {
@@ -786,17 +779,41 @@ public class Lista {
         return buffer.toString();
     }
 
-    public void spazzolaSottoPaginePerSottoSottoPagine() {
-        List<String> listaStr = new ArrayList<>();
 
-        if (getListaSottoPagine() != null && getListaSottoPagine().size() > 0) {
-            for (String key : this.getListaSottoPagine()) {
-                listaStr.add(key);
-            }
-            for (String keySottoPagina : listaStr) {
-                this.getBodySottoPagina(keySottoPagina);
+    /**
+     * Testo body delle sottoPagine <br>
+     */
+    private void bodyTextSottoPagine() {
+        String bodySingolaSottoPagina;
+
+        if (mappaBodySottoPagine != null && listaSottoPagine != null && listaSottoPagine.size() > 0) {
+            for (String keySottoPagina : listaSottoPagine) {
+                bodySingolaSottoPagina = bodyTextSottoPagina(keySottoPagina);
+                mappaBodySottoPagine.put(keySottoPagina, bodySingolaSottoPagina);
             }
         }
+    }
+
+
+    /**
+     * Testo body delle sottoPagine <br>
+     */
+    private String bodyTextSottoPagina(String keySottoPagina) {
+        StringBuffer buffer = new StringBuffer();
+        WrapLista wrapLista;
+        boolean usaParagrafi = typeLista.getTypeLivello().getLivelloParagrafi() >= 1;
+        Map<String, WrapLista> mappa;
+
+        wrapLista = mappaGenerale.get(keySottoPagina);
+        mappa = wrapLista.getMappa();
+        if (mappa != null && mappa.size() > 0) {
+            for (String keyParagrafoSottoPagina : mappa.keySet()) {
+                wrapLista = mappa.get(keyParagrafoSottoPagina);
+                buffer.append(bodyParagrafo(usaParagrafi, keyParagrafoSottoPagina, wrapLista));
+            }
+        }
+
+        return buffer.toString();
     }
 
 
@@ -841,12 +858,12 @@ public class Lista {
     }
 
 
-    public String getBodySottoPagina(final String keySottoPagina) {
+    public String getBodySottoPagina2(final String keySottoPagina) {
         StringBuffer buffer = new StringBuffer();
         WrapLista wrapLista;
         boolean usaParagrafi = numBio >= sogliaSottoPagina && mappaGenerale.size() >= sogliaParagrafi;
-        int livPagina = 2;
-        int livParagrafi = 2;
+        //        int livPagina = 2;
+        //        int livParagrafi = 2;
 
         if (!usaSottoPagineLista) {
             return VUOTA;
@@ -863,7 +880,7 @@ public class Lista {
 
         wrapLista = mappaGenerale.get(keySottoPagina);
         //        wrapLista.usaRinvio(true);
-        buffer.append(bodyParagrafo(livPagina, livParagrafi, false, keySottoPagina, wrapLista));
+        buffer.append(bodyParagrafo(false, keySottoPagina, wrapLista));
 
         if (!usaParagrafi && numBio > sogliaDiv) {
             buffer.append(DIV_END_CAPO);
@@ -947,6 +964,10 @@ public class Lista {
 
     public Map<String, WrapLista> getMappaGenerale() {
         return mappaGenerale;
+    }
+
+    public String getBodySottoPagina(String keySottoPagina) {
+        return mappaBodySottoPagine != null ? mappaBodySottoPagine.get(keySottoPagina) : VUOTA;
     }
 
 }

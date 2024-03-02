@@ -44,7 +44,7 @@ public class ListaTest extends WikiStreamTest {
     @Inject
     WikiUtilityService wikiUtilityService;
 
-    public static final boolean ESEGUE_SOLO_BODY = true;
+    public static final boolean ESEGUE_SOLO_BODY = false;
 
     /**
      * Classe principale di riferimento <br>
@@ -744,45 +744,6 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
-    //    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
-    //    @Order(702)
-    //    @DisplayName("702 - bodyTextSottoPagina")
-    //    void bodyTextSottoPagina(String nomeLista, TypeLista typeLista) {
-    //        System.out.println(("702 - bodyTextSottoPagina"));
-    //        System.out.println(VUOTA);
-    //        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
-    //            return;
-    //        }
-    //
-    //        istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
-    //        assertNotNull(istanza);
-    //        listaStr = istanza.getListaSottoPagine();
-    //
-    //        if (listaStr.size() > 0) {
-    //            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d (sottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
-    //            System.out.println(message);
-    //            System.out.println(VUOTA);
-    //            System.out.println("Prime 5 sottopagine");
-    //            for (String keySottoPagina : listaStr.subList(0, Math.min(5, listaStr.size()))) {
-    //                ottenuto = istanza.getBodySottoPagina(keySottoPagina);
-    //                if (textService.isValid(ottenuto)) {
-    //                    message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);
-    //                    System.out.println(message);
-    //
-    //                    System.out.println(ottenuto);
-    //                    System.out.println(VUOTA);
-    //                }
-    //                else {
-    //                    message = String.format("Non sono riuscito a recuperare il bodyText della sottoPagina [%s%s%s] esistente", nomeLista, SLASH, keySottoPagina);
-    //                    System.out.println(message);
-    //                }
-    //            }
-    //        }
-    //        else {
-    //            printMancanoBio("Non ci sono sottoPagine nella lista", nomeLista, typeLista);
-    //        }
-    //    }
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
@@ -791,10 +752,11 @@ public class ListaTest extends WikiStreamTest {
     void printBodySottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("703 - printBodySottoPagina"));
         System.out.println(VUOTA);
+        String titoloPagina;
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (true) {
+        if (false) {
             System.out.println("Sospesa");
             return;
         }
@@ -810,7 +772,19 @@ public class ListaTest extends WikiStreamTest {
             for (String keySottoPagina : listaStr) {
                 ottenuto = istanza.getBodySottoPagina(keySottoPagina);
                 if (textService.isValid(ottenuto)) {
-                    queryService.writeTest(nomeLista + CAPO + ottenuto);
+                    titoloPagina = switch (typeLista) {
+                        case giornoNascita -> wikiUtilityService.wikiTitleNatiGiorno(nomeLista);
+                        case giornoMorte -> wikiUtilityService.wikiTitleMortiGiorno(nomeLista);
+                        case annoNascita -> wikiUtilityService.wikiTitleNatiAnno(nomeLista);
+                        case annoMorte -> wikiUtilityService.wikiTitleMortiAnno(nomeLista);
+                        case attivitaSingolare -> wikiUtilityService.wikiTitleAttivita(nomeLista);
+                        case attivitaPlurale -> wikiUtilityService.wikiTitleAttivita(nomeLista);
+                        case nazionalitaSingolare -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
+                        case nazionalitaPlurale -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
+                        default -> null;
+                    };
+                    titoloPagina = textService.setDoppieQuadre(titoloPagina + SLASH + keySottoPagina);
+                    queryService.writeTest(titoloPagina + CAPO + ottenuto);
                 }
                 else {
                     message = String.format("Non sono riuscito a recuperare il bodyText della sottoPagina [%s%s%s] esistente", nomeLista, SLASH, keySottoPagina);

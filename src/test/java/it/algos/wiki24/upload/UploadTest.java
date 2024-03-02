@@ -33,7 +33,7 @@ public class UploadTest extends WikiStreamTest {
     @Inject
     QueryService queryService;
 
-    public static final boolean ESEGUE_SOLO_UPLOD = true;
+    public static final boolean ESEGUE_SOLO_UPLOD = false;
 
     private Lista istanzaLista;
 
@@ -312,7 +312,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "LISTA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
@@ -324,7 +324,7 @@ public class UploadTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (true) {
+        if (false) {
             System.out.println("Sospesa");
             return;
         }
@@ -478,7 +478,7 @@ public class UploadTest extends WikiStreamTest {
             ottenutoArray = istanzaLista.getKeyParagrafi();
             for (String keyParagrafoSenzaSottopagina : ottenutoArray) {
                 if (!listaStr.contains(keyParagrafoSenzaSottopagina)) {
-//                    ottenutoIntero = istanzaLista.getNumBioSottoPagina(keyParagrafoSenzaSottopagina);
+                    //                    ottenutoIntero = istanzaLista.getNumBioSottoPagina(keyParagrafoSenzaSottopagina);
                     totaleEffettivoParagrafiSenzaSottopagina += ottenutoIntero;
                 }
             }
@@ -491,7 +491,7 @@ public class UploadTest extends WikiStreamTest {
             if (!byPassaErrori) {
                 System.out.println(VUOTA);
                 keySottopaginaErrata = "Brumaio";
-//                ottenutoIntero = istanzaLista.getNumBioSottoPagina(keySottopaginaErrata);
+                //                ottenutoIntero = istanzaLista.getNumBioSottoPagina(keySottopaginaErrata);
                 if (ottenutoIntero == INT_ERROR) {
                     message = String.format("Nella lista [%s] non esiste un paragrafo/sottopagina [%s]", nomeLista, keySottopaginaErrata);
                     System.out.println(message);
@@ -753,7 +753,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-        @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(512)
     @DisplayName("512 - uploadTestAll")
@@ -792,7 +792,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-//    @ParameterizedTest
+    //    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(513)
     @DisplayName("513 - uploadRealSottopagina")
