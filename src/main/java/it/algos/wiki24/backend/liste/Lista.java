@@ -321,16 +321,14 @@ public class Lista {
     protected Map<String, WrapLista> mappaGenerale() {
         String key;
         WrapLista wrapLista;
-        //        boolean usaTitoloParagrafo = true;
-        //        boolean usaRinvio = usaSottoPagineLista;
         int soglia = WPref.sogliaSottoPagina.getInt();
 
         if (listaWrapDidascalie == null || listaWrapDidascalie.size() == 0) {
             listaWrapDidascalie = listaWrapDidascalie();
         }
 
-        //--primo livello
-        if (typeLivello.getLivelloPagine() >= 1) {
+        //--primo livello paragrafi (sempre)
+        if (typeLivello.getLivelloParagrafi() > 0) {
             for (WrapDidascalia wrap : listaWrapDidascalie) {
                 key = wrap.getPrimoLivello();
 
@@ -348,13 +346,13 @@ public class Lista {
         //--Solo per il 1° livello. Nei livelli successivi viene fatto insieme alla scansione
         fixListaMappaPrimoLivello();
 
-        //--secondo livello - paragrafi
-        if (typeLivello.getLivelloPagine() >= 2) {
+        //--secondo livello paragrafi
+        if (typeLivello.getLivelloParagrafi() >= 1) {
             mappaSottoPagine();
         }
 
         //--terzo livello - paragrafi
-        if (typeLivello.getLivelloPagine() >= 3) {
+        if (typeLivello.getLivelloParagrafi() >= 2) {
             mappaSottoSottoPagine();
         }
 
@@ -372,10 +370,9 @@ public class Lista {
         String key;
         Map<String, WrapLista> mappa;
         List<WrapDidascalia> listaWrap;
-        int numBio = 0;
+        int numBio;
         boolean usaSottoPaginaSingoloParagrafo;
-        boolean usaSottoPagineGeneraleDiQuestoLivello = numBio >= sogliaSottoPagina && mappaGenerale.size() >= sogliaParagrafi;
-        usaSottoPagineGeneraleDiQuestoLivello = true;//@todo provvisorio @todo controllare typeLista
+        boolean usaSottoPagineGeneraleDiQuestoLivello = typeLivello.getLivelloSottoPagine() > 0;
 
         if (usaSottoPagineGeneraleDiQuestoLivello) {
             for (String keyParagrafo : mappaGenerale.keySet()) {
@@ -417,7 +414,7 @@ public class Lista {
         List<WrapDidascalia> listaWrap;
 
         //--secondo livello
-        if (typeLivello.getLivelloPagine() >= 2) {
+        if (typeLivello.getLivelloSottoPagine() >= 1) {
             for (String keyParagrafo : mappaGenerale.keySet()) {
                 wrapListaParagrafo = mappaGenerale.get(keyParagrafo);
 
@@ -463,7 +460,7 @@ public class Lista {
         Map<String, WrapLista> mappa;
 
         //--terzo livello
-        if (typeLivello.getLivelloPagine() >= 3) {
+        if (typeLivello.getLivelloSottoPagine() >= 2) {
             for (String keySottoPagina : listaSottoPagine) {
                 wrapListaParagrafo = mappaGenerale.get(keySottoPagina);
                 mappa = wrapListaParagrafo.getMappa();
@@ -757,7 +754,7 @@ public class Lista {
         lista = wrapLista.getLista();
         dimensioneParagrafo = wrapLista.getNumBio();
         usaDiv = dimensioneParagrafo > sogliaDiv;
-        if (  usaParagrafi) {
+        if (usaParagrafi) {
             buffer.append(getTitoloParagrafo(keyParagrafo, dimensioneParagrafo));
         }
         if (wrapLista.isUsaRinvio()) {

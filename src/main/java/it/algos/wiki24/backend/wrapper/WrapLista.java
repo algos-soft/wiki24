@@ -36,14 +36,14 @@ public class WrapLista {
 
     private int sogliaSottoPagina;
 
-//    private boolean usaTitoloParagrafo;
-
     private boolean usaRinvio;
 
     private List<WrapDidascalia> lista = new ArrayList<>();
 
     private Map<String, WrapLista> mappa = new HashMap<>();
 
+    public WrapLista() {
+    }
 
     public WrapLista(String titoloPagina, String keyParagrafo) {
         this(titoloPagina, keyParagrafo, MAX_INT_VALUE);
@@ -53,24 +53,9 @@ public class WrapLista {
         this.titoloPagina = titoloPagina;
         this.keyParagrafo = keyParagrafo;
         this.sogliaSottoPagina = sogliaSottoPagina;
-//        this.usaTitoloParagrafo = false;
         this.usaRinvio = false;
     }
 
-//    /**
-//     * Fluent pattern Builder <br>
-//     */
-//    public WrapLista usaTitoloParagrafo() {
-//        return usaTitoloParagrafo(true);
-//    }
-
-//    /**
-//     * Fluent pattern Builder <br>
-//     */
-//    public WrapLista usaTitoloParagrafo(boolean usaTitoloParagrafo) {
-//        this.usaTitoloParagrafo = usaTitoloParagrafo;
-//        return this;
-//    }
 
     /**
      * Fluent pattern Builder <br>
@@ -109,9 +94,6 @@ public class WrapLista {
         return lista;
     }
 
-//    public boolean isUsaTitoloParagrafo() {
-//        return usaTitoloParagrafo;
-//    }
 
     public boolean isUsaRinvio() {
         return usaRinvio;
