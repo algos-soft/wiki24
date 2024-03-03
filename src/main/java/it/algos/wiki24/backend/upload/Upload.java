@@ -351,7 +351,7 @@ public class Upload {
         else {
             if (risultato.isValido() && risultato.isModificata() == false && risultato.getValidMessage().equals(NESSUNA_MODIFICA)) {
                 if (isSottoPagina) {
-                    message = String.format("Non registrata la sottoPagina [%s%s%s] perché le modifiche erano solo sulla data", nomeLista, SLASH, keySottoPagina);
+                    message = String.format("Non registrata la sottoPagina [%s] perché le modifiche erano solo sulla data", titoloPagina);
                 }
                 else {
                     message = String.format("Non registrata la pagina [%s] perché le modifiche erano solo sulla data", nomeLista);
@@ -361,10 +361,10 @@ public class Upload {
             else {
                 if (risultato.isValido() && risultato.isModificata() == true) {
                     if (isSottoPagina) {
-                        message = String.format("La sottoPagina [%s%s%s] è stata registrata", nomeLista, SLASH, keySottoPagina);
+                        message = String.format("La sottoPagina [%s] è stata registrata", titoloPagina);
                     }
                     else {
-                        message = String.format("La pagina [%s] è stata registrata", nomeLista);
+                        message = String.format("La pagina [%s] è stata registrata", titoloPagina);
                     }
                     logger.debug(new WrapLog().message(message).type(TypeLog.upload));
                 }
@@ -746,7 +746,7 @@ public class Upload {
         String titoloLista;
 
         if (isSottoPagina) {
-//            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
+            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
         }
         else {
             if (istanzaLista != null && istanzaLista.getTypeLista() == typeLista) {
@@ -1153,13 +1153,12 @@ public class Upload {
      * zero se i dati sono validi ma non ci sono biografie <br>
      */
     public int numBio() {
-        if (isSottoPagina) {
-            //            numBio = istanzaLista.n(keySottoPagina);
-            //            numBio= istanzaLista.getMappaSottoPagine().get(keySottoPagina).size();
-//            numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
-        }
-        else {
-            if (numBio == 0) {
+
+        if (numBio == 0) {
+            if (isSottoPagina) {
+                numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
+            }
+            else {
                 numBio = istanzaLista.getNumBio();
             }
         }
@@ -1181,7 +1180,7 @@ public class Upload {
      */
     public int numBio(String keySottopagina) {
         if (numBio == 0) {
-//            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
+            //            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
         }
 
         return numBio;
@@ -1202,6 +1201,10 @@ public class Upload {
         }
 
         return uploadText;
+    }
+
+    public String getBodySottoPagina(String keySottoPagina) {
+        return istanzaLista != null ? istanzaLista.getBodySottoPagina(keySottoPagina) : VUOTA;
     }
 
 }

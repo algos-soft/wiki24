@@ -4,9 +4,6 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.interfaces.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
-import jakarta.annotation.*;
-import org.springframework.beans.factory.annotation.*;
-import org.springframework.stereotype.*;
 
 import java.time.*;
 import java.util.*;
@@ -162,7 +159,7 @@ public enum WPref implements IPref {
     sogliaDiv("sogliaDiv", TypePref.integer, 5, "Soglia minima di voci per usare {{Div col}} nel singolo paragrafo"),
     sogliaParagrafi("sogliaParagrafi", TypePref.integer, 3, "Soglia minima di paragrafi per mostrarli"),
     sogliaIncludeAll("sogliaIncludeAll", TypePref.integer, 200, "Soglia minima di voci totali della pagina per 'includerla' in giorni/anni"),
-    sogliaPaginaGiorniAnni("sogliaPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
+    sogliaSottoPaginaGiorniAnni("sogliaSottoPaginaGiorniAnni", TypePref.integer, 1500, "Soglia minima di voci totali della pagina di un giorno/anno per creare le sottopagine dei paragrafi"),
     sogliaSottoPaginaAttNaz("sogliaSottoPaginaAttNaz", TypePref.integer, 3000, "Soglia minima di voci totali della sottoPagina di att/naz per creare le sottoSottoPagine per ogni lettere alfabetica"),
     sogliaPaginaAttivita("sogliaPaginaAttivita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di attività sul server wiki"),
     sogliaPaginaNazionalita("sogliaPaginaNazionalita", TypePref.integer, 50, "Soglia minima di voci per creare una pagina della lista di nazionalità sul server wiki"),

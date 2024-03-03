@@ -179,8 +179,8 @@ public class Lista {
         };
 
         this.sogliaVociTotaliPaginaPerSottopagine = switch (typeLista) {
-            case giornoNascita, giornoMorte -> WPref.sogliaPaginaGiorniAnni.getInt();
-            case annoNascita, annoMorte -> WPref.sogliaPaginaGiorniAnni.getInt();
+            case giornoNascita, giornoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
+            case annoNascita, annoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
             case attivitaSingolare, attivitaPlurale -> WPref.sogliaSottoPagina.getInt();
             case nazionalitaSingolare, nazionalitaPlurale -> WPref.sogliaSottoPagina.getInt();
             default -> 0;
@@ -343,6 +343,8 @@ public class Lista {
             }
         }
 
+        this.fixMappaGenerale();
+
         //--Fix eventuale lista -> mappa se paragrafo -> sottoPagina
         //--Solo per il 1° livello. Nei livelli successivi viene fatto insieme alla scansione
         fixListaMappaPrimoLivello();
@@ -357,7 +359,6 @@ public class Lista {
             mappaParagrafiAndSottoSottoPagine();
         }
 
-        this.fixMappaGenerale();
         return mappaGenerale;
     }
 
@@ -396,7 +397,6 @@ public class Lista {
                             wrapListaSub = mappa.get(key);
                             wrapListaSub.add(wrap);
                         }
-                        wrapListaParagrafo.setLista(null);
                     }
                 }
             }
@@ -413,8 +413,20 @@ public class Lista {
         Map<String, WrapLista> mappa;
         List<WrapDidascalia> listaWrap;
         int soglia;
-        int numBio;
-        //        boolean usaRinvio = false;
+        int numBioParagrafo;
+        int sogliaMinimaPaginaPerCreareSottoPagine;
+
+        boolean usaSottoPagine;
+
+        sogliaMinimaPaginaPerCreareSottoPagine = switch (typeLista) {
+            case giornoNascita, giornoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
+            case annoNascita, annoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
+            case attivitaPlurale -> 50;
+            case nazionalitaPlurale -> 50;
+            default -> MAX_INT_VALUE;
+        };
+
+        usaSottoPagine = numBio > sogliaMinimaPaginaPerCreareSottoPagine;
 
         //--secondo livello
         if (typeLivello.getLivelloSottoPagine() >= 1) {
@@ -422,13 +434,13 @@ public class Lista {
                 wrapListaParagrafo = mappaGenerale.get(keyParagrafo);
 
                 if (wrapListaParagrafo != null) {
-                    numBio = wrapListaParagrafo.getNumBio();
+                    numBioParagrafo = wrapListaParagrafo.getNumBio();
                     soglia = wrapListaParagrafo.getSogliaSottoPagina();
-                    if (numBio > soglia) {
-                        listaWrap = wrapListaParagrafo.getLista();
-                        mappa = wrapListaParagrafo.getMappa();
+                    listaWrap = wrapListaParagrafo.getLista();
+                    mappa = wrapListaParagrafo.getMappa();
 
-                        if (listaWrap != null && listaWrap.size() > 0) {
+                    if (usaSottoPagine && numBioParagrafo > soglia) {
+                        if (mappa.size() < 1) {
                             for (WrapDidascalia wrap : listaWrap) {
                                 key = wrap.getSecondoLivello();
                                 if (!mappa.containsKey(key)) {
@@ -439,8 +451,8 @@ public class Lista {
                                 wrapListaSub = mappa.get(key);
                                 wrapListaSub.add(wrap);
                             }
-                            wrapListaParagrafo.setLista(null);
                         }
+
                         wrapListaParagrafo.usaRinvio(true);
                         listaSottoPagine.add(keyParagrafo);
                     }
@@ -585,48 +597,6 @@ public class Lista {
         mappaParagrafi = fixAltreInCodaInt(mappaParagrafi, tagAltre);
     }
 
-    //    public void fixMappaWrapDidascalie() {
-    //        int size;
-    //        String tagAltre;
-    //        List<WrapDidascalia> lista;
-    //
-    //        for (String keyParagrafo : mappaWrapDidascalie.keySet()) {
-    //            size = mappaWrapDidascalie.get(keyParagrafo).size();
-    //            mappaParagrafi.put(keyParagrafo, size);
-    //        }
-    //
-    //        mappaWrapDidascalie = switch (typeLista) {
-    //            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaWrapDidascalie);
-    //            default -> mappaWrapDidascalie;
-    //        };
-    //
-    //        mappaParagrafi = switch (typeLista) {
-    //            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaParagrafi);
-    //            default -> mappaParagrafi;
-    //        };
-    //
-    //        for (String key : mappaWrapDidascalie.keySet()) {
-    //            lista = mappaWrapDidascalie.get(key);
-    //            lista = switch (typeLista) {
-    //                case giornoNascita, giornoMorte, annoNascita, annoMorte -> lista;
-    //                case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> didascaliaService.ordinamentoAlfabetico(lista);
-    //                default -> lista;
-    //            };
-    //            mappaWrapDidascalie.put(key, lista);
-    //        }
-    //
-    //        usaParagrafiLista = numBio >= sogliaSottoPagina && mappaWrapDidascalie.size() >= sogliaParagrafi;
-    //
-    //        tagAltre = switch (typeLista) {
-    //            case giornoNascita, giornoMorte -> TypeInesistente.giorno.getTag();
-    //            case annoNascita, annoMorte -> TypeInesistente.anno.getTag();
-    //            case attivitaSingolare, attivitaPlurale -> TypeInesistente.nazionalita.getTag();
-    //            case nazionalitaSingolare, nazionalitaPlurale -> TypeInesistente.attivita.getTag();
-    //            default -> VUOTA;
-    //        };
-    //        mappaWrapDidascalie = fixAltreInCodaWrap(mappaWrapDidascalie, tagAltre);
-    //        mappaParagrafi = fixAltreInCodaInt(mappaParagrafi, tagAltre);
-    //    }
 
     /**
      * Sposta in coda alla mappa il paragrafo 'Altre...' (eventuale) <br>
@@ -699,25 +669,6 @@ public class Lista {
         return mappaOut;
     }
 
-    //    /**
-    //     * Testo body della pagina suddiviso (eventualmente) in paragrafi <br>
-    //     *
-    //     * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
-    //     */
-    //    @Deprecated
-    //    protected String bodyTextOld() {
-    //        StringBuffer buffer = new StringBuffer();
-    //
-    //        if (usaParagrafiLista) {
-    //            buffer.append(bodyTextConParagrafi());
-    //        }
-    //        else {
-    //            buffer.append(bodyTextSenzaParagrafi());
-    //        }
-    //
-    //        bodyText = buffer.toString().trim();
-    //        return bodyText;
-    //    }
 
     /**
      * Testo body della pagina suddiviso (eventualmente) in paragrafi <br>
@@ -749,11 +700,18 @@ public class Lista {
 
     private String bodyParagrafo(boolean usaParagrafi, final String keyParagrafo, final WrapLista wrapLista) {
         StringBuffer buffer = new StringBuffer();
+        String message;
         List<WrapDidascalia> lista;
         int dimensioneParagrafo;
         boolean usaDiv;
 
         lista = wrapLista.getLista();
+        if (lista == null) {
+            message = String.format("Manca la lista nel paragrafo [%s%s%s]", nomeLista, SLASH, keyParagrafo);
+            logger.error(new WrapLog().exception(new Exception(message)));
+            return VUOTA;
+        }
+
         dimensioneParagrafo = wrapLista.getNumBio();
         usaDiv = dimensioneParagrafo > sogliaDiv;
         if (usaParagrafi) {
@@ -801,16 +759,26 @@ public class Lista {
     private String bodyTextSottoPagina(String keySottoPagina) {
         StringBuffer buffer = new StringBuffer();
         WrapLista wrapLista;
-        boolean usaParagrafi = typeLista.getTypeLivello().getLivelloParagrafi() >= 1;
+        boolean usaParagrafi = typeLista.getTypeLivello().getLivelloParagrafi() >= 2;
         Map<String, WrapLista> mappa;
+        boolean usaDiv;
 
         wrapLista = mappaGenerale.get(keySottoPagina);
         mappa = wrapLista.getMappa();
+
+        if (!usaParagrafi && numBio > sogliaDiv) {
+            buffer.append(DIV_INI_CAPO);
+        }
+
         if (mappa != null && mappa.size() > 0) {
             for (String keyParagrafoSottoPagina : mappa.keySet()) {
                 wrapLista = mappa.get(keyParagrafoSottoPagina);
                 buffer.append(bodyParagrafo(usaParagrafi, keyParagrafoSottoPagina, wrapLista));
             }
+        }
+
+        if (!usaParagrafi && numBio > sogliaDiv) {
+            buffer.append(DIV_END_CAPO);
         }
 
         return buffer.toString();

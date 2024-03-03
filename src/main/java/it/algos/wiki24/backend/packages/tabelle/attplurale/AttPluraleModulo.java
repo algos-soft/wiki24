@@ -236,7 +236,7 @@ public class AttPluraleModulo extends WikiModulo {
 
     @Override
     public void uploadPagina(AbstractEntity attivitaPlurale) {
-        uploadService.attivitaAll((AttPluraleEntity) attivitaPlurale);
+        uploadService.attivita((AttPluraleEntity) attivitaPlurale);
     }
 
 

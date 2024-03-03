@@ -620,10 +620,11 @@ public class UploadTest extends WikiStreamTest {
         }
 
         if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
             for (String keySottopagina : listaStr) {
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
-                assertNotNull(istanza);
-                ottenuto = istanza.getBodyText();
+                ottenuto = istanza.getBodySottoPagina(keySottopagina);
                 System.out.println(VUOTA);
                 message = String.format("Body di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
@@ -701,6 +702,9 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(listaStr);
 
         if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
             for (String keySottopagina : listaStr) {
                 istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
                 assertNotNull(istanza);
@@ -717,7 +721,7 @@ public class UploadTest extends WikiStreamTest {
         }
     }
 
-    //    @ParameterizedTest
+    @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(511)
     @DisplayName("511 - uploadTestSottopagina")
@@ -740,8 +744,13 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(listaStr);
 
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr.subList(0, 1)) {
-                ottenutoRisultato = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina).test().uploadOnly();
+            for (String keySottopagina : listaStr) {
+                message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+                System.out.println(message);
+                System.out.println(VUOTA);
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina).test();
+                assertNotNull(istanza);
+                ottenutoRisultato = istanza.uploadOnly();
                 message = String.format("Upload pagina di test di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
                 printRisultato(ottenutoRisultato);
@@ -775,10 +784,13 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanzaLista);
         listaStr = istanza.listaSottoPagine();
         assertNotNull(listaStr);
-
         ottenutoRisultato = istanza.uploadOnly();
+
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottopagina : listaStr.subList(0, 1)) {
+            message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String keySottopagina : listaStr) {
                 ottenutoRisultato = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina).test().uploadOnly();
                 message = String.format("Upload pagina di test di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);

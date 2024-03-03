@@ -484,6 +484,8 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
 
+        assertEquals(esisteSotto, listaStr != null);
+
         if (listaStr != null && listaStr.size() > 0) {
             message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
             System.out.println(message);
