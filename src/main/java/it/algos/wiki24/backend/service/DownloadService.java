@@ -9,6 +9,8 @@ import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.wrapper.*;
+import org.checkerframework.checker.units.qual.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -334,7 +336,14 @@ public class DownloadService {
         String size;
         String time;
 
-        lista = bioServerModulo.findOnlyPageId();
+        //@todo da rimettere (eventualmente, la differenza sono solo 6 secondi) se si aggiorna mongoDB per usare projectionLong
+        //                lista = bioServerModulo.findOnlyPageId();
+
+        List<BioServerEntity> listaIds = bioServerModulo.findAll();
+        lista = new ArrayList<>();
+        for (BioServerEntity bean : listaIds) {
+            lista.add(bean.pageId);
+        }
 
         if (lista == null || lista.size() == 0) {
             message = "La lista bio è vuota";
@@ -523,7 +532,7 @@ public class DownloadService {
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
-        int blocco =50000;
+        int blocco = 50000;
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio;
 
@@ -614,7 +623,7 @@ public class DownloadService {
         String vociTotali = textService.format(numVociTotali); ;
         boolean usaNotificationCurrentValue = Pref.usaNotification.is();
         Pref.usaNotification.setValue(false);
-//        int blocco = WPref.bloccoDownload.getInt();
+        //        int blocco = WPref.bloccoDownload.getInt();
         int blocco = 1000;
         List<Long> subListPageIds;
         List<WrapBio> listaWrapBio = null;
