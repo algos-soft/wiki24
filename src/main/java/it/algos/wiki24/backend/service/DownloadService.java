@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.service;
 
+import com.mongodb.client.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.service.*;
@@ -330,19 +331,23 @@ public class DownloadService {
      * @return lista di tutti i (long) pageId del database (mongo) locale
      */
     public List<Long> getListaMongoIds() {
-        List<Long> lista;
+        List<Long> lista=new ArrayList<>();
         String message;
         inizio = System.currentTimeMillis();
         String size;
         String time;
+        MongoCursor<Long> cursore;
 
         //@todo da rimettere (eventualmente, la differenza sono solo 6 secondi) se si aggiorna mongoDB per usare projectionLong
         //                lista = bioServerModulo.findOnlyPageId();
 
-        List<BioServerEntity> listaIds = bioServerModulo.findAll();
-        lista = new ArrayList<>();
-        for (BioServerEntity bean : listaIds) {
-            lista.add(bean.pageId);
+        try {
+            cursore = mongoService.getCollection("bioserver").distinct("pageId", Long.class).iterator();
+            while (cursore.hasNext()) {
+                lista.add(cursore.next());
+            }
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
         }
 
         if (lista == null || lista.size() == 0) {
