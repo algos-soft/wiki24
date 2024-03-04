@@ -293,6 +293,16 @@ public class BaseBoot {
             BaseVar.isIstanzaDemo = false;
         }
 
+        /**
+         * Nome identificativo del computer (server p locale) in cui 'gira' l'applicazione <br>
+         */
+        try {
+            property = "algos.server.name";
+            BaseVar.nameServer = Objects.requireNonNull(environment.getProperty(property));
+        } catch (Exception unErrore) {
+            logError(unErrore, property);
+        }
+
     }
 
     /**

@@ -236,4 +236,12 @@ public class BaseVar {
      */
     public static boolean isIstanzaDemo;
 
+    /**
+     * Nome identificativo del computer (server o locale) in cui 'gira' l'applicazione <br>
+     * Il valore viene 'letto' da [config/application.properties], nella cartella esterna al JAR <br>
+     * Regolata in backend.boot.BaseBoot.fixVariabiliProperty() del [progettoCorrente] <br>
+     * Di default false <br>
+     */
+    public static String nameServer;
+
 }
