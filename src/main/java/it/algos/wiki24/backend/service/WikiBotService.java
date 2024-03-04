@@ -898,7 +898,7 @@ public class WikiBotService {
         LocalDateTime lastServer;
         FindIterable<Document> documents = null;
         MongoCollection collection = mongoService.getCollection(collectionName);
-        int limit = 100000;
+        int limit = 10000;
         int max = mongoService.count(collectionName);
 
         Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
