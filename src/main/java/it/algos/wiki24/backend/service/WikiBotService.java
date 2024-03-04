@@ -845,7 +845,7 @@ public class WikiBotService {
         WrapTime wrapMongo;
         LocalDateTime lastWiki;
         LocalDateTime lastMongo;
-        List<WrapTime> listaWrapTimesMongo = projectionWrapTime();
+        List<WrapTime> listaWrapTimesMongo = projectionWrapTimeNew();
 
         LinkedHashMap<Long, WrapTime> mappaMongo = new LinkedHashMap<>();
         for (WrapTime wrapMongoMappa : listaWrapTimesMongo) {
@@ -884,6 +884,33 @@ public class WikiBotService {
             dateLastServer = singolo.get(FIELD_NAME_TIMESTAMP, Date.class);
             lastServer = dateService.dateToLocalDateTime(dateLastServer);
             listaWrap.add(new WrapTime(pageId, lastServer));
+        }
+
+        return listaWrap;
+    }
+
+
+    public List<WrapTime> projectionWrapTimeNew() {
+        List<WrapTime> listaWrap = new ArrayList();
+        String collectionName = "bioserver";
+        long pageId;
+        Date dateLastServer;
+        LocalDateTime lastServer;
+        FindIterable<Document> documents = null;
+        MongoCollection collection = mongoService.getCollection(collectionName);
+        int limit = 100000;
+        int max = mongoService.count(collectionName);
+
+        Bson bSort = Sorts.ascending(FIELD_NAME_PAGE_ID).toBsonDocument();
+        Bson projection = Projections.fields(Projections.include(FIELD_NAME_PAGE_ID, FIELD_NAME_TIMESTAMP), Projections.excludeId());
+        for (int skip = 0; skip < max; skip += limit) {
+            documents = collection.find().projection(projection).sort(bSort).skip(skip).limit(limit);
+            for (var singolo : documents) {
+                pageId = singolo.get(FIELD_NAME_PAGE_ID, Long.class);
+                dateLastServer = singolo.get(FIELD_NAME_TIMESTAMP, Date.class);
+                lastServer = dateService.dateToLocalDateTime(dateLastServer);
+                listaWrap.add(new WrapTime(pageId, lastServer));
+            }
         }
 
         return listaWrap;

@@ -55,8 +55,8 @@ public class MongoServiceTest extends ServiceTest {
         return Stream.of(
                 Arguments.of(null, false),
                 Arguments.of(RoleView.class, false),
-//                Arguments.of(ViaView.class, true),
-//                Arguments.of(ViaEntity.class, true),
+                //                Arguments.of(ViaView.class, true),
+                //                Arguments.of(ViaEntity.class, true),
                 Arguments.of(RoleEntity.class, true)
         );
     }
@@ -135,7 +135,7 @@ public class MongoServiceTest extends ServiceTest {
         System.out.println(("Controllo del nome e dell'esistenza del DB 'corrente'"));
         System.out.println(VUOTA);
 
-        sorgente = BaseVar.projectCurrent;
+        sorgente = BaseVar.mongoDatabaseName;
         previsto = sorgente;
         dataBase = service.getDB(sorgente);
         assertNotNull(dataBase);
@@ -211,9 +211,11 @@ public class MongoServiceTest extends ServiceTest {
 
         ottenutoBooleano = service.existsCollectionName(sorgente);
         assertEquals(previstoBooleano, ottenutoBooleano);
-        System.out.println(String.format("La collection '%s' %sesiste", sorgente, ottenutoBooleano ? VUOTA : "non "));
         if (ottenutoBooleano) {
-            System.out.println(VUOTA);
+            System.out.println(String.format("La collection [%s] ESISTE", sorgente));
+        }
+        else {
+            System.out.println(String.format("La collection [%s] NON esiste", sorgente));
         }
     }
 
@@ -240,7 +242,12 @@ public class MongoServiceTest extends ServiceTest {
         sorgente = annotationService.getCollectionName(clazz);
 
         ottenutoBooleano = service.existsCollectionClazz(clazz);
-        System.out.println(String.format("La collection [%s], corrispondente alla modelClazz '%s', %sesiste", sorgente, clazzName, ottenutoBooleano ? VUOTA : "non "));
+        if (ottenutoBooleano) {
+            System.out.println(String.format("La collection [%s], corrispondente alla modelClazz [%s], ESISTE", sorgente, clazzName));
+        }
+        else {
+            System.out.println(String.format("La collection [%s], corrispondente alla modelClazz [%s], NON resiste", sorgente, clazzName));
+        }
     }
 
 
@@ -278,20 +285,20 @@ public class MongoServiceTest extends ServiceTest {
     void insert() {
         System.out.println(("40 - insert"));
         System.out.println(VUOTA);
-//        DeleteResult risultato;
-//        ContinenteModel continenteNew = new ContinenteModel();
-//        ContinenteModel continenteRisultante;
-//        continenteNew.id = "xyz";
-//        continenteNew.nome = "Paperino";
-//
-//        continenteRisultante = (ContinenteModel) service.insert(continenteNew);
-//        assertNotNull(continenteRisultante);
-//        System.out.println(String.format("Creata la entity [%s]", continenteRisultante.nome));
-//
-//        risultato = service.delete(continenteRisultante);
-//        ottenutoIntero = ((Long) risultato.getDeletedCount()).intValue();
-//        assertTrue(ottenutoIntero == 1);
-//        System.out.println(String.format("Cancellata la entity [%s]", continenteRisultante.nome));
+        //        DeleteResult risultato;
+        //        ContinenteModel continenteNew = new ContinenteModel();
+        //        ContinenteModel continenteRisultante;
+        //        continenteNew.id = "xyz";
+        //        continenteNew.nome = "Paperino";
+        //
+        //        continenteRisultante = (ContinenteModel) service.insert(continenteNew);
+        //        assertNotNull(continenteRisultante);
+        //        System.out.println(String.format("Creata la entity [%s]", continenteRisultante.nome));
+        //
+        //        risultato = service.delete(continenteRisultante);
+        //        ottenutoIntero = ((Long) risultato.getDeletedCount()).intValue();
+        //        assertTrue(ottenutoIntero == 1);
+        //        System.out.println(String.format("Cancellata la entity [%s]", continenteRisultante.nome));
     }
 
 
@@ -340,6 +347,7 @@ public class MongoServiceTest extends ServiceTest {
         //            System.out.println(VUOTA);
         //        }
     }
+
 
 
 }

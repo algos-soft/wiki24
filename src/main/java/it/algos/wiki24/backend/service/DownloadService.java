@@ -331,15 +331,12 @@ public class DownloadService {
      * @return lista di tutti i (long) pageId del database (mongo) locale
      */
     public List<Long> getListaMongoIds() {
-        List<Long> lista=new ArrayList<>();
+        List<Long> lista = new ArrayList<>();
         String message;
         inizio = System.currentTimeMillis();
         String size;
         String time;
         MongoCursor<Long> cursore;
-
-        //@todo da rimettere (eventualmente, la differenza sono solo 6 secondi) se si aggiorna mongoDB per usare projectionLong
-        //                lista = bioServerModulo.findOnlyPageId();
 
         try {
             cursore = mongoService.getCollection("bioserver").distinct("pageId", Long.class).iterator();
@@ -347,7 +344,7 @@ public class DownloadService {
                 lista.add(cursore.next());
             }
         } catch (Exception unErrore) {
-            logger.error(new WrapLog().message(unErrore.getMessage()).usaDb());
+            logger.error(new WrapLog().exception(unErrore).usaDb());
         }
 
         if (lista == null || lista.size() == 0) {
@@ -497,16 +494,22 @@ public class DownloadService {
      * @return listaPageIdsDaLeggere
      */
     public List<Long> elaboraListaWrapTime(final List<WrapTime> listaWrapTimes) {
-        List<Long> listaPageIdsDaLeggere;
+        List<Long> listaPageIdsDaLeggere = null;
         long inizio = System.currentTimeMillis();
         String size;
         String voci;
 
-        listaPageIdsDaLeggere = wikiBotService.elaboraWrapTime(listaWrapTimes);
-        size = textService.format(listaWrapTimes.size());
-        voci = textService.format(listaPageIdsDaLeggere.size());
-        String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
-        logger.info(new WrapLog().message(message).type(TypeLog.bio));
+        try {
+            listaPageIdsDaLeggere = wikiBotService.elaboraWrapTime(listaWrapTimes);
+            size = textService.format(listaWrapTimes.size());
+            voci = textService.format(listaPageIdsDaLeggere.size());
+            String message = String.format("Elaborati in totale %s wrapTimes e trovate %s voci da aggiornare, in %s", size, voci, dateService.deltaText(inizio));
+            logger.info(new WrapLog().message(message).type(TypeLog.bio));
+
+        } catch (Exception unErrore) {
+            logger.error(new WrapLog().exception(unErrore).usaDb());
+        }
+
         return listaPageIdsDaLeggere;
     }
 
