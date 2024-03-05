@@ -321,6 +321,45 @@ public class ListaTest extends WikiStreamTest {
         }
     }
 
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(502)
+    @DisplayName("502 - chiaviMappa")
+    void chiaviMappa(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("502 - chiaviMappa"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (ESEGUE_SOLO_BODY) {
+            return;
+        }
+
+        istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        mappaGenerale = istanza.getMappaGenerale();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(mappaGenerale);
+            return;
+        }
+        if (mappaGenerale == null) {
+            assertTrue(false);
+            return;
+        }
+        if (!esistePagina) {
+            return;
+        }
+
+        if (mappaGenerale.size() > 0) {
+            System.out.println("Prime 10 per ogni paragrafo");
+            System.out.println(VUOTA);
+            printMappaLista(mappaGenerale);
+        }
+        else {
+            printMancanoBio("La mappa delle didascalie", nomeLista, typeLista);
+        }
+    }
 
     @ParameterizedTest
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
@@ -576,6 +615,12 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
         if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+        if (esisteSottoSotto && listaStr.size() == 0) {
+            message = String.format("Mancano le sottoSottoPagine (previste) per la lista [%s]", nomeLista);
+            System.out.println(message);
             assertTrue(false);
             return;
         }

@@ -94,6 +94,8 @@ public class Lista {
     protected List<BioMongoEntity> listaBio = new ArrayList<>();
 
     protected Map<String, WrapLista> mappaGenerale = new LinkedHashMap<>();
+    protected Map<String, String> mappaChiavi2 = new LinkedHashMap<>();
+    protected Map<String, Map<String, String>> mappaChiavi3 = new LinkedHashMap<>();
 
     protected Map<String, List<WrapDidascalia>> mappaWrapDidascalie2 = new LinkedHashMap<>();
 
@@ -471,49 +473,41 @@ public class Lista {
     protected void mappaParagrafiAndSottoSottoPagine() {
         WrapLista wrapListaParagrafo;
         WrapLista wrapListaSub;
-        WrapLista wrapListaSubSub;
+        //        WrapLista wrapListaSubSub;
         List<WrapDidascalia> listaWrap;
         Map<String, WrapLista> mappa;
+        int sogliaMinimaPaginaPerCreareSottoSottoPagine;
+        boolean usaSottoSottoPagine;
+        boolean usaRinvio;
+
+        sogliaMinimaPaginaPerCreareSottoSottoPagine = switch (typeLista) {
+            case giornoNascita, giornoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
+            case annoNascita, annoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
+            case attivitaPlurale -> 50;
+            case nazionalitaPlurale -> 50;
+            default -> MAX_INT_VALUE;
+        };
+
+        usaSottoSottoPagine = numBio > sogliaMinimaPaginaPerCreareSottoSottoPagine;
+        if (!usaSottoSottoPagine) {
+            return;
+        }
 
         //--terzo livello
         if (typeLivello.getLivelloSottoPagine() >= 2) {
-            for (String keySottoPagina : listaSottoPagine) {
+            for (String keySottoPagina : getListaSottoPagine()) {
                 wrapListaParagrafo = mappaGenerale.get(keySottoPagina);
                 mappa = wrapListaParagrafo.getMappa();
 
                 // devo spazzolare la mappa creare una lista
                 if (mappa != null) {
                     for (String keyParagrafoSottoPagina : mappa.keySet()) {
-
-                    }
-
-                    if (wrapListaParagrafo.getNumBio() > wrapListaParagrafo.getSogliaSottoPagina()) {
-                        listaWrap = wrapListaParagrafo.getLista();
-                        wrapListaParagrafo.usaRinvio(true);//@todo controllare typeLista
-                        //                        listaSottoSottoPagine.add(keyParagrafo);
-
-                        //                        wrapListaParagrafo = wrapListaParagrafo.getLista();
-                        //                        wrapLista.usaRinvio(true);//@todo controllare typeLista
-                        //                        listaSottoPagine.add(keyParagrafo);
-                        //                        mappa = wrapLista.getMappa();
-                        //
-                        //                        if (lista != null && lista.size() > 0) {
-                        //                            for (WrapDidascalia wrap : lista) {
-                        //                                key = wrap.getSecondoLivello();
-                        //                                if (!mappa.containsKey(key)) {
-                        //                                    wrapListaSub = appContext.getBean(WrapLista.class, titoloPagina, key);
-                        //                                    mappa.put(key, wrapListaSub);
-                        //                                }
-                        //
-                        //                                wrapListaSub = mappa.get(key);
-                        //                                wrapListaSub.add(wrap);
-                        //                            }
-                        //                            wrapLista.usaRinvio(true);//@todo controllare typeLista
-                        //                            wrapLista.setLista(null);
-                        //                        }
-                    }
-                    else {
-                        //                        wrapLista.usaRinvio(false);
+                        wrapListaSub = mappa.get(keyParagrafoSottoPagina);
+                        usaRinvio = wrapListaSub.getNumBio() > 50;//@todo controllare typeLista
+                        wrapListaParagrafo.usaRinvio(usaRinvio);
+                        if (usaRinvio) {
+                            getListaSottoSottoPagine().add(keyParagrafoSottoPagina);
+                        }
                     }
                 }
             }
