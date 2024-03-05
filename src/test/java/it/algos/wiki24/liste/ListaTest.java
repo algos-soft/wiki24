@@ -621,15 +621,12 @@ public class ListaTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (ESEGUE_SOLO_BODY) {
-            return;
-        }
-
         if (!esisteSottoSotto) {
             message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
             System.out.println(message);
             return;
         }
+
         istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
         assertNotNull(istanza);
         listaStr = istanza.getListaSottoSottoPagine();
@@ -879,22 +876,37 @@ public class ListaTest extends WikiStreamTest {
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (true) {
-            System.out.println("Sospesa");
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
         istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        listaStr = istanza.getListaSottoPagine();
+        listaStr = istanza.getListaSottoSottoPagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+        if (esisteSottoSotto && listaStr.size() == 0) {
+            message = String.format("Mancano le sottoSottoPagine (previste) per la lista [%s]", nomeLista);
+            System.out.println(message);
+            assertTrue(false);
+            return;
+        }
 
         if (listaStr.size() > 0) {
-            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d (sottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d (sottoSottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
             System.out.println(message);
             System.out.println(VUOTA);
-            System.out.println("Prime 5 sottopagine");
-            for (String keySottoPagina : listaStr.subList(0, Math.min(10, listaStr.size()))) {
-                //                ottenuto = istanza.getBodySottoPagina(keySottoPagina);
+            for (String keySottoPagina : listaStr) {
+                ottenuto = istanza.getBodySottoSottoPagina(keySottoPagina);
                 if (textService.isValid(ottenuto)) {
                     message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);
                     System.out.println(message);

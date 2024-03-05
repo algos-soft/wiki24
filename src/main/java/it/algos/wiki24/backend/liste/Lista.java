@@ -110,6 +110,8 @@ public class Lista {
 
     protected Map<String, String> mappaBodySottoPagine = new LinkedHashMap<>();
 
+    protected Map<String, String> mappaBodySottoSottoPagine = new LinkedHashMap<>();
+
     /**
      * Costruttore base con 2 parametri (obbligatori) <br>
      * Not annotated with @Autowired annotation, classe astratta <br>
@@ -132,6 +134,7 @@ public class Lista {
         //        this.mappaWrapDidascalie();
         this.bodyText();
         this.bodyTextSottoPagine();
+        this.bodyTextSottoSottoPagine();
     }
 
     /**
@@ -515,7 +518,7 @@ public class Lista {
                         usaRinvio = wrapListaSub.getNumBio() > 50;//@todo controllare typeLista
                         wrapListaParagrafo.usaRinvio(usaRinvio);
                         if (usaRinvio) {
-                            listaSottoSottoPagine.add(keySottoPagina+SLASH+keyParagrafoSottoPagina);
+                            listaSottoSottoPagine.add(keySottoPagina + SLASH + keyParagrafoSottoPagina);
                         }
                     }
                 }
@@ -762,14 +765,13 @@ public class Lista {
 
 
     /**
-     * Testo body delle sottoPagine <br>
+     * Testo body della singola sottoPagina <br>
      */
     private String bodyTextSottoPagina(String keySottoPagina) {
         StringBuffer buffer = new StringBuffer();
         WrapLista wrapLista;
         boolean usaParagrafi = typeLista.getTypeLivello().getLivelloParagrafi() >= 2;
         Map<String, WrapLista> mappa;
-        boolean usaDiv;
 
         wrapLista = mappaGenerale.get(keySottoPagina);
         mappa = wrapLista.getMappa();
@@ -784,6 +786,63 @@ public class Lista {
                 buffer.append(bodyParagrafo(usaParagrafi, keyParagrafoSottoPagina, wrapLista));
             }
         }
+
+        if (!usaParagrafi && numBio > sogliaDiv) {
+            buffer.append(DIV_END_CAPO);
+        }
+
+        return buffer.toString();
+    }
+
+    /**
+     * Testo body delle sottoSottoPagine <br>
+     */
+    private void bodyTextSottoSottoPagine() {
+        String bodySingolaSottoSottoPagina;
+
+        if (mappaBodySottoSottoPagine != null && listaSottoSottoPagine != null && listaSottoSottoPagine.size() > 0) {
+            for (String keySottoSottoPagina : listaSottoSottoPagine) {
+                bodySingolaSottoSottoPagina = bodyTextSottoSottoPagina(keySottoSottoPagina);
+                mappaBodySottoSottoPagine.put(keySottoSottoPagina, bodySingolaSottoSottoPagina);
+            }
+        }
+    }
+
+
+    /**
+     * Testo body della singola sottoSottoPagina <br>
+     */
+    private String bodyTextSottoSottoPagina(String keySottoSottoPagina) {
+        StringBuffer buffer = new StringBuffer();
+        String keyParagrafo;
+        String keySottoParagrafo;
+        WrapLista wrapListaParagrafo;
+        WrapLista wrapListaSottoParagrafo;
+        boolean usaParagrafi = typeLista.getTypeLivello().getLivelloParagrafi() >= 3;
+        Map<String, WrapLista> mappa;
+        List<WrapDidascalia> lista;
+
+        if (keySottoSottoPagina.contains(SLASH)) {
+            keyParagrafo = textService.levaCodaDaPrimo(keySottoSottoPagina, SLASH);
+            keySottoParagrafo = textService.levaPrimaAncheTag(keySottoSottoPagina, SLASH);
+        }
+        else {
+            return VUOTA;
+        }
+
+        wrapListaParagrafo = mappaGenerale.get(keyParagrafo);
+        mappa = wrapListaParagrafo.getMappa();
+        wrapListaSottoParagrafo = mappa.get(keySottoParagrafo);
+        //        lista = wrapListaSottoParagrafo.getLista();
+        //        if (lista == null) {
+        //            return VUOTA;
+        //        }
+
+        if (!usaParagrafi && numBio > sogliaDiv) {
+            buffer.append(DIV_INI_CAPO);
+        }
+
+        buffer.append(bodyParagrafo(usaParagrafi, keySottoSottoPagina, wrapListaSottoParagrafo));
 
         if (!usaParagrafi && numBio > sogliaDiv) {
             buffer.append(DIV_END_CAPO);
@@ -944,6 +1003,10 @@ public class Lista {
 
     public String getBodySottoPagina(String keySottoPagina) {
         return mappaBodySottoPagine != null ? mappaBodySottoPagine.get(keySottoPagina) : VUOTA;
+    }
+
+    public String getBodySottoSottoPagina(String keySottoPagina) {
+        return mappaBodySottoSottoPagine != null ? mappaBodySottoSottoPagine.get(keySottoPagina) : VUOTA;
     }
 
     public Map<String, Object> getMappaChiavi() {
