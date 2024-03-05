@@ -511,7 +511,6 @@ public class TextServiceTest extends ServiceTest {
     }
 
 
-
     @Test
     @Order(31)
     @DisplayName("31 - levaPrimaAncheTag")
@@ -568,7 +567,6 @@ public class TextServiceTest extends ServiceTest {
         message = String.format("[%s]%s[%s]%s[%s]", sorgente, FORWARD, tagIniziale, FORWARD, ottenuto);
         System.out.println(message);
     }
-
 
 
     @Test
@@ -1030,6 +1028,39 @@ public class TextServiceTest extends ServiceTest {
         doppieQuadre().forEach(this::fixDoppieQuadre);
     }
 
+
+    @Test
+    @Order(210)
+    @DisplayName("210 - escape")
+    void escape() {
+        System.out.println(("210 - escape"));
+        System.out.println(VUOTA);
+
+        sorgente = "<!-- NON MODIFICATE DIRETTAMENTE QUESTA PAGINA - GRAZIE -->\n" +
+                "<noinclude>__EXPECTED_UNCONNECTED_PAGE____NOEDITSECTION__{{Torna a|399 a.C.}}{{ListaBio|bio=2|data=7 mar 2024|progetto=biografie}}</noinclude>\n" +
+                "{{Lista persone per anno\n" +
+                "|titolo=Morti nel 399 a.C.\n" +
+                "|voci=2\n" +
+                "|testo=<nowiki></nowiki>\n" +
+                "*[[Amirteo]], sovrano egizio\n" +
+                "*[[Socrate]], filosofo greco antico}}\n" +
+                "<noinclude>\n" +
+                "== Altri progetti ==\n" +
+                "{{interprogetto}}\n" +
+                "{{Portale|biografie}}\n" +
+                "\n" +
+                "*<nowiki>[[Categoria:Liste di morti nel IV secolo a.C.| 60200]]</nowiki>\n" +
+                "*<nowiki>[[Categoria:Morti nel 399 a.C.| ]]</nowiki></noinclude>";
+        sorgente2 = "{{Lista persone per anno\n" +
+                "|titolo=Morti nel 399 a.C.\n" +
+                "|voci=2\n" +
+                "|testo=<nowiki></nowiki>\n" +
+                "*[[Amirteo]], sovrano egizio\n" +
+                "*[[Socrate]], filosofo greco antico}}";
+
+        ottenutoBooleano = sorgente.contains(sorgente2);
+        System.out.println(ottenutoBooleano);
+    }
 
     //--sorgente
     //--previsto

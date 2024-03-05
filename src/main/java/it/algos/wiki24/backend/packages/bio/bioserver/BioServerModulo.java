@@ -176,7 +176,7 @@ public class BioServerModulo extends WikiModulo {
         //        message += WPref.usaDownloadBioServer.getDescrizione();
         //        message += CAPO;
         //        message += risultato;
-        mailService.send(BaseVar.projectCurrent, risultato);
+        mailService.send(BaseVar.nameServer, risultato);
 
         super.fixDownload(inizio);
     }

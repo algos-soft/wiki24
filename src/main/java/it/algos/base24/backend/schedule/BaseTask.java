@@ -114,7 +114,7 @@ public abstract class BaseTask extends Task {
 
     public void logTaskEseguito(String risultato) {
         String message = descrizioneTask + CAPO + risultato;
-        mailService.send(BaseVar.projectCurrent, message);
+        mailService.send(BaseVar.nameServer, message);
     }
 
     public void logTaskEseguito() {

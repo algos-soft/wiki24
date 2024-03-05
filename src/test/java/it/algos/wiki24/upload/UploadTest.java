@@ -973,6 +973,25 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
+    @Test
+    @Order(1001)
+    @DisplayName("1001 - writeCheck")
+    void writeCheck() {
+        System.out.println(("1001 - writeCheck"));
+        System.out.println(("Controlla che NON esegua la registrazione se cambia SOLO la data"));
+        System.out.println(VUOTA);
+
+        sorgente = "399 a.C.";
+        typeLista = TypeLista.annoMorte;
+
+        istanza = appContext.getBean(Upload.class, sorgente, typeLista);
+        ottenutoRisultato = istanza.test().uploadOnly();
+        printRisultato(ottenutoRisultato);
+
+//        istanza = appContext.getBean(Upload.class, sorgente, typeLista);
+//        ottenutoRisultato = istanza.test().uploadOnly();
+//        printRisultato(ottenutoRisultato);
+    }
 
     @Test
     @DisplayName("Sovrascritto da WikiTest (checkIniziale - non usato)")

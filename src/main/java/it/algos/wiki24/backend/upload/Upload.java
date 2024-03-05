@@ -392,6 +392,7 @@ public class Upload {
 
     protected WResult registra() {
         String wikiTitle;
+        String newTextSignificativo=VUOTA;
 
         if (textService.isValid(titoloPagina)) {
             wikiTitle = titoloPagina;
@@ -400,7 +401,9 @@ public class Upload {
             return WResult.errato("Manca il wikiTitle");
         }
 
-        String newTextSignificativo = WPref.scriveComunque.is() ? VUOTA : bodyText + bottomText;
+        if (!WPref.scriveComunque.is()) {
+            newTextSignificativo = textService.estraeSenza(uploadText,NO_INCLUDE_END,NO_INCLUDE_INI);
+        }
 
         if (textService.isEmpty(titoloPagina)) {
             logger.error(new WrapLog().message("Manca il titolo della pagina"));
@@ -414,7 +417,12 @@ public class Upload {
             typeSummary = TypeSummary.test;
         }
 
-        return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
+        if (WPref.scriveComunque.is()) {
+            return queryService.write(wikiTitle, uploadText, typeSummary.get());
+        }
+        else {
+            return queryService.writeCheck(wikiTitle, uploadText, newTextSignificativo, typeSummary.get());
+        }
     }
 
 
