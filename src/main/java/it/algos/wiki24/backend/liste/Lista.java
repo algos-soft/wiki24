@@ -94,8 +94,8 @@ public class Lista {
     protected List<BioMongoEntity> listaBio = new ArrayList<>();
 
     protected Map<String, WrapLista> mappaGenerale = new LinkedHashMap<>();
-    protected Map<String, String> mappaChiavi2 = new LinkedHashMap<>();
-    protected Map<String, Map<String, String>> mappaChiavi3 = new LinkedHashMap<>();
+
+    protected Map<String, Object> mappaChiavi = new LinkedHashMap<>();
 
     protected Map<String, List<WrapDidascalia>> mappaWrapDidascalie2 = new LinkedHashMap<>();
 
@@ -361,6 +361,8 @@ public class Lista {
             mappaParagrafiAndSottoSottoPagine();
         }
 
+        Collections.sort(listaSottoSottoPagine);
+
         return mappaGenerale;
     }
 
@@ -417,7 +419,7 @@ public class Lista {
         int soglia;
         int numBioParagrafo;
         int sogliaMinimaPaginaPerCreareSottoPagine;
-
+        Map<String, Object> mappaChiave;
         boolean usaSottoPagine;
 
         sogliaMinimaPaginaPerCreareSottoPagine = switch (typeLista) {
@@ -457,6 +459,13 @@ public class Lista {
 
                         wrapListaParagrafo.usaRinvio(true);
                         listaSottoPagine.add(keyParagrafo);
+                        mappaChiave = new HashMap<>();
+                        for (String keyMappa : mappa.keySet()) {
+                            if (mappa.get(keyMappa).getNumBio() > soglia) {
+                                mappaChiave.put(keyMappa, keyMappa);
+                            }
+                        }
+                        mappaChiavi.put(keyParagrafo, mappaChiave);
                     }
                     else {
                         wrapListaParagrafo.usaRinvio(false);
@@ -506,7 +515,7 @@ public class Lista {
                         usaRinvio = wrapListaSub.getNumBio() > 50;//@todo controllare typeLista
                         wrapListaParagrafo.usaRinvio(usaRinvio);
                         if (usaRinvio) {
-                            getListaSottoSottoPagine().add(keyParagrafoSottoPagina);
+                            listaSottoSottoPagine.add(keySottoPagina+SLASH+keyParagrafoSottoPagina);
                         }
                     }
                 }
@@ -556,6 +565,7 @@ public class Lista {
         for (String keyParagrafo : mappaGenerale.keySet()) {
             size = mappaGenerale.get(keyParagrafo).getNumBio();
             mappaParagrafi.put(keyParagrafo, size);
+            mappaChiavi.put(keyParagrafo, keyParagrafo);
         }
 
         mappaGenerale = switch (typeLista) {
@@ -566,6 +576,10 @@ public class Lista {
         mappaParagrafi = switch (typeLista) {
             case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaParagrafi);
             default -> mappaParagrafi;
+        };
+        mappaChiavi = switch (typeLista) {
+            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaChiavi);
+            default -> mappaChiavi;
         };
 
         for (String key : mappaGenerale.keySet()) {
@@ -930,6 +944,10 @@ public class Lista {
 
     public String getBodySottoPagina(String keySottoPagina) {
         return mappaBodySottoPagine != null ? mappaBodySottoPagine.get(keySottoPagina) : VUOTA;
+    }
+
+    public Map<String, Object> getMappaChiavi() {
+        return mappaChiavi;
     }
 
 }

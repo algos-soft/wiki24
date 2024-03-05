@@ -15,6 +15,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
+import org.springframework.util.*;
 
 import javax.inject.*;
 import java.util.*;
@@ -57,6 +58,8 @@ public class ListaTest extends WikiStreamTest {
 
     private Map<String, WrapLista> mappaGenerale;
 
+    private Map<String, Object> mappaChiavi;
+
     private Map<String, List<WrapDidascalia>> mappaSottoPagine;
 
     private Map<String, Integer> mappaDimensioni;
@@ -91,6 +94,7 @@ public class ListaTest extends WikiStreamTest {
         mappaSottoPagine = null;
         mappaGenerale = null;
         wrapLista = null;
+        mappaChiavi = null;
     }
 
 
@@ -328,6 +332,8 @@ public class ListaTest extends WikiStreamTest {
     void chiaviMappa(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("502 - chiaviMappa"));
         System.out.println(VUOTA);
+        int spazi = 0;
+        String distanziatore = SPAZIO;
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
             return;
         }
@@ -337,13 +343,13 @@ public class ListaTest extends WikiStreamTest {
 
         istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        mappaGenerale = istanza.getMappaGenerale();
+        mappaChiavi = istanza.getMappaChiavi();
 
         if (textService.isEmpty(nomeLista)) {
-            assertNull(mappaGenerale);
+            assertNull(mappaChiavi);
             return;
         }
-        if (mappaGenerale == null) {
+        if (mappaChiavi == null) {
             assertTrue(false);
             return;
         }
@@ -351,10 +357,28 @@ public class ListaTest extends WikiStreamTest {
             return;
         }
 
-        if (mappaGenerale.size() > 0) {
-            System.out.println("Prime 10 per ogni paragrafo");
-            System.out.println(VUOTA);
-            printMappaLista(mappaGenerale);
+        if (mappaChiavi.size() > 0) {
+            for (String keyParagrafoPrimoLivello : mappaChiavi.keySet()) {
+                System.out.print(keyParagrafoPrimoLivello);
+                System.out.print(FORWARD);
+                if (mappaChiavi.get(keyParagrafoPrimoLivello) instanceof String value) {
+                    System.out.println(value);
+                }
+                else {
+                    if (mappaChiavi.get(keyParagrafoPrimoLivello) instanceof Map mappa) {
+                        spazi = keyParagrafoPrimoLivello.length() + FORWARD.length();
+                        distanziatore = SPAZIO;
+                        System.out.println("(sub)");
+                        for (Object key : mappa.keySet()) {
+                            System.out.print(distanziatore.repeat(spazi));
+                            System.out.println(mappa.get(key));
+                        }
+                    }
+                }
+            }
+
+            int a = 87;
+            //            printMappaLista(mappaChiavi);
         }
         else {
             printMancanoBio("La mappa delle didascalie", nomeLista, typeLista);
