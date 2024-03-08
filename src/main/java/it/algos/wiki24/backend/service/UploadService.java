@@ -212,7 +212,7 @@ public class UploadService {
         if (listaStrSottoSotto != null && listaStrSottoSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottoSottopagina : listaStrSottoSotto) {
-                risultato = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.attivitaPlurale, keySottoSottopagina, istanzaLista).uploadOnly();
+                risultato = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale, keySottoSottopagina, istanzaLista).uploadOnly();
             }
         }
     }

@@ -247,15 +247,20 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(206)
     @DisplayName("206 - getUploadText")
-    void getUploadText(String nomeLista, TypeLista typeLista) {
+    void getUploadText(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("206 - getUploadText"));
         System.out.println("Testo completo della pagina con Header, Incipit, Body e Bottom");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esistePagina) {
+            message = String.format("Non sono previste pagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
@@ -758,7 +763,7 @@ public class UploadTest extends WikiStreamTest {
                 message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
                 System.out.println(message);
                 System.out.println(VUOTA);
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina,istanzaLista ).test();
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista).test();
                 assertNotNull(istanza);
                 ottenutoRisultato = istanza.uploadOnly();
                 message = String.format("Upload pagina di test di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
