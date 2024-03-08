@@ -32,20 +32,21 @@ public class UploadService {
     }
 
     public void giornoNato(final GiornoWikiEntity giornoBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStr;
         Lista istanzaLista;
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
-                appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoNascita, keySottopagina, istanzaLista).uploadOnly();
             }
         }
     }
@@ -55,20 +56,21 @@ public class UploadService {
     }
 
     public void giornoMorto(final GiornoWikiEntity giornoBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStr;
         Lista istanzaLista;
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
-                appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, giornoBean.nome, TypeLista.giornoMorte, keySottopagina, istanzaLista).uploadOnly();
             }
         }
     }
@@ -78,20 +80,21 @@ public class UploadService {
     }
 
     public void annoNato(final AnnoWikiEntity annoBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStr;
         Lista istanzaLista;
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
-                appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoNascita, keySottopagina, istanzaLista).uploadOnly();
             }
         }
     }
@@ -101,20 +104,21 @@ public class UploadService {
     }
 
     public void annoMorto(final AnnoWikiEntity annoBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStr;
         Lista istanzaLista;
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
-                appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, annoBean.nome, TypeLista.annoMorte, keySottopagina, istanzaLista).uploadOnly();
             }
         }
     }
@@ -146,6 +150,7 @@ public class UploadService {
     }
 
     public void attivita(final AttPluraleEntity attivitaBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStrSotto;
         List<String> listaStrSottoSotto;
@@ -153,14 +158,14 @@ public class UploadService {
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStrSotto = istanzaUpload.getListaSottoPagine();
         if (listaStrSotto != null && listaStrSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStrSotto) {
-                appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, keySottopagina, istanzaLista).uploadOnly();
             }
         }
 
@@ -169,7 +174,7 @@ public class UploadService {
         if (listaStrSottoSotto != null && listaStrSottoSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottoSottopagina : listaStrSottoSotto) {
-                appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottoSottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, keySottoSottopagina, istanzaLista).uploadOnly();
             }
         }
     }
@@ -183,6 +188,7 @@ public class UploadService {
     }
 
     public void nazionalita(final NazPluraleEntity nazionalitaBean) {
+        WResult risultato;
         Upload istanzaUpload;
         List<String> listaStrSotto;
         List<String> listaStrSottoSotto;
@@ -190,14 +196,14 @@ public class UploadService {
 
         // pagina principale
         istanzaUpload = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale);
-        istanzaUpload.uploadOnly();
+        risultato = istanzaUpload.uploadOnly();
 
         // sottopagine
         listaStrSotto = istanzaUpload.getListaSottoPagine();
         if (listaStrSotto != null && listaStrSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStrSotto) {
-                appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale, keySottopagina, istanzaLista).uploadOnly();
             }
         }
 
@@ -206,7 +212,7 @@ public class UploadService {
         if (listaStrSottoSotto != null && listaStrSottoSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottoSottopagina : listaStrSottoSotto) {
-                appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottoSottopagina).uploadOnly();
+                risultato = appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.attivitaPlurale, keySottoSottopagina, istanzaLista).uploadOnly();
             }
         }
     }
