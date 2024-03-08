@@ -22,7 +22,6 @@ import it.algos.wiki24.backend.wrapper.*;
 import jakarta.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.inject.*;
@@ -146,6 +145,9 @@ public class Upload {
     public Upload(final String nomeLista, TypeLista typeLista) {
         this.nomeLista = nomeLista;
         this.typeLista = typeLista;
+        this.istanzaLista = null;
+        this.isSottoPagina = false;
+        this.keySottoPagina = VUOTA;
     }// end of constructor not @Autowired and used
 
     /**
@@ -153,12 +155,13 @@ public class Upload {
      * Not annotated with @Autowired annotation, classe astratta <br>
      * La classe usa poi il metodo @PostConstruct inizia() per proseguire dopo l'init del costruttore <br>
      */
-    public Upload(final String nomeLista, TypeLista typeLista, Lista istanzaLista, String keySottoPagina) {
+    public Upload(final String nomeLista, TypeLista typeLista, String keySottoPagina, Lista istanzaLista) {
         this.nomeLista = nomeLista;
         this.typeLista = typeLista;
         this.istanzaLista = istanzaLista;
-        this.isSottoPagina = true;
         this.keySottoPagina = keySottoPagina;
+        this.isSottoPagina = keySottoPagina.contains(SLASH) ? false : true;
+        this.isSottoSottoPagina = keySottoPagina.contains(SLASH) ? true : false;
     }// end of constructor not @Autowired and used
 
     @PostConstruct
@@ -216,7 +219,7 @@ public class Upload {
             default -> null;
         };
 
-        if (isSottoPagina) {
+        if (isSottoPagina || isSottoSottoPagina) {
             if (textService.isValid(titoloPagina)) {
                 titoloPagina = titoloPagina + SLASH + textService.primaMaiuscola(keySottoPagina);
             }
@@ -379,7 +382,7 @@ public class Upload {
         List<String> listaSottopagine;
 
         if (result.isValido()) {
-            listaSottopagine = listaSottoPagine();
+            listaSottopagine = getListaSottoPagine();
             if (listaSottopagine != null && listaSottopagine.size() > 0) {
                 for (String keySottopagina : listaSottopagine) {
                     result = appContext.getBean(Upload.class, nomeLista).test(uploadTest).sottoPagina(keySottopagina).uploadOnly();
@@ -392,7 +395,7 @@ public class Upload {
 
     protected WResult registra() {
         String wikiTitle;
-        String newTextSignificativo=VUOTA;
+        String newTextSignificativo = VUOTA;
 
         if (textService.isValid(titoloPagina)) {
             wikiTitle = titoloPagina;
@@ -402,7 +405,11 @@ public class Upload {
         }
 
         if (!WPref.scriveComunque.is()) {
-            newTextSignificativo = textService.estraeSenza(uploadText,NO_INCLUDE_END,NO_INCLUDE_INI);
+            newTextSignificativo = switch (typeLista) {
+                case giornoNascita, giornoMorte, annoNascita, annoMorte -> textService.estraeSenza(uploadText, NO_INCLUDE_END, NO_INCLUDE_INI);
+                case attivitaPlurale, nazionalitaPlurale -> textService.levaPrimaDelTag(uploadText, NO_INCLUDE_END);
+                default -> VUOTA;
+            };
         }
 
         if (textService.isEmpty(titoloPagina)) {
@@ -432,7 +439,7 @@ public class Upload {
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
-    public List<String> listaSottoPagine() {
+    public List<String> getListaSottoPagine() {
         if (listaSottoPagine == null || listaSottoPagine.isEmpty()) {
             listaSottoPagine = istanzaLista.getListaSottoPagine();
         }
@@ -457,9 +464,9 @@ public class Upload {
      *
      * @return STRING_ERROR se il pattern della classe non è valido, VUOTA se i dati sono validi ma non ci sono biografie <br>
      */
-    public List<String> listaSottoSottoPagine() {
+    public List<String> getListaSottoSottoPagine() {
         if (listaSottoSottoPagine == null || listaSottoSottoPagine.isEmpty()) {
-            //            listaSottoSottoPagine = istanzaLista.getListaSottoPagine();
+            listaSottoSottoPagine = istanzaLista.getListaSottoSottoPagine();
         }
 
         return listaSottoSottoPagine;
@@ -557,7 +564,7 @@ public class Upload {
         buffer.append("Questa");
         buffer.append(REF);
 
-        if (isSottoPagina) {
+        if (isSottoPagina || isSottoSottoPagina) {
             buffer.append("Questa sottopagina");
             buffer.append(SPAZIO);
             buffer.append(QUADRA_INI);
@@ -644,12 +651,25 @@ public class Upload {
         buffer.append(SPAZIO);
         buffer.append("quella di");
         buffer.append(SPAZIO + textService.setBold(textService.primaMinuscola(nomeLista)));
-        if (isSottoPagina) {
-            buffer.append(SPAZIO);
-            buffer.append("e sono");
-            buffer.append(SPAZIO);
-            buffer.append(textService.setBold(textService.primaMinuscola(keySottoPagina)));
-            buffer.append(PUNTO);
+        if (isSottoPagina || isSottoSottoPagina) {
+            if (isSottoPagina) {
+                buffer.append(SPAZIO);
+                buffer.append("e sono");
+                buffer.append(SPAZIO);
+                buffer.append(textService.setBold(textService.primaMinuscola(keySottoPagina)));
+                buffer.append(PUNTO);
+            }
+            else {
+                buffer.append(VIRGOLA_SPAZIO);
+                buffer.append("sono");
+                buffer.append(SPAZIO);
+                buffer.append(textService.setBold(getParagrafo(textService.primaMinuscola(keySottoPagina))));
+                buffer.append(SPAZIO);
+                buffer.append("e il loro cognome inizia con la lettera");
+                buffer.append(SPAZIO);
+                buffer.append(textService.setBold(getSottoParagrafo(keySottoPagina)));
+                buffer.append(PUNTO);
+            }
         }
         else {
             buffer.append(PUNTO);
@@ -753,18 +773,23 @@ public class Upload {
         StringBuffer buffer = new StringBuffer();
         String titoloLista;
 
-        if (isSottoPagina) {
-            bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
-        }
-        else {
-            if (istanzaLista != null && istanzaLista.getTypeLista() == typeLista) {
+        if (istanzaLista != null && istanzaLista.getTypeLista() == typeLista) {
+            if (textService.isEmpty(keySottoPagina)) {
                 bodyText = istanzaLista.getBodyText();
             }
             else {
-                message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getTypeLista().getTag(), typeLista.getTag());
-                logger.error(new WrapLog().exception(new AlgosException(message)));
-                return VUOTA;
+                if (isSottoPagina) {
+                    bodyText = istanzaLista.getBodySottoPagina(keySottoPagina);
+                }
+                if (isSottoSottoPagina) {
+                    bodyText = istanzaLista.getBodySottoSottoPagina(keySottoPagina);
+                }
             }
+        }
+        else {
+            message = String.format("I type di Lista [%s] e Upload [%s], NON coincidono", istanzaLista.getTypeLista().getTag(), typeLista.getTag());
+            logger.error(new WrapLog().exception(new AlgosException(message)));
+            return VUOTA;
         }
 
         titoloLista = switch (typeLista) {
@@ -775,28 +800,26 @@ public class Upload {
             default -> VUOTA;
         };
 
-        if (isSottoPagina) {
+        if (isSottoPagina || isSottoSottoPagina) {
             buffer.append(bodyText);
         }
+        else if (textService.isValid(titoloLista)) {
+            buffer.append(DOPPIE_GRAFFE_INI);
+            buffer.append(typeLista.getPersone());
+            buffer.append(CAPO);
+            buffer.append("|titolo=");
+            buffer.append(titoloLista);
+            buffer.append(CAPO);
+            buffer.append("|voci=");
+            buffer.append(numBio());
+            buffer.append(CAPO);
+            buffer.append("|testo=<nowiki></nowiki>");
+            buffer.append(CAPO);
+            buffer.append(bodyText);
+            buffer.append(DOPPIE_GRAFFE_END);
+        }
         else {
-            if (textService.isValid(titoloLista)) {
-                buffer.append(DOPPIE_GRAFFE_INI);
-                buffer.append(typeLista.getPersone());
-                buffer.append(CAPO);
-                buffer.append("|titolo=");
-                buffer.append(titoloLista);
-                buffer.append(CAPO);
-                buffer.append("|voci=");
-                buffer.append(numBio());
-                buffer.append(CAPO);
-                buffer.append("|testo=<nowiki></nowiki>");
-                buffer.append(CAPO);
-                buffer.append(bodyText);
-                buffer.append(DOPPIE_GRAFFE_END);
-            }
-            else {
-                buffer.append(bodyText);
-            }
+            buffer.append(bodyText);
         }
 
         buffer.append(CAPO);
@@ -1047,7 +1070,7 @@ public class Upload {
         String categoria;
 
         categoria = String.format("Categoria:Bio attività%s%s", PIPE, textService.primaMaiuscola(nomeLista));
-        categoria = isSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
+        categoria = isSottoPagina || isSottoSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
 
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
@@ -1066,7 +1089,7 @@ public class Upload {
         String categoria;
 
         categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
-        categoria = isSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
+        categoria = isSottoPagina || isSottoSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
 
         if (uploadTest) {
             buffer.append(NO_WIKI_INI);
@@ -1162,12 +1185,15 @@ public class Upload {
      */
     public int numBio() {
 
-        if (numBio == 0) {
+        if (textService.isEmpty(keySottoPagina)) {
+            numBio = istanzaLista.getNumBio();
+        }
+        else {
             if (isSottoPagina) {
                 numBio = istanzaLista.getNumBioSottoPagina(keySottoPagina);
             }
-            else {
-                numBio = istanzaLista.getNumBio();
+            if (isSottoSottoPagina) {
+                numBio = istanzaLista.getNumBioSottoSottoPagina(keySottoPagina);
             }
         }
 
@@ -1186,12 +1212,12 @@ public class Upload {
      * @return -1 se il pattern della classe non è valido o se nella mappa non esiste il paragrafo indicato come keySottopagina
      * zero se i dati sono validi ma non ci sono biografie <br>
      */
-    public int numBio(String keySottopagina) {
-        if (numBio == 0) {
-            //            numBio = istanzaLista.getNumBioSottoPagina(keySottopagina);
-        }
+    public int getNumBioSottoPagina(String keySottopagina) {
+        return istanzaLista != null ? istanzaLista.getNumBioSottoPagina(keySottopagina) : 0;
+    }
 
-        return numBio;
+    public int getNumBioSottoSottoPagina(String keySottoSottoPagina) {
+        return istanzaLista != null ? istanzaLista.getNumBioSottoSottoPagina(keySottoSottoPagina) : 0;
     }
 
     public LinkedHashMap<String, String> mappaSottoSottoPagine() {
@@ -1214,5 +1240,14 @@ public class Upload {
     public String getBodySottoPagina(String keySottoPagina) {
         return istanzaLista != null ? istanzaLista.getBodySottoPagina(keySottoPagina) : VUOTA;
     }
+
+    public String getParagrafo(String keySottoSottoPagina) {
+        return keySottoSottoPagina.contains(SLASH) ? textService.levaCodaDaPrimo(keySottoSottoPagina, SLASH) : keySottoSottoPagina;
+    }
+
+    public String getSottoParagrafo(String keySottoSottoPagina) {
+        return keySottoSottoPagina.contains(SLASH) ? textService.levaPrimaAncheTag(keySottoSottoPagina, SLASH) : keySottoSottoPagina;
+    }
+
 
 }

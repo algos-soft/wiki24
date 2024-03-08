@@ -592,7 +592,9 @@ public class TextService {
             length = tagIni.length();
             posIni = valueIn.indexOf(tagIni);
             posEnd = valueIn.indexOf(tagEnd, posIni + length);
-            valueOut = valueIn.substring(posIni, posEnd + tagEnd.length());
+            if (posEnd > posIni) {
+                valueOut = valueIn.substring(posIni, posEnd + tagEnd.length());
+            }
         }
 
         return valueOut.trim();
@@ -608,7 +610,9 @@ public class TextService {
             length = tagIni.length();
             posIni = valueIn.indexOf(tagIni);
             posEnd = valueIn.indexOf(tagEnd, posIni + length);
-            valueOut = valueIn.substring(posIni + length, posEnd);
+            if (posEnd > posIni) {
+                valueOut = valueIn.substring(posIni + length, posEnd);
+            }
         }
 
         return valueOut.trim();

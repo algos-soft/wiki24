@@ -1,20 +1,14 @@
 package it.algos.wiki24.backend.service;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.tabelle.anni.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
-import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -47,7 +41,7 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
+        listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
@@ -70,7 +64,7 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
+        listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
@@ -93,7 +87,7 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
+        listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
@@ -116,7 +110,7 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
+        listaStr = istanzaUpload.getListaSottoPagine();
         if (listaStr != null && listaStr.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
             for (String keySottopagina : listaStr) {
@@ -153,7 +147,8 @@ public class UploadService {
 
     public void attivita(final AttPluraleEntity attivitaBean) {
         Upload istanzaUpload;
-        List<String> listaStr;
+        List<String> listaStrSotto;
+        List<String> listaStrSottoSotto;
         Lista istanzaLista;
 
         // pagina principale
@@ -161,11 +156,20 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
-        if (listaStr != null && listaStr.size() > 0) {
+        listaStrSotto = istanzaUpload.getListaSottoPagine();
+        if (listaStrSotto != null && listaStrSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
-            for (String keySottopagina : listaStr) {
+            for (String keySottopagina : listaStrSotto) {
                 appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+            }
+        }
+
+        // sottosottopagine
+        listaStrSottoSotto = istanzaUpload.getListaSottoSottoPagine();
+        if (listaStrSottoSotto != null && listaStrSottoSotto.size() > 0) {
+            istanzaLista = istanzaUpload.getIstanzaLista();
+            for (String keySottoSottopagina : listaStrSottoSotto) {
+                appContext.getBean(Upload.class, attivitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottoSottopagina).uploadOnly();
             }
         }
     }
@@ -180,7 +184,8 @@ public class UploadService {
 
     public void nazionalita(final NazPluraleEntity nazionalitaBean) {
         Upload istanzaUpload;
-        List<String> listaStr;
+        List<String> listaStrSotto;
+        List<String> listaStrSottoSotto;
         Lista istanzaLista;
 
         // pagina principale
@@ -188,11 +193,20 @@ public class UploadService {
         istanzaUpload.uploadOnly();
 
         // sottopagine
-        listaStr = istanzaUpload.listaSottoPagine();
-        if (listaStr != null && listaStr.size() > 0) {
+        listaStrSotto = istanzaUpload.getListaSottoPagine();
+        if (listaStrSotto != null && listaStrSotto.size() > 0) {
             istanzaLista = istanzaUpload.getIstanzaLista();
-            for (String keySottopagina : listaStr) {
+            for (String keySottopagina : listaStrSotto) {
                 appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale, istanzaLista, keySottopagina).uploadOnly();
+            }
+        }
+
+        // sottosottopagine
+        listaStrSottoSotto = istanzaUpload.getListaSottoSottoPagine();
+        if (listaStrSottoSotto != null && listaStrSottoSotto.size() > 0) {
+            istanzaLista = istanzaUpload.getIstanzaLista();
+            for (String keySottoSottopagina : listaStrSottoSotto) {
+                appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.attivitaPlurale, istanzaLista, keySottoSottopagina).uploadOnly();
             }
         }
     }

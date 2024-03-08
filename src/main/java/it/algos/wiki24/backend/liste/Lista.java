@@ -127,7 +127,7 @@ public class Lista {
     protected void postConstruct() {
         this.fixPreferenze();
         this.fixRegolazioni();
-        this.numBio();
+        this.fixBio();
         this.listaBio();
         this.listaWrapDidascalie();
         this.mappaGenerale();
@@ -228,7 +228,7 @@ public class Lista {
      *
      * @return -1 se il pattern della classe non è valido, zero se i dati sono validi ma non ci sono biografie <br>
      */
-    protected int numBio() {
+    protected int fixBio() {
         if (bioMongoModulo == null || textService.isEmpty(nomeLista)) {
             return INT_ERROR;
         }
@@ -862,10 +862,6 @@ public class Lista {
     }
 
 
-    public int getNumBio() {
-        return numBio;
-    }
-
     public List<BioMongoEntity> getListaBio() {
         return listaBio;
     }
@@ -988,9 +984,40 @@ public class Lista {
         return typeLista;
     }
 
+    public int getNumBio() {
+        return numBio;
+    }
+
     public int getNumBioSottoPagina(String keySottoPagina) {
         WrapLista listaSottoPagina = mappaGenerale.get(keySottoPagina);
         return listaSottoPagina != null ? listaSottoPagina.getNumBio() : 0;
+    }
+
+    public int getNumBioSottoSottoPagina(String keySottoSottoPagina) {
+        String keyParagrafo = VUOTA;
+        String keySottoParagrafo = VUOTA;
+        WrapLista listaSottoPagina = null;
+        WrapLista listaSottoSottoPagina = null;
+        Map<String, WrapLista> mappa = null;
+
+        if (keySottoSottoPagina.contains(SLASH)) {
+            keyParagrafo = textService.levaCodaDaPrimo(keySottoSottoPagina, SLASH);
+            keySottoParagrafo = textService.levaPrimaAncheTag(keySottoSottoPagina, SLASH);
+        }
+
+        if (textService.isValid(keyParagrafo)) {
+            listaSottoPagina = mappaGenerale.get(keyParagrafo);
+        }
+
+        if (listaSottoPagina != null) {
+            mappa = listaSottoPagina.getMappa();
+        }
+
+        if (mappa != null) {
+            listaSottoSottoPagina = mappa.get(keySottoParagrafo);
+        }
+
+        return listaSottoSottoPagina != null ? listaSottoSottoPagina.getNumBio() : 0;
     }
 
     public List<String> getListaSottoSottoPagine() {

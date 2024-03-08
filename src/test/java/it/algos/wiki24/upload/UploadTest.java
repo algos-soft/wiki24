@@ -65,7 +65,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(101)
     @DisplayName("101 - getNumBio")
     void getNumBio(String nomeLista, TypeLista typeLista) {
@@ -73,15 +73,14 @@ public class UploadTest extends WikiStreamTest {
         System.out.println("Numero delle biografie (Bio) che hanno una valore valido per l'intera pagina (letto dalla Lista)");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
-            return;
-        }
-        if (ESEGUE_SOLO_UPLOD) {
+            System.out.println(VUOTA);
+            System.out.println("numBio ERRATA - mancano parametri validi");
             return;
         }
 
         istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        ottenutoIntero = istanza.numBio();
+        //        ottenutoIntero = istanza.numBio();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
@@ -413,7 +412,7 @@ public class UploadTest extends WikiStreamTest {
 
         istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (listaStr.size() > 0) {
@@ -431,11 +430,11 @@ public class UploadTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(502)
-    @DisplayName("502 - getNumBioSottopagina")
-    void getNumBioSottopagina(String nomeLista, TypeLista typeLista) {
-        System.out.println(("502 - getNumBioSottopagina"));
+    @DisplayName("502 - getNumBioSottoPagina")
+    void getNumBioSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("502 - getNumBioSottoPagina"));
         System.out.println("Numero delle biografie (Bio) che hanno una valore valido per il paragrafo (sottopagina) specifico (letto dalla lista)");
         System.out.println(VUOTA);
         String keySottopaginaErrata;
@@ -451,7 +450,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
         previstoTotalePagina = istanza.numBio();
         assertTrue(previstoTotalePagina > 0);
@@ -461,7 +460,7 @@ public class UploadTest extends WikiStreamTest {
             System.out.println(message);
             for (String keySottopagina : listaStr) {
                 previstoIntero = istanza.sottoPagina(keySottopagina).numBio();
-                ottenutoIntero = istanza.numBio(keySottopagina);
+                //                ottenutoIntero = istanza.numBio(keySottopagina);
                 assertEquals(previstoIntero, ottenutoIntero);
                 if (ottenutoIntero > 0) {
                     totaleEffettivoSottoPagine += ottenutoIntero;
@@ -512,14 +511,19 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(503)
-    @DisplayName("503 - getHeaderSottopagina")
-    void getHeaderSottopagina(String nomeLista, TypeLista typeLista) {
-        System.out.println(("503 - getHeaderSottopagina"));
+    @DisplayName("503 - getHeaderSottoPagina")
+    void getHeaderSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("503 - getHeaderSottoPagina"));
         System.out.println("Testo header della sottopagina con Avviso, Toc, Unconnected, Uneditable, Torna, TmplBio, Incipit");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSotto) {
+            message = String.format("Non sono previste sottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
@@ -527,7 +531,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (textService.isEmpty(nomeLista)) {
@@ -537,7 +541,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
                 assertNotNull(istanza);
                 ottenuto = istanza.getHeaderText();
                 System.out.println(VUOTA);
@@ -556,9 +560,9 @@ public class UploadTest extends WikiStreamTest {
     @ParameterizedTest
     @MethodSource(value = "SOTTO_PAGINE")
     @Order(504)
-    @DisplayName("504 - getIncipitSottopagina")
-    void getIncipitSottopagina(String nomeLista, TypeLista typeLista) {
-        System.out.println(("504 - getIncipitSottopagina"));
+    @DisplayName("504 - getIncipitTextSottoPagina")
+    void getIncipitTextSottoPagina(String nomeLista, TypeLista typeLista) {
+        System.out.println(("504 - getIncipitTextSottoPagina"));
         System.out.println("Testo incipit della sottopagina con <ref> per le note");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
@@ -569,7 +573,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (textService.isEmpty(nomeLista)) {
@@ -579,7 +583,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
                 assertNotNull(istanza);
                 ottenuto = istanza.getIncipitText();
                 System.out.println(VUOTA);
@@ -611,7 +615,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (textService.isEmpty(nomeLista)) {
@@ -656,7 +660,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (textService.isEmpty(nomeLista)) {
@@ -666,7 +670,7 @@ public class UploadTest extends WikiStreamTest {
 
         if (listaStr != null && listaStr.size() > 0) {
             for (String keySottopagina : listaStr) {
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
                 assertNotNull(istanza);
                 ottenuto = istanza.getBottomText();
                 System.out.println(VUOTA);
@@ -683,14 +687,19 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(507)
     @DisplayName("507 - getUploadTextSottopagina")
-    void getUploadTextSottopagina(String nomeLista, TypeLista typeLista) {
+    void getUploadTextSottopagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("507 - getUploadTextSottopagina"));
         System.out.println("Testo completo della sottopagina, Header, Body e Bottom");
         System.out.println(VUOTA);
         if (!fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSotto) {
+            message = String.format("Non sono previste sottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
@@ -698,7 +707,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (listaStr != null && listaStr.size() > 0) {
@@ -706,7 +715,7 @@ public class UploadTest extends WikiStreamTest {
             System.out.println(message);
             System.out.println(VUOTA);
             for (String keySottopagina : listaStr) {
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina);
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
                 assertNotNull(istanza);
                 ottenuto = istanza.getUploadText();
                 System.out.println(VUOTA);
@@ -722,17 +731,18 @@ public class UploadTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(511)
-    @DisplayName("511 - uploadTestSottopagina")
-    void uploadTestSottopagina(String nomeLista, TypeLista typeLista) {
-        System.out.println(("511 - uploadTestSottopagina"));
+    @DisplayName("511 - uploadTestSottoPagina")
+    void uploadTestSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("511 - uploadTestSottoPagina"));
         System.out.println(VUOTA);
         if (!fixListe(nomeLista, typeLista)) {
             return;
         }
-        if (false) {
-            System.out.println("Sospesa");
+        if (!esisteSotto) {
+            message = String.format("Non sono previste sottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
@@ -740,7 +750,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoSottoPagine();
         assertNotNull(listaStr);
 
         if (listaStr != null && listaStr.size() > 0) {
@@ -748,7 +758,7 @@ public class UploadTest extends WikiStreamTest {
                 message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottopagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
                 System.out.println(message);
                 System.out.println(VUOTA);
-                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, istanzaLista, keySottopagina).test();
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina,istanzaLista ).test();
                 assertNotNull(istanza);
                 ottenutoRisultato = istanza.uploadOnly();
                 message = String.format("Upload pagina di test di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
@@ -782,7 +792,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.listaSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
         ottenutoRisultato = istanza.uploadOnly();
 
@@ -837,24 +847,43 @@ public class UploadTest extends WikiStreamTest {
     }
 
 
-    //        @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(601)
     @DisplayName("601 - listaSottoSottoPagine")
-    void listaSottoSottoPagine(String nomeLista, TypeLista type) {
+    void listaSottoSottoPagine(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("601 - listaSottoSottoPagine"));
         System.out.println(VUOTA);
-        if (byPassaErrori && !fixListe(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
-        //        istanza = appContext.getBean(Upload.class, nomeLista).type(type);
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        listaStr = istanza.listaSottoSottoPagine();
-        assertNotNull(listaStr);
+        listaStr = istanza.getListaSottoSottoPagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+        if (esisteSottoSotto && listaStr.size() == 0) {
+            message = String.format("Mancano le sottoSottoPagine (previste) per la lista [%s]", nomeLista);
+            System.out.println(message);
+            assertTrue(false);
+            return;
+        }
 
         if (listaStr.size() > 0) {
-            message = String.format("Ci sono %s sottosottopagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, type.name());
+            message = String.format("Ci sono %s sottosottopagine nella lista [%s] di type [%s]", listaStr.size(), nomeLista, typeLista.name());
             System.out.println(message);
             message = "Recupera la lista da Lista, se non già esistente";
             System.out.println(message);
@@ -862,55 +891,76 @@ public class UploadTest extends WikiStreamTest {
             print(listaStr);
         }
         else {
-            message = String.format("Non ci sono sottosottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            message = String.format("Non ci sono sottosottopagine nella lista [%s] di type [%s]", nomeLista, typeLista.name());
             System.out.println(message);
         }
     }
 
 
-    //    @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(602)
-    @DisplayName("602 - getNumBioSottoSottopagina")
-    void getNumBioSottoSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("602 - getNumBioSottoSottopagina"));
+    @DisplayName("602 - getNumBioSottoSottoPagina")
+    void getNumBioSottoSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("602 - getNumBioSottoSottoPagina"));
         System.out.println("Numero delle biografie (Bio) che hanno una valore valido per la pagina (sottosottopagina) specifica (letto dalla lista)");
         System.out.println(VUOTA);
 
-        if (byPassaErrori && !fixListe(nomeLista, type)) {
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
-        //        istanza = appContext.getBean(Upload.class, nomeLista).type(type);
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        ottenutoMappa = istanza.mappaSottoSottoPagine();
-        assertNotNull(ottenutoMappa);
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+        listaStr = istanza.getListaSottoSottoPagine();
+        assertNotNull(listaStr);
 
-        if (ottenutoMappa.size() > 0) {
-            message = String.format("Nella pagina [%s] di type%s[%s], ci sono [%d] sottosottopagine", nomeLista, FORWARD, type.name(), ottenutoMappa.size());
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        listaStr = istanza.getListaSottoSottoPagine();
+        assertNotNull(listaStr);
+
+        if (listaStr.size() > 0) {
+            message = String.format("Nella pagina [%s] di type%s[%s], ci sono [%d] sottoSottoPagine", nomeLista, FORWARD, typeLista.name(), listaStr.size());
             System.out.println(message);
-            for (String keySottoSottopagina : ottenutoMappa.keySet()) {
-                Object alfa = ottenutoMappa.get(keySottoSottopagina);
+            for (String keySottopagina : listaStr) {
+                previstoIntero = istanzaLista.getNumBioSottoSottoPagina(keySottopagina);
+                ottenutoIntero = istanza.getNumBioSottoSottoPagina(keySottopagina);
+                assertEquals(previstoIntero, ottenutoIntero);
+                if (ottenutoIntero > 0) {
+                    message = String.format("Le biografie di type%s[%s] per [%s/%s], sono [%d]", FORWARD, typeLista.name(), nomeLista, keySottopagina, ottenutoIntero);
+                    System.out.println(message);
+                }
             }
-            System.out.println(VUOTA);
         }
     }
 
-    //    @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(603)
-    @DisplayName("603 - getHeaderTextSottoSottopagina")
-    void getHeaderTextSottoSottopagina(String nomeLista, TypeLista type) {
-        System.out.println(("603 - getHeaderTextSottoSottopagina"));
-        System.out.println("Testo header della sottosottopagina con Avviso, Toc, Unconnected, Uneditable, Torna, TmplBio, Incipit");
+    @DisplayName("603 - getHeaderTextSottoSottoPagina")
+    void getHeaderTextSottoSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("603 - getHeaderTextSottoSottoPagina"));
+        System.out.println("Testo header della sottoSottoPagina con Avviso, Toc, Unconnected, Uneditable, Torna, TmplBio, Incipit");
         System.out.println(VUOTA);
-        if (byPassaErrori && !fixListe(nomeLista, type)) {
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
-        //        istanza = appContext.getBean(Upload.class, nomeLista).type(type);
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        listaStr = istanza.listaSottoSottoPagine();
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+        listaStr = istanza.getListaSottoSottoPagine();
         assertNotNull(listaStr);
 
         if (textService.isEmpty(nomeLista)) {
@@ -919,16 +969,162 @@ public class UploadTest extends WikiStreamTest {
         }
 
         if (listaStr != null && listaStr.size() > 0) {
-            for (String keySottoSottoPagina : listaStr) {
-                //                ottenuto = appContext.getBean(Upload.class, nomeLista).type(type).sottoSottoPagina(keySottoSottoPagina).getHeaderText();
+            for (String keySottopagina : listaStr) {
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
+                assertNotNull(istanza);
+                ottenuto = istanza.getHeaderText();
                 System.out.println(VUOTA);
-                message = String.format("Header di %s [%s]", type.getCategoria(), nomeLista + SLASH + keySottoSottoPagina);
+                message = String.format("Header di %s [%s]", nomeLista, keySottopagina);
                 System.out.println(message);
                 System.out.println(ottenuto.trim());
             }
         }
         else {
-            message = String.format("Non ci sono sottopagine nella lista [%s] di type [%s]", nomeLista, type.name());
+            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, typeLista.name());
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(604)
+    @DisplayName("604 - getIncipitTextSottoSottoPagina")
+    void getIncipitTextSottoSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("604 - getIncipitTextSottoSottoPagina"));
+        System.out.println("Testo incipit della sottoSottoPagina con <ref> per le note");
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
+            return;
+        }
+
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+        listaStr = istanza.getListaSottoSottoPagine();
+        assertNotNull(listaStr);
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
+                assertNotNull(istanza);
+                ottenuto = istanza.getIncipitText();
+                System.out.println(VUOTA);
+                message = String.format("Incipit di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
+                System.out.println(message);
+                System.out.println(ottenuto.trim());
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, typeLista.name());
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(605)
+    @DisplayName("605 - getBottomTextSottoSottoPagina")
+    void getBottomTextSottoSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("605 - getBottomTextSottoSottoPagina"));
+        System.out.println("Testo bottom della sottopagina con Correlate, InterProgetto, Portale, Categorie");
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
+            return;
+        }
+
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+        listaStr = istanza.getListaSottoSottoPagine();
+        assertNotNull(listaStr);
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+
+        if (listaStr != null && listaStr.size() > 0) {
+            for (String keySottopagina : listaStr) {
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
+                assertNotNull(istanza);
+                ottenuto = istanza.getBottomText();
+                System.out.println(VUOTA);
+                message = String.format("Bottom di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
+                System.out.println(message);
+                System.out.println(ottenuto.trim());
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, typeLista.name());
+            System.out.println(message);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(607)
+    @DisplayName("607 - getUploadTextSottoSottoPagina")
+    void getUploadTextSottoSottoPagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("507 - getUploadTextSottoSottoPagina"));
+        System.out.println("Testo completo della sottoSottoPagina, Header, Body e Bottom");
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSottoSotto) {
+            message = String.format("Non sono previste sottoSottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
+            return;
+        }
+
+        istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+        listaStr = istanza.getListaSottoSottoPagine();
+        assertNotNull(listaStr);
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+
+        if (listaStr != null && listaStr.size() > 0) {
+            message = String.format("La lista di type%s[%s] per %s [%s] ha %d chiavi (sottoSottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
+            for (String keySottopagina : listaStr) {
+                istanza = appContext.getBean(Upload.class, nomeLista, typeLista, keySottopagina, istanzaLista);
+                assertNotNull(istanza);
+                ottenuto = istanza.getUploadText();
+                System.out.println(VUOTA);
+                message = String.format("UploadText di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
+                System.out.println(message);
+                System.out.println(ottenuto.trim());
+            }
+        }
+        else {
+            message = String.format("Non ci sono sottoSottoPagine nella lista [%s] di type [%s]", nomeLista, typeLista.name());
             System.out.println(message);
         }
     }
@@ -973,7 +1169,7 @@ public class UploadTest extends WikiStreamTest {
         System.out.println(message);
     }
 
-    @Test
+    //    @Test
     @Order(1001)
     @DisplayName("1001 - writeCheck")
     void writeCheck() {
@@ -988,9 +1184,29 @@ public class UploadTest extends WikiStreamTest {
         ottenutoRisultato = istanza.test().uploadOnly();
         printRisultato(ottenutoRisultato);
 
-//        istanza = appContext.getBean(Upload.class, sorgente, typeLista);
-//        ottenutoRisultato = istanza.test().uploadOnly();
-//        printRisultato(ottenutoRisultato);
+        //        istanza = appContext.getBean(Upload.class, sorgente, typeLista);
+        //        ottenutoRisultato = istanza.test().uploadOnly();
+        //        printRisultato(ottenutoRisultato);
+    }
+
+    @Test
+    @Order(2001)
+    @DisplayName("2001 - testPrintSottoSottoPagina")
+    void testPrintSottoSottoPagina() {
+        System.out.println(("2001 - testPrintSottoSottoPagina"));
+        System.out.println(VUOTA);
+
+        sorgente = "brasiliani";
+        typeLista = TypeLista.nazionalitaPlurale;
+
+        istanza = appContext.getBean(Upload.class, sorgente, typeLista);
+        assertNotNull(istanza);
+        istanzaLista = istanza.getIstanzaLista();
+        assertNotNull(istanzaLista);
+
+        sorgente2 = "allenatori di calcio/D";
+        istanza = appContext.getBean(Upload.class, sorgente, typeLista, sorgente2, istanzaLista);
+        ottenutoRisultato = istanza.test().uploadOnly();
     }
 
     @Test

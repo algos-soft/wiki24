@@ -567,7 +567,7 @@ public class ListaTest extends WikiStreamTest {
     @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(507)
     @DisplayName("507 - dimensioni delle sottoPagine")
-    void dimSottoPagine(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+    void numBioSottoPagine(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("507 - dimensioni delle sottoPagine"));
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
@@ -652,6 +652,55 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(VUOTA);
             for (String key : listaStr) {
                 message = String.format("%s", key);
+                System.out.println(message);
+            }
+        }
+        else {
+            printMancanoBio("Le mappa della lista", nomeLista, typeLista);
+        }
+    }
+
+
+    @ParameterizedTest
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
+    @Order(509)
+    @DisplayName("509 - dimensioni delle sottoSottoPagine")
+    void numBioSottoSottoPagine(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
+        System.out.println(("509 - dimensioni delle sottoSottoPagine"));
+        System.out.println(VUOTA);
+        if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (ESEGUE_SOLO_BODY) {
+            return;
+        }
+
+        if (!esisteSotto) {
+            message = String.format("Non sono previste sottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
+            return;
+        }
+        istanza = appContext.getBean(Lista.class, nomeLista, typeLista);
+        assertNotNull(istanza);
+        listaStr = istanza.getListaSottoSottoPagine();
+
+        if (textService.isEmpty(nomeLista)) {
+            assertNull(listaStr);
+            return;
+        }
+        if (listaStr == null) {
+            assertTrue(false);
+            return;
+        }
+
+        if (listaStr != null) {
+            message = String.format("La mappa della lista di type%s[%s] per %s [%s] ha %d chiavi (sottoPagine)", FORWARD, typeLista.name(), typeLista.getGiornoAnno(), nomeLista, listaStr.size());
+            System.out.println(message);
+            System.out.println(VUOTA);
+
+            for (String key : listaStr) {
+                ottenutoIntero = istanza.getNumBioSottoSottoPagina(key);
+                message = String.format("%s%s%d", key, FORWARD, ottenutoIntero);
                 System.out.println(message);
             }
         }
@@ -924,6 +973,7 @@ public class ListaTest extends WikiStreamTest {
             printMancanoBio("Non ci sono sottoPagine nella lista", nomeLista, typeLista);
         }
     }
+
 
     @Test
     @DisplayName("Sovrascritto da WikiTest (checkIniziale - non usato)")
