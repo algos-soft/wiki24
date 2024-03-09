@@ -59,8 +59,9 @@ public abstract class WikiStreamTest extends WikiTest {
                 Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale, true, true, true),
                 Arguments.of("2023", TypeLista.annoMorte, true, true, false),
                 Arguments.of("birmani", TypeLista.nazionalitaPlurale, true, true, false),
-                Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale, true, true, false)
-        );
+                Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale, true, true, false),
+                Arguments.of("1968", TypeLista.annoNascita, true, true, false)
+                );
     }
 
     //--nome lista

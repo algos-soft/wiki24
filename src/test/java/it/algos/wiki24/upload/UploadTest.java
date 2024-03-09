@@ -650,14 +650,19 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(506)
     @DisplayName("506 - getBottomSottopagina")
-    void getBottomSottopagina(String nomeLista, TypeLista typeLista) {
+    void getBottomSottopagina(String nomeLista, TypeLista typeLista, boolean esistePagina, boolean esisteSotto, boolean esisteSottoSotto) {
         System.out.println(("506 - getBottomSottopagina"));
         System.out.println("Testo bottom della sottopagina con Correlate, InterProgetto, Portale, Categorie");
         System.out.println(VUOTA);
         if (byPassaErrori && !fixListe(nomeLista, typeLista)) {
+            return;
+        }
+        if (!esisteSotto) {
+            message = String.format("Non sono previste sottoPagine per la lista [%s]", nomeLista);
+            System.out.println(message);
             return;
         }
 
@@ -682,6 +687,7 @@ public class UploadTest extends WikiStreamTest {
                 message = String.format("Bottom di %s [%s]", typeLista.getCategoria(), nomeLista + SLASH + keySottopagina);
                 System.out.println(message);
                 System.out.println(ottenuto.trim());
+                System.out.println(VUOTA);
             }
         }
         else {

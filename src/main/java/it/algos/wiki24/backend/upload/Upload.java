@@ -1015,7 +1015,7 @@ public class Upload {
         StringBuffer buffer = new StringBuffer();
         String nomeCat;
         int ordineCategoriaSottopagina;
-        String keyParagrafo = textService.levaPrimaAncheTag(nomeLista, SLASH);
+        String keyParagrafo = textService.levaPrimaAncheTag(titoloPagina, SLASH);
         String nomeAnno = isSottoPagina ? textService.levaCodaDaUltimo(nomeLista, SLASH) : nomeLista;
         AnnoEntity anno = (AnnoEntity) annoModulo.findByKey(nomeAnno);
         String secolo = anno.getSecolo().nome; ;
