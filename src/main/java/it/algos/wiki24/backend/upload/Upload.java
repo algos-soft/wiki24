@@ -406,7 +406,15 @@ public class Upload {
 
         if (!WPref.scriveComunque.is()) {
             newTextSignificativo = switch (typeLista) {
-                case giornoNascita, giornoMorte, annoNascita, annoMorte -> textService.estraeSenza(uploadText, NO_INCLUDE_END, NO_INCLUDE_INI);
+                case giornoNascita, giornoMorte -> textService.estraeSenza(uploadText, NO_INCLUDE_END, NO_INCLUDE_INI);
+                case annoNascita, annoMorte -> {
+                    if (isSottoPagina || isSottoSottoPagina) {
+                        yield textService.levaPrimaDelTag(uploadText, NO_INCLUDE_END);
+                    }
+                    else {
+                        yield textService.estraeSenza(uploadText, NO_INCLUDE_END, NO_INCLUDE_INI);
+                    }
+                }
                 case attivitaPlurale, nazionalitaPlurale -> textService.levaPrimaDelTag(uploadText, NO_INCLUDE_END);
                 default -> VUOTA;
             };
