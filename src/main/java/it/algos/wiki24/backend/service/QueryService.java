@@ -72,6 +72,10 @@ public class QueryService {
         return appContext.getBean(QueryCat.class).getPageIds(categoryTitle);
     }
 
+    public List<String> getTitles(final String categoryTitle) {
+        return appContext.getBean(QueryCat.class).getTitles(categoryTitle);
+    }
+
     public List<WrapBio> getListaBio(final List<Long> listaPageids) {
         return appContext.getBean(QueryListBio.class).getLista(listaPageids);
     }

@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -51,23 +52,20 @@ public class AttSingolareList extends WikiList {
         String ex = "Ex attività";
         String pagina = "Link attività";
 
-        link = String.format("%s%s", PATH_MODULO, plurale);
-        anchor1 = new Anchor(link, textService.setQuadre(plurale));
-        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        link = String.format("%s%s", TAG_MODULO, plurale);
+        anchor1 = WAnchor.build(link, textService.setQuadre(plurale));
 
-        link = String.format("%s%s", PATH_MODULO, ex);
-        anchor2 = new Anchor(link,  textService.setQuadre(ex));
-        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        link = String.format("%s%s", TAG_MODULO, ex);
+        anchor2 = WAnchor.build(link, textService.setQuadre(ex));
 
-        link = String.format("%s%s", PATH_MODULO, pagina);
-        anchor3 = new Anchor(link, textService.setQuadre(pagina));
-        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        link = String.format("%s%s", TAG_MODULO, pagina);
+        anchor3 = WAnchor.build(link, textService.setQuadre(pagina));
 
         message = "Tavola di base. Costruita dai moduli Wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        headerPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2,new Text(SEP), anchor3));
+        headerPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2, new Text(SEP), anchor3));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le attività singolari sono convertite in minuscolo.";
         headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
@@ -112,7 +110,7 @@ public class AttSingolareList extends WikiList {
 
         if (textService.isValid(pluraleValue)) {
             filtri.inizio(propertyPlurale, pluraleValue);
-            filtri.sort(Sort.by(Sort.Direction.ASC,propertyPlurale));
+            filtri.sort(Sort.by(Sort.Direction.ASC, propertyPlurale));
         }
         else {
             filtri.remove(propertyPlurale);

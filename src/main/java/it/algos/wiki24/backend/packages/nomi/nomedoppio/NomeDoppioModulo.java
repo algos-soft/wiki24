@@ -1,16 +1,10 @@
-package it.algos.wiki24.backend.packages.tabelle.nomidoppi;
+package it.algos.wiki24.backend.packages.nomi.nomedoppio;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 /**
  * Project wiki24
@@ -38,6 +32,14 @@ public class NomeDoppioModulo extends WikiModulo {
         super.fixPreferenze();
     }
 
+    public NomeDoppioEntity creaIfNotExists(String nome) {
+        if (existById(nome)) {
+            return null;
+        }
+        else {
+            return (NomeDoppioEntity) insert(newEntity(nome));
+        }
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -52,13 +54,13 @@ public class NomeDoppioModulo extends WikiModulo {
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
-     * @param code (obbligatorio)
+     * @param nome (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeDoppioEntity newEntity(String code) {
+    public NomeDoppioEntity newEntity(String nome) {
         NomeDoppioEntity newEntityBean = NomeDoppioEntity.builder()
-                .code(textService.isValid(code) ? code : null)
+                .nome(textService.isValid(nome) ? nome : null)
                 .build();
 
         return (NomeDoppioEntity) fixKey(newEntityBean);
@@ -68,5 +70,38 @@ public class NomeDoppioModulo extends WikiModulo {
     public NomeDoppioEntity findByKey(final Object keyPropertyValue) {
         return (NomeDoppioEntity) super.findByKey(keyPropertyValue);
     }
+
+
+    @Override
+    public RisultatoReset resetDelete() {
+        RisultatoReset typeReset = super.resetDelete();
+        this.download();
+        return null;
+    }
+
+
+    /**
+     * Legge le mappa di valori dalla pagina di wiki: <br>
+     * Progetto:Antroponimi/Nomi doppi
+     * <p>
+     * Cancella la (eventuale) precedente lista di nomi doppi <br>
+     */
+    public void download() {
+        String testoGrezzo;
+        String wikiTitle = TAG_ANTROPONIMI + DOPPI;
+        inizio = System.currentTimeMillis();
+        String[] parti;
+        super.deleteAll();
+
+        testoGrezzo = wikiApiService.legge(wikiTitle);
+        parti = testoGrezzo.split(CAPO);
+        for (String riga : parti) {
+            if (riga.startsWith(ASTERISCO)) {
+                riga = textService.levaTesta(riga, ASTERISCO).trim();
+                creaIfNotExists(riga);
+            }
+        }
+    }
+
 
 }// end of CrudModulo class

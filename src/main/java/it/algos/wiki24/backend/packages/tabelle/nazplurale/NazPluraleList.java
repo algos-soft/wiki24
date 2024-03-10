@@ -7,6 +7,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -18,12 +19,12 @@ import org.springframework.context.annotation.*;
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
 public class NazPluraleList extends WikiList {
+
     private IndeterminateCheckbox checkSoglia;
 
     private IndeterminateCheckbox checkLista;
 
     private IndeterminateCheckbox checkPagina;
-
 
 
     public NazPluraleList(final NazPluraleModulo crudModulo) {
@@ -53,20 +54,19 @@ public class NazPluraleList extends WikiList {
 
     @Override
     protected void fixHeader() {
-        String categoria = TAG_WIKI + "Categoria:Bio nazionalità";
+        Anchor anchor1;
+        Anchor anchor2;
+        String categoria = CAT + "Bio nazionalità";
 
-        Anchor anchor2 = new Anchor(categoria, textService.setQuadre("Categoria"));
-        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-
-        Anchor anchor3 = new Anchor(TAG_WIKI + PATH_STATISTICHE_NAZIONALITA, textService.setQuadre(STATISTICHE));
-        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor1 = WAnchor.build(categoria, textService.setQuadre(CATEGORIA));
+        anchor2 = WAnchor.build(PATH_STATISTICHE_NAZIONALITA, textService.setQuadre(STATISTICHE));
 
         message = "Tavola di base. Vedi pagine wiki: ";
         Span testo = new Span(message);
         testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
         testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        headerPlaceHolder.add(new Span(testo, anchor2, new Text(SEP), anchor3));
+        headerPlaceHolder.add(new Span(testo, anchor1, new Text(SEP), anchor2));
 
         message = "Indipendentemente da come sono scritte nei moduli, tutte le nazionalità plurali sono convertite in minuscolo.";
         headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());

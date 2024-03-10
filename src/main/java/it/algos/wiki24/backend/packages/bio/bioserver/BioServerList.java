@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.bio.bioserver;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -43,10 +44,9 @@ public class BioServerList extends WikiList {
         Span biografie;
         Span contiene;
         String numPagine;
-        String categoria = TAG_WIKI + CAT + WPref.categoriaBio.getStr();
+        String categoria =   CAT + WPref.categoriaBio.getStr();
 
-        Anchor anchor = new Anchor(categoria, textService.setQuadre(category));
-        anchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        Anchor anchor = WAnchor.build(categoria, textService.setQuadre(category));
 
         message = "Biografie grezze del server. Lette dalla categoria: ";
         biografie = new Span(message);

@@ -323,11 +323,11 @@ public class WikiCost {
 
     public static final String INCIPIT_COGNOMI = "Incipit cognomi";
 
-    public static final String TAG_INCIPIT_NOMI = "Modulo:" + INCIPIT_NOMI;
+    public static final String MODULO = "Modulo:";
+    public static final String TAG_INCIPIT_NOMI = MODULO + INCIPIT_NOMI;
 
-    public static final String TAG_INCIPIT_COGNOMI = "Modulo:" + INCIPIT_COGNOMI;
+    public static final String TAG_INCIPIT_COGNOMI = MODULO + INCIPIT_COGNOMI;
 
-    public static final String MODULO = "Modulo";
 
     public static final String PROGETTO = "Progetto";
 
@@ -339,7 +339,7 @@ public class WikiCost {
 
     public static final String COGNOMI_LINGUA = "Cognomi per lingua";
 
-    public static final String CATEGORIA_COGNOMI = CATEGORIA + DUE_PUNTI + COGNOMI_LINGUA;
+    public static final String CATEGORIA_COGNOMI = CAT + COGNOMI_LINGUA;
 
 
     public static final String NAZ_LOWER = NAZ.toLowerCase();

@@ -55,10 +55,6 @@ public class BioMongoList extends WikiList {
     protected void fixHeader() {
         String category = WPref.categoriaBio.getStr();
         Span biografie;
-        String categoria = TAG_WIKI + CAT + WPref.categoriaBio.getStr();
-
-        Anchor anchor = new Anchor(categoria, textService.setQuadre(category));
-        anchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         message = "Biografie con i parametri significativi. Elaborati da BioServer";
         biografie = new Span(message);

@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.tabelle.nomidoppi;
+package it.algos.wiki24.backend.packages.nomi.nome;
 
 import it.algos.base24.backend.annotation.*;
 import it.algos.base24.backend.entity.*;
@@ -12,15 +12,18 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "nomedoppio", typeList = TypeList.standard)
-public class NomeDoppioEntity extends AbstractEntity {
+@AEntity(collectionName = "nome", keyPropertyName = "sigla", typeList = TypeList.standard)
+public class NomeEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text)
-    public String code;
+    @AField(type = TypeField.text, widthRem = 6)
+    public String sigla;
+
+    @AField(type = TypeField.text, widthRem = 16)
+    public String descrizione;
 
     @Override
     public String toString() {
-        return code;
+        return sigla;
     }
 
 }// end of Entity class

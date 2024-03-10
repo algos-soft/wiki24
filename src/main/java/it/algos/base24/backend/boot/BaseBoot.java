@@ -113,9 +113,9 @@ public class BaseBoot {
         this.fixMenuRoutes();
         this.fixTask();
         this.fixData();
+        this.fixLogin();
         this.printInfo();
         //        this.fixVersioni();
-        this.fixLogin();
 
         //        logger.setUpEnd();
     }

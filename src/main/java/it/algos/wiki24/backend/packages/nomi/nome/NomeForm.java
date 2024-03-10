@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.tabelle.nomidoppi;
+package it.algos.wiki24.backend.packages.nomi.nome;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NomeDoppioForm extends CrudForm {
+public class NomeForm extends CrudForm {
 
 
-    public NomeDoppioForm(NomeDoppioModulo crudModulo, NomeDoppioEntity entityBean, CrudOperation operation) {
+    public NomeForm(NomeModulo crudModulo, NomeEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

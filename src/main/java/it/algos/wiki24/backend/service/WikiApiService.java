@@ -61,6 +61,7 @@ public class WikiApiService {
     public static final String QUERY = "query";
 
     public static final String EDIT = "edit";
+
     public static final String NEW = "new";
 
     public static final String NEW_REV_ID = "newrevid";
@@ -333,18 +334,36 @@ public class WikiApiService {
      */
     public Map<String, String> leggeMappaModulo(final String wikiTitle) {
         Map<String, String> mappa = null;
-        String tagRighe = CAPO;
-        String tagSezioni = UGUALE_SEMPLICE;
-        String[] righe = null;
-        String[] sezioni = null;
-        String key = VUOTA;
-        String value;
         String testoModulo = this.leggeModulo(wikiTitle);
 
         if (textService.isValid(testoModulo)) {
             testoModulo = textService.levaTesta(testoModulo, "return");
             testoModulo = textService.levaTesta(testoModulo, "{");
             testoModulo = textService.levaCoda(testoModulo, "}");
+            mappa = creaMappaTestoModulo(testoModulo);
+        }
+
+        return mappa;
+    }
+
+
+    /**
+     * Legge la mappa dei valori di modulo di una pagina wiki <br>
+     *
+     * @param testoModulo della pagina wiki
+     *
+     * @return mappa chiave=valore del modulo
+     */
+    public Map<String, String> creaMappaTestoModulo(final String testoModulo) {
+        Map<String, String> mappa = null;
+        String tagRighe = CAPO;
+        String tagSezioni = UGUALE_SEMPLICE;
+        String[] righe = null;
+        String[] sezioni;
+        String key = VUOTA;
+        String value;
+
+        if (textService.isValid(testoModulo)) {
             righe = testoModulo.split(tagRighe);
         }
 
@@ -881,11 +900,12 @@ public class WikiApiService {
     }
 
     public void editWikiPage(String wikiTitle) {
-        String  link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=edit&section=0", wikiTitle);
+        String link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=edit&section=0", wikiTitle);
         UI.getCurrent().getPage().open(link);
     }
+
     public void cronoWikiPage(String wikiTitle) {
-        String  link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=history", wikiTitle);
+        String link = String.format("https://it.wikipedia.org/w/index.php?title=%s&action=history", wikiTitle);
         UI.getCurrent().getPage().open(link);
     }
 

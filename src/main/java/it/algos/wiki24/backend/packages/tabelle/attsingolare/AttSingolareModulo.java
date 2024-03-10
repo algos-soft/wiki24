@@ -120,18 +120,6 @@ public class AttSingolareModulo extends WikiModulo {
                 .stream()
                 .map(bean -> (AttSingolareEntity) bean)
                 .collect(Collectors.toList());
-        //        Query query = new Query();
-        //
-        //        if (textService.isEmpty(propertyName)) {
-        //            return null;
-        //        }
-        //        if (propertyValue == null) {
-        //            return null;
-        //        }
-        //
-        //        query.addCriteria(Criteria.where(propertyName).is(propertyValue));
-        //
-        //        return findQuery(query);
     }
 
     protected List<AttSingolareEntity> findQuery(Query query) {

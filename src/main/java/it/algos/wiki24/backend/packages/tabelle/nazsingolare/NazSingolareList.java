@@ -6,6 +6,7 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
@@ -46,13 +47,11 @@ public class NazSingolareList extends WikiList {
         String plurale = "Plurale nazionalità";
         String pagina = "Link nazionalità";
 
-        link = String.format("%s%s", PATH_MODULO, plurale);
-        anchor1 = new Anchor(link, textService.setQuadre(plurale));
-        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        link = String.format("%s%s", TAG_MODULO, plurale);
+        anchor1 = WAnchor.build(link, textService.setQuadre(plurale));
 
-        link = String.format("%s%s", PATH_MODULO, pagina);
-        anchor2 = new Anchor(link, textService.setQuadre(pagina));
-        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        link = String.format("%s%s", TAG_MODULO, pagina);
+        anchor2 = WAnchor.build(link, textService.setQuadre(pagina));
 
         message = "Tavola di base. Costruita dai moduli Wiki: ";
         Span testo = new Span(message);
