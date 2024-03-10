@@ -25,8 +25,7 @@ public class BioServerEntity extends AbstractEntity {
     public long pageId;
 
 
-    //    @NotBlank()
-    @AField(type = TypeField.text, widthRem = 20)
+    @AField(type = TypeField.wikiAnchor, widthRem = 16)
     public String wikiTitle;
 
     //    @Lob
@@ -36,7 +35,6 @@ public class BioServerEntity extends AbstractEntity {
 
     @AField(type = TypeField.localDateTime, typeDate = TypeDate.normaleOrario)
     public LocalDateTime timestamp;
-
 
 
     @Override

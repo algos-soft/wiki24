@@ -19,9 +19,6 @@ public class NomeCategoriaEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String nome;
 
-    @AField(type = TypeField.linkWiki, headerText = "pagina", anchorPrefix = "Progetto:Biografie/Attività/")
-    public String linkPagina;
-
     @AField(type = TypeField.enumType)
     public TypeGenere typeGenere;
 

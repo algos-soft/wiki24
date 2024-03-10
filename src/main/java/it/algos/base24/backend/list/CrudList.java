@@ -263,11 +263,11 @@ public abstract class CrudList extends VerticalLayout {
             }
         }
 
-        headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso());
-        headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso());
+        headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso().small());
+        headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso().small());
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
-            headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic());
+            headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic().small());
         }
     }
 

@@ -23,13 +23,13 @@ public class AttPluraleEntity extends AbstractEntity {
     @AField(type = TypeField.linkStatico, headerText = "singolari", widthRem = 30)
     public List<String> txtSingolari;
 
-    @AField(type = TypeField.linkWiki, headerText = "lista", anchorPrefix = "Progetto:Biografie/Attività/")
+    @AField(type = TypeField.linkWiki, anchorPrefix = "Progetto:Biografie/Attività/")
     public String lista;
 
     @AField(type = TypeField.linkWiki)
     public String pagina;
 
-    @AField(type = TypeField.linkWiki, headerText = "cat", anchorPrefix = "Categoria:")
+    @AField(type = TypeField.linkWiki, anchorPrefix = "Categoria:")
     public String categoria;
 
     @AField(type = TypeField.booleano, headerText = "s", widthRem = 3)

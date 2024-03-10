@@ -18,6 +18,8 @@ import org.springframework.context.annotation.Scope;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class WAnchor extends Anchor {
 
+    private static final boolean BOLD = false;
+
     public WAnchor() {
     }
 
@@ -28,7 +30,9 @@ public class WAnchor extends Anchor {
     public static WAnchor build(String href, String text) {
         WAnchor wAnchor = new WAnchor(TAG_WIKI + href, text);
         wAnchor.setTarget(AnchorTarget.BLANK);
-        wAnchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        if (BOLD) {
+            wAnchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        }
         wAnchor.getElement().getStyle().set("color", "blue");
         return wAnchor;
     }

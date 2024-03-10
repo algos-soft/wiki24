@@ -5,7 +5,9 @@ import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.data.renderer.*;
+import it.algos.base24.backend.boot.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.utility.preferenza.*;
@@ -110,7 +112,8 @@ public class ColumnService {
             case enumType -> grid.addColumn(propertyName).setSortable(sortable);
             case linkStatico -> grid.addColumn(propertyName).setSortable(sortable);
             case linkDBRef -> grid.addColumn(propertyName).setSortable(sortable);
-            case linkWiki -> grid.addColumn(new ComponentRenderer<>(entity -> {
+            case linkWiki -> grid.addColumn(propertyName).setSortable(sortable);
+            case wikiAnchor -> grid.addColumn(new ComponentRenderer<>(entity -> {
                 Object obj = null;
                 Anchor anchor;
                 String wikiLink = VUOTA;
@@ -132,11 +135,7 @@ public class ColumnService {
                         wikiLink = wikiTitle;
                         wikiLabel = wikiTitle;
                     }
-                    anchor = new Anchor(TAG_WIKI + anchorPrefix + wikiLink, wikiLabel);
-                    anchor.getElement().getStyle().set("color", "blue");
-                    //                    anchor.getElement().getStyle().set("fontWeight", "bold");
-                    //                    anchor.getElement().getStyle().set("font-style", "italic");
-
+                    anchor = WAnchor.build(  anchorPrefix + wikiLink, wikiLabel);
                     return new Span(anchor);
                 }
                 return new Span(VUOTA);
@@ -202,9 +201,7 @@ public class ColumnService {
                 colonna.setHeader(headerIcon);
             }
             else {
-                //                if (textService.isEmpty(colonna.getHeaderText())) {
                 colonna.setHeader(textService.primaMaiuscola(headerText));
-                //                }
             }
             if (type == TypeField.ordine) {
                 colonna.setHeader("#");

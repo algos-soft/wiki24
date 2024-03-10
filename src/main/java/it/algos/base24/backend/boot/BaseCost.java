@@ -39,7 +39,9 @@ public class BaseCost {
     public static final String SEP_TABLE = "|-";
 
     public static final String CONFIG = "config";
+
     public static final int INT_ERROR = -1;
+
     public static final String STRING_ERROR = "errore";
 
     public static final String FRONTEND = "frontend";
@@ -71,6 +73,7 @@ public class BaseCost {
     public static final String TAB = "\t";
 
     public static final String APICETTI = "\"";
+
     public static final String APICE = "'";
 
     public static final String VIRGOLA = ",";
@@ -225,6 +228,8 @@ public class BaseCost {
 
     public static String TEXT_BASE = "Tavola di base.";
 
+    public static final String PAGINA = "Pagina";
+
     public static String TEXT_WIKI = TEXT_BASE + SPAZIO + "Costruita dalle pagine Wiki: ";
 
 
@@ -263,6 +268,7 @@ public class BaseCost {
     public static String TEXT_EXPORT = "Export dati come esempio.";
 
     public static String TEXT_TYPE_BOOL = "Test di booleani utilizzabili nelle liste in vari formati selezionati da [TypeBool] in @AField di xxxEntity.";
+
     public static String TEXT_TYPE_DATE = "Test di date utilizzabili nelle liste in vari formati selezionati da [TypeDate] in @AField di xxxEntity.";
 
 

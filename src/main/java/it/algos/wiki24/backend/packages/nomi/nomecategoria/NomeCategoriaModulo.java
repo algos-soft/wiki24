@@ -66,7 +66,7 @@ public class NomeCategoriaModulo extends WikiModulo {
             return null;
         }
 
-        return (NomeCategoriaEntity) insert(newEntity(wikiTitle, typeGenere, null));
+        return (NomeCategoriaEntity) insert(newEntity(wikiTitle, typeGenere));
     }
 
 
@@ -77,7 +77,7 @@ public class NomeCategoriaModulo extends WikiModulo {
      */
     @Override
     public NomeCategoriaEntity newEntity() {
-        return newEntity(VUOTA, null, VUOTA);
+        return newEntity(VUOTA, null);
     }
 
     /**
@@ -85,15 +85,13 @@ public class NomeCategoriaModulo extends WikiModulo {
      *
      * @param nome       (obbligatorio)
      * @param typeGenere (obbligatorio)
-     * @param linkPagina (facoltativa)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeCategoriaEntity newEntity(final String nome, final TypeGenere typeGenere, final String linkPagina) {
+    public NomeCategoriaEntity newEntity(final String nome, final TypeGenere typeGenere) {
         NomeCategoriaEntity newEntityBean = NomeCategoriaEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .typeGenere(typeGenere != null ? typeGenere : TypeGenere.nessuno)
-                .linkPagina(textService.isValid(linkPagina) ? linkPagina : null)
                 .build();
 
         return (NomeCategoriaEntity) fixKey(newEntityBean);

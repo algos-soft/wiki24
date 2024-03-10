@@ -18,7 +18,7 @@ public class NomePaginaEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String nome;
 
-    @AField(type = TypeField.linkWiki)
+    @AField(type = TypeField.wikiAnchor)
     public String pagina;
 
     @Override

@@ -24,6 +24,8 @@ public class NomeDoppioList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaBottoneElabora = false;
     }
 
     @Override

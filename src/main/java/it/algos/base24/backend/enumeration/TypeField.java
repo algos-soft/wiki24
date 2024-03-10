@@ -38,7 +38,7 @@ public enum TypeField implements Type {
     linkWikiCheck(12, 16),
     image(3, 9),
     vaadinIcon(8, 8),
-    anchor(10, 10),
+    wikiAnchor(12, 16),
     enumType(8, 8),
 
     preferenza(12, 12),
@@ -72,7 +72,7 @@ public enum TypeField implements Type {
     public List<String> getAllTags() {
         return getAllEnums()
                 .stream()
-                .map(type->type.getTag())
+                .map(type -> type.getTag())
                 .collect(Collectors.toList());
     }
 
