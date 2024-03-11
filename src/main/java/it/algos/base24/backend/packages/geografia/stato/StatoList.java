@@ -5,10 +5,11 @@ import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.geografia.continente.*;
+import it.algos.base24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -45,25 +46,37 @@ public class StatoList extends CrudList {
         String alfa2 = "ISO 3166-1";
 
         link = String.format("%s%s", TAG_WIKI, alfa3);
-        caption = String.format("%s%s%s", QUADRA_INI, alfa3, QUADRA_END);
-        anchor1 = new Anchor(link, caption);
-        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor1 = WAnchor.build(link, textService.setQuadre(alfa3)).bold();
+
+//        caption = String.format("%s%s%s", QUADRA_INI, alfa3, QUADRA_END);
+//        anchor1 = new Anchor(link, caption);
+//        anchor1.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         link = String.format("%s%s", TAG_WIKI, capitali);
-        caption = String.format("%s%s%s", QUADRA_INI, capitali, QUADRA_END);
-        anchor2 = new Anchor(link, caption);
-        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor2 = WAnchor.build(link, textService.setQuadre(capitali)).bold();
+//        caption = String.format("%s%s%s", QUADRA_INI, capitali, QUADRA_END);
+//        anchor2 = new Anchor(link, caption);
+//        anchor2.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
 
         link = String.format("%s%s", TAG_WIKI, alfa2);
-        caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
-        anchor3 = new Anchor(link, caption);
-        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        anchor3 = WAnchor.build(link, textService.setQuadre(alfa2)).bold();
+//        caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
+//        anchor3 = new Anchor(link, caption);
+//        anchor3.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        BSpan testo = BSpan.text( TEXT_WIKI).bold().verde();
+        headerPlaceHolder.add(new Span(testo, new Text(SPAZIO), anchor1,new Text(SPAZIO), anchor2,new Text(SPAZIO), anchor3));
 
-        Span testo = new Span(typeList.getInfoScopo());
-        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+//        Span testo = new Span(typeList.getInfoScopo());
+//        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+//        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
 
-        headerPlaceHolder.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
+        super.infoScopo = VUOTA;
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
+
+
+//        headerPlaceHolder.add(new Span(testo, anchor1, new Text(VIRGOLA_SPAZIO), anchor2, new Text(VIRGOLA_SPAZIO), anchor3));
+//        headerPlaceHolder.add(new Span(testo, new Text(SPAZIO), anchor));
 
         super.fixHeader();
     }

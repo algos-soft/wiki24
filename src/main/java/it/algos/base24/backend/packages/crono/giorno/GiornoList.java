@@ -2,6 +2,7 @@ package it.algos.base24.backend.packages.crono.giorno;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import org.springframework.beans.factory.annotation.*;
@@ -28,7 +29,10 @@ public class GiornoList extends CrudList {
 
     @Override
     public void fixHeader() {
-        super.infoScopo = String.format(typeList.getInfoScopo(), "Giorno");;
+        super.infoScopo = String.format(typeList.getInfoScopo(), "Giorno");
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
+
         super.fixHeader();
     }
 

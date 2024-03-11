@@ -1,13 +1,16 @@
 package it.algos.base24.backend.packages.geografia.regione;
 
+import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.geografia.stato.*;
+import it.algos.base24.ui.dialog.*;
 import org.springframework.beans.factory.annotation.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
@@ -36,21 +39,16 @@ public class RegioneList extends CrudList {
 
     @Override
     public void fixHeader() {
-        Anchor anchor;
-        String link;
-        String caption;
-        String alfa1 = "ISO 3166-1";
-        String alfa2 = "ISO 3166-2:xx";
+        String link = "ISO 3166-1";
+        String link2 = "ISO 3166-2:xx";
 
-        link = String.format("%s%s", TAG_WIKI, alfa1);
-        caption = String.format("%s%s%s", QUADRA_INI, alfa2, QUADRA_END);
-        anchor = new Anchor(link, caption);
-        anchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
+        WAnchor anchor = WAnchor.build(  link, textService.setQuadre( link2)).bold();
+        BSpan testo = BSpan.text( TEXT_WIKI).bold().verde();
+        headerPlaceHolder.add(new Span(testo, new Text(SPAZIO), anchor));
 
-        Span testo = new Span(typeList.getInfoScopo());
-        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
-        headerPlaceHolder.add(new Span(testo, anchor));
+        super.infoScopo = VUOTA;
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
 
         super.fixHeader();
     }

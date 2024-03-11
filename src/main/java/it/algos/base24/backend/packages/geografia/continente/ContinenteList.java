@@ -1,6 +1,7 @@
 package it.algos.base24.backend.packages.geografia.continente;
 
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.importexport.*;
 import it.algos.base24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
@@ -20,6 +21,8 @@ public class ContinenteList extends CrudList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaBottoneShows = false;
     }
 
     /**
@@ -27,7 +30,12 @@ public class ContinenteList extends CrudList {
      */
     @Override
     public void fixHeader() {
-        super.infoScopo = String.format(typeList.getInfoScopo(), "Continente", "Continente"); ;
+        String enumeration = "Continente";
+
+        super.infoScopo = String.format(TEXT_TAVOLA + SPAZIO + TEXT_ENUM, enumeration, enumeration); ;
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
+
         super.fixHeader();
     }
 

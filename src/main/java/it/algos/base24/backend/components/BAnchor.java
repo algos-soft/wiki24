@@ -16,27 +16,25 @@ import org.springframework.context.annotation.Scope;
  */
 @SpringComponent
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class WAnchor extends Anchor {
+public class BAnchor extends Anchor {
 
     private static final boolean BOLD = false;
 
-    public WAnchor() {
+    public BAnchor() {
     }
 
-    public WAnchor(String href, String text) {
+    public BAnchor(String href, String text) {
         super(href, text);
     }
 
-    /**
-     * Pattern Builder <br>
-     */
-    public WAnchor bold() {
-        this.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-        return this;
-    }
+    public static BAnchor build(String href, String text) {
+        BAnchor wAnchor;
 
-    public static WAnchor build(String href, String text) {
-        WAnchor wAnchor = new WAnchor(TAG_WIKI + href, text);
+        if (!href.startsWith(TAG_INIZIALE)) {
+            href = TAG_INIZIALE + href;
+        }
+
+        wAnchor = new BAnchor(href, text);
         wAnchor.setTarget(AnchorTarget.BLANK);
         if (BOLD) {
             wAnchor.getElement().getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());

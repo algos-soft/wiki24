@@ -4,6 +4,7 @@ import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.list.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.ui.wrapper.*;
@@ -35,7 +36,10 @@ public class AnnoList extends CrudList {
 
     @Override
     public void fixHeader() {
-        super.infoScopo = String.format(typeList.getInfoScopo(), "Anno"); ;
+        super.infoScopo = String.format(typeList.getInfoScopo(), "Anno");
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
+
         super.fixHeader();
         headerPlaceHolder.add(ASpan.text("L'anno [zero] non esiste").blue().bold());
     }

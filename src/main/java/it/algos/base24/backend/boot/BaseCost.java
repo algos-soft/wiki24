@@ -233,7 +233,9 @@ public class BaseCost {
     public static String TEXT_WIKI = TEXT_BASE + SPAZIO + "Costruita dalle pagine Wiki: ";
 
 
-    public static String TEXT_CSV = "File originale (CSV) sul server [/www.algos.it/vaadin24/config/%s]";
+    public static String LINK_SERVER_ALGOS = "/www.algos.it/vaadin24/config/";
+
+    public static String TEXT_CSV = "File originale (CSV) sul server ";
 
     public static String TEXT_HARD = "Solo hard coded. Non creabili, non modificabili e non cancellabili.";
 

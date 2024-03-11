@@ -13,16 +13,16 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "provincia", keyPropertyName = "sigla", typeList = TypeList.hardCsv,usaIdPrimaMinuscola = false)
+@AEntity(collectionName = "provincia", keyPropertyName = "sigla", typeList = TypeList.hardCsv, usaIdPrimaMinuscola = false)
 public class ProvinciaEntity extends AbstractEntity {
 
     @AField(type = TypeField.text, widthRem = 6)
     public String sigla;
 
-    @AField(type = TypeField.text, widthRem = 12)
+    @AField(type = TypeField.wikiAnchor, widthRem = 12, anchorPrefix = "Provincia di ")
     public String nomeBreve;
 
-    @AField(type = TypeField.text, widthRem = 24)
+    @AField(type = TypeField.wikiAnchor, widthRem = 24)
     public String nomeCompleto;
 
     @AField(type = TypeField.linkDBRef, widthRem = 10, linkClazz = RegioneEntity.class)

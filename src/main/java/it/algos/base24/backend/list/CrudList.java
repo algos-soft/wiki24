@@ -92,6 +92,8 @@ public abstract class CrudList extends VerticalLayout {
     protected VerticalLayout bottomPlaceHolder;
 
     protected String infoScopo;
+    protected String infoCreazione;
+    protected String infoReset;
 
     public boolean usaBottoneDeleteAll;
 
@@ -254,17 +256,26 @@ public abstract class CrudList extends VerticalLayout {
      * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
      */
     protected void fixHeader() {
-        if (typeList != TypeList.hardWiki && typeList != TypeList.softWiki) {
-            if (textService.isEmpty(infoScopo)) {
-                infoScopo = typeList.getInfoScopo();
-            }
-            if (textService.isValid(infoScopo)) {
-                headerPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
-            }
+//        if (typeList != TypeList.hardWiki && typeList != TypeList.softWiki) {
+//            if (textService.isEmpty(infoScopo)) {
+//                infoScopo = typeList.getInfoScopo();
+//            }
+//            if (textService.isValid(infoScopo)) {
+//                headerPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
+//            }
+//        }
+        if (textService.isValid(infoScopo)) {
+            headerPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
+        }
+        if (textService.isValid(infoCreazione)) {
+            headerPlaceHolder.add(ASpan.text(infoCreazione).rosso().small());
+        }
+        if (textService.isValid(infoReset)) {
+            headerPlaceHolder.add(ASpan.text(infoReset).rosso().small());
         }
 
-        headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso().small());
-        headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso().small());
+//        headerPlaceHolder.add(ASpan.text(typeList.getInfoCreazione()).rosso().small());
+//        headerPlaceHolder.add(ASpan.text(typeList.getInfoReset()).rosso().small());
 
         if (usaBottoneSearch && textService.isValid(searchFieldName)) {
             headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic().small());

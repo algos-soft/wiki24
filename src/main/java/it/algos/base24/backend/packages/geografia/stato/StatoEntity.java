@@ -19,10 +19,10 @@ public class StatoEntity extends AbstractEntity {
     @AField(type = TypeField.ordine)
     public int ordine;
 
-    @AField(type = TypeField.text, widthRem = 14)
+    @AField(type = TypeField.wikiAnchor)
     public String nome;
 
-    @AField(type = TypeField.text, widthRem = 14)
+    @AField(type = TypeField.wikiAnchor)
     public String capitale;
 
     @AField(type = TypeField.text, widthRem = 6)
