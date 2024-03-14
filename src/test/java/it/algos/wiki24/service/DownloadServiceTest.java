@@ -5,7 +5,6 @@ import it.algos.*;
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.basetest.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -31,7 +30,7 @@ import java.util.*;
 @Tag("service")
 @DisplayName("Download Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DownloadServiceTest extends ServiceTest {
+public class DownloadServiceTest {
 
     @Inject
     private DownloadService service;
