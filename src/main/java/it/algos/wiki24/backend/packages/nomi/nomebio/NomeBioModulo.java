@@ -12,6 +12,7 @@ import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomi.nomepagina.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -133,6 +134,9 @@ public class NomeBioModulo extends WikiModulo {
     public List<NomeBioEntity> findAll() {
         return super.findAll();
     }
+    public List<NomeBioEntity> findAllSuperaSoglia() {
+        return findAll().stream().filter(bean->bean.superaSoglia).toList();
+    }
 
     @Override
     public NomeBioEntity findByKey(final Object keyPropertyValue) {
@@ -206,6 +210,38 @@ public class NomeBioModulo extends WikiModulo {
 
         super.fixInfoElabora();
         return VUOTA;
+    }
+
+
+    @Override
+    public String uploadAll() {
+        inizio = System.currentTimeMillis();
+
+        message = String.format("Inizio del ciclo di upload di tutti nomi (che superano la soglia prevista)");
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+
+        for (NomeBioEntity nomBean : findAllSuperaSoglia()) {
+            uploadPagina(nomBean);
+        }
+
+        message = String.format("Fine del ciclo di upload di tutti nomi (che superano la soglia prevista)");
+        logger.info(new WrapLog().message(message).type(TypeLog.upload));
+        logger.info(new WrapLog().message(VUOTA).type(TypeLog.upload));
+
+        return super.fixUpload(inizio);
+    }
+
+
+    @Override
+    public void testPagina(AbstractEntity nome) {
+        uploadService.nomeTest((NomeBioEntity) nome);
+    }
+
+
+    @Override
+    public void uploadPagina(AbstractEntity nome) {
+        uploadService.nomeOnly((NomeBioEntity) nome);
     }
 
 }// end of CrudModulo class

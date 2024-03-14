@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.service;
 
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.nomi.nomebio.*;
 import it.algos.wiki24.backend.packages.tabelle.anni.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.giorni.*;
@@ -185,6 +186,12 @@ public class UploadService {
 
     public WResult nazionalitaOnly(final NazPluraleEntity nazionalitaBean) {
         return appContext.getBean(Upload.class, nazionalitaBean.plurale, TypeLista.nazionalitaPlurale).uploadOnly();
+    }
+    public WResult nomeTest(final NomeBioEntity nomeBean) {
+        return appContext.getBean(Upload.class, nomeBean.nome, TypeLista.nomi).test().uploadOnly();
+    }
+    public WResult nomeOnly(final NomeBioEntity nomeBean) {
+        return appContext.getBean(Upload.class, nomeBean.nome, TypeLista.nomi).uploadOnly();
     }
 
     public void nazionalita(final NazPluraleEntity nazionalitaBean) {

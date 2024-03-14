@@ -61,7 +61,7 @@ public abstract class WikiStreamTest extends WikiTest {
 //                Arguments.of("birmani", TypeLista.nazionalitaPlurale, true, true, false),
 //                Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale, true, true, false),
 //                Arguments.of("1968", TypeLista.annoNascita, true, true, false),
-                Arguments.of("Adrian", TypeLista.nomi, true, false, false)
+                Arguments.of("Adriana", TypeLista.nomi, true, false, false)
                 );
     }
 

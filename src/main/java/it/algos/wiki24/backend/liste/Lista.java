@@ -173,7 +173,7 @@ public class Lista {
             case annoNascita, annoMorte -> true;
             case attivitaSingolare, attivitaPlurale -> false;
             case nazionalitaSingolare, nazionalitaPlurale -> false;
-            case nomi -> true;
+            case nomi -> false;
             default -> false;
         };
 
