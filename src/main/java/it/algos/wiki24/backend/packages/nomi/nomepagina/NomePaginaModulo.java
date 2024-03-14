@@ -1,13 +1,18 @@
 package it.algos.wiki24.backend.packages.nomi.nomepagina;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.base24.backend.entity.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.exception.*;
 import it.algos.base24.backend.logic.*;
 import it.algos.base24.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
+import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
+import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
+import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.stereotype.*;
 
 import java.util.*;
@@ -16,6 +21,8 @@ import com.vaadin.flow.spring.annotation.SpringComponent;
 import org.springframework.context.annotation.Scope;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.vaadin.flow.component.textfield.TextField;
+
+import javax.inject.*;
 
 /**
  * Project wiki24
@@ -28,6 +35,9 @@ import com.vaadin.flow.component.textfield.TextField;
 public class NomePaginaModulo extends WikiModulo {
 
     public static final String INCIPIT_NOMI = "Incipit nomi";
+
+    @Inject
+    NomeCategoriaModulo nomeCategoriaModulo;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -46,14 +56,17 @@ public class NomePaginaModulo extends WikiModulo {
     }
 
     public NomePaginaEntity creaIfNotExists(String nome, String pagina) {
+        return creaIfNotExists(nome, pagina, false, false);
+    }
+
+    public NomePaginaEntity creaIfNotExists(String nome, String pagina, boolean aggiunto, boolean uguale) {
         if (existByKey(nome)) {
             return null;
         }
         else {
-            return (NomePaginaEntity) insert(newEntity(nome, pagina));
+            return (NomePaginaEntity) insert(newEntity(nome, pagina, aggiunto, uguale));
         }
     }
-
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -62,7 +75,7 @@ public class NomePaginaModulo extends WikiModulo {
      */
     @Override
     public NomePaginaEntity newEntity() {
-        return newEntity(VUOTA, VUOTA);
+        return newEntity(VUOTA, VUOTA, false, false);
     }
 
     /**
@@ -73,10 +86,12 @@ public class NomePaginaModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomePaginaEntity newEntity(final String nome, final String pagina) {
+    public NomePaginaEntity newEntity(final String nome, final String pagina, boolean aggiunto, boolean uguale) {
         NomePaginaEntity newEntityBean = NomePaginaEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
+                .aggiunto(aggiunto)
+                .uguale(uguale)
                 .build();
 
         return (NomePaginaEntity) fixKey(newEntityBean);
@@ -85,6 +100,9 @@ public class NomePaginaModulo extends WikiModulo {
     @Override
     public List<NomePaginaEntity> findAll() {
         return super.findAll();
+    }
+    public List<String> findAllForKey() {
+        return findAll().stream().map(bean -> bean.nome).toList();
     }
 
     @Override
@@ -137,5 +155,57 @@ public class NomePaginaModulo extends WikiModulo {
         super.fixDownload(inizio);
     }
 
+    @Override
+    public String elabora() {
+        super.elabora();
+
+        List<NomeCategoriaEntity> listaNomiCategoria = null;
+        NomePaginaEntity entityBean;
+        List<AbstractEntity> lista = new ArrayList<>();
+        List<NomePaginaEntity> listaNomi;
+        String suffissoNome = SPAZIO + "(nome)";
+
+
+        //--Controllo e recupero di NomiCategoria
+        nomeCategoriaModulo.download();
+        listaNomiCategoria = nomeCategoriaModulo.findAll();
+
+        if (listaNomiCategoria != null) {
+            for (NomeCategoriaEntity nomeCategoria : listaNomiCategoria) {
+                //devo fare un doppio controllo perché alcuni nomi potrebbero già esserci e NON è un errore
+                if (existByKey(nomeCategoria.nome)) {
+                    message = String.format("Il nome [%s] esiste già", nomeCategoria.nome);
+                    logger.debug(new WrapLog().message(message));
+                }
+                else {
+                    entityBean = creaIfNotExists(nomeCategoria.nome, null, true, false);
+                }
+            }
+        }
+
+        //        //--Controllo nomi uguali che vanno omessi nel modulo
+        //        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+        //        //--Sono uguali se il nome della persona coincide con la pagina di riferimento seguita dal suffisso (nome)
+        //        listaNomi = findAll();
+        //        for (NomeIncipit nome : listaNomi) {
+        //            if (nome.linkPagina.equals(nome.nome) || nome.linkPagina.equals(nome.nome + suffissoNome)) {
+        //                nome.uguale = true;
+        //                save(nome);
+        //            }
+        //        }
+
+        //--Controllo nomi uguali che vanno omessi nel modulo
+        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
+        listaNomi = findAll();
+//        for (NomeIncipit nome : listaNomi) {
+//            if (nome.linkPagina.equals(nome.nome)) {
+//                nome.uguale = true;
+//                save(nome);
+//            }
+//        }
+
+        super.fixInfoElabora();
+        return VUOTA;
+    }
 
 }// end of CrudModulo class

@@ -83,15 +83,15 @@ public class NomeCategoriaModulo extends WikiModulo {
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
-     * @param nome       (obbligatorio)
-     * @param typeGenere (obbligatorio)
+     * @param nome (obbligatorio)
+     * @param type (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeCategoriaEntity newEntity(final String nome, final TypeGenere typeGenere) {
+    public NomeCategoriaEntity newEntity(final String nome, final TypeGenere type) {
         NomeCategoriaEntity newEntityBean = NomeCategoriaEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
-                .typeGenere(typeGenere != null ? typeGenere : TypeGenere.nessuno)
+                .type(type != null ? type : TypeGenere.nessuno)
                 .build();
 
         return (NomeCategoriaEntity) fixKey(newEntityBean);
@@ -100,6 +100,10 @@ public class NomeCategoriaModulo extends WikiModulo {
     @Override
     public List<NomeCategoriaEntity> findAll() {
         return super.findAll();
+    }
+
+    public List<String> findAllForKey() {
+        return findAll().stream().map(bean -> bean.nome).toList();
     }
 
     @Override

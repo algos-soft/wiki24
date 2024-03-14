@@ -19,8 +19,9 @@ public class NomeCategoriaEntity extends AbstractEntity {
     @AField(type = TypeField.text)
     public String nome;
 
-    @AField(type = TypeField.enumType)
-    public TypeGenere typeGenere;
+    @AField(type = TypeField.enumType, enumClazz = TypeGenere.class)
+    public TypeGenere type;
+
 
     @Override
     public String toString() {

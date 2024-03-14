@@ -21,6 +21,12 @@ public class NomePaginaEntity extends AbstractEntity {
     @AField(type = TypeField.wikiAnchor)
     public String pagina;
 
+    @AField(type = TypeField.booleano, typeBool = TypeBool.yesNo, widthRem = 8)
+    public boolean aggiunto;
+
+    @AField(type = TypeField.booleano, typeBool = TypeBool.yesNo, widthRem = 8)
+    public boolean uguale;
+
     @Override
     public String toString() {
         return nome;

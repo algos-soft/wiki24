@@ -164,6 +164,7 @@ public class Lista {
             case attivitaPlurale -> wikiUtilityService.wikiTitleAttivita(nomeLista);
             case nazionalitaSingolare -> VUOTA;
             case nazionalitaPlurale -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
+            case nomi -> wikiUtilityService.wikiTitleNomi(nomeLista);
             default -> null;
         };
 
@@ -172,6 +173,7 @@ public class Lista {
             case annoNascita, annoMorte -> true;
             case attivitaSingolare, attivitaPlurale -> false;
             case nazionalitaSingolare, nazionalitaPlurale -> false;
+            case nomi -> true;
             default -> false;
         };
 
@@ -180,6 +182,7 @@ public class Lista {
             case annoNascita, annoMorte -> WPref.usaSottopagineAnni.is();
             case attivitaSingolare, attivitaPlurale -> WPref.usaSottopagineAttivita.is();
             case nazionalitaSingolare, nazionalitaPlurale -> WPref.usaSottopagineNazionalita.is();
+            case nomi -> false; //@todo per ora
             default -> false;
         };
 
@@ -188,6 +191,7 @@ public class Lista {
             case annoNascita, annoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
             case attivitaSingolare, attivitaPlurale -> WPref.sogliaSottoPagina.getInt();
             case nazionalitaSingolare, nazionalitaPlurale -> WPref.sogliaSottoPagina.getInt();
+            case nomi -> MAX_INT_VALUE;//@todo per ora
             default -> 0;
         };
 
@@ -198,6 +202,7 @@ public class Lista {
             case attivitaPlurale -> true;
             case nazionalitaSingolare -> false;
             case nazionalitaPlurale -> true;
+            case nomi -> false; //@todo per ora
             default -> false;
         };
 
@@ -208,6 +213,7 @@ public class Lista {
             case attivitaPlurale -> true;
             case nazionalitaSingolare -> false;
             case nazionalitaPlurale -> true;
+            case nomi -> false; //@todo per ora
             default -> false;
         };
 
@@ -216,6 +222,7 @@ public class Lista {
             case annoNascita, annoMorte -> MAX_INT_VALUE;
             case attivitaSingolare, attivitaPlurale -> WPref.sogliaSottoPaginaAttNaz.getInt();
             case nazionalitaSingolare, nazionalitaPlurale -> WPref.sogliaSottoPaginaAttNaz.getInt();
+            case nomi -> MAX_INT_VALUE; //@todo per ora
             default -> MAX_INT_VALUE;
         };
 
@@ -242,6 +249,7 @@ public class Lista {
             case attivitaPlurale -> bioMongoModulo.countAllByAttivitaPlurale(nomeLista);
             case nazionalitaSingolare -> bioMongoModulo.countAllByNazionalitaSingolare(nomeLista);
             case nazionalitaPlurale -> bioMongoModulo.countAllByNazionalitaPlurale(nomeLista);
+            case nomi -> bioMongoModulo.countAllByNome(nomeLista);
             default -> 0;
         };
 
@@ -269,6 +277,7 @@ public class Lista {
             case attivitaPlurale -> bioMongoModulo.findAllByAttivitaPlurale(nomeLista);
             case nazionalitaSingolare -> bioMongoModulo.findAllByNazionalitaSingolare(nomeLista);
             case nazionalitaPlurale -> bioMongoModulo.findAllByNazionalitaPlurale(nomeLista);
+            case nomi -> bioMongoModulo.findAllByNome(nomeLista);
             default -> null;
         };
 
@@ -576,16 +585,23 @@ public class Lista {
         }
 
         mappaGenerale = switch (typeLista) {
-            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaGenerale);
+            case attivitaSingolare, attivitaPlurale -> arrayService.sort(mappaGenerale);
+            case  nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaGenerale);
+            case nomi -> arrayService.sort(mappaGenerale);
             default -> mappaGenerale;
         };
 
         mappaParagrafi = switch (typeLista) {
-            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaParagrafi);
+            case attivitaSingolare, attivitaPlurale -> arrayService.sort(mappaParagrafi);
+            case  nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaParagrafi);
+            case nomi -> arrayService.sort(mappaParagrafi);
             default -> mappaParagrafi;
         };
+
         mappaChiavi = switch (typeLista) {
-            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaChiavi);
+            case attivitaSingolare, attivitaPlurale -> arrayService.sort(mappaChiavi);
+            case  nazionalitaSingolare, nazionalitaPlurale -> arrayService.sort(mappaChiavi);
+            case nomi -> arrayService.sort(mappaChiavi);
             default -> mappaChiavi;
         };
 

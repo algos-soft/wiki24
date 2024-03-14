@@ -14,6 +14,7 @@ import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
+import it.algos.wiki24.backend.packages.nomi.nomebio.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
@@ -123,6 +124,9 @@ public abstract class WikiTest extends AlgosTest {
 
     @Inject
     protected NazPluraleModulo nazPluraleModulo;
+
+    @Inject
+    protected NomeBioModulo nomeBioModulo;
 
     //    protected CrudBackend crudBackend;
 
@@ -297,15 +301,15 @@ public abstract class WikiTest extends AlgosTest {
     //--sottopagina
     protected static Stream<Arguments> SOTTO_PAGINE() {
         return Stream.of(
-//                Arguments.of("29 febbraio", TypeLista.giornoNascita, NULLO),
+                //                Arguments.of("29 febbraio", TypeLista.giornoNascita, NULLO),
                 Arguments.of("1968", TypeLista.annoMorte, NULLO)
                 //                Arguments.of("abati e badesse", TypeLista.attivitaPlurale, NULLO),
-//                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
-//                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
-//                Arguments.of("afghani", TypeLista.nazionalitaPlurale, NULLO),
-//                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO)
-//                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, "cestisti"),
-//                Arguments.of("2023", TypeLista.annoMorte, NULLO)
+                //                Arguments.of("agronomi", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("direttori d'orchestra", TypeLista.attivitaPlurale, NULLO),
+                //                Arguments.of("afghani", TypeLista.nazionalitaPlurale, NULLO),
+                //                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, NULLO)
+                //                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, "cestisti"),
+                //                Arguments.of("2023", TypeLista.annoMorte, NULLO)
         );
     }
 
@@ -902,6 +906,7 @@ public abstract class WikiTest extends AlgosTest {
             case attivitaPlurale -> attPluraleModulo;
             case nazionalitaSingolare -> nazSingolareModulo;
             case nazionalitaPlurale -> nazPluraleModulo;
+            case nomi -> nomeBioModulo;
             default -> null;
         };
 

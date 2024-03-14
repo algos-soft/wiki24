@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nome;
+package it.algos.wiki24.backend.packages.nomi.nomebio;
 
 import com.vaadin.flow.router.*;
 import it.algos.base24.backend.annotation.*;
@@ -18,21 +18,21 @@ import com.vaadin.flow.component.textfield.TextField;
  * Project wiki24
  * Created by Algos
  * User: gac
- * Date: Sat, 09-Mar-2024
- * Time: 13:54
+ * Date: Mon, 11-Mar-2024
+ * Time: 15:03
  *
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
-@PageTitle("Nomi")
-@Route(value = "nome", layout = MainLayout.class)
+@PageTitle("NomiBio")
+@Route(value = "nomebio", layout = MainLayout.class)
 @AView(menuGroupName = "nomi")
-public class NomeView extends CrudView {
+public class NomeBioView extends CrudView {
 
 
     /**
      * Regola il crudModulo associato a questa @Route e lo passa alla superclasse <br>
      */
-    public NomeView(@Autowired NomeModulo crudModulo) {
+    public NomeBioView(@Autowired NomeBioModulo crudModulo) {
         super(crudModulo);
     }
 

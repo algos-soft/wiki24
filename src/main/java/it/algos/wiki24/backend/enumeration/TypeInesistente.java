@@ -19,7 +19,8 @@ public enum TypeInesistente {
     secolo("Secolo inesistente"),
     mese("Mese inesistente"),
     attivita("Senza attività specificata"),
-    nazionalita("Senza nazionalità specificata");
+    nazionalita("Senza nazionalità specificata"),
+    nomi("Senza attività specificata");
 
     private String tag;
 

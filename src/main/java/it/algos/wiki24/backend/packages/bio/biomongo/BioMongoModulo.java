@@ -6,7 +6,9 @@ import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.packages.crono.mese.*;
 import it.algos.base24.backend.packages.crono.secolo.*;
 import it.algos.base24.backend.service.*;
+import it.algos.wiki24.backend.boot.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import static it.algos.wiki24.backend.boot.WikiCost.FIELD_NAME_NOME;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
@@ -660,6 +662,28 @@ public class BioMongoModulo extends WikiModulo {
         }
 
         return lista;
+    }
+
+
+    public int countAllByNome(final String propertyValue) {
+        return mongoService.count(queryByNome(propertyValue), BioMongoEntity.class);
+    }
+
+    public List<BioMongoEntity> findAllByNome(final String propertyValue) {
+        return mongoService.find(queryByNome(propertyValue), BioMongoEntity.class);
+    }
+
+    public Query queryByNome(final String propertyValue) {
+        Query query = new Query();
+        Sort sort = Sort.by(Sort.Direction.ASC, FIELD_NAME_NOME);
+
+        if (textService.isEmpty(propertyValue)) {
+            return query;
+        }
+
+        query.addCriteria(Criteria.where(FIELD_NAME_NOME).is(propertyValue));
+        query.with(sort);
+        return query;
     }
 
     public String elabora() {

@@ -46,7 +46,7 @@ public class BioServerList extends WikiList {
         String numPagine;
         String categoria =   CAT + WPref.categoriaBio.getStr();
 
-        Anchor anchor = WAnchor.build(categoria, textService.setQuadre(category));
+        WAnchor anchor = WAnchor.build(categoria, textService.setQuadre(category)).bold();
 
         message = "Biografie grezze del server. Lette dalla categoria: ";
         biografie = new Span(message);

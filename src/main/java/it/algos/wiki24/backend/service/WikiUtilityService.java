@@ -119,6 +119,9 @@ public class WikiUtilityService {
     public String wikiTitleNazionalita(String nazionalita) {
         return "Progetto:Biografie/Nazionalità/" + textService.primaMaiuscola(nazionalita);
     }
+    public String wikiTitleNomi(String nome) {
+        return "Persone di nome " + textService.primaMaiuscola(nome);
+    }
 
     /**
      * Inserisce un numero in caratteri ridotti <br>

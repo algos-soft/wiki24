@@ -130,7 +130,6 @@ public enum WPref implements IPref {
     lastUploadAttPlu("lastUploadAttPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di AttivitàPlurale."),
     uploadAttPluTime("uploadAttPluTime", TypePref.integer, 0, "Durata upload di AttivitàPlurale in minuti."),
 
-
     //***************
 
     usaTaskNazSin("usaTaskNazSin", TypePref.bool, false, "Flag per usare la task di download NazionalitàSingolare."),
@@ -149,6 +148,15 @@ public enum WPref implements IPref {
     elaboraNazPluTime("elaboraNazPluTime", TypePref.integer, 0, "Durata elaborazione di NazionalitàPlurale in minuti."),
     lastUploadNazPlu("lastUploadNazPlu", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di NazionalitàPlurale."),
     uploadNazPluTime("uploadNazPluTime", TypePref.integer, 0, "Durata upload di NazionalitàPlurale in minuti."),
+
+
+    //***************
+    usaTaskNomi("usaTaskNomi", TypePref.bool, false, "Flag per usare l'elaborazione e l'upload di NomeBio."),
+    lastElaboraNomi("lastElaboraNomi", TypePref.localdatetime, ROOT_DATA_TIME, "Last elaborazione date and time di NomeBio."),
+    elaboraNomiTime("elaboraNomiTime", TypePref.integer, 0, "Durata elaborazione di NomeBio in minuti."),
+    lastUploadNomi("lastUploadNomi", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di NomeBio."),
+    uploadNomiTime("uploadNomiTime", TypePref.integer, 0, "Durata upload di NomeBio in minuti."),
+    sogliaPaginaNomi("sogliaPaginaNomi", TypePref.integer, 100, "Soglia minima di voci per creare una pagina della lista di nomi sul server wiki"),
 
 
     //***************

@@ -80,7 +80,7 @@ public class UploadTest extends WikiStreamTest {
 
         istanza = appContext.getBean(Upload.class, nomeLista, typeLista);
         assertNotNull(istanza);
-        //        ottenutoIntero = istanza.numBio();
+        ottenutoIntero = istanza.numBio();
 
         if (textService.isEmpty(nomeLista)) {
             assertFalse(ottenutoIntero > 0);
@@ -104,7 +104,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(202)
     @DisplayName("202 - getHeaderText")
     void getHeaderText(String nomeLista, TypeLista typeLista) {
@@ -139,7 +139,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(203)
     @DisplayName("203 - getIncipitText")
     void getIncipitText(String nomeLista, TypeLista typeLista) {
@@ -165,7 +165,7 @@ public class UploadTest extends WikiStreamTest {
             assertTrue(false);
             return;
         }
-        if (typeLista == TypeLista.attivitaPlurale || typeLista == TypeLista.nazionalitaPlurale) {
+        if (typeLista == TypeLista.attivitaPlurale || typeLista == TypeLista.nazionalitaPlurale|| typeLista == TypeLista.nomi) {
             assertTrue(textService.isValid(ottenuto));
         }
         else {
@@ -180,7 +180,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(204)
     @DisplayName("204 - getBodyText")
     void getBodyText(String nomeLista, TypeLista typeLista) {
@@ -214,7 +214,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(205)
     @DisplayName("205 - getBottomText")
     void getBottomText(String nomeLista, TypeLista typeLista) {
@@ -317,7 +317,7 @@ public class UploadTest extends WikiStreamTest {
     }
 
     @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(211)
     @DisplayName("211 - uploadTestPaginaPrincipaleOnly")
     void uploadTestPaginaPrincipaleOnly(String nomeLista, TypeLista typeLista) {
@@ -345,7 +345,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     //    @ParameterizedTest
-    @MethodSource(value = "LISTA")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(212)
     @DisplayName("212 - uploadRealPaginaPrincipaleOnly")
     void uploadRealPaginaPrincipaleOnly(String nomeLista, TypeLista type) {

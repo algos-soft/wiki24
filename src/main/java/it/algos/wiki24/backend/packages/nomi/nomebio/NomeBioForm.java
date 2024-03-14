@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nome;
+package it.algos.wiki24.backend.packages.nomi.nomebio;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.base24.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NomeForm extends CrudForm {
+public class NomeBioForm extends CrudForm {
 
 
-    public NomeForm(NomeModulo crudModulo, NomeEntity entityBean, CrudOperation operation) {
+    public NomeBioForm(NomeBioModulo crudModulo, NomeBioEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

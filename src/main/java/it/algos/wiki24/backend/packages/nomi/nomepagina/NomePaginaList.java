@@ -1,5 +1,6 @@
 package it.algos.wiki24.backend.packages.nomi.nomepagina;
 
+import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.orderedlayout.*;
@@ -8,6 +9,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
+import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
@@ -18,6 +20,9 @@ import org.springframework.context.annotation.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class NomePaginaList extends WikiList {
 
+    private IndeterminateCheckbox checkAggiunto;
+
+    private IndeterminateCheckbox checkUguale;
 
     public NomePaginaList(final NomePaginaModulo crudModulo) {
         super(crudModulo);
@@ -26,34 +31,55 @@ public class NomePaginaList extends WikiList {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.usaBottoneElabora = true;
+        super.usaBottoneShows = false;
     }
 
     protected void fixHeader() {
-        Anchor anchor;
+        WAnchor anchor;
         String message;
 
-        anchor = WAnchor.build(MODULO + INCIPIT_NOMI, textService.setQuadre(INCIPIT_NOMI));
+        anchor = WAnchor.build(MODULO + INCIPIT_NOMI, textService.setQuadre(INCIPIT_NOMI)).bold();
 
-        message = "Tavola di base. Costruita dal modulo Wiki: ";
-        Span testo = new Span(message);
-        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+        message = "Tavola di base. Costruita dalla pagina wiki: ";
+        BSpan testo = BSpan.text(message).bold().verde();
         headerPlaceHolder.add(new Span(testo, anchor));
 
-        message = "Indipendentemente da come sono scritte nei moduli, tutte le attività singolari sono convertite in minuscolo.";
-        headerPlaceHolder.add(ASpan.text(message).size(FontSize.em8).rosso());
 
-        message = "Pagine di riferimento per ogni nome (es.: [Felix->Felice (nome)]) da inserire nell'incipit della lista.";
-        headerPlaceHolder.add(ASpan.text(message).rosso());
-
-        message = String.format("Download%sCancella tutto e scarica il modulo wiki", FORWARD);
-        headerPlaceHolder.add(ASpan.text(message).rosso());
+        message = "I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale";
+        headerPlaceHolder.add(ASpan.text(message).blue());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
-        headerPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).blue());
+
+        message = "Elabora: aggiunge tutti i NomiCategoria che hanno la pagina omonima o che non ce l'hanno proprio";
+        headerPlaceHolder.add(ASpan.text(message).blue());
+
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
 
         super.fixHeader();
     }
 
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    @Override
+    protected void fixTop() {
+        super.fixTop();
+
+        checkAggiunto = super.creaFiltroCheckBox(checkAggiunto, "aggiunto");
+        checkUguale = super.creaFiltroCheckBox(checkUguale, "uguale");
+    }
+
+
+    @Override
+    protected void fixFiltri() {
+        super.fixFiltri();
+
+        super.fixFiltroCheckBox(checkAggiunto, "aggiunto");
+        super.fixFiltroCheckBox(checkUguale, "uguale");
+    }
 
 }// end of CrudList class

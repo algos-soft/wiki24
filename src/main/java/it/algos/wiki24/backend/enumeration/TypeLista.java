@@ -19,7 +19,7 @@ public enum TypeLista {
     attivitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista attività", "", TypeLivello.attivita),
     nazionalitaSingolare("singolare", VUOTA, VUOTA, VUOTA, "Lista nazionalità", "", TypeLivello.nazionalita),
     nazionalitaPlurale("plurale", VUOTA, VUOTA, VUOTA, "Lista nazionalità", "", TypeLivello.nazionalita),
-    nomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per nome", "", null),
+    nomi("nomi", VUOTA, VUOTA, VUOTA, "Liste di persone per nome", "", TypeLivello.nomi),
     cognomi(VUOTA, VUOTA, VUOTA, VUOTA, "Liste di persone per cognome", "", null),
     listaBreve(VUOTA, VUOTA, VUOTA, VUOTA, "", "", null),
     listaEstesa(VUOTA, VUOTA, VUOTA, VUOTA, "", "", null),

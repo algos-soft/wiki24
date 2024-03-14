@@ -15,6 +15,7 @@ public enum TypeLivello {
     anni("Nati nel", 1, 1, "anno", "mese", "decine"),
     attivita("Progetto:Biografie/Attività/", 2, 2, "attività", "nazionalita", "alfabetico"),
     nazionalita("Progetto:Biografie/Nazionalita/", 2, 2, "nazionalita", "attivita", "alfabetico"),
+    nomi("Persone di nome ", 2, 2, "nomi", "attivita", "alfabetico"),
     ;
 
     private String prefix;

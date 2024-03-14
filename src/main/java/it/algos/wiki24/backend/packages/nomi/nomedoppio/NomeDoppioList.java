@@ -6,6 +6,7 @@ import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.components.*;
 import it.algos.base24.backend.enumeration.*;
 import it.algos.base24.backend.list.*;
+import it.algos.base24.ui.dialog.*;
 import it.algos.base24.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
@@ -26,38 +27,31 @@ public class NomeDoppioList extends WikiList {
         super.fixPreferenze();
 
         super.usaBottoneElabora = false;
+        super.usaBottoneShows = false;
     }
 
     @Override
     protected void fixHeader() {
-        Anchor anchor;
-        Anchor anchor2;
-        Anchor anchor3;
-        String link;
+        WAnchor anchor;
         String message;
-        String plurale = "Plurale attività";
-        String ex = "Ex attività";
-        String pagina = "Link attività";
 
-        anchor = WAnchor.build(TAG_ANTROPONIMI + DOPPI, textService.setQuadre(DOPPI));
+        anchor = WAnchor.build(TAG_ANTROPONIMI + DOPPI, textService.setQuadre(DOPPI)).bold();
 
         message = "Tavola di base. Costruita dalla pagina wiki: ";
-        Span testo = new Span(message);
-        testo.getStyle().set(FontWeight.HTML, FontWeight.bold.getTag());
-        testo.getStyle().set(TAG_HTML_COLOR, TypeColor.verde.getTag());
+        BSpan testo = BSpan.text(message).bold().verde();
         headerPlaceHolder.add(new Span(testo, anchor));
 
         message = "Nomi doppi (esempio: 'Maria Teresa') elencati nella pagina di progetto";
-        headerPlaceHolder.add(ASpan.text(message).verde());
+        headerPlaceHolder.add(ASpan.text(message).blue());
 
         message = "I nomi mantengono spazi, maiuscole, minuscole e caratteri accentati come in originale";
-        headerPlaceHolder.add(ASpan.text(message).verde());
-
-        message = String.format("Download%sCancella tutto e scarica la pagina wiki", FORWARD);
-        headerPlaceHolder.add(ASpan.text(message).rosso());
+        headerPlaceHolder.add(ASpan.text(message).blue());
 
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
-        headerPlaceHolder.add(ASpan.text(message).rosso().small());
+        headerPlaceHolder.add(ASpan.text(message).blue());
+
+        super.infoCreazione = TEXT_HARD;
+        super.infoReset = TEXT_RESET_DELETE;
 
         super.fixHeader();
     }

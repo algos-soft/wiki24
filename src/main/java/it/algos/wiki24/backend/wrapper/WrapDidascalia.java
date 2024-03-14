@@ -8,6 +8,7 @@ import it.algos.base24.backend.service.*;
 import it.algos.base24.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.nomi.nomebio.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
@@ -44,6 +45,9 @@ public class WrapDidascalia {
 
     @Inject
     AttSingolareModulo attSingolareModulo;
+
+    @Inject
+    NomeBioModulo nomeBioModulo;
 
     @Inject
     LogService logger;
@@ -135,6 +139,7 @@ public class WrapDidascalia {
             case attivitaPlurale -> didascaliaService.didascaliaLista(bio);
             case nazionalitaSingolare -> didascaliaService.didascaliaLista(bio);
             case nazionalitaPlurale -> didascaliaService.didascaliaLista(bio);
+            case nomi -> didascaliaService.didascaliaLista(bio);
             default -> VUOTA;
         };
 
@@ -154,7 +159,9 @@ public class WrapDidascalia {
             case giornoMorte -> bio.annoMortoOrd;
             case annoNascita -> 0;
             case annoMorte -> 0;
-            case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> 0;
+            case attivitaSingolare, attivitaPlurale -> 0;
+            case nazionalitaSingolare, nazionalitaPlurale -> 0;
+            case nomi -> 0;
             default -> 0;
         };
 
@@ -181,6 +188,7 @@ public class WrapDidascalia {
             case annoMorte -> getTitoloParagrafoMeseMorto(bio);
             case attivitaSingolare, attivitaPlurale -> getTitoloParagrafoNazionalita(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> getTitoloParagrafoAttivita(bio);
+            case nomi -> getTitoloParagrafoAttivita(bio);
             default -> VUOTA;
         };
     }
@@ -192,6 +200,7 @@ public class WrapDidascalia {
             case annoNascita, annoMorte -> VUOTA;
             case attivitaSingolare, attivitaPlurale -> getSecondoLivelloAlfabetico(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> getSecondoLivelloAlfabetico(bio);
+            case nomi -> getSecondoLivelloAlfabetico(bio);
             default -> VUOTA;
         };
     }
@@ -204,6 +213,7 @@ public class WrapDidascalia {
             case annoMorte -> bio.giornoMorto;
             case attivitaSingolare, attivitaPlurale -> getTerzoLivelloAlfabetico(bio);
             case nazionalitaSingolare, nazionalitaPlurale -> getTerzoLivelloAlfabetico(bio);
+            case nomi -> getTerzoLivelloAlfabetico(bio);
             default -> VUOTA;
         };
     }
@@ -219,7 +229,7 @@ public class WrapDidascalia {
     }
 
     public String getTitoloParagrafoSecoloNato(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza anno specificato";
+        String titoloParagrafo = TypeInesistente.anno.getTag();
         SecoloEntity secoloBean;
         String anno = bio.annoNato;
 
@@ -233,7 +243,7 @@ public class WrapDidascalia {
 
 
     public String getTitoloParagrafoSecoloMorto(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza anno specificato";
+        String titoloParagrafo = TypeInesistente.anno.getTag();
         SecoloEntity secoloBean;
         String anno = bio.annoMorto;
 
@@ -247,7 +257,7 @@ public class WrapDidascalia {
 
 
     public String getTitoloParagrafoMeseNato(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza giorno specificato";
+        String titoloParagrafo = TypeInesistente.giorno.getTag();
         String giorno = bio.giornoNato;
 
         if (textService.isEmpty(giorno)) {
@@ -266,7 +276,7 @@ public class WrapDidascalia {
 
 
     public String getTitoloParagrafoMeseMorto(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza giorno specificato";
+        String titoloParagrafo = TypeInesistente.giorno.getTag();
         String giorno = bio.giornoMorto;
 
         if (textService.isEmpty(giorno)) {
@@ -281,25 +291,6 @@ public class WrapDidascalia {
         }
 
         return textService.primaMaiuscola(titoloParagrafo);
-    }
-
-    public String getTitoloParagrafoNazionalita(BioMongoEntity bio) {
-        String titoloParagrafo = "Senza nazionalità specificata";
-        String nazionalita = bio.nazionalita;
-        NazSingolareEntity nazionalitaBean;
-
-        if (textService.isEmpty(nazionalita)) {
-            return titoloParagrafo;
-        }
-        else {
-            nazionalitaBean = nazSingolareModulo.findOneById(nazionalita);
-            if (nazionalitaBean != null) {
-                return textService.primaMaiuscola(nazionalitaBean.plurale);
-            }
-            else {
-                return titoloParagrafo;
-            }
-        }
     }
 
 
@@ -321,6 +312,45 @@ public class WrapDidascalia {
             }
         }
     }
+
+    public String getTitoloParagrafoNazionalita(BioMongoEntity bio) {
+        String titoloParagrafo = TypeInesistente.nazionalita.getTag();
+        String nazionalita = bio.nazionalita;
+        NazSingolareEntity nazionalitaBean;
+
+        if (textService.isEmpty(nazionalita)) {
+            return titoloParagrafo;
+        }
+        else {
+            nazionalitaBean = nazSingolareModulo.findOneById(nazionalita);
+            if (nazionalitaBean != null) {
+                return textService.primaMaiuscola(nazionalitaBean.plurale);
+            }
+            else {
+                return titoloParagrafo;
+            }
+        }
+    }
+
+
+//    public String getTitoloParagrafoNome(BioMongoEntity bio) {
+//        String titoloParagrafo = TypeInesistente.nomi.getTag();
+//        String nome = bio.nome;
+//        NomeBioEntity nomeBean;
+//
+//        if (textService.isEmpty(nome)) {
+//            return titoloParagrafo;
+//        }
+//        else {
+//            nomeBean = nomeBioModulo.findByKey(nome);
+//            if (nomeBean != null) {
+//                return textService.primaMaiuscola(nomeBean.nome);
+//            }
+//            else {
+//                return titoloParagrafo;
+//            }
+//        }
+//    }
 
 
     public String getSecondoLivelloAlfabetico(BioMongoEntity bio) {

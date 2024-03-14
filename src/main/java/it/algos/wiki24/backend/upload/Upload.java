@@ -13,6 +13,7 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
+import it.algos.wiki24.backend.packages.nomi.nomebio.*;
 import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;
 import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
@@ -72,6 +73,9 @@ public class Upload {
 
     @Inject
     protected NazPluraleModulo nazPluraleModulo;
+
+    @Inject
+    protected NomeBioModulo nomeBioModulo;
 
     @Inject
     QueryService queryService;
@@ -204,6 +208,7 @@ public class Upload {
             case attivitaPlurale -> attPluraleModulo;
             case nazionalitaSingolare -> nazSingolareModulo;
             case nazionalitaPlurale -> nazPluraleModulo;
+            case nomi -> nomeBioModulo;
             default -> null;
         };
 
@@ -216,6 +221,7 @@ public class Upload {
             case attivitaPlurale -> wikiUtilityService.wikiTitleAttivita(nomeLista);
             case nazionalitaSingolare -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
             case nazionalitaPlurale -> wikiUtilityService.wikiTitleNazionalita(nomeLista);
+            case nomi -> wikiUtilityService.wikiTitleNomi(nomeLista);
             default -> null;
         };
 
@@ -236,6 +242,7 @@ public class Upload {
             case annoNascita, annoMorte -> TypeSummary.anniBio;
             case attivitaSingolare, attivitaPlurale -> TypeSummary.attivitàBio;
             case nazionalitaSingolare, nazionalitaPlurale -> TypeSummary.nazionalitàBio;
+            case nomi -> TypeSummary.nomiBio;
             default -> TypeSummary.nessuno;
         };
 
@@ -326,6 +333,7 @@ public class Upload {
             case attivitaPlurale -> WPref.sogliaPaginaAttivita.getInt();
             case nazionalitaSingolare -> MAX_INT_VALUE;
             case nazionalitaPlurale -> WPref.sogliaPaginaNazionalita.getInt();
+            case nomi -> WPref.sogliaPaginaNomi.getInt();
             default -> MAX_INT_VALUE;
         };
 
@@ -564,6 +572,14 @@ public class Upload {
                 tagModulo = "Modulo:Bio/Plurale nazionalità|";
                 tagModuloInverso = "Modulo:Bio/Plurale attività|";
                 break;
+            }
+            case nomi: {
+                buffer.append("{{incipit nomi|nome=");
+                buffer.append(nomeLista);
+                buffer.append("}}");
+                buffer.append(CAPO);
+                this.incipitText = buffer.toString();
+                return incipitText;
             }
             default: {}
         }
@@ -843,6 +859,7 @@ public class Upload {
         boolean usaInclude = switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> true;
             case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale -> false;
+            case nomi -> false;
             default -> false;
         };
 
@@ -959,9 +976,17 @@ public class Upload {
 
     protected String portale() {
         StringBuffer buffer = new StringBuffer();
+        String tagPortale;
+
+        tagPortale = switch (typeLista) {
+            case nomi -> "antroponimi";
+            default -> "biografie";
+        };
 
         buffer.append(CAPO);
-        buffer.append("{{Portale|biografie}}");
+        buffer.append("{{Portale|");
+        buffer.append(tagPortale);
+        buffer.append("}}");
         buffer.append(CAPO);
 
         return buffer.toString();
@@ -974,6 +999,7 @@ public class Upload {
             case annoNascita, annoMorte -> categorieAnni();
             case attivitaSingolare, attivitaPlurale -> categorieAttivita();
             case nazionalitaSingolare, nazionalitaPlurale -> categorieNazionalita();
+            case nomi -> categorieNomi();
             default -> VUOTA;
         };
     }
@@ -1097,6 +1123,25 @@ public class Upload {
         String categoria;
 
         categoria = String.format("Categoria:Bio nazionalità%s%s", PIPE, textService.primaMaiuscola(nomeLista));
+        categoria = isSottoPagina || isSottoSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
+
+        if (uploadTest) {
+            buffer.append(NO_WIKI_INI);
+        }
+        buffer.append(ASTERISCO);
+        buffer.append(textService.setDoppieQuadre(categoria));
+        if (uploadTest) {
+            buffer.append(NO_WIKI_END);
+        }
+
+        return buffer.toString();
+    }
+
+    protected String categorieNomi() {
+        StringBuffer buffer = new StringBuffer();
+        String categoria;
+
+        categoria = String.format("Categoria:Liste di persone per nome%s%s", PIPE, textService.primaMaiuscola(nomeLista));
         categoria = isSottoPagina || isSottoSottoPagina ? categoria + SLASH + keySottoPagina : categoria;
 
         if (uploadTest) {

@@ -2,9 +2,12 @@ package it.algos.wiki24.backend.packages.nomi.nomedoppio;
 
 import static it.algos.base24.backend.boot.BaseCost.*;
 import it.algos.base24.backend.enumeration.*;
+import it.algos.base24.backend.packages.crono.mese.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
+
+import java.util.*;
 
 /**
  * Project wiki24
@@ -64,6 +67,14 @@ public class NomeDoppioModulo extends WikiModulo {
                 .build();
 
         return (NomeDoppioEntity) fixKey(newEntityBean);
+    }
+
+    @Override
+    public List<NomeDoppioEntity> findAll() {
+        return super.findAll();
+    }
+    public List<String> findAllForKey() {
+        return findAll().stream().map(bean -> bean.nome).toList();
     }
 
     @Override
