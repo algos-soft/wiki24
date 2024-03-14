@@ -41,6 +41,7 @@ public class NomeBioList extends WikiList {
         this.usaBottoneDownload = false;
         this.usaBottoneElabora = true;
         this.usaBottoneUploadAll = true;
+        super.usaBottoneUpload = true;
     }
 
     /**
