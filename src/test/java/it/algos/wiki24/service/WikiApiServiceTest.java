@@ -1,7 +1,7 @@
 package it.algos.wiki24.service;
 
 import it.algos.*;
-import it.algos.base24.basetest.*;
+import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.service.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,9 +1,9 @@
 package it.algos.wiki24.basetest;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.query.*;

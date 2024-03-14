@@ -1,11 +1,11 @@
 package it.algos.wiki24.backend.service;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.packages.crono.anno.*;
+import it.algos.vbase.backend.packages.crono.giorno.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;

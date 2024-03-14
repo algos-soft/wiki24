@@ -1,17 +1,11 @@
 package it.algos.wiki24.backend.service;
 
 import com.vaadin.flow.component.*;
-import static com.vaadin.flow.component.Tag.*;
-import it.algos.base24.backend.boot.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import static it.algos.base24.backend.boot.BaseCost.WIKI_PARSE;
-import it.algos.base24.backend.service.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
-import static it.algos.wiki24.backend.boot.WikiCost.SUMMARY;
 import org.json.simple.*;
-import org.springframework.beans.factory.config.*;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

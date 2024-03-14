@@ -1,10 +1,10 @@
 package it.algos.wiki24.modulo;
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.packages.geografia.stato.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.packages.geografia.stato.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.basetest.*;
 import static org.junit.Assert.*;

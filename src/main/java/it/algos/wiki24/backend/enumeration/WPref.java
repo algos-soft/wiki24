@@ -1,9 +1,9 @@
 package it.algos.wiki24.backend.enumeration;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.interfaces.*;
-import it.algos.base24.backend.packages.utility.preferenza.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.interfaces.*;
+import it.algos.vbase.backend.packages.utility.preferenza.*;
 
 import java.time.*;
 import java.util.*;

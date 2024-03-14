@@ -1,8 +1,8 @@
 package it.algos.wiki24.backend.packages.bio.bioserver;
 
 import com.vaadin.flow.router.*;
-import it.algos.base24.backend.annotation.*;
-import it.algos.base24.ui.view.*;
+import it.algos.vbase.backend.annotation.*;
+import it.algos.vbase.ui.view.*;
 import org.springframework.beans.factory.annotation.*;
 
 /**

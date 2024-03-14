@@ -1,15 +1,13 @@
 package it.algos.wiki24.backend.packages.tabelle.nazplurale;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.wrapper.*;
-import static it.algos.wiki24.backend.boot.WikiCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import it.algos.wiki24.backend.packages.tabelle.nazsingolare.*;
 import it.algos.wiki24.backend.service.*;
 import org.springframework.stereotype.*;

@@ -2,17 +2,10 @@ package it.algos.wiki24.ui;
 
 import com.vaadin.flow.component.applayout.*;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.sidenav.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import com.vaadin.flow.theme.lumo.*;
-import static it.algos.base24.backend.boot.BaseVar.*;
-import it.algos.base24.backend.packages.crono.mese.*;
-import it.algos.base24.backend.service.*;
-import it.algos.wiki24.backend.packages.tabelle.giorni.*;
+import it.algos.vbase.backend.packages.crono.mese.*;
+import it.algos.vbase.backend.service.*;
 import jakarta.annotation.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 

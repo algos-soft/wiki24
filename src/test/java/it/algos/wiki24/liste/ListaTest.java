@@ -1,8 +1,8 @@
 package it.algos.wiki24.liste;
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;

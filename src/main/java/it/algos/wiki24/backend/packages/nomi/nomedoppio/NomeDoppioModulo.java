@@ -1,8 +1,7 @@
 package it.algos.wiki24.backend.packages.nomi.nomedoppio;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.packages.crono.mese.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;

@@ -1,11 +1,11 @@
 package it.algos.wiki24.backend.wrapper;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.packages.crono.mese.*;
-import it.algos.base24.backend.packages.crono.secolo.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.packages.crono.mese.*;
+import it.algos.vbase.backend.packages.crono.secolo.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.nomi.nomebio.*;

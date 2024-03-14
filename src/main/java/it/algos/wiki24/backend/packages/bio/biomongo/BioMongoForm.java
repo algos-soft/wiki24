@@ -5,14 +5,13 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.ui.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
-import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Scope;
 
 import javax.inject.*;

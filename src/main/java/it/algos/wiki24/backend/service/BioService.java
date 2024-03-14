@@ -1,16 +1,10 @@
 package it.algos.wiki24.backend.service;
 
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
-import it.algos.wiki24.backend.boot.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import org.springframework.stereotype.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
 
 import javax.inject.*;
 import java.util.*;

@@ -1,8 +1,8 @@
 package it.algos.wiki24.backend.schedule;
 
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.schedule.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.schedule.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;

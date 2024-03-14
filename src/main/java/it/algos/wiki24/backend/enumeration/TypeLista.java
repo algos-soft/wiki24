@@ -1,7 +1,7 @@
 package it.algos.wiki24.backend.enumeration;
 
 
-import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 
 /**
  * Project wiki23

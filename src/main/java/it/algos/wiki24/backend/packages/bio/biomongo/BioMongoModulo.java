@@ -1,14 +1,13 @@
 package it.algos.wiki24.backend.packages.bio.biomongo;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.packages.crono.mese.*;
-import it.algos.base24.backend.packages.crono.secolo.*;
-import it.algos.base24.backend.service.*;
-import it.algos.wiki24.backend.boot.*;
-import static it.algos.wiki24.backend.boot.WikiCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.packages.crono.mese.*;
+import it.algos.vbase.backend.packages.crono.secolo.*;
+import it.algos.vbase.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.FIELD_NAME_NOME;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;

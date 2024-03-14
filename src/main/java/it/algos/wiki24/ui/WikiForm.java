@@ -1,15 +1,9 @@
 package it.algos.wiki24.ui;
 
-import com.vaadin.flow.component.button.*;
-import com.vaadin.flow.component.icon.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.ui.form.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.ui.form.*;
 import it.algos.wiki24.backend.logic.*;
-import org.atmosphere.interceptor.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  * Project wiki24

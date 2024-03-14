@@ -1,8 +1,7 @@
 package it.algos.wiki24.backend.query;
 
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.wrapper.*;

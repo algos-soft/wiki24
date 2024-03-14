@@ -1,14 +1,11 @@
 package it.algos.wiki24.backend.wrapper;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.service.*;
-import it.algos.wiki24.backend.enumeration.*;
+import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.service.*;
 import it.algos.wiki24.backend.service.*;
-import org.checkerframework.checker.units.qual.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 import java.util.*;

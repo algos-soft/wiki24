@@ -1,10 +1,8 @@
 package it.algos.wiki24.backend.packages.tabelle.attplurale;
 
-import com.vaadin.flow.component.formlayout.*;
-import com.vaadin.flow.component.textfield.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.ui.form.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.ui.form.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 

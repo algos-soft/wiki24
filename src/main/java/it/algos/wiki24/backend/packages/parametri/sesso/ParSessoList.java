@@ -1,7 +1,7 @@
 package it.algos.wiki24.backend.packages.parametri.sesso;
 
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.entity.*;
+import it.algos.vbase.backend.entity.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.packages.parametri.*;
 import it.algos.wiki24.backend.service.*;

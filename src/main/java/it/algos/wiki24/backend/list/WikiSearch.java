@@ -1,12 +1,7 @@
 package it.algos.wiki24.backend.list;
 
 import com.vaadin.flow.component.textfield.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.ui.form.*;
-import it.algos.base24.ui.view.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 
 import java.util.function.*;
 

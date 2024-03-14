@@ -1,11 +1,11 @@
 package it.algos.wiki24.backend.boot;
 
-import it.algos.base24.backend.boot.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import static it.algos.base24.backend.boot.BaseVar.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.interfaces.*;
-import it.algos.base24.backend.wrapper.*;
+import it.algos.vbase.backend.boot.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import static it.algos.vbase.backend.boot.BaseVar.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.interfaces.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.tabelle.attsingolare.*;

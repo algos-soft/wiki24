@@ -5,7 +5,7 @@ import com.vaadin.flow.component.dependency.*;
 import com.vaadin.flow.component.icon.*;
 import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.router.*;
-import it.algos.base24.ui.view.*;
+import it.algos.vbase.ui.view.*;
 
 @PageTitle("Hello World")
 @Route(value = "hello", layout = MainLayout.class)

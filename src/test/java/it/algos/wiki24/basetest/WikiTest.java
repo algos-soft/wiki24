@@ -1,15 +1,15 @@
 package it.algos.wiki24.basetest;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.basetest.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.logic.*;
+import it.algos.vbase.backend.packages.crono.anno.*;
+import it.algos.vbase.backend.packages.crono.giorno.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
+import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;

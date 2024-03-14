@@ -1,10 +1,6 @@
 package it.algos.wiki24.backend.packages.parametri.annomorto;
 
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.components.*;
-import it.algos.base24.backend.list.*;
-import it.algos.base24.ui.wrapper.*;
 import it.algos.wiki24.backend.packages.parametri.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;

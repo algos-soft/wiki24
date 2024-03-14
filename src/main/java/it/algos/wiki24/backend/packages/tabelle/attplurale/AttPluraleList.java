@@ -6,16 +6,14 @@ import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.annotation.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.ui.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.components.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.ui.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
-import org.springframework.data.domain.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)

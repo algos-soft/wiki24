@@ -1,20 +1,15 @@
 package it.algos.wiki24.backend.logic;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.base24.backend.boot.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.schedule.*;
-import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.ui.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.boot.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.logic.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.service.*;
 import jakarta.annotation.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 import javax.inject.*;
 import java.time.*;

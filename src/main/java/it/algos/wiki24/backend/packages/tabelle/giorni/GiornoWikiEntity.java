@@ -1,9 +1,9 @@
 package it.algos.wiki24.backend.packages.tabelle.giorni;
 
-import it.algos.base24.backend.annotation.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.packages.crono.mese.*;
+import it.algos.vbase.backend.annotation.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.packages.crono.mese.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 

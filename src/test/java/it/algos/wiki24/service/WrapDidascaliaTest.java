@@ -1,12 +1,12 @@
 package it.algos.wiki24.service;
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.list.*;
-import it.algos.base24.backend.packages.anagrafica.via.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.basetest.*;
-import it.algos.base24.ui.form.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.list.*;
+import it.algos.vbase.backend.packages.anagrafica.via.*;
+import it.algos.vbase.backend.packages.crono.anno.*;
+import it.algos.vbase.basetest.*;
+import it.algos.vbase.ui.form.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;

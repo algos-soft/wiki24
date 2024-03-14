@@ -1,11 +1,11 @@
 package it.algos.wiki24.modulo;
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.packages.geografia.stato.*;
-import it.algos.base24.basetest.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.packages.crono.giorno.*;
+import it.algos.vbase.backend.packages.geografia.stato.*;
+import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;

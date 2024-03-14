@@ -1,17 +1,15 @@
 package it.algos.wiki24.backend.service;
 
 import com.mongodb.client.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.checkerframework.checker.units.qual.*;
-import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

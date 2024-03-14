@@ -1,7 +1,7 @@
 package it.algos.wiki24.service;
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.basetest.*;

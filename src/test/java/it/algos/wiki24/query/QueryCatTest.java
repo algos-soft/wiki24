@@ -2,7 +2,7 @@ package it.algos.wiki24.query;
 
 
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.query.*;
 import it.algos.wiki24.basetest.*;

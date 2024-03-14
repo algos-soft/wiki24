@@ -1,6 +1,6 @@
 package it.algos.wiki24.backend.wrapper;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 
 import java.time.*;

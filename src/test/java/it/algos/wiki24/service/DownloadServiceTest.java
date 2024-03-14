@@ -2,9 +2,9 @@ package it.algos.wiki24.service;
 
 import com.mongodb.client.*;
 import it.algos.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.service.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;

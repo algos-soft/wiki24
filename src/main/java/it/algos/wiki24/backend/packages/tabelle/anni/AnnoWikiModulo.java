@@ -1,18 +1,16 @@
 package it.algos.wiki24.backend.packages.tabelle.anni;
 
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.backend.packages.crono.secolo.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.packages.crono.anno.*;
+import it.algos.vbase.backend.packages.crono.secolo.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import it.algos.wiki24.backend.packages.tabelle.giorni.*;
 import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.upload.*;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
 

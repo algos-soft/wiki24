@@ -1,28 +1,19 @@
 package it.algos.wiki24.backend.packages.nomi.nomebio;
 
-import com.mongodb.client.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.logic.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomi.nomepagina.*;
-import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
 import org.springframework.stereotype.*;
 
-import java.util.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
 import javax.inject.*;
+import java.util.*;
 
 /**
  * Project wiki24

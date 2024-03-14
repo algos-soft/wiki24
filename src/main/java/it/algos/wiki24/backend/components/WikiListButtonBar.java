@@ -2,19 +2,15 @@ package it.algos.wiki24.backend.components;
 
 import com.vaadin.flow.component.button.*;
 import com.vaadin.flow.component.icon.*;
-import com.vaadin.flow.component.orderedlayout.*;
 import com.vaadin.flow.component.textfield.*;
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.components.*;
-import it.algos.base24.backend.list.*;
-import it.algos.base24.backend.service.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.components.*;
+import it.algos.vbase.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import it.algos.wiki24.backend.logic.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;

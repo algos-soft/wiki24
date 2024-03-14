@@ -2,7 +2,7 @@ package it.algos.wiki24.backend.packages.tabelle.giorni;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.packages.crono.mese.*;
+import it.algos.vbase.backend.packages.crono.mese.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;

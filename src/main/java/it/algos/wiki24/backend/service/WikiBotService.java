@@ -2,8 +2,8 @@ package it.algos.wiki24.backend.service;
 
 import com.mongodb.client.*;
 import com.mongodb.client.model.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.service.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.service.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.wrapper.*;

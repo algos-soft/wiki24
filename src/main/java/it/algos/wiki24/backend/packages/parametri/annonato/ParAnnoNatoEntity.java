@@ -1,8 +1,8 @@
 package it.algos.wiki24.backend.packages.parametri.annonato;
 
-import it.algos.base24.backend.annotation.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
+import it.algos.vbase.backend.annotation.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 

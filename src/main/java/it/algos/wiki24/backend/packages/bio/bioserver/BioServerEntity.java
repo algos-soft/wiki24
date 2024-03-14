@@ -1,13 +1,10 @@
 package it.algos.wiki24.backend.packages.bio.bioserver;
 
-import it.algos.base24.backend.annotation.*;
-import it.algos.base24.backend.entity.*;
-import it.algos.base24.backend.enumeration.*;
-import jakarta.validation.constraints.*;
+import it.algos.vbase.backend.annotation.*;
+import it.algos.vbase.backend.entity.*;
+import it.algos.vbase.backend.enumeration.*;
 import lombok.*;
-import org.springframework.data.mongodb.core.index.*;
 import org.springframework.stereotype.*;
-import org.springframework.stereotype.Indexed;
 
 import java.time.*;
 

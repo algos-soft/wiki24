@@ -2,26 +2,20 @@ package it.algos.wiki24.backend.query;
 
 import com.google.common.base.*;
 import com.vaadin.flow.spring.annotation.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.service.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;
 import it.algos.wiki24.backend.wrapper.*;
-import org.apache.poi.ss.formula.functions.*;
 import org.json.simple.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.beans.factory.config.*;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.env.*;
 
-import javax.inject.*;
 import java.net.*;
-import java.util.*;
 import java.util.Objects;
+import java.util.*;
 
 /**
  * Project vaadwiki

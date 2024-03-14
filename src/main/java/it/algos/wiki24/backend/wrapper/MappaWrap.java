@@ -1,9 +1,5 @@
 package it.algos.wiki24.backend.wrapper;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-
 import java.util.*;
 
 /**

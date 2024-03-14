@@ -1,9 +1,6 @@
 package it.algos.wiki24.backend.enumeration;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 
 /**
  * Project wiki24

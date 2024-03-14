@@ -1,12 +1,12 @@
 package it.algos.wiki24.basetest;
 
 import com.vaadin.flow.spring.annotation.SpringComponent;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.packages.crono.anno.*;
-import it.algos.base24.backend.packages.crono.giorno.*;
-import it.algos.base24.backend.wrapper.*;
-import it.algos.base24.basetest.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.packages.crono.anno.*;
+import it.algos.vbase.backend.packages.crono.giorno.*;
+import it.algos.vbase.backend.wrapper.*;
+import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;

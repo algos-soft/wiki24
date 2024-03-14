@@ -1,11 +1,10 @@
 package it.algos.wiki24.backend.query;
 
 import com.vaadin.flow.spring.annotation.*;
-import it.algos.base24.backend.boot.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
-import it.algos.base24.backend.enumeration.*;
-import it.algos.base24.backend.exception.*;
-import it.algos.base24.backend.wrapper.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.exception.*;
+import it.algos.vbase.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import static it.algos.wiki24.backend.service.WikiApiService.*;

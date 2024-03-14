@@ -1,15 +1,11 @@
 package it.algos.wiki24.backend.wrapper;
 
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import it.algos.base24.backend.boot.*;
-import static it.algos.base24.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.boot.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.wiki24.backend.enumeration.*;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-
-import java.time.format.*;
 
 import java.time.*;
+import java.time.format.*;
 
 /**
  * Project wiki24
