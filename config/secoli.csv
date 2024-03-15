@@ -16,7 +16,7 @@ ordine,nome,inizio,fine,anteCristo
 15,V,401,500,false
 16,VI,501,600,false
 17,VII,601,700,false
-18,VII,701,800,false
+18,VIII,701,800,false
 19,IX,801,900,false
 20,X,901,1000,false
 21,XI,1001,1100,false
@@ -27,6 +27,6 @@ ordine,nome,inizio,fine,anteCristo
 26,XVI,1501,1600,false
 27,XVII,1601,1700,false
 28,XVIII,1701,1800,false
-29,IXX,1801,1900,false
+29,XIX,1801,1900,false
 30,XX,1901,2000,false
 31,XXI,2001,2100,false
