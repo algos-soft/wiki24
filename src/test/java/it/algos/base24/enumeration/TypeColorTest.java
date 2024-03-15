@@ -1,28 +1,28 @@
-package it.algos.wiki24.enumeration;
+package it.algos.base24.enumeration;
 
 import it.algos.base24.basetest.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
-import it.algos.wiki24.backend.enumeration.*;
-import org.junit.jupiter.api.*;
+import it.algos.vbase.backend.enumeration.*;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 
 /**
- * Project wiki24
+ * Project base24
  * Created by Algos
  * User: gac
- * Date: Thu, 14-Dec-2023
- * Time: 12:51
+ * Date: Sat, 21-Oct-2023
+ * Time: 19:03
  * <p>
  * Unit test di una enumeration che implementa Type <br>
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("enums")
-@DisplayName("Enumeration TypeQuery")
+@DisplayName("Enumeration TypeColor")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TypeQueryTest extends AlgosTest {
+public class TypeColorTest extends EnumTest {
 
 
-    private TypeQuery[] matrice;
+    private TypeColor[] matrice;
 
 
     /**
@@ -32,8 +32,8 @@ public class TypeQueryTest extends AlgosTest {
      */
     @BeforeAll
     protected void setUpAll() {
-//        super.setUpAll();
-//        super.typeZero = TypeQuery.getAllEnums().get(0);
+        super.setUpAll();
+        super.typeZero = TypeColor.getAllEnums().get(0);
     }
 
 
@@ -54,14 +54,14 @@ public class TypeQueryTest extends AlgosTest {
     @Order(1)
     @DisplayName("1 - matrice dei valori")
     void matrice() {
-        matrice = TypeQuery.values();
+        matrice = TypeColor.values();
         assertNotNull(matrice);
 
         System.out.println("Tutti i valori della enumeration come matrice []");
         System.out.println(VUOTA);
         System.out.println(String.format("Ci sono %d elementi nella Enumeration", matrice.length));
         System.out.println(VUOTA);
-        for (TypeQuery valore : matrice) {
+        for (TypeColor valore : matrice) {
             System.out.println(valore);
         }
     }

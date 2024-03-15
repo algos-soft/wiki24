@@ -1,33 +1,31 @@
-package it.algos.wiki24.service;
+package it.algos.base24.enumeration;
 
 import it.algos.*;
 import it.algos.base24.basetest.*;
-import it.algos.wiki24.backend.service.*;
+import it.algos.vbase.backend.service.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import javax.inject.*;
+import org.junit.jupiter.api.extension.*;
+import org.springframework.beans.factory.annotation.*;
+import org.springframework.boot.test.context.*;
+import org.springframework.test.context.junit.jupiter.*;
 
 /**
- * Project wiki24
+ * Project base24
  * Created by Algos
  * User: gac
- * Date: Thu, 14-Dec-2023
- * Time: 12:34
+ * Date: lun, 23-ott-2023
+ * Time: 14:52
  */
 @SpringBootTest(classes = {Application.class})
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Tag("service")
-@DisplayName("WikiApi Service")
+@DisplayName("Utility Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WikiApiServiceTest extends ServiceTest {
+public class UtilityServiceTest extends ServiceTest {
 
-    @Inject
-    private WikiApiService service;
+    @Autowired
+    private UtilityService service;
 
 
     /**
@@ -37,7 +35,7 @@ public class WikiApiServiceTest extends ServiceTest {
      */
     @BeforeAll
     protected void setUpAll() {
-        super.clazz = WikiApiService.class;
+        super.clazz = UtilityService.class;
         super.setUpAll();
     }
 

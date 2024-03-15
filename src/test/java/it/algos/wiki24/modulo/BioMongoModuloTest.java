@@ -2,32 +2,16 @@ package it.algos.wiki24.modulo;
 
 import it.algos.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
-import it.algos.vbase.backend.entity.*;
-import it.algos.vbase.backend.packages.crono.giorno.*;
-import it.algos.vbase.backend.packages.geografia.stato.*;
-import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.liste.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import static it.algos.wiki24.backend.wrapper.WResult.*;
 import it.algos.wiki24.basetest.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.*;
 
-import java.util.*;
 import java.util.stream.*;
-
-import com.vaadin.flow.spring.annotation.SpringComponent;
-import org.springframework.context.annotation.Scope;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import com.vaadin.flow.component.textfield.TextField;
-
-import javax.inject.*;
-
 /**
  * Project wiki24
  * Created by Algos

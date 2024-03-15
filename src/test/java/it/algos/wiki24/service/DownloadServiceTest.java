@@ -2,6 +2,7 @@ package it.algos.wiki24.service;
 
 import com.mongodb.client.*;
 import it.algos.*;
+import it.algos.base24.basetest.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.service.*;
 import it.algos.vbase.backend.wrapper.*;
@@ -30,7 +31,7 @@ import java.util.*;
 @Tag("service")
 @DisplayName("Download Service")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class DownloadServiceTest {
+public class DownloadServiceTest extends ServiceTest {
 
     @Inject
     private DownloadService service;

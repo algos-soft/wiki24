@@ -1,7 +1,7 @@
 package it.algos.wiki24.enumeration;
 
+import it.algos.base24.basetest.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
-import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

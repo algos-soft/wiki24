@@ -1,26 +1,8 @@
 package it.algos.wiki24.basetest;
 
 import static it.algos.vbase.backend.boot.BaseCost.*;
-import it.algos.vbase.backend.enumeration.*;
-import it.algos.vbase.backend.exception.*;
-import it.algos.vbase.backend.logic.*;
-import it.algos.vbase.backend.service.*;
-import it.algos.vbase.backend.wrapper.*;
-import it.algos.vbase.basetest.*;
 import it.algos.wiki24.backend.enumeration.*;
-import it.algos.wiki24.backend.login.*;
-import it.algos.wiki24.backend.packages.bio.biomongo.*;
-import it.algos.wiki24.backend.packages.bio.bioserver.*;
-import it.algos.wiki24.backend.service.*;
-import it.algos.wiki24.backend.wrapper.*;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.provider.*;
-import org.mockito.*;
-import org.springframework.context.*;
-
-import javax.inject.*;
-import java.util.*;
 import java.util.stream.*;
 
 /**

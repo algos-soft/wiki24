@@ -2,11 +2,6 @@ package it.algos.wiki24.service;
 
 import it.algos.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
-import it.algos.vbase.backend.list.*;
-import it.algos.vbase.backend.packages.anagrafica.via.*;
-import it.algos.vbase.backend.packages.crono.anno.*;
-import it.algos.vbase.basetest.*;
-import it.algos.vbase.ui.form.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.service.*;
 import it.algos.wiki24.backend.wrapper.*;
@@ -17,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
