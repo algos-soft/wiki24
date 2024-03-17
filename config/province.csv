@@ -1,108 +1,108 @@
-sigla,nomeBreve,nomeCompleto,regione
-AG,Agrigento,Libero consorzio comunale di Agrigento,Sicilia
-AL,Alessandria,Provincia di Alessandria,Piemonte
-AN,Ancona,Provincia di Ancona,Marche
-AO,Aosta,Valle d'Aosta,Valle d'Aosta
-AP,Ascoli Piceno,Provincia di Ascoli Piceno,Marche
-AR,Arezzo,Provincia di Arezzo,Toscana
-AT,Asti,Provincia di Asti,Piemonte
-AV,Avellino,Provincia di Avellino,Campania
-BA,Bari,Città metropolitana di Bari,Puglia
-BT,Barletta-Andria-Trani,Provincia di Barletta-Andria-Trani,Puglia
-BL,Belluno,Provincia di Belluno,Veneto
-BN,Benevento,Provincia di Benevento,Campania
-BG,Bergamo,Provincia di Bergamo,Lombardia
-BI,Biella,Provincia di Biella,Piemonte
-BO,Bologna,Città metropolitana di Bologna,Emilia-Romagna
-BZ,Bolzano,Provincia autonoma di Bolzano,Trentino-Alto Adige
-BS,Brescia,Provincia di Brescia,Lombardia
-BR,Brindisi,Provincia di Brindisi,Puglia
-CA,Cagliari,Città metropolitana di Cagliari,Sardegna
-CL,Caltanissetta,Libero consorzio comunale di Caltanissetta,Sicilia
-CB,Campobasso,Provincia di Campobasso,Molise
-CE,Caserta,Provincia di Caserta,Campania
-CT,Catania,Città metropolitana di Catania,Sicilia
-CZ,Catanzaro,Provincia di Catanzaro,Calabria
-CH,Chieti,Provincia di Chieti,Abruzzo
-CO,Como,Provincia di Como,Lombardia
-CS,Cosenza,Provincia di Cosenza,Calabria
-CR,Cremona,Provincia di Cremona,Lombardia
-KR,Crotone,Provincia di Crotone,Calabria
-CN,Cuneo,Provincia di Cuneo,Piemonte
-EN,Enna,Libero consorzio comunale di Enna,Sicilia
-FM,Fermo,Provincia di Fermo,Marche
-FE,Provincia di Ferrara,Provincia di Ferrara,Emilia-Romagna
-FI,Firenze,Città metropolitana di Firenze,Toscana
-FG,Foggia,Provincia di Foggia,Puglia
-FC,Forlì-Cesena,Provincia di Forlì-Cesena,Emilia-Romagna
-FR,Frosinone,Provincia di Frosinone,Lazio
-GE,Genova,Città metropolitana di Genova,Liguria
-GO,Gorizia,Provincia di Gorizia,Friuli-Venezia Giulia
-GR,Grosseto,Provincia di Grosseto,Toscana
-IM,Imperia,Provincia di Imperia,Liguria
-IS,Isernia,Provincia di Isernia,Molise
-AQ,L'Aquila,Provincia dell'Aquila,Abruzzo
-SP,La Spezia,Provincia della Spezia,Liguria
-LT,Latina,Provincia di Latina,Lazio
-LE,Lecce,Provincia di Lecce,Puglia
-LC,Lecco,Provincia di Lecco,Lombardia
-LI,Livorno,Provincia di Livorno,Toscana
-LO,Lodi,Provincia di Lodi,Lombardia
-LU,Lucca,Provincia di Lucca,Toscana
-MC,Macerata,Provincia di Macerata,Marche
-MN,Mantova,Provincia di Mantova,Lombardia
-MS,Massa-Carrara,Provincia di Massa-Carrara,Toscana
-MT,Matera,Provincia di Matera,Basilicata
-ME,Messina,Città metropolitana di Messina,Sicilia
-MI,Milano,Città metropolitana di Milano,Lombardia
-MO,Modena,Provincia di Modena,Emilia-Romagna
-MB,Monza e Brianza,Provincia di Monza e della Brianza,Lombardia
-NA,Napoli,Città metropolitana di Napoli,Campania
-NO,Novara,Provincia di Novara,Piemonte
-NU,Nuoro,Provincia di Nuoro,Sardegna
-OR,Oristano,Provincia di Oristano,Sardegna
-PD,Padova,Provincia di Padova,Veneto
-PA,Palermo,Città metropolitana di Palermo,Sicilia
-PR,Parma,Provincia di Parma,Emilia-Romagna
-PV,Pavia,Provincia di Pavia,Lombardia
-PG,Perugia,Provincia di Perugia,Umbria
-PU,Pesaro e Urbino,Provincia di Pesaro e Urbino,Marche
-PE,Pescara,Provincia di Pescara,Abruzzo
-PC,Piacenza,Provincia di Piacenza,Emilia-Romagna
-PI,Pisa,Provincia di Pisa,Toscana
-PT,Pistoia,Provincia di Pistoia,Toscana
-PN,Pordenone,Provincia di Pordenone,Friuli-Venezia Giulia
-PZ,Potenza,Provincia di Potenza,Basilicata
-PO,Prato,Provincia di Prato,Toscana
-RG,Ragusa,Libero consorzio comunale di Ragusa,Sicilia
-RA,Ravenna,Provincia di Ravenna,Emilia-Romagna
-RC,Reggio Calabria,Città metropolitana di Reggio Calabria,Calabria
-RE,Reggio Emilia,Provincia di Reggio Emilia,Emilia-Romagna
-RI,Rieti,Provincia di Rieti,Lazio
-RN,Rimini,Provincia di Rimini,Emilia-Romagna
-RM,Roma,Città metropolitana di Roma Capitale,Lazio
-RO,Rovigo,Provincia di Rovigo,Veneto
-SA,Salerno,Provincia di Salerno,Campania
-SS,Sassari,Provincia di Sassari,Sardegna
-SV,Savona,Provincia di Savona,Liguria
-SI,Siena,Provincia di Siena,Toscana
-SR,Siracusa,Libero consorzio comunale di Siracusa,Sicilia
-SO,Sondrio,Provincia di Sondrio,Lombardia
-SU,Sud Sardegna,Provincia del Sud Sardegna,Sardegna
-TA,Taranto,Provincia di Taranto,Puglia
-TE,Teramo,Provincia di Teramo,Abruzzo
-TR,Terni,Provincia di Terni,Umbria
-TO,Torino,Città metropolitana di Torino,Piemonte
-TP,Trapani,Libero consorzio comunale di Trapani,Sicilia
-TN,Trento,Provincia autonoma di Trento,Trentino-Alto Adige
-TV,Treviso,Provincia di Treviso,Veneto
-TS,Trieste,Provincia di Trieste,Friuli-Venezia Giulia
-UD,Udine,Provincia di Udine,Friuli-Venezia Giulia
-VA,Varese,Provincia di Varese,Lombardia
-VE,Venezia,Città metropolitana di Venezia,Veneto
-VB,Verbano-Cusio-Ossola,Provincia del Verbano-Cusio-Ossola,Piemonte
-VC,Vercelli,Provincia di Vercelli,Piemonte
-VR,Verona,Città metropolitana di Verona,Veneto
-VV,Vibo Valentia,Provincia di Vibo Valentia,Calabria
-VI,Vicenza,Città metropolitana di Vicenza,Veneto
-VT,Viterbo,Provincia di Viterbo,Lazio
+sigla;nomeBreve;nomeCompleto;regione
+AG;Agrigento;Libero consorzio comunale di Agrigento;Sicilia
+AL;Alessandria;Provincia di Alessandria;Piemonte
+AN;Ancona;Provincia di Ancona;Marche
+AO;Aosta;Valle d'Aosta;Valle d'Aosta
+AP;Ascoli Piceno;Provincia di Ascoli Piceno;Marche
+AR;Arezzo;Provincia di Arezzo;Toscana
+AT;Asti;Provincia di Asti;Piemonte
+AV;Avellino;Provincia di Avellino;Campania
+BA;Bari;Città metropolitana di Bari;Puglia
+BT;Barletta-Andria-Trani;Provincia di Barletta-Andria-Trani;Puglia
+BL;Belluno;Provincia di Belluno;Veneto
+BN;Benevento;Provincia di Benevento;Campania
+BG;Bergamo;Provincia di Bergamo;Lombardia
+BI;Biella;Provincia di Biella;Piemonte
+BO;Bologna;Città metropolitana di Bologna;Emilia-Romagna
+BZ;Bolzano;Provincia autonoma di Bolzano;Trentino-Alto Adige
+BS;Brescia;Provincia di Brescia;Lombardia
+BR;Brindisi;Provincia di Brindisi;Puglia
+CA;Cagliari;Città metropolitana di Cagliari;Sardegna
+CL;Caltanissetta;Libero consorzio comunale di Caltanissetta;Sicilia
+CB;Campobasso;Provincia di Campobasso;Molise
+CE;Caserta;Provincia di Caserta;Campania
+CT;Catania;Città metropolitana di Catania;Sicilia
+CZ;Catanzaro;Provincia di Catanzaro;Calabria
+CH;Chieti;Provincia di Chieti;Abruzzo
+CO;Como;Provincia di Como;Lombardia
+CS;Cosenza;Provincia di Cosenza;Calabria
+CR;Cremona;Provincia di Cremona;Lombardia
+KR;Crotone;Provincia di Crotone;Calabria
+CN;Cuneo;Provincia di Cuneo;Piemonte
+EN;Enna;Libero consorzio comunale di Enna;Sicilia
+FM;Fermo;Provincia di Fermo;Marche
+FE;Provincia di Ferrara;Provincia di Ferrara;Emilia-Romagna
+FI;Firenze;Città metropolitana di Firenze;Toscana
+FG;Foggia;Provincia di Foggia;Puglia
+FC;Forlì-Cesena;Provincia di Forlì-Cesena;Emilia-Romagna
+FR;Frosinone;Provincia di Frosinone;Lazio
+GE;Genova;Città metropolitana di Genova;Liguria
+GO;Gorizia;Provincia di Gorizia;Friuli-Venezia Giulia
+GR;Grosseto;Provincia di Grosseto;Toscana
+IM;Imperia;Provincia di Imperia;Liguria
+IS;Isernia;Provincia di Isernia;Molise
+AQ;L'Aquila;Provincia dell'Aquila;Abruzzo
+SP;La Spezia;Provincia della Spezia;Liguria
+LT;Latina;Provincia di Latina;Lazio
+LE;Lecce;Provincia di Lecce;Puglia
+LC;Lecco;Provincia di Lecco;Lombardia
+LI;Livorno;Provincia di Livorno;Toscana
+LO;Lodi;Provincia di Lodi;Lombardia
+LU;Lucca;Provincia di Lucca;Toscana
+MC;Macerata;Provincia di Macerata;Marche
+MN;Mantova;Provincia di Mantova;Lombardia
+MS;Massa-Carrara;Provincia di Massa-Carrara;Toscana
+MT;Matera;Provincia di Matera;Basilicata
+ME;Messina;Città metropolitana di Messina;Sicilia
+MI;Milano;Città metropolitana di Milano;Lombardia
+MO;Modena;Provincia di Modena;Emilia-Romagna
+MB;Monza e Brianza;Provincia di Monza e della Brianza;Lombardia
+NA;Napoli;Città metropolitana di Napoli;Campania
+NO;Novara;Provincia di Novara;Piemonte
+NU;Nuoro;Provincia di Nuoro;Sardegna
+OR;Oristano;Provincia di Oristano;Sardegna
+PD;Padova;Provincia di Padova;Veneto
+PA;Palermo;Città metropolitana di Palermo;Sicilia
+PR;Parma;Provincia di Parma;Emilia-Romagna
+PV;Pavia;Provincia di Pavia;Lombardia
+PG;Perugia;Provincia di Perugia;Umbria
+PU;Pesaro e Urbino;Provincia di Pesaro e Urbino;Marche
+PE;Pescara;Provincia di Pescara;Abruzzo
+PC;Piacenza;Provincia di Piacenza;Emilia-Romagna
+PI;Pisa;Provincia di Pisa;Toscana
+PT;Pistoia;Provincia di Pistoia;Toscana
+PN;Pordenone;Provincia di Pordenone;Friuli-Venezia Giulia
+PZ;Potenza;Provincia di Potenza;Basilicata
+PO;Prato;Provincia di Prato;Toscana
+RG;Ragusa;Libero consorzio comunale di Ragusa;Sicilia
+RA;Ravenna;Provincia di Ravenna;Emilia-Romagna
+RC;Reggio Calabria;Città metropolitana di Reggio Calabria;Calabria
+RE;Reggio Emilia;Provincia di Reggio Emilia;Emilia-Romagna
+RI;Rieti;Provincia di Rieti;Lazio
+RN;Rimini;Provincia di Rimini;Emilia-Romagna
+RM;Roma;Città metropolitana di Roma Capitale;Lazio
+RO;Rovigo;Provincia di Rovigo;Veneto
+SA;Salerno;Provincia di Salerno;Campania
+SS;Sassari;Provincia di Sassari;Sardegna
+SV;Savona;Provincia di Savona;Liguria
+SI;Siena;Provincia di Siena;Toscana
+SR;Siracusa;Libero consorzio comunale di Siracusa;Sicilia
+SO;Sondrio;Provincia di Sondrio;Lombardia
+SU;Sud Sardegna;Provincia del Sud Sardegna;Sardegna
+TA;Taranto;Provincia di Taranto;Puglia
+TE;Teramo;Provincia di Teramo;Abruzzo
+TR;Terni;Provincia di Terni;Umbria
+TO;Torino;Città metropolitana di Torino;Piemonte
+TP;Trapani;Libero consorzio comunale di Trapani;Sicilia
+TN;Trento;Provincia autonoma di Trento;Trentino-Alto Adige
+TV;Treviso;Provincia di Treviso;Veneto
+TS;Trieste;Provincia di Trieste;Friuli-Venezia Giulia
+UD;Udine;Provincia di Udine;Friuli-Venezia Giulia
+VA;Varese;Provincia di Varese;Lombardia
+VE;Venezia;Città metropolitana di Venezia;Veneto
+VB;Verbano-Cusio-Ossola;Provincia del Verbano-Cusio-Ossola;Piemonte
+VC;Vercelli;Provincia di Vercelli;Piemonte
+VR;Verona;Città metropolitana di Verona;Veneto
+VV;Vibo Valentia;Provincia di Vibo Valentia;Calabria
+VI;Vicenza;Città metropolitana di Vicenza;Veneto
+VT;Viterbo;Provincia di Viterbo;Lazio
