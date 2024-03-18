@@ -585,7 +585,7 @@ public class Upload {
                     usaIncipit = true;
                     buffer.append("Questa è una lista di persone presenti nell'enciclopedia che hanno il prenome");
                     buffer.append(SPAZIO);
-                    buffer.append( textService.setBold(textService.primaMaiuscola(nomeLista)));
+                    buffer.append(textService.setBold(textService.primaMaiuscola(nomeLista)));
                     buffer.append(SPAZIO);
                     buffer.append("e sono");
                     buffer.append(SPAZIO);
@@ -805,7 +805,7 @@ public class Upload {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> giornoAnnoTxt;
             case attivitaSingolare, attivitaPlurale -> attivitaTxt;
             case nazionalitaSingolare, nazionalitaPlurale -> nazionalitaTxt;
-            case nomi -> nomeTxt;
+            case nomi -> isSottoPagina ? nomeTxt : VUOTA;
             default -> VUOTA;
         };
     }
