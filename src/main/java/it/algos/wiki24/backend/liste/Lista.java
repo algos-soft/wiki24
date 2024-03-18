@@ -611,6 +611,7 @@ public class Lista {
                 case giornoNascita, giornoMorte, annoNascita, annoMorte -> wrapLista.getLista();
                 case attivitaSingolare, attivitaPlurale, nazionalitaSingolare, nazionalitaPlurale ->
                         didascaliaService.ordinamentoAlfabetico(wrapLista.getLista());
+                case nomi -> didascaliaService.ordinamentoAlfabetico(wrapLista.getLista());
                 default -> wrapLista.getLista();
             };
             wrapLista.setLista(wrapDidascalie);
@@ -622,6 +623,7 @@ public class Lista {
             case annoNascita, annoMorte -> TypeInesistente.anno.getTag();
             case attivitaSingolare, attivitaPlurale -> TypeInesistente.nazionalita.getTag();
             case nazionalitaSingolare, nazionalitaPlurale -> TypeInesistente.attivita.getTag();
+            case nomi -> TypeInesistente.nomi.getTag();
             default -> VUOTA;
         };
 
