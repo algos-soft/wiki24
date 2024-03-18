@@ -36,7 +36,7 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("560", TypeLista.annoMorte, true, false, false),
                 //                Arguments.of("1968", TypeLista.annoMorte, true, true, false),
                 //                Arguments.of("dominicani", TypeLista.nazionalitaPlurale, true, true, false),
-                                Arguments.of("abati e badesse", TypeLista.attivitaPlurale, true, true, false),
+//                                Arguments.of("abati e badesse", TypeLista.attivitaPlurale, true, true, false),
                 //                Arguments.of("agronomi", TypeLista.attivitaPlurale, true, true, false),
                 //                Arguments.of("brasiliani", TypeLista.nazionalitaPlurale, true, true, true),
                 //                Arguments.of("allenatori di calcio", TypeLista.attivitaPlurale, true, true, true),
@@ -45,7 +45,7 @@ public abstract class WikiStreamTest extends WikiTest {
                 //                Arguments.of("antiguo-barbudani", TypeLista.nazionalitaPlurale, true, true, false),
                 //                Arguments.of("1968", TypeLista.annoNascita, true, true, false),
                 //                Arguments.of("Aaron", TypeLista.nomi, true, false, false),
-                Arguments.of("Aaron", TypeLista.nomi, true, true, false)
+                Arguments.of("Carlo", TypeLista.nomi, true, true, false)
         );
     }
 

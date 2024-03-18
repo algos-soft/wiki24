@@ -116,4 +116,8 @@ public class WrapLista {
         return mappa;
     }
 
+    public void setMappa(Map<String, WrapLista> mappa) {
+        this.mappa = mappa;
+    }
+
 }

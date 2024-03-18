@@ -840,7 +840,8 @@ public class ListaTest extends WikiStreamTest {
             System.out.println(VUOTA);
 
             System.out.println("Prime 5 sottopagine");
-            for (String keySottoPagina : listaStr.subList(0, Math.min(5, listaStr.size()))) {
+//            for (String keySottoPagina : listaStr.subList(0, Math.min(5, listaStr.size()))) {
+                for (String keySottoPagina : listaStr.subList(10,  listaStr.size())) {
                 ottenuto = istanza.getBodySottoPagina(keySottoPagina);
                 if (textService.isValid(ottenuto)) {
                     message = String.format("[%s%s%s]", nomeLista, SLASH, keySottoPagina);

@@ -415,6 +415,7 @@ public class Lista {
                             wrapListaSub = mappa.get(key);
                             wrapListaSub.add(wrap);
                         }
+                        wrapListaParagrafo.setMappa(arrayService.sort(mappa));
                     }
                 }
             }
