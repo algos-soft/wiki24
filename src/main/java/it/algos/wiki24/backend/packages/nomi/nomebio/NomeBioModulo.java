@@ -232,7 +232,7 @@ public class NomeBioModulo extends WikiModulo {
 
     @Override
     public void uploadPagina(AbstractEntity nome) {
-        uploadService.nomeOnly((NomeBioEntity) nome);
+        uploadService.nome((NomeBioEntity) nome);
     }
 
 }// end of CrudModulo class

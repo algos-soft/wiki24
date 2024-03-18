@@ -563,7 +563,7 @@ public class UploadTest extends WikiStreamTest {
 
 
     @ParameterizedTest
-    @MethodSource(value = "SOTTO_PAGINE")
+    @MethodSource(value = "LISTA_LIVELLO_PAGINA")
     @Order(504)
     @DisplayName("504 - getIncipitTextSottoPagina")
     void getIncipitTextSottoPagina(String nomeLista, TypeLista typeLista) {
@@ -761,7 +761,7 @@ public class UploadTest extends WikiStreamTest {
         assertNotNull(istanza);
         istanzaLista = istanza.getIstanzaLista();
         assertNotNull(istanzaLista);
-        listaStr = istanza.getListaSottoSottoPagine();
+        listaStr = istanza.getListaSottoPagine();
         assertNotNull(listaStr);
 
         if (listaStr != null && listaStr.size() > 0) {

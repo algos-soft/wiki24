@@ -194,6 +194,26 @@ public class UploadService {
         return appContext.getBean(Upload.class, nomeBean.nome, TypeLista.nomi).uploadOnly();
     }
 
+
+    public void nome(final NomeBioEntity nomeBean) {
+        Upload istanzaUpload;
+        List<String> listaStr;
+        Lista istanzaLista;
+
+        // pagina principale
+        istanzaUpload = appContext.getBean(Upload.class, nomeBean.nome, TypeLista.nomi);
+        istanzaUpload.uploadOnly();
+
+        // sottopagine
+        listaStr = istanzaUpload.getListaSottoPagine();
+        if (listaStr != null && listaStr.size() > 0) {
+            istanzaLista = istanzaUpload.getIstanzaLista();
+            for (String keySottopagina : listaStr) {
+                appContext.getBean(Upload.class, nomeBean.nome, TypeLista.nomi, keySottopagina, istanzaLista).uploadOnly();
+            }
+        }
+    }
+
     public void nazionalita(final NazPluraleEntity nazionalitaBean) {
         WResult risultato;
         Upload istanzaUpload;

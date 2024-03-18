@@ -441,6 +441,7 @@ public class Lista {
             case annoNascita, annoMorte -> WPref.sogliaSottoPaginaGiorniAnni.getInt();
             case attivitaPlurale -> 50;
             case nazionalitaPlurale -> 50;
+            case nomi -> 50;
             default -> MAX_INT_VALUE;
         };
 

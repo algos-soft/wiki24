@@ -333,7 +333,14 @@ public class Upload {
             case attivitaPlurale -> WPref.sogliaPaginaAttivita.getInt();
             case nazionalitaSingolare -> MAX_INT_VALUE;
             case nazionalitaPlurale -> WPref.sogliaPaginaNazionalita.getInt();
-            case nomi -> WPref.sogliaPaginaNomi.getInt();
+            case nomi -> {
+                if (isSottoPagina || isSottoSottoPagina) {
+                    yield 50; //@todo da controllare
+                }
+                else {
+                    yield WPref.sogliaPaginaNomi.getInt();
+                }
+            }
             default -> MAX_INT_VALUE;
         };
 
@@ -574,12 +581,28 @@ public class Upload {
                 break;
             }
             case nomi: {
-                buffer.append("{{incipit nomi|nome=");
-                buffer.append(nomeLista);
-                buffer.append("}}");
-                buffer.append(CAPO);
-                this.incipitText = buffer.toString();
-                return incipitText;
+                if (isSottoPagina || isSottoSottoPagina) {
+                    usaIncipit = true;
+                    buffer.append("Questa è una lista di persone presenti nell'enciclopedia che hanno il prenome");
+                    buffer.append(SPAZIO);
+                    buffer.append( textService.setBold(textService.primaMaiuscola(nomeLista)));
+                    buffer.append(SPAZIO);
+                    buffer.append("e sono");
+                    buffer.append(SPAZIO);
+                    buffer.append(textService.setBold(textService.primaMinuscola(keySottoPagina)));
+                    buffer.append(PUNTO);
+                    buffer.append(CAPO);
+                    this.incipitText = buffer.toString();
+                    return incipitText;
+                }
+                else {
+                    buffer.append("{{incipit nomi|nome=");
+                    buffer.append(nomeLista);
+                    buffer.append("}}");
+                    buffer.append(CAPO);
+                    this.incipitText = buffer.toString();
+                    return incipitText;
+                }
             }
             default: {}
         }
@@ -747,6 +770,7 @@ public class Upload {
                 case annoNascita, annoMorte -> TypeToc.nessuno.get();
                 case attivitaSingolare, attivitaPlurale -> TypeToc.noToc.get();
                 case nazionalitaSingolare, nazionalitaPlurale -> TypeToc.noToc.get();
+                case nomi -> TypeToc.noToc.get();
                 default -> TypeToc.nessuno.get();
             };
         }
@@ -774,10 +798,14 @@ public class Upload {
         String nazionalitaLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
         String nazionalitaTxt = String.format("{{Torna a|%s}}", nazionalitaLink);
 
+        String nomeLink = textService.levaCodaDaUltimo(titoloPagina, SLASH);
+        String nomeTxt = String.format("{{Torna a|%s}}", nomeLink);
+
         return switch (typeLista) {
             case giornoNascita, giornoMorte, annoNascita, annoMorte -> giornoAnnoTxt;
             case attivitaSingolare, attivitaPlurale -> attivitaTxt;
             case nazionalitaSingolare, nazionalitaPlurale -> nazionalitaTxt;
+            case nomi -> nomeTxt;
             default -> VUOTA;
         };
     }
