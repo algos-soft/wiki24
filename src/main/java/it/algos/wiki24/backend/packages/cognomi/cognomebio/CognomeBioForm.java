@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.tabelle.anni;
+package it.algos.wiki24.backend.packages.cognomi.cognomebio;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vbase.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class AnnoWikiForm extends CrudForm {
+public class CognomeBioForm extends CrudForm {
 
 
-    public AnnoWikiForm(AnnoWikiModulo crudModulo, AnnoWikiEntity entityBean, CrudOperation operation) {
+    public CognomeBioForm(CognomeBioModulo crudModulo, CognomeBioEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

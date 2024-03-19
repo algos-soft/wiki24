@@ -19,24 +19,24 @@ public class GiornoWikiEntity extends AbstractEntity {
     @AField(type = TypeField.integer, headerText = "#", widthRem = 3, caption = "Ordinamento")
     public int ordine;
 
-    @AField(type = TypeField.text, widthRem = 9, caption = "Giorno")
+    @AField(type = TypeField.wikiAnchor, headerText = "Pagina")
     public String nome;
 
     @AField(type = TypeField.linkDBRef, widthRem = 7)
     public MeseEntity mese;
 
-    @AField(type = TypeField.integer, headerText = "nati", caption = "Numero di biografie che utilizzano i nati in questo giorno", widthRem = 6)
-    public int bioNati;
-
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per giorno di nascita")
+    @AField(type = TypeField.wikiAnchor, headerText = "lista nati", caption = "Pagina su wiki con la lista di biografie per giorno di nascita")
     public String pageNati;
 
-    @AField(type = TypeField.integer, headerText = "morti", caption = "Numero di biografie che utilizzano i morti in questo giorno", widthRem = 6)
-    public int bioMorti;
+    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo giorno")
+    public int bioNati;
 
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per giorno di morte")
+
+    @AField(type = TypeField.wikiAnchor, headerText = "lista morti", caption = "Pagina su wiki con la lista di biografie per giorno di morte")
     public String pageMorti;
 
+    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo giorno")
+    public int bioMorti;
 
     @Override
     public String toString() {

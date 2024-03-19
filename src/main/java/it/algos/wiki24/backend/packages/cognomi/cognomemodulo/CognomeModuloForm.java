@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nomepagina;
+package it.algos.wiki24.backend.packages.cognomi.cognomemodulo;
 
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vbase.backend.enumeration.*;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NomePaginaForm extends CrudForm {
+public class CognomeModuloForm extends CrudForm {
 
 
-    public NomePaginaForm(NomePaginaModulo crudModulo, NomePaginaEntity entityBean, CrudOperation operation) {
+    public CognomeModuloForm(CognomeModuloModulo crudModulo, CognomeModuloEntity entityBean, CrudOperation operation) {
         super(crudModulo, entityBean, operation);
     }
 

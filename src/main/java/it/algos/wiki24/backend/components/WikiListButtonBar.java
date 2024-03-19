@@ -407,10 +407,10 @@ public class WikiListButtonBar extends ListButtonBar {
     private ListButtonBar addUploadAll() {
         buttonUploadAll.getElement().setAttribute("theme", "primary");
         buttonUploadAll.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        buttonUploadAll.getElement().setProperty("title", "Upload di tutte le pagine");
+        buttonUploadAll.getElement().setProperty("title", "Upload di tutte le pagine visibili nella lista");
         buttonUploadAll.setIcon(new Icon(VaadinIcon.UPLOAD));
         buttonUploadAll.setEnabled(true);
-        buttonUploadAll.addClickListener(event -> currentCrudModulo.uploadAll());
+        buttonUploadAll.addClickListener(event -> currentCrudList.uploadAll());
         this.add(buttonUploadAll);
         return null;
     }

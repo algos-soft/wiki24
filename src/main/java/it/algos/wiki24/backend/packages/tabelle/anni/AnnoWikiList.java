@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.tabelle.anni;
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
 import it.algos.vbase.backend.packages.crono.secolo.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +31,7 @@ public class AnnoWikiList extends WikiList {
         super.usaBottoneDownload = false;
         super.usaBottoneElabora = true;
         super.usaBottoneUploadAll = true;
-        super.usaBottoneSearch = typeList.isUsaBottoneSearch();
+        super.usaBottoneSearch = false;
         super.usaBottoneExport = false;
         super.usaInfoElabora = true;
         this.usaInfoUpload = true;
@@ -43,6 +44,23 @@ public class AnnoWikiList extends WikiList {
         super.usaBottoneUpload = false;
         super.usaBottoneUpload1 = true;
         super.usaBottoneUpload2 = true;
+    }
+
+
+    /**
+     * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
+     */
+    @Override
+    public void fixHeader() {
+        headerPlaceHolder.removeAll();
+        int sogliaSottoPagina = WPref.sogliaSottoPaginaGiorniAnni.getInt();
+
+        super.infoScopo = "Liste di nati e morti per anno."; ;
+        super.infoListaPagina = "quando numBio della pagina > 0";
+        super.infoSottoPagina = String.format("quando numBio della pagina > %s", sogliaSottoPagina);
+        super.infoSottoSottoPagina = "mai";
+        super.fixHeader();
     }
 
     /**
@@ -58,6 +76,7 @@ public class AnnoWikiList extends WikiList {
         comboSecolo.setWidth("12rem");
         comboSecolo.setItems(secoloModulo.findAll());
         comboSecolo.addValueChangeListener(event -> sincroFiltri());
+        wikiTopPlaceHolder.add(comboSecolo);
     }
 
     @Override

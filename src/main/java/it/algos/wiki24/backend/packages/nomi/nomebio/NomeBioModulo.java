@@ -9,7 +9,7 @@ import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
-import it.algos.wiki24.backend.packages.nomi.nomepagina.*;
+import it.algos.wiki24.backend.packages.nomi.nomemodulo.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -32,7 +32,7 @@ public class NomeBioModulo extends WikiModulo {
     NomeCategoriaModulo nomeCategoriaModulo;
 
     @Inject
-    NomePaginaModulo nomePaginaModulo;
+    NomeModuloModulo nomePaginaModulo;
 
     @Inject
     BioMongoModulo bioMongoModulo;
@@ -148,7 +148,7 @@ public class NomeBioModulo extends WikiModulo {
      */
     @Override
     public String elabora() {
-        List<NomePaginaEntity> listaNomiPagina = null;
+        List<NomeModuloEntity> listaNomiPagina = null;
         List<String> listaKeyDoppio = null;
         List<String> listaKeyCategoria = null;
         int numBio = 0;
@@ -183,12 +183,20 @@ public class NomeBioModulo extends WikiModulo {
 
         listaNomiPagina = nomePaginaModulo.findAll();
         if (listaNomiPagina != null && listaNomiPagina.size() > 0) {
-            for (NomePaginaEntity bean : listaNomiPagina) {
+            for (NomeModuloEntity bean : listaNomiPagina) {
                 numBio = bioMongoModulo.countAllByNome(bean.nome);
                 doppio = listaKeyDoppio.contains(bean.nome);
                 categoria = listaKeyCategoria.contains(bean.nome);
                 superaSoglia = numBio > minimoVociBioPerAvereUnaPaginaLista;
                 entityBean = creaIfNotExists(bean.nome, numBio, bean.pagina, doppio, categoria, true, superaSoglia);
+            }
+        }
+
+        if (listaKeyDoppio != null && listaKeyDoppio.size() > 0) {
+            for (String nome : listaKeyDoppio) {
+                numBio = bioMongoModulo.countAllByNome(nome);
+                superaSoglia = numBio > minimoVociBioPerAvereUnaPaginaLista;
+                entityBean = creaIfNotExists(nome, numBio, VUOTA, true, false, true, superaSoglia);
             }
         }
 

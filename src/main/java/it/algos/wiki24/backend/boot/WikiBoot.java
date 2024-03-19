@@ -1,10 +1,12 @@
 package it.algos.wiki24.backend.boot;
 
+import com.google.common.base.*;
 import it.algos.vbase.backend.boot.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import static it.algos.vbase.backend.boot.BaseVar.*;
 import it.algos.vbase.backend.enumeration.*;
 import it.algos.vbase.backend.interfaces.*;
+import it.algos.vbase.backend.logic.*;
 import it.algos.vbase.backend.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.login.*;
@@ -104,6 +106,14 @@ public class WikiBoot extends BaseBoot {
         }
         else {
             menuRouteListProject.add(AttSingolareView.class);
+        }
+    }
+
+    protected void printInfoModuli() {
+        super.printInfoModuli();
+
+        for (CrudModulo modulo : crudModuloListProject) {
+            modulo.checkReset();
         }
     }
 

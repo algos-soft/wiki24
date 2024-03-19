@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nomepagina;
+package it.algos.wiki24.backend.packages.nomi.nomemodulo;
 
 import com.vaadin.flow.router.*;
 import it.algos.vbase.backend.annotation.*;
@@ -14,16 +14,16 @@ import org.springframework.beans.factory.annotation.*;
  *
  * @Route chiamata dal menu generale o dalla barra del browser <br>
  */
-@PageTitle("NomiPagina")
-@Route(value = "nomepagina", layout = MainLayout.class)
+@PageTitle("NomiModulo")
+@Route(value = "nomemodulo", layout = MainLayout.class)
 @AView(menuGroupName = "nomi")
-public class NomePaginaView extends CrudView {
+public class NomeModuloView extends CrudView {
 
 
     /**
      * Regola il crudModulo associato a questa @Route e lo passa alla superclasse <br>
      */
-    public NomePaginaView(@Autowired NomePaginaModulo crudModulo) {
+    public NomeModuloView(@Autowired NomeModuloModulo crudModulo) {
         super(crudModulo);
     }
 

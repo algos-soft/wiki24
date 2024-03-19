@@ -39,10 +39,9 @@ public class GiornoWikiModulo extends WikiModulo {
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
-     * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public GiornoWikiModulo() {
-        super(GiornoWikiEntity.class, GiornoWikiView.class, GiornoWikiList.class, GiornoWikiForm.class);
+        super(GiornoWikiEntity.class, GiornoWikiView.class, GiornoWikiList.class);
     }
 
 
@@ -68,7 +67,7 @@ public class GiornoWikiModulo extends WikiModulo {
      * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
      */
     public List<String> getListPropertyNames() {
-        return Arrays.asList("ordine", "bioNati", "pageNati", "bioMorti", "pageMorti");
+        return Arrays.asList("ordine", "nome","pageNati", "bioNati", "pageMorti", "bioMorti");
     }
 
     /**
@@ -172,9 +171,13 @@ public class GiornoWikiModulo extends WikiModulo {
 
     @Override
     public String uploadAll() {
+        return uploadAll(super.findAll());
+    }
+
+    public String uploadAll(List<AbstractEntity> lista) {
         inizio = System.currentTimeMillis();
 
-        for (GiornoWikiEntity giornoBean : findAll()) {
+        for (AbstractEntity giornoBean : lista) {
             uploadPaginaNati(giornoBean);
             uploadPaginaMorti(giornoBean);
         }

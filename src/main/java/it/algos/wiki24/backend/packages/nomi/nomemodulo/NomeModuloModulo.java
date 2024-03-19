@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nomepagina;
+package it.algos.wiki24.backend.packages.nomi.nomemodulo;
 
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.entity.*;
@@ -21,7 +21,7 @@ import java.util.*;
  * Time: 13:53
  */
 @Service
-public class NomePaginaModulo extends WikiModulo {
+public class NomeModuloModulo extends WikiModulo {
 
     public static final String INCIPIT_NOMI = "Incipit nomi";
 
@@ -34,8 +34,8 @@ public class NomePaginaModulo extends WikiModulo {
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
-    public NomePaginaModulo() {
-        super(NomePaginaEntity.class, NomePaginaView.class, NomePaginaList.class, NomePaginaForm.class);
+    public NomeModuloModulo() {
+        super(NomeModuloEntity.class, NomeModuloView.class, NomeModuloList.class, NomeModuloForm.class);
     }
 
 
@@ -44,16 +44,16 @@ public class NomePaginaModulo extends WikiModulo {
         super.fixPreferenze();
     }
 
-    public NomePaginaEntity creaIfNotExists(String nome, String pagina) {
+    public NomeModuloEntity creaIfNotExists(String nome, String pagina) {
         return creaIfNotExists(nome, pagina, false, false);
     }
 
-    public NomePaginaEntity creaIfNotExists(String nome, String pagina, boolean aggiunto, boolean uguale) {
+    public NomeModuloEntity creaIfNotExists(String nome, String pagina, boolean aggiunto, boolean uguale) {
         if (existByKey(nome)) {
             return null;
         }
         else {
-            return (NomePaginaEntity) insert(newEntity(nome, pagina, aggiunto, uguale));
+            return (NomeModuloEntity) insert(newEntity(nome, pagina, aggiunto, uguale));
         }
     }
 
@@ -63,7 +63,7 @@ public class NomePaginaModulo extends WikiModulo {
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
     @Override
-    public NomePaginaEntity newEntity() {
+    public NomeModuloEntity newEntity() {
         return newEntity(VUOTA, VUOTA, false, false);
     }
 
@@ -75,19 +75,19 @@ public class NomePaginaModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomePaginaEntity newEntity(final String nome, final String pagina, boolean aggiunto, boolean uguale) {
-        NomePaginaEntity newEntityBean = NomePaginaEntity.builder()
+    public NomeModuloEntity newEntity(final String nome, final String pagina, boolean aggiunto, boolean uguale) {
+        NomeModuloEntity newEntityBean = NomeModuloEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
                 .aggiunto(aggiunto)
                 .uguale(uguale)
                 .build();
 
-        return (NomePaginaEntity) fixKey(newEntityBean);
+        return (NomeModuloEntity) fixKey(newEntityBean);
     }
 
     @Override
-    public List<NomePaginaEntity> findAll() {
+    public List<NomeModuloEntity> findAll() {
         return super.findAll();
     }
     public List<String> findAllForKey() {
@@ -95,8 +95,8 @@ public class NomePaginaModulo extends WikiModulo {
     }
 
     @Override
-    public NomePaginaEntity findByKey(final Object keyPropertyValue) {
-        return (NomePaginaEntity) super.findByKey(keyPropertyValue);
+    public NomeModuloEntity findByKey(final Object keyPropertyValue) {
+        return (NomeModuloEntity) super.findByKey(keyPropertyValue);
     }
 
 
@@ -149,9 +149,9 @@ public class NomePaginaModulo extends WikiModulo {
         super.elabora();
 
         List<NomeCategoriaEntity> listaNomiCategoria = null;
-        NomePaginaEntity entityBean;
+        NomeModuloEntity entityBean;
         List<AbstractEntity> lista = new ArrayList<>();
-        List<NomePaginaEntity> listaNomi;
+        List<NomeModuloEntity> listaNomi;
         String suffissoNome = SPAZIO + "(nome)";
 
 

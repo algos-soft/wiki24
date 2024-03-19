@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nomepagina;
+package it.algos.wiki24.backend.packages.cognomi.cognomemodulo;
 
 import it.algos.vbase.backend.annotation.*;
 import it.algos.vbase.backend.entity.*;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.*;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@AEntity(collectionName = "nomepagina", keyPropertyName = "nome", typeList = TypeList.hardWiki)
-public class NomePaginaEntity extends AbstractEntity {
+@AEntity(collectionName = "cognomemodulo", keyPropertyName = "nome", typeList = TypeList.hardWiki)
+public class CognomeModuloEntity extends AbstractEntity {
 
     @AField(type = TypeField.text)
     public String nome;

@@ -29,6 +29,7 @@ public class NomeCategoriaList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
+        super.usaBottoneDownload = true;
         super.usaBottoneElabora = false;
         super.usaBottoneShows = false;
     }

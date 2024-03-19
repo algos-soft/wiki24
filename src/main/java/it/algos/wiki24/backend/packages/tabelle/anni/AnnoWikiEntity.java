@@ -19,27 +19,24 @@ public class AnnoWikiEntity extends AbstractEntity {
     @AField(type = TypeField.integer, headerText = "#", widthRem = 4, caption = "Ordinamento")
     public int ordine;
 
-    @AField(type = TypeField.text, widthRem = 9, caption = "Anno")
+    @AField(type = TypeField.wikiAnchor, headerText = "Pagina")
     public String nome;
 
     @AField(type = TypeField.linkDBRef, widthRem = 7)
     public SecoloEntity secolo;
 
-    @AField(type = TypeField.integer, headerText = "nati", caption = "Numero di biografie che utilizzano i nati in questo anno", widthRem
-            = 6)
-    public int bioNati;
-
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per anno" +
-            " di nascita")
+    @AField(type = TypeField.wikiAnchor, headerText = "lista nati", caption = "Pagina su wiki con la lista di biografie per anno di nascita")
     public String pageNati;
 
-    @AField(type = TypeField.integer, headerText = "morti", caption = "Numero di biografie che utilizzano i morti in questo anno", widthRem
-            = 6)
+    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo anno")
+    public int bioNati;
+
+    @AField(type = TypeField.wikiAnchor, headerText = "lista morti", caption = "Pagina su wiki con la lista di biografie per anno di morte")
+    public String pageMorti;
+
+    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo anno")
     public int bioMorti;
 
-    @AField(type = TypeField.linkWiki, headerText = "pagina", widthRem = 13, caption = "Pagina su wiki con la lista di biografie per anno" +
-            " di morte")
-    public String pageMorti;
 
     @AField(type = TypeField.booleano, typeBool = TypeBool.thumb, headerText = "n")
     public boolean natiOk;

@@ -116,6 +116,11 @@ public class QueryCat extends AQuery {
         this.queryProp = TypeQueryProp.title;
         return (List<String>) urlRequest().getLista();
     }
+    public List<String> getSubCat(final String catTitleGrezzo) {
+        this.queryType = TypeQueryType.subCat;
+        this.queryProp = TypeQueryProp.title;
+        return (List<String>) urlRequest(catTitleGrezzo).getLista();
+    }
 
     /**
      * Request principale <br>

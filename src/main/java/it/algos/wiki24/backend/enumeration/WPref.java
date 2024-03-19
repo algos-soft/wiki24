@@ -162,7 +162,7 @@ public enum WPref implements IPref {
     //***************
     iconaNato("iconaNato", TypePref.string, "n." + SPAZIO_NON_BREAKING, "Icona con spazio per le date di nascita", false, false),
     iconaMorto("iconaMorto", TypePref.string, "†" + SPAZIO_NON_BREAKING, "Icona con spazio per le date di morte", false, false),
-    scriveComunque("scriveComunque", TypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono sulla data", true, false),
+    scriveComunque("scriveComunque", TypePref.bool, false, "Forza comunque la registrazione della pagina anche se le modifiche sono solo sulla data.", true, false),
     sogliaSottoPagina("sogliaSottoPagina", TypePref.integer, 50, "Soglia minima del paragrafo per creare una sottopagina di una lista sul server wiki"),
     sogliaDiv("sogliaDiv", TypePref.integer, 5, "Soglia minima di voci per usare {{Div col}} nel singolo paragrafo"),
     sogliaParagrafi("sogliaParagrafi", TypePref.integer, 3, "Soglia minima di paragrafi per mostrarli"),

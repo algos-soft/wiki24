@@ -4,6 +4,7 @@ import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.server.*;
+import it.algos.vbase.backend.boot.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.components.*;
 import it.algos.vbase.backend.entity.*;
@@ -105,6 +106,14 @@ public abstract class WikiList extends CrudList {
 
     public WikiModulo currentCrudModulo;
 
+    protected String infoListaPagina;
+
+    protected String infoSottoPagina;
+
+    protected String infoSottoSottoPagina;
+
+    protected String infoUpload;
+
     public WikiList(final WikiModulo crudModulo) {
         super(crudModulo);
         this.currentCrudModulo = crudModulo;
@@ -179,7 +188,65 @@ public abstract class WikiList extends CrudList {
      */
     @Override
     protected void fixHeader() {
-        super.fixHeader();
+        String messageInfo = VUOTA;
+        String messageUpload = VUOTA;
+        String sep = DUE_PUNTI_SPAZIO;
+        int elementiTotali = currentCrudModulo.count();
+        int elementiFiltrati = dataProviderService.count(filtri);
+
+        if (textService.isValid(infoScopo)) {
+            headerPlaceHolder.add(ASpan.text(infoScopo).verde().bold());
+        }
+
+        if (textService.isValid(infoListaPagina)) {
+            messageInfo = String.format("Lista/Pagina%s%s%s%s", sep, infoListaPagina, PUNTO, SPAZIO);
+        }
+        if (textService.isValid(infoSottoPagina)) {
+            messageInfo += String.format("SottoPagine%s%s%s%s", sep, infoSottoPagina, PUNTO, SPAZIO);
+        }
+        if (textService.isValid(infoSottoSottoPagina)) {
+            messageInfo += String.format("SottoSottoPagine%s%s%s%s", sep, infoSottoSottoPagina, PUNTO, SPAZIO);
+        }
+        if (textService.isValid(messageInfo)) {
+            headerPlaceHolder.add(ASpan.text(messageInfo).blue().bold().small());
+        }
+
+        if (usaBottoneUploadAll) {
+            if (isUnoSoloSelezionato()) {
+                messageUpload = String.format("Upload della lista selezionata%s%s", PUNTO, SPAZIO);
+            }
+            else {
+                if (elementiTotali == elementiFiltrati) {
+                    messageUpload = String.format("Upload di tutte le [%d] liste%s%s", elementiTotali,PUNTO, SPAZIO);
+                }
+                else {
+                    messageUpload = String.format("Upload delle sole [%d] liste selezionate coi filtri%s%s", elementiFiltrati, PUNTO, SPAZIO);
+                }
+            }
+            if (WPref.scriveComunque.is()) {
+                messageUpload += WPref.scriveComunque.getDescrizione();
+            }
+            else {
+                messageUpload += "Registra solo se ci sono modifiche.";
+            }
+            headerPlaceHolder.add(ASpan.text(messageUpload).rosso().bold().small());
+        }
+
+        if (textService.isValid(infoCreazione)) {
+            headerPlaceHolder.add(ASpan.text(infoCreazione).rosso().small());
+        }
+        if (textService.isValid(infoReset)) {
+            if (isUnoSoloSelezionato()) {
+                headerPlaceHolder.add(ASpan.text(infoReset).rosso().small());
+            }
+            else {
+                headerPlaceHolder.add(ASpan.text(infoReset).rosso().bold());
+            }
+        }
+
+        if (usaBottoneSearch && textService.isValid(searchFieldName)) {
+            headerPlaceHolder.add(ASpan.text(String.format(TEXT_SEARCH, textService.primaMaiuscola(searchFieldName))).rosso().italic().small());
+        }
         this.fixInfo();
     }
 
@@ -457,6 +524,9 @@ public abstract class WikiList extends CrudList {
     }
 
     protected void sincroSelection() {
+        if (headerPlaceHolder != null) {
+            fixHeader();
+        }
         if (wikiTopPlaceHolder != null) {
             wikiTopPlaceHolder.sincroSelection(isUnoSoloSelezionato());
         }
@@ -528,6 +598,12 @@ public abstract class WikiList extends CrudList {
         if (crudEntityBean != null) {
             currentCrudModulo.wikiView(crudEntityBean);
         }
+    }
+
+    public void uploadAll() {
+
+        int a = 87;
+        //        currentCrudModulo.uploadAll();
     }
 
     public void testPagina() {

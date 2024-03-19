@@ -2,7 +2,11 @@ package it.algos.wiki24.backend.packages.tabelle.giorni;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.vbase.backend.boot.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.packages.crono.mese.*;
+import it.algos.vbase.ui.wrapper.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +34,7 @@ public class GiornoWikiList extends WikiList {
         super.usaBottoneDownload = false;
         super.usaBottoneElabora = true;
         super.usaBottoneUploadAll = true;
-        super.usaBottoneSearch = typeList.isUsaBottoneSearch();
+        super.usaBottoneSearch = false;
         super.usaBottoneExport = false;
         super.usaInfoElabora = true;
         super.usaInfoUpload = true;
@@ -46,6 +50,23 @@ public class GiornoWikiList extends WikiList {
     }
 
     /**
+     * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
+     */
+    @Override
+    public void fixHeader() {
+        headerPlaceHolder.removeAll();
+        int sogliaSottoPagina = WPref.sogliaSottoPaginaGiorniAnni.getInt();
+
+        super.infoScopo = "Liste di nati e morti per giorno."; ;
+        super.infoListaPagina = "sempre (per tutti i 366 GG)";
+//        super.infoSottoPagina = String.format("quando numBio della pagina > %s",sogliaSottoPagina);
+        super.infoSottoPagina = "mai"; //@todo per adesso. C'è solo il 1° gennaio.
+        super.infoSottoSottoPagina = "mai";
+        super.fixHeader();
+    }
+
+    /**
      * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
      */
     @Override
@@ -58,6 +79,7 @@ public class GiornoWikiList extends WikiList {
         comboMese.setWidth("12rem");
         comboMese.setItems(meseModulo.findAll());
         comboMese.addValueChangeListener(event -> sincroFiltri());
+        wikiTopPlaceHolder.add(comboMese);
     }
 
     @Override

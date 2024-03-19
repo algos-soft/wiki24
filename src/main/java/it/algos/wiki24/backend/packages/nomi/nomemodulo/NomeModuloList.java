@@ -1,4 +1,4 @@
-package it.algos.wiki24.backend.packages.nomi.nomepagina;
+package it.algos.wiki24.backend.packages.nomi.nomemodulo;
 
 import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.html.*;
@@ -14,13 +14,13 @@ import org.springframework.context.annotation.*;
 
 @SpringComponent
 @Scope(value = SCOPE_PROTOTYPE)
-public class NomePaginaList extends WikiList {
+public class NomeModuloList extends WikiList {
 
     private IndeterminateCheckbox checkAggiunto;
 
     private IndeterminateCheckbox checkUguale;
 
-    public NomePaginaList(final NomePaginaModulo crudModulo) {
+    public NomeModuloList(final NomeModuloModulo crudModulo) {
         super(crudModulo);
     }
 

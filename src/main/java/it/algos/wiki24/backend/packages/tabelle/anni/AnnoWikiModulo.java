@@ -41,10 +41,9 @@ public class AnnoWikiModulo extends WikiModulo {
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
-     * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public AnnoWikiModulo() {
-        super(AnnoWikiEntity.class, AnnoWikiView.class, AnnoWikiList.class, AnnoWikiForm.class);
+        super(AnnoWikiEntity.class, AnnoWikiView.class, AnnoWikiList.class);
     }
 
 
@@ -69,7 +68,7 @@ public class AnnoWikiModulo extends WikiModulo {
      * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
      */
     public List<String> getListPropertyNames() {
-        return Arrays.asList("ordine", "bioNati", "pageNati", "bioMorti", "pageMorti");
+        return Arrays.asList("ordine", "nome", "pageNati", "bioNati", "pageMorti", "bioMorti");
     }
 
     /**
@@ -197,7 +196,7 @@ public class AnnoWikiModulo extends WikiModulo {
         String annoCorrenteTxt = LocalDateTime.now().getYear() + VUOTA;
         AnnoWikiEntity annoCorrente = findByKey(annoCorrenteTxt);
 
-        if (annoCorrente!=null) {
+        if (annoCorrente != null) {
             uploadService.annoMorto(annoCorrente);
             numMorti = uploadService.numMortiAnno(annoCorrente);
             risultato = String.format("Nella pagina [Morti nel %s] ci sono [%s] biografie. ", annoCorrenteTxt, textService.format(numMorti));
