@@ -199,13 +199,13 @@ public abstract class WikiList extends CrudList {
         }
 
         if (textService.isValid(infoListaPagina)) {
-            messageInfo = String.format("Lista/Pagina%s%s%s%s", sep, infoListaPagina, PUNTO, SPAZIO);
+            messageInfo = String.format("Lista/Pagina%s%s%s%s", sep, infoListaPagina, PUNTO, SPAZIO_DOPPIO);
         }
         if (textService.isValid(infoSottoPagina)) {
-            messageInfo += String.format("SottoPagine%s%s%s%s", sep, infoSottoPagina, PUNTO, SPAZIO);
+            messageInfo += String.format("SottoPagine%s%s%s%s", sep, infoSottoPagina, PUNTO, SPAZIO_DOPPIO);
         }
         if (textService.isValid(infoSottoSottoPagina)) {
-            messageInfo += String.format("SottoSottoPagine%s%s%s%s", sep, infoSottoSottoPagina, PUNTO, SPAZIO);
+            messageInfo += String.format("SottoSottoPagine%s%s%s%s", sep, infoSottoSottoPagina, PUNTO, SPAZIO_DOPPIO);
         }
         if (textService.isValid(messageInfo)) {
             headerPlaceHolder.add(ASpan.text(messageInfo).blue().bold().small());

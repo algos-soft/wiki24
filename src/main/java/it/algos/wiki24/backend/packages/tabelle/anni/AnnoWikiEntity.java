@@ -28,13 +28,13 @@ public class AnnoWikiEntity extends AbstractEntity {
     @AField(type = TypeField.wikiAnchor, headerText = "lista nati", caption = "Pagina su wiki con la lista di biografie per anno di nascita")
     public String pageNati;
 
-    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo anno")
+    @AField(type = TypeField.numberFormat, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo anno")
     public int bioNati;
 
     @AField(type = TypeField.wikiAnchor, headerText = "lista morti", caption = "Pagina su wiki con la lista di biografie per anno di morte")
     public String pageMorti;
 
-    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo anno")
+    @AField(type = TypeField.numberFormat, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo anno")
     public int bioMorti;
 
 

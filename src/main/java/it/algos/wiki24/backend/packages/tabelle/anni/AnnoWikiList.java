@@ -2,11 +2,13 @@ package it.algos.wiki24.backend.packages.tabelle.anni;
 
 import com.vaadin.flow.component.combobox.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.packages.crono.secolo.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 
 import javax.inject.*;
 
@@ -87,6 +89,7 @@ public class AnnoWikiList extends WikiList {
             if (comboSecolo.getValue() != null) {
                 if (comboSecolo.getValue() instanceof SecoloEntity mese) {
                     filtri.uguale("secolo", mese);
+                    filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE));
                 }
             }
             else {

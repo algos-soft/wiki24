@@ -6,10 +6,12 @@ import it.algos.vbase.backend.boot.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.packages.crono.mese.*;
 import it.algos.vbase.ui.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.*;
 
 import javax.inject.*;
 
@@ -90,6 +92,7 @@ public class GiornoWikiList extends WikiList {
             if (comboMese.getValue() != null) {
                 if (comboMese.getValue() instanceof MeseEntity mese) {
                     filtri.uguale("mese", mese);
+                    filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_ORDINE));
                 }
             }
             else {

@@ -28,14 +28,14 @@ public class GiornoWikiEntity extends AbstractEntity {
     @AField(type = TypeField.wikiAnchor, headerText = "lista nati", caption = "Pagina su wiki con la lista di biografie per giorno di nascita")
     public String pageNati;
 
-    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo giorno")
+    @AField(type = TypeField.numberFormat, headerText = "numBio", caption = "Numero di biografie che utilizzano i nati in questo giorno")
     public int bioNati;
 
 
     @AField(type = TypeField.wikiAnchor, headerText = "lista morti", caption = "Pagina su wiki con la lista di biografie per giorno di morte")
     public String pageMorti;
 
-    @AField(type = TypeField.integer, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo giorno")
+    @AField(type = TypeField.numberFormat, headerText = "numBio", caption = "Numero di biografie che utilizzano i morti in questo giorno")
     public int bioMorti;
 
     @Override
