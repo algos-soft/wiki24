@@ -608,9 +608,7 @@ public abstract class WikiList extends CrudList {
     }
 
     public void uploadAll() {
-
-        int a = 87;
-        //        currentCrudModulo.uploadAll();
+        currentCrudModulo.uploadAll();
     }
 
     public void testPagina() {
