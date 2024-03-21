@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.nomi.nomemodulo;
 
 import ch.carnet.kasparscherrer.*;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
@@ -16,9 +17,6 @@ import org.springframework.context.annotation.*;
 @Scope(value = SCOPE_PROTOTYPE)
 public class NomeModuloList extends WikiList {
 
-    private IndeterminateCheckbox checkAggiunto;
-
-    private IndeterminateCheckbox checkUguale;
 
     public NomeModuloList(final NomeModuloModulo crudModulo) {
         super(crudModulo);
@@ -28,13 +26,17 @@ public class NomeModuloList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaBottoneElabora = true;
+        super.gridSelection = Grid.SelectionMode.NONE;
+
+        super.usaInfoDownload = true;
+        super.usaBottoneElabora = false;
         super.usaBottoneShows = false;
     }
 
     protected void fixHeader() {
         WAnchor anchor;
         String message;
+        headerPlaceHolder.removeAll();
 
         anchor = WAnchor.build(MODULO + INCIPIT_NOMI, textService.setQuadre(INCIPIT_NOMI)).bold();
 
@@ -49,33 +51,10 @@ public class NomeModuloList extends WikiList {
         message = "L'elaborazione delle liste biografiche e gli upload delle liste di nomi sono gestiti dalla task Nome.";
         headerPlaceHolder.add(ASpan.text(message).blue());
 
-        message = "Elabora: aggiunge tutti i NomiCategoria che hanno la pagina omonima o che non ce l'hanno proprio";
-        headerPlaceHolder.add(ASpan.text(message).blue());
-
         super.infoCreazione = TEXT_HARD;
         super.infoReset = TEXT_RESET_DELETE;
 
         super.fixHeader();
-    }
-
-    /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
-     */
-    @Override
-    protected void fixTop() {
-        super.fixTop();
-
-        checkAggiunto = super.creaFiltroCheckBox(checkAggiunto, "aggiunto");
-        checkUguale = super.creaFiltroCheckBox(checkUguale, "uguale");
-    }
-
-
-    @Override
-    protected void fixFiltri() {
-        super.fixFiltri();
-
-        super.fixFiltroCheckBox(checkAggiunto, "aggiunto");
-        super.fixFiltroCheckBox(checkUguale, "uguale");
     }
 
 }// end of CrudList class

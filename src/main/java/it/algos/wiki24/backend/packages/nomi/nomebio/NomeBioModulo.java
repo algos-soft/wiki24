@@ -3,13 +3,18 @@ package it.algos.wiki24.backend.packages.nomi.nomebio;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.entity.*;
 import it.algos.vbase.backend.enumeration.*;
+import it.algos.vbase.backend.service.*;
 import it.algos.vbase.backend.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.FIELD_NAME_NOME;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomi.nomemodulo.*;
+import it.algos.wiki24.backend.service.*;
+import org.springframework.data.domain.*;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -29,13 +34,22 @@ public class NomeBioModulo extends WikiModulo {
     NomeDoppioModulo nomeDoppioModulo;
 
     @Inject
+    MongoService mongoService;
+
+    @Inject
+    NomeModuloModulo nomeModuloModulo;
+
+    @Inject
     NomeCategoriaModulo nomeCategoriaModulo;
 
     @Inject
-    NomeModuloModulo nomePaginaModulo;
+    BioMongoModulo bioMongoModulo;
 
     @Inject
-    BioMongoModulo bioMongoModulo;
+    QueryService queryService;
+
+    @Inject
+    WikiUtilityService wikiUtilityService;
 
     /**
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
@@ -71,16 +85,6 @@ public class NomeBioModulo extends WikiModulo {
     }
 
 
-    public NomeBioEntity creaIfNotExists(String nome, int numBio, String pagina, boolean doppio, boolean categoria, boolean incipit, boolean superaSoglia) {
-        if (existByKey(nome)) {
-            return null;
-        }
-        else {
-            return (NomeBioEntity) insert(newEntity(nome, numBio, pagina, doppio, categoria, incipit, superaSoglia));
-        }
-    }
-
-
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
      *
@@ -88,12 +92,20 @@ public class NomeBioModulo extends WikiModulo {
      */
     @Override
     public NomeBioEntity newEntity() {
-        return newEntity(VUOTA, 0, VUOTA, VUOTA, false, false, false, false);
+        return newEntity(VUOTA, 0, VUOTA, VUOTA, false, false, false);
     }
 
 
-    public NomeBioEntity newEntity(String nome, int numBio, String pagina, boolean doppio, boolean categoria, boolean incipit, boolean superaSoglia) {
-        return newEntity(nome, numBio, pagina, VUOTA, doppio, categoria, incipit, superaSoglia);
+    public NomeBioEntity newEntity(String nome) {
+        return newEntity(nome, 0, VUOTA, VUOTA, false, false, false);
+    }
+
+    public NomeBioEntity newEntity(String nome, boolean doppio) {
+        return newEntity(nome, 0, VUOTA, VUOTA, doppio, false, false);
+    }
+
+    public NomeBioEntity newEntity(String nome, String pagina) {
+        return newEntity(nome, 0, pagina, VUOTA, false, false, false);
     }
 
     /**
@@ -106,16 +118,15 @@ public class NomeBioModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeBioEntity newEntity(String nome, int numBio, String pagina, String lista, boolean doppio, boolean categoria, boolean incipit, boolean superaSoglia) {
+    public NomeBioEntity newEntity(String nome, int numBio, String pagina, String lista, boolean doppio, boolean superaSoglia, boolean esisteLista) {
         NomeBioEntity newEntityBean = NomeBioEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .numBio(numBio)
                 .pagina(textService.isValid(pagina) ? pagina : null)
                 .lista(textService.isValid(lista) ? lista : null)
                 .doppio(doppio)
-                .categoria(categoria)
-                .incipit(incipit)
                 .superaSoglia(superaSoglia)
+                .esisteLista(esisteLista)
                 .build();
 
         return (NomeBioEntity) fixKey(newEntityBean);
@@ -125,8 +136,9 @@ public class NomeBioModulo extends WikiModulo {
     public List<NomeBioEntity> findAll() {
         return super.findAll();
     }
+
     public List<NomeBioEntity> findAllSuperaSoglia() {
-        return findAll().stream().filter(bean->bean.superaSoglia).toList();
+        return findAll().stream().filter(bean -> bean.superaSoglia).toList();
     }
 
     @Override
@@ -148,11 +160,12 @@ public class NomeBioModulo extends WikiModulo {
      */
     @Override
     public String elabora() {
-        List<NomeModuloEntity> listaNomiPagina = null;
-        List<String> listaKeyDoppio = null;
-        List<String> listaKeyCategoria = null;
-        int numBio = 0;
-        NomeBioEntity entityBean;
+        List<NomeModuloEntity> listaNomiBio = null;
+        List<NomeDoppioEntity> listaNomiDoppi = null;
+        List<NomeModuloEntity> listaNomiModuli = null;
+        List<NomeCategoriaEntity> listaNomiCategoria = null;
+        NomeBioEntity newBean;
+        String nomeCategoria;
         boolean categoria;
         boolean doppio;
         boolean superaSoglia;
@@ -165,39 +178,52 @@ public class NomeBioModulo extends WikiModulo {
 
         // Download di NomeDoppio <br>
         nomeDoppioModulo.download();
-        listaKeyDoppio = nomeDoppioModulo.findAllForKey();
-        if (listaKeyDoppio == null || listaKeyDoppio.size() == 0) {
+        listaNomiDoppi = nomeDoppioModulo.findAll();
+        if (listaNomiDoppi != null && listaNomiDoppi.size() > 0) {
+            for (NomeDoppioEntity bean : listaNomiDoppi) {
+                newBean = newEntity(bean.nome, true);
+                if (!mappaBeans.containsKey(bean.nome)) {
+                    mappaBeans.put(bean.nome, newBean);
+                }
+            }
+        }
+        else {
             logger.warn(new WrapLog().message("Mancano i nomi doppi"));
+        }
+
+        // Download di NomeModulo <br>
+        nomeModuloModulo.download();
+        listaNomiModuli = nomeModuloModulo.findAll();
+        if (listaNomiModuli != null && listaNomiModuli.size() > 0) {
+            for (NomeModuloEntity bean : listaNomiModuli) {
+                newBean = newEntity(bean.nome, bean.pagina);
+                if (!mappaBeans.containsKey(bean.nome)) {
+                    mappaBeans.put(bean.nome, newBean);
+                }
+            }
+        }
+        else {
+            logger.warn(new WrapLog().message("Mancano i nomi modulo (incipit)"));
         }
 
         // Download di NomeCategoria <br>
         nomeCategoriaModulo.download();
-        listaKeyCategoria = nomeCategoriaModulo.findAllForKey();
-        if (listaKeyCategoria == null || listaKeyCategoria.size() == 0) {
+        listaNomiCategoria = nomeCategoriaModulo.findAll();
+        if (listaNomiCategoria != null && listaNomiCategoria.size() > 0) {
+            for (NomeCategoriaEntity bean : listaNomiCategoria) {
+                nomeCategoria = bean.nome;
+                if (nomeCategoria.contains(PARENTESI_TONDA_INI)) {
+                    nomeCategoria = textService.levaCodaDaPrimo(nomeCategoria, PARENTESI_TONDA_INI);
+                    nomeCategoria = nomeCategoria.trim();
+                }
+                if (!mappaBeans.containsKey(nomeCategoria)) {
+                    newBean = newEntity(nomeCategoria, bean.nome);
+                    mappaBeans.put(bean.nome, newBean);
+                }
+            }
+        }
+        else {
             logger.warn(new WrapLog().message("Mancano i nomi delle categorie"));
-        }
-
-        // Download ed elaborazione di NomePagina <br>
-        nomePaginaModulo.download();
-        nomePaginaModulo.elabora();
-
-        listaNomiPagina = nomePaginaModulo.findAll();
-        if (listaNomiPagina != null && listaNomiPagina.size() > 0) {
-            for (NomeModuloEntity bean : listaNomiPagina) {
-                numBio = bioMongoModulo.countAllByNome(bean.nome);
-                doppio = listaKeyDoppio.contains(bean.nome);
-                categoria = listaKeyCategoria.contains(bean.nome);
-                superaSoglia = numBio > minimoVociBioPerAvereUnaPaginaLista;
-                entityBean = creaIfNotExists(bean.nome, numBio, bean.pagina, doppio, categoria, true, superaSoglia);
-            }
-        }
-
-        if (listaKeyDoppio != null && listaKeyDoppio.size() > 0) {
-            for (String nome : listaKeyDoppio) {
-                numBio = bioMongoModulo.countAllByNome(nome);
-                superaSoglia = numBio > minimoVociBioPerAvereUnaPaginaLista;
-                entityBean = creaIfNotExists(nome, numBio, VUOTA, true, false, true, superaSoglia);
-            }
         }
 
         //        DistinctIterable<String> listaNomiMongo = mongoService.getCollection("biomongo").distinct("nome", String.class);
@@ -207,8 +233,20 @@ public class NomeBioModulo extends WikiModulo {
         //        }
         //        int a = 87;
 
+                mappaBeans.values().stream().toList().subList(150, 200).stream().forEach(bean -> checkElabora((NomeBioEntity) bean, minimoVociBioPerAvereUnaPaginaLista));
+        ;
+//        mappaBeans.values().stream().forEach(bean -> checkElabora((NomeBioEntity) bean, minimoVociBioPerAvereUnaPaginaLista));
+
         super.fixInfoElabora();
         return VUOTA;
+    }
+
+    public void checkElabora(NomeBioEntity newBean, int minimoVociBioPerAvereUnaPaginaLista) {
+        newBean.numBio = bioMongoModulo.countAllByNome(newBean.nome);
+        newBean.superaSoglia = newBean.numBio > minimoVociBioPerAvereUnaPaginaLista;
+        newBean.lista = newBean.nome;
+        newBean.esisteLista = queryService.isEsiste(wikiUtilityService.wikiTitleNomi(newBean.lista));
+        insert(newBean);
     }
 
 

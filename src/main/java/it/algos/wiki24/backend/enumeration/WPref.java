@@ -157,6 +157,9 @@ public enum WPref implements IPref {
     lastUploadNomi("lastUploadNomi", TypePref.localdatetime, ROOT_DATA_TIME, "Last upload date and time di NomeBio."),
     uploadNomiTime("uploadNomiTime", TypePref.integer, 0, "Durata upload di NomeBio in minuti."),
     sogliaPaginaNomi("sogliaPaginaNomi", TypePref.integer, 100, "Soglia minima di voci per creare una pagina della lista di nomi sul server wiki"),
+    lastDownloadNomiDoppi("lastDownloadNomiDoppi", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NomiDoppi."),
+    lastDownloadNomiModulo("lastDownloadNomiModulo", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NomiModulo."),
+    lastDownloadNomiCategoria("lastDownloadNomiCategoria", TypePref.localdatetime, ROOT_DATA_TIME, "Last download date and time di NomiCategoria."),
 
 
     //***************

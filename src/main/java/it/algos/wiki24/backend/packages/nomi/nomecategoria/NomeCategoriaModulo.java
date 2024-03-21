@@ -46,6 +46,8 @@ public class NomeCategoriaModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastDownload = WPref.lastDownloadNomiCategoria;
     }
 
     public NomeCategoriaEntity creaIfNotExists(final String nome, final TypeGenere typeGenere) {
@@ -125,11 +127,14 @@ public class NomeCategoriaModulo extends WikiModulo {
         //--Cancella la (eventuale) precedente lista di nomi template
         deleteAll();
 
+        inizio = System.currentTimeMillis();
         if (botLogin != null && botLogin.isValido() && botLogin.isBot()) {
             downloadCategoria(CAT_MASCHILE, TypeGenere.maschile);
             downloadCategoria(CAT_FEMMINILE, TypeGenere.femminile);
             downloadCategoria(CAT_ENTRAMBI, TypeGenere.entrambi);
         }
+
+        super.fixDownload(inizio);
     }
 
     /**
@@ -142,9 +147,9 @@ public class NomeCategoriaModulo extends WikiModulo {
 
         if (listaNomi != null) {
             for (String nome : listaNomi) {
-                if (nome.contains(PARENTESI_TONDA_INI)) {
-                    nome = textService.levaCodaDaPrimo(nome, PARENTESI_TONDA_INI);
-                }
+//                if (nome.contains(PARENTESI_TONDA_INI)) {
+//                    nome = textService.levaCodaDaPrimo(nome, PARENTESI_TONDA_INI);
+//                }
                 creaIfNotExists(nome, typeGenere);
             }
         }

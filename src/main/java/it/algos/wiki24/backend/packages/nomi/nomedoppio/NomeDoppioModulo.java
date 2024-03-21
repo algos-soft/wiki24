@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.nomi.nomedoppio;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.enumeration.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import org.springframework.stereotype.*;
 
@@ -22,16 +23,17 @@ public class NomeDoppioModulo extends WikiModulo {
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
-     * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public NomeDoppioModulo() {
-        super(NomeDoppioEntity.class, NomeDoppioView.class, NomeDoppioList.class, NomeDoppioForm.class);
+        super(NomeDoppioEntity.class, NomeDoppioView.class, NomeDoppioList.class);
     }
 
 
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastDownload = WPref.lastDownloadNomiDoppi;
     }
 
     public NomeDoppioEntity creaIfNotExists(String nome) {
@@ -111,6 +113,8 @@ public class NomeDoppioModulo extends WikiModulo {
                 creaIfNotExists(riga);
             }
         }
+
+        super.fixDownload(inizio);
     }
 
 

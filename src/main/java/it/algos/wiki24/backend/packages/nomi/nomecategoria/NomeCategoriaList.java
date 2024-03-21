@@ -2,6 +2,7 @@ package it.algos.wiki24.backend.packages.nomi.nomecategoria;
 
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.combobox.*;
+import com.vaadin.flow.component.grid.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
@@ -29,7 +30,9 @@ public class NomeCategoriaList extends WikiList {
     protected void fixPreferenze() {
         super.fixPreferenze();
 
-        super.usaBottoneDownload = true;
+        super.gridSelection = Grid.SelectionMode.NONE;
+
+        super.usaInfoDownload = true;
         super.usaBottoneElabora = false;
         super.usaBottoneShows = false;
     }
@@ -40,6 +43,7 @@ public class NomeCategoriaList extends WikiList {
         WAnchor anchor2;
         WAnchor anchor3;
         String message;
+        headerPlaceHolder.removeAll();
 
         anchor1 = WAnchor.build(CAT + CAT_MASCHILE, "Maschili").bold();
         anchor2 = WAnchor.build(CAT + CAT_FEMMINILE, "Femminili").bold();

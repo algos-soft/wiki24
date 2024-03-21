@@ -16,7 +16,7 @@ import org.springframework.stereotype.*;
 @AEntity(collectionName = "nomecategoria", keyPropertyName = "nome", typeList = TypeList.hardWiki)
 public class NomeCategoriaEntity extends AbstractEntity {
 
-    @AField(type = TypeField.text)
+    @AField(type = TypeField.wikiAnchor)
     public String nome;
 
     @AField(type = TypeField.enumType, enumClazz = TypeGenere.class)

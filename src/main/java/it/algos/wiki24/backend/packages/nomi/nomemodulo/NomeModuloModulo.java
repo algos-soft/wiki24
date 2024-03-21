@@ -6,6 +6,7 @@ import it.algos.vbase.backend.enumeration.*;
 import it.algos.vbase.backend.exception.*;
 import it.algos.vbase.backend.wrapper.*;
 import static it.algos.wiki24.backend.boot.WikiCost.*;
+import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.logic.*;
 import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import org.springframework.stereotype.*;
@@ -32,28 +33,26 @@ public class NomeModuloModulo extends WikiModulo {
      * Regola la entityClazz associata a questo Modulo e la passa alla superclasse <br>
      * Regola la viewClazz @Route associata a questo Modulo e la passa alla superclasse <br>
      * Regola la listClazz associata a questo Modulo e la passa alla superclasse <br>
-     * Regola la formClazz associata a questo Modulo e la passa alla superclasse <br>
      */
     public NomeModuloModulo() {
-        super(NomeModuloEntity.class, NomeModuloView.class, NomeModuloList.class, NomeModuloForm.class);
+        super(NomeModuloEntity.class, NomeModuloView.class, NomeModuloList.class);
     }
 
 
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.lastDownload = WPref.lastDownloadNomiModulo;
     }
+
 
     public NomeModuloEntity creaIfNotExists(String nome, String pagina) {
-        return creaIfNotExists(nome, pagina, false, false);
-    }
-
-    public NomeModuloEntity creaIfNotExists(String nome, String pagina, boolean aggiunto, boolean uguale) {
         if (existByKey(nome)) {
             return null;
         }
         else {
-            return (NomeModuloEntity) insert(newEntity(nome, pagina, aggiunto, uguale));
+            return (NomeModuloEntity) insert(newEntity(nome, pagina));
         }
     }
 
@@ -64,7 +63,7 @@ public class NomeModuloModulo extends WikiModulo {
      */
     @Override
     public NomeModuloEntity newEntity() {
-        return newEntity(VUOTA, VUOTA, false, false);
+        return newEntity(VUOTA, VUOTA);
     }
 
     /**
@@ -75,12 +74,10 @@ public class NomeModuloModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeModuloEntity newEntity(final String nome, final String pagina, boolean aggiunto, boolean uguale) {
+    public NomeModuloEntity newEntity(final String nome, final String pagina) {
         NomeModuloEntity newEntityBean = NomeModuloEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .pagina(textService.isValid(pagina) ? pagina : null)
-                .aggiunto(aggiunto)
-                .uguale(uguale)
                 .build();
 
         return (NomeModuloEntity) fixKey(newEntityBean);
@@ -144,33 +141,32 @@ public class NomeModuloModulo extends WikiModulo {
         super.fixDownload(inizio);
     }
 
-    @Override
-    public String elabora() {
-        super.elabora();
-
-        List<NomeCategoriaEntity> listaNomiCategoria = null;
-        NomeModuloEntity entityBean;
-        List<AbstractEntity> lista = new ArrayList<>();
-        List<NomeModuloEntity> listaNomi;
-        String suffissoNome = SPAZIO + "(nome)";
-
-
-        //--Controllo e recupero di NomiCategoria
-        nomeCategoriaModulo.download();
-        listaNomiCategoria = nomeCategoriaModulo.findAll();
-
-        if (listaNomiCategoria != null) {
-            for (NomeCategoriaEntity nomeCategoria : listaNomiCategoria) {
-                //devo fare un doppio controllo perché alcuni nomi potrebbero già esserci e NON è un errore
-                if (existByKey(nomeCategoria.nome)) {
-                    message = String.format("Il nome [%s] esiste già", nomeCategoria.nome);
-                    logger.debug(new WrapLog().message(message));
-                }
-                else {
-                    entityBean = creaIfNotExists(nomeCategoria.nome, null, true, false);
-                }
-            }
-        }
+//    @Override
+//    public String elabora() {
+//        super.elabora();
+//
+//        NomeModuloEntity entityBean;
+//        List<AbstractEntity> lista = new ArrayList<>();
+//        List<NomeModuloEntity> listaNomi;
+//        String suffissoNome = SPAZIO + "(nome)";
+//
+//
+//        //--Controllo e recupero di NomiCategoria
+//        nomeCategoriaModulo.download();
+//        listaNomiCategoria = nomeCategoriaModulo.findAll();
+//
+//        if (listaNomiCategoria != null) {
+//            for (NomeCategoriaEntity nomeCategoria : listaNomiCategoria) {
+//                //devo fare un doppio controllo perché alcuni nomi potrebbero già esserci e NON è un errore
+//                if (existByKey(nomeCategoria.nome)) {
+//                    message = String.format("Il nome [%s] esiste già", nomeCategoria.nome);
+//                    logger.debug(new WrapLog().message(message));
+//                }
+//                else {
+//                    entityBean = creaIfNotExists(nomeCategoria.nome, null);
+//                }
+//            }
+//        }
 
         //        //--Controllo nomi uguali che vanno omessi nel modulo
         //        //--Sono uguali se il nome della persona coincide con la pagina di riferimento
@@ -185,7 +181,7 @@ public class NomeModuloModulo extends WikiModulo {
 
         //--Controllo nomi uguali che vanno omessi nel modulo
         //--Sono uguali se il nome della persona coincide con la pagina di riferimento
-        listaNomi = findAll();
+//        listaNomi = findAll();
 //        for (NomeIncipit nome : listaNomi) {
 //            if (nome.linkPagina.equals(nome.nome)) {
 //                nome.uguale = true;
@@ -193,8 +189,8 @@ public class NomeModuloModulo extends WikiModulo {
 //            }
 //        }
 
-        super.fixInfoElabora();
-        return VUOTA;
-    }
+//        super.fixInfoElabora();
+//        return VUOTA;
+//    }
 
 }// end of CrudModulo class

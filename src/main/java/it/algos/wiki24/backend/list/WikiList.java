@@ -4,7 +4,6 @@ import ch.carnet.kasparscherrer.*;
 import com.vaadin.flow.component.*;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.server.*;
-import it.algos.vbase.backend.boot.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.components.*;
 import it.algos.vbase.backend.entity.*;
@@ -108,9 +107,9 @@ public abstract class WikiList extends CrudList {
 
     protected String infoListaPagina;
 
-    protected String infoSottoPagina;
+    protected String infoListaSottoPagina;
 
-    protected String infoSottoSottoPagina;
+    protected String infoListaSottoSottoPagina;
 
     protected String infoUpload;
 
@@ -184,6 +183,14 @@ public abstract class WikiList extends CrudList {
 
     /**
      * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * <p>
+     * Prima riga (infoScopo): Verde, bold, normale. Informazioni base: tavola (download) oppure Lista (upload) <br>
+     * Secondo gruppo: Blue, normale, normale. Logica di creazione/funzionamento della tavola <br>
+     * Terzo gruppo (infoLista): Blue, bold, small. Parametri logici di creazione delle liste <br>
+     * Quarto gruppo: Rosso, bold, small. Esecuzione upload <br>
+     * Quinto gruppo: Rosso, normale, small. Parametri delete/reset <br>
+     * Sesto gruppo: Verde, normale, small. Informazioni sulla tempistica <br>
+     * <p>
      * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
      */
     @Override
@@ -201,11 +208,11 @@ public abstract class WikiList extends CrudList {
         if (textService.isValid(infoListaPagina)) {
             messageInfo = String.format("Lista/Pagina%s%s%s%s", sep, infoListaPagina, PUNTO, SPAZIO_DOPPIO);
         }
-        if (textService.isValid(infoSottoPagina)) {
-            messageInfo += String.format("SottoPagine%s%s%s%s", sep, infoSottoPagina, PUNTO, SPAZIO_DOPPIO);
+        if (textService.isValid(infoListaSottoPagina)) {
+            messageInfo += String.format("SottoPagine%s%s%s%s", sep, infoListaSottoPagina, PUNTO, SPAZIO_DOPPIO);
         }
-        if (textService.isValid(infoSottoSottoPagina)) {
-            messageInfo += String.format("SottoSottoPagine%s%s%s%s", sep, infoSottoSottoPagina, PUNTO, SPAZIO_DOPPIO);
+        if (textService.isValid(infoListaSottoSottoPagina)) {
+            messageInfo += String.format("SottoSottoPagine%s%s%s%s", sep, infoListaSottoSottoPagina, PUNTO, SPAZIO_DOPPIO);
         }
         if (textService.isValid(messageInfo)) {
             headerPlaceHolder.add(ASpan.text(messageInfo).blue().bold().small());
@@ -217,7 +224,7 @@ public abstract class WikiList extends CrudList {
             }
             else {
                 if (elementiTotali == elementiFiltrati) {
-                    messageUpload = String.format("Upload di tutte le [%d] liste%s%s", elementiTotali,PUNTO, SPAZIO);
+                    messageUpload = String.format("Upload di tutte le [%d] liste%s%s", elementiTotali, PUNTO, SPAZIO);
                 }
                 else {
                     messageUpload = String.format("Upload delle sole [%d] liste selezionate coi filtri%s%s", elementiFiltrati, PUNTO, SPAZIO);

@@ -51,6 +51,14 @@ public class AnnoWikiList extends WikiList {
 
     /**
      * Utilizza il placeHolder header della view per informazioni sulla tavola/lista <br>
+     * <p>
+     * Prima riga (infoScopo): Verde, bold, normale. Informazioni base: tavola (download) oppure Lista (upload) <br>
+     * Secondo gruppo: Blue, normale, normale. Logica di creazione/funzionamento della tavola <br>
+     * Terzo gruppo (infoLista): Blue, bold, small. Parametri logici di creazione delle liste <br>
+     * Quarto gruppo: Rosso, bold, small. Esecuzione upload <br>
+     * Quinto gruppo: Rosso, normale, small. Parametri delete/reset <br>
+     * Sesto gruppo: Verde, normale, small. Informazioni sulla tempistica <br>
+     * <p>
      * Può essere sovrascritto, invocando PRIMA o DOPO il metodo della superclasse <br>
      */
     @Override
@@ -58,10 +66,15 @@ public class AnnoWikiList extends WikiList {
         headerPlaceHolder.removeAll();
         int sogliaSottoPagina = WPref.sogliaSottoPaginaGiorniAnni.getInt();
 
+        //Prima riga (infoScopo): Verde, bold, normale. Informazioni base: tavola (download) oppure Lista (upload) <br>
         super.infoScopo = "Liste di nati e morti per anno."; ;
+
+        //Secondo gruppo: Blue, normale, normale. Logica di creazione/funzionamento della tavola <br>
         super.infoListaPagina = "quando numBio della pagina > 0";
-        super.infoSottoPagina = String.format("quando numBio della pagina > %s", sogliaSottoPagina);
-        super.infoSottoSottoPagina = "mai";
+        super.infoListaSottoPagina = String.format("quando numBio della pagina > %s", sogliaSottoPagina);
+        super.infoListaSottoSottoPagina = "mai";
+
+        //Sesto gruppo: Verde, normale, small. Informazioni sulla tempistica <br>
         super.fixHeader();
     }
 
