@@ -147,9 +147,6 @@ public class NomeCategoriaModulo extends WikiModulo {
 
         if (listaNomi != null) {
             for (String nome : listaNomi) {
-//                if (nome.contains(PARENTESI_TONDA_INI)) {
-//                    nome = textService.levaCodaDaPrimo(nome, PARENTESI_TONDA_INI);
-//                }
                 creaIfNotExists(nome, typeGenere);
             }
         }

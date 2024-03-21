@@ -24,8 +24,11 @@ public class NomeBioEntity extends AbstractEntity {
     @AField(type = TypeField.wikiAnchor)
     public String pagina;
 
-    @AField(type = TypeField.wikiAnchor, anchorPrefix = "Persone di nome ")
+    @AField(type = TypeField.wikiAnchor,  anchorPrefix = "Persone di nome ")
     public String lista;
+
+    @AField(type = TypeField.enumType)
+    public TypeAnchor listaTypeAnchor;
 
     @AField(type = TypeField.booleano, headerText = "XX", widthRem = 4)
     public boolean doppio;

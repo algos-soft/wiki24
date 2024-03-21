@@ -2,11 +2,11 @@ package it.algos.wiki24.backend.service;
 
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.liste.*;
+import it.algos.wiki24.backend.packages.anni.*;
+import it.algos.wiki24.backend.packages.attivita.attplurale.*;
+import it.algos.wiki24.backend.packages.giorni.*;
+import it.algos.wiki24.backend.packages.nazionalita.nazplurale.*;
 import it.algos.wiki24.backend.packages.nomi.nomebio.*;
-import it.algos.wiki24.backend.packages.tabelle.anni.*;
-import it.algos.wiki24.backend.packages.tabelle.attplurale.*;
-import it.algos.wiki24.backend.packages.tabelle.giorni.*;
-import it.algos.wiki24.backend.packages.tabelle.nazplurale.*;
 import it.algos.wiki24.backend.upload.*;
 import it.algos.wiki24.backend.wrapper.*;
 import org.springframework.context.*;

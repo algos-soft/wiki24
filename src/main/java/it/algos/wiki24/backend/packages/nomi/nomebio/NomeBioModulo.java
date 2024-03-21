@@ -84,6 +84,14 @@ public class NomeBioModulo extends WikiModulo {
         super.unitaMisuraUpload = TypeDurata.minuti;
     }
 
+    /**
+     * Regola le property visibili in una lista CrudList <br>
+     * Di default prende tutti i fields della ModelClazz specifica <br>
+     * Può essere sovrascritto SENZA richiamare il metodo della superclasse <br>
+     */
+    public List<String> getListPropertyNames() {
+        return Arrays.asList("nome", "numBio", "pagina", "lista", "doppio", "mongo", "superaSoglia", "esisteLista");
+    }
 
     /**
      * Creazione in memoria di una nuova entity che NON viene salvata <br>
@@ -169,7 +177,7 @@ public class NomeBioModulo extends WikiModulo {
         boolean categoria;
         boolean doppio;
         boolean superaSoglia;
-        int minimoVociBioPerAvereUnaPaginaLista = WPref.sogliaPaginaNomi.getInt();
+        int soglia = WPref.sogliaPaginaNomi.getInt();
 
         super.elabora();
 
@@ -233,19 +241,35 @@ public class NomeBioModulo extends WikiModulo {
         //        }
         //        int a = 87;
 
-                mappaBeans.values().stream().toList().subList(150, 200).stream().forEach(bean -> checkElabora((NomeBioEntity) bean, minimoVociBioPerAvereUnaPaginaLista));
+        //        mappaBeans.values().stream().toList().subList(150, 200).stream().forEach(bean -> checkElabora((NomeBioEntity) bean, soglia));
         ;
-//        mappaBeans.values().stream().forEach(bean -> checkElabora((NomeBioEntity) bean, minimoVociBioPerAvereUnaPaginaLista));
+        mappaBeans.values().stream().forEach(bean -> checkElabora((NomeBioEntity) bean, soglia));
 
         super.fixInfoElabora();
         return VUOTA;
     }
 
-    public void checkElabora(NomeBioEntity newBean, int minimoVociBioPerAvereUnaPaginaLista) {
+    public void checkElabora(NomeBioEntity newBean, int soglia) {
         newBean.numBio = bioMongoModulo.countAllByNome(newBean.nome);
-        newBean.superaSoglia = newBean.numBio > minimoVociBioPerAvereUnaPaginaLista;
+        newBean.superaSoglia = newBean.numBio > soglia;
         newBean.lista = newBean.nome;
         newBean.esisteLista = queryService.isEsiste(wikiUtilityService.wikiTitleNomi(newBean.lista));
+        if (newBean.esisteLista) {
+            if (newBean.superaSoglia) {
+                newBean.listaTypeAnchor = TypeAnchor.esisteMantenere;
+            }
+            else {
+                newBean.listaTypeAnchor = TypeAnchor.esisteCancellare;
+            }
+        }
+        else {
+            if (newBean.superaSoglia) {
+                newBean.listaTypeAnchor = TypeAnchor.mancaCreare;
+            }
+            else {
+                newBean.listaTypeAnchor = TypeAnchor.mancaNonPrevisto;
+            }
+        }
         insert(newBean);
     }
 
