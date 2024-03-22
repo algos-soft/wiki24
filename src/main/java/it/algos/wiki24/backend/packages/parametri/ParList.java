@@ -32,13 +32,21 @@ public abstract class ParList extends WikiList {
         super(crudModulo);
     }
 
-
     /**
-     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     * Può essere sovrascritto <br>
      */
-    @Override
     protected void fixTop() {
-        super.fixTop();
+        wikiTopPlaceHolder.removeAll();
+
+        wikiTopPlaceHolder.deleteAll();
+        wikiTopPlaceHolder.elabora();
+
+        if (usaBottoneEdit) {
+            wikiTopPlaceHolder.edit();
+        }
+        if (usaSearchWikiTitle) {
+            wikiTopPlaceHolder.searchWikiTitle();
+        }
 
         searchGrezzo.setPlaceholder(TAG_ALTRE_BY + FIELD_NAME_GREZZO);
         searchGrezzo.getElement().setProperty("title", "Search: ricerca testuale da inizio del campo " + FIELD_NAME_GREZZO);
@@ -50,31 +58,46 @@ public abstract class ParList extends WikiList {
         searchElaborato.setClearButtonVisible(true);
         searchElaborato.addValueChangeListener(event -> sincroFiltri());
 
-        boxGrezzoVuoto = new IndeterminateCheckbox();
-        boxGrezzoVuoto.setLabel("Grezzo");
-        boxGrezzoVuoto.setIndeterminate(false);
-        boxGrezzoVuoto.setValue(false);
-        boxGrezzoVuoto.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layout1 = new HorizontalLayout(boxGrezzoVuoto);
-        layout1.setAlignItems(Alignment.CENTER);
+        wikiTopPlaceHolder.build();
+        boxGrezzoVuoto = super.creaFiltroCheckBox(boxGrezzoVuoto, "Grezzo");
+        boxElaboratoVuoto = super.creaFiltroCheckBox(boxElaboratoVuoto, "Elaborato");
+        boxUguale = super.creaFiltroCheckBox(boxUguale, "Uguale");
+    }
 
-        boxElaboratoVuoto = new IndeterminateCheckbox();
-        boxElaboratoVuoto.setLabel("Elaborato");
-        boxElaboratoVuoto.setIndeterminate(false);
-        boxElaboratoVuoto.setValue(false);
-        boxElaboratoVuoto.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layout2 = new HorizontalLayout(boxElaboratoVuoto);
-        layout2.setAlignItems(Alignment.CENTER);
+    /**
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    protected void fixTop2() {
+        wikiTopPlaceHolder.removeAll();
 
-        boxUguale = new IndeterminateCheckbox();
-        boxUguale.setLabel("Uguale");
-        boxUguale.setIndeterminate(false);
-        boxUguale.setValue(false);
-        boxUguale.addValueChangeListener(event -> sincroFiltri());
-        HorizontalLayout layout3 = new HorizontalLayout(boxUguale);
-        layout3.setAlignItems(Alignment.CENTER);
+        boxGrezzoVuoto = super.creaFiltroCheckBox(boxGrezzoVuoto, "Grezzo");
+        //        boxGrezzoVuoto = new IndeterminateCheckbox();
+        //        boxGrezzoVuoto.setLabel("Grezzo");
+        //        boxGrezzoVuoto.setIndeterminate(false);
+        //        boxGrezzoVuoto.setValue(false);
+        //        boxGrezzoVuoto.addValueChangeListener(event -> sincroFiltri());
+        //        HorizontalLayout layout1 = new HorizontalLayout(boxGrezzoVuoto);
+        //        layout1.setAlignItems(Alignment.CENTER);
 
-        this.add(new HorizontalLayout(searchGrezzo, searchElaborato, layout1, layout2, layout3));
+        boxElaboratoVuoto = super.creaFiltroCheckBox(boxElaboratoVuoto, "Elaborato");
+        //        boxElaboratoVuoto = new IndeterminateCheckbox();
+        //        boxElaboratoVuoto.setLabel("Elaborato");
+        //        boxElaboratoVuoto.setIndeterminate(false);
+        //        boxElaboratoVuoto.setValue(false);
+        //        boxElaboratoVuoto.addValueChangeListener(event -> sincroFiltri());
+        //        HorizontalLayout layout2 = new HorizontalLayout(boxElaboratoVuoto);
+        //        layout2.setAlignItems(Alignment.CENTER);
+
+        boxUguale = super.creaFiltroCheckBox(boxUguale, "Uguale");
+        //        boxUguale = new IndeterminateCheckbox();
+        //        boxUguale.setLabel("Uguale");
+        //        boxUguale.setIndeterminate(false);
+        //        boxUguale.setValue(false);
+        //        boxUguale.addValueChangeListener(event -> sincroFiltri());
+        //        HorizontalLayout layout3 = new HorizontalLayout(boxUguale);
+        //        layout3.setAlignItems(Alignment.CENTER);
+
+        //        headerPlaceHolder.add(new HorizontalLayout(searchGrezzo, searchElaborato, layout1, layout2, layout3));
     }
 
 
@@ -86,7 +109,7 @@ public abstract class ParList extends WikiList {
             String grezzo = searchGrezzo.getValue();
             if (textService.isValid(grezzo)) {
                 filtri.inizio(FIELD_NAME_GREZZO, grezzo);
-                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_GREZZO));
+                filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_GREZZO));
             }
             else {
                 filtri.remove(FIELD_NAME_GREZZO);
@@ -98,7 +121,7 @@ public abstract class ParList extends WikiList {
             String elaborato = searchElaborato.getValue();
             if (textService.isValid(elaborato)) {
                 filtri.inizio(FIELD_NAME_ELABORATO, elaborato);
-                filtri.sort(Sort.by(Sort.Direction.ASC,FIELD_NAME_ELABORATO));
+                filtri.sort(Sort.by(Sort.Direction.ASC, FIELD_NAME_ELABORATO));
             }
             else {
                 filtri.remove(FIELD_NAME_ELABORATO);
@@ -106,26 +129,29 @@ public abstract class ParList extends WikiList {
             }
         }
 
-        if (boxGrezzoVuoto != null && !boxGrezzoVuoto.isIndeterminate()) {
-            filtri.uguale(FIELD_NAME_GREZZO_VUOTO, boxGrezzoVuoto.getValue());
-        }
-        else {
-            filtri.remove(FIELD_NAME_GREZZO_VUOTO);
-        }
+        super.fixFiltroCheckBox(boxGrezzoVuoto, FIELD_NAME_GREZZO_VUOTO);
+        //        if (boxGrezzoVuoto != null && !boxGrezzoVuoto.isIndeterminate()) {
+        //            filtri.uguale(FIELD_NAME_GREZZO_VUOTO, boxGrezzoVuoto.getValue());
+        //        }
+        //        else {
+        //            filtri.remove(FIELD_NAME_GREZZO_VUOTO);
+        //        }
 
-        if (boxElaboratoVuoto != null && !boxElaboratoVuoto.isIndeterminate()) {
-            filtri.uguale(FIELD_NAME_ELABORATO_VUOTO, boxElaboratoVuoto.getValue());
-        }
-        else {
-            filtri.remove(FIELD_NAME_ELABORATO_VUOTO);
-        }
+        super.fixFiltroCheckBox(boxElaboratoVuoto, FIELD_NAME_ELABORATO_VUOTO);
+        //        if (boxElaboratoVuoto != null && !boxElaboratoVuoto.isIndeterminate()) {
+        //            filtri.uguale(FIELD_NAME_ELABORATO_VUOTO, boxElaboratoVuoto.getValue());
+        //        }
+        //        else {
+        //            filtri.remove(FIELD_NAME_ELABORATO_VUOTO);
+        //        }
 
-        if (boxUguale != null && !boxUguale.isIndeterminate()) {
-            filtri.uguale(FIELD_NAME_UGUALE, boxUguale.getValue());
-        }
-        else {
-            filtri.remove(FIELD_NAME_UGUALE);
-        }
+        super.fixFiltroCheckBox(boxUguale, FIELD_NAME_UGUALE);
+        //        if (boxUguale != null && !boxUguale.isIndeterminate()) {
+        //            filtri.uguale(FIELD_NAME_UGUALE, boxUguale.getValue());
+        //        }
+        //        else {
+        //            filtri.remove(FIELD_NAME_UGUALE);
+        //        }
 
     }
 

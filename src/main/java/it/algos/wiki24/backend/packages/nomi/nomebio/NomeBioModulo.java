@@ -1,5 +1,7 @@
 package it.algos.wiki24.backend.packages.nomi.nomebio;
 
+import com.mongodb.client.*;
+import com.mongodb.client.model.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.backend.entity.*;
 import it.algos.vbase.backend.enumeration.*;
@@ -13,6 +15,7 @@ import it.algos.wiki24.backend.packages.nomi.nomecategoria.*;
 import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
 import it.algos.wiki24.backend.packages.nomi.nomemodulo.*;
 import it.algos.wiki24.backend.service.*;
+import org.bson.*;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.*;
@@ -100,20 +103,20 @@ public class NomeBioModulo extends WikiModulo {
      */
     @Override
     public NomeBioEntity newEntity() {
-        return newEntity(VUOTA, 0, VUOTA, VUOTA, false, false, false);
+        return newEntity(VUOTA, 0, VUOTA, VUOTA, false, false, false, false);
     }
 
 
     public NomeBioEntity newEntity(String nome) {
-        return newEntity(nome, 0, VUOTA, VUOTA, false, false, false);
+        return newEntity(nome, 0, VUOTA, VUOTA, false, false, false, false);
     }
 
     public NomeBioEntity newEntity(String nome, boolean doppio) {
-        return newEntity(nome, 0, VUOTA, VUOTA, doppio, false, false);
+        return newEntity(nome, 0, VUOTA, VUOTA, doppio, false, false, false);
     }
 
     public NomeBioEntity newEntity(String nome, String pagina) {
-        return newEntity(nome, 0, pagina, VUOTA, false, false, false);
+        return newEntity(nome, 0, pagina, VUOTA, false, false, false, false);
     }
 
     /**
@@ -126,13 +129,14 @@ public class NomeBioModulo extends WikiModulo {
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public NomeBioEntity newEntity(String nome, int numBio, String pagina, String lista, boolean doppio, boolean superaSoglia, boolean esisteLista) {
+    public NomeBioEntity newEntity(String nome, int numBio, String pagina, String lista, boolean doppio, boolean mongo, boolean superaSoglia, boolean esisteLista) {
         NomeBioEntity newEntityBean = NomeBioEntity.builder()
                 .nome(textService.isValid(nome) ? nome : null)
                 .numBio(numBio)
                 .pagina(textService.isValid(pagina) ? pagina : null)
                 .lista(textService.isValid(lista) ? lista : null)
                 .doppio(doppio)
+                .mongo(mongo)
                 .superaSoglia(superaSoglia)
                 .esisteLista(esisteLista)
                 .build();
@@ -172,6 +176,8 @@ public class NomeBioModulo extends WikiModulo {
         List<NomeDoppioEntity> listaNomiDoppi = null;
         List<NomeModuloEntity> listaNomiModuli = null;
         List<NomeCategoriaEntity> listaNomiCategoria = null;
+        List<String> listaDistintiBioMongo;
+
         NomeBioEntity newBean;
         String nomeCategoria;
         boolean categoria;
@@ -234,15 +240,18 @@ public class NomeBioModulo extends WikiModulo {
             logger.warn(new WrapLog().message("Mancano i nomi delle categorie"));
         }
 
-        //        DistinctIterable<String> listaNomiMongo = mongoService.getCollection("biomongo").distinct("nome", String.class);
-        //        for (String nome : listaNomiMongo) {
-        //            numBio = bioMongoModulo.countAllByNome(nome);
-        //            creaIfNotExists(nome, numBio);
-        //        }
-        //        int a = 87;
+        //Recupero dei Nomi Distinct presenti in BioMongo alla property [nome] con occorrenze > sogliaPrevista
+        listaDistintiBioMongo = mongoService.getDistintiSoglia("biomongo", "nome", soglia);
+        for (String nome : listaDistintiBioMongo) {
+            if (textService.isValid(nome)) {
+                if (!mappaBeans.containsKey(nome)) {
+                    newBean = newEntity(nome);
+                    newBean.mongo = true;
+                    mappaBeans.put(nome, newBean);
+                }
+            }
+        }
 
-        //        mappaBeans.values().stream().toList().subList(150, 200).stream().forEach(bean -> checkElabora((NomeBioEntity) bean, soglia));
-        ;
         mappaBeans.values().stream().forEach(bean -> checkElabora((NomeBioEntity) bean, soglia));
 
         super.fixInfoElabora();
@@ -304,5 +313,6 @@ public class NomeBioModulo extends WikiModulo {
     public void uploadPagina(AbstractEntity nome) {
         uploadService.nome((NomeBioEntity) nome);
     }
+
 
 }// end of CrudModulo class

@@ -1,12 +1,16 @@
 package it.algos.wiki24.backend.packages.nomi.nomebio;
 
 import ch.carnet.kasparscherrer.*;
+import com.vaadin.flow.component.grid.*;
+import com.vaadin.flow.component.html.*;
+import com.vaadin.flow.data.renderer.*;
 import com.vaadin.flow.spring.annotation.*;
 import static it.algos.vbase.backend.boot.BaseCost.*;
 import it.algos.vbase.ui.dialog.*;
 import it.algos.vbase.ui.wrapper.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.list.*;
+import it.algos.wiki24.backend.packages.nazionalita.nazplurale.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;
 
@@ -37,6 +41,9 @@ public class NomeBioList extends WikiList {
         this.usaBottoneElabora = true;
         this.usaBottoneUploadAll = true;
         super.usaBottoneUpload = true;
+
+        this.usaBottoneEdit = true;
+        this.usaBottoneShows = false;
     }
 
     /**
@@ -68,8 +75,6 @@ public class NomeBioList extends WikiList {
         message = "Spazzola ogni nome per calcolare le occorrenze di numBio.";
         headerPlaceHolder.add(ASpan.text(message).blue());
 
-
-        //        super.infoListaPagina = "sempre (per tutti i 366 GG)";
         super.infoListaPagina = String.format("quando numBio della pagina > %s", sogliaPagina);
         super.infoListaSottoPagina = String.format("quando numBio del paragrafo > %s", "50");
         super.infoListaSottoSottoPagina = "mai";
@@ -94,6 +99,15 @@ public class NomeBioList extends WikiList {
         checkLista = super.creaFiltroCheckBox(checkLista, "lista");
     }
 
+    /**
+     * Regola numero, ordine e visibilità delle colonne della grid <br>
+     * Può essere sovrascritto, invocando PRIMA il metodo della superclasse <br>
+     */
+    public void fixColumns() {
+        int soglia = WPref.sogliaPaginaNomi.getInt();
+        Grid.Column superaSoglia = grid.getColumnByKey("superaSoglia");
+        superaSoglia.setHeader(">" + soglia);
+    }
 
     @Override
     protected void fixFiltri() {

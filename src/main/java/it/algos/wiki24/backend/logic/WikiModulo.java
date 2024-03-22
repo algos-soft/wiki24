@@ -81,8 +81,8 @@ public abstract class WikiModulo extends CrudModulo {
      * Regola la listClazz associata a questo Modulo <br>
      * Regola la formClazz associata a questo Modulo <br>
      */
-    public WikiModulo(Class entityClazz, Class viewClass, Class listClazz, Class formClazz) {
-        super(entityClazz, viewClass, listClazz, formClazz);
+    public WikiModulo(Class entityClazz, Class viewClazz, Class listClazz, Class formClazz) {
+        super(entityClazz, viewClazz, listClazz, formClazz);
     }
 
     @PostConstruct

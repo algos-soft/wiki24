@@ -46,8 +46,8 @@ public abstract class ParModulo extends WikiModulo {
      * Regola la listClazz associata a questo Modulo <br>
      * Regola la formClazz associata a questo Modulo <br>
      */
-    public ParModulo(Class entityClazz, Class viewClass, Class listClazz, Class formClazz) {
-        super(entityClazz, viewClass, listClazz, formClazz);
+    public ParModulo(Class entityClazz, Class viewClazz, Class listClazz, Class formClazz) {
+        super(entityClazz, viewClazz, listClazz, formClazz);
     }
 
 
@@ -71,7 +71,7 @@ public abstract class ParModulo extends WikiModulo {
 
     public String elabora() {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
-        elabora(lista);
+        elabora(lista.subList(87, 121));
         return VUOTA;
     }
 

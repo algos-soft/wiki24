@@ -1,6 +1,7 @@
 package it.algos.wiki24.backend.packages.parametri.nome;
 
 import com.vaadin.flow.spring.annotation.*;
+import it.algos.wiki24.backend.list.*;
 import it.algos.wiki24.backend.packages.parametri.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
 import org.springframework.context.annotation.*;

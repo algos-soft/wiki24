@@ -36,7 +36,7 @@ public class NomeBioEntity extends AbstractEntity {
     @AField(type = TypeField.booleano, headerText = "bio", widthRem = 4)
     public boolean mongo;
 
-    @AField(type = TypeField.booleano, headerText = ">50", widthRem = 4)
+    @AField(type = TypeField.booleano, headerText = ">?", widthRem = 5)
     public boolean superaSoglia;
 
     @AField(type = TypeField.booleano, headerText = "lista", widthRem = 4)
