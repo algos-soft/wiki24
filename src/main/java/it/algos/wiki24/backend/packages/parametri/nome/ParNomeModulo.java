@@ -39,7 +39,6 @@ public class ParNomeModulo extends ParModulo {
 
         super.lastElabora = WPref.lastElaboraParNome;
         super.durataElabora = WPref.elaboraParNomeTime;
-        super.unitaMisuraElabora = TypeDurata.minuti;
 
         super.keyMapName = KEY_MAPPA_NOME;
     }
@@ -61,22 +60,24 @@ public class ParNomeModulo extends ParModulo {
      * @param pageId    (obbligatorio)
      * @param wikiTitle (obbligatorio)
      * @param grezzo    (obbligatorio)
-     * @param elaborato (obbligatorio)
+     * @param valido (obbligatorio)
      *
      * @return la nuova entity appena creata (con keyID ma non salvata)
      */
-    public ParNomeEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
+    @Override
+    public ParNomeEntity newEntity(long pageId, String wikiTitle, String grezzo, String valido) {
         ParNomeEntity newEntityBean = ParNomeEntity.builder()
                 .pageId(pageId)
                 .wikiTitle(textService.isValid(wikiTitle) ? wikiTitle : null)
                 .grezzo(textService.isValid(grezzo) ? grezzo : null)
-                .elaborato(textService.isValid(elaborato) ? elaborato : null)
+                .valido(textService.isValid(valido) ? valido : null)
                 .build();
 
         return (ParNomeEntity) fixKey(newEntityBean);
     }
 
-    public String getElaborato(String grezzo) {
+    @Override
+    public String getElaborato(String wikiTitle, String grezzo) {
         return elaboraService.fixNome(grezzo);
     }
 

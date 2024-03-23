@@ -54,6 +54,8 @@ public abstract class ParModulo extends WikiModulo {
     @Override
     protected void fixPreferenze() {
         super.fixPreferenze();
+
+        super.unitaMisuraElabora = TypeDurata.minuti;
     }
 
     /**
@@ -62,7 +64,7 @@ public abstract class ParModulo extends WikiModulo {
      */
     @Override
     public List<String> getPropertyNames() {
-        return Arrays.asList("pageId", "wikiTitle", "grezzo", "elaborato", "grezzoVuoto", "elaboratoVuoto", "uguale");
+        return Arrays.asList("pageId", "wikiTitle", "grezzo", "valido", "grezzoPieno", "validoPieno", "uguale");
     }
 
     public AbstractEntity newEntity(long pageId, String wikiTitle, String grezzo, String elaborato) {
@@ -71,15 +73,17 @@ public abstract class ParModulo extends WikiModulo {
 
     public String elabora() {
         List<BioServerEntity> lista = mongoService.findAll(BioServerEntity.class);
-        elabora(lista.subList(87, 121));
+        elabora(lista);
         return VUOTA;
     }
 
     public void elabora(List<BioServerEntity> lista) {
+        AbstractEntity parametroEntity;
         inizio = System.currentTimeMillis();
 
         for (BioServerEntity bioServerBean : lista) {
-            elabora(bioServerBean);
+            parametroEntity = elabora(bioServerBean);
+            insertSave(parametroEntity);
         }
 
         super.fixElabora(inizio);
@@ -101,27 +105,27 @@ public abstract class ParModulo extends WikiModulo {
         parametroEntity = newEntity(pageId, wikiTitle, grezzo, elaborato);
 
         parametroEntity = fixParametri(parametroEntity, grezzo, elaborato);
-        return insertSave(parametroEntity);
+        return parametroEntity;
     }
 
     public String getElaborato(String wikiTitle, String grezzo) {
         return VUOTA;
     }
 
-    public AbstractEntity fixParametri(AbstractEntity parametroEntity, String grezzo, String elaborato) {
-        boolean grezzoVuoto = textService.isEmpty(grezzo);
-        boolean elaboratoVuoto = textService.isEmpty(elaborato);
+    public AbstractEntity fixParametri(AbstractEntity parametroEntity, String grezzo, String valido) {
+        boolean grezzoPieno = textService.isValid(grezzo);
+        boolean validoPieno = textService.isValid(valido);
         boolean uguale;
 
-        if (grezzo == null && elaborato == null) {
+        if (grezzo == null && valido == null) {
             uguale = true;
         }
         else {
-            uguale = elaborato.equals(grezzo);
+            uguale = valido.equals(grezzo);
         }
 
-        reflectionService.setPropertyValue(parametroEntity, FIELD_NAME_GREZZO_VUOTO, grezzoVuoto);
-        reflectionService.setPropertyValue(parametroEntity, FIELD_NAME_ELABORATO_VUOTO, elaboratoVuoto);
+        reflectionService.setPropertyValue(parametroEntity, FIELD_NAME_GREZZO_PIENO, grezzoPieno);
+        reflectionService.setPropertyValue(parametroEntity, FIELD_NAME_VALIDO_PIENO, validoPieno);
         reflectionService.setPropertyValue(parametroEntity, FIELD_NAME_UGUALE, uguale);
 
         return parametroEntity;

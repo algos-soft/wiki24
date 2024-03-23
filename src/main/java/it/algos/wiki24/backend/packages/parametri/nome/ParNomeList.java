@@ -1,6 +1,12 @@
 package it.algos.wiki24.backend.packages.parametri.nome;
 
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.spring.annotation.*;
+import static it.algos.vbase.backend.boot.BaseCost.*;
+import it.algos.vbase.backend.components.*;
+import it.algos.vbase.ui.dialog.*;
+import it.algos.vbase.ui.wrapper.*;
+import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.list.*;
 import it.algos.wiki24.backend.packages.parametri.*;
 import static org.springframework.beans.factory.config.BeanDefinition.*;
@@ -14,24 +20,5 @@ public class ParNomeList extends ParList {
     public ParNomeList(final ParNomeModulo crudModulo) {
         super(crudModulo);
     }
-
-    @Override
-    protected void fixPreferenze() {
-        super.fixPreferenze();
-
-        this.usaBottoneDownload = false;
-        this.usaBottoneTransfer = true;
-        this.usaBottoneResetEntity = true;
-        this.usaBottoneWikiView = true;
-        this.usaBottoneWikiEdit = true;
-        this.usaBottoneWikiCrono = true;
-
-        super.usaInfoElabora = true;
-
-        this.usaBottoneSearch = false;
-        this.usaSearchPageId = true;
-        this.usaSearchWikiTitle = true;
-    }
-
 
 }// end of CrudList class

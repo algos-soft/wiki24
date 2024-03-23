@@ -3,6 +3,7 @@ package it.algos.wiki24.backend.packages.parametri.nome;
 import it.algos.vbase.backend.annotation.*;
 import it.algos.vbase.backend.entity.*;
 import it.algos.vbase.backend.enumeration.*;
+import it.algos.wiki24.backend.packages.parametri.*;
 import lombok.*;
 import org.springframework.stereotype.*;
 
@@ -13,7 +14,7 @@ import org.springframework.stereotype.*;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @AEntity(collectionName = "parnome", keyPropertyName = "pageId")
-public class ParNomeEntity extends AbstractEntity {
+public class ParNomeEntity extends ParEntity {
 
     @AField(type = TypeField.lungo, widthRem = 7)
     public long pageId;
@@ -25,15 +26,15 @@ public class ParNomeEntity extends AbstractEntity {
     public String grezzo;
 
     @AField(type = TypeField.text, widthRem = 16)
-    public String elaborato;
+    public String valido;
 
-    @AField(type = TypeField.booleano,headerText = "GV")
-    public boolean grezzoVuoto;
+    @AField(type = TypeField.booleano,headerText = "grezzo")
+    public boolean grezzoPieno;
 
-    @AField(type = TypeField.booleano,headerText = "EV")
-    public boolean elaboratoVuoto;
+    @AField(type = TypeField.booleano,headerText = "valido")
+    public boolean validoPieno;
 
-    @AField(type = TypeField.booleano,headerText = "=")
+    @AField(type = TypeField.booleano)
     public boolean uguale;
 
     @Override

@@ -381,10 +381,11 @@ public class WikiCost {
     public static final String FIELD_NAME_GREZZO = "grezzo";
 
     public static final String FIELD_NAME_ELABORATO = "elaborato";
+    public static final String FIELD_NAME_VALIDO = "valido";
 
-    public static final String FIELD_NAME_GREZZO_VUOTO = "grezzoVuoto";
+    public static final String FIELD_NAME_GREZZO_PIENO = "grezzoPieno";
 
-    public static final String FIELD_NAME_ELABORATO_VUOTO = "elaboratoVuoto";
+    public static final String FIELD_NAME_VALIDO_PIENO = "validoPieno";
 
     public static final String FIELD_NAME_UGUALE = "uguale";
 

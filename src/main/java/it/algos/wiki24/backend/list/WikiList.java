@@ -300,7 +300,7 @@ public abstract class WikiList extends CrudList {
     }
 
 
-    private void fixInfoElabora() {
+    protected void fixInfoElabora() {
         String elaboraTxt;
         String elaboraLast = VUOTA;
         WPref flagElabora = currentCrudModulo.flagElabora;

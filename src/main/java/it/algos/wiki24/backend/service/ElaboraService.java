@@ -10,6 +10,9 @@ import static it.algos.wiki24.backend.boot.WikiCost.*;
 import it.algos.wiki24.backend.enumeration.*;
 import it.algos.wiki24.backend.packages.bio.biomongo.*;
 import it.algos.wiki24.backend.packages.bio.bioserver.*;
+import it.algos.wiki24.backend.packages.nomi.nomedoppio.*;
+import jakarta.annotation.*;
+import org.checkerframework.checker.units.qual.*;
 import org.springframework.stereotype.*;
 
 import javax.inject.*;
@@ -57,8 +60,26 @@ public class ElaboraService {
     @Inject
     AnnoModulo annoModulo;
 
+    @Inject
+    NomeDoppioModulo nomeDoppioModulo;
+
+    List<String> listaNomiDoppi = new ArrayList<>();
+
     private String message;
 
+    /**
+     * Performing the initialization in a constructor is not suggested as the state of the UI is not properly set up when the constructor is invoked. <br>
+     * La injection viene fatta da SpringBoot SOLO DOPO il metodo init() del costruttore <br>
+     * Si usa quindi un metodo @PostConstruct per avere disponibili tutte le istanze @Autowired <br>
+     * <p>
+     * Ci possono essere diversi metodi con @PostConstruct e firme diverse e funzionano tutti, ma l'ordine con cui vengono chiamati (nella stessa classe) NON è garantito <br>
+     * Se viene implementata una sottoclasse, passa di qui per ogni sottoclasse oltre che per questa istanza <br>
+     * Se esistono delle sottoclassi, passa di qui per ognuna di esse (oltre a questa classe madre) <br>
+     */
+    @PostConstruct
+    private void postConstruct() {
+        listaNomiDoppi = nomeDoppioModulo.findAllForKey();
+    }
 
     /**
      * Elabora tutte le entities di BioMongo <br>
@@ -797,17 +818,28 @@ public class ElaboraService {
         return textService.isValid(elaborato) ? textService.primaMinuscola(elaborato) : VUOTA;
     }
 
-    public String fixNomeSingolo(String elaboratoForseDoppio) {
-        String elaboratoSingolo = elaboratoForseDoppio;
+    public String fixNomeSingolo(final String elaboratoForseDoppio) {
+        boolean isDoppio = false;
+        String nomeDoppioSelezionato = VUOTA;
 
         if (textService.isValid(elaboratoForseDoppio)) {
             if (elaboratoForseDoppio.contains(SPAZIO)) {
-                elaboratoSingolo = elaboratoForseDoppio.substring(0, elaboratoForseDoppio.indexOf(SPAZIO));
-                //                elaboratoSingolo = textService.levaCodaDaPrimo(elaboratoForseDoppio, SPAZIO);
+                for (String nomeDoppio : listaNomiDoppi) {
+                    if (elaboratoForseDoppio.startsWith(nomeDoppio)) {
+                        isDoppio = true;
+                        nomeDoppioSelezionato = nomeDoppio;
+                        break;
+                    }
+                }
+                if (isDoppio) {
+                    return nomeDoppioSelezionato;
+                }
+                else {
+                    return elaboratoForseDoppio.substring(0, elaboratoForseDoppio.indexOf(SPAZIO));
+                }
             }
         }
-
-        return elaboratoSingolo.trim();
+        return elaboratoForseDoppio;
     }
 
     /**
