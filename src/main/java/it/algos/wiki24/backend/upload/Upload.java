@@ -431,6 +431,7 @@ public class Upload {
                     }
                 }
                 case attivitaPlurale, nazionalitaPlurale -> textService.levaPrimaDelTag(uploadText, NO_INCLUDE_END);
+                case nomi -> textService.levaPrimaDelTag(uploadText, NO_INCLUDE_END);
                 default -> VUOTA;
             };
         }

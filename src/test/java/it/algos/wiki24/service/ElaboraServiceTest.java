@@ -54,8 +54,12 @@ public class ElaboraServiceTest extends WikiTest {
     @Inject
     private BioMongoEntity bioMongoEntity;
 
+    @Inject
+    QueryService queryService;
+
     private Map<String, String> mappaBio;
 
+    private List<BioServerEntity> listaServer = new ArrayList<>();
 
     //--wikiTitle
     //--numero parametri
@@ -63,35 +67,35 @@ public class ElaboraServiceTest extends WikiTest {
         return Stream.of(
                 Arguments.of(VUOTA, 0),
                 Arguments.of("Ivan Prebeg", 15)
-//                Arguments.of("Junior Mapuku", 13),
-//                Arguments.of("Jacques de Molay", 17),
-//                Arguments.of("Roberto il Forte", 16),
-//                Arguments.of("Agnese di Borgogna", 17),
-//                Arguments.of("Matteo Renzi", 14),
-//                Arguments.of("Hunter King", 10),
-//                Arguments.of("Laura Mancinelli", 17),
-//                Arguments.of("Johann Georg Kastner", 14),
-//                Arguments.of("Meirchion Gul", 15),
-//                Arguments.of("Vincenzo Vacirca", 15),
-//                Arguments.of("Ashur-uballit I", 15),
-//                Arguments.of("Albia Dominica", 15),
-//                Arguments.of("Angelo Inganni", 13),
-//                Arguments.of("Andrey Guryev", 17),
-//                Arguments.of("Ingen Ryūki", 17),
-//                Arguments.of("Giorgio Merula", 16),
-//                Arguments.of("Rob Paulsen", 16),
-//                Arguments.of("Aleksandr Isaevič Solženicyn", 22),
-//                Arguments.of("Aloisio Gonzaga", 19),
-//                Arguments.of("Alex Bagnoli", 18),
-//                Arguments.of("Harry Fielder", 15),
-//                Arguments.of("Yehudai Gaon", 16),
-//                Arguments.of("Kaku Takagawa", 13),
-//                Arguments.of("Filippo Tornielli", 12),
-//                Arguments.of("Mario Tosi (fotografo)", 13),
-//                Arguments.of("Giuseppe Trombone de Mier", 12),
-//                Arguments.of("Herlindis di Maaseik", 17),
-//                Arguments.of("Rinaldo II di Bar", 15),
-//                Arguments.of("Harald II di Norvegia", 18)
+                //                Arguments.of("Junior Mapuku", 13),
+                //                Arguments.of("Jacques de Molay", 17),
+                //                Arguments.of("Roberto il Forte", 16),
+                //                Arguments.of("Agnese di Borgogna", 17),
+                //                Arguments.of("Matteo Renzi", 14),
+                //                Arguments.of("Hunter King", 10),
+                //                Arguments.of("Laura Mancinelli", 17),
+                //                Arguments.of("Johann Georg Kastner", 14),
+                //                Arguments.of("Meirchion Gul", 15),
+                //                Arguments.of("Vincenzo Vacirca", 15),
+                //                Arguments.of("Ashur-uballit I", 15),
+                //                Arguments.of("Albia Dominica", 15),
+                //                Arguments.of("Angelo Inganni", 13),
+                //                Arguments.of("Andrey Guryev", 17),
+                //                Arguments.of("Ingen Ryūki", 17),
+                //                Arguments.of("Giorgio Merula", 16),
+                //                Arguments.of("Rob Paulsen", 16),
+                //                Arguments.of("Aleksandr Isaevič Solženicyn", 22),
+                //                Arguments.of("Aloisio Gonzaga", 19),
+                //                Arguments.of("Alex Bagnoli", 18),
+                //                Arguments.of("Harry Fielder", 15),
+                //                Arguments.of("Yehudai Gaon", 16),
+                //                Arguments.of("Kaku Takagawa", 13),
+                //                Arguments.of("Filippo Tornielli", 12),
+                //                Arguments.of("Mario Tosi (fotografo)", 13),
+                //                Arguments.of("Giuseppe Trombone de Mier", 12),
+                //                Arguments.of("Herlindis di Maaseik", 17),
+                //                Arguments.of("Rinaldo II di Bar", 15),
+                //                Arguments.of("Harald II di Norvegia", 18)
         );
     }
 
@@ -425,5 +429,72 @@ public class ElaboraServiceTest extends WikiTest {
         assertEquals(previsto, ottenuto);
     }
 
+    @Test
+    @Order(1001)
+    @DisplayName("1001 - fixMappa")
+    void fixMappa() {
+        System.out.println(("1001 - fixMappa"));
+        System.out.println(VUOTA);
+
+        String tmplBio;
+        String tagCorretto = "{{Bio\n|Nome";
+        String tagSbagliato = "{{Bio|\nNome";
+        int numBioTotali = 0;
+        int numBioCorrette = 0;
+        int numBioSbagliate = 0;
+        int numBioVuote = 0;
+        listaStr = new ArrayList<>();
+
+        numBioTotali = bioServerModulo.count();
+        listaServer = bioServerModulo.findAll();
+
+        for (BioServerEntity bean : listaServer) {
+            tmplBio = bean.tmplBio;
+
+            if (tmplBio.startsWith(tagCorretto)) {
+                numBioCorrette++;
+            }
+            else if (tmplBio.startsWith(tagSbagliato)) {
+                numBioSbagliate++;
+                listaStr.add(bean.wikiTitle);
+            }
+            else {
+                numBioVuote++;
+            }
+        }
+
+        System.out.println(("Corrette: " + textService.format(numBioCorrette)));
+        System.out.println(("Sbagliate: " + textService.format(numBioSbagliate)));
+        System.out.println(("Mancanti: " + textService.format(numBioVuote)));
+        System.out.println(VUOTA);
+        print(listaStr);
+
+        //eventuale
+        fixErrorNome();
+    }
+
+    private void fixErrorNome() {
+        List<String> lista = new ArrayList<>();
+        String tagError = "{{Bio|\nNome";
+        String tagTrue = "{{Bio\n|Nome";
+        String tmplBio;
+        String testoPrecedente;
+        String testoNew;
+
+        for (BioServerEntity bean : bioServerModulo.findAll()) {
+            tmplBio = bean.tmplBio;
+
+            if (tmplBio.startsWith(tagError)) {
+                lista.add(bean.wikiTitle);
+            }
+        }
+
+        for (String wikiTitle : lista) {
+            testoPrecedente = queryService.legge(wikiTitle);
+            testoNew = textService.sostituisce(testoPrecedente, tagError, tagTrue);
+            queryService.write(wikiTitle, testoNew,"Fix error tmplBio");
+        }
+
+    }
 
 }
