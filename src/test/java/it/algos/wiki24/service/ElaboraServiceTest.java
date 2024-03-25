@@ -470,7 +470,7 @@ public class ElaboraServiceTest extends WikiTest {
         print(listaStr);
 
         //eventuale
-        fixErrorNome();
+        //        fixErrorNome();
     }
 
     private void fixErrorNome() {
@@ -492,9 +492,74 @@ public class ElaboraServiceTest extends WikiTest {
         for (String wikiTitle : lista) {
             testoPrecedente = queryService.legge(wikiTitle);
             testoNew = textService.sostituisce(testoPrecedente, tagError, tagTrue);
-            queryService.write(wikiTitle, testoNew,"Fix error tmplBio");
+            queryService.write(wikiTitle, testoNew, "Fix error tmplBio");
+        }
+    }
+
+    @Test
+    @Order(1002)
+    @DisplayName("1002 - fixPrimoMese")
+    void fixPrimoMese() {
+        System.out.println(("1002 - fixPrimoMese"));
+        System.out.println(VUOTA);
+
+        String tmplBio;
+        String tagSbagliato = " 1° ";
+        int sbagliate = 0;
+        listaStr = new ArrayList<>();
+
+        listaServer = bioServerModulo.findAll();
+
+        for (BioServerEntity bean : listaServer) {
+            tmplBio = bean.tmplBio;
+
+            if (tmplBio.contains(tagSbagliato)) {
+                sbagliate++;
+                listaStr.add(bean.wikiTitle);
+            }
         }
 
+        System.out.println(("Sbagliate: " + textService.format(sbagliate)));
+        System.out.println(VUOTA);
+        print(listaStr);
+
+        //eventuale
+        fixErrorPrimoMese();
+    }
+
+
+    private void fixErrorPrimoMese() {
+        List<String> lista = new ArrayList<>();
+        String tagSbagliato = " 1° ";
+        String tagCorretto = " 1º ";
+        String tmplBio;
+        String tmplBioOld;
+        String tmplBioNew;
+        String testoPrecedente;
+        String testoNew;
+
+        for (BioServerEntity bean : bioServerModulo.findAll()) {
+            tmplBio = bean.tmplBio;
+
+            if (tmplBio.contains(tagSbagliato)) {
+                lista.add(bean.wikiTitle);
+            }
+        }
+
+        //        for (String wikiTitle : lista.subList(1,2)) {
+        //            testoPrecedente = queryService.legge(wikiTitle);
+        //            testoNew = textService.sostituisce(testoPrecedente, tagSbagliato, tagCorretto);
+        //            queryService.write(wikiTitle, testoNew, "Fix error tmplBio");
+        //        }
+
+        for (String wikiTitle : lista) {
+            testoPrecedente = queryService.legge(wikiTitle);
+            tmplBioOld = wikiBotService.estraeTmplBio(testoPrecedente);
+            tmplBioNew = textService.sostituisce(tmplBioOld, tagSbagliato, tagCorretto);
+            testoNew = textService.sostituisce(testoPrecedente, tmplBioOld, tmplBioNew);
+            queryService.write(wikiTitle, testoNew, "Fix error tmplBio");
+        }
     }
 
 }
+
