@@ -25,7 +25,7 @@ import java.util.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ViaModuloTest extends ModuloTest {
 
-    @Autowired
+//    @Autowired
     private ViaModulo modulo;
 
 

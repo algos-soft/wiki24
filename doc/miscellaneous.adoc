@@ -70,3 +70,8 @@ are needed after this. See Date/Time conversion below.
 == Icons
 
 * Vaadin [https://vaadin.com/docs/latest/components/icons]
+
+
+== CSS
+* Properties [https://www.w3schools.com/cssref/index.php]
+* Colors [https://www.w3schools.com/cssref/css_colors.php]
